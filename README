@@ -1,0 +1,14 @@
+
+
+-------------------------------------------
+design/
+-------------------------------------------
+(1) diagram-workspaces/
+keep source code of diagram
+
+pencil prototyping tool: *.ep
+dia: *.dia
+yEd: *.graphml
+
+(2) images/
+exported images for software design
