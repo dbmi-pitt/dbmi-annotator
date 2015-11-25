@@ -1,12 +1,28 @@
 from flask import Flask, render_template, request, json, session, flash, redirect, url_for, make_response
 from forms import SignUpForm, SignInForm
 from models import db
-from src import app
 from models import User, Activation
 import time, uuid, datetime
+import sys, random, string, os
+
+## initialize
+app = Flask(__name__)
+
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS']=False
+app.secret_key = 'dbmi-annotator-test'
+
+app.config.from_pyfile('config.py')
+
+db.init_app(app)
+
+from app import *
+
+sys.stdout = sys.stderr
+if __name__ == '__main__':
+    app.run(port=5050, debug=True)
 
 
-# define root and corresponding request handler
+## define root and corresponding request handler
 @app.route("/",methods=['POST','GET'])
 def main():
     
@@ -37,7 +53,7 @@ def signUp():
 
 		## add activation
 		expireTime = datetime.datetime.utcnow() + datetime.timedelta(days=10)
-		newact = Activation("XTcAfQ33",uid, expireTime)
+		newact = Activation(code_generator(),uid, expireTime)
 		db.session.add(newact)
 		db.session.commit()
 
@@ -89,4 +105,5 @@ def signOut():
 
 
 
-
+def code_generator(size=10, chars=string.ascii_uppercase + string.digits):
+    return ''.join(random.choice(chars) for _ in range(size))
