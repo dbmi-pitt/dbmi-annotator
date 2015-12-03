@@ -25,7 +25,7 @@ if (typeof annotator === 'undefined') {
                  } else{
                      app.ident.identity = 'anonymous@gmail.com';                 
                  }
-                 app.annotations.load();
+                 //app.annotations.load();
 		     });
 }
 

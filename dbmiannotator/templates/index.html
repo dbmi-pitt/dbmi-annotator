@@ -29,18 +29,38 @@
     </div>
 
     <script>
+// $(document).ready(function(){
+// $("#content").load("http://localhost/DDI-html-labels/38642D80-AAA6-4196-A033-3977FF35B48A.html");
+// }
 
 $('#loadButton').click(function(event) {
-    event.preventDefault();
-    
-    $('#content').load($("#sourceURL").val(), function(responseText, status) {
-        if (status === 'success') {
-            $('#content').text('The page has been successfully loaded');
-        } else {
-            $('#content').text('Opps, an error occurred, please ensure the url you entered is valid');
-        }
-    });
+    //event.preventDefault();
+    //alert(getKeys(annotator.ui.highlighter));
+
+    $('#content').load($("#sourceURL").val());
+    app.annotations.load();
+
+    // $('#content').load($("#sourceURL").val(), function(responseText, status) {
+    //     if (status === 'success') {
+    //         app.annotations.load();
+    //     } else {
+    //         $('#content').text('Opps, an error occurred, please ensure the url you entered is valid');
+    //     }
+    // });
+
 });
+
+
+// return all properties of object
+// helps on debugging
+var getKeys = function(obj){
+   var keys = [];
+   for(var key in obj){
+      keys.push(key);
+   }
+   return keys;
+}
+
     </script>
 
     </header>
