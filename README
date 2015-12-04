@@ -8,11 +8,11 @@ DDI annotation is purpose for represents a drug drug interaction information in 
 Drug highlight annotation in the text quote of DDI annotation will be added to the field drug mentions, a list box including all drug mention options.
 
 -------------------------------------------------------------
-How to run
+How to run locally
 -------------------------------------------------------------
 
 Notes: ensure annotator store is running at port 5000
-       	      elasticsearch is running at port 9250
+       elasticsearch is running at port 9250
 
 (1) edit config python at  
 dbmi-annotator/dbmiannotator/config.py
@@ -41,3 +41,119 @@ yEd: *.graphml
 
 (2) images/
 exported images for software design
+
+-------------------------------------------------------------
+Deployment (config by components):
+-------------------------------------------------------------
+1 Components
+
+dbmi-annotator: python based Flask project, provides user authentication, annotation management, load web resources, etc. Running on port 5050
+
+Elasticsearch 1.7.1: elasticsearch data store, running on port 9250
+Mysql 1: stores user information, running on port 3336
+
+Apache server 2: serve static resources, proxy external web resources, Running on port 80
+
+2 development mode configuration
+Note: Development mode not support external web resources loading
+
+2.1 Required services
+Require Annotator store running on port 5000 
+Require Elasticsearch 1.7 running on port 9250
+
+2.2 Deploy customized annotatorJs
+Download code repo
+clone: https://github.com/ningyifan/annotator.git
+
+Update customized annotator JS
+
+$ cd dbmi-annotator
+$ make pkg/dbmi-annotator.js
+
+2.3 Deploy dbmi-annotator
+clone: https://github.com/dbmi-pitt/dbmi-annotator.git
+
+(1) Install python modules
+$ sudo apt-get install python-mysqldb
+$ sudo pip install Flask
+$ sudo pip install install flask-sqlalchemy
+$ sudo pip install install flask-wtf
+
+(2) Copy compiled JS lib from annotator to dbmi-annotator Js folder
+$ cp pkg/dbmi-annotator.js dbmi-annotator/dbmiannotator/static/js/dbmi-annotator-drug-ddiV-ddiE.js
+
+(3) edit config python at  
+dbmi-annotator/dbmiannotator/config.py
+Example:
+SQLALCHEMY_DATABASE_URI = 'mysql://<username>:<password>@localhost/AnnotatorDBMI'
+
+(4) run dbmi-annotator
+$ cd dbmi-annotator/dbmiannotator; python app.py
+
+(5) access to 'http://localhost:5050/dbmiannotator'
+
+3 production mode configuration
+3.1 Required services
+Require annotator store running on port 5000 and elasticsearch 1.7 running on port 9250
+Require development mode dbmi-annotator running on port 5050
+3.2 Apache server configurations
+$ sudo aptitude install libapache2-mod-wsgi
+
+install apache server and have configuration in httpd.conf as below:
+        
+        WSGIDaemonProcess dbmiannotator user=<username> group=<group name> threads=5
+        WSGIScriptAlias /dbmiannotator <FILE PATH TO>/start.wsgi
+        Alias "/static/" "/<FILE PATH TO>/dbmi-annotator/dbmiannotator/static/"
+
+    #Load function to unescape strings and name it unencode                                   
+    RewriteMap unencode int:unescape
+    RewriteRule ^/proxy/(htt.*)$ ${unencode:$1} [P]
+
+    RewriteCond ${unencode:${unencode:%{HTTP_REFERER}}} ^http:\/\/.*\/proxy/(http:\/\/(([a-zA-\Z0-9-]+\.?)*[a-zA-Z0-9-]+\.?)(:\d+)?)($|\/(\(([^\\/]+\/)*))([^\/]*)$
+    RewriteRule ^/proxy/(.*)$ %1/%6$1 [L]
+
+    RewriteCond ${unencode:${unencode:%{HTTP_REFERER}}} ^http:\/\/.*\/proxy/(http:\/\/(([a-zA-\Z0-9-]+\.?)*[a-zA-Z0-9-]+\.?)(:\d+)?).*?$
+    RewriteRule ^/(.*) %1/$1 [L]
+
+    # correct css path for static dailymed pages
+    #RewriteRule ^/dbmiannotator/dailymed/(.*)$ http://localhost/DDI-html-labels/dailymed/$1 [P]  
+    RewriteRule ^/dailymed/(.*)$ http://localhost/DDI-html-labels/dailymed/$1 [P]  
+
+
+    ## dbmi annotator config - Flask
+    #WSGIDaemonProcess dbmiannotator user=yin2 group=yin2 threads=5
+    WSGIScriptAlias /dbmiannotator /home/yin2/dbmi-annotator/dbmiannotator/start.wsgi
+    Alias "/static/" "/home/yin2/dbmi-annotator/dbmiannotator/static/"
+
+    <Directory />
+        Require all granted
+        Options FollowSymLinks
+    </Directory>
+
+3.3 run and load external web resources
+$ sudo service apache2 restart
+Access dbmi-annotator by ‘http://<domainname>:80/dbmiannotator’
+
+apache reverse proxy external web resources, the format below is way of put url in index page to load alive web page
+http://<domain>:<port>/proxy/<url>
+
+4 annotator store
+require elasticsearch running
+$ git clone https://github.com/ningyifan/dbmi-annotator-store.git
+Install: see README in repository
+Edit dbmi-annotator-store/dbmi-annotator.cfg to set elasticsearch port to 9250 for avoiding conflict with domeo elasticsearch instance on 9200
+
+5 elasticsearch
+add “http.port: 9250” to config file
+config/elasticsearch.yml
+run elasticsearch Version 1.7 at port 9250
+
+Install head plugin:
+elasticsearch/bin/plugin -install mobz/elasticsearch-head
+open http://localhost:9250/_plugin/head/ for browse datastore
+
+6 Mysql 
+Mysql connection configuration
+dbmi-annotator/dbmiannotator/config.py
+Example:
+SQLALCHEMY_DATABASE_URI = 'mysql://<username>:<password>@localhost/AnnotatorDBMI'
