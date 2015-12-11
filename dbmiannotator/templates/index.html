@@ -34,15 +34,17 @@
 // }
 
 $('#loadButton').click(function(event) {
-    //event.preventDefault();
-    //alert(getKeys(annotator.ui.highlighter));
-
-    $('#content').load($("#sourceURL").val());
+    event.preventDefault();
+    //alert(getKeys(app));
+    $("#content").load($("#sourceURL").val());
     app.annotations.load();
 
     // $('#content').load($("#sourceURL").val(), function(responseText, status) {
+    //     alert(status);
+    //     app.annotations.load();
     //     if (status === 'success') {
-    //         app.annotations.load();
+    //         //app.annotations.load();
+    //         alert("success");
     //     } else {
     //         $('#content').text('Opps, an error occurred, please ensure the url you entered is valid');
     //     }
@@ -70,6 +72,8 @@ var getKeys = function(obj){
       <div id="content">
       
       </div>
+
+      <a href="{{ url_for('pdf') }}">Open yourpdf.pdf with PDF.js</a>
 
     </article>
 
