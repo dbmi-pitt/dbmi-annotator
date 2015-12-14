@@ -1,5 +1,5 @@
 -------------------------------------------------------------
-Overview
+Overview 
 -------------------------------------------------------------
 Based on the open source project dbmi-annotator.js Version 2.0, dbmi-annotator aims to implement templated annotations. This will enable the creation of multiple annotation plugins that meet various use cases, including drug highlight annotation, DDI (drug-drug interaction) annotation, clinical trial annotation and PK(pharmacokinetics annotation).
 

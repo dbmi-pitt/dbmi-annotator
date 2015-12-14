@@ -1,14 +1,21 @@
 <html>
 
   <body>
-    
+
+    <!-- annotator js  -->
     <script src="../static/js/annotator.js"></script>
     <script src="../static/js/jquery-1.11.1.min.js"></script>
     <link rel="stylesheet" type="text/css" href="../static/css/dbmiannotator.css" />
 
+
+
+<!--       <object data="http://localhost/static/js/web/viewer.html?file=http://localhost/DDI-pdfs/d2r-publishing-RDB-on-sematic-web.pdf" type="application/pdf" width="900" height="900"> -->
+<!-- alt : <a href="http://localhost/static/js/web/viewer.html?file=http://localhost/DDI-pdfs/d2r-publishing-RDB-on-sematic-web.pdf">test.pdf</a> -->
+<!--       </object> -->
+
+
+    
     <header>
-
-
     <div id="toppanel">
       <nav>
       <h2>DBMI Annotator demonstration</h2>
@@ -27,6 +34,10 @@
         <button id="loadButton">load</button> 
 
     </div>
+    
+    <br>
+    <a href="http://localhost/static/js/web/viewer.html?file=http://localhost/DDI-pdfs/d2r-publishing-RDB-on-sematic-web.pdf">Open sample pdf document for annotation</a>
+    <br>
 
     <script>
 // $(document).ready(function(){
@@ -37,20 +48,14 @@ $('#loadButton').click(function(event) {
     event.preventDefault();
     //alert(getKeys(app));
     $("#content").load($("#sourceURL").val());
+
+    // after html label loaded, then load annotations
     app.annotations.load();
-
-    // $('#content').load($("#sourceURL").val(), function(responseText, status) {
-    //     alert(status);
-    //     app.annotations.load();
-    //     if (status === 'success') {
-    //         //app.annotations.load();
-    //         alert("success");
-    //     } else {
-    //         $('#content').text('Opps, an error occurred, please ensure the url you entered is valid');
-    //     }
-    // });
-
+    
 });
+
+
+
 
 
 // return all properties of object
@@ -73,11 +78,16 @@ var getKeys = function(obj){
       
       </div>
 
-      <a href="{{ url_for('pdf') }}">Open yourpdf.pdf with PDF.js</a>
+
 
     </article>
 
     <script src="../static/js/ddi-plugin.js"> </script>
+
+
+
+    <!-- pdf js  -->
+
 
   </body>
 
