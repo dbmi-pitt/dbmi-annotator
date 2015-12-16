@@ -44,15 +44,15 @@
 // $("#content").load("http://localhost/DDI-html-labels/38642D80-AAA6-4196-A033-3977FF35B48A.html");
 // }
 
-$('#loadButton').click(function(event) {
-    event.preventDefault();
-    //alert(getKeys(app));
-    $("#content").load($("#sourceURL").val());
+// $('#loadButton').click(function(event) {
+//     event.preventDefault();
+//     //alert(getKeys(app));
+//     $("#content").load($("#sourceURL").val());
 
-    // after html label loaded, then load annotations
-    app.annotations.load();
+//     // after html label loaded, then load annotations
+//     app.annotations.load(uri: window.location.href);
     
-});
+// });
 
 
 
@@ -60,13 +60,13 @@ $('#loadButton').click(function(event) {
 
 // return all properties of object
 // helps on debugging
-var getKeys = function(obj){
-   var keys = [];
-   for(var key in obj){
-      keys.push(key);
-   }
-   return keys;
-}
+// var getKeys = function(obj){
+//    var keys = [];
+//    for(var key in obj){
+//       keys.push(key);
+//    }
+//    return keys;
+// }
 
     </script>
 

@@ -17,6 +17,18 @@ if (typeof annotator === 'undefined') {
 	prefix: 'http://127.0.0.1:5000'
     });
 
+    var pageUri = function () {
+    	return {
+            beforeAnnotationCreated: function (ann) {
+
+		ann.uri = $("#sourceURL").val().replace(/[\/\\\-\:\.]/g, "");
+
+            }
+    	};
+    };
+    
+    app.include(pageUri);
+
     app.start().then(function () 
 		     {   
                  var currUser = getCookie('email');
@@ -27,6 +39,21 @@ if (typeof annotator === 'undefined') {
                  }
                  //app.annotations.load();
 		     });
+    
+    $('#loadButton').click(function(event) {
+	event.preventDefault();
+
+	// load label
+	$("#content").load($("#sourceURL").val());
+	
+	// after html label loaded, then load annotations
+	app.annotations.load({uri: $("#sourceURL").val().replace(/[\/\\\-\:\.]/g, "")})
+	//app.annotations.load();
+	
+	//app.annotations.load({"url": encodeURIComponent("http://localhost/DDI-labels/2e7350bd-ab32-4619-a3f9-12fdf56fc5e2.html")});
+	
+    });
+
 }
 
 
@@ -42,3 +69,4 @@ function getCookie(cname) {
     }
     return "";
 } 
+
