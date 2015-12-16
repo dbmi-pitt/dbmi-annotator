@@ -16263,6 +16263,7 @@ var Editor = exports.Editor = Widget.extend({
         this.fields = [];
         this.annotation = {};
 
+
         // if (this.options.defaultFields) {
         //     this.addField({
         //         type: 'textarea',
