@@ -17,12 +17,11 @@ if (typeof annotator === 'undefined') {
 	prefix: 'http://127.0.0.1:5000'
     });
 
+    // add attribute uri for annotation as source url
     var pageUri = function () {
     	return {
             beforeAnnotationCreated: function (ann) {
-
-		ann.uri = $("#sourceURL").val().replace(/[\/\\\-\:\.]/g, "");
-
+		ann.uri = $('input#hdURL').val().replace(/[\/\\\-\:\.]/g, "");
             }
     	};
     };
@@ -31,27 +30,32 @@ if (typeof annotator === 'undefined') {
 
     app.start().then(function () 
 		     {   
-                 var currUser = getCookie('email');
-                 if (currUser != null){
-                     app.ident.identity = currUser;
-                 } else{
-                     app.ident.identity = 'anonymous@gmail.com';                 
-                 }
-                 //app.annotations.load();
+			 var currUser = getCookie('email');
+			 if (currUser != null){
+			     app.ident.identity = currUser;
+			 } else{
+			     app.ident.identity = 'anonymous@gmail.com';                 
+			 }
 		     });
     
     $('#loadButton').click(function(event) {
 	event.preventDefault();
 
-	// load label
-	$("#content").load($("#sourceURL").val());
+	var sourceUrlTxt = $('#sourceURL').val()
+	// set source url
+	$('input#hdURL').val(sourceUrlTxt)
 	
-	// after html label loaded, then load annotations
-	app.annotations.load({uri: $("#sourceURL").val().replace(/[\/\\\-\:\.]/g, "")})
-	//app.annotations.load();
+	// if dailymed html label, load label in range of div content
+	if(sourceUrlTxt.indexOf('.html') >= 0){
+	    $("#content").load($("#sourceURL").val());
+	    // after html label loaded, then load annotations
+	    app.annotations.load({uri: $('input#hdURL').val().replace(/[\/\\\-\:\.]/g, "")})
+	}
 	
-	//app.annotations.load({"url": encodeURIComponent("http://localhost/DDI-labels/2e7350bd-ab32-4619-a3f9-12fdf56fc5e2.html")});
-	
+	// if source is pdf documents, jump to pdf.js viewer.html
+	if(sourceUrlTxt.indexOf('.pdf') >= 0){
+	    window.location.href = "http://localhost/static/js/web/viewer.html?file=" + sourceUrlTxt;
+	}
     });
 
 }

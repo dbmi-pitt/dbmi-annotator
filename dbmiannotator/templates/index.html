@@ -7,14 +7,10 @@
     <script src="../static/js/jquery-1.11.1.min.js"></script>
     <link rel="stylesheet" type="text/css" href="../static/css/dbmiannotator.css" />
 
-
-
-<!--       <object data="http://localhost/static/js/web/viewer.html?file=http://localhost/DDI-pdfs/d2r-publishing-RDB-on-sematic-web.pdf" type="application/pdf" width="900" height="900"> -->
-<!-- alt : <a href="http://localhost/static/js/web/viewer.html?file=http://localhost/DDI-pdfs/d2r-publishing-RDB-on-sematic-web.pdf">test.pdf</a> -->
-<!--       </object> -->
-
-
-    
+    <!-- div with id content will be reload with html label -->
+    <article>
+      <div id="content">
+	    
     <header>
     <div id="toppanel">
       <nav>
@@ -35,63 +31,16 @@
         <button id="loadButton">load</button> 
 
     </div>
-    
-    <br>
-    <a href="http://localhost/static/js/web/viewer.html?file=http://localhost/DDI-pdfs/d2r-publishing-RDB-on-sematic-web.pdf">Open sample pdf document for annotation</a>
-    <br>
-
-    <script>
-// $(document).ready(function(){
-// $("#content").load("http://localhost/DDI-html-labels/38642D80-AAA6-4196-A033-3977FF35B48A.html");
-// }
-
-// $('#loadButton').click(function(event) {
-//     event.preventDefault();
-//     //alert(getKeys(app));
-//     $("#content").load($("#sourceURL").val());
-
-//     // after html label loaded, then load annotations
-//     app.annotations.load(uri: window.location.href);
-    
-// });
-
-
-
-
-
-// return all properties of object
-// helps on debugging
-// var getKeys = function(obj){
-//    var keys = [];
-//    for(var key in obj){
-//       keys.push(key);
-//    }
-//    return keys;
-// }
-
-    </script>
 
     </header>
 
-    <article>
+      </div></article>
 
-      <div id="content">
-      
-      </div>
-
-
-
-    </article>
+    <!-- hidden input purpose for tracking source url  -->
+    <input id="hdURL" type="hidden" class="hdURL" value="" name="testinput">
 
     <script src="../static/js/ddi-plugin.js"> </script>
 
-
-
-    <!-- pdf js  -->
-
-
   </body>
-
-
 
 </html>
