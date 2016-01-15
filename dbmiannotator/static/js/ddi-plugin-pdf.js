@@ -17,6 +17,18 @@ if (typeof annotator === 'undefined') {
 	prefix: 'http://127.0.0.1:5000'
     });
 
+    // var pageUri = function () {
+    // 	return {
+    //         beforeAnnotationCreated: function (ann) {
+
+    // 		ann.uri = $("#sourceURL").val().replace(/[\/\\\-\:\.]/g, "");
+
+    //         }
+    // 	};
+    // };
+    
+    // app.include(pageUri);
+    
     app.start().then(function () 
 		     {
 

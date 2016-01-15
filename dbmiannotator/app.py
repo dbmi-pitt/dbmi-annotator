@@ -4,6 +4,7 @@ from models import db
 from models import User, Activation
 import time, uuid, datetime
 import sys, random, string, os
+from export.exportPDDIAnnotation import exportAnnotationToCSV
 
 ## initialize
 app = Flask(__name__)
@@ -101,8 +102,6 @@ def signOut():
     
     return response
     #return redirect(url_for('main'))
-
-
 
 
 def code_generator(size=10, chars=string.ascii_uppercase + string.digits):
