@@ -1,0 +1,46 @@
+<html>
+
+  <body>
+
+    <!-- annotator js  -->
+    <script src="../static/js/annotator.js"></script>
+    <script src="../static/js/jquery-1.11.1.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../static/css/dbmiannotator.css" />
+
+    <!-- div with id content will be reload with html label -->
+    <article>
+      <div id="content">
+	    
+    <header>
+    <div id="toppanel">
+      <nav>
+      <h2>DBMI Annotator demonstration</h2>
+        <ul>
+          {% if 'email' in session %}
+          <li>Welcome: {{session.email}}</li>
+          <li><a href="{{ url_for('signOut') }}">Sign Out</a></li>
+          {% else %}
+          <li><a href="{{ url_for('signUp') }}">Sign Up</a></li>
+          <li><a href="{{ url_for('signIn') }}">Sign In</a></li>
+          {% endif %}
+        </ul>
+	
+      </nav>
+
+        <input type="text" id="sourceURL" size="40" maxlength="150" />
+        <button id="loadButton">load</button> 
+
+    </div>
+
+    </header>
+
+      </div></article>
+
+    <!-- hidden input purpose for tracking source url  -->
+    <input id="hdURL" type="hidden" class="hdURL" value="" name="testinput">
+
+    <script src="../static/js/ddi-plugin.js"> </script>
+
+  </body>
+
+</html>

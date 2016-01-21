@@ -17,7 +17,11 @@
     <node id="n0">
       <data key="d6">
         <y:ShapeNode>
+<<<<<<< HEAD:design/diagram-workspace/system-architecture-diagram-12212015.graphml
           <y:Geometry height="200.08633648521106" width="252.61240136063066" x="0.501302394715367" y="245.0043304603974"/>
+=======
+          <y:Geometry height="200.08633648521106" width="252.61240136063066" x="25.234498299211708" y="245.0043304603974"/>
+>>>>>>> dbmi-pitt/master:design/diagram-workspace/system-architecture-diagram-11052015.graphml
           <y:Fill color="#E8EEF7" color2="#FFFFFF" transparent="false"/>
           <y:BorderStyle color="#000000" type="dashed" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" backgroundColor="#FFFFFF" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasLineColor="false" hasText="false" height="4.0" modelName="custom" textColor="#000000" visible="true" width="4.0" x="124.30620068031533" y="98.04316824260553">
@@ -35,10 +39,17 @@
     <node id="n1">
       <data key="d6">
         <y:ShapeNode>
+<<<<<<< HEAD:design/diagram-workspace/system-architecture-diagram-12212015.graphml
           <y:Geometry height="854.7366132379786" width="598.0317234355429" x="298.2036032268782" y="37.14523059500425"/>
           <y:Fill color="#E8EEF7" color2="#FFFFFF" transparent="false"/>
           <y:BorderStyle color="#000000" type="dashed" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" backgroundColor="#FFFFFF" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasLineColor="false" hasText="false" height="4.0" modelName="custom" textColor="#000000" visible="true" width="4.0" x="297.01586171777143" y="425.3683066189893">
+=======
+          <y:Geometry height="711.7616132379786" width="720.5817234355428" x="298.2036032268781" y="37.14523059500425"/>
+          <y:Fill color="#E8EEF7" color2="#FFFFFF" transparent="false"/>
+          <y:BorderStyle color="#000000" type="dashed" width="1.0"/>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" backgroundColor="#FFFFFF" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasLineColor="false" hasText="false" height="4.0" modelName="custom" textColor="#000000" visible="true" width="4.0" x="358.2908617177714" y="353.8808066189893">
+>>>>>>> dbmi-pitt/master:design/diagram-workspace/system-architecture-diagram-11052015.graphml
             <y:LabelModel>
               <y:SmartNodeLabelModel distance="4.0"/>
             </y:LabelModel>
@@ -53,7 +64,11 @@
     <node id="n2">
       <data key="d6">
         <y:SVGNode>
+<<<<<<< HEAD:design/diagram-workspace/system-architecture-diagram-12212015.graphml
           <y:Geometry height="70.13700103759766" width="56.558998107910156" x="20.62398068080917" y="257.2539981842041"/>
+=======
+          <y:Geometry height="70.13700103759766" width="56.558998107910156" x="60.52398068080919" y="309.9789981842041"/>
+>>>>>>> dbmi-pitt/master:design/diagram-workspace/system-architecture-diagram-11052015.graphml
           <y:Fill color="#CCCCFF" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
           <y:NodeLabel alignment="left" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="102.9296875" modelName="custom" textColor="#000000" visible="true" width="135.748046875" x="4.0" y="74.13700103759766">Curator
@@ -120,9 +135,15 @@ Store
     </node>
     <node id="n5">
       <data key="d6">
+<<<<<<< HEAD:design/diagram-workspace/system-architecture-diagram-12212015.graphml
         <y:GenericNode configuration="com.yworks.flowchart.cloud">
           <y:Geometry height="84.03266588846844" width="268.9680196801968" x="0.6867055077111104" y="80.86766783396396"/>
           <y:Fill color="#E8EEF7" color2="#FFFFFF" transparent="false"/>
+=======
+        <y:GenericNode configuration="com.yworks.flowchart.dataBase">
+          <y:Geometry height="56.231998443603516" width="91.0" x="582.2564575645757" y="600.7680015563965"/>
+          <y:Fill color="#FFFFFF" color2="#FFFFFF" transparent="false"/>
+>>>>>>> dbmi-pitt/master:design/diagram-workspace/system-architecture-diagram-11052015.graphml
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="32.265625" modelName="custom" textColor="#000000" visible="true" width="184.66796875" x="42.150025465098395" y="25.88352044423422">exernal web resouces
 (ex. dailymed labels, PDFs, etc)<y:LabelModel>
@@ -203,7 +224,11 @@ Client<y:LabelModel>
     <node id="n9">
       <data key="d6">
         <y:GenericNode configuration="com.yworks.flowchart.dataBase">
+<<<<<<< HEAD:design/diagram-workspace/system-architecture-diagram-12212015.graphml
           <y:Geometry height="104.11556785841356" width="104.0" x="428.0825030750307" y="619.4883440157125"/>
+=======
+          <y:Geometry height="56.231998443603516" width="104.0" x="872.0" y="678.8840007781982"/>
+>>>>>>> dbmi-pitt/master:design/diagram-workspace/system-architecture-diagram-11052015.graphml
           <y:Fill color="#FFFFFF" color2="#FFFFFF" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="46.3984375" modelName="custom" textColor="#000000" visible="true" width="80.8984375" x="11.55078125" y="28.858565179206835">Virtuoso
@@ -220,11 +245,20 @@ RDF store
     </node>
     <node id="n10">
       <data key="d6">
+<<<<<<< HEAD:design/diagram-workspace/system-architecture-diagram-12212015.graphml
         <y:GenericNode configuration="com.yworks.flowchart.annotation">
           <y:Geometry height="23.0" width="56.558998107910156" x="298.2036032268782" y="14.145230595004254"/>
           <y:Fill color="#FFFFFF" color2="#FFFFFF" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.1328125" modelName="custom" textColor="#000000" visible="true" width="39.865234375" x="8.346881866455078" y="2.43359375">Server<y:LabelModel>
+=======
+        <y:GenericNode configuration="com.yworks.flowchart.cloud">
+          <y:Geometry height="84.03266588846844" width="268.9680196801968" x="0.6867055077111104" y="80.86766783396396"/>
+          <y:Fill color="#E8EEF7" color2="#FFFFFF" transparent="false"/>
+          <y:BorderStyle color="#000000" type="line" width="1.0"/>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="31.9375" modelName="custom" textColor="#000000" visible="true" width="193.568359375" x="37.699830152598395" y="26.04758294423422">exernal web resouces
+(ex. dailymed labels, PDFs, etc)<y:LabelModel>
+>>>>>>> dbmi-pitt/master:design/diagram-workspace/system-architecture-diagram-11052015.graphml
               <y:SmartNodeLabelModel distance="4.0"/>
             </y:LabelModel>
             <y:ModelParameter>
@@ -296,6 +330,7 @@ WebAPI<y:LabelModel>
     </node>
     <node id="n14">
       <data key="d6">
+<<<<<<< HEAD:design/diagram-workspace/system-architecture-diagram-12212015.graphml
         <y:ShapeNode>
           <y:Geometry height="207.70372510338711" width="252.61240136063066" x="613.1881918819191" y="365.22560914761544"/>
           <y:Fill color="#E8EEF7" color2="#FFFFFF" transparent="false"/>
@@ -317,6 +352,11 @@ WebAPI<y:LabelModel>
         <y:GenericNode configuration="com.yworks.flowchart.annotation">
           <y:Geometry height="30.0" width="30.0" x="613.1881918819191" y="335.22560914761544"/>
           <y:Fill color="#FFFFFF" color2="#FFFFFF" transparent="false"/>
+=======
+        <y:SVGNode>
+          <y:Geometry height="45.56999588012695" width="67.49800109863281" x="193.2855121775023" y="322.26250076293945"/>
+          <y:Fill color="#CCCCFF" transparent="false"/>
+>>>>>>> dbmi-pitt/master:design/diagram-workspace/system-architecture-diagram-11052015.graphml
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.1328125" modelName="custom" textColor="#000000" visible="true" width="69.6953125" x="4.0" y="5.93359375">PostgresDB<y:LabelModel>
               <y:SmartNodeLabelModel distance="4.0"/>
@@ -332,6 +372,7 @@ WebAPI<y:LabelModel>
         </y:GenericNode>
       </data>
     </node>
+<<<<<<< HEAD:design/diagram-workspace/system-architecture-diagram-12212015.graphml
     <node id="n16">
       <data key="d6">
         <y:GenericNode configuration="com.yworks.flowchart.dataBase">
@@ -339,6 +380,16 @@ WebAPI<y:LabelModel>
           <y:Fill color="#FFFFFF" color2="#FFFFFF" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.1328125" modelName="custom" textColor="#000000" visible="true" width="68.32421875" x="17.837890625" y="40.827845954895">OHDSI RDB<y:LabelModel>
+=======
+    <node id="n12">
+      <data key="d6">
+        <y:GenericNode configuration="com.yworks.flowchart.dataBase">
+          <y:Geometry height="104.11556785841356" width="104.0" x="74.80750307503072" y="803.3849033240201"/>
+          <y:Fill color="#FFFFFF" color2="#FFFFFF" transparent="false"/>
+          <y:BorderStyle color="#000000" type="line" width="1.0"/>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="31.9375" modelName="custom" textColor="#000000" visible="true" width="62.91015625" x="20.544921875" y="36.08903392920672">Virtuoso
+RDF store<y:LabelModel>
+>>>>>>> dbmi-pitt/master:design/diagram-workspace/system-architecture-diagram-11052015.graphml
               <y:SmartNodeLabelModel distance="4.0"/>
             </y:LabelModel>
             <y:ModelParameter>
@@ -348,6 +399,7 @@ WebAPI<y:LabelModel>
         </y:GenericNode>
       </data>
     </node>
+<<<<<<< HEAD:design/diagram-workspace/system-architecture-diagram-12212015.graphml
     <node id="n17">
       <data key="d6">
         <y:GenericNode configuration="com.yworks.flowchart.dataBase">
@@ -356,6 +408,17 @@ WebAPI<y:LabelModel>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.1328125" modelName="custom" textColor="#000000" visible="true" width="81.9765625" x="11.01171875" y="40.827845954895">Evidence RDB
 <y:LabelModel>
+=======
+    <node id="n13">
+      <data key="d6">
+        <y:GenericNode configuration="com.yworks.flowchart.process">
+          <y:Geometry height="111.83333333333337" width="213.80073800738" x="314.3474784747849" y="572.9673341115315"/>
+          <y:Fill color="#FFFFFF" color2="#FFFFFF" transparent="false"/>
+          <y:BorderStyle color="#000000" type="line" width="1.0"/>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="45.90625" modelName="custom" textColor="#000000" visible="true" width="206.078125" x="3.8613065036900025" y="32.96354166666663">ETL (extract Json annotation, 
+translate to MP relational schema
+load into OHDSI postgres DB)<y:LabelModel>
+>>>>>>> dbmi-pitt/master:design/diagram-workspace/system-architecture-diagram-11052015.graphml
               <y:SmartNodeLabelModel distance="4.0"/>
             </y:LabelModel>
             <y:ModelParameter>
@@ -367,9 +430,15 @@ WebAPI<y:LabelModel>
     </node>
     <node id="n18">
       <data key="d6">
+<<<<<<< HEAD:design/diagram-workspace/system-architecture-diagram-12212015.graphml
         <y:SVGNode>
           <y:Geometry height="70.13700103759766" width="56.55899810791006" x="20.623980680809268" y="636.4776274261205"/>
           <y:Fill color="#CCCCFF" transparent="false"/>
+=======
+        <y:GenericNode configuration="com.yworks.flowchart.cloud">
+          <y:Geometry height="145.66666666666663" width="399.5476493835449" x="273.7088081810308" y="782.6093539198937"/>
+          <y:Fill color="#E8EEF7" color2="#FFFFFF" transparent="false"/>
+>>>>>>> dbmi-pitt/master:design/diagram-workspace/system-architecture-diagram-11052015.graphml
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
           <y:NodeLabel alignment="left" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="46.3984375" modelName="custom" textColor="#000000" visible="true" width="122.048828125" x="-14.723394743309257" y="88.28111756642659">Data Scientist
 • Review MP
@@ -395,10 +464,17 @@ WebAPI<y:LabelModel>
         </y:SVGNode>
       </data>
     </node>
+<<<<<<< HEAD:design/diagram-workspace/system-architecture-diagram-12212015.graphml
     <node id="n19">
       <data key="d6">
         <y:GenericNode configuration="com.yworks.flowchart.dataBase">
           <y:Geometry height="99.78850440979" width="104.0" x="673.2443925622345" y="621.6518757400244"/>
+=======
+    <node id="n15">
+      <data key="d6">
+        <y:GenericNode configuration="com.yworks.flowchart.dataBase">
+          <y:Geometry height="56.231998443603516" width="91.0" x="351.7201722017221" y="833.3537483020281"/>
+>>>>>>> dbmi-pitt/master:design/diagram-workspace/system-architecture-diagram-11052015.graphml
           <y:Fill color="#FFFFFF" color2="#FFFFFF" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="32.265625" modelName="custom" textColor="#000000" visible="true" width="100.931640625" x="1.5341796875" y="33.761439704895">RDF D2R server
@@ -412,11 +488,19 @@ WebAPI<y:LabelModel>
         </y:GenericNode>
       </data>
     </node>
+<<<<<<< HEAD:design/diagram-workspace/system-architecture-diagram-12212015.graphml
     <node id="n20">
       <data key="d6">
         <y:SVGNode>
           <y:Geometry height="70.13700103759766" width="56.558998107910156" x="20.623980680809225" y="792.1750000000002"/>
           <y:Fill color="#CCCCFF" transparent="false"/>
+=======
+    <node id="n16">
+      <data key="d6">
+        <y:GenericNode configuration="com.yworks.flowchart.annotation">
+          <y:Geometry height="23.0" width="135.0" x="483.8714637146373" y="819.8352075916076"/>
+          <y:Fill color="#FFFFFF" color2="#FFFFFF" transparent="false"/>
+>>>>>>> dbmi-pitt/master:design/diagram-workspace/system-architecture-diagram-11052015.graphml
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
           <y:NodeLabel alignment="left" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.1328125" modelName="custom" textColor="#000000" visible="true" width="54.115234375" x="4.0" y="74.13700103759766">Manager<y:LabelModel>
               <y:SmartNodeLabelModel distance="4.0"/>
@@ -433,6 +517,7 @@ WebAPI<y:LabelModel>
               <y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/>
             </y:ModelParameter>
           </y:NodeLabel>
+<<<<<<< HEAD:design/diagram-workspace/system-architecture-diagram-12212015.graphml
           <y:SVGNodeProperties usingVisualBounds="true"/>
           <y:SVGModel svgBoundsPolicy="0">
             <y:SVGContent refid="1"/>
@@ -441,6 +526,16 @@ WebAPI<y:LabelModel>
       </data>
     </node>
     <node id="n21">
+=======
+          <y:StyleProperties>
+            <y:Property class="java.lang.Byte" name="com.yworks.flowchart.style.orientation" value="0"/>
+            <y:Property class="java.lang.Byte" name="LAYER_STYLE_PROPERTY_KEY" value="1"/>
+          </y:StyleProperties>
+        </y:GenericNode>
+      </data>
+    </node>
+    <node id="n17">
+>>>>>>> dbmi-pitt/master:design/diagram-workspace/system-architecture-diagram-11052015.graphml
       <data key="d6">
         <y:GenericNode configuration="com.yworks.flowchart.dataBase">
           <y:Geometry height="94.07411687344094" width="104.0" x="686.7440959409594" y="365.22560914761544"/>
@@ -457,11 +552,18 @@ RDB<y:LabelModel>
         </y:GenericNode>
       </data>
     </node>
+<<<<<<< HEAD:design/diagram-workspace/system-architecture-diagram-12212015.graphml
     <node id="n22">
       <data key="d5"/>
       <data key="d6">
         <y:GenericNode configuration="com.yworks.entityRelationship.big_entity">
           <y:Geometry height="157.0666666666666" width="165.5" x="926.2353266624211" y="566.5372452074594"/>
+=======
+    <node id="n18">
+      <data key="d6">
+        <y:GenericNode configuration="com.yworks.flowchart.annotation">
+          <y:Geometry height="23.0" width="56.558998107910156" x="221.28790155193224" y="245.00433046039737"/>
+>>>>>>> dbmi-pitt/master:design/diagram-workspace/system-architecture-diagram-11052015.graphml
           <y:Fill color="#FFFFFF" color2="#FFFFFF" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" backgroundColor="#FFFFFF" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasLineColor="false" height="18.1328125" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="51.994140625" x="56.7529296875" y="4.0">Concept</y:NodeLabel>
@@ -484,7 +586,61 @@ custom concept
         </y:GenericNode>
       </data>
     </node>
+<<<<<<< HEAD:design/diagram-workspace/system-architecture-diagram-12212015.graphml
     <edge id="e0" source="n6" target="n5">
+=======
+    <node id="n19">
+      <data key="d6">
+        <y:GenericNode configuration="com.yworks.flowchart.dataBase">
+          <y:Geometry height="80.17378315100848" width="91.0" x="81.30750307503072" y="588.797109202694"/>
+          <y:Fill color="#FFFFFF" color2="#FFFFFF" transparent="false"/>
+          <y:BorderStyle color="#000000" type="line" width="1.0"/>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="31.9375" modelName="custom" textColor="#000000" visible="true" width="42.865234375" x="24.0673828125" y="24.118141575504296">OHDSI
+RDB <y:LabelModel>
+              <y:SmartNodeLabelModel distance="4.0"/>
+            </y:LabelModel>
+            <y:ModelParameter>
+              <y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/>
+            </y:ModelParameter>
+          </y:NodeLabel>
+        </y:GenericNode>
+      </data>
+    </node>
+    <node id="n20">
+      <data key="d6">
+        <y:GenericNode configuration="com.yworks.flowchart.process">
+          <y:Geometry height="40.0" width="147.0" x="53.30750307503072" y="722.1633440157125"/>
+          <y:Fill color="#FFFFFF" color2="#FFFFFF" transparent="false"/>
+          <y:BorderStyle color="#000000" type="line" width="1.0"/>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="31.9375" modelName="custom" textColor="#000000" visible="true" width="111.783203125" x="17.6083984375" y="4.03125">D2R server
+applying ontology<y:LabelModel>
+              <y:SmartNodeLabelModel distance="4.0"/>
+            </y:LabelModel>
+            <y:ModelParameter>
+              <y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/>
+            </y:ModelParameter>
+          </y:NodeLabel>
+        </y:GenericNode>
+      </data>
+    </node>
+    <node id="n21">
+      <data key="d6">
+        <y:GenericNode configuration="com.yworks.flowchart.process">
+          <y:Geometry height="40.0" width="91.0" x="81.30750307503074" y="502.9293342510025"/>
+          <y:Fill color="#FFFFFF" color2="#FFFFFF" transparent="false"/>
+          <y:BorderStyle color="#000000" type="line" width="1.0"/>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="17.96875" modelName="custom" textColor="#000000" visible="true" width="53.6640625" x="18.66796875" y="11.015625">Web API<y:LabelModel>
+              <y:SmartNodeLabelModel distance="4.0"/>
+            </y:LabelModel>
+            <y:ModelParameter>
+              <y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/>
+            </y:ModelParameter>
+          </y:NodeLabel>
+        </y:GenericNode>
+      </data>
+    </node>
+    <edge id="e0" source="n3" target="n6">
+>>>>>>> dbmi-pitt/master:design/diagram-workspace/system-architecture-diagram-11052015.graphml
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
@@ -541,9 +697,25 @@ custom concept
     <edge id="e3" source="n7" target="n4">
       <data key="d10">
         <y:PolyLineEdge>
+<<<<<<< HEAD:design/diagram-workspace/system-architecture-diagram-12212015.graphml
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
           <y:LineStyle color="#000000" type="line" width="1.0"/>
           <y:Arrows source="none" target="standard"/>
+=======
+          <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0">
+            <y:Point x="713.8972970620596" y="536.043524311624"/>
+          </y:Path>
+          <y:LineStyle color="#000000" type="line" width="1.0"/>
+          <y:Arrows source="none" target="standard"/>
+          <y:EdgeLabel alignment="center" configuration="AutoFlippingLabel" distance="2.0" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="17.96875" modelName="custom" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" visible="true" width="91.97265625" x="-34.78286647797495" y="96.20804247932188">send REST call<y:LabelModel>
+              <y:SmartEdgeLabelModel autoRotationEnabled="false" defaultAngle="0.0" defaultDistance="10.0"/>
+            </y:LabelModel>
+            <y:ModelParameter>
+              <y:SmartEdgeLabelModelParameter angle="0.0" distance="11.828125" distanceToCenter="false" position="left" ratio="1.0" segment="0"/>
+            </y:ModelParameter>
+            <y:PreferredPlacementDescriptor angle="0.0" angleOffsetOnRightSide="0" angleReference="absolute" angleRotationOnRightSide="co" distance="-1.0" frozen="true" placement="anywhere" side="anywhere" sideReference="relative_to_edge_flow"/>
+          </y:EdgeLabel>
+>>>>>>> dbmi-pitt/master:design/diagram-workspace/system-architecture-diagram-11052015.graphml
           <y:BendStyle smoothed="false"/>
         </y:PolyLineEdge>
       </data>
@@ -551,6 +723,7 @@ custom concept
     <edge id="e4" source="n2" target="n8">
       <data key="d10">
         <y:PolyLineEdge>
+<<<<<<< HEAD:design/diagram-workspace/system-architecture-diagram-12212015.graphml
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
           <y:LineStyle color="#000000" type="line" width="1.0"/>
           <y:Arrows source="standard" target="standard"/>
@@ -565,6 +738,22 @@ custom concept
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
           <y:LineStyle color="#000000" type="line" width="1.0"/>
           <y:Arrows source="none" target="standard"/>
+=======
+          <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0">
+            <y:Point x="703.2484624846248" y="510.8381122575035"/>
+          </y:Path>
+          <y:LineStyle color="#000000" type="line" width="1.0"/>
+          <y:Arrows source="none" target="standard"/>
+          <y:EdgeLabel alignment="center" configuration="AutoFlippingLabel" distance="2.0" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="31.9375" modelName="custom" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" visible="true" width="127.533203125" x="-43.4326415822552" y="-162.0710131455345">response annotation
+ in JSON<y:LabelModel>
+              <y:SmartEdgeLabelModel autoRotationEnabled="false" defaultAngle="0.0" defaultDistance="10.0"/>
+            </y:LabelModel>
+            <y:ModelParameter>
+              <y:SmartEdgeLabelModelParameter angle="6.283185307179586" distance="63.53314474430048" distanceToCenter="true" position="left" ratio="0.46212640481842054" segment="-1"/>
+            </y:ModelParameter>
+            <y:PreferredPlacementDescriptor angle="0.0" angleOffsetOnRightSide="0" angleReference="absolute" angleRotationOnRightSide="co" distance="-1.0" frozen="true" placement="anywhere" side="anywhere" sideReference="relative_to_edge_flow"/>
+          </y:EdgeLabel>
+>>>>>>> dbmi-pitt/master:design/diagram-workspace/system-architecture-diagram-11052015.graphml
           <y:BendStyle smoothed="false"/>
         </y:PolyLineEdge>
       </data>
@@ -584,9 +773,26 @@ custom concept
       <data key="d9"/>
       <data key="d10">
         <y:PolyLineEdge>
+<<<<<<< HEAD:design/diagram-workspace/system-architecture-diagram-12212015.graphml
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
           <y:LineStyle color="#000000" type="line" width="1.0"/>
           <y:Arrows source="none" target="standard"/>
+=======
+          <y:Path sx="0.0" sy="0.0" tx="23.7116165086627" ty="0.0">
+            <y:Point x="385.03813038130374" y="364.82164821648223"/>
+          </y:Path>
+          <y:LineStyle color="#000000" type="line" width="1.0"/>
+          <y:Arrows source="none" target="standard"/>
+          <y:EdgeLabel alignment="center" configuration="AutoFlippingLabel" distance="2.0" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="31.9375" modelName="custom" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" visible="true" width="160.7265625" x="-209.87715763524722" y="39.17512899610216">serialize JSON to JS Object
+present on web page<y:LabelModel>
+              <y:SmartEdgeLabelModel autoRotationEnabled="false" defaultAngle="0.0" defaultDistance="10.0"/>
+            </y:LabelModel>
+            <y:ModelParameter>
+              <y:SmartEdgeLabelModelParameter angle="0.0" distance="11.765521698523083" distanceToCenter="false" position="left" ratio="1.0" segment="0"/>
+            </y:ModelParameter>
+            <y:PreferredPlacementDescriptor angle="0.0" angleOffsetOnRightSide="0" angleReference="absolute" angleRotationOnRightSide="co" distance="-1.0" frozen="true" placement="anywhere" side="anywhere" sideReference="relative_to_edge_flow"/>
+          </y:EdgeLabel>
+>>>>>>> dbmi-pitt/master:design/diagram-workspace/system-architecture-diagram-11052015.graphml
           <y:BendStyle smoothed="false"/>
         </y:PolyLineEdge>
       </data>
@@ -595,6 +801,7 @@ custom concept
       <data key="d9"/>
       <data key="d10">
         <y:PolyLineEdge>
+<<<<<<< HEAD:design/diagram-workspace/system-architecture-diagram-12212015.graphml
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
           <y:LineStyle color="#000000" type="line" width="1.0"/>
           <y:Arrows source="none" target="standard"/>
@@ -675,6 +882,22 @@ custom concept
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
           <y:LineStyle color="#000000" type="line" width="1.0"/>
           <y:Arrows source="none" target="standard"/>
+=======
+          <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0">
+            <y:Point x="406.54612546125463" y="329.0"/>
+          </y:Path>
+          <y:LineStyle color="#000000" type="line" width="1.0"/>
+          <y:Arrows source="none" target="standard"/>
+          <y:EdgeLabel alignment="center" configuration="AutoFlippingLabel" distance="2.0" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="31.9375" modelName="custom" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" visible="true" width="201.00390625" x="63.03976623192705" y="-72.61071138113994">send authentication information 
+and annotation as JS object<y:LabelModel>
+              <y:SmartEdgeLabelModel autoRotationEnabled="false" defaultAngle="0.0" defaultDistance="10.0"/>
+            </y:LabelModel>
+            <y:ModelParameter>
+              <y:SmartEdgeLabelModelParameter angle="0.0" distance="15.219634711089213" distanceToCenter="false" position="left" ratio="0.043373793695333014" segment="-1"/>
+            </y:ModelParameter>
+            <y:PreferredPlacementDescriptor angle="0.0" angleOffsetOnRightSide="0" angleReference="absolute" angleRotationOnRightSide="co" distance="-1.0" frozen="true" placement="anywhere" side="anywhere" sideReference="relative_to_edge_flow"/>
+          </y:EdgeLabel>
+>>>>>>> dbmi-pitt/master:design/diagram-workspace/system-architecture-diagram-11052015.graphml
           <y:BendStyle smoothed="false"/>
         </y:PolyLineEdge>
       </data>
@@ -706,6 +929,7 @@ custom concept
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
           <y:LineStyle color="#000000" type="line" width="1.0"/>
           <y:Arrows source="none" target="standard"/>
+<<<<<<< HEAD:design/diagram-workspace/system-architecture-diagram-12212015.graphml
           <y:BendStyle smoothed="false"/>
         </y:PolyLineEdge>
       </data>
@@ -718,6 +942,9 @@ custom concept
           <y:LineStyle color="#000000" type="line" width="1.0"/>
           <y:Arrows source="standard" target="standard"/>
           <y:EdgeLabel alignment="center" configuration="AutoFlippingLabel" distance="2.0" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.1328125" modelName="custom" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" visible="true" width="34.609375" x="12.695319366455067" y="-68.39373188018797">serve<y:LabelModel>
+=======
+          <y:EdgeLabel alignment="center" configuration="AutoFlippingLabel" distance="2.0" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="17.96875" modelName="custom" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" visible="true" width="87.279296875" x="-168.57475799625604" y="-38.98437690734869">reverse proxy<y:LabelModel>
+>>>>>>> dbmi-pitt/master:design/diagram-workspace/system-architecture-diagram-11052015.graphml
               <y:SmartEdgeLabelModel autoRotationEnabled="false" defaultAngle="0.0" defaultDistance="10.0"/>
             </y:LabelModel>
             <y:ModelParameter>
@@ -766,6 +993,7 @@ custom concept
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
           <y:LineStyle color="#000000" type="line" width="1.0"/>
           <y:Arrows source="none" target="standard"/>
+<<<<<<< HEAD:design/diagram-workspace/system-architecture-diagram-12212015.graphml
           <y:BendStyle smoothed="false"/>
         </y:PolyLineEdge>
       </data>
@@ -779,6 +1007,9 @@ custom concept
           <y:Arrows source="standard" target="standard"/>
           <y:EdgeLabel alignment="center" configuration="AutoFlippingLabel" distance="2.0" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="32.265625" modelName="custom" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" visible="true" width="181.416015625" x="-13.085099362882886" y="-13.207817180835775">request/response Annotations
 in JSON<y:LabelModel>
+=======
+          <y:EdgeLabel alignment="center" configuration="AutoFlippingLabel" distance="2.0" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="17.96875" modelName="custom" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" visible="true" width="32.658203125" x="-104.9324401630247" y="21.015653610229492">copy<y:LabelModel>
+>>>>>>> dbmi-pitt/master:design/diagram-workspace/system-architecture-diagram-11052015.graphml
               <y:SmartEdgeLabelModel autoRotationEnabled="false" defaultAngle="0.0" defaultDistance="10.0"/>
             </y:LabelModel>
             <y:ModelParameter>
@@ -830,6 +1061,7 @@ in JSON<y:LabelModel>
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
           <y:LineStyle color="#000000" type="line" width="1.0"/>
           <y:Arrows source="none" target="standard"/>
+<<<<<<< HEAD:design/diagram-workspace/system-architecture-diagram-12212015.graphml
           <y:BendStyle smoothed="false"/>
         </y:PolyLineEdge>
       </data>
@@ -853,6 +1085,9 @@ in JSON<y:LabelModel>
           <y:LineStyle color="#000000" type="line" width="1.0"/>
           <y:Arrows source="standard" target="standard"/>
           <y:EdgeLabel alignment="center" configuration="AutoFlippingLabel" distance="2.0" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.1328125" modelName="custom" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" visible="true" width="36.865234375" x="169.9011506608789" y="-39.06642088320564">query<y:LabelModel>
+=======
+          <y:EdgeLabel alignment="center" configuration="AutoFlippingLabel" distance="2.0" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="17.96875" modelName="custom" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" visible="true" width="38.640625" x="7.724614855401569" y="21.015653610229492">query<y:LabelModel>
+>>>>>>> dbmi-pitt/master:design/diagram-workspace/system-architecture-diagram-11052015.graphml
               <y:SmartEdgeLabelModel autoRotationEnabled="false" defaultAngle="0.0" defaultDistance="10.0"/>
             </y:LabelModel>
             <y:ModelParameter>
@@ -864,14 +1099,32 @@ in JSON<y:LabelModel>
         </y:PolyLineEdge>
       </data>
     </edge>
+<<<<<<< HEAD:design/diagram-workspace/system-architecture-diagram-12212015.graphml
     <edge id="e29" source="n19" target="n9">
       <data key="d9"/>
+=======
+    <edge id="e15" source="n12" target="n14">
+>>>>>>> dbmi-pitt/master:design/diagram-workspace/system-architecture-diagram-11052015.graphml
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
           <y:LineStyle color="#000000" type="line" width="1.0"/>
           <y:Arrows source="none" target="standard"/>
+<<<<<<< HEAD:design/diagram-workspace/system-architecture-diagram-12212015.graphml
           <y:EdgeLabel alignment="center" configuration="AutoFlippingLabel" distance="2.0" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.1328125" modelName="custom" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" visible="true" width="67.15234375" x="-104.17395452511744" y="-39.06642088320564">D2R Dump<y:LabelModel>
+=======
+          <y:BendStyle smoothed="false"/>
+        </y:PolyLineEdge>
+      </data>
+    </edge>
+    <edge id="e16" source="n13" target="n19">
+      <data key="d10">
+        <y:PolyLineEdge>
+          <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
+          <y:LineStyle color="#000000" type="line" width="1.0"/>
+          <y:Arrows source="none" target="standard"/>
+          <y:EdgeLabel alignment="center" configuration="AutoFlippingLabel" distance="2.0" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="17.96875" modelName="custom" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" visible="true" width="29.646484375" x="-85.81487372704532" y="-38.98434638977051">load<y:LabelModel>
+>>>>>>> dbmi-pitt/master:design/diagram-workspace/system-architecture-diagram-11052015.graphml
               <y:SmartEdgeLabelModel autoRotationEnabled="false" defaultAngle="0.0" defaultDistance="10.0"/>
             </y:LabelModel>
             <y:ModelParameter>
@@ -883,6 +1136,7 @@ in JSON<y:LabelModel>
         </y:PolyLineEdge>
       </data>
     </edge>
+<<<<<<< HEAD:design/diagram-workspace/system-architecture-diagram-12212015.graphml
     <edge id="e30" source="n19" target="n14">
       <data key="d9"/>
       <data key="d10">
@@ -915,6 +1169,9 @@ in JSON<y:LabelModel>
     </edge>
     <edge id="e32" source="n16" target="n14">
       <data key="d9"/>
+=======
+    <edge id="e17" source="n20" target="n19">
+>>>>>>> dbmi-pitt/master:design/diagram-workspace/system-architecture-diagram-11052015.graphml
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
@@ -924,8 +1181,12 @@ in JSON<y:LabelModel>
         </y:PolyLineEdge>
       </data>
     </edge>
+<<<<<<< HEAD:design/diagram-workspace/system-architecture-diagram-12212015.graphml
     <edge id="e33" source="n21" target="n14">
       <data key="d9"/>
+=======
+    <edge id="e18" source="n20" target="n12">
+>>>>>>> dbmi-pitt/master:design/diagram-workspace/system-architecture-diagram-11052015.graphml
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
@@ -935,6 +1196,7 @@ in JSON<y:LabelModel>
         </y:PolyLineEdge>
       </data>
     </edge>
+<<<<<<< HEAD:design/diagram-workspace/system-architecture-diagram-12212015.graphml
     <edge id="e34" source="n12" target="n13">
       <data key="d9"/>
       <data key="d10">
@@ -944,13 +1206,34 @@ in JSON<y:LabelModel>
           <y:Arrows source="standard" target="standard"/>
           <y:EdgeLabel alignment="left" configuration="AutoFlippingLabel" distance="2.0" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="32.265625" modelName="custom" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" visible="true" width="213.19140625" x="-76.59569625854493" y="49.226023991902764">• DDI data visualization
 • Load data into OHDSI postgres DB<y:LabelModel>
+=======
+    <edge id="e19" source="n3" target="n21">
+      <data key="d10">
+        <y:PolyLineEdge>
+          <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0">
+            <y:Point x="537.0" y="522.9293342510025"/>
+          </y:Path>
+          <y:LineStyle color="#000000" type="line" width="1.0"/>
+          <y:Arrows source="standard" target="standard"/>
+          <y:EdgeLabel alignment="center" configuration="AutoFlippingLabel" distance="2.0" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="17.96875" modelName="custom" preferredPlacement="anywhere" ratio="0.5" textColor="#000000" visible="true" width="355.375" x="-360.0337484624846" y="110.79942092092432">Web API enables DDI data virtualization on OHDSI schema<y:LabelModel>
+>>>>>>> dbmi-pitt/master:design/diagram-workspace/system-architecture-diagram-11052015.graphml
               <y:SmartEdgeLabelModel autoRotationEnabled="false" defaultAngle="0.0" defaultDistance="10.0"/>
             </y:LabelModel>
             <y:ModelParameter>
-              <y:SmartEdgeLabelModelParameter angle="0.0" distance="30.0" distanceToCenter="true" position="left" ratio="0.5" segment="0"/>
+              <y:SmartEdgeLabelModelParameter angle="0.0" distance="30.0" distanceToCenter="true" position="right" ratio="1.0" segment="-1"/>
             </y:ModelParameter>
             <y:PreferredPlacementDescriptor angle="0.0" angleOffsetOnRightSide="0" angleReference="absolute" angleRotationOnRightSide="co" distance="-1.0" frozen="true" placement="anywhere" side="anywhere" sideReference="relative_to_edge_flow"/>
           </y:EdgeLabel>
+          <y:BendStyle smoothed="false"/>
+        </y:PolyLineEdge>
+      </data>
+    </edge>
+    <edge id="e20" source="n21" target="n19">
+      <data key="d10">
+        <y:PolyLineEdge>
+          <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
+          <y:LineStyle color="#000000" type="line" width="1.0"/>
+          <y:Arrows source="standard" target="standard"/>
           <y:BendStyle smoothed="false"/>
         </y:PolyLineEdge>
       </data>
