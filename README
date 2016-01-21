@@ -14,13 +14,14 @@ How to run locally
 Notes: ensure annotator store is running at port 5000
        elasticsearch is running at port 9250
 
-(1) edit config python at  
-dbmi-annotator/dbmiannotator/config.py
+(1) edit config file at  
+dbmi-annotator/server.js
 
 (2) run program
-$ cd dbmi-annotator/dbmiannotator; python app.py
+$ cd dbmi-annotator
+$ nodemon server.js
 
-access to 'http://localhost:5050/dbmiannotator'
+access to 'http://localhost:3000/'
 
 -------------------------------------------------------------
 Layout
@@ -73,24 +74,8 @@ $ make pkg/dbmi-annotator.js
 2.3 Deploy dbmi-annotator
 clone: https://github.com/dbmi-pitt/dbmi-annotator.git
 
-(1) Install python modules
-$ sudo apt-get install python-mysqldb
-$ sudo pip install Flask
-$ sudo pip install install flask-sqlalchemy
-$ sudo pip install install flask-wtf
-
-(2) Copy compiled JS lib from annotator to dbmi-annotator Js folder
+(1) Copy compiled JS lib from annotator to dbmi-annotator Js folder
 $ cp pkg/dbmi-annotator.js dbmi-annotator/dbmiannotator/static/js/dbmi-annotator-drug-ddiV-ddiE.js
-
-(3) edit config python at  
-dbmi-annotator/dbmiannotator/config.py
-Example:
-SQLALCHEMY_DATABASE_URI = 'mysql://<username>:<password>@localhost/AnnotatorDBMI'
-
-(4) run dbmi-annotator
-$ cd dbmi-annotator/dbmiannotator; python app.py
-
-(5) access to 'http://localhost:5050/dbmiannotator'
 
 3 production mode configuration
 3.1 Required services
@@ -154,6 +139,4 @@ open http://localhost:9250/_plugin/head/ for browse datastore
 
 6 Mysql 
 Mysql connection configuration
-dbmi-annotator/dbmiannotator/config.py
-Example:
-SQLALCHEMY_DATABASE_URI = 'mysql://<username>:<password>@localhost/AnnotatorDBMI'
+
