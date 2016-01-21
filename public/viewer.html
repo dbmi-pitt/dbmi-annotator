@@ -248,11 +248,17 @@ See https://github.com/adobe-type-tools/cmap-resources
           <menuitem id="contextPageRotateCcw" label="Rotate Counter-Clockwise"
                     data-l10n-id="page_rotate_ccw"></menuitem>
         </menu>
-
+        <!---annotator splitter-->
+<div id='splitter'>
+      <div id="content" class="firstsection" style='overflow: auto'>
+        <button class="btn btn-success" onclick="showrightbyvalue()" value="hide"><span><--Annotator</span></button>
         <div id="viewerContainer" tabindex="0">
           <div id="viewer" class="pdfViewer"></div>
         </div>
-
+      </div>
+      <div class="secondsection">
+      </div>
+</div>
         <div id="errorWrapper" hidden='true'>
           <div id="errorMessageLeft">
             <span id="errorMessage"></span>
@@ -421,10 +427,22 @@ See https://github.com/adobe-type-tools/cmap-resources
 <link rel="stylesheet" href="css/dbmi.pdf.highlight.css"/>
 
 <!-- bring annotator js-->
-<script src="js/annotator.js"></script>
+<script src="js/annotator.min.js"></script>
 
 <!-- bring ddi plugin js for pdf -->
 <script src="js/ddi-plugin-pdf.js"></script>
+
+<link rel="stylesheet" href="css/jqx.base.css" type="text/css" />
+
+
+<script src="js/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="js/jqxcore.js"></script>
+<script type="text/javascript" src="js/jqxsplitter.js"></script>
+<script type="text/javascript" src="js/jqxbuttons.js"></script>
+<script type="text/javascript" src="js/jqxscrollbar.js"></script>
+<script type="text/javascript" src="js/jqxpanel.js"></script>
+<script type="text/javascript" src="js/demos.js"></script>
+<script type="text/javascript" src="js/dbmi.js"></script>
 
 
   </body>
