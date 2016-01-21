@@ -1,0 +1,14 @@
+{
+  "name": "dbmi-annotator",
+  "version": "0.0.0",
+  "description": "DBMI Annotator node.js migration",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Yifan Ning",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.13.3"
+  }
+}
