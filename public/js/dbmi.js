@@ -14,7 +14,7 @@
       });
       $('.btn-success').val("show");
       $('.annotator-editor').show();
-      $('.btn-success').css("margin-right",420);
+      $('.btn-success').css("margin-right",430);
     }
     else {
       $('#splitter').jqxSplitter({

@@ -47,7 +47,8 @@ if (typeof annotator === 'undefined') {
 	
 	// if dailymed html label, load label in range of div content
 	if(sourceUrlTxt.indexOf('.html') >= 0){
-	    $("#content").load($("#sourceURL").val());
+        $(".btn-success").css("display","block");
+	    $("#subcontent").load($("#sourceURL").val());
 	    // after html label loaded, then load annotations
 	    app.annotations.load({uri: $('input#hdURL').val().replace(/[\/\\\-\:\.]/g, "")})
 	}
