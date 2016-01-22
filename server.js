@@ -4,7 +4,7 @@ var express = require('express');
 
 var app = express();
 
-_dirname = "/home/yin2/dbmi-annotator/";
+_dirname = "/Users/wenzhang/GitHub/dbmi-annotator/";
 
 // Register all our routes
 app.use(express.static(_dirname + 'public'));
