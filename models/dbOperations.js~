@@ -1,0 +1,27 @@
+
+var path = require('path');
+
+
+validateUser : function(req, res){
+    var pg = require('pg');
+    var conString = require(path.join(__dirname, '../config', '../config', 'config'));
+    var client = new pg.Client(conString);
+    client.connect();
+
+    userEmail = req.query.email;
+    userPwd = req.query.pwd;
+
+    var query = client.query('SELECT * FROM USER WHERE user.email = ' + userEmail + 'user.password = ' + userPwd);
+    
+    query.on("end", function (result) {          
+        client.end();
+        res.writeHead(200, {'Content-Type': 'text/plain'});
+        res.write(JSON.stringify(result.rows, null, "    ") + "\n");
+        res.end();  
+    });
+    
+}
+
+
+
+
