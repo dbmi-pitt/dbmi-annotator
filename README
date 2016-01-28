@@ -137,6 +137,7 @@ Install head plugin:
 elasticsearch/bin/plugin -install mobz/elasticsearch-head
 open http://localhost:9250/_plugin/head/ for browse datastore
 
-6 Mysql 
-Mysql connection configuration
-
+-------------------------------------------------------------
+Nodejs based program - folder structures
+-------------------------------------------------------------
+https://www.terlici.com/2014/08/25/best-practices-express-structure.html
