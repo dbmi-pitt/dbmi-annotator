@@ -1,10 +1,9 @@
 module.exports = function(app, passport) {
 
-    // index page
+    // INDEX PAGE ===============================
     app.get('/', function(req, res) {
         res.render('index.ejs', { message: req.flash('loginMessage') }); 
     });
-
     
     // LOGIN ===============================
     app.get('/login', function(req, res) {
@@ -18,16 +17,15 @@ module.exports = function(app, passport) {
         failureFlash : true 
     }));    
 
-
     // SIGNUP ==============================
     app.get('/register', function(req, res) {
         res.render('register.ejs', { message: req.flash('signupMessage') });
     });
 
     app.post('/register', passport.authenticate('local-signup', {
-        successRedirect : '/main', // redirect to the secure profile section
-        failureRedirect : '/register', // redirect back to the signup page if there is an error
-        failureFlash : true // allow flash messages
+        successRedirect : '/main', 
+        failureRedirect : '/register', 
+        failureFlash : true
     }));
 
     // MAIN ==============================
@@ -36,15 +34,35 @@ module.exports = function(app, passport) {
             user : req.user 
         });
     });
-    
 
     // LOGOUT ==============================
     app.get('/logout', function(req, res) {
         req.logout();
         res.redirect('/');
     });
+
+    // DISPLAY ==============================
+    app.get('/displayWebPage', function(req, res) {
+	console.log(req.query.sourceURL);
+	//res.render('displayWebPage.ejs', { sourceURL: req.sourceURL });
+	
+	var sourceUrl = req.query.sourceURL;
+	if (sourceUrl.indexOf('.html') >= 0){
+	    res.render('displayWebPage.ejs', { sourceURL: req.sourceURL });
+	}
+	else if (sourceUrl.indexOf('.pdf') >= 0){
+	    res.redirect("http://localhost:3000/viewer.html?file=" + sourceUrl);
+	}
+	else {
+	    res.redirect('/main');
+	}
+	
+    });
+    
 };
 
+// FUNCTIONS ==============================
+    
 // route middleware to make sure a user is logged in
 function isLoggedIn(req, res, next) {
 

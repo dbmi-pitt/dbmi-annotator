@@ -1,0 +1,44 @@
+<html>
+
+  <body>
+
+    <script src="./js/jquery-1.11.1.min.js"></script>
+    
+    <!-- screen spliter js lib -->
+    <link rel="stylesheet" href="css/jqx.base.css" type="text/css" />
+    <script type="text/javascript" src="js/jqxcore.js"></script>
+    <script type="text/javascript" src="js/jqxsplitter.js"></script>
+    <script type="text/javascript" src="js/jqxbuttons.js"></script>
+    <script type="text/javascript" src="js/jqxscrollbar.js"></script>
+    <script type="text/javascript" src="js/jqxpanel.js"></script>
+    <script type="text/javascript" src="js/demos.js"></script>
+    <script type="text/javascript" src="js/dbmi.js"></script>
+
+    <!-- annotator js  -->
+    <script src="./js/annotator.min.js"></script>
+
+    
+    <!-- div with id content will be reload with html label -->
+    <article>
+      <div id='splitter'>
+	
+	<div id="content" class="firstsection" style='overflow: auto'>
+	  
+          <button style="style:absolute;display:none" class="btn btn-success" onclick="showrightbyvalue()" value="hide"><span>Annotator</span></button>
+	  
+	  <div style="margin-top:30px" id="subcontent"> </div>  
+
+	</div>
+	
+	<div class="secondsection"></div>
+	
+      </div>
+      
+    </article>
+    
+    <!-- annotator ddi plugin load -->
+    <script src="./js/ddi-plugin.js"> </script>
+    
+  </body>
+
+</html>

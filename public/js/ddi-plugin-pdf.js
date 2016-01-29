@@ -17,31 +17,50 @@ if (typeof annotator === 'undefined') {
 	prefix: 'http://127.0.0.1:5000'
     });
 
-    // var pageUri = function () {
-    // 	return {
-    //         beforeAnnotationCreated: function (ann) {
-
-    // 		ann.uri = $("#sourceURL").val().replace(/[\/\\\-\:\.]/g, "");
-
-    //         }
-    // 	};
-    // };
+    var sourceURL = getURLParameter("file");
+    //alert(sourceURL);
     
-    // app.include(pageUri);
+    // add attribute uri for annotation as source url
+    var pageUri = function () {
+
+	source = getURLParameter("file");
+    	return {
+            beforeAnnotationCreated: function (ann) {
+    		ann.uri = source.replace(/[\/\\\-\:\.]/g, "");
+            }
+    	};
+    };
+    app.include(pageUri);
     
     app.start().then(function () 
 		     {
 
-			 var currUser = getCookie('email');
-			 if (currUser != null){
-			     app.ident.identity = currUser;
-			 } else{
-			     app.ident.identity = 'anonymous@gmail.com';                 
-			 }
+			 setTimeout(function () { alert(document.readyState); }, 2000);
+			 setTimeout(function () { app.annotations.load(); }, 2100);
 
+
+			 // var readyStateCheckInterval = setInterval(function() {
+			 //     if (document.readyState === "complete") {
+			 // 	 clearInterval(readyStateCheckInterval);
+			 // 	 app.annotations.load();
+			 // 	 alert('[INFO] annotations are loaded');
+			 //     }
+			 // }, 100);
+			 
 		     });
 
+
+    
 }
+
+
+
+function getURLParameter(name) {
+    return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search)||[,""])[1].replace(/\+/g, '%20'))||null
+}
+
+
+
 
 function getCookie(cname) {
 
@@ -56,6 +75,4 @@ function getCookie(cname) {
     return "";
 }
 
-// delay the load call, suppose to wait until pdf contents are loaded 
-setTimeout(function () { app.annotations.load(); }, 1800);
-setTimeout(function () { alert('[INFO] annotations are loaded'); }, 1900);
+

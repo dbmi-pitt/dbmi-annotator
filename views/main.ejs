@@ -3,28 +3,27 @@
   <body>
 
     <!-- annotator js  -->
-    <script src="./js/annotator.min.js"></script>
-    <script src="./js/jquery-1.11.1.min.js"></script>
-    <link rel="stylesheet" href="css/jqx.base.css" type="text/css" />
-    <script type="text/javascript" src="js/jqxcore.js"></script>
-    <script type="text/javascript" src="js/jqxsplitter.js"></script>
-    <script type="text/javascript" src="js/jqxbuttons.js"></script>
-    <script type="text/javascript" src="js/jqxscrollbar.js"></script>
-    <script type="text/javascript" src="js/jqxpanel.js"></script>
-    <script type="text/javascript" src="js/demos.js"></script>
-    <script type="text/javascript" src="js/dbmi.js"></script>
+    <!-- <script src="./js/annotator.min.js"></script> -->
+    <!-- <script src="./js/jquery-1.11.1.min.js"></script> -->
+    <!-- <link rel="stylesheet" href="css/jqx.base.css" type="text/css" /> -->
+    <!-- <script type="text/javascript" src="js/jqxcore.js"></script> -->
+    <!-- <script type="text/javascript" src="js/jqxsplitter.js"></script> -->
+    <!-- <script type="text/javascript" src="js/jqxbuttons.js"></script> -->
+    <!-- <script type="text/javascript" src="js/jqxscrollbar.js"></script> -->
+    <!-- <script type="text/javascript" src="js/jqxpanel.js"></script> -->
+    <!-- <script type="text/javascript" src="js/demos.js"></script> -->
+    <!-- <script type="text/javascript" src="js/dbmi.js"></script> -->
 
     <!-- div with id content will be reload with html label -->
+
+    <style> body        { padding-top:80px; word-wrap:break-word; } </style>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css"> 
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+    
     <article>
       <div id='splitter'>
 	
 	<div id="content" class="firstsection" style='overflow: auto'>
-
-	  <!-- add temp css styles which will be override after label load -->
-	  <style> body        { padding-top:80px; word-wrap:break-word; } </style>
-	  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css"> 
-	  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
-
 	  
           <button style="style:absolute;display:none" class="btn btn-success" onclick="showrightbyvalue()" value="hide"><span>Annotator</span></button>
 	  <div style="margin-top:30px" id="subcontent">
@@ -43,24 +42,37 @@
 		  <a href="/logout" class="btn btn-default btn-sm">Logout</a>
 
 		  <br><br><br>
+		  
 		  Note: Please paste valid URL of html web resouces or pdf document in 
 		  <br><br>
 		  <!-- url input box for label load  -->
-		  <div id="toppanel">  
-		    <input type="text" id="sourceURL" size="40" maxlength="150" />
-		    <button id="loadButton">load</button> 
+		  <div id="toppanel">
+		    
+		    <form action="/displayWebPage" method="get" >
+		      <input type="text" id="sourceURL" name="sourceURL" size="40" maxlength="150" />
+		      <button id="loadButton">load</button>
+		    </form>
+		    
 		  </div>
 		  
 		  
                   <h3><span class="fa fa-user"></span>&nbsp;Profile (annotation tasks) </h3>
                   <p>
-		    
+
+		    Local html labels: <br>
+		    http://localhost:3000/DDI-labels/010f9162-9f7f-4b6d-a6e4-4f832f26f38e.html <br>
+		    http://localhost:3000/DDI-labels/b891bd9f-fdb8-4862-89c5-ecdd700398a3.html
+		  </p>
+		  <p>
+		    Local pdf documents: <br>
+		    http://localhost:3000/DDI-pdfs/Backman_2005_16084850.pdf <br>
+		    http://localhost:3000/DDI-pdfs/Frelinger_2012_07351097.pdf 
                   </p>
 		  
 		</div>
               </div>
 
-    </div>
+	    </div>
 	    
 	    
 	    </header>
@@ -73,11 +85,7 @@
       </div>
       
     </article>
-    
-    <!-- hidden input purpose for tracking source url  -->
-    <input id="hdURL" type="hidden" class="hdURL" value="" name="testinput">
-    
-    <script src="./js/ddi-plugin.js"> </script>
+
     
   </body>
 

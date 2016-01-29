@@ -3,12 +3,10 @@ if (typeof annotator === 'undefined') {
           "Either download a tagged release from GitHub, or build the " +
           "package by running `make`");
 } else {
-    
     // DBMIAnnotator with highlight and DDI plugin
     var app = new annotator.App();
 
     app.include(annotator.ui.dbmimain);
-
     app.include(annotator.storage.debug);
     app.include(annotator.identity.simple);
     app.include(annotator.authz.acl);
@@ -16,49 +14,37 @@ if (typeof annotator === 'undefined') {
     app.include(annotator.storage.http, {
 	prefix: 'http://127.0.0.1:5000'
     });
-
+    
+    var sourceURL = getURLParameter("sourceURL");
+    
     // add attribute uri for annotation as source url
     var pageUri = function () {
+
+	source = getURLParameter("sourceURL");
     	return {
             beforeAnnotationCreated: function (ann) {
-		ann.uri = $('input#hdURL').val().replace(/[\/\\\-\:\.]/g, "");
+    		ann.uri = source.replace(/[\/\\\-\:\.]/g, "");
             }
     	};
     };
-    
     app.include(pageUri);
+
 
     app.start().then(function () 
 		     {   
-			 var currUser = getCookie('email');
-			 if (currUser != null){
-			     app.ident.identity = currUser;
-			 } else{
-			     app.ident.identity = 'anonymous@gmail.com';                 
-			 }
+			 $(".btn-success").css("display","block");
+			 $("#subcontent").load(sourceURL);
+			 
+		     }).then(function(){
+			 //alert(sourceURL);
+			 app.annotations.load({uri: sourceURL.replace(/[\/\\\-\:\.]/g, "")});
 		     });
-    
-    $('#loadButton').click(function(event) {
-	event.preventDefault();
 
-	var sourceUrlTxt = $('#sourceURL').val()
-	// set source url
-	$('input#hdURL').val(sourceUrlTxt)
-	
-	// if dailymed html label, load label in range of div content
-	if(sourceUrlTxt.indexOf('.html') >= 0){
-        $(".btn-success").css("display","block");
-	    $("#subcontent").load($("#sourceURL").val());
-	    // after html label loaded, then load annotations
-	    app.annotations.load({uri: $('input#hdURL').val().replace(/[\/\\\-\:\.]/g, "")})
-	}
-	
-	// if source is pdf documents, jump to pdf.js viewer.html
-	if(sourceUrlTxt.indexOf('.pdf') >= 0){
-	    window.location.href = "http://localhost:3000/viewer.html?file=" + sourceUrlTxt;
-	}
-    });
+}
 
+
+function getURLParameter(name) {
+    return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search)||[,""])[1].replace(/\+/g, '%20'))||null
 }
 
 
