@@ -1,4 +1,9 @@
 -------------------------------------------------------------
+Author
+-------------------------------------------------------------
+Yifan Ning, Wen Zhang
+
+-------------------------------------------------------------
 Overview 
 -------------------------------------------------------------
 Based on the open source project dbmi-annotator.js Version 2.0, dbmi-annotator aims to implement templated annotations. This will enable the creation of multiple annotation plugins that meet various use cases, including drug highlight annotation, DDI (drug-drug interaction) annotation, clinical trial annotation and PK(pharmacokinetics annotation).
@@ -8,14 +13,17 @@ DDI annotation is purpose for represents a drug drug interaction information in 
 Drug highlight annotation in the text quote of DDI annotation will be added to the field drug mentions, a list box including all drug mention options.
 
 -------------------------------------------------------------
-How to run locally
+How to run 
 -------------------------------------------------------------
-
 Notes: ensure annotator store is running at port 5000
        elasticsearch is running at port 9250
 
-(1) edit config file at  
-dbmi-annotator/server.js
+(1) create a config file at config/config.js
+Have information below for postgres db connection:
+
+var conString = process.env.DATABASE_URL || 'postgres://<username>:<password>@localhost:5432/dbmiannotator'; 
+module.exports = conString;
+
 
 (2) run program
 $ cd dbmi-annotator
@@ -24,15 +32,21 @@ $ nodemon server.js
 access to 'http://localhost:3000/'
 
 -------------------------------------------------------------
-Layout
+Nodejs based program - folder structures
 -------------------------------------------------------------
+config/ - configurations
+models/ - represents data, implements business logic and handles storage
+controllers/ - defines your app routes and their logic
+public/ - contains all static files like images, styles and javascript
+views/ - provides templates which are rendered and served by your routes
+server.js - initializes the app and glues everything together
+package.json - remembers all packages that your app depends on and their versions
 
-rdb-mysql: mysql dump
+reference: https://www.terlici.com/2014/08/25/best-practices-express-structure.html
 
-dbmiannotator: source code based on flask framework
-
-design:
-
+-------------------------------------------------------------
+design/ 
+-------------------------------------------------------------
 (1) diagram-workspaces/
 keep source code of diagram
 
@@ -75,12 +89,14 @@ $ make pkg/dbmi-annotator.js
 clone: https://github.com/dbmi-pitt/dbmi-annotator.git
 
 (1) Copy compiled JS lib from annotator to dbmi-annotator Js folder
-$ cp pkg/dbmi-annotator.js dbmi-annotator/dbmiannotator/static/js/dbmi-annotator-drug-ddiV-ddiE.js
+$ cp pkg/dbmi-annotator.js dbmi-annotator/public/js/annotator.js
 
 3 production mode configuration
+
 3.1 Required services
 Require annotator store running on port 5000 and elasticsearch 1.7 running on port 9250
 Require development mode dbmi-annotator running on port 5050
+
 3.2 Apache server configurations
 $ sudo aptitude install libapache2-mod-wsgi
 
@@ -116,6 +132,7 @@ install apache server and have configuration in httpd.conf as below:
     </Directory>
 
 3.3 run and load external web resources
+
 $ sudo service apache2 restart
 Access dbmi-annotator by ‘http://<domainname>:80/dbmiannotator’
 
@@ -137,7 +154,3 @@ Install head plugin:
 elasticsearch/bin/plugin -install mobz/elasticsearch-head
 open http://localhost:9250/_plugin/head/ for browse datastore
 
--------------------------------------------------------------
-Nodejs based program - folder structures
--------------------------------------------------------------
-https://www.terlici.com/2014/08/25/best-practices-express-structure.html
