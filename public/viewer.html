@@ -37,16 +37,16 @@ See https://github.com/adobe-type-tools/cmap-resources
     <link rel="resource" type="application/l10n" href="js/pdfjs/locale/locale.properties"/>
     <script src="js/pdfjs/l10n.js"></script>
     <script src="js/pdfjs/pdf.js"></script>
-
-
-
+<link rel="stylesheet" href="css/jquery-ui.css">
+<script src="js/jquery-1.11.1.min.js"></script>
+<script src="js/jquery-ui.js"></script>
     <script src="js/pdfjs/debugger.js"></script>
     <script src="js/pdfjs/viewer.js"></script>
 
    
   </head>
 
-  <body tabindex="1" class="loadingInProgress">
+  <body onload="Init()" tabindex="1" class="loadingInProgress">
     <div id="outerContainer">
 
       <div id="sidebarContainer">
@@ -254,10 +254,29 @@ See https://github.com/adobe-type-tools/cmap-resources
         <div id="viewerContainer" tabindex="0">
           <div id="viewer" class="pdfViewer"></div>
         </div>
-        <button class="btn btn-success" onclick="showrightbyvalue()" value="hide"><span><--Annotator</span></button>
+        <button class="btn btn-success" onclick="buttonshowright()" value="hide"><span><--Annotator</span></button>
       </div>
-      <div class="secondsection">
+      <div id="tabs">
+  <ul>
+    <li><a href="#tabs-1">Annotation List</a></li>
+    <li><a href="#tabs-2">Annotation Editor</a></li>
+    <li><a href="#tabs-3">Sign In</a></li>
+  </ul>
+  <div id="tabs-1">
+      <p>COMING SOON</p>
+  </div>
+  <div id="tabs-2">
+    <div class="secondsection">
       </div>
+  </div>
+  <div id="tabs-3">
+    <h2>Sign In</h2><br>
+        <input type="text" style="width:150px;height:30px" id="username" size="20" placeholder="User Name" maxlength="30" />
+        <input type="text" style="width:150px;height:30px" id="userpwd" size="20" placeholder="Password" maxlength="30" /><br><br>
+        <button style="align:right;width:185px;height:30px" id="loginButton">login</button> 
+  </div>
+</div>
+      
 </div>
         <div id="errorWrapper" hidden='true'>
           <div id="errorMessageLeft">
@@ -434,8 +453,6 @@ See https://github.com/adobe-type-tools/cmap-resources
 
 <link rel="stylesheet" href="css/jqx.base.css" type="text/css" />
 
-
-<script src="js/jquery-1.11.1.min.js"></script>
 <script type="text/javascript" src="js/jqxcore.js"></script>
 <script type="text/javascript" src="js/jqxsplitter.js"></script>
 <script type="text/javascript" src="js/jqxbuttons.js"></script>
@@ -443,7 +460,9 @@ See https://github.com/adobe-type-tools/cmap-resources
 <script type="text/javascript" src="js/jqxpanel.js"></script>
 <script type="text/javascript" src="js/demos.js"></script>
 <script type="text/javascript" src="js/dbmi.js"></script>
-
+<script>
+    $( "#tabs" ).tabs();
+</script>
 
   </body>
 </html>

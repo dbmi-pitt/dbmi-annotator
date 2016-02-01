@@ -37,27 +37,6 @@ if (typeof annotator === 'undefined') {
 			     app.ident.identity = 'anonymous@gmail.com';                 
 			 }
 		     });
-    
-    $('#loadButton').click(function(event) {
-	event.preventDefault();
-
-	var sourceUrlTxt = $('#sourceURL').val()
-	// set source url
-	$('input#hdURL').val(sourceUrlTxt)
-	
-	// if dailymed html label, load label in range of div content
-	if(sourceUrlTxt.indexOf('.html') >= 0){
-        $(".btn-success").css("display","block");
-	    $("#subcontent").load($("#sourceURL").val());
-	    // after html label loaded, then load annotations
-	    app.annotations.load({uri: $('input#hdURL').val().replace(/[\/\\\-\:\.]/g, "")})
-	}
-	
-	// if source is pdf documents, jump to pdf.js viewer.html
-	if(sourceUrlTxt.indexOf('.pdf') >= 0){
-	    window.location.href = "http://localhost:3000/viewer.html?file=" + sourceUrlTxt;
-	}
-    });
 
 }
 

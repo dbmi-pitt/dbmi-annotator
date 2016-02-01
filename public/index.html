@@ -6,6 +6,7 @@
     <script src="./js/annotator.min.js"></script>
     <script src="./js/jquery-1.11.1.min.js"></script>
     <link rel="stylesheet" href="css/jqx.base.css" type="text/css" />
+    <link rel="stylesheet" href="css/dbmiannotator.css" type="text/css" />
 <script type="text/javascript" src="js/jqxcore.js"></script>
 <script type="text/javascript" src="js/jqxsplitter.js"></script>
 <script type="text/javascript" src="js/jqxbuttons.js"></script>
@@ -17,11 +18,13 @@
     <article>
       <div id='splitter'>
       <div id="content" class="firstsection" style='overflow: auto'>
-        <button style="style:absolute;display:none" class="btn btn-success" onclick="showrightbyvalue()" value="hide"><span><--Annotator</span></button>
+        <button style="style:absolute;display:none" class="btn btn-success" onclick="buttonshowright()" value="hide"><span><--Annotator</span></button>
       <div style="margin-top:30px" id="subcontent">
 	    
-    <header>
-    <div id="toppanel">
+    <header style="width: 100%; text-align: center;">
+    <div style="display: inline-block;" id="toppanel">
+      <img src="images/logo.png" alt="Department of Biomedical Informatics" style="float: left;width:150px;height:150px;">
+      <div style="float: left;margin-left:70px" align="left">
       <nav>
       <h2>DBMI Annotator demonstration</h2>
         <!-- <ul> -->
@@ -37,13 +40,13 @@
       </nav>
 
         <input type="text" id="sourceURL" size="40" maxlength="150" />
-        <button id="loadButton">load</button> 
+        <button class="custombutton -blue center" id="loadButton">load</button> 
         <br>
-        <h2>login</h2>
+        <h2>Sign In</h2>
         <input type="text" id="username" size="20" maxlength="30" />
         <input type="text" id="userpwd" size="20" maxlength="30" />
         <button id="loginButton">login</button> 
-
+      </div>
     </div>
 
     </header>
@@ -60,8 +63,26 @@
     <!-- hidden input purpose for tracking source url  -->
     <input id="hdURL" type="hidden" class="hdURL" value="" name="testinput">
 
-    <script src="./js/ddi-plugin.js"> </script>
+    <script src="js/ddi-plugin.js"> </script>
+    <script>
+    $('#loadButton').click(function(event) {
+  event.preventDefault();
 
+  var sourceUrlTxt = $('#sourceURL').val()
+  // set source url
+  $('input#hdURL').val(sourceUrlTxt)
+  
+  // if dailymed html label, load label in range of div content
+  if(sourceUrlTxt.indexOf('.html') >= 0){
+        window.location.href = "http://localhost:3000/webViewer.html?webpage=" + sourceUrlTxt;
+  }
+  
+  // if source is pdf documents, jump to pdf.js viewer.html
+  if(sourceUrlTxt.indexOf('.pdf') >= 0){
+      window.location.href = "http://localhost:3000/viewer.html?file=" + sourceUrlTxt;
+  }
+    });
+    </script>
   </body>
 
 </html>
