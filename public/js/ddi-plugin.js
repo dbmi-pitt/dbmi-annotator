@@ -16,6 +16,7 @@ if (typeof annotator === 'undefined') {
     });
     
     var sourceURL = getURLParameter("sourceURL");
+    var username = getURLParameter("username");
     
     // add attribute uri for annotation as source url
     var pageUri = function () {
@@ -29,15 +30,17 @@ if (typeof annotator === 'undefined') {
     };
     app.include(pageUri);
 
-
+    $(".btn-success").css("display","block");
+    $("#subcontent").load(sourceURL);
+    
     app.start().then(function () 
-		     {   
-			 $(".btn-success").css("display","block");
-			 $("#subcontent").load(sourceURL);
+		     {
+			 app.ident.identity = username;
 			 
 		     }).then(function(){
-			 //alert(sourceURL);
+			 
 			 app.annotations.load({uri: sourceURL.replace(/[\/\\\-\:\.]/g, "")});
+			 alert("annotations for user: " + username + " are loaded");
 		     });
 
 }

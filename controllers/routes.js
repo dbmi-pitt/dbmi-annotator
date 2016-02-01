@@ -42,14 +42,15 @@ module.exports = function(app, passport) {
     });
 
     // DISPLAY ==============================
-    app.get('/displayWebPage', function(req, res) {
+    app.get('/displayWebPage', isLoggedIn, function(req, res) {
 	console.log(req.query.sourceURL);
-	//res.render('displayWebPage.ejs', { sourceURL: req.sourceURL });
+	console.log(req.user.username);
 	
 	var sourceUrl = req.query.sourceURL;
 	if (sourceUrl.indexOf('.html') >= 0){
-	    res.render('displayWebPage.ejs', { sourceURL: req.sourceURL });
-	}
+	    //res.render('displayWebPage.ejs', { sourceURL: req.sourceURL });
+	    res.render('displayWebPage.ejs', { username: req.user.username });
+	} 
 	else if (sourceUrl.indexOf('.pdf') >= 0){
 	    res.redirect("http://localhost:3000/viewer.html?file=" + sourceUrl);
 	}

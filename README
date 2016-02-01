@@ -15,8 +15,19 @@ Drug highlight annotation in the text quote of DDI annotation will be added to t
 -------------------------------------------------------------
 How to run 
 -------------------------------------------------------------
-Notes: ensure annotator store is running at port 5000
-       elasticsearch is running at port 9250
+Notes: ensure elasticsearch is running at port 9250
+       annotator store is running at port 5000
+       (ex. Ubuntu OS
+       
+       elasticsearch 
+       $ bash /var/lib/elasticsearch-1.7.1/bin/elasticsearch > /var/lib/elasticsearch-1.7.1/logs/elasticsearch.log 2>&1 &
+       
+       annotator-store
+       $ cd /home/<DIR TO>/annotator-store/
+       $ source pyenv/bin/activate
+       $ nohup python run.py 2>&1
+       )
+
 
 (1) create a config file at config/config.js
 Have information below for postgres db connection:
