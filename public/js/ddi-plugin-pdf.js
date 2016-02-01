@@ -17,13 +17,13 @@ if (typeof annotator === 'undefined') {
 	prefix: 'http://127.0.0.1:5000'
     });
 
-    var sourceURL = getURLParameter("file");
-    //alert(sourceURL);
+    var sourceURL = getURLParameter("file").trim();
+    var username = getURLParameter("username");
     
     // add attribute uri for annotation as source url
     var pageUri = function () {
 
-	source = getURLParameter("file");
+	source = getURLParameter("file").trim();
     	return {
             beforeAnnotationCreated: function (ann) {
     		ann.uri = source.replace(/[\/\\\-\:\.]/g, "");
@@ -34,18 +34,14 @@ if (typeof annotator === 'undefined') {
     
     app.start().then(function () 
 		     {
+			 app.ident.identity = username;
 
-			 setTimeout(function () { alert(document.readyState); }, 2000);
-			 setTimeout(function () { app.annotations.load(); }, 2100);
-
-
-			 // var readyStateCheckInterval = setInterval(function() {
-			 //     if (document.readyState === "complete") {
-			 // 	 clearInterval(readyStateCheckInterval);
-			 // 	 app.annotations.load();
-			 // 	 alert('[INFO] annotations are loaded');
-			 //     }
-			 // }, 100);
+			 //setTimeout(function () { alert(document.readyState); }, 2000);
+			 setTimeout(function ()
+				    { app.annotations.load(
+					{uri: sourceURL.replace(/[\/\\\-\:\.]/g, "")}
+				    );
+				    }, 2100);
 			 
 		     });
 
@@ -75,31 +71,4 @@ function getCookie(cname) {
     return "";
 }
 
-
-// from >>>>>>> wenz/master
-// $("#pageContainer").load(function() {
-//             alert("aa");
-//             app.annotations.load();
-//         });
-
-
-// var times = 0;
-//  function Init () {
-           
-//             container = document.getElementById ("viewer");
-//             if (container.addEventListener) {
-//                 container.addEventListener ('pageshow', OnSubtreeModified, false);
-//             }
-//             //textNode = document.createTextNode ("My text");
-//         }
-
-// function OnSubtreeModified () {
-//             app.annotations.load();
-//             alert('[INFO] annotations are loaded');
-//             //alert ("The subtree that belongs to the container has been modified.");
-//         }
-
-// // delay the load call, suppose to wait until pdf contents are loaded
-// setTimeout(function () { app.annotations.load(); }, 2000);
-// setTimeout(function () { alert('[INFO] annotations are loaded'); }, 2000);
 

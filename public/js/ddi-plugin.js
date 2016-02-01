@@ -15,13 +15,13 @@ if (typeof annotator === 'undefined') {
 	prefix: 'http://127.0.0.1:5000'
     });
     
-    var sourceURL = getURLParameter("sourceURL");
+    var sourceURL = getURLParameter("sourceURL").trim();
     var username = getURLParameter("username");
     
     // add attribute uri for annotation as source url
     var pageUri = function () {
 
-	source = getURLParameter("sourceURL");
+	source = getURLParameter("sourceURL").trim();
     	return {
             beforeAnnotationCreated: function (ann) {
     		ann.uri = source.replace(/[\/\\\-\:\.]/g, "");
@@ -30,12 +30,12 @@ if (typeof annotator === 'undefined') {
     };
     app.include(pageUri);
 
-    $(".btn-success").css("display","block");
-    $("#subcontent").load(sourceURL);
     
     app.start().then(function () 
 		     {
 			 app.ident.identity = username;
+			 $(".btn-success").css("display","block");
+			 $("#subcontent").load(sourceURL);
 			 
 		     }).then(function(){
 			 

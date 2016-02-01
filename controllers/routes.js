@@ -43,10 +43,10 @@ module.exports = function(app, passport) {
 
     // DISPLAY ==============================
     app.get('/displayWebPage', isLoggedIn, function(req, res) {
-	console.log(req.query.sourceURL);
-	console.log(req.user.username);
+	//console.log(req.query.sourceURL);
+	//console.log(req.user.username);
 	
-	var sourceUrl = req.query.sourceURL;
+	var sourceUrl = req.query.sourceURL.trim();
 	if (sourceUrl.indexOf('.html') >= 0){
 	    //res.render('displayWebPage.ejs', { sourceURL: req.sourceURL });
 	    res.render('displayWebPage.ejs', { username: req.user.username });
