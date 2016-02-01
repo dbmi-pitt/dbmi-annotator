@@ -42,9 +42,7 @@ if (typeof annotator === 'undefined') {
 			 app.annotations.load({uri: sourceURL.replace(/[\/\\\-\:\.]/g, "")});
 			 alert("annotations for user: " + username + " are loaded");
 		     });
-
 }
-
 
 function getURLParameter(name) {
     return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search)||[,""])[1].replace(/\+/g, '%20'))||null
@@ -62,5 +60,5 @@ function getCookie(cname) {
         if (c.indexOf(name) == 0) return c.substring(name.length,c.length);
     }
     return "";
-} 
+}
 

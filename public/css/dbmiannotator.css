@@ -1,9 +1,101 @@
-#toppanel{
-    font-size:13px;
-    text-align: center;
-    background-color:#FFFFFF;
-    height:130px;
-    vertical-align:middle;
-    width: 80%;
-    margin: 0 auto;
+
+
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,700);
+
+$dark:  #171717;
+$blue:  #0167F6;
+$green: #3AB54A;
+$white: #FFFFFF;
+
+
+$font-face: 'Open Sans', sans-serif;
+
+body {
+  background: white;
+  font-family: $font-face;
+  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+  height: 100vh;
+  line-height: 1;
 }
+
+h1 {
+  text-align: center;
+  font-family: $font-face;
+  font-size: 22px;
+  color: $dark;
+  font-weight: 700;
+  
+  span {
+    font-weight: 400;
+  }
+  
+}
+
+.container {
+  min-width: 640px;
+  
+  display: flex;
+  flex-direction: column;
+}
+
+.button-container {
+    display: flex;
+    justify-content: space-between;
+    margin: 60px auto;
+}
+
+
+// Copy button styles
+.custombutton {
+  border: 0 none;
+  border-radius: 5px;
+  
+  padding: 12px 55px;
+  margin: 0 10px;
+  
+  cursor: pointer;
+  display: inline-block;
+  
+  font-size: 14px;
+  color: #fff;
+  text-transform: none;
+  
+  transition: all 80ms ease-in-out;
+
+  &:hover {
+      opacity: .7;
+  }
+}
+
+.custombutton.-dark {
+  background: $dark;
+  color: $white;
+}
+  
+.custombutton.-green {
+  background: $green;
+  color: $white;
+}
+
+.custombutton.-blue {
+  background: $blue;
+  color: $white;
+}
+
+.custombutton.-border {
+  background: transparent;
+  border: 2px solid $blue;
+  color: $blue;
+  
+  &:hover {
+    border-color: $dark;
+    color: $dark;
+    
+    opacity: 1;
+  }
+}
+

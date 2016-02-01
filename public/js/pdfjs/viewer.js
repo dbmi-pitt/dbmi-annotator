@@ -1855,6 +1855,7 @@ var PDFHistory = (function () {
         // If the entire viewer (including the PDF file) is cached in
         // the browser, we need to reattach the 'beforeunload' event listener
         // since the 'DOMContentLoaded' event is not fired on 'pageshow'.
+
         window.addEventListener('beforeunload', pdfHistoryBeforeUnload, false);
       }, false);
 
@@ -5242,6 +5243,7 @@ var PDFViewer = (function pdfViewer() {
      * @private
      */
     _ensurePdfPageLoaded: function (pageView) {
+
       if (pageView.pdfPage) {
         return Promise.resolve(pageView.pdfPage);
       }

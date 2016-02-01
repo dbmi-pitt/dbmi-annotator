@@ -76,3 +76,30 @@ function getCookie(cname) {
 }
 
 
+// from >>>>>>> wenz/master
+// $("#pageContainer").load(function() {
+//             alert("aa");
+//             app.annotations.load();
+//         });
+
+
+// var times = 0;
+//  function Init () {
+           
+//             container = document.getElementById ("viewer");
+//             if (container.addEventListener) {
+//                 container.addEventListener ('pageshow', OnSubtreeModified, false);
+//             }
+//             //textNode = document.createTextNode ("My text");
+//         }
+
+// function OnSubtreeModified () {
+//             app.annotations.load();
+//             alert('[INFO] annotations are loaded');
+//             //alert ("The subtree that belongs to the container has been modified.");
+//         }
+
+// // delay the load call, suppose to wait until pdf contents are loaded
+// setTimeout(function () { app.annotations.load(); }, 2000);
+// setTimeout(function () { alert('[INFO] annotations are loaded'); }, 2000);
+
