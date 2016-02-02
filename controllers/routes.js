@@ -30,9 +30,31 @@ module.exports = function(app, passport) {
 
     // MAIN ==============================
     app.get('/main', isLoggedIn, function(req, res) {
-        res.render('main.ejs', {
-            user : req.user 
-        });
+	var request = require("request");
+	var url = "http://127.0.0.1:5000/search?user=alice";
+	
+	request({url: url, json: true}, function(error,response,body){
+	    if (!error && response.statusCode === 200) {
+		console.log(body);
+		
+		res.render('main.ejs', {
+		    user : req.user,
+		    annotations : body
+		});
+		
+	    } else {
+
+		res.render('main.ejs', {
+		    user : req.user,
+		    annotations : {'total':0}
+		});
+
+	    }
+
+	    
+	});
+	
+
     });
 
     // LOGOUT ==============================

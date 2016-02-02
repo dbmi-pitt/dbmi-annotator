@@ -73,7 +73,7 @@ Deployment (config by components):
 -------------------------------------------------------------
 1 Components
 
-dbmi-annotator: python based Flask project, provides user authentication, annotation management, load web resources, etc. Running on port 5050
+dbmi-annotator: JS based, provides user authentication, annotation management, load web resources, etc. Running on port 5050
 
 Elasticsearch 1.7.1: elasticsearch data store, running on port 9250
 Mysql 1: stores user information, running on port 3336
@@ -112,10 +112,6 @@ Require development mode dbmi-annotator running on port 5050
 $ sudo aptitude install libapache2-mod-wsgi
 
 install apache server and have configuration in httpd.conf as below:
-        
-        WSGIDaemonProcess dbmiannotator user=<username> group=<group name> threads=5
-        WSGIScriptAlias /dbmiannotator <FILE PATH TO>/start.wsgi
-        Alias "/static/" "/<FILE PATH TO>/dbmi-annotator/dbmiannotator/static/"
 
     #Load function to unescape strings and name it unencode                                   
     RewriteMap unencode int:unescape
@@ -130,12 +126,6 @@ install apache server and have configuration in httpd.conf as below:
     # correct css path for static dailymed pages
     #RewriteRule ^/dbmiannotator/dailymed/(.*)$ http://localhost/DDI-html-labels/dailymed/$1 [P]  
     RewriteRule ^/dailymed/(.*)$ http://localhost/DDI-html-labels/dailymed/$1 [P]  
-
-
-    ## dbmi annotator config - Flask
-    #WSGIDaemonProcess dbmiannotator user=yin2 group=yin2 threads=5
-    WSGIScriptAlias /dbmiannotator /home/yin2/dbmi-annotator/dbmiannotator/start.wsgi
-    Alias "/static/" "/home/yin2/dbmi-annotator/dbmiannotator/static/"
 
     <Directory />
         Require all granted

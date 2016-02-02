@@ -24,12 +24,12 @@ if (typeof annotator === 'undefined') {
 	source = getURLParameter("sourceURL").trim();
     	return {
             beforeAnnotationCreated: function (ann) {
-    		ann.uri = source.replace(/[\/\\\-\:\.]/g, "");
+    		ann.uri = source.replace(/[\/\\\-\:\.]/g, "");		
+		ann.user = username;
             }
     	};
     };
     app.include(pageUri);
-
     
     app.start().then(function () 
 		     {
