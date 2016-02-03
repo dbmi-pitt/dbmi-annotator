@@ -16,6 +16,7 @@
     "ejs": "~0.8.5",
     "express": "^4.13.3",
     "express-session": "~1.0.0",
+    "json2csv": "^3.1.0",
     "method-override": "~1.0.0",
     "morgan": "~1.0.0",
     "node-uuid": "^1.4.7",

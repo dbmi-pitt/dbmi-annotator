@@ -35,7 +35,7 @@ module.exports = function(app, passport) {
 	
 	request({url: url, json: true}, function(error,response,body){
 	    if (!error && response.statusCode === 200) {
-		console.log(body);
+		//console.log(body);
 		
 		res.render('main.ejs', {
 		    user : req.user,
@@ -79,6 +79,44 @@ module.exports = function(app, passport) {
 	}
 	
     });
+
+
+    // EXPORT ==============================
+    app.get('/exportcsv', function(req, res){
+	
+	var filename = req.query.filename;
+	
+	console.log(filename);
+	
+	if (filename) {
+	    var filepath = 'export/' + filename;
+	    var request = require("request");
+	    
+	    var url = "http://127.0.0.1:5000/search?email=" + req.query.email;
+	    
+	    request({url: url, json: true}, function(error,response,body){
+		if (!error && response.statusCode === 200) {
+		    console.log(body);
+		    
+		    var json2csv = require('json2csv');
+		    json2csv({data: body.rows, fields: ['email', 'rawurl', 'annotationType', 'assertion_type', 'quote', 'Drug1', 'Type1', 'Role1', 'Drug2', 'Type2', 'Role2', 'Modality', 'Evidence_modality']}, function(err, csv) {
+			if (err) console.log(err);
+			fs.writeFile(filepath , csv, function(err) {
+			    if (err) throw err;
+			    console.log('[INFO] annotation saved in export!');
+			});
+		    });
+		    
+		}	
+	    });
+	    
+	    res.redirect('/main');
+	    
+	} else {
+	    res.resdirect('/main');
+	}	
+    });
+
     
 };
 
