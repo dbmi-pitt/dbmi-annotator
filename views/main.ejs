@@ -13,7 +13,7 @@
 	  <div style="margin-top:30px" id="subcontent">  
 
 	    <div class="page-header text-center">
-              <h1><span class="fa fa-anchor"></span> DBMI Annotator demonstration</h1>
+              <h1><span class="fa fa-anchor"></span> DBMI Annotator </h1>
 	    </div>
 
 	    <div class="row">
@@ -26,23 +26,23 @@
 
 		  <br><br><br>
 		  
-		  Note: Please paste valid URL of html web resouces or pdf document in 
+		  Note: Please input valid html web resources or PDF document URL in 
 		  <br><br>
 		  <!-- url input box for label load  -->
 		  <div id="toppanel">
 		    
 		    <form action="/displayWebPage" method="get" >
 		      <input type="text" id="sourceURL" name="sourceURL" size="40" maxlength="150" />
-		      <input type="text" id="email" name="email" value="<%= user.email %>" style="display: none;" />
-		      <button id="loadButton">load</button>
+		      <input type="text" id="email" name="email" value="<%= user.email %>" style="display: none;" />  &nbsp;
+		      <button id="loadButton" class="btn btn-success">load</button>
 		    </form>
 		    
 		  </div>
 		  
 		  
-                  <h3><span class="fa fa-user"></span>&nbsp;Profile (annotation tasks) </h3>
+                  <h3><span class="fa fa-user"></span>&nbsp;Profile (Overview annotation tasks) </h3>
 		  
-		  <table>
+		  <table class="table table-striped" >
 		       <tr>
 			 <td>Document source URL </td>
 			 <td>Number of Annotations </td>

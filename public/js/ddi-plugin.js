@@ -39,7 +39,7 @@ if (typeof annotator === 'undefined') {
 		     }).then(function(){
 			 app.annotations.load({uri: sourceURL.replace(/[\/\\\-\:\.]/g, ""), email: email});
 		     }).then(function(){
-			 alert("annotations for user: " + email + " are loaded");
+			 alert("Annotations for user: " + email + " are loaded");
 		     });
 }
 
