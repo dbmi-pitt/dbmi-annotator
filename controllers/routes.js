@@ -39,14 +39,16 @@ module.exports = function(app, passport) {
 		
 		res.render('main.ejs', {
 		    user : req.user,
-		    annotations : body
+		    annotations : body,
+		    message: req.flash('exportMessage')
 		});
 		
 	    } else {
 
 		res.render('main.ejs', {
 		    user : req.user,
-		    annotations : {'total':0}
+		    annotations : {'total':0},
+		    message: req.flash('exportMessage')
 		});
 
 	    }
@@ -110,9 +112,11 @@ module.exports = function(app, passport) {
 		}	
 	    });
 	    
+	    req.flash('exportMessage', 'successfully exported!');
 	    res.redirect('/main');
 	    
 	} else {
+	    req.flash('exportMessage', 'exported failed, file not exists!');
 	    res.resdirect('/main');
 	}	
     });

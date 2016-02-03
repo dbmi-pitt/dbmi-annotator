@@ -1,5 +1,4 @@
 <html>
-
   <body>
 
     <style> body        { padding-top:80px; word-wrap:break-word; } </style>
@@ -8,63 +7,67 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
     
     <article>
-      <div id='splitter'>
+
+      <div class="row">
 	
-	<div id="content" class="firstsection" style='overflow: auto'>
-	  <div style="margin-top:30px" id="subcontent">  
-
-
-
-	    <div class="row">
-	   
-              <div class="col-sm-8">
-
-		<div class="page-header text-center">
-		  <h1><span class="fa fa-anchor"></span> DBMI Annotator </h1>
-		</div>
-		
-		<div class="well">
-
-		  <strong>Welcome: </strong> <%= user.email %> &nbsp;&nbsp;&nbsp;&nbsp;
-		  <a href="/logout" class="btn btn-default btn-sm">Logout</a>
-
-		  <br><br><br>
+        <div class="col-sm-8">
+	  <div class="page-header text-center">
+	    <h1><span class="fa fa-anchor"></span> DBMI Annotator </h1>
+	  </div>
+	  
+	  <div class="well">
+	    
+	    <strong>Welcome: </strong> <%= user.email %> &nbsp;&nbsp;&nbsp;&nbsp;
+	    <a href="/logout" class="btn btn-default btn-sm">Logout</a>
+	    
+	    <br><br><br>
+	    
+	    <!-- annotation export  -->
+	    <strong>Export my annotation: </strong><br>
+	    <form action="/exportcsv" method="get" >
+	      <span class="btn btn-default btn-file">
+		<input type="file" name="filename" >
+	      </span>
+	      <input type="text" id="email" name="email" value="<%= user.email %>" style="display: none;" />
+	      
+	      <button id="exportButton" class="btn btn-success">export</button>
+	      
+	      <% if (message.length > 0) {
+	      if (message.indexOf('success')){
+	      %>
+	      <div class="alert alert-success"><%=message %></div>
+	      <% } else { %>
+	      <div class="alert alert-warning"><%=message %></div>
+	      <% } } %>		  
+	      
+	    </form>
 		  
-		  <!-- annotation export  -->
-		  <strong>Export my annotation: </strong><br>
-		  <form action="/exportcsv" method="get" >
-		  <span class="btn btn-default btn-file">
-		     <input type="file" name="filename" >
-		  </span>
-		  <input type="text" id="email" name="email" value="<%= user.email %>" style="display: none;" /> 
-		  <button id="exportButton" class="btn btn-success">export</button>
-		  </form>
-		  
-		  <br><br>
-
-		  <strong>Load document: </strong>
-		  (Please input valid html web resources or PDF document URL): 
-		  <br>
-		  
-		  <!-- label load  -->
-		  <div id="toppanel">
-		    
-		    <form action="/displayWebPage" method="get" >
-		      <input type="text" id="sourceURL" name="sourceURL" size="40" maxlength="150" />
-		      <input type="text" id="email" name="email" value="<%= user.email %>" style="display: none;" />  &nbsp;
-		      <button id="loadButton" class="btn btn-success">load</button>
-		    </form>
-		    
-		  </div>
+	    <br><br>
+	    
+	    <!-- document load  -->
+	    <strong>Load document: </strong>
+	    (Please input valid html web resources or PDF document URL): 
+	    <br>
 		  
 		  
-                  <h3><span class="fa fa-user"></span>&nbsp;Profile (Overview annotation tasks) </h3>
+	    <div id="toppanel">
+	      
+	      <form action="/displayWebPage" method="get" >
+		<input type="text" id="sourceURL" name="sourceURL" size="40" maxlength="150" />
+		<input type="text" id="email" name="email" value="<%= user.email %>" style="display: none;" />  &nbsp;
+		<button id="loadButton" class="btn btn-success">load</button>
+	      </form>
+	      
+	    </div>
 		  
-		  <table class="table table-striped" >
-		       <tr>
-			 <td>Document source URL </td>
-			 <td>Number of Annotations </td>
-		       </tr>
+		  
+            <h3><span class="fa fa-user"></span>&nbsp;Profile (Overview annotation tasks) </h3>
+		  
+	    <table class="table table-striped" >
+	      <tr>
+		<td>Document source URL </td>
+		<td>Number of Annotations </td>
+	      </tr>
 		    
 <%
 
@@ -81,42 +84,30 @@ if (annotations.total > 0){
 
     for (var item in dictAnnots){
 	    %>
-	    <tr>
-	    <td><%=item %></td>
-	    <td><%=dictAnnots[item] %> </td>
-	    </tr>
-	    
-	    <% }
-} else { %>
-	 </table>
-	 <strong>No annotations been made, below are sample document urls </strong><br><br>
-         <p>Local dailymed html labels: <br>
-	 http://localhost:3000/DDI-labels/010f9162-9f7f-4b6d-a6e4-4f832f26f38e.html <br>http://localhost:3000/DDI-labels/b891bd9f-fdb8-4862-89c5-ecdd700398a3.html
-	 </p>
-		  
-	 <p>
-	 Local pdf documents: <br>http://localhost:3000/DDI-pdfs/Backman_2005_16084850.pdf <br>http://localhost:3000/DDI-pdfs/Frelinger_2012_07351097.pdf 
-         </p>
+  <tr>
+    <td><%=item %></td>
+    <td><%=dictAnnots[item] %> </td>
+  </tr>
+  
+  <% }
+     } else { %>
+	    </table>
+	    <strong>No annotations been made, below are sample document urls </strong><br><br>
+            <p>Local dailymed html labels: <br>
+	      http://localhost:3000/DDI-labels/010f9162-9f7f-4b6d-a6e4-4f832f26f38e.html <br>http://localhost:3000/DDI-labels/b891bd9f-fdb8-4862-89c5-ecdd700398a3.html
+	    </p>
+	    <p>
+	      Local pdf documents: <br>http://localhost:3000/DDI-pdfs/Backman_2005_16084850.pdf <br>http://localhost:3000/DDI-pdfs/Frelinger_2012_07351097.pdf 
+            </p>
 
-	 <% } %>
-    </div>
-    </div>
-    
-</div>
+	    <% } %>
 	    
-	    
-	    </header>
 	  
+	  </div>
 	</div>
-      </div>
-      
-      <div class="secondsection"></div>
-      
-      </div>
-      
+	
+      </div>	
     </article>
-
     
   </body>
-
 </html>
