@@ -16,16 +16,16 @@ if (typeof annotator === 'undefined') {
     });
     
     var sourceURL = getURLParameter("sourceURL").trim();
-    var username = getURLParameter("username");
+    var email = getURLParameter("email");
     
-    // add attribute uri for annotation as source url
     var pageUri = function () {
 
 	source = getURLParameter("sourceURL").trim();
     	return {
             beforeAnnotationCreated: function (ann) {
+		ann.rawurl = source;
     		ann.uri = source.replace(/[\/\\\-\:\.]/g, "");		
-		ann.user = username;
+		ann.email = email;
             }
     	};
     };
@@ -33,14 +33,13 @@ if (typeof annotator === 'undefined') {
     
     app.start().then(function () 
 		     {
-			 app.ident.identity = username;
+			 app.ident.identity = email;
 			 $(".btn-success").css("display","block");
 			 $("#subcontent").load(sourceURL);
-			 
 		     }).then(function(){
-			 
-			 app.annotations.load({uri: sourceURL.replace(/[\/\\\-\:\.]/g, "")});
-			 alert("annotations for user: " + username + " are loaded");
+			 app.annotations.load({uri: sourceURL.replace(/[\/\\\-\:\.]/g, ""), email: email});
+		     }).then(function(){
+			 alert("annotations for user: " + email + " are loaded");
 		     });
 }
 
@@ -48,17 +47,4 @@ function getURLParameter(name) {
     return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search)||[,""])[1].replace(/\+/g, '%20'))||null
 }
 
-
-function getCookie(cname) {
-
-    //alert('get cookie by name: ' + cname)
-    var name = cname + "=";
-    var ca = document.cookie.split(';');
-    for(var i=0; i<ca.length; i++) {
-        var c = ca[i];
-        while (c.charAt(0)==' ') c = c.substring(1);
-        if (c.indexOf(name) == 0) return c.substring(name.length,c.length);
-    }
-    return "";
-}
 

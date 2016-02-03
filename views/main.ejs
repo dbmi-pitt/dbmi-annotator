@@ -33,7 +33,7 @@
 		    
 		    <form action="/displayWebPage" method="get" >
 		      <input type="text" id="sourceURL" name="sourceURL" size="40" maxlength="150" />
-		      <input type="text" id="username" name="username" value="<%= user.username %>" style="display: none;" />
+		      <input type="text" id="email" name="email" value="<%= user.email %>" style="display: none;" />
 		      <button id="loadButton">load</button>
 		    </form>
 		    
@@ -44,36 +44,47 @@
 		  
 		  <table>
 		       <tr>
-			 <td>Document source url </td>
-			 <td>Annotation type </td>
-			 <td>Annotated date </td>
+			 <td>Document source URL </td>
+			 <td>Number of Annotations </td>
 		       </tr>
 		    
-		    <%
-		       if (annotations.total > 0){
-		       for(var i=0; i < annotations.rows.length; i++) {  %>
-		       <tr>
-			 <td><%=annotations.rows[i].uri %> </td>
-			 <td><%=annotations.rows[i].annotationType %> </td>
-			 <td><%=annotations.rows[i].created %> </td>
-		       </tr>
-		       <% }
-			  } else { %>
-		  </table>
-		  <strong>No annotations been made, below are sample document urls </strong><br><br>
-                  <p>Local dailymed html labels: <br>
-		    http://localhost:3000/DDI-labels/010f9162-9f7f-4b6d-a6e4-4f832f26f38e.html <br>http://localhost:3000/DDI-labels/b891bd9f-fdb8-4862-89c5-ecdd700398a3.html
-		  </p>
+<%
+
+if (annotations.total > 0){
+    var dictAnnots = {};
+
+    for(var i=0; i < annotations.rows.length; i++) {
+	if (annotations.rows[i].rawurl in dictAnnots){
+	    dictAnnots[annotations.rows[i].rawurl] += 1;
+	} else {
+	    dictAnnots[annotations.rows[i].rawurl] = 1;
+	}
+    }
+
+    for (var item in dictAnnots){
+	    %>
+	    <tr>
+	    <td><%=item %></td>
+	    <td><%=dictAnnots[item] %> </td>
+	    </tr>
+	    
+	    <% }
+} else { %>
+	 </table>
+	 <strong>No annotations been made, below are sample document urls </strong><br><br>
+         <p>Local dailymed html labels: <br>
+	 http://localhost:3000/DDI-labels/010f9162-9f7f-4b6d-a6e4-4f832f26f38e.html <br>http://localhost:3000/DDI-labels/b891bd9f-fdb8-4862-89c5-ecdd700398a3.html
+	 </p>
 		  
-		  <p>
-		    Local pdf documents: <br>http://localhost:3000/DDI-pdfs/Backman_2005_16084850.pdf <br>http://localhost:3000/DDI-pdfs/Frelinger_2012_07351097.pdf 
-                  </p>
+	 <p>
+	 Local pdf documents: <br>http://localhost:3000/DDI-pdfs/Backman_2005_16084850.pdf <br>http://localhost:3000/DDI-pdfs/Frelinger_2012_07351097.pdf 
+         </p>
 
-		  <% } %>
-		</div>
-              </div>
-
-	    </div>
+	 <% } %>
+    </div>
+    </div>
+    
+</div>
 	    
 	    
 	    </header>

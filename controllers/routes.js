@@ -31,7 +31,7 @@ module.exports = function(app, passport) {
     // MAIN ==============================
     app.get('/main', isLoggedIn, function(req, res) {
 	var request = require("request");
-	var url = "http://127.0.0.1:5000/search?user=alice";
+	var url = "http://127.0.0.1:5000/search?email=" + req.user.email;
 	
 	request({url: url, json: true}, function(error,response,body){
 	    if (!error && response.statusCode === 200) {
@@ -65,16 +65,14 @@ module.exports = function(app, passport) {
 
     // DISPLAY ==============================
     app.get('/displayWebPage', isLoggedIn, function(req, res) {
-	//console.log(req.query.sourceURL);
-	//console.log(req.user.username);
 	
 	var sourceUrl = req.query.sourceURL.trim();
+	var email = req.query.email;
 	if (sourceUrl.indexOf('.html') >= 0){
-	    //res.render('displayWebPage.ejs', { sourceURL: req.sourceURL });
-	    res.render('displayWebPage.ejs', { username: req.user.username });
+	    res.render('displayWebPage.ejs');
 	} 
 	else if (sourceUrl.indexOf('.pdf') >= 0){
-	    res.redirect("http://localhost:3000/viewer.html?file=" + sourceUrl);
+	    res.redirect("http://localhost:3000/viewer.html?file=" + sourceUrl+"&email=" + email);
 	}
 	else {
 	    res.redirect('/main');
