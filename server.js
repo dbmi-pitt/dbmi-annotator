@@ -12,7 +12,6 @@ var morgan       = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser   = require('body-parser');
 var session      = require('express-session');
-var debug = require('debug')('express-example');
 
 var app = express();
 
@@ -41,7 +40,8 @@ app.use(passport.session()); // persistent login sessions
 app.use(flash()); 
 
 require('./config/passport')(passport, user); 
-require('./controllers/routes')(app, passport); 
+require('./controllers/routes')(app, passport);
+require('./controllers/pdf-image-extract')(app);
 
 app.listen(port);
 

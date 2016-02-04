@@ -35,7 +35,6 @@ module.exports = function(app, passport) {
 	
 	request({url: url, json: true}, function(error,response,body){
 	    if (!error && response.statusCode === 200) {
-		//console.log(body);
 		
 		res.render('main.ejs', {
 		    user : req.user,
@@ -84,7 +83,7 @@ module.exports = function(app, passport) {
 
 
     // EXPORT ==============================
-    app.get('/exportcsv', function(req, res){
+    app.get('/exportcsv', isLoggedIn, function(req, res){
 	
 	var filename = req.query.filename;
 	
@@ -109,6 +108,10 @@ module.exports = function(app, passport) {
 			});
 		    });
 		    
+		} else {
+		    req.flash('exportMessage', 'exported failed, annotation fetch exception, please see logs or contact Yifan at yin2@pitt.edu!');
+		    res.redirect('/main');
+
 		}	
 	    });
 	    
@@ -117,7 +120,7 @@ module.exports = function(app, passport) {
 	    
 	} else {
 	    req.flash('exportMessage', 'exported failed, file not exists!');
-	    res.resdirect('/main');
+	    res.redirect('/main');
 	}	
     });
 
@@ -138,25 +141,4 @@ function isLoggedIn(req, res, next) {
 }
 
 
-// app.get('/extractImages', function(req, res) {
-    
-//     var pdfdoc = req.param('pdfdoc');
-    
-//     console.log("[INFO] server received request with doc: " + pdfdoc)
 
-//     // run pdfimages
-//     var sys = require('sys')
-//     var exec = require('child_process').exec;
-
-//     var imgDirName = "images-" + pdfdoc;
-//     exec("mkdir public/pdf-images/" + imgDirName);
-//     exec("pdfimages -j public/DDI-pdfs/" +pdfdoc + " public/pdf-images/"+ imgDirName +"/");
-//     console.log("[INFO] extraction complete!");
-
-//     var img = fs.readFileSync('public/pdf-images/' + imgDirName + "/-000.jpg");
-//     res.writeHead(200, {'Content-Type': 'image/jpg' });
-//     res.end(img, 'binary');
-    
-//     res.send('pdfdoc: ' + pdfdoc);
-    
-// });
