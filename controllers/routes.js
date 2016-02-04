@@ -22,12 +22,28 @@ module.exports = function(app, passport) {
         res.render('register.ejs', { message: req.flash('signupMessage') });
     });
 
-    app.post('/register', passport.authenticate('local-signup', {
-        successRedirect : '/main', 
-        failureRedirect : '/register', 
-        failureFlash : true
-    }));
+    app.post('/register', function(req,res) {
+	
+	req.assert('email', 'Email is not valid').isEmail();
+	req.assert('password', 'Password must be at least 6 characters long').len(6);
+	req.assert('repassword', 'Passwords do not match').equals(req.password);
 
+	var err = req.validationErrors();
+	console.log(err);
+
+	if (err) {
+	    console.log("err");
+	    res.redirect('/register');
+	} else {
+	
+	    passport.authenticate('local-signup', {
+		successRedirect : '/main', 
+		failureRedirect : '/register', 
+		failureFlash : true
+	    })
+	}
+    });
+    
     // MAIN ==============================
     app.get('/main', isLoggedIn, function(req, res) {
 	var request = require("request");

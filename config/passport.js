@@ -29,10 +29,12 @@ module.exports = function(passport, User) {
         passReqToCallback : true // allows us to pass back the entire request to the callback
     },
     function(req, email, password, done) {
-
+	
         // User.findOne wont fire unless data is sent back
         process.nextTick(function() {
 	    console.log("[DEBUG] register - with email: " + email + " | password: " + password);
+	    if (!req.repassword)
+	    
             User.findOne({where:{'email': email}})
 		.then(function(user){
 		    
