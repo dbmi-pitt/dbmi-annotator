@@ -98,4 +98,18 @@ h1 {
     opacity: 1;
   }
 }
+/*
+.btn-success {
+  // Add .button-inline class for inline-block display
+  display: block;
+  text-align: center;
+  cursor: pointer;
+  border: none;
+  .buttonSize(40px, 3px, 18px);
+  .transition(background-color, 0.2s);
+  .buttonColor(@default-background-color, @default-text-color);
+  .buttonColor(@primary-background-color, @primary-text-color);
+  display: inline-block;
+  vertical-align: middle;
+}*/
 
