@@ -28,6 +28,7 @@ var getUrlParameter = function getUrlParameter(sParam) {
         height: '100%',
         panels: [{size: '67%', min: 850}, {size: '33%', min: 410}]
       });
+      $('.editorsection').hide();
       $('.btn-success').val("show");
       $('.annotator-editor').show();
       $('.btn-success').css("margin-right",425);
@@ -42,7 +43,10 @@ var getUrlParameter = function getUrlParameter(sParam) {
       $('.annotator-editor').hide();
       $('.btn-success').css("margin-right",0);
     }
-
+    var w = $(window).width()*0.31;
+    $('.annotator-widget').width(w);
+    
+    
   }
 
   function showrightbyvalue(){
@@ -55,6 +59,7 @@ var getUrlParameter = function getUrlParameter(sParam) {
         height: '100%',
         panels: [{size: '67%', min: 850}, {size: '33%', min: 410}]
       });
+      $('.editorsection').show();
       $('.btn-success').val("show");
       $('.annotator-editor').show();
       $('.btn-success').css("margin-right",425);
@@ -69,7 +74,8 @@ var getUrlParameter = function getUrlParameter(sParam) {
       $('.annotator-editor').hide();
       $('.btn-success').css("margin-right",0);
     }
-
+    var w = $(window).width()*0.31;
+    $('.annotator-widget').width(w);
   }
 
 //show right splitter directly
@@ -82,9 +88,14 @@ var getUrlParameter = function getUrlParameter(sParam) {
         height: '100%',
         panels: [{size: '67%', min: 850}, {size: '33%', min: 410}]
       });
+      $('.editorsection').show();
       $('.btn-success').val("show");
       $('.annotator-editor').show();
       $('.btn-success').css("margin-right",420);
+      
+      var w = $(window).width()*0.31;
+      $('.annotator-widget').width(w);
+      
     /*}
     else {
       $('#splitter').jqxSplitter({
