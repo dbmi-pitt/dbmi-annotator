@@ -12,7 +12,7 @@ var morgan       = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser   = require('body-parser');
 var session      = require('express-session');
-var debug = require('debug')('express-example');
+var expressValidator = require('express-validator');
 
 var app = express();
 
@@ -21,6 +21,7 @@ app.use(express.static('public'));
 app.use(morgan('dev')); // log every request to the console
 app.use(cookieParser()); // read cookies (needed for auth)
 app.use(bodyParser()); // get information from html forms
+app.use(expressValidator());
 
 // enable template engine ejs
 app.set('view engine', 'ejs'); 
@@ -41,7 +42,8 @@ app.use(passport.session()); // persistent login sessions
 app.use(flash()); 
 
 require('./config/passport')(passport, user); 
-require('./controllers/routes')(app, passport); 
+require('./controllers/routes')(app, passport);
+require('./controllers/pdf-image-extract')(app);
 
 app.listen(port);
 
