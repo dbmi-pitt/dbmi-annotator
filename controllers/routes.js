@@ -22,27 +22,12 @@ module.exports = function(app, passport) {
         res.render('register.ejs', { message: req.flash('signupMessage') });
     });
 
-    app.post('/register', function(req,res) {
-	
-	req.assert('email', 'Email is not valid').isEmail();
-	req.assert('password', 'Password must be at least 6 characters long').len(6);
-	req.assert('repassword', 'Passwords do not match').equals(req.password);
-
-	var err = req.validationErrors();
-	console.log(err);
-
-	if (err) {
-	    console.log("err");
-	    res.redirect('/register');
-	} else {
-	
-	    passport.authenticate('local-signup', {
-		successRedirect : '/main', 
-		failureRedirect : '/register', 
-		failureFlash : true
-	    })
-	}
-    });
+    app.post('/register', isRegisterFormValid, passport.authenticate('local-signup', {
+	    successRedirect : '/main', 
+	    failureRedirect : '/register', 
+	    failureFlash : true
+    })
+	    );
     
     // MAIN ==============================
     app.get('/main', isLoggedIn, function(req, res) {
@@ -59,7 +44,6 @@ module.exports = function(app, passport) {
 		});
 		
 	    } else {
-
 		res.render('main.ejs', {
 		    user : req.user,
 		    annotations : {'total':0},
@@ -156,5 +140,27 @@ function isLoggedIn(req, res, next) {
     res.redirect('/');
 }
 
+// validate inputs in register form
+function isRegisterFormValid(req, res, next){
 
+    req.assert('email', 'Email is not valid').isEmail();
+    req.assert('username', 'Username must be at least 4 characters long').len(4);
+    req.assert('password', 'Password must be at least 6 characters long').len(6);
+    req.assert('repassword', 'Passwords do not match').equals(req.body.password);
+    
+    var errors = req.validationErrors();
+    
+    if (errors) {
+	
+	res.render('register', { 
+	    title: 'Register Form Validation',
+	    message: '',
+	    errors: errors
+        });
+	
+    } else {
+	return next();
+    } 
+
+}
 
