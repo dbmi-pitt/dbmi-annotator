@@ -28,6 +28,8 @@ var getUrlParameter = function getUrlParameter(sParam) {
         height: '100%',
         panels: [{size: '67%', min: 850}, {size: '33%', min: 410}]
       });
+    
+      $('#tabs').tabs("option", "active", 0);
       $('.editorsection').hide();
       $('.btn-success').val("show");
       $('.annotator-editor').show();
