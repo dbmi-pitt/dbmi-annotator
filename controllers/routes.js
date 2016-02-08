@@ -1,36 +1,36 @@
 module.exports = function(app, passport) {
 
     // INDEX PAGE ===============================
-    app.get('/', function(req, res) {
+    app.get('/dbmiannotator', function(req, res) {
         res.render('index.ejs', { message: req.flash('loginMessage') }); 
     });
     
     // LOGIN ===============================
-    app.get('/login', function(req, res) {
+    app.get('/dbmiannotator/login', function(req, res) {
         // render the page and pass in any flash data if it exists
         res.render('login.ejs', { message: req.flash('loginMessage') }); 
     });
 
-    app.post('/login', passport.authenticate('local-login', {
-        successRedirect : '/main', 
-        failureRedirect : '/login', 
+    app.post('/dbmiannotator/login', passport.authenticate('local-login', {
+        successRedirect : '/dbmiannotator/main', 
+        failureRedirect : '/dbmiannotator/login', 
         failureFlash : true 
     }));    
 
     // SIGNUP ==============================
-    app.get('/register', function(req, res) {
+    app.get('/dbmiannotator/register', function(req, res) {
         res.render('register.ejs', { message: req.flash('signupMessage') });
     });
 
-    app.post('/register', isRegisterFormValid, passport.authenticate('local-signup', {
-	    successRedirect : '/main', 
-	    failureRedirect : '/register', 
+    app.post('/dbmiannotator/register', isRegisterFormValid, passport.authenticate('local-signup', {
+	    successRedirect : '/dbmiannotator/main', 
+	    failureRedirect : '/dbmiannotator/register', 
 	    failureFlash : true
     })
 	    );
     
     // MAIN ==============================
-    app.get('/main', isLoggedIn, function(req, res) {
+    app.get('/dbmiannotator/main', isLoggedIn, function(req, res) {
 	var request = require("request");
 	var url = "http://127.0.0.1:5000/search?email=" + req.user.email;
 	
@@ -59,13 +59,13 @@ module.exports = function(app, passport) {
     });
 
     // LOGOUT ==============================
-    app.get('/logout', function(req, res) {
+    app.get('/dbmiannotator/logout', function(req, res) {
         req.logout();
-        res.redirect('/');
+        res.redirect('/dbmiannotator');
     });
 
     // DISPLAY ==============================
-    app.get('/displayWebPage', isLoggedIn, function(req, res) {
+    app.get('/dbmiannotator/displayWebPage', isLoggedIn, function(req, res) {
 	
 	var sourceUrl = req.query.sourceURL.trim();
 	var email = req.query.email;
@@ -73,10 +73,10 @@ module.exports = function(app, passport) {
 	    res.render('displayWebPage.ejs');
 	} 
 	else if (sourceUrl.indexOf('.pdf') >= 0){
-	    res.redirect("http://localhost:3000/viewer.html?file=" + sourceUrl+"&email=" + email);
+	    res.redirect("http://localhost:3000/dbmiannotator/viewer.html?file=" + sourceUrl+"&email=" + email);
 	}
 	else {
-	    res.redirect('/main');
+	    res.redirect('/dbmiannotator/main');
 	}
 	
     });
@@ -110,17 +110,17 @@ module.exports = function(app, passport) {
 		    
 		} else {
 		    req.flash('exportMessage', 'exported failed, annotation fetch exception, please see logs or contact Yifan at yin2@pitt.edu!');
-		    res.redirect('/main');
+		    res.redirect('/dbmiannotator/main');
 
 		}	
 	    });
 	    
 	    req.flash('exportMessage', 'successfully exported!');
-	    res.redirect('/main');
+	    res.redirect('/dbmiannotator/main');
 	    
 	} else {
 	    req.flash('exportMessage', 'exported failed, file not exists!');
-	    res.redirect('/main');
+	    res.redirect('/dbmiannotator/main');
 	}	
     });
 
@@ -137,7 +137,7 @@ function isLoggedIn(req, res, next) {
         return next();
 
     // if they aren't redirect them to the home page
-    res.redirect('/');
+    res.redirect('/dbmiannotator');
 }
 
 // validate inputs in register form

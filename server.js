@@ -1,5 +1,5 @@
 // set up
-_dirname = "/home/yin2/dbmi-annotator/";
+//_dirname = "/home/yin2/dbmi-annotator/";
 var port     = process.env.PORT || 3000;
 
 // Load packages
