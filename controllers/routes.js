@@ -32,7 +32,7 @@ module.exports = function(app, passport) {
     // MAIN ==============================
     app.get('/dbmiannotator/main', isLoggedIn, function(req, res) {
 	var request = require("request");
-	var url = "http://127.0.0.1:5000/search?email=" + req.user.email;
+	var url = "http://130.49.206.139:5000/search?email=" + req.user.email;
 	
 	request({url: url, json: true}, function(error,response,body){
 	    if (!error && response.statusCode === 200) {
@@ -49,7 +49,6 @@ module.exports = function(app, passport) {
 		    annotations : {'total':0},
 		    message: req.flash('exportMessage')
 		});
-
 	    }
 
 	    
@@ -73,7 +72,7 @@ module.exports = function(app, passport) {
 	    res.render('displayWebPage.ejs');
 	} 
 	else if (sourceUrl.indexOf('.pdf') >= 0){
-	    res.redirect("http://localhost:3000/dbmiannotator/viewer.html?file=" + sourceUrl+"&email=" + email);
+	    res.redirect("/dbmiannotator/viewer.html?file=" + sourceUrl+"&email=" + email);
 	}
 	else {
 	    res.redirect('/dbmiannotator/main');

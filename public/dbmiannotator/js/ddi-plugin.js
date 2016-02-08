@@ -12,7 +12,7 @@ if (typeof annotator === 'undefined') {
     app.include(annotator.authz.acl);
 
     app.include(annotator.storage.http, {
-	prefix: 'http://127.0.0.1:5000'
+	prefix: 'http://130.49.206.139:5000'
     });
     
     var sourceURL = getURLParameter("sourceURL").trim();
