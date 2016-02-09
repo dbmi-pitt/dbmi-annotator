@@ -1,3 +1,4 @@
+
 if (typeof annotator === 'undefined') {
     alert("Oops! it looks like you haven't built Annotator. " +
           "Either download a tagged release from GitHub, or build the " +
@@ -12,7 +13,7 @@ if (typeof annotator === 'undefined') {
     app.include(annotator.authz.acl);
 
     app.include(annotator.storage.http, {
-	prefix: 'http://130.49.206.139:5000'
+	prefix: 'http://' + config.store.host + ':' + config.store.port
     });
     
     var sourceURL = getURLParameter("sourceURL").trim();
@@ -35,6 +36,7 @@ if (typeof annotator === 'undefined') {
 		     {
 			 app.ident.identity = email;
 			 $(".btn-success").css("display","block");
+			 alert(sourceURL);
 			 $("#subcontent").load(sourceURL);
 		     }).then(function(){
 			 app.annotations.load({uri: sourceURL.replace(/[\/\\\-\:\.]/g, ""), email: email});

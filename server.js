@@ -1,6 +1,6 @@
-// set up
-//_dirname = "/home/yin2/dbmi-annotator/";
-var port     = process.env.PORT || 3000;
+// SET UP
+var _dirname = "/home/yin2/dbmi-annotator/";
+var config = require('./config/config');
 
 // Load packages
 fs = require('fs');
@@ -16,20 +16,22 @@ var expressValidator = require('express-validator');
 
 var app = express();
 
-app.use(express.static('public'));
-
 app.use(morgan('dev')); // log every request to the console
 app.use(cookieParser()); // read cookies (needed for auth)
 app.use(bodyParser()); // get information from html forms
 app.use(expressValidator());
 
-// enable template engine ejs
+//app.locals.host = config.annotator.host;
+//app.locals.port = config.annotator.port;
+
+app.use(express.static('public'));
+
 app.set('view engine', 'ejs'); 
 
 // bring sequelize in
 var Sequelize = require('sequelize');
 var conStr = require('./config/config');
-var sequelize = new Sequelize(conStr, {dialect:'postgres', define:{freezeTableName:true, timestamps: false} });
+var sequelize = new Sequelize(config.postgres, {dialect:'postgres', define:{freezeTableName:true, timestamps: false} });
 // model initialize
 var user = require('./models/user')(sequelize, Sequelize);
 
@@ -45,7 +47,7 @@ require('./config/passport')(passport, user);
 require('./controllers/routes')(app, passport);
 require('./controllers/pdf-image-extract')(app);
 
-app.listen(port);
+app.listen(config.annotator.port);
 
 
 

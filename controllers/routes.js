@@ -1,3 +1,5 @@
+config = require('./../config/config.js');
+
 module.exports = function(app, passport) {
 
     // INDEX PAGE ===============================
@@ -32,7 +34,7 @@ module.exports = function(app, passport) {
     // MAIN ==============================
     app.get('/dbmiannotator/main', isLoggedIn, function(req, res) {
 	var request = require("request");
-	var url = "http://130.49.206.139:5000/search?email=" + req.user.email;
+	var url = "http://" + config.store.host +":" + config.store.port + "/search?email=" + req.user.email;
 	
 	request({url: url, json: true}, function(error,response,body){
 	    if (!error && response.statusCode === 200) {
@@ -40,14 +42,16 @@ module.exports = function(app, passport) {
 		res.render('main.ejs', {
 		    user : req.user,
 		    annotations : body,
-		    message: req.flash('exportMessage')
+		    message: req.flash('exportMessage'),
+		    host: config.annotator.host
 		});
 		
 	    } else {
 		res.render('main.ejs', {
 		    user : req.user,
 		    annotations : {'total':0},
-		    message: req.flash('exportMessage')
+		    message: req.flash('exportMessage'),
+		    host: config.annotator.host
 		});
 	    }
 
@@ -92,7 +96,7 @@ module.exports = function(app, passport) {
 	    var filepath = 'export/' + filename;
 	    var request = require("request");
 	    
-	    var url = "http://127.0.0.1:5000/search?email=" + req.query.email;
+	    var url = "http://" + config.store.host + ":" + config.store.port + "/search?email=" + req.query.email;
 	    
 	    request({url: url, json: true}, function(error,response,body){
 		if (!error && response.statusCode === 200) {

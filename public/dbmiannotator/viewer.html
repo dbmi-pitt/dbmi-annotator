@@ -29,6 +29,9 @@ See https://github.com/adobe-type-tools/cmap-resources
 
     <link rel="stylesheet" href="css/viewer.css"/>
 
+    <!-- browserify for configs -->
+    <script type="text/javascript" src="js/app.bundle.js"></script>
+
     <script src="js/pdfjs/compatibility.js"></script>
 
 
@@ -36,9 +39,9 @@ See https://github.com/adobe-type-tools/cmap-resources
     <link rel="resource" type="application/l10n" href="js/pdfjs/locale/locale.properties"/>
     <script src="js/pdfjs/l10n.js"></script>
     <script src="js/pdfjs/pdf.js"></script>
-<link rel="stylesheet" href="css/jquery-ui.css">
-<script src="js/jquery-1.11.1.min.js"></script>
-<script src="js/jquery-ui.js"></script>
+    <link rel="stylesheet" href="css/jquery-ui.css">
+    <script src="js/jquery-1.11.1.min.js"></script>
+    <script src="js/jquery-ui.js"></script>
     <script src="js/pdfjs/debugger.js"></script>
     <script src="js/pdfjs/viewer.js"></script>
 
@@ -447,9 +450,7 @@ See https://github.com/adobe-type-tools/cmap-resources
 <!-- bring annotator js-->
 <script src="js/annotator.min.js"></script>
 
-<!-- bring ddi plugin js for pdf -->
-<script src="js/ddi-plugin-pdf.js"></script>
-
+<!-- bring splitter libs -->
 <link rel="stylesheet" href="css/jqx.base.css" type="text/css" />
 
 <script type="text/javascript" src="js/jqxcore.js"></script>
@@ -462,6 +463,9 @@ See https://github.com/adobe-type-tools/cmap-resources
 <script>
     $( "#tabs" ).tabs();
 </script>
+
+<!-- bring ddi plugin js for pdf -->
+<script src="js/ddi-plugin-pdf.js"></script>
 
   </body>
 </html>

@@ -13,7 +13,7 @@ if (typeof annotator === 'undefined') {
     app.include(annotator.authz.acl);
 
     app.include(annotator.storage.http, {
-	prefix: 'http://130.49.206.139:5000'
+	prefix: 'http://' + config.store.host + ':' + config.store.port
     });
 
     var sourceURL = getURLParameter("file").trim();
