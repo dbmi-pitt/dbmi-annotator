@@ -36,7 +36,6 @@ if (typeof annotator === 'undefined') {
 		     {
 			 app.ident.identity = email;
 			 $(".btn-success").css("display","block");
-			 alert(sourceURL);
 			 $("#subcontent").load(sourceURL);
 		     }).then(function(){
 			 app.annotations.load({uri: sourceURL.replace(/[\/\\\-\:\.]/g, ""), email: email});
