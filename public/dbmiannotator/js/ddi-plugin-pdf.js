@@ -34,7 +34,7 @@ if (typeof annotator === 'undefined') {
     app.start().then(function () 
 		     {
 			 app.ident.identity = email;
-			 //setTimeout(function () { alert(document.readyState); }, 2000);
+			 setTimeout(function () { alert(document.readyState); }, 2000);
 			 setTimeout(function ()
 				    { app.annotations.load(
 					{uri: sourceURL.replace(/[\/\\\-\:\.]/g, ""), email: email});
