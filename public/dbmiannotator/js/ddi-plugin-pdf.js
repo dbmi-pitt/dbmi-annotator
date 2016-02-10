@@ -34,11 +34,15 @@ if (typeof annotator === 'undefined') {
     app.start().then(function () 
 		     {
 			 app.ident.identity = email;
-			 setTimeout(function () { alert(document.readyState); }, 2000);
 			 setTimeout(function ()
-				    { app.annotations.load(
-					{uri: sourceURL.replace(/[\/\\\-\:\.]/g, ""), email: email});
-				    }, 2100);
+				    {
+					//alert(document.readyState);
+					app.annotations.load(
+					    {uri: sourceURL.replace(/[\/\\\-\:\.]/g, ""), email: email}).then(function(){
+						alert("[INFO] Annotation loaded");
+					    });
+				    }, 3800);
+			 
 		     });
     
 }
