@@ -28,6 +28,7 @@
     "passport-local": "~0.1.6",
     "passport-twitter": "~1.0.2",
     "pg": "^4.4.3",
-    "sequelize": "^3.18.0"
+    "sequelize": "^3.18.0",
+    "valid-url": "^1.0.9"
   }
 }

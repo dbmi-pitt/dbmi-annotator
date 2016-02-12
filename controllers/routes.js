@@ -72,14 +72,24 @@ module.exports = function(app, passport) {
 	
 	var sourceUrl = req.query.sourceURL.trim();
 	var email = req.query.email;
-	if (sourceUrl.indexOf('.html') >= 0){
-	    res.render('displayWebPage.ejs');
-	} 
-	else if (sourceUrl.indexOf('.pdf') >= 0){
-	    res.redirect("/dbmiannotator/viewer.html?file=" + sourceUrl+"&email=" + email);
-	}
-	else {
+
+	var validUrl = require('valid-url');
+	
+	if (validUrl.isUri(sourceUrl)){
+	
+	    if (sourceUrl.indexOf('.html') >= 0){
+		res.render('displayWebPage.ejs');
+	    } 
+	    else if (sourceUrl.indexOf('.pdf') >= 0){
+		res.redirect("/dbmiannotator/viewer.html?file=" + sourceUrl+"&email=" + email);
+	    }
+	    else {
+		res.redirect('/dbmiannotator/main');
+	    }
+	} else {
+	    console.log('Not a URI');
 	    res.redirect('/dbmiannotator/main');
+	    
 	}
 	
     });
