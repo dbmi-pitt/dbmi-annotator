@@ -1,5 +1,5 @@
 ﻿$(document).ready(function () {
-    $('#splitter').jqxSplitter({ width: $(window).width(), height: '100%',  panels: [{ size: '100%', min: 100 }, { size: '0%', min: 0}] });
+    $('#splitter').jqxSplitter({ showSplitBar: false, width: $(window).width(), height: '100%',  panels: [{ size: '100%',min: 100 }, { size: '0%', min: 0}] });
     //$('.secondsection').append("<p><a href='http://www.google.com'>Google</a></p>");
   });
 
@@ -24,6 +24,7 @@ var getUrlParameter = function getUrlParameter(sParam) {
     if($('.btn-success').val()=="hide") {
 
       $('#splitter').jqxSplitter({
+        showSplitBar:false,
         width: $(window).width(),
         height: '100%',
         panels: [{size: '67%', min: 850}, {size: '33%', min: 410}]
@@ -34,9 +35,12 @@ var getUrlParameter = function getUrlParameter(sParam) {
       $('.btn-success').val("show");
       $('.annotator-editor').show();
       $('.btn-success').css("margin-right",425);
+      $('.btn-home').css("margin-right",425);
+      $('#menu').html("&nbsp Collapse");
     }
     else {
       $('#splitter').jqxSplitter({
+        showSplitBar:false,
         width: '100%',
         height: '100%',
         panels: [{size: '100%', min: 100}, {size: '0%', min: 0}]
@@ -44,6 +48,8 @@ var getUrlParameter = function getUrlParameter(sParam) {
       $('.btn-success').val("hide");
       $('.annotator-editor').hide();
       $('.btn-success').css("margin-right",0);
+      $('.btn-home').css("margin-right",0);
+      $('#menu').html("&nbsp Menu");
     }
     var w = $(window).width()*0.31;
     $('.annotator-widget').width(w);
@@ -57,6 +63,7 @@ var getUrlParameter = function getUrlParameter(sParam) {
       var tab = $('#tabs-2').attr('href');
       $('#tabs').tabs('select', tab);
       $('#splitter').jqxSplitter({
+        showSplitBar:false,
         width: $(window).width(),
         height: '100%',
         panels: [{size: '67%', min: 850}, {size: '33%', min: 410}]
@@ -65,9 +72,12 @@ var getUrlParameter = function getUrlParameter(sParam) {
       $('.btn-success').val("show");
       $('.annotator-editor').show();
       $('.btn-success').css("margin-right",425);
+      $('.btn-home').css("margin-right",425);
+      $('#menu').html("&nbsp Collapse");
     }
     else {
       $('#splitter').jqxSplitter({
+        showSplitBar:false,
         width: '100%',
         height: '100%',
         panels: [{size: '100%', min: 100}, {size: '0%', min: 0}]
@@ -75,6 +85,8 @@ var getUrlParameter = function getUrlParameter(sParam) {
       $('.btn-success').val("hide");
       $('.annotator-editor').hide();
       $('.btn-success').css("margin-right",0);
+      $('.btn-home').css("margin-right",0);
+      $('#menu').html("&nbsp Menu");
     }
     var w = $(window).width()*0.31;
     $('.annotator-widget').width(w);
@@ -86,6 +98,7 @@ var getUrlParameter = function getUrlParameter(sParam) {
       var index = $("#tabs-1").index();
       $('#tabs').tabs("option", "active", index);
       $('#splitter').jqxSplitter({
+        showSplitBar:false,
         width: $(window).width(),
         height: '100%',
         panels: [{size: '67%', min: 850}, {size: '33%', min: 410}]
@@ -94,6 +107,8 @@ var getUrlParameter = function getUrlParameter(sParam) {
       $('.btn-success').val("show");
       $('.annotator-editor').show();
       $('.btn-success').css("margin-right",420);
+      $('.btn-home').css("margin-right",420);
+      $('#menu').html("&nbsp Collapse");
       
       var w = $(window).width()*0.31;
       $('.annotator-widget').width(w);
