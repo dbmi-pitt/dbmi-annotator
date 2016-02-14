@@ -34,12 +34,13 @@
 	      
 	      <button id="exportButton" class="btn btn-success">export</button>
 	      
-	      <% if (message.length > 0) {
-	      if (message.indexOf('success')){
+	      <% if (exportMessage.length > 0) {
+
+	      if (exportMessage.indexOf('success')){
 	      %>
-	      <div class="alert alert-success"><%=message %></div>
+	      <div class="alert alert-success"><%=exportMessage %></div>
 	      <% } else { %>
-	      <div class="alert alert-warning"><%=message %></div>
+	      <div class="alert alert-warning"><%=exportMessage %></div>
 	      <% } } %>		  
 	      
 	    </form>
@@ -60,6 +61,9 @@
 		<button id="loadButton" class="btn btn-success">load</button>
 	      </form>
 	      
+	      <% if (loadMessage.length > 0) { %>
+	      <div class="alert alert-warning"><%=loadMessage %></div>
+	      <% } %>
 	    </div>
 		  
 		  
