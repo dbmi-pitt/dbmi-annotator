@@ -256,7 +256,9 @@ See https://github.com/adobe-type-tools/cmap-resources
         <div id="viewerContainer" tabindex="0">
           <div id="viewer" class="pdfViewer"></div>
         </div>
-        <button class="btn btn-success" onclick="buttonshowright()" value="hide"><span><--Annotator</span></button>
+
+        <button class="btn btn-success" onclick="buttonshowright()" value="hide"><img src="img/menu.png" height="25px" width="25px"><span id="menu">&nbsp Menu</span></button>
+          <button class="btn btn-home" onclick="location.href = '/dbmiannotator/main';" value="hide"><img src="img/home.png" height="20px" width="20px"><span>&nbsp&nbsp Home</span></button>
       </div>
       <div id="tabs">
   <ul>
@@ -266,6 +268,7 @@ See https://github.com/adobe-type-tools/cmap-resources
   </ul>
   <div id="tabs-1">
       <p>COMING SOON</p>
+
   </div>
   <div id="tabs-2">
     <div class="secondsection">
@@ -446,7 +449,7 @@ See https://github.com/adobe-type-tools/cmap-resources
 
 <!-- bring pdf annotation highlights css style  -->
 <link rel="stylesheet" href="css/dbmi.pdf.highlight.css"/>
-
+<link rel="stylesheet" href="./css/dbmiannotator.css" type="text/css" />
 <!-- bring annotator js-->
 <script src="js/annotator.min.js"></script>
 
@@ -455,9 +458,6 @@ See https://github.com/adobe-type-tools/cmap-resources
 
 <script type="text/javascript" src="js/jqxcore.js"></script>
 <script type="text/javascript" src="js/jqxsplitter.js"></script>
-<script type="text/javascript" src="js/jqxbuttons.js"></script>
-<script type="text/javascript" src="js/jqxscrollbar.js"></script>
-<script type="text/javascript" src="js/jqxpanel.js"></script>
 <script type="text/javascript" src="js/demos.js"></script>
 <script type="text/javascript" src="js/dbmi.js"></script>
 <script>
