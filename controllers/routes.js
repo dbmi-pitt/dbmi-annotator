@@ -42,7 +42,8 @@ module.exports = function(app, passport) {
 		res.render('main.ejs', {
 		    user : req.user,
 		    annotations : body,
-		    message: req.flash('exportMessage'),
+		    exportMessage: req.flash('exportMessage'),
+		    loadMessage: req.flash('loadMessage'),
 		    host: config.annotator.host
 		});
 		
@@ -50,7 +51,8 @@ module.exports = function(app, passport) {
 		res.render('main.ejs', {
 		    user : req.user,
 		    annotations : {'total':0},
-		    message: req.flash('exportMessage'),
+		    exportMessage: req.flash('exportMessage'),
+		    loadMessage: req.flash('loadMessage'),
 		    host: config.annotator.host
 		});
 	    }
@@ -72,21 +74,32 @@ module.exports = function(app, passport) {
 	
 	var sourceUrl = req.query.sourceURL.trim();
 	var email = req.query.email;
-	if (sourceUrl.indexOf('.html') >= 0){
-	    res.render('displayWebPage.ejs');
-	} 
-	else if (sourceUrl.indexOf('.pdf') >= 0){
-	    res.redirect("/dbmiannotator/viewer.html?file=" + sourceUrl+"&email=" + email);
-	}
-	else {
+
+	var validUrl = require('valid-url');
+	
+	if (validUrl.isUri(sourceUrl)){
+	
+	    if (sourceUrl.indexOf('.html') >= 0){
+		res.render('displayWebPage.ejs');
+	    } 
+	    else if (sourceUrl.indexOf('.pdf') >= 0){
+		res.redirect("/dbmiannotator/viewer.html?file=" + sourceUrl+"&email=" + email);
+	    }
+	    else {
+		req.flash('loadMessage', 'The url you just entered is valid but not have local resource served yet');
+		res.redirect('/dbmiannotator/main');
+	    }
+	} else {
+	    req.flash('loadMessage', 'The url you just entered is not valid!');
 	    res.redirect('/dbmiannotator/main');
+	    
 	}
 	
     });
 
 
     // EXPORT ==============================
-    app.get('/exportcsv', isLoggedIn, function(req, res){
+    app.get('/dbmiannotator/exportcsv', isLoggedIn, function(req, res){
 	
 	var filename = req.query.filename;
 	
@@ -100,7 +113,7 @@ module.exports = function(app, passport) {
 	    
 	    request({url: url, json: true}, function(error,response,body){
 		if (!error && response.statusCode === 200) {
-		    console.log(body);
+		    //console.log(body);
 		    
 		    var json2csv = require('json2csv');
 		    json2csv({data: body.rows, fields: ['email', 'rawurl', 'annotationType', 'assertion_type', 'quote', 'Drug1', 'Type1', 'Role1', 'Drug2', 'Type2', 'Role2', 'Modality', 'Evidence_modality']}, function(err, csv) {

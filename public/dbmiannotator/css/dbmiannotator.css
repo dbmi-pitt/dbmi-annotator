@@ -98,6 +98,32 @@ h1 {
     opacity: 1;
   }
 }
+
+.btn-success {
+  position:fixed;
+  right: 0px;
+  top:40px;
+  color:#FFFFFF;
+  background-color:#448AFF;
+  border:none;
+  height:35px;
+  width:135px;
+  z-index: 999;
+  text-align: center;
+}
+
+.btn-home {
+  position:fixed;
+  right: 0px;
+  top:80px;
+  border:none;
+  height:35px;
+  width:135px;
+  color:#FFFFFF;
+  background-color:#448AFF;
+  z-index: 999;
+  text-align: center;
+}
 /*
 .btn-success {
   // Add .button-inline class for inline-block display
