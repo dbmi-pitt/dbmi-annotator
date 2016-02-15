@@ -12435,7 +12435,7 @@ var id = (function () {
         return counter += 1;
     };
 }());
-
+var tempquery;
 var anns;
 
 /**
@@ -13052,12 +13052,13 @@ StorageAdapter.prototype.query = function (query) {
  *
  * :returns Promise: Resolves when loading is complete.
  */
+
 StorageAdapter.prototype.load = function (query) {
     var self = this;
+    tempquery = query;
     return this.query(query)
         .then(function (data) {
             self.runHook('annotationsLoaded', [data.results]);
-            anns = data.results;
         });
 };
 
@@ -13070,7 +13071,10 @@ StorageAdapter.prototype._cycle = function (
     afterEvent
 ) {
     var self = this;
-    return this.runHook(beforeEvent, [obj,anns])
+    return this.query(tempquery)
+        .then(function (data) {
+            self.runHook(beforeEvent, [obj,data.results]);
+        })
         .then(function () {
             var safeCopy = $.extend(true, {}, obj);
             delete safeCopy._local;
@@ -13975,7 +13979,6 @@ var ddiEditor = exports.ddiEditor = Editor.extend({
                     //console.log(annList[0].quote);
                     //var now = annList.splice(0, annotations.options.chunkSize);
 
-
                     $('#quote').empty();
                     var quoteobject = $( "<div id='quotearea'/>" );
                     $('#quote').append(quoteobject);
@@ -13984,10 +13987,10 @@ var ddiEditor = exports.ddiEditor = Editor.extend({
                     $('#Drug2 option').remove();
                     var flag = 0;
                     var anns = annotations.slice();
-                    console.log("(1):"+anns[0].quote);
+                    //console.log("(1):"+anns[0].quote);
                     var quoteobject = $('#quotearea');
                     var quotecontent = $('#quotearea').html();
-                    console.log(quotecontent);
+                    //console.log(quotecontent);
                     for (var i = 0, len = anns.length; i < len; i++) {
                         if(anns[i].annotationType=="DrugMention")
                         {
@@ -14003,6 +14006,7 @@ var ddiEditor = exports.ddiEditor = Editor.extend({
                                     text: anns[i].quote
                                 }));
                                 flag = flag + 1;
+                                //console.log(flag+","+anns[i].quote);
                             }
                         }
 
@@ -14592,7 +14596,12 @@ var ddiEditor = exports.ddiEditor = Editor.extend({
     // Returns nothing
     _onCancelClick: function (event) {
         preventEventDefault(event);
-        this.cancel();
+        var item = $(event.target)
+            .parents('.annotator-annotation')
+            .data('annotation');
+        this.hide();
+        this.options.onDelete(item);
+        //this.cancel();
     },
 
     // Event callback: called when a user mouses over the editor's cancel
@@ -15844,7 +15853,6 @@ Template.content = [
     'var quotestring = $("#quote").html();',
     'quotestring = quotestring.replace(drug2, "<span class=\'selecteddrug\'>"+drug2+"</span>");',
     'quotestring = quotestring.replace(drug1, "<span class=\'selecteddrug\'>"+drug1+"</span>");',
-    'console.log(quotestring);',
     '$("#quote").html(quotestring);',
     '}',
     'function deselectDrug() {',
@@ -15853,7 +15861,6 @@ Template.content = [
     'var quotestring = $("#quote").html();',
     'quotestring = quotestring.replace(\'<span class="selecteddrug">\'+drug2+\'</span>\', drug2);',
     'quotestring = quotestring.replace(\'<span class="selecteddrug">\'+drug1+\'</span>\', drug1);',
-    'console.log(quotestring);',
     '$("#quote").html(quotestring);',
     '}',
     'function changeFunc() {',
