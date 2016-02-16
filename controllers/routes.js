@@ -4,7 +4,11 @@ module.exports = function(app, passport) {
 
     // INDEX PAGE ===============================
     app.get('/dbmiannotator', function(req, res) {
-        res.render('index.ejs', { message: req.flash('loginMessage') }); 
+	if (req.isAuthenticated()){
+            res.redirect('/dbmiannotator/main');
+	} else {
+	    res.render('index.ejs', { message: req.flash('loginMessage') });
+	}
     });
     
     // LOGIN ===============================

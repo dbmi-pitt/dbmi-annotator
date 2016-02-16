@@ -7,7 +7,7 @@ if (typeof annotator === 'undefined') {
     // DBMIAnnotator with highlight and DDI plugin
     var app = new annotator.App();
 
-    app.include(annotator.ui.dbmimain);
+
     app.include(annotator.storage.debug);
     app.include(annotator.identity.simple);
     app.include(annotator.authz.acl);
@@ -15,6 +15,8 @@ if (typeof annotator === 'undefined') {
     app.include(annotator.storage.http, {
 	prefix: 'http://' + config.store.host + ':' + config.store.port
     });
+
+    app.include(annotator.ui.dbmimain);
     
     var sourceURL = getURLParameter("sourceURL").trim();
     var email = getURLParameter("email");
