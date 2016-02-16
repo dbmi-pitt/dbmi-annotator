@@ -34,8 +34,8 @@ var getUrlParameter = function getUrlParameter(sParam) {
       $('.editorsection').hide();
       $('.btn-success').val("show");
       $('.annotator-editor').show();
-      $('.btn-success').css("margin-right",425);
-      $('.btn-home').css("margin-right",425);
+      $('.btn-success').css("margin-right",$(window).width()*0.32);
+      $('.btn-home').css("margin-right",$(window).width()*0.32);
       $('#menu').html("&nbsp Collapse");
     }
     else {
@@ -71,8 +71,8 @@ var getUrlParameter = function getUrlParameter(sParam) {
       $('.editorsection').show();
       $('.btn-success').val("show");
       $('.annotator-editor').show();
-      $('.btn-success').css("margin-right",425);
-      $('.btn-home').css("margin-right",425);
+      $('.btn-success').css("margin-right",$(window).width()*0.32);
+      $('.btn-home').css("margin-right",$(window).width()*0.32);
       $('#menu').html("&nbsp Collapse");
     }
     else {
@@ -106,8 +106,8 @@ var getUrlParameter = function getUrlParameter(sParam) {
       $('.editorsection').show();
       $('.btn-success').val("show");
       $('.annotator-editor').show();
-      $('.btn-success').css("margin-right",420);
-      $('.btn-home').css("margin-right",420);
+      $('.btn-success').css("margin-right",$(window).width()*0.32);
+      $('.btn-home').css("margin-right",$(window).width()*0.32);
       $('#menu').html("&nbsp Collapse");
       
       var w = $(window).width()*0.31;
