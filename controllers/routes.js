@@ -38,7 +38,9 @@ module.exports = function(app, passport) {
     // MAIN ==============================
     app.get('/dbmiannotator/main', isLoggedIn, function(req, res) {
 	var request = require("request");
-	var url = "http://" + config.store.host +":" + config.store.port + "/search?email=" + req.user.email;
+
+	// fetch all DDI annotations for current user
+	var url = "http://" + config.store.host +":" + config.store.port + "/search?email=" + req.user.email + "&annotationType=DDI";
 	
 	request({url: url, json: true}, function(error,response,body){
 	    if (!error && response.statusCode === 200) {
