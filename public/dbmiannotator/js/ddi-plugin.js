@@ -33,17 +33,22 @@ if (typeof annotator === 'undefined') {
     	};
     };
     app.include(pageUri);
-    
+
+    // load annotation after page contents loaded
     app.start().then(function () 
 		     {
 			 app.ident.identity = email;
 			 $(".btn-success").css("display","block");
 			 $("#subcontent").load(sourceURL);
 		     }).then(function(){
-			 app.annotations.load({uri: sourceURL.replace(/[\/\\\-\:\.]/g, ""), email: email});
-		     }).then(function(){
+			 setTimeout(function(){
+			     app.annotations.load({uri: sourceURL.replace(/[\/\\\-\:\.]/g, ""), email: email});
+			 }, 1000);
+		     })
+	.then(function(){
 			 alert("Annotations for user: " + email + " are loaded");
-		     });
+	})
+    ;
 }
 
 function getURLParameter(name) {
