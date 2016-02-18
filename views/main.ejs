@@ -24,29 +24,6 @@
 	    
 	    <br><br><br>
 	    
-	    <!-- annotation export  -->
-	    <strong>Export my annotation (its not ready yet): </strong><br>
-	    <form action="/dbmiannotator/exportcsv" method="get" >
-	      <span class="btn btn-default btn-file">
-		<input type="file" name="filename" >
-	      </span>
-	      <input type="text" id="email" name="email" value="<%= user.email %>" style="display: none;" />
-	      
-	      <button id="exportButton" class="btn btn-success">export</button>
-	      
-	      <% if (exportMessage.length > 0) {
-
-	      if (exportMessage.indexOf('success')){
-	      %>
-	      <div class="alert alert-success"><%=exportMessage %></div>
-	      <% } else { %>
-	      <div class="alert alert-warning"><%=exportMessage %></div>
-	      <% } } %>		  
-	      
-	    </form>
-		  
-	    <br><br>
-	    
 	    <!-- document load  -->
 	    <strong>Load document: </strong>
 	    (Please input valid html web resources or PDF document URL): 
@@ -68,36 +45,38 @@
 		  
 		  
             <h3><span class="fa fa-user"></span>&nbsp;Profile (Overview annotation tasks) </h3>
-		  
+	    
 	    <table class="table table-striped" >
+
+		    
+	      <%  if (annotations.total > 0){   %>
 	      <tr>
 		<td>Document source URL </td>
 		<td>Number of Annotations </td>
 	      </tr>
-		    
-<%
 
-if (annotations.total > 0){
-    var dictAnnots = {};
+	      <%
+		 var dictAnnots = {};
+		 
+		 for(var i=0; i < annotations.rows.length; i++) {
+				  if (annotations.rows[i].rawurl in dictAnnots){
+				  dictAnnots[annotations.rows[i].rawurl] += 1;
+				  } else {
+				  dictAnnots[annotations.rows[i].rawurl] = 1;
+				  }
+				  }
 
-    for(var i=0; i < annotations.rows.length; i++) {
-	if (annotations.rows[i].rawurl in dictAnnots){
-	    dictAnnots[annotations.rows[i].rawurl] += 1;
-	} else {
-	    dictAnnots[annotations.rows[i].rawurl] = 1;
-	}
-    }
+				  for (var item in dictAnnots){
+				  %>
+		 <tr>
+		   <td><%=item %></td>
+		   <td><%=dictAnnots[item] %> </td>
+		 </tr>
+		 
+		 <% }
+		    } else { %>
 
-    for (var item in dictAnnots){
-	    %>
-  <tr>
-    <td><%=item %></td>
-    <td><%=dictAnnots[item] %> </td>
-  </tr>
-  
-  <% }
-     } else { %>
-	    </table>
+	    
 	    <strong>No annotations been made, below are sample document urls </strong><br><br>
             <p>Local dailymed html labels: <br>
 	      http://<%-host %>/DDI-labels/010f9162-9f7f-4b6d-a6e4-4f832f26f38e.html <br>http://<%-host %>/DDI-labels/b891bd9f-fdb8-4862-89c5-ecdd700398a3.html
@@ -106,13 +85,45 @@ if (annotations.total > 0){
 	      Local pdf documents: <br>http://<%-host %>/DDI-pdfs/Backman_2005_16084850.pdf <br>http://<%-host %>/DDI-pdfs/Frelinger_2012_07351097.pdf 
             </p>
 	    <% } %>
+	    </table>
+	    <br><br>
+
+	  <!-- annotation export  -->
+	  <strong>Export my annotation (its not ready yet): </strong><br>
+	  <form action="/dbmiannotator/exportcsv" method="get" >
+	    <span class="btn btn-default btn-file">
+	      <input type="file" name="filename" >
+	    </span>
+	    <input type="text" id="email" name="email" value="<%= user.email %>" style="display: none;" />
 	    
-	  
+	    <button id="exportButton" class="btn btn-success">export</button>
+	    
+	    <% if (exportMessage.length > 0) {
+	    
+	    if (exportMessage.indexOf('success')){
+	    %>
+	    <div class="alert alert-success"><%=exportMessage %></div>
+	    <% } else { %>
+	    <div class="alert alert-warning"><%=exportMessage %></div>
+	    <% } } %>		  
+	  </form>
+
+	    
 	  </div>
+	  
 	</div>
+
+
+
+
+
+
+
 	
       </div>	
     </article>
+
+
     
   </body>
 </html>
