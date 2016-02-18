@@ -115,14 +115,14 @@ module.exports = function(app, passport) {
 	    var filepath = 'export/' + filename;
 	    var request = require("request");
 	    
-	    var url = "http://" + config.store.host + ":" + config.store.port + "/search?email=" + req.query.email;
+	    var url = "http://" + config.store.host + ":" + config.store.port + "/search?email=" + req.query.email + "&annotationType=DDI";
 	    
 	    request({url: url, json: true}, function(error,response,body){
 		if (!error && response.statusCode === 200) {
 		    //console.log(body);
 		    
 		    var json2csv = require('json2csv');
-		    json2csv({data: body.rows, fields: ['email', 'rawurl', 'annotationType', 'assertion_type', 'quote', 'Drug1', 'Type1', 'Role1', 'Drug2', 'Type2', 'Role2', 'Modality', 'Evidence_modality']}, function(err, csv) {
+		    json2csv({data: body.rows, fields: ['email', 'rawurl', 'annotationType', 'assertion_type', 'quote', 'Drug1', 'Type1', 'Role1', 'Drug2', 'Type2', 'Role2', 'Modality', 'Evidence_modality','Number_participants','FormulationP','FormulationO','DoseMG_precipitant','DoseMG_object','Duration_precipitant','Duration_object','RegimentsP','RegimentsO','Aucval','AucType','AucDirection','Clval','ClType','ClDirection','cmaxval','cmaxType','cmaxDirection','cminval','cminType','cminDirection','t12','t12Type','t12Direction','Comment']}, function(err, csv) {
 			if (err) console.log(err);
 			fs.writeFile(filepath , csv, function(err) {
 			    if (err) throw err;
