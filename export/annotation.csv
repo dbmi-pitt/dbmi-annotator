@@ -1,7 +1,0 @@
-"email","rawurl","annotationType","assertion_type","quote","Drug1","Type1","Role1","Drug2","Type2","Role2","Modality","Evidence_modality"
-"yin2@gmail.com","http://localhost:3000/DDI-pdfs/Backman_2005_16084850.pdf","DDI","Drug Drug Interaction","Conclusions:Rifampin markedly decreases and gemfibrozil moderately increases the plasma concentrations ofatorvastatin and its metabolites","Rifampin","active ingredient",,"increases",,,,
-"yin2@gmail.com","http://localhost:3000/DDI-pdfs/Backman_2005_16084850.pdf","DrugMention",,"increases",,,,,,,,
-"yin2@gmail.com","http://localhost:3000/DDI-pdfs/Backman_2005_16084850.pdf","DrugMention",,"Rifampin",,,,,,,,
-"yin2@gmail.com","http://localhost:3000/DDI-labels/010f9162-9f7f-4b6d-a6e4-4f832f26f38e.html","DDI","Drug Drug Interaction","Antidepressants increased the risk compared to placebo of suicidal thinking and behavior (suicidality) in children, adolescents, and young","Antidepressants",,,"placebo",,,,
-"yin2@gmail.com","http://localhost:3000/DDI-labels/010f9162-9f7f-4b6d-a6e4-4f832f26f38e.html","DrugMention",,"placebo",,,,,,,,
-"yin2@gmail.com","http://localhost:3000/DDI-labels/010f9162-9f7f-4b6d-a6e4-4f832f26f38e.html","DrugMention",,"Antidepressants",,,,,,,,

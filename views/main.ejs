@@ -2,7 +2,7 @@
   <body>
 
     <style> body        { padding-top:80px; word-wrap:break-word; } </style>
-
+    <script src="js/jquery-1.11.1.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css"> 
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
@@ -45,7 +45,7 @@
 		  
 		  
             <h3><span class="fa fa-user"></span>&nbsp;Profile (Overview annotation tasks) </h3>
-	    
+
 	    <table class="table table-striped" >
 
 		    
@@ -88,32 +88,18 @@
 	    </table>
 	    <br><br>
 
-	  <!-- annotation export  -->
-	  <strong>Export my annotation (its not ready yet): </strong><br>
-	  <form action="/dbmiannotator/exportcsv" method="get" >
-	    <span class="btn btn-default btn-file">
-	      <input type="file" name="filename" >
-	    </span>
-	    <input type="text" id="email" name="email" value="<%= user.email %>" style="display: none;" />
 	    
-	    <button id="exportButton" class="btn btn-success">export</button>
-	    
-	    <% if (exportMessage.length > 0) {
-	    
-	    if (exportMessage.indexOf('success')){
-	    %>
-	    <div class="alert alert-success"><%=exportMessage %></div>
-	    <% } else { %>
-	    <div class="alert alert-warning"><%=exportMessage %></div>
-	    <% } } %>		  
-	  </form>
+	    <!-- annotation download  -->
 
+	    <form action="/dbmiannotator/exportcsv" method="get">
+	      <strong>Download my annotations: </strong>
+	      <input type="text" id="email" name="email" value="<%= user.email %>" style="display: none;" />
+	      <button id="exportButton" class="btn btn-success">Download</button>
+	    </form>
 	    
 	  </div>
 	  
 	</div>
-
-
 
 
 
