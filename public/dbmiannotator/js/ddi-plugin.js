@@ -44,11 +44,11 @@ if (typeof annotator === 'undefined') {
 			 setTimeout(function(){
 			     app.annotations.load({uri: sourceURL.replace(/[\/\\\-\:\.]/g, ""), email: email});
 			 }, 1000);
-		     })
-	.then(function(){
-			 alert("Annotations for user: " + email + " are loaded");
-	})
-    ;
+		     });
+	// .then(function(){
+	// 		 alert("Annotations for user: " + email + " are loaded");
+	// })
+    
 }
 
 function getURLParameter(name) {
