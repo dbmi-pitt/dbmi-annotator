@@ -38,9 +38,9 @@
 		<button id="loadButton" class="btn btn-success">load</button>
 	      </form>
 	      
-	      <% if (loadMessage.length > 0) { %>
-	      <div class="alert alert-warning"><%=loadMessage %></div>
-	      <% } %>
+    <% if (loadMessage.length > 0) { %>
+				     <div class="alert alert-warning"><%=loadMessage %></div>
+				     <% } %>
 	    </div>
 		  
 		  
@@ -49,42 +49,52 @@
 	    <table class="table table-striped" >
 
 		    
-	      <%  if (annotations.total > 0){   %>
+    <%  if (annotations.total > 0){   %>
 	      <tr>
 		<td>Document source URL </td>
 		<td>Number of Annotations </td>
 	      </tr>
 
 	      <%
-		 var dictAnnots = {};
+				      var dictAnnots = {};
 		 
-		 for(var i=0; i < annotations.rows.length; i++) {
-				  if (annotations.rows[i].rawurl in dictAnnots){
-				  dictAnnots[annotations.rows[i].rawurl] += 1;
-				  } else {
-				  dictAnnots[annotations.rows[i].rawurl] = 1;
-				  }
-				  }
-
-				  for (var item in dictAnnots){
-				  %>
+				      for(var i=0; i < annotations.rows.length; i++) {
+					  if (annotations.rows[i].rawurl in dictAnnots){
+					      dictAnnots[annotations.rows[i].rawurl] += 1;
+					  } else {
+					      dictAnnots[annotations.rows[i].rawurl] = 1;
+					  }
+				      }
+				      
+				      for (var item in dictAnnots){
+					  var dbmiurl = "";
+					  if (item.indexOf('.html') >= 0){
+					      dbmiurl = "displayWebPage?sourceURL=" + item + "&email=" + user.email;
+					  }
+					  else if (item.indexOf('.pdf') >= 0){
+					      dbmiurl = "viewer.html?file=" + item + "&email=" + user.email;
+					  }
+					  else{
+					      dbmiurl = "main";
+					  }
+					      %>
 		 <tr>
-		   <td><%=item %></td>
-		   <td><%=dictAnnots[item] %> </td>
-		 </tr>
-		 
-		 <% }
-		    } else { %>
+						  <td><a href="<%=dbmiurl %>" > <%=item %> </a>  </td>
+						  <td><%=dictAnnots[item] %> </td>
+						  </tr>
+
+					      <% }
+				  } else { %>
 
 	    
-	    <strong>No annotations been made, below are sample document urls </strong><br><br>
-            <p>Local dailymed html labels: <br>
-	      http://<%-host %>/DDI-labels/010f9162-9f7f-4b6d-a6e4-4f832f26f38e.html <br>http://<%-host %>/DDI-labels/b891bd9f-fdb8-4862-89c5-ecdd700398a3.html
-	    </p>
-	    <p>
-	      Local pdf documents: <br>http://<%-host %>/DDI-pdfs/Backman_2005_16084850.pdf <br>http://<%-host %>/DDI-pdfs/Frelinger_2012_07351097.pdf 
-            </p>
-	    <% } %>
+					   <strong>No annotations been made, below are sample document urls </strong><br><br>
+					   <p>Local dailymed html labels: <br>
+					   http://<%-host %>/DDI-labels/010f9162-9f7f-4b6d-a6e4-4f832f26f38e.html <br>http://<%-host %>/DDI-labels/b891bd9f-fdb8-4862-89c5-ecdd700398a3.html
+					   </p>
+					   <p>
+					   Local pdf documents: <br>http://<%-host %>/DDI-pdfs/Backman_2005_16084850.pdf <br>http://<%-host %>/DDI-pdfs/Frelinger_2012_07351097.pdf 
+					   </p>
+					   <% } %>
 	    </table>
 	    <br><br>
 
