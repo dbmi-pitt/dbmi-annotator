@@ -20,7 +20,7 @@ How to run
 Dependences:
 --------------------------
 
-1. Elasticsearch version 1.7 running on port 9250
+1. Elasticsearch version 1.7.1 running on port 9250
 
 2. Annotator Store running on port 5000
 

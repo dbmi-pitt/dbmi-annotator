@@ -13,9 +13,8 @@ if (typeof annotator === 'undefined') {
     app.include(annotator.authz.acl);
 
     app.include(annotator.storage.http, {
-	prefix: 'http://' + config.store.host + ':' + config.store.port
+	prefix: 'http://' + config.annotator.host + '/annotatorstore'
     });
-
 
     
     var sourceURL = getURLParameter("sourceURL").trim();
