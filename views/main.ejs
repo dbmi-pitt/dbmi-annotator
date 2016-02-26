@@ -89,10 +89,15 @@
 	    
 					   <strong>No annotations been made, below are sample document urls </strong><br><br>
 					   <p>Local dailymed html labels: <br>
-					   http://<%-host %>/DDI-labels/010f9162-9f7f-4b6d-a6e4-4f832f26f38e.html <br>http://<%-host %>/DDI-labels/b891bd9f-fdb8-4862-89c5-ecdd700398a3.html
+					     <a href="displayWebPage?sourceURL=http://<%-host %>/DDI-labels/010f9162-9f7f-4b6d-a6e4-4f832f26f38e.html&email=<%=user.email%>">http://<%-host %>/DDI-labels/010f9162-9f7f-4b6d-a6e4-4f832f26f38e.html</a>
+					     <br>
+					     <a href="displayWebPage?sourceURL=http://<%-host %>/DDI-labels/b891bd9f-fdb8-4862-89c5-ecdd700398a3.html&email=<%=user.email%>">http://<%-host %>/DDI-labels/b891bd9f-fdb8-4862-89c5-ecdd700398a3.html</a>
 					   </p>
 					   <p>
-					   Local pdf documents: <br>http://<%-host %>/DDI-pdfs/Backman_2005_16084850.pdf <br>http://<%-host %>/DDI-pdfs/Frelinger_2012_07351097.pdf 
+					     Local pdf documents: <br>
+					     <a href="viewer.html?file=http://<%-host %>/DDI-pdfs/Backman_2005_16084850.pdf&email=<%=user.email%>">http://<%-host %>/DDI-pdfs/Backman_2005_16084850.pdf</a>
+					     <br>
+					     <a href="viewer.html?file=http://<%-host %>/DDI-pdfs/Frelinger_2012_07351097.pdf&email=<%=user.email%>">http://<%-host %>/DDI-pdfs/Frelinger_2012_07351097.pdf</a>
 					   </p>
 					   <% } %>
 	    </table>
