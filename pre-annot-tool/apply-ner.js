@@ -19,6 +19,36 @@ var nerResultsM = new HashMap();
 parseNERDIR(NER_XML_DIR, nerResultsM);
 
 
+var parseNameInFile = function(file){ 
+
+	if (path.extname(file) == ".xml"){
+        
+        var readFile = Promise.denodeify(fs.readFile);
+        
+		return readFile(file, 'utf-8').then(function(data){
+            
+		    doc = new dom().parseFromString(data);
+		    var nameNodes = xpath.select("//name", doc);
+		    var nameS = new Set([]); 
+		    
+		    if (nameNodes){
+			    for (k = 0; k < nameNodes.length; k++){
+			        name = nameNodes[k].firstChild.data.trim();
+			        if (!name.match(".*[,|;|.|(|)].*")){
+				        nameS.add(name);
+			        }
+			    }
+			    //nerResultsM.set(file, nameS.toArray());
+			    console.log(file + "\n" + nameS.toArray());
+			    //console.log(nerResultsM.get(file));
+                
+                return nameS.toArray();
+		    }
+		});                
+	}
+}
+
+
 // PARSE NER XMLS
 // @INPUT: dir to NER
 // @INPUT: hashmap obj
@@ -26,43 +56,32 @@ parseNERDIR(NER_XML_DIR, nerResultsM);
 function parseNERDIR(dir, nerResultsM){
     
     //var nerResultsM = new HashMap();
-    
-    fs.readdir(dir, function(err, files){
-	if (err) throw err;
+    var readDir = Promise.denodeify(fs.readdir);
 
-	for (i = 0; i < files.length; i++){
+    return readDir(dir, function(err, files){
 
-	    file = dir + files[i];
+	    if (err) throw err;
+        console.log("TEST0");
+        
+	    for (i = 0; i < files.length; i++){
+            
+	        file = dir + files[i];
+            console.log("TEST1");
+            
+            parseNameInFile(file).then(function(data){
+                console.log(file);
+                console.log(data);                
+                
+            });
 
-	    if (path.extname(file) == ".xml"){
-		fs.readFile(file, 'utf-8', function(err, data){
-	
-		    doc = new dom().parseFromString(data);
-		    var nameNodes = xpath.select("//name", doc);
-		    var nameS = new Set([]); 
-		    
-		    if (nameNodes){
-			for (k = 0; k < nameNodes.length; k++){
-			    name = nameNodes[k].firstChild.data.trim();
-			    if (!name.match(".*[,|;|.|(|)].*")){
-				nameS.add(name);
-			    }
-			}
-
-			// nerResultsM.set(file, nameS.toArray());
-			// console.log(file);
-			// console.log(nerResultsM.get(file));
-
-			// parseDrugInLabel(file + ".xml");
-		    }
-		});
 
 	    }
-	}
-	//console.log("test");
+	    //console.log("test");
     });
-   
+    
 }
+
+
 
 
 // PARSE LABEL
