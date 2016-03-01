@@ -3,7 +3,7 @@ var fs = require('fs'), path = require("path");
 var xpath = require('xpath'), parse5 = require('parse5'), xmlser = require('xmlserializer'), dom = require('xmldom').DOMParser;
 var Set = require("collections/set");
 var HashMap = require('hashmap');
-var q = require('q');
+var Q = require('q');
 var Promise = require('promise');
 
 // SET VARS
@@ -15,123 +15,123 @@ var label1 = "./Dailymed-SPLs-html/test.html"
 //var label1 = './Dailymed-SPLs-html/08320ea3-8f93-6f04-5d1c-f69af3eb5a81.html'
 
 
-var nerResultsM = new HashMap();
-parseNERDIR(NER_XML_DIR, nerResultsM);
 
-
-var parseNameInFile = function(file){ 
-
-	if (path.extname(file) == ".xml"){
-        
-        var readFile = Promise.denodeify(fs.readFile);
-        
-		return readFile(file, 'utf-8').then(function(data){
-            
-		    doc = new dom().parseFromString(data);
-		    var nameNodes = xpath.select("//name", doc);
-		    var nameS = new Set([]); 
-		    
-		    if (nameNodes){
-			    for (k = 0; k < nameNodes.length; k++){
-			        name = nameNodes[k].firstChild.data.trim();
-			        if (!name.match(".*[,|;|.|(|)].*")){
-				        nameS.add(name);
-			        }
-			    }
-			    //nerResultsM.set(file, nameS.toArray());
-			    console.log(file + "\n" + nameS.toArray());
-			    //console.log(nerResultsM.get(file));
-                
-                return nameS.toArray();
-		    }
-		});                
-	}
-}
+parseNERDIR(NER_XML_DIR);
+var fs_stat = Q.denodeify(fs.stat)
 
 
 // PARSE NER XMLS
 // @INPUT: dir to NER
 // @INPUT: hashmap obj
 // @RETURN: NULL
-function parseNERDIR(dir, nerResultsM){
-    
-    //var nerResultsM = new HashMap();
-    var readDir = Promise.denodeify(fs.readdir);
+function parseNERDIR(dir){
 
-    return readDir(dir, function(err, files){
-
-	    if (err) throw err;
-        console.log("TEST0");
-        
-	    for (i = 0; i < files.length; i++){
+    var fs_readdir = Q.denodeify(fs.readdir);
+    return fs_readdir(dir)
+        .then(function(files){
+            var promises = files.map(function (file) {
+                return fs_stat(path.join(dir,file));
+            })
+            return Q.all(promises).then(function (stats) { 
+                return files;
+            })
+        })
+        .then(function(files){
             
-	        file = dir + files[i];
-            console.log("TEST1");
-            
-            parseNameInFile(file).then(function(data){
-                console.log(file);
-                console.log(data);                
-                
-            });
+            for (var i = 0; i < files.length; i++ ) {
 
+                var filename = files[i];
+                (function(filename){
 
-	    }
-	    //console.log("test");
-    });
-    
+                    var filepath = NER_XML_DIR + filename;
+	                fs.readFile(filepath, 'utf-8', function(error, data){
+
+                        if (error){
+                            console.log("Error: ", error);
+                        } else {
+
+                            drugL = parseNameInData(data);
+                            setid = filename.replace("-drugInteractions.txt-PROCESSED.xml","").replace("-clinicalPharmacology.txt-PROCESSED.xml","");
+                            label = LABEL_HTML_DIR+ setid + ".html";
+                            
+                            //console.log(label);
+                            //console.log(drugL[0]);
+
+                            //var data = fs.readFileSync(label, 'utf-8');
+                            var rangesL = findDrugInLabel(drugL[0],label);
+                            
+                            console.log(rangesL[0]);
+                            
+                        }
+
+	                });
+                })(filename)                
+            }
+
+        })
+}
+
+// PARSE DRUG NAMES IN XML CONTENTS
+// @INPUT: XML STRING
+// @RETURN: LIST OF UNIQUE DRUG NAMES
+var parseNameInData = function(data){ 
+
+	doc = new dom().parseFromString(data);
+	var nameNodes = xpath.select("//name", doc);
+	var nameS = new Set([]); 
+	
+	if (nameNodes){
+		for (k = 0; k < nameNodes.length; k++){
+			name = nameNodes[k].firstChild.data.trim();
+			if (!name.match(".*[,|;|.|(|)].*")){
+				nameS.add(name);
+			}
+		}
+        return nameS.toArray();
+	}
 }
 
 
-
-
-// PARSE LABEL
-var parseDrugInLabel = function(file){
-    
-    fs.readFile(file, {encoding: 'utf-8'}, function (err, data) {
-	if (err) throw err;
-	
-	//var drugStr = "paroxetine";
-	var drugStr = "antidepressants";
-	findDrugInLabel(drugStr, data);
-	//console.log(findDrugInLabel(drugStr, data));
-	
-    });
-}
 
 // PARSE DRUG OCCURRENCES IN LABEL
 // @INPUT: drug name : String
-// @INPUT: context : String
+// @INPUT: context : File with path
 // @RETURN: List of Ranges {startOffset, endOffset, start, end}
 
-var findDrugInLabel = function(drug, label){
+var findDrugInLabel = function(drug, file){
 
-    if (drug == null || label == null) return null;
+    if (drug == null || file == null) return null;
+
+    var label = fs.readFileSync(file, 'utf-8');
     
     doc = new dom().parseFromString(label);
     drugMatchPattern = "//*[contains(text()[not(name()='script')],'" + drug + "')]";
     
     var drugNodes = xpath.select(drugMatchPattern, doc);
     var rangesL = [];
-    
+
     for (i = 0; i < drugNodes.length; i++){
 
-	cntStr = drugNodes[i].firstChild.data;
-	pathL = getXPath(drugNodes[i]);
+	    cntStr = drugNodes[i].firstChild.data;
+	    pathL = getXPath(drugNodes[i]);
 
-	if (cntStr.length > MIN_TXT){
-
-	    pathStr = ""; 
-	    for (j = 0; j < pathL.length; j++){
-	    	pathStr += "/" + pathL[j];
-	    }
-
-	    var re = new RegExp(drug,"gi");
-	    while (res = re.exec(cntStr)){
-		startOffset = res["index"];
-		var ranges = {"startOffset":startOffset, "endOffset": startOffset + drug.length, "start":pathStr, "end":pathStr};
-		rangesL.push(ranges);
-	    }
-	}
+        if (cntStr){
+        
+	        if (cntStr.length > MIN_TXT){
+                
+	            pathStr = ""; 
+	            for (j = 0; j < pathL.length; j++){
+	    	        pathStr += "/" + pathL[j];
+	            }
+                
+	            var re = new RegExp(drug,"gi");
+	            while (res = re.exec(cntStr)){
+		            startOffset = res["index"];
+		            var ranges = {"label": file,"drugname":drug, "startOffset":startOffset, "endOffset": startOffset + drug.length, "start":pathStr, "end":pathStr};
+		            rangesL.push(ranges);
+	            }
+	        }
+        }
     }
     return rangesL;
 };
