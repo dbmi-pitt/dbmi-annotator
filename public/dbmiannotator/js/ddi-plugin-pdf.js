@@ -13,7 +13,7 @@ if (typeof annotator === 'undefined') {
     app.include(annotator.authz.acl);
 
     app.include(annotator.storage.http, {
-	prefix: 'http://' + config.store.host + '/annotatorstore'
+	prefix: 'http://' + config.store.host + ':' + config.store.port
     });
 
     var sourceURL = getURLParameter("file").trim();
@@ -36,9 +36,12 @@ if (typeof annotator === 'undefined') {
 			 app.ident.identity = email;
 			 setTimeout(function ()
 				    {
+					//alert(document.readyState);
 					app.annotations.load(
-					    {uri: sourceURL.replace(/[\/\\\-\:\.]/g, ""), email: email})
-				    }, 3500);
+					    {uri: sourceURL.replace(/[\/\\\-\:\.]/g, ""), email: email}).then(function(){
+						alert("[INFO] Annotation loaded");
+					    });
+				    }, 3800);
 			 
 		     });
     

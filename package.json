@@ -21,15 +21,14 @@
     "json2csv": "^3.1.0",
     "method-override": "~1.0.0",
     "morgan": "~1.0.0",
+    "node-curl": "^0.3.3",
     "node-uuid": "^1.4.7",
-    "nodemon": "^1.9.1",
     "passport": "~0.1.17",
     "passport-facebook": "~1.0.2",
     "passport-google-oauth": "~0.1.5",
     "passport-local": "~0.1.6",
     "passport-twitter": "~1.0.2",
     "pg": "^4.4.3",
-    "request": "^2.69.0",
     "sequelize": "^3.18.0",
     "valid-url": "^1.0.9"
   }
