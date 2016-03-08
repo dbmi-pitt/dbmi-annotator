@@ -1,5 +1,3 @@
-
-
 var INPUT_URLS = "input-urls.txt";
 var OUTPUT_DIR = "outputs/";
 
@@ -30,7 +28,12 @@ lineReader.on('line', function (line) {
             // write to file
             var file = "sample.html";
             if (line.indexOf("dailymed") > 0){
-                file = OUTPUT_DIR + line.replace("http://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=","");
+                if (line.indexOf("setid=") > 0)
+                    file = OUTPUT_DIR + line.replace("http://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=","") + ".html";
+                else if (line.indexOf("archives") > 0)
+                    file = OUTPUT_DIR + line.replace("http://dailymed.nlm.nih.gov/dailymed/archives/fdaDrugInfo.cfm?archiveid=","archiveid-") + ".html";
+                else
+                    console.log("[ERROR] dailymed url not resolved!");
             } else {
                 file = OUTPUT_DIR + line + ".html";
             }
