@@ -9,9 +9,7 @@ var HashMap = require('hashmap');
 
 // SET VARS
 var MIN_TXT = 30; 
-//var LABEL_HTML_DIR = "Dailymed-SPLs-html/";
-var LABEL_HTML_DIR = "../public/DDI-labels/";
-
+var LABEL_HTML_DIR = "../public/nlabels/";
 var NER_XML_DIR = "NER-results-xml/";
 
 
@@ -124,21 +122,8 @@ var findDrugPInLabel = function(drug, file, setid){
 
     if (drug == null || file == null || setid == null) return null;
 
-    file = "083-tidy";
     var label = fs.readFileSync(file, 'utf-8');
-
-    //var request = require('sync-request');
-    //var res = request('GET','http://localhost/DDI-labels/08320ea3-8f93-6f04-5d1c-f69af3eb5a81.html');
-    //var res = request('GET','http://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=08320ea3-8f93-6f04-5d1c-f69af3eb5a81');
-    //var res = request('GET','http://localhost/DDI-labels/test-htmls/08320ea3-8f93-6f04-5d1c-f69af3eb5a81.html');
-
-    //var label = res.getBody().toString();
-
     doc = new dom().parseFromString(label);
-
-    //innerBody = doc.body;
-
-    //console.log(innerBody)
 
     drugMatchPattern = "//*[contains(text()[not(name()='script')],'" + drug + "')]";
     

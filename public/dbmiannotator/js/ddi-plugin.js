@@ -16,7 +16,6 @@ if (typeof annotator === 'undefined') {
 	prefix: 'http://' + config.annotator.host + '/annotatorstore'
     });
 
-    
     var sourceURL = getURLParameter("sourceURL").trim();
     var email = getURLParameter("email");
     

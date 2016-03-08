@@ -1,6 +1,7 @@
 //var NER_RESULTS = "ners-03012016.json";
-var NER_RESULTS = "083-ner";
+var NER_RESULTS = "ner-resutls-json";
 var ES_CONN = "localhost:9250";
+var HOSTNAME = "localhost";
 
 var uuid = require('uuid');
 
@@ -12,19 +13,17 @@ var client = new elasticsearch.Client({
 
 var fs = require('fs');
 var nerResults = fs.readFileSync(NER_RESULTS,"utf-8");
-//console.log(nerResults);
 
 var nersets = JSON.parse(nerResults).nersets;
 
 for (i = 0; i < nersets.length; i++){
 //for (i = 0; i < 1; i++){
     subL = nersets[i];
-    //console.log(subL.length);
 
     for (j = 0; j < subL.length; j++){
     //for (j = 0; j < 80; j++){
         annot = subL[j];
-        //console.log(annot);
+
         if (annot){
             es_index(annot);
         }
@@ -42,12 +41,12 @@ function es_index(annot){
         return null;
     } else {
 
-        uriStr = "http://localhost/DDI-labels/" + annot.setid + ".html";
+        uriStr = "http://" + HOSTNAME + "/nlabels/" + annot.setid + ".html";
         uriPost = uriStr.replace(/[\/\\\-\:\.]/g, "");
 
         //path = "/article[1]/div[1]/div[1]/div[1]" + annot.start
         path = annot.start.replace("/html[1]/body[1]","/article[1]/div[1]/div[1]/div[1]");
-
+        var datetime = new Date();
         client.index(
             {
                 index: 'annotator',
@@ -55,8 +54,8 @@ function es_index(annot){
                 id: uuid.v4(),
                 body: {
                     "email": "yin2@gmail.com",
-                    "created": "2016-03-01", 
-                    "updated": "2016-03-01", 
+                    "created": datetime, 
+                    "updated": datetime, 
                     "annotationType": "DrugMention",
                     "quote": annot.drugname,
                     "permissions": {},
@@ -71,8 +70,7 @@ function es_index(annot){
                     "consumer": "mockconsumer",
                     "uri": uriPost,
                     "rawurl": uriStr,
-                    "user": "alice"
-                    
+                    "user": "NER"
                 }
                 
             }, function (err, resp) {
@@ -82,38 +80,6 @@ function es_index(annot){
                     console.log("[INFO] load successfully")
             });
 
-
-        // client.index(
-        //     {
-        //         "index": 'annotator',
-        //         "type": 'annotation',
-        //         "id": uuid.v4(),
-        //         "version": 1,
-        //         "score": 1,
-        //         "source": {
-        //             "email": "yin2@gmail.com",
-        //             "created": "2016-03-01", 
-        //             "updated": "2016-03-01", 
-        //             "annotationType": "DrugMention",
-        //             "quote": annot.drugname,
-        //             "permissions": {},
-        //             "ranges": [
-        //                 {
-        //                     "start": annot.start,
-        //                     "end": annot.end,
-        //                     "startOffset": annot.startOffset,
-        //                     "endOffset": annot.endOffset,
-        //                 }
-        //             ],
-        //             "consumer": "mockconsumer",
-        //             "uri": uriPost,
-        //             "rawurl": uriStr,
-        //             "user": "alice"
-        //         }
-                
-        //     }, function (err, resp) {
-        //         console.log("[ERROR] " + err)
-        //     });
     }
 }
 
