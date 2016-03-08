@@ -33,7 +33,7 @@ module.exports = function(app, passport) {
 	    failureRedirect : '/dbmiannotator/register', 
 	    failureFlash : true
     })
-	    );
+	        );
     
     // MAIN ==============================
     app.get('/dbmiannotator/main', isLoggedIn, function(req, res) {
@@ -44,23 +44,23 @@ module.exports = function(app, passport) {
 	
 	request({url: url, json: true}, function(error,response,body){
 	    if (!error && response.statusCode === 200) {
-		
-		res.render('main.ejs', {
-		    user : req.user,
-		    annotations : body,
-		    exportMessage: req.flash('exportMessage'),
-		    loadMessage: req.flash('loadMessage'),
-		    host: config.annotator.host
-		});
-		
+		    
+		    res.render('main.ejs', {
+		        user : req.user,
+		        annotations : body,
+		        exportMessage: req.flash('exportMessage'),
+		        loadMessage: req.flash('loadMessage'),
+		        host: config.annotator.host
+		    });
+		    
 	    } else {
-		res.render('main.ejs', {
-		    user : req.user,
-		    annotations : {'total':0},
-		    exportMessage: req.flash('exportMessage'),
-		    loadMessage: req.flash('loadMessage'),
-		    host: config.annotator.host
-		});
+		    res.render('main.ejs', {
+		        user : req.user,
+		        annotations : {'total':0},
+		        exportMessage: req.flash('exportMessage'),
+		        loadMessage: req.flash('loadMessage'),
+		        host: config.annotator.host
+		    });
 	    }
 
 	    
@@ -83,24 +83,24 @@ module.exports = function(app, passport) {
 
 	var validUrl = require('valid-url');
 	
-	if (validUrl.isUri(sourceUrl)){
-	
-	    if (sourceUrl.indexOf('.html') >= 0){
-		res.render('displayWebPage.ejs');
-	    } 
-	    else if (sourceUrl.indexOf('.pdf') >= 0){
-		res.redirect("/dbmiannotator/viewer.html?file=" + sourceUrl+"&email=" + email);
+	    if (validUrl.isUri(sourceUrl)){
+	        
+            //if (sourceUrl.indexOf('setid') >= 0){
+	        if (sourceUrl.indexOf('.html') >= 0){	    
+		        res.render('displayWebPage.ejs');
+	        } 
+	        else if (sourceUrl.indexOf('.pdf') >= 0){
+		        res.redirect("/dbmiannotator/viewer.html?file=" + sourceUrl+"&email=" + email);
 	    }
-	    else {
-		req.flash('loadMessage', 'The url you just entered is valid but not have local resource served yet');
-		res.redirect('/dbmiannotator/main');
+	        else {
+		        req.flash('loadMessage', 'The url you just entered is valid but not have local resource served yet');
+		        res.redirect('/dbmiannotator/main');
+	        }
+	    } else {
+	        req.flash('loadMessage', 'The url you just entered is not valid!');
+	        res.redirect('/dbmiannotator/main');
 	    }
-	} else {
-	    req.flash('loadMessage', 'The url you just entered is not valid!');
-	    res.redirect('/dbmiannotator/main');
 	    
-	}
-	
     });
 
 
