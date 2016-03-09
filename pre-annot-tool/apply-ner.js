@@ -11,163 +11,150 @@ var HashMap = require('hashmap');
 var MIN_TXT = 30; 
 var PRE_POST_LEN = 30;
 var LABEL_HTML_DIR = "../public/nlabels/";
-var NER_XML_DIR = "NER-results-xml/";
+var NER_JSON = "NER/NER-outputs.json";
 
 
-parseNERDIR(NER_XML_DIR);
+parseNERDIR(NER_JSON);
 
-// PARSE NER XMLS
-// @INPUT: dir to NER
+// PARSE NER IN JSON
+// @INPUT: file path
 // @RETURN: [{setId, drugL}, {xx}]
-function parseNERDIR(dir){
+function parseNERDIR(nerfile){
 
-    var fs_readdir = Q.denodeify(fs.readdir);
-    var fs_stat = Q.denodeify(fs.stat);
+    data = fs.readFileSync(nerfile, 'utf-8');
+    var nerResults = JSON.parse(data);
+    var nerM = new HashMap();
 
-    return fs_readdir(dir)
-        .then(function(files){
-            var promises = files.map(function (file) {
-                return fs_stat(path.join(dir,file));
-            })
-            return Q.all(promises).then(function (stats) { 
-                return files;
-            })
-        })
-        .then(function(files){
-            var nerM = new HashMap();   
-            for (var i = 0; i < files.length; i++ ) {
+    for (i = 0; i < nerResults.length; i++){
 
-                var filename = files[i];
-                (function(filename){
+        item = nerResults[i];
+        setid = item.setId;
 
-                    var filepath = NER_XML_DIR + filename;
-                    setid = filename.replace("-drugInteractions.txt-PROCESSED.xml","").replace("-clinicalPharmacology.txt-PROCESSED.xml","");
+        if (nerM.has(setid)){
+            nerM.get(setid).push(item);
+        } else {
+            nerM.set(setid, []);
+        }
+    }
 
-                    data = fs.readFileSync(filepath, 'utf-8');
-                    drugS = findNameInXML(data);
+    var jsonResults = {"nersets":[]};
+    
+    nerM.forEach(function(item, setid) {
+        //console.log(key + " : " + value);
+        labelFile = LABEL_HTML_DIR+ setid + ".html";
+        selectorsL = findDrugPInLabel(item, labelFile, setid);
+        
+        if (selectorsL)
+            if (selectorsL.length > 0)
+                jsonResults.nersets.push(selectorsL);
 
-                    if (nerM.has(setid)) {
-                        try {
-                            drugExS = nerM.get(setid);
-                            drugL = drugS.toArray();
+        
+ 
+    });
+    console.log(JSON.stringify(jsonResults));
 
-                            for (k=0; k<drugL.length; k++){
-                                drugExS.add(drugL[k]);
-                            }
-                            nerM.set(setid, drugExS);
-
-                        } catch(ex){
-                            console.log(ex);
-                        }
-                    } else {
-                        nerM.set(setid, drugS);           
-                    }
-  
-                })(filename, i)                
-            }
-            return nerM;
-        })
-        .then(function(nerM){           
-            var jsonResults = {"nersets":[]};
-
-            try {
-                nerM.forEach(function(value, key){
-                    setid = key.toString();
-                    drugL = value.toArray();
-                    labelFile = LABEL_HTML_DIR+ setid + ".html";
-
-                    for (var j = 0; j < drugL.length; j++){
-                    //for (var j = 0; j < 1; j++){
-                        var rangesL = findDrugPInLabel(drugL[j], labelFile, setid);
-                        if (rangesL)
-                            if (rangesL.length > 0)
-                                jsonResults.nersets.push(rangesL);
-                    }
-                })
-                console.log(JSON.stringify(jsonResults));
-            } catch(ex){
-                console.log(ex);
-            }
-        })
-}
-
-// PARSE DRUG NAMES IN XML CONTENTS
-// @INPUT: XML STRING
-// @RETURN: SET OF UNIQUE DRUG NAMES
-var findNameInXML = function(data){ 
-
-	doc = new dom().parseFromString(data);
-	var nameNodes = xpath.select("//name", doc);
-	var nameS = new Set([]); 
-	
-	if (nameNodes){
-		for (k = 0; k < nameNodes.length; k++){
-			name = nameNodes[k].firstChild.data.trim();
-			if (!name.match(".*[,|;|.|(|)].*")){
-				nameS.add(name);
-			}
-		}
-        return nameS;
-	}
+    //console.log(nerM.get("08320ea3-8f93-6f04-5d1c-f69af3eb5a81"));
 }
 
 
 
 // PARSE DRUG OCCURRENCES IN LABEL
-// @INPUT: drug name : String
+// @INPUT: drugL : JSON list for ner items
 // @INPUT: context : File path
 // @INPUT: label setid : String
-// @RETURN: List of Ranges {startOffset, endOffset, start, end}
+// @RETURN: List of Ranges {startOffset, endOffset, start, end, etc...}
 
-var findDrugPInLabel = function(drug, file, setid){
+function findDrugPInLabel(drugL, file, setid){
 
-    if (drug == null || file == null || setid == null) return null;
+    //console.log("[INFO] begin search in " + setid);
+
+    if (drugL == null || file == null || setid == null) return null;
 
     var label = fs.readFileSync(file, 'utf-8');
     doc = new dom().parseFromString(label);
 
-    drugMatchPattern = "//*[contains(text()[not(name()='script')],'" + drug + "')]";
-    
-    var drugNodes = xpath.select(drugMatchPattern, doc);
-    var rangesL = [];
+    selectorL = [];
 
-    for (i = 0; i < drugNodes.length; i++){
-    //for (i = 0; i < 1; i++){
+    //for (var j = 0; j < drugL.length; j++){
+    for (var j = 0; j < 1; j++){
+        drugItem = drugL[j];
 
-        if (!drugNodes[i]){
-            continue;
+        prefix = drugItem.prefix;
+        suffix = drugItem.suffix;
+        exact = drugItem.exact;
+
+        prefixOffset = prefix.lastIndexOf("\n");
+        if (prefixOffset > 0){
+            prefix = prefix.substring(prefixOffset + 2);
         }
 
-	    cntStr = drugNodes[i].firstChild.data;
-	    pathL = getXPath(drugNodes[i]);
-
-        if (cntStr){
-        
-	        if (cntStr.length > MIN_TXT){
-                
-	            pathStr = ""; 
-	            for (j = 0; j < pathL.length; j++){
-	    	        pathStr += "/" + pathL[j];
-	            }
-                
-	            var re = new RegExp(drug.toLowerCase(),"gi");
-	            while (res = re.exec(cntStr)){
-		            startOffset = res["index"];
-
-		            var rangesStr = '{"setid":"' + setid+'","drugname":"' + drug + '", "startOffset":"' + startOffset + '","endOffset":"' + (startOffset + drug.length) + '", "start":"'+ pathStr + '", "end":"' + pathStr + '"}';
-                    ranges = JSON.parse(rangesStr);
-		            rangesL.push(ranges);
-	            }
-	        }
+        suffixOffset = suffix.indexOf("\n");
+        if (suffixOffset > 0){
+            suffix = suffix.substring(0, suffixOffset);
         }
+
+        drugMatchPattern = "//*[contains(text()[not(parent::script)],'" + exact + "')]";
+        var drugNodes = xpath.select(drugMatchPattern, doc);
+
+        if (drugNodes.length > 0){
+
+            for (i = 0; i < drugNodes.length; i++){
+                
+                if (!drugNodes[i]) continue;
+
+	            cntStr = drugNodes[i].firstChild.data;
+	            pathL = getXPath(drugNodes[i]);
+
+                //console.log(drugNodes[i]);
+
+                if (cntStr){        
+
+                    cntStr = cntStr.replace(/\n\n/gm,' ').replace(/\n/gm,' ');
+	                if (cntStr.length > MIN_TXT){
+                        
+	                    pathStr = ""; 
+	                    for (j = 0; j < pathL.length; j++){
+	    	                pathStr += "/" + pathL[j];
+	                    }
+                        
+	                    var re = new RegExp(exact,"gi");
+	                    while (res = re.exec(cntStr)){
+		                    startOffset = res["index"];
+                            endOffset = startOffset + exact.length
+
+                            if (startOffset > PRE_POST_LEN)
+                                prefixSub = cntStr.substring(startOffset - PRE_POST_LEN, startOffset);
+                            else
+                                prefixSub = cntStr.substring(0, startOffset);
+
+                            if (cntStr.length - endOffset > PRE_POST_LEN)
+                                suffixSub = cntStr.substring(endOffset, endOffset + PRE_POST_LEN);
+                            else
+                                suffixSub = cntStr.substring(endOffset);
+
+                            if ((prefixSub.indexOf(prefix) || prefix.indexOf(prefixSub)) && (suffixSub.indexOf(suffix) || suffix.indexOf(suffixSub))){
+                            
+		                        selectorStr = '{"setid":"' + setid+'","drugname":"' + exact.toLowerCase() + '", "startOffset":"' + startOffset + '","endOffset":"' + endOffset + '", "start":"'+ pathStr + '", "end":"' + pathStr + '", "prefix":"' + prefixSub + '", "suffix":"' + suffixSub + '", "exact":"' + exact + '"}';
+
+                                //console.log(selectorStr);
+                                selector = JSON.parse(selectorStr);
+		                        selectorL.push(selector);
+                            }
+	                    }
+	                }
+                }
+            }
+        } else {
+            console.log("[ERROR] didn't match:" + exact);
+        }    
     }
-    return rangesL;
+    return selectorL;
 }
 
 
 
 // GET XPATH OF NODE
-var getXPath = function (node, path) {
+function getXPath(node, path) {
     path = path || [];
     if(node.parentNode) {
       path = getXPath(node.parentNode, path);
