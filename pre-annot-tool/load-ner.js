@@ -52,7 +52,7 @@ function es_index(annot){
                 index: 'annotator',
                 type: 'annotation',
                 id: uuid.v4(),
-                body: {
+                body: {    // annotatorJs fields for drug Mention
                     "email": "yin2@gmail.com",
                     "created": datetime, 
                     "updated": datetime, 
@@ -71,7 +71,17 @@ function es_index(annot){
                     "uri": uriPost,
                     "rawurl": uriStr,
                     "user": "NER"
+                },
+                target: {   //for OA text quote selector (JSON-LD)
+                    "source" : uriStr,
+                    "selector" : {
+                        "@type": "TextQuoteSelector",
+                        "exact": "",
+                        "prefix": "",
+                        "suffix": ""
+                    }
                 }
+                
                 
             }, function (err, resp) {
                 if (err)
