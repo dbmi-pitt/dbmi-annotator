@@ -24,9 +24,9 @@ if (typeof annotator === 'undefined') {
 	source = getURLParameter("sourceURL").trim();
     	return {
             beforeAnnotationCreated: function (ann) {
-		ann.rawurl = source;
-    		ann.uri = source.replace(/[\/\\\-\:\.]/g, "");		
-		ann.email = email;
+		        ann.rawurl = source;
+    		    ann.uri = source.replace(/[\/\\\-\:\.]/g, "");		
+		        ann.email = email;
             }
     	};
     };

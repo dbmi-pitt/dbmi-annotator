@@ -117,7 +117,7 @@ function findDrugPInLabel(drugL, file, setid){
 	    	                pathStr += "/" + pathL[j];
 	                    }
                         
-	                    var re = new RegExp(exact,"gi");
+	                    var re = new RegExp(exact,"g");
 	                    while (res = re.exec(cntStr)){
 		                    startOffset = res["index"];
                             endOffset = startOffset + exact.length
