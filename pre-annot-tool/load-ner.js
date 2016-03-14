@@ -70,18 +70,18 @@ function es_index(annot){
                     "consumer": "mockconsumer",
                     "uri": uriPost,
                     "rawurl": uriStr,
-                    "user": "NER"
-                },
-                target: {   //for OA text quote selector (JSON-LD)
-                    "source" : uriStr,
-                    "selector" : {
-                        "@type": "TextQuoteSelector",
-                        "exact": "",
-                        "prefix": "",
-                        "suffix": ""
+                    "user": "NER",
+                    target: {   //for OA text quote selector (JSON-LD)
+                        "source" : uriStr,
+                        "selector" : {
+                            "@type": "TextQuoteSelector",
+                            "exact": annot.exact,
+                            "prefix": annot.prefix,
+                            "suffix": annot.suffix
+                        }
                     }
                 }
-                
+     
                 
             }, function (err, resp) {
                 if (err)
