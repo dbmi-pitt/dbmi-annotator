@@ -103,8 +103,8 @@ h1 {
 
 .btn-success {
   position:fixed;
-  right: 0px;
-  top:40px;
+  bottom: 20px;
+  left:0px;
   color:#FFFFFF;
   background-color:#448AFF;
   border:none;
@@ -116,8 +116,8 @@ h1 {
 
 .btn-home {
   position:fixed;
-  right: 0px;
-  top:80px;
+  bottom: 60px;
+  left:0px;
   border:none;
   height:35px;
   width:135px;

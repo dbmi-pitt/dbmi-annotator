@@ -1,5 +1,5 @@
 ﻿$(document).ready(function () {
-    $('#splitter').jqxSplitter({ showSplitBar: false, width: $(window).width(), height: '100%',  panels: [{ size: '100%',min: 100 }, { size: '0%', min: 0}] });
+    $('#splitter').jqxSplitter({ showSplitBar: false, width: $(window).width(), height: $(window).height(), orientation: 'horizontal', panels: [{ size: '100%',min: 200 }, { size: '0%', min: 0}] });
     //$('.secondsection').append("<p><a href='http://www.google.com'>Google</a></p>");
   });
 
@@ -26,32 +26,34 @@ var getUrlParameter = function getUrlParameter(sParam) {
       $('#splitter').jqxSplitter({
         showSplitBar:false,
         width: $(window).width(),
-        height: '100%',
-        panels: [{size: '67%', min: 850}, {size: '33%', min: 410}]
+        height: $(window).height(),
+        orientation: 'horizontal', 
+        panels: [{size: '60%', min: 200}, {size: '40%', min: 200}]
       });
     
       $('#tabs').tabs("option", "active", 0);
       $('.editorsection').hide();
       $('.btn-success').val("show");
       $('.annotator-editor').show();
-      $('.btn-success').css("margin-right",$(window).width()*0.32);
-      $('.btn-home').css("margin-right",$(window).width()*0.32);
+      $('.btn-success').css("margin-bottom",$(window).height()*0.40);
+      $('.btn-home').css("margin-bottom",$(window).height()*0.40);
       $('#menu').html("&nbsp Collapse");
     }
     else {
       $('#splitter').jqxSplitter({
         showSplitBar:false,
         width: '100%',
-        height: '100%',
-        panels: [{size: '100%', min: 100}, {size: '0%', min: 0}]
+        height: $(window).height(),
+        orientation: 'horizontal', 
+        panels: [{size: '100%', min: 200}, {size: '0%', min: 0}]
       });
       $('.btn-success').val("hide");
       $('.annotator-editor').hide();
-      $('.btn-success').css("margin-right",0);
-      $('.btn-home').css("margin-right",0);
+      $('.btn-success').css("margin-bottom",0);
+      $('.btn-home').css("margin-bottom",0);
       $('#menu').html("&nbsp Menu");
     }
-    var w = $(window).width()*0.31;
+    var w = $(window).width()*0.85;
     $('.annotator-widget').width(w);
     
     
@@ -65,30 +67,32 @@ var getUrlParameter = function getUrlParameter(sParam) {
       $('#splitter').jqxSplitter({
         showSplitBar:false,
         width: $(window).width(),
-        height: '100%',
-        panels: [{size: '67%', min: 850}, {size: '33%', min: 410}]
+        height: $(window).height(),
+        orientation: 'horizontal', 
+        panels: [{size: '60%', min: 200}, {size: '40%', min: 200}]
       });
       $('.editorsection').show();
       $('.btn-success').val("show");
       $('.annotator-editor').show();
-      $('.btn-success').css("margin-right",$(window).width()*0.32);
-      $('.btn-home').css("margin-right",$(window).width()*0.32);
+      $('.btn-success').css("margin-bottom",$(window).height()*0.40);
+      $('.btn-home').css("margin-bottom",$(window).height()*0.40);
       $('#menu').html("&nbsp Collapse");
     }
     else {
       $('#splitter').jqxSplitter({
         showSplitBar:false,
         width: '100%',
-        height: '100%',
-        panels: [{size: '100%', min: 100}, {size: '0%', min: 0}]
+        height: $(window).height(),
+        orientation: 'horizontal', 
+        panels: [{size: '100%', min: 200}, {size: '0%', min: 0}]
       });
       $('.btn-success').val("hide");
       $('.annotator-editor').hide();
-      $('.btn-success').css("margin-right",0);
-      $('.btn-home').css("margin-right",0);
+      $('.btn-success').css("margin-bottom",0);
+      $('.btn-home').css("margin-bottom",0);
       $('#menu').html("&nbsp Menu");
     }
-    var w = $(window).width()*0.31;
+    var w = $(window).width()*0.85;
     $('.annotator-widget').width(w);
   }
 
@@ -100,17 +104,18 @@ var getUrlParameter = function getUrlParameter(sParam) {
       $('#splitter').jqxSplitter({
         showSplitBar:false,
         width: $(window).width(),
-        height: '100%',
-        panels: [{size: '67%', min: 850}, {size: '33%', min: 410}]
+        height: $(window).height(),
+        orientation: 'horizontal', 
+        panels: [{size: '60%', min: 200}, {size: '40%', min: 200}]
       });
       $('.editorsection').show();
       $('.btn-success').val("show");
       $('.annotator-editor').show();
-      $('.btn-success').css("margin-right",$(window).width()*0.32);
-      $('.btn-home').css("margin-right",$(window).width()*0.32);
+      $('.btn-success').css("margin-bottom",$(window).height()*0.40);
+      $('.btn-home').css("margin-bottom",$(window).height()*0.40);
       $('#menu').html("&nbsp Collapse");
       
-      var w = $(window).width()*0.31;
+      var w = $(window).width()*0.85;
       $('.annotator-widget').width(w);
       
     /*}
