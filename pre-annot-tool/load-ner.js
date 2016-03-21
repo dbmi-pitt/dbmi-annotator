@@ -16,12 +16,12 @@ var nerResults = fs.readFileSync(NER_RESULTS,"utf-8");
 
 var nersets = JSON.parse(nerResults).nersets;
 
-for (i = 0; i < nersets.length; i++){
-//for (i = 0; i < 1; i++){
+//for (i = 0; i < nersets.length; i++){
+for (i = 0; i < 1; i++){
     subL = nersets[i];
 
-    for (j = 0; j < subL.length; j++){
-    //for (j = 0; j < 80; j++){
+    //for (j = 0; j < subL.length; j++){
+    for (j = 0; j < 30; j++){
         annot = subL[j];
 
         if (annot){
