@@ -1,4 +1,4 @@
-//var NER_RESULTS = "ners-03012016.json";
+
 var NER_RESULTS = "ner-resutls-json";
 var ES_CONN = "localhost:9250";
 var HOSTNAME = "localhost";
@@ -13,15 +13,14 @@ var client = new elasticsearch.Client({
 
 var fs = require('fs');
 var nerResults = fs.readFileSync(NER_RESULTS,"utf-8");
-
 var nersets = JSON.parse(nerResults).nersets;
 
 //for (i = 0; i < nersets.length; i++){
-for (i = 0; i < 1; i++){
+for (i = 1; i < 2; i++){
     subL = nersets[i];
 
-    //for (j = 0; j < subL.length; j++){
-    for (j = 0; j < 30; j++){
+    for (j = 0; j < subL.length; j++){
+    //for (j = 2; j < 8; j++){
         annot = subL[j];
 
         if (annot){
@@ -41,11 +40,13 @@ function es_index(annot){
         return null;
     } else {
 
-        uriStr = "http://" + HOSTNAME + "/nlabels/" + annot.setid + ".html";
+        //uriStr = "http://" + HOSTNAME + "/nlabels/" + annot.setid + ".html";
+        uriStr = "http://" + HOSTNAME + "/DDI-labels/" + annot.setid + ".html";
         uriPost = uriStr.replace(/[\/\\\-\:\.]/g, "");
 
-        //path = "/article[1]/div[1]/div[1]/div[1]" + annot.start
-        path = annot.start.replace("/html[1]/body[1]","/article[1]/div[1]/div[1]/div[1]");
+        //path = annot.start.replace("/html[1]/body[1]","/article[1]/div[1]/div[1]/div[1]");
+        path = annot.start.replace("/html[1]/body[1]","/article[1]/div[1]/div[1]");
+
         var datetime = new Date();
         client.index(
             {

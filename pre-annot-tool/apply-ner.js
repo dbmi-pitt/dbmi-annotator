@@ -9,8 +9,9 @@ var HashMap = require('hashmap');
 
 // SET VARS
 var MIN_TXT = 30; 
-var PRE_POST_LEN = 30;
+var PRE_POST_LEN = 60;
 var LABEL_HTML_DIR = "../public/nlabels/";
+//var LABEL_HTML_DIR = "../public/DDI-labels/";
 var NER_JSON = "NER/NER-outputs.json";
 
 
@@ -21,41 +22,40 @@ parseNERDIR(NER_JSON);
 // @RETURN: [{setId, drugL}, {xx}]
 function parseNERDIR(nerfile){
 
-    data = fs.readFileSync(nerfile, 'utf-8');
-    var nerResults = JSON.parse(data);
-    var nerM = new HashMap();
-
-    for (i = 0; i < nerResults.length; i++){
-
-        item = nerResults[i];
-        setid = item.setId;
-
-        if (nerM.has(setid)){
-            nerM.get(setid).push(item);
-        } else {
-            nerM.set(setid, []);
+    try {
+        data = fs.readFileSync(nerfile, 'utf-8');
+        var nerResults = JSON.parse(data);
+        var nerM = new HashMap();
+        
+        for (m = 0; m < nerResults.length; m++){
+            
+            item = nerResults[m];
+            setid = item.setId;
+            
+            if (nerM.has(setid)){
+                nerM.get(setid).push(item);
+            } else {
+                nerM.set(setid, []);
+            }
         }
+        
+        var jsonResults = {"nersets":[]};
+        
+        nerM.forEach(function(item, setid) {
+
+            labelFile = LABEL_HTML_DIR+ setid + ".html";
+            selectorsL = findDrugPInLabel(item, labelFile, setid);
+            
+            if (selectorsL)
+                if (selectorsL.length > 0)
+                    jsonResults.nersets.push(selectorsL);
+        });
+        console.log(JSON.stringify(jsonResults));
+        //console.log(nerM.get("08320ea3-8f93-6f04-5d1c-f69af3eb5a81"));
+    } catch(err) {
+        console.log("ERROR:" + err);
     }
-
-    var jsonResults = {"nersets":[]};
-    
-    nerM.forEach(function(item, setid) {
-        //console.log(key + " : " + value);
-        labelFile = LABEL_HTML_DIR+ setid + ".html";
-        selectorsL = findDrugPInLabel(item, labelFile, setid);
-        
-        if (selectorsL)
-            if (selectorsL.length > 0)
-                jsonResults.nersets.push(selectorsL);
-
-        
- 
-    });
-    console.log(JSON.stringify(jsonResults));
-
-    //console.log(nerM.get("08320ea3-8f93-6f04-5d1c-f69af3eb5a81"));
 }
-
 
 
 // PARSE DRUG OCCURRENCES IN LABEL
@@ -66,8 +66,6 @@ function parseNERDIR(nerfile){
 
 function findDrugPInLabel(drugL, file, setid){
 
-    //console.log("[INFO] begin search in " + setid);
-
     if (drugL == null || file == null || setid == null) return null;
 
     var label = fs.readFileSync(file, 'utf-8');
@@ -75,52 +73,47 @@ function findDrugPInLabel(drugL, file, setid){
 
     selectorL = [];
 
-    //for (var j = 0; j < drugL.length; j++){
-    for (var j = 0; j < 1; j++){
-        drugItem = drugL[j];
+    for (i = 0; i < drugL.length; i++){
+    //for (var i = 0; i < 20; i++){
+        drugItem = drugL[i];
 
-        prefix = drugItem.prefix;
-        suffix = drugItem.suffix;
-        exact = drugItem.exact;
-
-        prefixOffset = prefix.lastIndexOf("\n");
-        if (prefixOffset > 0){
-            prefix = prefix.substring(prefixOffset + 2);
-        }
-
-        suffixOffset = suffix.indexOf("\n");
-        if (suffixOffset > 0){
-            suffix = suffix.substring(0, suffixOffset);
-        }
+        prefix = drugItem.prefix.replace(/\s/g, ' ');
+        suffix = drugItem.suffix.replace(/\s/g, ' ');
+        exact = drugItem.exact.replace(/\s/g, ' ');
 
         drugMatchPattern = "//*[contains(text()[not(parent::script)],'" + exact + "')]";
         var drugNodes = xpath.select(drugMatchPattern, doc);
 
         if (drugNodes.length > 0){
 
-            for (i = 0; i < drugNodes.length; i++){
+            for (j = 0; j < drugNodes.length; j++){
                 
-                if (!drugNodes[i]) continue;
+                if (!drugNodes[j]) continue;
+	            cntStr = drugNodes[j].firstChild.data;
+	            pathL = getXPath(drugNodes[j]);
 
-	            cntStr = drugNodes[i].firstChild.data;
-	            pathL = getXPath(drugNodes[i]);
+                // ignore matches in script or table 
+                var isValid = true;
+	            pathStr = ""; 
 
-                //console.log(drugNodes[i]);
+	            for (p = 0; p < pathL.length; p++){
+                    if (pathL[p].match(/(table|script|head|h3|h2)/g)){
+                        isValid = false;
+                        break;
+                    }
+	    	        pathStr += "/" + pathL[p];
+	            }
+                
+                if (cntStr && isValid){        
+                    
+                    cntStr = cntStr.replace(/\s/g, ' ');
 
-                if (cntStr){        
-
-                    cntStr = cntStr.replace(/\n\n/gm,' ').replace(/\n/gm,' ');
 	                if (cntStr.length > MIN_TXT){
-                        
-	                    pathStr = ""; 
-	                    for (j = 0; j < pathL.length; j++){
-	    	                pathStr += "/" + pathL[j];
-	                    }
                         
 	                    var re = new RegExp(exact,"g");
 	                    while (res = re.exec(cntStr)){
 		                    startOffset = res["index"];
-                            endOffset = startOffset + exact.length
+                            endOffset = startOffset + exact.length;
 
                             if (startOffset > PRE_POST_LEN)
                                 prefixSub = cntStr.substring(startOffset - PRE_POST_LEN, startOffset);
@@ -132,11 +125,10 @@ function findDrugPInLabel(drugL, file, setid){
                             else
                                 suffixSub = cntStr.substring(endOffset);
 
-                            if ((prefixSub.indexOf(prefix) || prefix.indexOf(prefixSub)) && (suffixSub.indexOf(suffix) || suffix.indexOf(suffixSub))){
+                            if ((prefixSub.indexOf(prefix)>=0 || prefix.indexOf(prefixSub) >=0) && (suffixSub.indexOf(suffix) >= 0 || suffix.indexOf(suffixSub) >=0)){
                             
-		                        selectorStr = '{"setid":"' + setid+'","drugname":"' + exact.toLowerCase() + '", "startOffset":"' + startOffset + '","endOffset":"' + endOffset + '", "start":"'+ pathStr + '", "end":"' + pathStr + '", "prefix":"' + prefixSub + '", "suffix":"' + suffixSub + '", "exact":"' + exact + '"}';
+		                        selectorStr = '{"setid":"' + setid+'","drugname":"' + exact.toLowerCase() + '", "startOffset":"' + startOffset + '","endOffset":"' + endOffset + '", "start":"'+ pathStr + '", "end":"' + pathStr + '", "prefix":"' + prefixSub + '", "suffix":"' + suffixSub + '", "exact":"' + exact + '"}';           
 
-                                //console.log(selectorStr);
                                 selector = JSON.parse(selectorStr);
 		                        selectorL.push(selector);
                             }
@@ -144,9 +136,10 @@ function findDrugPInLabel(drugL, file, setid){
 	                }
                 }
             }
-        } else {
-            console.log("[ERROR] didn't match:" + exact);
-        }    
+        } // else {
+        //     console.log("[ERROR] didn't match:" + exact);
+        // } 
+        
     }
     return selectorL;
 }
@@ -188,18 +181,3 @@ function getXPath(node, path) {
     }
     return path;
 };
-
-
-
-//parseLabelURL();
-
-function parseLabelURL(){
-
-    var request = require('sync-request');
-
-    var res = request('GET','http://localhost/DDI-labels/08320ea3-8f93-6f04-5d1c-f69af3eb5a81.html');
-    //var res = request('GET','http://130.49.206.139/DDI-labels/08320ea3-8f93-6f04-5d1c-f69af3eb5a81.html');
-    //console.log(res.getBody().toString());
-    //label = res;
-    //console.log(label);
-}
