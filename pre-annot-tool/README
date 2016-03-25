@@ -1,0 +1,57 @@
+--------------------------------------------------------------------
+parse html pages
+--------------------------------------------------------------------
+
+for example, for Dailymed product labels
+
+create folder if there is no folder "outputs" under "pre-annot-tool/html-parser"
+
+(1) inputs
+
+$ cd html-parser 
+define urls in input-urls.txt
+
+(2) run program
+
+$ node html-parser.js
+
+(3) outputs
+
+html normalized by tidyhtml lib
+
+--------------------------------------------------------------------
+apply NER results
+--------------------------------------------------------------------
+
+(1) inputs
+
+have NER XMLs prepared under "NER-results-xml"
+
+(2) run program
+
+$ cd pre-annot-tool
+$ node apply-ner.js > ner-resutls-03082016
+
+(3) outputs
+JSON format ner results with selectors in "ner-resutls-json"
+
+--------------------------------------------------------------------
+preload drug mention annotation to elastico
+--------------------------------------------------------------------
+
+(1) define inputs
+
+edit load-ner.js for elastico connection and input ner path
+ 
+ex.
+var NER_RESULTS = "ner-resutls-json";
+var ES_CONN = "localhost:9250";
+
+(2) run program
+
+$ cd pre-annot-tool
+$ node load-ner.js
+
+(3) check annotations in elastico head plugin
+
+http://localhost:9250/_plugin/head/
