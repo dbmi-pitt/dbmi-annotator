@@ -74,7 +74,7 @@ function es_index(annot){
 
             }).then(function (resp){
                 var hits = resp.hits.hits;
-                console.log(hits);
+                console.log("results:" + hits.length);
                 
                 if (hits.length > 0)
                     console.log("[EXITS]");
