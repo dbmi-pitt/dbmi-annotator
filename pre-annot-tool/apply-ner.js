@@ -13,7 +13,7 @@ var PRE_POST_LEN = 60;
 var LABEL_HTML_DIR = "../public/nlabels/";
 //var LABEL_HTML_DIR = "../public/DDI-labels/";
 var NER_JSON = "NER/NER-outputs.json";
-
+var OUTPUT = "ner-resutls-json";
 
 parseNERDIR(NER_JSON);
 
@@ -50,8 +50,12 @@ function parseNERDIR(nerfile){
                 if (selectorsL.length > 0)
                     jsonResults.nersets.push(selectorsL);
         });
-        console.log(JSON.stringify(jsonResults));
+        //console.log(JSON.stringify(jsonResults));
         //console.log(nerM.get("08320ea3-8f93-6f04-5d1c-f69af3eb5a81"));
+        fs.writeFile(OUTPUT, JSON.stringify(jsonResults), function(err){
+            if (err) console.log(err);
+        })
+        
     } catch(err) {
         console.log("ERROR:" + err);
     }
