@@ -28,15 +28,15 @@ var getUrlParameter = function getUrlParameter(sParam) {
         width: $(window).width(),
         height: $(window).height(),
         orientation: 'horizontal', 
-        panels: [{size: '60%', min: 200}, {size: '40%', min: 200}]
+        panels: [{size: '80%', min: 200}, {size: '20%', min: 270}]
       });
     
       $('#tabs').tabs("option", "active", 0);
       $('.editorsection').hide();
       $('.btn-success').val("show");
       $('.annotator-editor').show();
-      $('.btn-success').css("margin-bottom",$(window).height()*0.40);
-      $('.btn-home').css("margin-bottom",$(window).height()*0.40);
+      $('.btn-success').css("margin-bottom",270);
+      $('.btn-home').css("margin-bottom",270);
       $('#menu').html("&nbsp Collapse");
     }
     else {
@@ -69,13 +69,13 @@ var getUrlParameter = function getUrlParameter(sParam) {
         width: $(window).width(),
         height: $(window).height(),
         orientation: 'horizontal', 
-        panels: [{size: '60%', min: 200}, {size: '40%', min: 200}]
+        panels: [{size: '80%', min: 200}, {size: '20%', min: 270}]
       });
       $('.editorsection').show();
       $('.btn-success').val("show");
       $('.annotator-editor').show();
-      $('.btn-success').css("margin-bottom",$(window).height()*0.40);
-      $('.btn-home').css("margin-bottom",$(window).height()*0.40);
+      $('.btn-success').css("margin-bottom",270);
+      $('.btn-home').css("margin-bottom",270);
       $('#menu').html("&nbsp Collapse");
     }
     else {
@@ -106,13 +106,13 @@ var getUrlParameter = function getUrlParameter(sParam) {
         width: $(window).width(),
         height: $(window).height(),
         orientation: 'horizontal', 
-        panels: [{size: '60%', min: 200}, {size: '40%', min: 200}]
+        panels: [{size: '80%', min: 200}, {size: '20%', min: 270}]
       });
       $('.editorsection').show();
       $('.btn-success').val("show");
       $('.annotator-editor').show();
-      $('.btn-success').css("margin-bottom",$(window).height()*0.40);
-      $('.btn-home').css("margin-bottom",$(window).height()*0.40);
+      $('.btn-success').css("margin-bottom",270);
+      $('.btn-home').css("margin-bottom",270);
       $('#menu').html("&nbsp Collapse");
       
       var w = $(window).width()*0.85;
