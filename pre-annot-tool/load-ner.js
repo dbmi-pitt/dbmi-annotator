@@ -1,9 +1,10 @@
+config = require('./../config/config.js');
+var uuid = require('uuid');
 
 var NER_RESULTS = "ner-resutls-json";
-var ES_CONN = "localhost:9250";
-var HOSTNAME = "localhost";
+var HOSTNAME = config.elastico.host;
+var ES_CONN = config.elastico.host + ":" + config.elastico.port;
 
-var uuid = require('uuid');
 var USER_EMAIL = "yin2@gmail.com"
 
 var elasticsearch = require('elasticsearch');
@@ -21,7 +22,8 @@ var nersets = JSON.parse(nerResults).nersets;
 for (i = 0; i < 1; i++){
     subL = nersets[i];
 
-    for (j = 0; j < subL.length; j++){
+    //for (j = 0; j < subL.length; j++){
+    for (j = 0; j < 20; j++){
         annot = subL[j];
 
         if (annot){
@@ -45,11 +47,11 @@ function es_index(annot){
         uriStr = "http://" + HOSTNAME + "/DDI-labels/" + annot.setid + ".html";
         uriPost = uriStr.replace(/[\/\\\-\:\.]/g, "");
 
-        //path = annot.start.replace("/html[1]/body[1]","/article[1]/div[1]/div[1]/div[1]");
-        path = annot.start.replace("/html[1]/body[1]","/article[1]/div[1]/div[1]");
+        path = annot.start.replace("/html[1]/body[1]","/article[1]/div[1]/div[1]/div[1]");
+        //path = annot.start.replace("/html[1]/body[1]","/article[1]/div[1]/div[1]");
 
         var isExists = false;
-        console.log("[INFO]: begin check for " + annot.exact);
+        //console.log("[INFO]: begin check for " + annot.exact);
 
         client.search(
             {
@@ -74,12 +76,12 @@ function es_index(annot){
 
             }).then(function (resp){
                 var hits = resp.hits.hits;
-                console.log("results:" + hits.length);
+                //console.log("results:" + hits.length);
                 
                 if (hits.length > 0)
                     console.log("[EXITS]");
                 else {
-                    console.log("[NOT EXITS]");
+                    //console.log("[NOT EXITS]");
                     console.log("[INFO]: begin load for " + annot.exact);
                     var datetime = new Date();
                     client.index(
@@ -120,7 +122,7 @@ function es_index(annot){
                             if (err)
                                 console.log("[ERROR] " + err)
                             else
-                                console.log("[INFO] load successfully")
+                                console.log("[INFO] load successfully for " + annot.exact)
                         });
                 }
             }, function (err) {

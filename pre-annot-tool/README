@@ -65,3 +65,6 @@ curl -XDELETE 'http://localhost:9200/annotator/annotation/_query?q=<field>:<valu
 
 (2) free store size after deletion 
 curl -XPOST 'http://localhost:9200/_optimize?only_expunge_deletes=true'
+
+(3) delete the whole index
+curl -XDELETE 'http://localhost:9200/annotator/annotation/'
