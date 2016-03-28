@@ -1,14 +1,11 @@
-// config = require('./../config/config.js');
-// var uuid = require('uuid');
-
-// var NER_RESULTS = "ner-resutls-json";
-// var HOSTNAME = config.elastico.host;
-// var ES_CONN = config.elastico.host + ":" + config.elastico.port;
+var config = require('./../config/config.js');
+var HOSTNAME = config.elastico.host;
+var ES_CONN = config.elastico.host + ":" + config.elastico.port;
 
 
 var NER_RESULTS = "ner-resutls-json";
-var ES_CONN = "localhost:9250";
-var HOSTNAME = "localhost";
+//var ES_CONN = "localhost:9250";
+//var HOSTNAME = "localhost";
 
 var uuid = require('uuid');
 var USER_EMAIL = "yin2@gmail.com"
