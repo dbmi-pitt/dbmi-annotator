@@ -18,6 +18,7 @@
     "express": "^4.13.3",
     "express-session": "~1.0.0",
     "express-validator": "^2.19.0",
+    "htmltidy": "0.0.6",
     "json2csv": "^3.1.0",
     "method-override": "~1.0.0",
     "morgan": "~1.0.0",

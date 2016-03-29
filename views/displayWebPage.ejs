@@ -9,12 +9,7 @@
     <script type="text/javascript" src="js/app.bundle.js"></script>
     
     <link rel="stylesheet" href="./css/dbmiannotator.css" type="text/css" />
-    
-    <!-- screen spliter js lib -->
-    <link rel="stylesheet" href="css/jqx.base.css" type="text/css" />
-    <script type="text/javascript" src="js/jqx-all.js"></script>
-    <script type="text/javascript" src="js/demos.js"></script>
-    <script type="text/javascript" src="js/dbmi.js"></script>
+   
     
     <!-- annotator js  -->
     <script src="js/annotator.min.js"></script>
@@ -34,7 +29,7 @@
           <button class="btn btn-home" onclick="location.href = '/dbmiannotator/main';" value="hide"><img src="img/home.png" height="20px" width="20px"><span>&nbsp&nbsp Home</span></button>
 																		      
 	  <!-- div with subcontent will be replaced with html document page -->
-	  <div style="margin-top:30px" id="subcontent"> </div>  
+	  <div style="margin-top:30px" id="subcontent"> <%- htmlsource %> </div>  
 
 	</div>
 	
@@ -57,20 +52,22 @@
         <input type="text" style="width:150px;height:30px" id="userpwd" size="20" placeholder="Password" maxlength="30" /><br><br>
         <button style="align:right;width:185px;height:30px" id="loginButton">login</button> 
   </div>
-</div>
-	
+    </div>
       </div>
-      
     </article>
 
-    
+  </body>
     <script>
     $( "#tabs" ).tabs();
     </script>
     
-
     <!-- call annotator -->
     <script src="js/ddi-plugin.js"></script>
-  </body>
+
+    <!-- screen spliter js lib -->
+    <link rel="stylesheet" href="css/jqx.base.css" type="text/css" />
+    <script type="text/javascript" src="js/jqx-all.js"></script>
+    <script type="text/javascript" src="js/demos.js"></script>
+    <script type="text/javascript" src="js/dbmi.js"></script>
 
 </html>

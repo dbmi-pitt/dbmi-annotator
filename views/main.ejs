@@ -68,15 +68,13 @@
 				      
 				      for (var item in dictAnnots){
 					  var dbmiurl = "";
-					  if (item.indexOf('.html') >= 0){
-					      dbmiurl = "displayWebPage?sourceURL=" + item + "&email=" + user.email;
-					  }
-					  else if (item.indexOf('.pdf') >= 0){
-					      dbmiurl = "viewer.html?file=" + item + "&email=" + user.email;
-					  }
-					  else{
-					      dbmiurl = "main";
-					  }
+					      if (item.match(/localhost.*pdf/g)){
+					          dbmiurl = "viewer.html?file=" + item + "&email=" + user.email;
+					      }
+					      else {
+                              dbmiurl = "displayWebPage?sourceURL=" + item + "&email=" + user.email;
+					      }
+
 					      %>
 		 <tr>
 						  <td><a href="<%=dbmiurl %>" > <%=item %> </a>  </td>

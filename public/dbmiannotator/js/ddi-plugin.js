@@ -16,11 +16,9 @@ if (typeof annotator === 'undefined') {
 	prefix: 'http://' + config.store.host + ':' + config.store.port
     });
 
-
-    
     var sourceURL = getURLParameter("sourceURL").trim();
     var email = getURLParameter("email");
-    
+
     var pageUri = function () {
 
 	source = getURLParameter("sourceURL").trim();
@@ -36,19 +34,15 @@ if (typeof annotator === 'undefined') {
 
     // load annotation after page contents loaded
     app.start().then(function () 
-		     {
-			 app.ident.identity = email;
-			 $(".btn-success").css("display","block");
-			 $("#subcontent").load(sourceURL);
-		     }).then(function(){
-			 setTimeout(function(){
-			     app.annotations.load({uri: sourceURL.replace(/[\/\\\-\:\.]/g, ""), email: email});
-			 }, 1000);
-		     });
-	// .then(function(){
-	// 		 alert("Annotations for user: " + email + " are loaded");
-	// })
-    
+		             {
+			             app.ident.identity = email;
+			             $(".btn-success").css("display","block");
+			             //$("#subcontent").load(sourceURL);
+		             }).then(function(){
+			             setTimeout(function(){
+			                 app.annotations.load({uri: sourceURL.replace(/[\/\\\-\:\.]/g, ""), email: email});
+			             }, 1000);
+		             });
 }
 
 function getURLParameter(name) {
