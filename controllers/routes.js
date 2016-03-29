@@ -82,8 +82,6 @@ module.exports = function(app, passport) {
 	    var sourceUrl = req.query.sourceURL.trim();
 	    var email = req.query.email;
 
-        //var htmlsource = req.htmlsource;
-        //console.log(htmlsource);
         // if (sourceURL.indexOf("pmc/articles") > 0){
         //     sourceURL = "http://" + config.annotator.host + "/proxy/" + sourceURL;
         // }
@@ -91,8 +89,8 @@ module.exports = function(app, passport) {
 	    var validUrl = require('valid-url');
 	    
 	    if (validUrl.isUri(sourceUrl)){
-
-            if (sourceUrl.match(/localhost.*pdf/g)){ // local pdf resouces
+           
+            if (sourceUrl.match(/.pdf/g)){ // local pdf resouces
 		        res.redirect("/dbmiannotator/viewer.html?file=" + sourceUrl+"&email=" + email);
             } else { // local or external html resouces
                 res.render('displayWebPage.ejs', {
