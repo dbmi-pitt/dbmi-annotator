@@ -2,13 +2,11 @@ var config = require('./../config/config.js');
 var HOSTNAME = config.elastico.host;
 var ES_CONN = config.elastico.host + ":" + config.elastico.port;
 
-
 var NER_RESULTS = "ner-resutls-json";
-//var ES_CONN = "localhost:9250";
-//var HOSTNAME = "localhost";
 
 var uuid = require('uuid');
-var USER_EMAIL = "yin2@gmail.com"
+//var USER_EMAIL = "yin2@gmail.com"
+var USER_EMAIL = "123@123.com"
 
 var elasticsearch = require('elasticsearch');
 var client = new elasticsearch.Client({
@@ -21,8 +19,8 @@ var fs = require('fs');
 var nerResults = fs.readFileSync(NER_RESULTS,"utf-8");
 var nersets = JSON.parse(nerResults).nersets;
 
-//for (i = 0; i < nersets.length; i++){
-for (i = 0; i < 1; i++){
+for (i = 0; i < nersets.length; i++){
+//for (i = 0; i < 1; i++){
     subL = nersets[i];
 
     for (j = 0; j < subL.length; j++){
@@ -45,7 +43,6 @@ function es_index(annot){
         return null;
     } else {
 
-        //uriStr = "http://" + HOSTNAME + "/nlabels/" + annot.setid + ".html";
         uriStr = "http://" + HOSTNAME + "/DDI-labels/" + annot.setid + ".html";
         uriPost = uriStr.replace(/[\/\\\-\:\.]/g, "");
 

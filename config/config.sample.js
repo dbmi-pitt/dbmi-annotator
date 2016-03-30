@@ -1,6 +1,7 @@
 var config = {};
 config.store = {};
 config.annotator = {};
+config.elastico = {};
 
 // postgres db
 config.postgres = process.env.DATABASE_URL || 'postgres://<username>:<password>@<hostname/ip addresss>:<port>/<schema name>'; 
@@ -14,5 +15,8 @@ config.annotator.port = 'port';
 config.store.host = 'host name or ip address';
 config.store.port = 'port';
 
+// elastico
+config.elastico.host = 'host name or ip address';
+config.elastico.port = 'port';
 
 module.exports = config;
