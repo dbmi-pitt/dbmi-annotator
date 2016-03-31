@@ -24,9 +24,9 @@ if (typeof annotator === 'undefined') {
 	source = getURLParameter("file").trim();
     	return {
             beforeAnnotationCreated: function (ann) {
-		ann.rawurl = source;
-    		ann.uri = source.replace(/[\/\\\-\:\.]/g, "");
-		ann.email = email;
+		        ann.rawurl = source;
+    		    ann.uri = source.replace(/[\/\\\-\:\.]/g, "");
+		        ann.email = email;
             }
     	};
     };
@@ -38,10 +38,11 @@ if (typeof annotator === 'undefined') {
 				    {
 					//alert(document.readyState);
 					app.annotations.load(
-					    {uri: sourceURL.replace(/[\/\\\-\:\.]/g, ""), email: email}).then(function(){
-						alert("[INFO] Annotation loaded");
-					    });
-				    }, 3800);
+					    {uri: sourceURL.replace(/[\/\\\-\:\.]/g, ""), email: email})
+                        // .then(function(){
+						// alert("[INFO] Annotation loaded");
+					    // });
+				    }, 3000);
 			 
 		     });
     

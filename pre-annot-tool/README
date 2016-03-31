@@ -30,7 +30,7 @@ have NER XMLs prepared under "NER-results-xml"
 (2) run program
 
 $ cd pre-annot-tool
-$ node apply-ner.js > ner-resutls-03082016
+$ node apply-ner.js
 
 (3) outputs
 JSON format ner results with selectors in "ner-resutls-json"
@@ -55,3 +55,16 @@ $ node load-ner.js
 (3) check annotations in elastico head plugin
 
 http://localhost:9250/_plugin/head/
+
+--------------------------------------------------------------------
+delete specific set of annotations
+--------------------------------------------------------------------
+
+(1) delete by specified query condition
+curl -XDELETE 'http://localhost:9200/annotator/annotation/_query?q=<field>:<value>'
+
+(2) free store size after deletion 
+curl -XPOST 'http://localhost:9200/_optimize?only_expunge_deletes=true'
+
+(3) delete the whole index
+curl -XDELETE 'http://localhost:9200/annotator/annotation/'

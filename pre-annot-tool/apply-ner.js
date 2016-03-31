@@ -10,8 +10,7 @@ var HashMap = require('hashmap');
 // SET VARS
 var MIN_TXT = 30; 
 var PRE_POST_LEN = 60;
-var LABEL_HTML_DIR = "../public/nlabels/";
-//var LABEL_HTML_DIR = "../public/DDI-labels/";
+var LABEL_HTML_DIR = "../public/DDI-labels/";
 var NER_JSON = "NER/NER-outputs.json";
 var OUTPUT = "ner-resutls-json";
 

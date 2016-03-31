@@ -1,10 +1,12 @@
+var config = require('./../config/config.js');
+var HOSTNAME = config.elastico.host;
+var ES_CONN = config.elastico.host + ":" + config.elastico.port;
 
 var NER_RESULTS = "ner-resutls-json";
-var ES_CONN = "localhost:9250";
-var HOSTNAME = "localhost";
 
 var uuid = require('uuid');
-var USER_EMAIL = "yin2@gmail.com"
+//var USER_EMAIL = "yin2@gmail.com"
+var USER_EMAIL = "123@123.com"
 
 var elasticsearch = require('elasticsearch');
 var client = new elasticsearch.Client({
@@ -17,8 +19,8 @@ var fs = require('fs');
 var nerResults = fs.readFileSync(NER_RESULTS,"utf-8");
 var nersets = JSON.parse(nerResults).nersets;
 
-//for (i = 0; i < nersets.length; i++){
-for (i = 0; i < 1; i++){
+for (i = 0; i < nersets.length; i++){
+//for (i = 0; i < 1; i++){
     subL = nersets[i];
 
     for (j = 0; j < subL.length; j++){
@@ -41,91 +43,87 @@ function es_index(annot){
         return null;
     } else {
 
-        //uriStr = "http://" + HOSTNAME + "/nlabels/" + annot.setid + ".html";
         uriStr = "http://" + HOSTNAME + "/DDI-labels/" + annot.setid + ".html";
         uriPost = uriStr.replace(/[\/\\\-\:\.]/g, "");
 
-        //path = annot.start.replace("/html[1]/body[1]","/article[1]/div[1]/div[1]/div[1]");
-        path = annot.start.replace("/html[1]/body[1]","/article[1]/div[1]/div[1]");
+        path = annot.start.replace("/html[1]/body[1]","/article[1]/div[1]/div[1]/div[1]");
+        //path = annot.start.replace("/html[1]/body[1]","/article[1]/div[1]/div[1]");
 
         var isExists = false;
         console.log("[INFO]: begin check for " + annot.exact);
 
-        client.search(
+        // client.search(
+        //     {
+        //         index: 'annotator',
+        //         type: 'annotation',
+        //         body:{
+        //             query : {
+        //                 match: {
+        //                     "email": USER_EMAIL                            
+        //                 },
+        //                 match: {
+        //                     "uri": uriPost                            
+        //                 },
+        //                 match: {
+        //                     "prefix": annot.prefix
+        //                 },
+        //                 match: {
+        //                     "exact": annot.exact                            
+        //                 }
+        //             }
+        //         }
+
+        //     }).then(function (resp){
+        //         var hits = resp.hits.hits;
+        //         console.log("results:" + hits.length);
+                
+        //         if (hits.length > 0)
+        //             console.log("[EXITS]");
+        //         else {
+        console.log("[NOT EXITS]");
+        console.log("[INFO]: begin load for " + annot.exact);
+        var datetime = new Date();
+        client.index(
             {
                 index: 'annotator',
                 type: 'annotation',
-                body:{
-                    query : {
-                        match: {
-                            "email": USER_EMAIL                            
-                        },
-                        match: {
-                            "uri": uriPost                            
-                        },
-                        match: {
-                            "prefix": annot.prefix
-                        },
-                        match: {
-                            "exact": annot.exact                            
+                id: uuid.v4(),
+                body: {    // annotatorJs fields for drug Mention
+                    "email": USER_EMAIL,
+                    "created": datetime, 
+                    "updated": datetime, 
+                    "annotationType": "DrugMention",
+                    "quote": annot.drugname,
+                    "permissions": {},
+                    "ranges": [
+                        {
+                            "start": path,
+                            "end": path,
+                            "startOffset": parseInt(annot.startOffset),
+                            "endOffset": parseInt(annot.endOffset),
+                        }
+                    ],
+                    "consumer": "mockconsumer",
+                    "uri": uriPost,
+                    "rawurl": uriStr,
+                    "user": "NER",
+                    target: {   //for OA text quote selector (JSON-LD)
+                        "source" : uriStr,
+                        "selector" : {
+                            "@type": "TextQuoteSelector",
+                            "exact": annot.exact,
+                            "prefix": annot.prefix,
+                            "suffix": annot.suffix
                         }
                     }
                 }
-
-            }).then(function (resp){
-                var hits = resp.hits.hits;
-                console.log("results:" + hits.length);
-                
-                if (hits.length > 0)
-                    console.log("[EXITS]");
-                else {
-                    console.log("[NOT EXITS]");
-                    console.log("[INFO]: begin load for " + annot.exact);
-                    var datetime = new Date();
-                    client.index(
-                        {
-                            index: 'annotator',
-                            type: 'annotation',
-                            id: uuid.v4(),
-                            body: {    // annotatorJs fields for drug Mention
-                                "email": USER_EMAIL,
-                                "created": datetime, 
-                                "updated": datetime, 
-                                "annotationType": "DrugMention",
-                                "quote": annot.drugname,
-                                "permissions": {},
-                                "ranges": [
-                                    {
-                                        "start": path,
-                                        "end": path,
-                                        "startOffset": parseInt(annot.startOffset),
-                                        "endOffset": parseInt(annot.endOffset),
-                                    }
-                                ],
-                                "consumer": "mockconsumer",
-                                "uri": uriPost,
-                                "rawurl": uriStr,
-                                "user": "NER",
-                                target: {   //for OA text quote selector (JSON-LD)
-                                    "source" : uriStr,
-                                    "selector" : {
-                                        "@type": "TextQuoteSelector",
-                                        "exact": annot.exact,
-                                        "prefix": annot.prefix,
-                                    "suffix": annot.suffix
-                                    }
-                                }
-                            }
-                        }, function (err, resp) {
-                            if (err)
-                                console.log("[ERROR] " + err)
-                            else
-                                console.log("[INFO] load successfully")
-                        });
-                }
-            }, function (err) {
-                console.log(err);
+            }, function (err, resp) {
+                if (err)
+                    console.log("[ERROR] " + err)
+                else
+                    console.log("[INFO] load successfully")
             });
     }
 }
+
 

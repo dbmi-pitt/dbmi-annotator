@@ -1,4 +1,6 @@
 config = require('./../config/config.js');
+var request = require("request");
+var tidy = require('htmltidy').tidy;
 
 module.exports = function(app, passport) {
 
@@ -37,7 +39,6 @@ module.exports = function(app, passport) {
     
     // MAIN ==============================
     app.get('/dbmiannotator/main', isLoggedIn, function(req, res) {
-	var request = require("request");
 
 	// fetch all DDI annotations for current user
 	var url = "http://" + config.store.host +":" + config.store.port + "/search?email=" + req.user.email + "&annotationType=DDI";
@@ -54,15 +55,15 @@ module.exports = function(app, passport) {
 		});
 		
 	    } else {
-		res.render('main.ejs', {
-		    user : req.user,
-		    annotations : {'total':0},
-		    exportMessage: req.flash('exportMessage'),
-		    loadMessage: req.flash('loadMessage'),
-		    host: config.annotator.host
-		});
+		    res.render('main.ejs', {
+		        user : req.user,
+		        annotations : {'total':0},
+		        exportMessage: req.flash('exportMessage'),
+		        loadMessage: req.flash('loadMessage'),
+		        host: config.annotator.host
+		    });
 	    }
-
+        
 	    
 	});
 	
@@ -76,38 +77,52 @@ module.exports = function(app, passport) {
     });
 
     // DISPLAY ==============================
-    app.get('/dbmiannotator/displayWebPage', isLoggedIn, function(req, res) {
+    app.get('/dbmiannotator/displayWebPage', isLoggedIn, praseWebContents, function(req, res) {
 	
-	var sourceUrl = req.query.sourceURL.trim();
-	var email = req.query.email;
+	    var sourceUrl = req.query.sourceURL.trim();
+	    var email = req.query.email;
 
-	var validUrl = require('valid-url');
-	
-	if (validUrl.isUri(sourceUrl)){
-	
-	    if (sourceUrl.indexOf('.html') >= 0){
-		res.render('displayWebPage.ejs');
-	    } 
-	    else if (sourceUrl.indexOf('.pdf') >= 0){
-		res.redirect("/dbmiannotator/viewer.html?file=" + sourceUrl+"&email=" + email);
-	    }
-	    else {
-		req.flash('loadMessage', 'The url you just entered is valid but not have local resource served yet');
-		res.redirect('/dbmiannotator/main');
-	    }
-	} else {
-	    req.flash('loadMessage', 'The url you just entered is not valid!');
-	    res.redirect('/dbmiannotator/main');
+        // if (sourceURL.indexOf("pmc/articles") > 0){
+        //     sourceURL = "http://" + config.annotator.host + "/proxy/" + sourceURL;
+        // }
+
+	    var validUrl = require('valid-url');
 	    
-	}
-	
-    });
+	    if (validUrl.isUri(sourceUrl)){
+           
+            if (sourceUrl.match(/.pdf/g)){ // local pdf resouces
+		        res.redirect("/dbmiannotator/viewer.html?file=" + sourceUrl+"&email=" + email);
+            } else { // local or external html resouces
+                res.render('displayWebPage.ejs', {
+                    htmlsource: req.htmlsource
+                });   
 
+	        // if (sourceUrl.match(/localhost.*html/g)){ // local dailymed labels
+		    // res.render('displayWebPage.ejs');
+	        // } 
+	        // else if (sourceUrl.match(/localhost.*pdf/g)){ // local pdf resouces
+		    //     res.redirect("/dbmiannotator/viewer.html?file=" + sourceUrl+"&email=" + email);
+	        // }
+	        // else if (sourceUrl.match(/pmc\/articles/g)){ // external pmc
+            //     res.render('displayWebPage.ejs', {
+            //         htmlsource: req.htmlsource
+            //     });
+	        // } else {
+            //     req.flash('loadMessage', 'The url you just entered is valid but not have local resource served yet');
+		    //     res.redirect('/dbmiannotator/main');
+            // }
+	        }
+        }
+        else {
+	        req.flash('loadMessage', 'The url you just entered is not valid!');
+	        res.redirect('/dbmiannotator/main');
+	    }
+	    
+    });
+    
 
     // EXPORT ==============================
     app.get('/dbmiannotator/exportcsv', isLoggedIn, function(req, res){
-	
-	var request = require("request");
 	
 	var url = "http://" + config.store.host + ":" + config.store.port + "/search?email=" + req.query.email + "&annotationType=DDI";
 	    
@@ -141,6 +156,33 @@ module.exports = function(app, passport) {
 };
 
 // FUNCTIONS ==============================
+// parse web contents from url
+function praseWebContents(req, res, next){
+    var sourceUrl = req.query.sourceURL.trim();
+
+    if(sourceUrl.match(/localhost.*pdf/g)){
+        next();
+    } else {
+
+    request(sourceUrl, function(err, res, body){
+
+        labelDecode = body.replace(/&amp;/g,'&').replace(/&nbsp;/g,' ');        
+
+        // normalize html source
+        tidy(labelDecode, function(err, html) {
+            if (err){
+                console.log(err);
+            }
+            req.htmlsource = html;
+            next();
+            //console.log(html);
+        });
+        
+    });
+    }
+}
+
+
     
 // route middleware to make sure a user is logged in
 function isLoggedIn(req, res, next) {

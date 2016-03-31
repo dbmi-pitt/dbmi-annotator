@@ -27,13 +27,15 @@ lineReader.on('line', function (line) {
 
             // write to file
             var file = "sample.html";
-            if (line.indexOf("dailymed") > 0){
+            if (line.indexOf("dailymed") > 0){ // dailymed label 
                 if (line.indexOf("setid=") > 0)
                     file = OUTPUT_DIR + line.replace("http://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=","") + ".html";
-                else if (line.indexOf("archives") > 0)
+                else if (line.indexOf("archives") > 0) // dailymed archive
                     file = OUTPUT_DIR + line.replace("http://dailymed.nlm.nih.gov/dailymed/archives/fdaDrugInfo.cfm?archiveid=","archiveid-") + ".html";
                 else
                     console.log("[ERROR] dailymed url not resolved!");
+            } else if(line.match(/pmc\/articles/g)){     
+                file = OUTPUT_DIR + line.replace("http://www.ncbi.nlm.nih.gov/pmc/articles/","") + ".html";
             } else {
                 file = OUTPUT_DIR + line + ".html";
             }
