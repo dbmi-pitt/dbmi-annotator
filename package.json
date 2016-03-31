@@ -12,6 +12,7 @@
     "bcrypt-nodejs": "latest",
     "body-parser": "~1.0.0",
     "browserify": "^13.0.0",
+    "cheerio": "^0.20.0",
     "connect-flash": "~0.1.1",
     "cookie-parser": "~1.0.0",
     "ejs": "~0.8.5",
