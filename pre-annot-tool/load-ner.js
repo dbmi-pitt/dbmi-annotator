@@ -2,11 +2,11 @@ var config = require('./../config/config.js');
 var HOSTNAME = config.elastico.host;
 var ES_CONN = config.elastico.host + ":" + config.elastico.port;
 
-var NER_RESULTS = "ner-resutls-json";
+//var NER_RESULTS = "ner-resutls-json";
+var NER_RESULTS = "ner-pubmed-json";
 
 var uuid = require('uuid');
-//var USER_EMAIL = "yin2@gmail.com"
-var USER_EMAIL = "123@123.com"
+var USER_EMAIL = "yin2@gmail.com"
 
 var elasticsearch = require('elasticsearch');
 var client = new elasticsearch.Client({
@@ -24,6 +24,7 @@ for (i = 0; i < nersets.length; i++){
     subL = nersets[i];
 
     for (j = 0; j < subL.length; j++){
+    //for (j = 0; j < 10; j++){
         annot = subL[j];
 
         if (annot){
@@ -42,8 +43,12 @@ function es_index(annot){
             console.log("[ERROR] annot attributes incompelete!");
         return null;
     } else {
+        // for local dailymed spls
+        //uriStr = "http://" + HOSTNAME + "/DDI-labels/" + annot.setid + ".html";
 
-        uriStr = "http://" + HOSTNAME + "/DDI-labels/" + annot.setid + ".html";
+        // for pubmed external resources
+        uriStr = "http://www.ncbi.nlm.nih.gov/pmc/articles/" + annot.setid;
+
         uriPost = uriStr.replace(/[\/\\\-\:\.]/g, "");
 
         path = annot.start.replace("/html[1]/body[1]","/article[1]/div[1]/div[1]/div[1]");

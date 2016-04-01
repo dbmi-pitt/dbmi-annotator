@@ -10,9 +10,11 @@ var HashMap = require('hashmap');
 // SET VARS
 var MIN_TXT = 30; 
 var PRE_POST_LEN = 60;
-var LABEL_HTML_DIR = "../public/DDI-labels/";
-var NER_JSON = "NER/NER-outputs.json";
-var OUTPUT = "ner-resutls-json";
+//var LABEL_HTML_DIR = "../public/DDI-labels/";
+var LABEL_HTML_DIR = "html-parser/outputs/";
+//var NER_JSON = "NER/NER-outputs.json";
+var NER_JSON = "NER/NER-pubmed-sample-outputs.json";
+var OUTPUT = "ner-pubmed-json";
 
 parseNERDIR(NER_JSON);
 
