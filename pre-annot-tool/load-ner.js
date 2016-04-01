@@ -2,7 +2,7 @@ var config = require('./../config/config.js');
 var HOSTNAME = config.elastico.host;
 var ES_CONN = config.elastico.host + ":" + config.elastico.port;
 
-//var NER_RESULTS = "ner-resutls-json";
+//var NER_RESULTS = "ner-results-json";
 var NER_RESULTS = "ner-pubmed-json";
 
 var uuid = require('uuid');
