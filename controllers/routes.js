@@ -39,37 +39,33 @@ module.exports = function(app, passport) {
     
     // MAIN ==============================
     app.get('/dbmiannotator/main', isLoggedIn, function(req, res) {
-
-	// fetch all DDI annotations for current user
-	var url = "http://" + config.store.host +":" + config.store.port + "/search?email=" + req.user.email + "&annotationType=DDI";
-	
-	request({url: url, json: true}, function(error,response,body){
-	    if (!error && response.statusCode === 200) {
-		
-		res.render('main.ejs', {
-		    user : req.user,
-		    annotations : body,
-		    exportMessage: req.flash('exportMessage'),
-		    loadMessage: req.flash('loadMessage'),
-		    host: config.annotator.host
-		});
-		
-	    } else {
-		    res.render('main.ejs', {
-		        user : req.user,
-		        annotations : {'total':0},
-		        exportMessage: req.flash('exportMessage'),
-		        loadMessage: req.flash('loadMessage'),
-		        host: config.annotator.host
-		    });
-	    }
         
+	    // fetch all DDI annotations for current user
+	    var url = "http://" + config.store.host +":" + config.store.port + "/search?email=" + req.user.email + "&annotationType=DDI";
 	    
-	});
-	
-
+	    request({url: url, json: true}, function(error,response,body){
+	        if (!error && response.statusCode === 200) {
+		        
+		        res.render('main.ejs', {
+		            user : req.user,
+		            annotations : body,
+		            exportMessage: req.flash('exportMessage'),
+		            loadMessage: req.flash('loadMessage'),
+		            host: config.annotator.host
+		        });
+		        
+	        } else {
+		        res.render('main.ejs', {
+		            user : req.user,
+		            annotations : {'total':0},
+		            exportMessage: req.flash('exportMessage'),
+		            loadMessage: req.flash('loadMessage'),
+		            host: config.annotator.host
+		        });
+	        }
+	    });
     });
-
+    
     // LOGOUT ==============================
     app.get('/dbmiannotator/logout', function(req, res) {
         req.logout();
@@ -82,10 +78,6 @@ module.exports = function(app, passport) {
 	    var sourceUrl = req.query.sourceURL.trim();
 	    var email = req.query.email;
 
-        // if (sourceURL.indexOf("pmc/articles") > 0){
-        //     sourceURL = "http://" + config.annotator.host + "/proxy/" + sourceURL;
-        // }
-
 	    var validUrl = require('valid-url');
 	    
 	    if (validUrl.isUri(sourceUrl)){
@@ -96,21 +88,6 @@ module.exports = function(app, passport) {
                 res.render('displayWebPage.ejs', {
                     htmlsource: req.htmlsource
                 });   
-
-	        // if (sourceUrl.match(/localhost.*html/g)){ // local dailymed labels
-		    // res.render('displayWebPage.ejs');
-	        // } 
-	        // else if (sourceUrl.match(/localhost.*pdf/g)){ // local pdf resouces
-		    //     res.redirect("/dbmiannotator/viewer.html?file=" + sourceUrl+"&email=" + email);
-	        // }
-	        // else if (sourceUrl.match(/pmc\/articles/g)){ // external pmc
-            //     res.render('displayWebPage.ejs', {
-            //         htmlsource: req.htmlsource
-            //     });
-	        // } else {
-            //     req.flash('loadMessage', 'The url you just entered is valid but not have local resource served yet');
-		    //     res.redirect('/dbmiannotator/main');
-            // }
 	        }
         }
         else {
@@ -155,7 +132,8 @@ module.exports = function(app, passport) {
     
 };
 
-// FUNCTIONS ==============================
+// MIDDLE WARE FUNCTIONS ==============================
+
 // parse web contents from url
 function praseWebContents(req, res, next){
     var sourceUrl = req.query.sourceURL.trim();
@@ -182,6 +160,19 @@ function praseWebContents(req, res, next){
     }
 }
 
+
+// get annotation list
+function getAnnotationList(req, res, next){
+	// fetch annotations for current document
+	var url = "http://" + config.store.host +":" + config.store.port + "/search?email=" + req.user.email + "&annotationType=DDI&";
+	
+	request({url: url, json: true}, function(error,response,body){
+	    if (!error && response.statusCode === 200) {
+            req.annotations = body;
+            next();
+        }
+    });
+}
 
     
 // route middleware to make sure a user is logged in
