@@ -1,13 +1,26 @@
+/*************************************************************************
+ * Copyright 
+ *
+ *************************************************************************
+ *
+ * @description
+ * load NER in json to elasticsearch for dbmi-annotator pre-annotate drug mentions 
+ * 
+ * @author
+ * Yifan Ning
+ *
+ *************************************************************************/
+
+// IMPORT=================================================================
 var config = require('./../config/config.js');
 var HOSTNAME = config.elastico.host;
 var ES_CONN = config.elastico.host + ":" + config.elastico.port;
-
-//var NER_RESULTS = "ner-results-json";
-var NER_RESULTS = "ner-pubmed-json";
-
+var q = require('q');
 var uuid = require('uuid');
-var USER_EMAIL = "yin2@gmail.com"
+var fs = require('fs');
 
+
+// ELASTICO=================================================================
 var elasticsearch = require('elasticsearch');
 var client = new elasticsearch.Client({
   host: ES_CONN
@@ -15,78 +28,130 @@ var client = new elasticsearch.Client({
 });
 
 
-var fs = require('fs');
-var nerResults = fs.readFileSync(NER_RESULTS,"utf-8");
-var nersets = JSON.parse(nerResults).nersets;
+var args = process.argv.slice(2);
+if (args.length == 3) {
 
-for (i = 0; i < nersets.length; i++){
-//for (i = 0; i < 1; i++){
-    subL = nersets[i];
+    var email = args[2];
 
-    for (j = 0; j < subL.length; j++){
-    //for (j = 0; j < 10; j++){
-        annot = subL[j];
+    if (args[1] == "dailymed" || args[1] == "pubmed"){
+        if (args[1] == "dailymed")
+            var NER_RESULTS = "ner-dailymed-json";
+        else if (args[1] == "pubmed") {
+            var NER_RESULTS = "ner-pubmed-json";
+        } 
+        var nerResults = fs.readFileSync(NER_RESULTS,"utf-8");
+        var nersets = JSON.parse(nerResults).nersets;
+        loadNERs(nersets, args[1], email);
+    }
+    else {
+        console.log("RUN: node load-ner.js <ner-results (ex. ner-pubmed-json)> <options: pubmed or dailymed> <user email (ex. yin2@gmail.com)>");
+        process.exit(1);
+    } 
+} else {
+    console.log("RUN: node load-ner.js <ner-results (ex. ner-pubmed-json)> <options: pubmed or dailymed> <user email (ex. yin2@gmail.com)>");
+    process.exit(1);
+}
 
-        if (annot){
-            es_index(annot);
+
+function loadNERs(nersets, sourceType, email){
+
+    for (i = 0; i < nersets.length; i++){
+    //for (i = 0; i < 1; i++){
+        subL = nersets[i];
+        
+        for (j = 0; j < subL.length; j++){
+        //for (j = 0; j < 5; j++){
+            annotation = subL[j];
+            if (annotation){
+                uriStr = "";
+                if (sourceType == "pubmed")
+                    uriStr = "http://www.ncbi.nlm.nih.gov/pmc/articles/" + annotation.setid;
+                else if (sourceType == "dailymed")
+                    uriStr = "http://" + HOSTNAME + "/DDI-labels/" + annotation.setid + ".html";
+                else {
+                    console.log("[ERROR] sourceType wrong: " + sourceType);
+                    process.exit(1);
+                }              
+                loadNewAnnotation(annotation, uriStr, email);
+            }
         }
     }
 }
 
+function loadNewAnnotation(annotation, uriStr, email){
+    console.log("[INFO]: begin check for " + annotation.exact + " | " + email);
+    uriPost = uriStr.replace(/[\/\\\-\:\.]/g, "");
 
-function es_index(annot){
+    q.nfcall(
+        client.search(
+            {
+                index: 'annotator',
+                type: 'annotation',
+                body:{
+                    query : {
+                        bool : {
+                            must : [
+                                {
+                                    match: {
+                                        "email": email                           
+                                    }
+                                },
+                                {
+                                    match: {
+                                        "uri": uriPost                           
+                                    }
+                                },
+                                {
+                                    match: {
+                                        "prefix": annotation.prefix                           
+                                    }
+                                },
+                                {
+                                    match: {
+                                        "exact": annotation.exact                           
+                                    }
+                                },
+                                {
+                                    match: {
+                                        "suffix": annotation.suffix                  
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }).then(function (resp){
+                var hits = resp.hits.hits;
+                if (hits.length > 0){
+                    console.log("[EXITS] " + annotation.exact);
+                    //console.log(hits);
+                    return true;
+                } else {
+                    console.log("[NOT EXITS] " + annotation.exact);
+                    return false;
+                }
+            }).then(function (isExists){
+                if (!isExists){
+                    loadAnnotation(annotation, uriStr, email);
+                }
+            })
+    );
+}
 
-    if (annot == null){
-        console.log("[ERROR] annot is null!");
 
-        if (annot.setid == null || annot.drugname == null || annot.startOffset == null || annot.endOffset == null || start == null || end == null)
+function loadAnnotation(annotation, uriStr, email){
+
+    if (annotation == null){
+        console.log("[ERROR] annotation is null!");
+
+        if (annotation.setid == null || annotation.drugname == null || annotation.startOffset == null || annotation.endOffset == null || start == null || end == null)
             console.log("[ERROR] annot attributes incompelete!");
         return null;
     } else {
-        // for local dailymed spls
-        //uriStr = "http://" + HOSTNAME + "/DDI-labels/" + annot.setid + ".html";
-
-        // for pubmed external resources
-        uriStr = "http://www.ncbi.nlm.nih.gov/pmc/articles/" + annot.setid;
-
         uriPost = uriStr.replace(/[\/\\\-\:\.]/g, "");
+        path = annotation.start.replace("/html[1]/body[1]","/article[1]/div[1]/div[1]/div[1]");
 
-        path = annot.start.replace("/html[1]/body[1]","/article[1]/div[1]/div[1]/div[1]");
-        //path = annot.start.replace("/html[1]/body[1]","/article[1]/div[1]/div[1]");
-
-        var isExists = false;
-        console.log("[INFO]: begin check for " + annot.exact);
-
-        // client.search(
-        //     {
-        //         index: 'annotator',
-        //         type: 'annotation',
-        //         body:{
-        //             query : {
-        //                 match: {
-        //                     "email": USER_EMAIL                            
-        //                 },
-        //                 match: {
-        //                     "uri": uriPost                            
-        //                 },
-        //                 match: {
-        //                     "prefix": annot.prefix
-        //                 },
-        //                 match: {
-        //                     "exact": annot.exact                            
-        //                 }
-        //             }
-        //         }
-
-        //     }).then(function (resp){
-        //         var hits = resp.hits.hits;
-        //         console.log("results:" + hits.length);
-                
-        //         if (hits.length > 0)
-        //             console.log("[EXITS]");
-        //         else {
-        console.log("[NOT EXITS]");
-        console.log("[INFO]: begin load for " + annot.exact);
+        console.log("[INFO]: begin load for " + annotation.exact);
         var datetime = new Date();
         client.index(
             {
@@ -94,18 +159,18 @@ function es_index(annot){
                 type: 'annotation',
                 id: uuid.v4(),
                 body: {    // annotatorJs fields for drug Mention
-                    "email": USER_EMAIL,
+                    "email": email,
                     "created": datetime, 
                     "updated": datetime, 
                     "annotationType": "DrugMention",
-                    "quote": annot.drugname,
+                    "quote": annotation.drugname,
                     "permissions": {},
                     "ranges": [
                         {
                             "start": path,
                             "end": path,
-                            "startOffset": parseInt(annot.startOffset),
-                            "endOffset": parseInt(annot.endOffset),
+                            "startOffset": parseInt(annotation.startOffset),
+                            "endOffset": parseInt(annotation.endOffset),
                         }
                     ],
                     "consumer": "mockconsumer",
@@ -116,17 +181,17 @@ function es_index(annot){
                         "source" : uriStr,
                         "selector" : {
                             "@type": "TextQuoteSelector",
-                            "exact": annot.exact,
-                            "prefix": annot.prefix,
-                            "suffix": annot.suffix
+                            "exact": annotation.exact,
+                            "prefix": annotation.prefix,
+                            "suffix": annotation.suffix
                         }
                     }
                 }
             }, function (err, resp) {
                 if (err)
-                    console.log("[ERROR] " + err)
+                    console.log("[ERROR] " + err);
                 else
-                    console.log("[INFO] load successfully")
+                    console.log("[INFO] load successfully");
             });
     }
 }

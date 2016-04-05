@@ -39,22 +39,20 @@ JSON format ner results with selectors in "ner-resutls-json"
 preload drug mention annotation to elastico
 --------------------------------------------------------------------
 
-(1) define inputs
+(1) pre condition
 
-edit load-ner.js for elastico connection and input ner path
- 
-ex.
-var NER_RESULTS = "ner-resutls-json";
-var ES_CONN = "localhost:9250";
+ner results: ner-pubmed-json or ner-dailymed-json
 
 (2) run program
 
 $ cd pre-annot-tool
-$ node load-ner.js
+$ node load-ner.js <ner-results (ex. ner-pubmed-json)> <options: pubmed or dailymed> <user email (ex. yin2@gmail.com)>
+
+ex. $ node load-ner.js ner-pubmed-json pubmed yin2@gmail.com
 
 (3) check annotations in elastico head plugin
 
-http://localhost:9250/_plugin/head/
+http://localhost:9200/_plugin/head/
 
 --------------------------------------------------------------------
 delete specific set of annotations
