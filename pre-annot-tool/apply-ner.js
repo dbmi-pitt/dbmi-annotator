@@ -1,22 +1,54 @@
-// IMPORT
+/*************************************************************************
+ * Copyright 
+ *
+ *************************************************************************
+ *
+ * @description
+ * apply result from NER program, append OA selector fields to annotation item, converts to json format for annotation preload purpose
+ * 
+ * @author
+ * Yifan Ning
+ *
+ *************************************************************************/
+
+
+// IMPORT=================================================================
 var fs = require('fs'), path = require("path");
 var xpath = require('xpath'), parse5 = require('parse5'), xmlser = require('xmlserializer'), dom = require('xmldom').DOMParser;
 var Set = require("collections/set");
-var Q = require('q');
-
-
+var q = require('q');
 var HashMap = require('hashmap');
 
-// SET VARS
+// SET VARS=================================================================
 var MIN_TXT = 30; 
 var PRE_POST_LEN = 60;
 //var LABEL_HTML_DIR = "../public/DDI-labels/";
-var LABEL_HTML_DIR = "html-parser/outputs/";
+//var LABEL_HTML_DIR = "html-parser/outputs/";
 //var NER_JSON = "NER/NER-outputs.json";
-var NER_JSON = "NER/NER-pubmed-sample-outputs.json";
-var OUTPUT = "ner-pubmed-json";
+//var NER_JSON = "NER/NER-pubmed-sample-outputs.json";
 
-parseNERDIR(NER_JSON);
+
+// MAIN=================================================================
+
+var args = process.argv.slice(2);
+if (args.length == 3) {
+    var NER_JSON = args[0];
+    var LABEL_HTML_DIR = args[1];
+
+    if (args[2] == "dailymed"){
+        var OUTPUT = "ner-dailymed-json";
+    } else if (args[2] == "pubmed") {
+        var OUTPUT = "ner-pubmed-json";
+    }
+
+    parseNERDIR(NER_JSON);
+
+} else {
+    console.log("RUN: node apply-ner.js <ner-results (ex. NER/NER-outputs.json)> <html label directory> <options: pubmed or dailymed>");
+    process.exit(1);
+}
+
+
 
 // PARSE NER IN JSON
 // @INPUT: file path

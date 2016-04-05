@@ -17,7 +17,7 @@ $ node html-parser.js
 
 (3) outputs
 
-html normalized by tidyhtml lib
+html normalized by tidyhtml lib in folder outputs
 
 --------------------------------------------------------------------
 apply NER results
@@ -25,15 +25,26 @@ apply NER results
 
 (1) inputs
 
-have NER XMLs prepared under "NER-results-xml"
+have NER XMLs prepared under folder NER
 
 (2) run program
 
 $ cd pre-annot-tool
-$ node apply-ner.js
+$ node apply-ner.js <ner-results (ex. NER/NER-outputs.json)> <html label directory> <options: pubmed or dailymed>
+
+ex pubmed:
+$ node apply-ner.js "NER/NER-pubmed-sample-outputs.json" "html-parser/outputs/" "pubmed"
+ex dailymed:
+$ node apply-ner.js "NER/NER-outputs.json" "../public/DDI-labels/" "dailymed" 
 
 (3) outputs
-JSON format ner results with selectors in "ner-resutls-json"
+JSON format ner results for load
+
+ex pubmed:
+ner-pubmed-json
+
+ex dailymed:
+ner-dailymed-json
 
 --------------------------------------------------------------------
 preload drug mention annotation to elastico

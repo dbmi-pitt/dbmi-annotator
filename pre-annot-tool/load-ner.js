@@ -27,7 +27,7 @@ var client = new elasticsearch.Client({
   //log: 'trace'
 });
 
-
+//MAIN=================================================================
 var args = process.argv.slice(2);
 if (args.length == 3) {
 
