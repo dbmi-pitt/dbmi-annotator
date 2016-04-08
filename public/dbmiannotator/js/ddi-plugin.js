@@ -28,14 +28,16 @@ if (typeof annotator === 'undefined') {
     		    ann.uri = source.replace(/[\/\\\-\:\.]/g, "");		
 		        ann.email = email;
             },
-            annotationCreated: function(ann) {
+            annotationCreated: function (ann) {
                 refreshAnnotationList(ann.rawurl, ann.email);
             },
-            beforeAnnotationUpdated: function(ann) {
+            annotationUpdated: function(ann) {
                 refreshAnnotationList(ann.rawurl, ann.email);
             },
-            beforeAnnotationDeleted: function (ann) {
-                refreshAnnotationList(ann.rawurl, ann.email);
+            annotationDeleted: function (ann) {
+                setTimeout(function(){
+                    refreshAnnotationList(source, email);
+                },800);
             }
             
     	};
@@ -54,34 +56,42 @@ if (typeof annotator === 'undefined') {
 		             }).then(function(){
                          refreshAnnotationList(sourceURL, email);
                      });
-    
-                 
 }
 
 
 function refreshAnnotationList(sourceURL, email){
 
+    console.log("[INFO] refreshAnnotationList called");
+
     $.ajax({url: 'http://' + config.annotator.host + "/annotatorstore/search",
             data: {annotationType: 'DDI', 
                    email: email, 
                    uri: sourceURL.replace(/[\/\\\-\:\.]/g, "")},
-            method: 'GET'
-           }).then(function (response){
-               console.log(response);
-               if (response.total > 0){
+            method: 'GET',
+            error : function(jqXHR, exception){
+                console.log(exception);
+            },
+            success : function(response){
 
-                   listTable = "<table>";
-                   for (i = 0; i < response.total; i++){
-                       row = response.rows[i];
-                       listTable += "<tr><td>" + row.Drug1 + "</td><td>" + row.Drug2 + "</td></tr>"
-                   }
-                   listTable += "</table>"
-                   $("#annotation-list").html(listTable);  
-               } else {
-                   $("#annotation-list").html("No DDI annotations been made!");  
-               }
-               
-           });   
+                //console.log(response);
+                if (response.total > 0){
+                    
+                    listTable = "<table>";
+                    listTable += "<tr><td>Subject</td><td>Predicate</td><td>Object</td><td>Assertion Type</td><td>Date</td><td>Quote</td><td></td></tr>";
+                    for (i = 0; i < response.total; i++){
+                        row = response.rows[i];
+                        listTable += "<tr><td>" + row.Drug1 + "</td><td>Interact with</td><td>" + row.Drug2 + "</td><td>" + row.assertion_type + "</td><td>" + row.created + "</td><td>text</td><td><a href='#" + row.id + "' >annotation</a></td></tr>"
+                    }
+                    listTable += "</table>";
+                    $("#annotation-list").html(listTable);  
+                } else {
+                    $("#annotation-list").html("No DDI annotations been made!");  
+                }
+                
+            }
+     
+           });
+
 }
 
 
