@@ -29,14 +29,14 @@ if (typeof annotator === 'undefined') {
 		        ann.email = email;
             },
             annotationCreated: function (ann) {
-                refreshAnnotationList(ann.rawurl, ann.email);
+                annoList(ann.rawurl, ann.email);
             },
             annotationUpdated: function(ann) {
-                refreshAnnotationList(ann.rawurl, ann.email);
+                annoList(ann.rawurl, ann.email);
             },
             annotationDeleted: function (ann) {
                 setTimeout(function(){
-                    refreshAnnotationList(source, email);
+                    annoList(source, email);
                 },800);
             }
             
@@ -54,14 +54,13 @@ if (typeof annotator === 'undefined') {
 			                 app.annotations.load({uri: sourceURL.replace(/[\/\\\-\:\.]/g, ""), email: email});
 			             }, 1000);
 		             }).then(function(){
-                         refreshAnnotationList(sourceURL, email);
+                         annoList(sourceURL, email);
+                         console.log(app.annotations);
                      });
 }
 
 
-function refreshAnnotationList(sourceURL, email){
-
-    console.log("[INFO] refreshAnnotationList called");
+function annoList(sourceURL, email, sortByColumn){
 
     $.ajax({url: 'http://' + config.annotator.host + "/annotatorstore/search",
             data: {annotationType: 'DDI', 
@@ -73,14 +72,25 @@ function refreshAnnotationList(sourceURL, email){
             },
             success : function(response){
 
-                //console.log(response);
                 if (response.total > 0){
-                    
-                    listTable = "<table>";
-                    listTable += "<tr><td>Subject</td><td>Predicate</td><td>Object</td><td>Assertion Type</td><td>Date</td><td>Quote</td><td></td></tr>";
+
+                    fieldsL = ["Drug1", "relationship", "Drug2", "assertion_type", "updated"];
+                    if (sortByColumn != null){
+                        sort(response.rows, sortByColumn);
+                    }
+
+                    listTable = "<table id='tb-annotation-list'><tr><td><div onclick='annoList(sourceURL, email, fieldsL[0])'>Subject</div></td><td><div onclick='annoList(sourceURL, email, fieldsL[1])'>Predicate</div></td><td><div onclick='annoList(sourceURL, email, fieldsL[2])'>Object</div></td><td><div onclick='annoList(sourceURL, email, fieldsL[3])'>Assertion Type</div></td><td><div onclick='annoList(sourceURL, email, fieldsL[4])'>Date</div></td><td>Text quote</td></tr>";
+
                     for (i = 0; i < response.total; i++){
                         row = response.rows[i];
-                        listTable += "<tr><td>" + row.Drug1 + "</td><td>Interact with</td><td>" + row.Drug2 + "</td><td>" + row.assertion_type + "</td><td>" + row.created + "</td><td>text</td><td><a href='#" + row.id + "' >annotation</a></td></tr>"
+                        quote = row.target.selector.exact;
+                        if (quote.length > 65){
+                            quote = quote.substring(0, 65) + "...";
+                        }
+                        
+                        date = new Date(row.updated);
+                        dateUpdated = [date.toDateString(), date.toLocaleTimeString()].join(' ');                    
+                        listTable += "<tr><td>" + row.Drug1 + "</td><td>" + row.relationship + "</td><td>" + row.Drug2 + "</td><td>" + row.assertion_type + "</td><td>" + dateUpdated + "</td><td><a href='#" + row.id + "'>" + quote + "</a></td></tr>"
                     }
                     listTable += "</table>";
                     $("#annotation-list").html(listTable);  
@@ -91,7 +101,13 @@ function refreshAnnotationList(sourceURL, email){
             }
      
            });
+}
 
+
+function sort(annotations, sortByColumn) {
+    annotations.sort(function(a, b){
+        return a[sortByColumn].localeCompare(b[sortByColumn]);
+    });
 }
 
 
