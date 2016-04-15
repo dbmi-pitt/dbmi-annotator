@@ -28,14 +28,16 @@ if (typeof annotator === 'undefined') {
     		    ann.uri = source.replace(/[\/\\\-\:\.]/g, "");		
 		        ann.email = email;
             },
-            annotationCreated: function(ann) {
-                refreshAnnotationList(ann.rawurl, ann.email);
+            annotationCreated: function (ann) {
+                annoList(ann.rawurl, ann.email);
             },
-            beforeAnnotationUpdated: function(ann) {
-                refreshAnnotationList(ann.rawurl, ann.email);
+            annotationUpdated: function(ann) {
+                annoList(ann.rawurl, ann.email);
             },
-            beforeAnnotationDeleted: function (ann) {
-                refreshAnnotationList(ann.rawurl, ann.email);
+            annotationDeleted: function (ann) {
+                setTimeout(function(){
+                    annoList(source, email);
+                },800);
             }
             
     	};
@@ -52,36 +54,60 @@ if (typeof annotator === 'undefined') {
 			                 app.annotations.load({uri: sourceURL.replace(/[\/\\\-\:\.]/g, ""), email: email});
 			             }, 1000);
 		             }).then(function(){
-                         refreshAnnotationList(sourceURL, email);
+                         annoList(sourceURL, email);
+                         console.log(app.annotations);
                      });
-    
-                 
 }
 
 
-function refreshAnnotationList(sourceURL, email){
+function annoList(sourceURL, email, sortByColumn){
 
     $.ajax({url: 'http://' + config.annotator.host + "/annotatorstore/search",
             data: {annotationType: 'DDI', 
                    email: email, 
                    uri: sourceURL.replace(/[\/\\\-\:\.]/g, "")},
-            method: 'GET'
-           }).then(function (response){
-               console.log(response);
-               if (response.total > 0){
+            method: 'GET',
+            error : function(jqXHR, exception){
+                console.log(exception);
+            },
+            success : function(response){
 
-                   listTable = "<table>";
-                   for (i = 0; i < response.total; i++){
-                       row = response.rows[i];
-                       listTable += "<tr><td>" + row.Drug1 + "</td><td>" + row.Drug2 + "</td></tr>"
-                   }
-                   listTable += "</table>"
-                   $("#annotation-list").html(listTable);  
-               } else {
-                   $("#annotation-list").html("No DDI annotations been made!");  
-               }
-               
-           });   
+                if (response.total > 0){
+
+                    fieldsL = ["Drug1", "relationship", "Drug2", "assertion_type", "updated"];
+                    if (sortByColumn != null){
+                        sort(response.rows, sortByColumn);
+                    }
+
+                    listTable = "<table id='tb-annotation-list'><tr><td><div onclick='annoList(sourceURL, email, fieldsL[0])'>Subject</div></td><td><div onclick='annoList(sourceURL, email, fieldsL[1])'>Predicate</div></td><td><div onclick='annoList(sourceURL, email, fieldsL[2])'>Object</div></td><td><div onclick='annoList(sourceURL, email, fieldsL[3])'>Assertion Type</div></td><td><div onclick='annoList(sourceURL, email, fieldsL[4])'>Date</div></td><td>Text quote</td></tr>";
+
+                    for (i = 0; i < response.total; i++){
+                        row = response.rows[i];
+                        quote = row.target.selector.exact;
+                        if (quote.length > 65){
+                            quote = quote.substring(0, 65) + "...";
+                        }
+                        
+                        date = new Date(row.updated);
+                        dateUpdated = [date.toDateString(), date.toLocaleTimeString()].join(' ');                    
+                        listTable += "<tr><td>" + row.Drug1 + "</td><td>" + row.relationship + "</td><td>" + row.Drug2 + "</td><td>" + row.assertion_type + "</td><td>" + dateUpdated + "</td><td><a href='#" + row.id + "'>" + quote + "</a></td></tr>"
+                    }
+                    listTable += "</table>";
+                    $("#annotation-list").html(listTable);  
+                } else {
+                    $("#annotation-list").html("No DDI annotations been made!");  
+                }
+                
+            }
+     
+           });
+}
+
+
+function sort(annotations, sortByColumn) {
+    annotations.sort(function(a, b){
+        return a[sortByColumn].localeCompare(b[sortByColumn]);
+    });
 }
 
 
