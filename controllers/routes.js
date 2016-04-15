@@ -107,7 +107,7 @@ module.exports = function(app, passport) {
 	    if (!error && response.statusCode === 200) {
 		
 		var json2csv = require('json2csv');
-		json2csv({data: body.rows, fields: ['email', 'rawurl', 'annotationType', 'assertion_type', 'quote', 'Drug1', 'Type1', 'Role1', 'Drug2', 'Type2', 'Role2', 'Modality', 'Evidence_modality','Number_participants','FormulationP','FormulationO','DoseMG_precipitant','DoseMG_object','Duration_precipitant','Duration_object','RegimentsP','RegimentsO','Aucval','AucType','AucDirection','Clval','ClType','ClDirection','cmaxval','cmaxType','cmaxDirection','cminval','cminType','cminDirection','t12','t12Type','t12Direction','Comment']}, function(err, csv) {
+		json2csv({data: body.rows, fields: ['email', 'rawurl', 'annotationType', 'assertion_type', 'quote', 'relationship', 'Drug1', 'Type1', 'Role1', 'Drug2', 'Type2', 'Role2', 'enzyme', 'Modality', 'Evidence_modality','Number_participants','FormulationP','FormulationO','DoseMG_precipitant','DoseMG_object','Duration_precipitant','Duration_object','RegimentsP','RegimentsO','Aucval','AucType','AucDirection','Clval','ClType','ClDirection','cmaxval','cmaxType','cmaxDirection','cminval','cminType','cminDirection','t12','t12Type','t12Direction','Comment']}, function(err, csv) {
 		    
 		    if (err) console.log(err);
 		    
