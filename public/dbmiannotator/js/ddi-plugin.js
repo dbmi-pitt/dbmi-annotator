@@ -79,7 +79,12 @@ function annoList(sourceURL, email, sortByColumn){
                         sort(response.rows, sortByColumn);
                     }
 
-                    listTable = "<table id='tb-annotation-list'><tr><td><div onclick='annoList(sourceURL, email, fieldsL[0])'>Subject</div></td><td><div onclick='annoList(sourceURL, email, fieldsL[1])'>Predicate</div></td><td><div onclick='annoList(sourceURL, email, fieldsL[2])'>Object</div></td><td><div onclick='annoList(sourceURL, email, fieldsL[3])'>Assertion Type</div></td><td><div onclick='annoList(sourceURL, email, fieldsL[4])'>Date</div></td><td>Text quote</td></tr>";
+                    listTable = "<table id='tb-annotation-list'><tr>" +
+"<td><div id=fields[0] class='tb-list-unsorted' onclick='annoList(sourceURL, email, fieldsL[0])'>Subject</div></td>" +
+"<td><div id=fields[1] class='tb-list-unsorted' onclick='annoList(sourceURL, email, fieldsL[1])'>Predicate</div></td>" +
+"<td><div id=fields[2] class='tb-list-unsorted' onclick='annoList(sourceURL, email, fieldsL[2])'>Object</div></td>" +
+"<td><div id=fields[3] class='tb-list-unsorted' onclick='annoList(sourceURL, email, fieldsL[3])'>Assertion Type</div></td>" +
+"<td><div id=fields[4] class='tb-list-unsorted' onclick='annoList(sourceURL, email, fieldsL[4])'>Date</div></td><td>Text quote</td></tr>";
 
                     for (i = 0; i < response.total; i++){
                         row = response.rows[i];
@@ -105,9 +110,28 @@ function annoList(sourceURL, email, sortByColumn){
 
 
 function sort(annotations, sortByColumn) {
-    annotations.sort(function(a, b){
-        return a[sortByColumn].localeCompare(b[sortByColumn]);
-    });
+
+    //console.log("sortByColumn: " + sortByColumn);
+    // console.log($("#tb-annotation-list"));
+    // className = $("#tb-annotation-list").find('#' + sortByColumn).attr('class');
+    // console.log("className: " + className);
+
+    // if (className == "tb-list-unsorted"){
+        
+    //     $('#' + sortByColumn).attr('class','tb-list-asc');
+    //     annotations.sort(function(a, b){
+    //         return a[sortByColumn].localeCompare(b[sortByColumn]);
+    //     });
+    // } else if (className == "tb-list-asc"){
+    //     annotations.sort(function(a, b){
+    //         return a[sortByColumn].localeCompare(b[sortByColumn]);
+    //     }).reverse();
+    // }
+
+    $('#' + sortByColumn).attr('class','tb-list-asc');
+        annotations.sort(function(a, b){
+            return a[sortByColumn].localeCompare(b[sortByColumn]);
+        });
 }
 
 
