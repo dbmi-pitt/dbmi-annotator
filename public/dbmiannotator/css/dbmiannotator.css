@@ -47,11 +47,11 @@ h1 {
 .button-container {
     display: flex;
     justify-content: space-between;
-    margin: 60px auto;
+    margin: auto;
 }
 
 
-// Copy button styles
+/* Copy button styles*/
 .custombutton {
   border: 0 none;
   border-radius: 5px;

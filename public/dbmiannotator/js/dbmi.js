@@ -117,15 +117,129 @@ var getUrlParameter = function getUrlParameter(sParam) {
       
       var w = $(window).width()*0.85;
       $('.annotator-widget').width(w);
-      
-    /*}
-    else {
-      $('#splitter').jqxSplitter({
-        width: 1270,
-        height: '100%',
-        panels: [{size: '100%', min: 100}, {size: '0%', min: 0}]
-      });
-      $('.btn-success').val("hide");
-    }*/
+  }
 
+  //move from editor.js
+  
+  function editorload() {
+      $("#firstsection").show();
+      $("#altersection").hide();
+      showEnzyme();
+  }
+
+$("#Drug1").change(function (){selectDrug();});
+$("#Drug2").change(function (){selectDrug();});
+  function selectDrug() {
+      var drug1 = $("#Drug1").val();
+      var drug2 = $("#Drug2").val();
+      var quotestring = $("#quote").html();
+      quotestring = quotestring.replace(drug2, "<span class='selecteddrug'>"+drug2+"</span>");
+      quotestring = quotestring.replace(drug1, "<span class='selecteddrug'>"+drug1+"</span>");
+      $("#quote").html(quotestring);
+  }
+$("#Drug1").mousedown(function (){deselectDrug();});
+$("#Drug2").mousedown(function (){deselectDrug();});
+  function deselectDrug() {
+      var drug1 = $("#Drug1").val();
+      var drug2 = $("#Drug2").val();
+      var quotestring = $("#quote").html();
+      quotestring = quotestring.replace("<span class='selecteddrug'>"+drug2+"</span>", drug2);
+      quotestring = quotestring.replace("<span class='selecteddrug'>"+drug1+"</span>", drug1);
+      $("#quote").html(quotestring);
+  }
+
+  $("#assertion_type").change(function changeFunc() {
+      if($("#assertion_type option:selected").text()=="DDI clinical trial") { 
+        $("#firstsection").hide(); 
+        $("#altersection").show();
+        var object = $("#Drug1 option:selected").text(); 
+        $("#objectinalter").html("Object: "+object);
+        var precipt = $("#Drug2 option:selected").text(); 
+        $("#preciptinalter").html("Precipt: "+precipt);
+        $("#back").show();
+        var modal = $("#Modality:checked").val();
+        $("#modalityinalter").html("Modality: "+modal);
+        var evid = $("#Evidence_modality:checked").val();
+        $("#evidenceinalter").html("Evidence: "+evid);
+      
+      } else {
+        $("#altersection").hide();$("#forward").hide();
+      }
+  });
+
+  $( "#relationship" ).change(function showEnzyme() {
+    if($("#relationship option:selected").text()=="inhibit"||$("#relationship option:selected").text()=="substrate of") {
+          $("#enzymesection1").show();
+          $("#enzyme").show();
+      }
+      if($("#relationship option:selected").text()=="interact with") {
+          $("#enzymesection1").hide();
+          $("#enzyme").hide();
+      }
+  });
+
+  function showEnzyme() {
+      if($("#relationship option:selected").text()=="inhibit"||$("#relationship option:selected").text()=="substrate of") {
+          $("#enzymesection1").show();
+          $("#enzyme").show();
+      }
+      if($("#relationship option:selected").text()=="interact with") {
+          $("#enzymesection1").hide();
+          $("#enzyme").hide();
+      }
+  }
+
+  function flipdrug() {
+      var object = $("#Drug1 option:selected").text();
+      var precip = $("#Drug2 option:selected").text();
+      $("#Drug1 option").removeAttr("selected");
+      $("#Drug2 option").removeAttr("selected");
+      $("#Drug1 > option").each(function () {
+          if ($(this).text() == precip){ 
+            $(this).prop("selected", "selected");
+          }
+      });
+      $("#Drug2 > option").each(function () {
+          if ($(this).text() == object) 
+            $(this).prop("selected", "selected");
+      });
+  }
+
+  function backtofirst() {
+      $("#firstsection").show(); 
+      $("#altersection").hide();
+      $("#forward").show();
+      $("#back").hide();
+  }
+
+  function forwardtosecond() {
+      $("#firstsection").hide(); 
+      $("#altersection").show();
+      $("#forward").hide();
+      $("#back").show();
+      var object = $("#Drug1 option:selected").text(); 
+      $("#objectinalter").html("Object: "+object);
+      var precipt = $("#Drug2 option:selected").text(); 
+      $("#preciptinalter").html("Precipt: "+precipt);
+      var modal = $("#Modality:checked").val();
+      $("#modalityinalter").html("Modality: "+modal);
+      var evid = $("#Evidence_modality:checked").val();
+      $("#evidenceinalter").html("Evidence: "+evid);
+  }
+
+  function changeRole1(role) {
+      $(".Role2").each(function(){ 
+          if(this.value != role) 
+            this.checked = true; 
+          else 
+            this.checked = false;
+      });
+  }
+
+  function changeRole2(role) {
+      $(".Role1").each(function(){ 
+        if(this.value != role) 
+          this.checked = true; 
+        else this.checked = false;
+      });
   }
