@@ -15,9 +15,9 @@ module.exports = function(passport, User) {
     });
 
     passport.deserializeUser(function(id, done) {
-	User.findById(id).then(function(user){
-	    done(null,user);
-	});
+	    User.findById(id).then(function(user){
+	        done(null,user);
+	    });
     });
 
 
@@ -32,7 +32,6 @@ module.exports = function(passport, User) {
 	console.log("in passport validation");
         // User.findOne wont fire unless data is sent back
         process.nextTick(function() {
-	    console.log("[DEBUG] register - with email: " + email + " | password: " + password);
 	    if (!req.repassword)
 	    
             User.findOne({where:{'email': email}})

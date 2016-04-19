@@ -7,7 +7,9 @@ if (typeof annotator === 'undefined') {
     // DBMIAnnotator with highlight and DDI plugin
     var app = new annotator.App();
 
+    // Plugin UI
     app.include(annotator.ui.dbmimain);
+
     app.include(annotator.storage.debug);
     app.include(annotator.identity.simple);
     app.include(annotator.authz.acl);

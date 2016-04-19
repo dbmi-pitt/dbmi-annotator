@@ -1,6 +1,7 @@
 config = require('./../config/config.js');
 var request = require("request");
 var tidy = require('htmltidy').tidy;
+var pg = require('pg');
 
 module.exports = function(app, passport) {
 
@@ -73,20 +74,23 @@ module.exports = function(app, passport) {
     });
 
     // DISPLAY ==============================
-    app.get('/dbmiannotator/displayWebPage', isLoggedIn, praseWebContents, function(req, res) {
+    app.get('/dbmiannotator/displayWebPage', isLoggedIn, praseWebContents, getPluginProfile, function(req, res) {
 	
 	    var sourceUrl = req.query.sourceURL.trim();
 	    var email = req.query.email;
-
 	    var validUrl = require('valid-url');
+
 	    
 	    if (validUrl.isUri(sourceUrl)){
            
             if (sourceUrl.match(/.pdf/g)){ // local pdf resouces
 		        res.redirect("/dbmiannotator/viewer.html?file=" + sourceUrl+"&email=" + email);
             } else { // local or external html resouces
+                console.log(req.pluginL);
+
                 res.render('displayWebPage.ejs', {
-                    htmlsource: req.htmlsource
+                    htmlsource: req.htmlsource,
+                    pluginL: req.pluginL
                 });   
 	        }
         }
@@ -153,12 +157,40 @@ function praseWebContents(req, res, next){
             }
             req.htmlsource = html;
             next();
-            //console.log(html);
         });
         
     });
     }
 }
+
+
+// get plugin profile
+function getPluginProfile(req, res, next){
+    var results = [];
+    var data = {text: req.body.text, complete: false};
+    
+    pg.connect(config.postgres, function(err, client, done) {
+
+        if(err) {
+            done();
+            console.log(err);
+            return res.status(500).json({ success: false, data: err});
+        }
+        
+        var query = client.query("SELECT ps.set_id, ps.plugin_id, p.name FROM plugin_set ps, plugin p WHERE ps.status = True AND ps.plugin_id = p.id ORDER BY set_id ASC;");
+        query.on('row', function(row) {
+            results.push(row);
+        });
+        
+        query.on('end', function() {
+            //done();
+            req.pluginL = results;
+            next();
+        });
+    });
+    
+}
+
 
 
 // get annotation list
