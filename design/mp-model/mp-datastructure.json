@@ -1,0 +1,97 @@
+// Micropublication annotation
+{
+    // mp claim
+    'id': 'uuid',
+    'type': 'mp:claim',
+    'qualifiedBy': {
+        'object': 'DRON:XXXX',
+        'predicate': 'dikb:inhibits',
+        'precipitant': 'DRON:XXXX',
+    },
+    'hasTarget' : {
+        'id': 'uuid'
+        'type': 'mp:claim',
+        'hasSelector': {
+            'prefix': 'string',
+            'exact': 'string',
+            'suffix': 'string'
+        }
+    },
+    'ranges': {
+        'start': 'string',
+        'end': 'string',
+        'startOffset': 'integer',
+        'endOffset': 'integer',
+    },
+
+    // mp:data (one or more mp:data supports claim)
+    'supportsBy': 
+    [
+        {
+            'id': 'uuid',
+            'type': 'mp:data',
+            // mp:method (method supports data)
+            'supportsBy': { 
+                'id': 'uuid'
+                'type': 'mp:method',
+                'name': '',
+                'uri': '',
+                // mp:material (material supports method)
+                'supportsBy': {
+                    'id': 'uuid',
+                    'type': 'mp:material',                    
+                    'objDose': {
+                        'value': 'numeric',
+                        'hasTarget': {'oaSelector obj'},
+                        'ranges': {'xpath-range obj'}
+                    },                   
+                    'preciptDose': {
+                        'value': 'numeric',
+                        'hasTarget': {'oaSelector obj'},
+                        'ranges': {'xpath-range obj'}
+                    },
+                    'numOfParticipants': {
+                        'value': 'numeric',
+                        'hasTarget': {'oaSelector obj'},
+                        'ranges': {'xpath-range obj'}                        
+                    }                    
+                }
+            },
+            
+            // data attributes
+            'auc': {
+                'value': 'numeric',
+                'type' : 'percent or fold',
+                'direction' : 'increase or decrease',
+                'hasTarget' : { 'oaSelector obj' },
+                'ranges' : { 'xpath-range obj' }
+            },
+            'cmax': {
+                'value': 'numeric',
+                'type' : 'percent or fold',
+                'direction' : 'increase or decrease',
+                'hasTarget' : { 'oaSelector obj' },
+                'ranges' : { 'xpath-range obj' }
+            },
+            'clearance': {
+                'value': 'numeric',
+                'type' : 'percent or fold',
+                'direction' : 'increase or decrease',
+                'hasTarget' : { 'oaSelector obj' },
+                'ranges' : { 'xpath-range obj' }
+            },
+            'half-life': {
+                'value': 'numeric',
+                'type' : 'percent or fold',
+                'direction' : 'increase or decrease',
+                'hasTarget' : { 'oaSelector obj' },
+                'ranges' : { 'xpath-range obj' }
+            }
+        
+        }
+    ]
+       
+}
+
+
+
