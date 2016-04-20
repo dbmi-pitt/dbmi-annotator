@@ -47,7 +47,12 @@
   </div>
   
   <div id="tabs-3">
-    
+    <ul>
+      <% pluginL.forEach(function(plugin) {  %>
+      <li><%=plugin.plugin_id %> - <%=plugin.name %> </li>
+        <% }); %>
+    </ul>
+
   </div>
 
     </div>
