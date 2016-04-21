@@ -20,4 +20,6 @@ INSERT INTO plugin_set(set_id, plugin_id, status, created) VALUES
 
 -- SET 2: micropublication
 INSERT INTO plugin_set(set_id, plugin_id, status, created) VALUES
+	(2, 1, TRUE, now());
+INSERT INTO plugin_set(set_id, plugin_id, status, created) VALUES
 	(2, 3, TRUE, now());
