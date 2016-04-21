@@ -168,7 +168,7 @@ $("#Drug2").mousedown(function (){deselectDrug();});
   });
 
   $( "#relationship" ).change(function showEnzyme() {
-    if($("#relationship option:selected").text()=="inhibit"||$("#relationship option:selected").text()=="substrate of") {
+    if($("#relationship option:selected").text()=="inhibits"||$("#relationship option:selected").text()=="substrate of") {
           $("#enzymesection1").show();
           $("#enzyme").show();
       }
@@ -179,7 +179,7 @@ $("#Drug2").mousedown(function (){deselectDrug();});
   });
 
   function showEnzyme() {
-      if($("#relationship option:selected").text()=="inhibit"||$("#relationship option:selected").text()=="substrate of") {
+      if($("#relationship option:selected").text()=="inhibits"||$("#relationship option:selected").text()=="substrate of") {
           $("#enzymesection1").show();
           $("#enzyme").show();
       }
