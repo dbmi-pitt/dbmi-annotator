@@ -179,11 +179,11 @@ $("#Drug2").mousedown(function (){deselectDrug();});
   });
 
   function showEnzyme() {
-      if($("#relationship option:selected").text()=="inhibits"||$("#relationship option:selected").text()=="substrate of") {
+      if($('#relationship').val()=="inhibits"||$('#relationship').val()=="substrate of") {
           $("#enzymesection1").show();
           $("#enzyme").show();
       }
-      if($("#relationship option:selected").text()=="interact with") {
+      if($('#relationship').val()=="interact with") {
           $("#enzymesection1").hide();
           $("#enzyme").hide();
       }
