@@ -1,5 +1,5 @@
 -- Table: USER
--- DROP TABLE IF EXISTS USER;
+DROP TABLE IF EXISTS "user";
 CREATE TABLE "user"(
     id SERIAL NOT NULL PRIMARY KEY,
     uid TEXT NOT NULL,
@@ -15,31 +15,40 @@ CREATE TABLE "user"(
 );
 
 -- Table: USER_PROFILE
--- DROP TABLE IF EXISTS USER_PROFILE;
+DROP TABLE IF EXISTS "user_profile";
 CREATE TABLE "user_profile"(
     id SERIAL NOT NULL PRIMARY KEY,
     uid TEXT NOT NULL,
-    set_id TEXT NOT NULL,
+    set_id INTEGER NOT NULL,
     status BOOLEAN,
     created timestamp
 );
 
 -- Table: PLUGIN_SET
--- DROP TABLE IF EXISTS PLUGIN_SET;
+DROP TABLE IF EXISTS "plugin_set";
 CREATE TABLE "plugin_set"(
     id SERIAL NOT NULL PRIMARY KEY,
-    set_id TEXT NOT NULL,
-    plugin_id INTEGER NOT NULL,
+    name TEXT NOT NULL,
+    type TEXT NOT NULL,
     status BOOLEAN,
-    created timestamp
+    created timestamp,
+    description TEXT
 );
 
+-- Table: PLUGIN_RELATIONSHIP
+DROP TABLE IF EXISTS "plugin_relationship";
+CREATE TABLE "plugin_relationship"(
+    id SERIAL NOT NULL PRIMARY KEY,
+    set_id INTEGER NOT NULL,
+    plugin_id INTEGER NOT NULL
+);
 
 -- Table: PLUGIN
--- DROP TABLE IF EXISTS PLUGIN;
+DROP TABLE IF EXISTS "plugin";
 CREATE TABLE "plugin"(
     id SERIAL NOT NULL PRIMARY KEY,
     name TEXT NOT NULL,
+    type TEXT NOT NULL,
     description TEXT NOT NULL,
     status BOOLEAN,
     created timestamp
@@ -47,7 +56,7 @@ CREATE TABLE "plugin"(
 
 
 -- Table: USER_GROUP
--- DROP TABLE IF EXISTS USER_GROUP;
+DROP TABLE IF EXISTS "user_group";
 CREATE TABLE "user_group"(
     id SERIAL NOT NULL PRIMARY KEY,
     user_id TEXT NOT NULL,
@@ -56,7 +65,7 @@ CREATE TABLE "user_group"(
 
 
 -- Table: GROUP
--- DROP TABLE IF EXISTS GROUP;
+DROP TABLE IF EXISTS "group";
 CREATE TABLE "group"(
     id SERIAL NOT NULL PRIMARY KEY,
     name TEXT NOT NULL,
@@ -66,7 +75,7 @@ CREATE TABLE "group"(
 );
 
 -- Table: ACTIVATION
--- DROP TABLE IF EXISTS ACTIVATION;
+DROP TABLE IF EXISTS "activation";
 CREATE TABLE "activation"(
     id SERIAL NOT NULL PRIMARY KEY,
     code TEXT NOT NULL,
