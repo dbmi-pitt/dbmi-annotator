@@ -7,11 +7,11 @@ module.exports = function(app, passport) {
 
     // INDEX PAGE ===============================
     app.get('/dbmiannotator', function(req, res) {
-	if (req.isAuthenticated()){
+	    if (req.isAuthenticated()){
             res.redirect('/dbmiannotator/main');
-	} else {
-	    res.render('index.ejs', { message: req.flash('loginMessage') });
-	}
+	    } else {
+	        res.render('index.ejs', { message: req.flash('loginMessage') });
+	    }
     });
     
     // LOGIN ===============================
@@ -36,13 +36,23 @@ module.exports = function(app, passport) {
 	    failureRedirect : '/dbmiannotator/register', 
 	    failureFlash : true
     })
-	    );
+	        );
     
     // MAIN ==============================
-    app.get('/dbmiannotator/main', isLoggedIn, function(req, res) {
+    app.get('/dbmiannotator/main', isLoggedIn, initPluginProfile, function(req, res) {
+        console.log(config.profile.userProfile);
+
+        if (config.profile.userProfile != null) {
+            annotationType = config.profile.userProfile.type;
+        } else {
+            annotationType = config.profile.def;
+        }
+
+        console.log("plugin init main.ejs: " + annotationType);
         
 	    // fetch all DDI annotations for current user
-	    var url = "http://" + config.store.host +":" + config.store.port + "/search?email=" + req.user.email + "&annotationType=DDI";
+	    var url = "http://" + config.store.host +":" + config.store.port + "/search?email=" + req.user.email + "&annotationType=" + annotationType;
+
 	    
 	    request({url: url, json: true}, function(error,response,body){
 	        if (!error && response.statusCode === 200) {
@@ -50,9 +60,9 @@ module.exports = function(app, passport) {
 		        res.render('main.ejs', {
 		            user : req.user,
 		            annotations : body,
-		            exportMessage: req.flash('exportMessage'),
-		            loadMessage: req.flash('loadMessage'),
-		            host: config.annotator.host
+		            exportMessage : req.flash('exportMessage'),
+		            loadMessage : req.flash('loadMessage'),
+		            host : config.annotator.host,
 		        });
 		        
 	        } else {
@@ -61,7 +71,7 @@ module.exports = function(app, passport) {
 		            annotations : {'total':0},
 		            exportMessage: req.flash('exportMessage'),
 		            loadMessage: req.flash('loadMessage'),
-		            host: config.annotator.host
+		            host: config.annotator.host,
 		        });
 	        }
 	    });
@@ -69,28 +79,32 @@ module.exports = function(app, passport) {
     
     // LOGOUT ==============================
     app.get('/dbmiannotator/logout', function(req, res) {
+        config.profile.pluginSetL = [];
+        config.profile.userProfile = {};
         req.logout();
         res.redirect('/dbmiannotator');
     });
 
     // DISPLAY ==============================
-    app.get('/dbmiannotator/displayWebPage', isLoggedIn, praseWebContents, getPluginProfile, function(req, res) {
+    app.get('/dbmiannotator/displayWebPage', isLoggedIn, praseWebContents, function(req, res) {
 	
 	    var sourceUrl = req.query.sourceURL.trim();
 	    var email = req.query.email;
 	    var validUrl = require('valid-url');
 
-	    
 	    if (validUrl.isUri(sourceUrl)){
            
             if (sourceUrl.match(/.pdf/g)){ // local pdf resouces
 		        res.redirect("/dbmiannotator/viewer.html?file=" + sourceUrl+"&email=" + email);
             } else { // local or external html resouces
-                console.log(req.pluginL);
+
+                console.log("routes - displayWebPage");
+                console.log(config);
 
                 res.render('displayWebPage.ejs', {
                     htmlsource: req.htmlsource,
-                    pluginL: req.pluginL
+                    pluginSetL: config.profile.pluginSetL,
+                    userProfile: config.profile.userProfile
                 });   
 	        }
         }
@@ -102,10 +116,55 @@ module.exports = function(app, passport) {
     });
     
 
+    // PLUGIN PROFILE ==============================
+    app.post('/dbmiannotator/savePluginProfile', function(req, res) {
+        console.log(req.body.pluginset);
+        console.log(req.user.email);
+
+        pg.connect(config.postgres, function(err, client, done) {
+            
+            if(err) {
+                done();
+                console.log(err);
+                return res.status(500).json({ success: false, data: err});
+            }
+
+            if (config.profile.userProfile == null){  // no user profile, then insert
+                console.log("[ERROR] user profile not avaliable!");
+	            res.redirect('/dbmiannotator/main');
+
+            } else {   // get user profile
+                resultsL = []
+                var queryUserProfile = client.query('SELECT u.uid, up.set_id FROM "user" u, user_profile up where u.uid = up.uid and u.email = $1 and up.status = $2', [req.user.email, true]);    
+                queryUserProfile.on('row', function(row) {
+                    resultsL.push(row);
+                });
+                
+                queryUserProfile.on('end', function() { // user profile changed, then update           
+                    if (resultsL[0].set_id != req.body.pluginset){ 
+                        console.log("update user plugin profile");
+                        client.query('UPDATE "user_profile" SET set_id = $1, created = now() FROM (SELECT * FROM "user" u where u.email = $2) AS u, "user_profile" up WHERE up.uid = u.uid AND up.status = true', [req.body.pluginset, req.user.email]);    
+                        done();
+	                    res.redirect('/dbmiannotator/main');
+                    }
+                    else {
+                        console.log("user profile not need to update");
+                        done();
+	                    res.redirect('/dbmiannotator/main');
+                    }
+                }, function(){
+                    res.redirect('/dbmiannotator/main');
+                });
+            }
+                
+        });
+    });
+    
+
     // EXPORT ==============================
     app.get('/dbmiannotator/exportcsv', isLoggedIn, function(req, res){
 	
-	var url = "http://" + config.store.host + ":" + config.store.port + "/search?email=" + req.query.email + "&annotationType=DDI";
+	var url = "http://" + config.store.host + ":" + config.store.port + "/search?email=" + req.query.email + "&annotationType=" + config.plugin.userProfile;
 	    
 	request({url: url, json: true}, function(error,response,body){
 	    if (!error && response.statusCode === 200) {
@@ -165,8 +224,10 @@ function praseWebContents(req, res, next){
 
 
 // get plugin profile
-function getPluginProfile(req, res, next){
-    var results = [];
+function initPluginProfile(req, res, next){
+    var pluginSetL = [];
+    var userProfileL = [];
+
     var data = {text: req.body.text, complete: false};
     
     pg.connect(config.postgres, function(err, client, done) {
@@ -176,35 +237,49 @@ function getPluginProfile(req, res, next){
             console.log(err);
             return res.status(500).json({ success: false, data: err});
         }
-        
-        var query = client.query("SELECT ps.set_id, ps.plugin_id, p.name FROM plugin_set ps, plugin p WHERE ps.status = True AND ps.plugin_id = p.id ORDER BY set_id ASC;");
-        query.on('row', function(row) {
-            results.push(row);
-        });
-        
-        query.on('end', function() {
-            //done();
-            req.pluginL = results;
-            next();
-        });
-    });
-    
-}
+        // get all available plugin sets 
+        var queryPlugins = client.query("SELECT ps.id, ps.name, ps.type, ps.description FROM plugin_set ps WHERE ps.status = True ORDER BY ps.id ASC;");
 
+        queryPlugins.on('row', function(row) {
+            pluginSetL.push(row);
+        });
+        
+        queryPlugins.on('end', function() {
+            config.profile.pluginSetL = pluginSetL;
+        });
+        // get plugin set from user setting
+        var queryUserProfile = client.query('SELECT u.uid, up.set_id, ps.name, ps.type FROM "user" u, "user_profile" up, "plugin_set" ps where u.uid = up.uid and up.set_id = ps.id and u.email = $1 and up.status = True', [req.user.email]);
+
+        queryUserProfile.on('row', function(row) {
+            userProfileL.push(row);
+        });
+        queryUserProfile.on('end', function() { 
+            if (userProfileL.length > 0){
+                config.profile.userProfile = userProfileL[0];
+                console.log("init pluginProfile - get user profile");
+                console.log(config.profile.userProfile)
+            }
+            next();
+            client.end();
+        });
+
+
+    });
+}
 
 
 // get annotation list
-function getAnnotationList(req, res, next){
-	// fetch annotations for current document
-	var url = "http://" + config.store.host +":" + config.store.port + "/search?email=" + req.user.email + "&annotationType=DDI&";
+// function getAnnotationList(req, res, next){
+// 	// fetch annotations for current document
+// 	var url = "http://" + config.store.host +":" + config.store.port + "/search?email=" + req.user.email + "&annotationType=" + config.profile.userProfile.type;
 	
-	request({url: url, json: true}, function(error,response,body){
-	    if (!error && response.statusCode === 200) {
-            req.annotations = body;
-            next();
-        }
-    });
-}
+// 	request({url: url, json: true}, function(error,response,body){
+// 	    if (!error && response.statusCode === 200) {
+//             req.annotations = body;
+//             next();
+//         }
+//     });
+// }
 
     
 // route middleware to make sure a user is logged in

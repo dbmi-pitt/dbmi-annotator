@@ -39,7 +39,7 @@
   </ul>
 
   <div id="tabs-1">
-      <div id="annotation-list" > </div>
+    <div id="annotation-list" name="<%=config.profile.userProfile.type %>" > </div>
   </div>
 
   <div class="editorsection" id="tabs-2">
@@ -47,12 +47,38 @@
   </div>
   
   <div id="tabs-3">
-    <ul>
-      <% pluginL.forEach(function(plugin) {  %>
-      <li><%=plugin.plugin_id %> - <%=plugin.name %> </li>
-        <% }); %>
-    </ul>
 
+    <form action="/dbmiannotator/savePluginProfile" method="post">
+      <table>
+        <% 
+            if (userProfile == null){
+                selection = config.profile.def;
+            } else {
+                selection = userProfile.type;
+            }
+
+            pluginSetL.forEach(function(pluginset) {
+                checked = "";
+                if (pluginset.type == selection) {
+                    checked = "checked";
+                }
+           %>
+        <tr>
+          <td> <input type="radio" name="pluginset" value="<%=pluginset.id %>" <%=checked %> > </td>
+          <td><%=pluginset.id %> &nbsp;&nbsp;</td>
+          <td><%=pluginset.name %></td> 
+          <td><%=pluginset.description %></td>
+        </tr>
+        <% }); %>
+        <tr>
+          <td></td>
+          <td></td>
+          <td><button type="submit">save</button> </td>
+          <td><button type="button">cancel</button> </td>
+        </tr>
+      </table>
+    </form>
+    
   </div>
 
     </div>

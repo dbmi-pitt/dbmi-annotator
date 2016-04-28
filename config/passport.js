@@ -3,7 +3,7 @@ var LocalStrategy = require('passport-local').Strategy;
 //var User = require('./../models/user').User;
 var bcrypt   = require('bcrypt-nodejs');
 var uuid = require('node-uuid');
-
+config = require('./config.js');
 
 // expose this function to our app using module.exports
 module.exports = function(passport, User) {
@@ -41,29 +41,34 @@ module.exports = function(passport, User) {
 			console.log("[INFO] register - user exists");
 			return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
 		    } else {
-			console.log("[INFO] register - create new user");
-			
-			User.create({
-			    uid : uuid.v1(),
-			    username : req.param('username'),
-			    admin : 0,
-			    manager : 0,
-			    email : email,
-			    status : 0,
-			    last_login_date : new Date(),
-			    registered_date : new Date(),
-			    activation_id : 0,
-			    password : User.generateHash(password)
-			}).then(function (user){
-			    return done(null, user);
-			});
-		    }    
-	    
+			    console.log("[INFO] register - create new user");
+                userId = uuid.v1();
+			    
+			    User.create({
+			        uid : userId,
+			        username : req.param('username'),
+			        admin : 0,
+			        manager : 0,
+			        email : email,
+			        status : 0,
+			        last_login_date : new Date(),
+			        registered_date : new Date(),
+			        activation_id : 0,
+			        password : User.generateHash(password)
+			    }).then(function (user){
+                    // add default user profile MP 
+                    pg.connect(config.postgres, function(err, client, done) {
+                        client.query('INSERT INTO user_profile(uid, set_id, status, created) values($1, (SELECT id FROM plugin_set WHERE type = $2), $3, now())', [userId, 'MP', true]); 
+                    });
+			        return done(null, user);
+                });    
+
+	        }
 		});
-	});
+	    });
     }));
 
-    // LOGIN =============================================================
+// LOGIN =============================================================
 
 
     passport.use('local-login', new LocalStrategy({

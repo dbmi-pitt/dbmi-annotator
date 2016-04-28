@@ -7,9 +7,24 @@ if (typeof annotator === 'undefined') {
     // DBMIAnnotator with highlight and DDI plugin
     var app = new annotator.App();
 
-    // Plugin UI
-    app.include(annotator.ui.dbmimain);
+    // Plugin UI initialize
 
+    console.log(config);
+
+    //var annType = config.profile.def;    
+
+    var annType = $('#annotation-list').attr('name');
+
+    console.log("ddi-plugin.js - annType: " + annType);
+
+    if (annType == "DDI")
+        app.include(annotator.ui.dbmimain);            
+    else if (annType == "MP")
+        app.include(annotator.ui.mpmain);
+    else 
+        alert("[ERROR] plugin settings wrong, neither DDI nor MP plugin!");
+
+    
     app.include(annotator.storage.debug);
     app.include(annotator.identity.simple);
     app.include(annotator.authz.acl);
@@ -31,14 +46,14 @@ if (typeof annotator === 'undefined') {
 		        ann.email = email;
             },
             annotationCreated: function (ann) {
-                annoList(ann.rawurl, ann.email);
+                annoList(ann.rawurl, ann.email, annType);
             },
             annotationUpdated: function(ann) {
-                annoList(ann.rawurl, ann.email);
+                annoList(ann.rawurl, ann.email, annType);
             },
             annotationDeleted: function (ann) {
                 setTimeout(function(){
-                    annoList(source, email);
+                    annoList(source, email, annType);
                 },800);
             }
             
@@ -56,16 +71,17 @@ if (typeof annotator === 'undefined') {
 			                 app.annotations.load({uri: sourceURL.replace(/[\/\\\-\:\.]/g, ""), email: email});
 			             }, 1000);
 		             }).then(function(){
-                         annoList(sourceURL, email);
-                         console.log(app.annotations);
+                         annoList(sourceURL, email, annType);
                      });
 }
 
 
-function annoList(sourceURL, email, sortByColumn){
+function annoList(sourceURL, email, annType, sortByColumn){
+
+    console.log("annType:" + annType);
 
     $.ajax({url: 'http://' + config.annotator.host + "/annotatorstore/search",
-            data: {annotationType: 'DDI', 
+            data: {annotationType: annType, 
                    email: email, 
                    uri: sourceURL.replace(/[\/\\\-\:\.]/g, "")},
             method: 'GET',
@@ -82,11 +98,11 @@ function annoList(sourceURL, email, sortByColumn){
                     }
 
                     listTable = "<table id='tb-annotation-list'><tr>" +
-"<td><div id=fields[0] class='tb-list-unsorted' onclick='annoList(sourceURL, email, fieldsL[0])'>Subject</div></td>" +
-"<td><div id=fields[1] class='tb-list-unsorted' onclick='annoList(sourceURL, email, fieldsL[1])'>Predicate</div></td>" +
-"<td><div id=fields[2] class='tb-list-unsorted' onclick='annoList(sourceURL, email, fieldsL[2])'>Object</div></td>" +
-"<td><div id=fields[3] class='tb-list-unsorted' onclick='annoList(sourceURL, email, fieldsL[3])'>Assertion Type</div></td>" +
-"<td><div id=fields[4] class='tb-list-unsorted' onclick='annoList(sourceURL, email, fieldsL[4])'>Date</div></td><td>Text quote</td></tr>";
+"<td><div id=fields[0] class='tb-list-unsorted' onclick='annoList(sourceURL, email, annType, fieldsL[0])'>Subject</div></td>" +
+"<td><div id=fields[1] class='tb-list-unsorted' onclick='annoList(sourceURL, email, annType, fieldsL[1])'>Predicate</div></td>" +
+"<td><div id=fields[2] class='tb-list-unsorted' onclick='annoList(sourceURL, email, annType, fieldsL[2])'>Object</div></td>" +
+"<td><div id=fields[3] class='tb-list-unsorted' onclick='annoList(sourceURL, email, annType, fieldsL[3])'>Assertion Type</div></td>" +
+"<td><div id=fields[4] class='tb-list-unsorted' onclick='annoList(sourceURL, email,  annType, fieldsL[4])'>Date</div></td><td>Text quote</td></tr>";
 
                     for (i = 0; i < response.total; i++){
                         row = response.rows[i];
