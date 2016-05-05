@@ -1,7 +1,25 @@
 ﻿$(document).ready(function () {
+    // splitter for show annotation panel
     $('#splitter').jqxSplitter({ showSplitBar: false, width: $(window).width(), height: $(window).height(), orientation: 'horizontal', panels: [{ size: '100%',min: 200 }, { size: '0%', min: 0}] });
-    //$('.secondsection').append("<p><a href='http://www.google.com'>Google</a></p>");
-  });
+
+    // MP adder
+    $(function() {
+        $('.mp-menu-btn').hover(function() { 
+            $('.mp-main-menu').show(); 
+        });
+    });
+    
+    $('.mp-main-menu-2').mouseenter(function(){
+        $(this).find('.mp-sub-menu-2').slideDown();
+    });
+    
+    $('.mp-main-menu-2').mouseleave(function(){
+        $(this).find('.mp-sub-menu-2').slideUp();
+    });
+ 
+});
+
+
 
 var getUrlParameter = function getUrlParameter(sParam) {
     var sPageURL = decodeURIComponent(window.location.search.substring(1)),
@@ -97,59 +115,66 @@ var getUrlParameter = function getUrlParameter(sParam) {
   }
 
 //show right splitter directly
-  function showright(){
-      //open editor tab before editot is triggered
-      var index = $("#tabs-1").index();
-      $('#tabs').tabs("option", "active", index);
-      $('#splitter').jqxSplitter({
+function showright(){
+    //open editor tab before editot is triggered
+    var index = $("#tabs-1").index();
+    $('#tabs').tabs("option", "active", index);
+    $('#splitter').jqxSplitter({
         showSplitBar:false,
         width: $(window).width(),
         height: $(window).height(),
         orientation: 'horizontal', 
         panels: [{size: '80%', min: 200}, {size: '20%', min: 280}]
-      });
-      $('.editorsection').show();
-      $('.btn-success').val("show");
-      $('.annotator-editor').show();
-      $('.btn-success').css("margin-bottom",270);
-      $('.btn-home').css("margin-bottom",270);
-      $('#menu').html("&nbsp Collapse");
-      
-      var w = $(window).width()*0.85;
-      $('.annotator-widget').width(w);
-  }
+    });
+    $('.editorsection').show();
+    $('.btn-success').val("show");
+    $('.annotator-editor').show();
+    $('.btn-success').css("margin-bottom",270);
+    $('.btn-home').css("margin-bottom",270);
+    $('#menu').html("&nbsp Collapse");
+    
+    var w = $(window).width()*0.85;
+    $('.annotator-widget').width(w);
+}
 
-  //move from editor.js
-  
-  function editorload() {
-      $("#firstsection").show();
-      $("#altersection").hide();
-      showEnzyme();
-  }
+//move from editor.js 
+function claimEditorLoad() {
+    $("#mp-editor-type").html('claim');
+    $("#mp-claim-form").show();
+    $("#mp-data-form-np").hide();
+    showEnzyme();
+}
+
+function dataEditorParticipantsLoad() {
+    $("#mp-editor-type").html('participants');
+    $("#mp-claim-form").hide();
+    $("#mp-data-form-np").show();
+}
+
 
 $("#Drug1").change(function (){selectDrug();});
 $("#Drug2").change(function (){selectDrug();});
-  function selectDrug() {
-      var drug1 = $("#Drug1").val();
-      var drug2 = $("#Drug2").val();
-      var quotestring = $("#quote").html();
-      quotestring = quotestring.replace(drug2, "<span class='selecteddrug'>"+drug2+"</span>");
-      quotestring = quotestring.replace(drug1, "<span class='selecteddrug'>"+drug1+"</span>");
-      $("#quote").html(quotestring);
-  }
+function selectDrug() {
+    var drug1 = $("#Drug1").val();
+    var drug2 = $("#Drug2").val();
+    var quotestring = $("#quote").html();
+    quotestring = quotestring.replace(drug2, "<span class='selecteddrug'>"+drug2+"</span>");
+    quotestring = quotestring.replace(drug1, "<span class='selecteddrug'>"+drug1+"</span>");
+    $("#quote").html(quotestring);
+}
 $("#Drug1").mousedown(function (){deselectDrug();});
 $("#Drug2").mousedown(function (){deselectDrug();});
-  function deselectDrug() {
-      var drug1 = $("#Drug1").val();
-      var drug2 = $("#Drug2").val();
-      var quotestring = $("#quote").html();
-      quotestring = quotestring.replace("<span class='selecteddrug'>"+drug2+"</span>", drug2);
-      quotestring = quotestring.replace("<span class='selecteddrug'>"+drug1+"</span>", drug1);
-      $("#quote").html(quotestring);
-  }
+function deselectDrug() {
+    var drug1 = $("#Drug1").val();
+    var drug2 = $("#Drug2").val();
+    var quotestring = $("#quote").html();
+    quotestring = quotestring.replace("<span class='selecteddrug'>"+drug2+"</span>", drug2);
+    quotestring = quotestring.replace("<span class='selecteddrug'>"+drug1+"</span>", drug1);
+    $("#quote").html(quotestring);
+}
 
-  $("#assertion_type").change(function changeFunc() {
-      if($("#assertion_type option:selected").text()=="DDI clinical trial") { 
+$("#assertion_type").change(function changeFunc() {
+    if($("#assertion_type option:selected").text()=="DDI clinical trial") { 
         $("#firstsection").hide(); 
         $("#altersection").show();
         var object = $("#Drug1 option:selected").text(); 
@@ -161,24 +186,24 @@ $("#Drug2").mousedown(function (){deselectDrug();});
         $("#modalityinalter").html("Modality: "+modal);
         var evid = $("#Evidence_modality:checked").val();
         $("#evidenceinalter").html("Evidence: "+evid);
-      
-      } else {
+        
+    } else {
         $("#altersection").hide();$("#forward").hide();
-      }
-  });
+    }
+});
 
-  $( "#relationship" ).change(function showEnzyme() {
+$( "#relationship" ).change(function showEnzyme() {
     if($("#relationship option:selected").text()=="inhibits"||$("#relationship option:selected").text()=="substrate of") {
-          $("#enzymesection1").show();
-          $("#enzyme").show();
-      }
-      if($("#relationship option:selected").text()=="interact with") {
-          $("#enzymesection1").hide();
-          $("#enzyme").hide();
-      }
-  });
+        $("#enzymesection1").show();
+        $("#enzyme").show();
+    }
+    if($("#relationship option:selected").text()=="interact with") {
+        $("#enzymesection1").hide();
+        $("#enzyme").hide();
+    }
+});
 
-  function showEnzyme() {
+function showEnzyme() {
       if($("#relationship option:selected").text()=="inhibits"||$("#relationship option:selected").text()=="substrate of") {
           $("#enzymesection1").show();
           $("#enzyme").show();
