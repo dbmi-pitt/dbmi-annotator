@@ -1,97 +1,101 @@
 // Micropublication annotation
-{
-    // mp claim
-    'id': 'uuid',
-    'type': 'mp:claim',
-    'qualifiedBy': {
-        'object': 'DRON:XXXX',
-        'predicate': 'dikb:inhibits',
-        'precipitant': 'DRON:XXXX',
-    },
-    'hasTarget' : {
-        'id': 'uuid'
-        'type': 'mp:claim',
-        'hasSelector': {
-            'prefix': 'string',
-            'exact': 'string',
-            'suffix': 'string'
-        }
-    },
-    'ranges': {
-        'start': 'string',
-        'end': 'string',
-        'startOffset': 'integer',
-        'endOffset': 'integer',
-    },
-
+{'annotationType' : 'MP',
+ 'uri' : 'httplocalhostDDIlabelstesthtml',
+ 'rawuri' : 'http://localhost/DDI-labels/test.html',
+ 'email' : 'xx@gmail.com',
+ 'updated' : '2016-05-03T17:39:44.986668+00:00',
+ 'created' : '2016-05-03T17:39:44.986668+00:00',
+ 
+ 'argues' : { // mp claim
+     'id': 'uuid',
+     'type': 'mp:claim',
+     'qualifiedBy': {
+         'Drug1': '',
+         'relationship': 'inhibits',
+         'Drug2': '',
+     },
+     'hasTarget' : {
+         'id': 'uuid'
+         'type': 'mp:claim',
+         'hasSelector': {
+             'prefix': 'string',
+             'exact': 'string',
+             'suffix': 'string'
+         }
+     },
+     'ranges': {
+         'start': 'string',
+         'end': 'string',
+         'startOffset': 'integer',
+         'endOffset': 'integer',
+     },
+     
     // mp:data (one or more mp:data supports claim)
-    'supportsBy': 
-    [
-        {
-            'id': 'uuid',
-            'type': 'mp:data',
-            // mp:method (method supports data)
-            'supportsBy': { 
-                'id': 'uuid'
-                'type': 'mp:method',
-                'name': '',
-                'uri': '',
-                // mp:material (material supports method)
-                'supportsBy': {
+     'supportsBy': 
+     [
+         {
+             'id': 'uuid',
+             'type': 'mp:data',
+             // mp:method (method supports data)
+             'supportsBy': { 
+                 'id': 'uuid'
+                 'type': 'mp:method',
+                 'name': '',
+                 'hasTarget': '',
+                 'ranges': ''
+                 // mp:material (material supports method)
+                 'supportsBy': {
                     'id': 'uuid',
-                    'type': 'mp:material',                    
-                    'objDose': {
-                        'value': 'numeric',
-                        'hasTarget': {'oaSelector obj'},
-                        'ranges': {'xpath-range obj'}
+                     'type': 'mp:material',                    
+                    'drug1Dose': {
+                        'hasTarget': '',
+                        'ranges': ''
+                        'value': '',
+                        'formulation' : 'options: UNK, Oral, IV, transdermal',
+                        'duration' : 'days',
+                        'regimens' : 'options: UNK, SD, QD, BID, TID, QID, Q12, Q8, Q6, Daily'
                     },                   
-                    'preciptDose': {
-                        'value': 'numeric',
-                        'hasTarget': {'oaSelector obj'},
-                        'ranges': {'xpath-range obj'}
-                    },
-                    'numOfParticipants': {
-                        'value': 'numeric',
-                        'hasTarget': {'oaSelector obj'},
-                        'ranges': {'xpath-range obj'}                        
+                     'drug2Dose': {'the same as drug1Dose'},
+                     'participants': {
+                         'value': 'numeric',
+                         'hasTarget': '',
+                         'ranges': ''                        
                     }                    
-                }
-            },
-            
-            // data attributes
-            'auc': {
-                'value': 'numeric',
-                'type' : 'percent or fold',
-                'direction' : 'increase or decrease',
-                'hasTarget' : { 'oaSelector obj' },
-                'ranges' : { 'xpath-range obj' }
-            },
-            'cmax': {
-                'value': 'numeric',
-                'type' : 'percent or fold',
-                'direction' : 'increase or decrease',
-                'hasTarget' : { 'oaSelector obj' },
-                'ranges' : { 'xpath-range obj' }
-            },
-            'clearance': {
-                'value': 'numeric',
-                'type' : 'percent or fold',
-                'direction' : 'increase or decrease',
-                'hasTarget' : { 'oaSelector obj' },
-                'ranges' : { 'xpath-range obj' }
-            },
-            'half-life': {
-                'value': 'numeric',
-                'type' : 'percent or fold',
-                'direction' : 'increase or decrease',
-                'hasTarget' : { 'oaSelector obj' },
-                'ranges' : { 'xpath-range obj' }
-            }
+                 }
+             },            
+             // data attributes
+             'auc': {
+                 'value': 'numeric',
+                 'type' : 'options: unk, percent, fold',
+                 'direction' : 'increase or decrease',
+                 'hasTarget' : '',
+                 'ranges' : ''
+             },
+             'cmax': {
+                 'value': 'numeric',
+                 'type' : 'options: unk, percent, fold',
+                 'direction' : 'unk, increase, decrease',
+                 'hasTarget' : '',
+                 'ranges' : ''
+             },
+             'clearance': {
+                 'value': 'numeric',
+                 'type' : 'options: unk, percent, fold',
+                 'direction' : 'unk, increase, decrease',
+                 'hasTarget' : '',
+                 'ranges' : ''
+             },
+             'halflife': {
+                 'value': 'numeric',
+                 'type' : 'options: unk, percent, fold',
+                 'direction' : 'unk, increase, decrease',
+                 'hasTarget' : '',
+                 'ranges' : ''
+             }
         
-        }
-    ]
-       
+         }
+     ]    
+ }
 }
-
 
 

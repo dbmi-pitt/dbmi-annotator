@@ -8,10 +8,9 @@ if (typeof annotator === 'undefined') {
     var app = new annotator.App();
 
     // Plugin UI initialize
+    //console.log(config);
 
-    console.log(config);
-
-    var annType = $('#annotation-list').attr('name');
+    var annType = $('#mp-annotation-tb').attr('name');
 
     if (annType == "DDI")
         app.include(annotator.ui.dbmimain);            
@@ -71,13 +70,17 @@ if (typeof annotator === 'undefined') {
                      });
 }
 
+// update 1) annotation table (claim and data) and  2) mpadder (claim menu)
+// @input: annotatio source url
+// @input: user email
+// @input: annotation type
+// @input: the column that data & material table sorting by
+// @output: update annotation table and mpadder 
 
 function annoList(sourceURL, email, annType, sortByColumn){
 
-    console.log("annType:" + annType);
-
     $.ajax({url: 'http://' + config.annotator.host + "/annotatorstore/search",
-            data: {annotationType: annType, 
+            data: {annotationType: "MP", 
                    email: email, 
                    uri: sourceURL.replace(/[\/\\\-\:\.]/g, "")},
             method: 'GET',
@@ -85,40 +88,44 @@ function annoList(sourceURL, email, annType, sortByColumn){
                 console.log(exception);
             },
             success : function(response){
+                // claim menu for mpadder
+                claimMenu = "";
 
-                if (response.total > 0){
+                // Claim listbox
+                claimListbox = "<select id='mp-claim'>";
+                for (i = 0; i < response.total; i++){ // add claim label as options
+                    row = response.rows[i];
 
-                    fieldsL = ["Drug1", "relationship", "Drug2", "assertion_type", "updated"];
-                    if (sortByColumn != null){
-                        sort(response.rows, sortByColumn);
-                    }
-
-                    listTable = "<table id='tb-annotation-list'><tr>" +
-"<td><div id=fields[0] class='tb-list-unsorted' onclick='annoList(sourceURL, email, annType, fieldsL[0])'>Subject</div></td>" +
-"<td><div id=fields[1] class='tb-list-unsorted' onclick='annoList(sourceURL, email, annType, fieldsL[1])'>Predicate</div></td>" +
-"<td><div id=fields[2] class='tb-list-unsorted' onclick='annoList(sourceURL, email, annType, fieldsL[2])'>Object</div></td>" +
-"<td><div id=fields[3] class='tb-list-unsorted' onclick='annoList(sourceURL, email, annType, fieldsL[3])'>Assertion Type</div></td>" +
-"<td><div id=fields[4] class='tb-list-unsorted' onclick='annoList(sourceURL, email,  annType, fieldsL[4])'>Date</div></td><td>Text quote</td></tr>";
-
-                    for (i = 0; i < response.total; i++){
-                        row = response.rows[i];
-                        quote = row.target.selector.exact;
-                        if (quote.length > 65){
-                            quote = quote.substring(0, 65) + "...";
-                        }
-                        
-                        date = new Date(row.updated);
-                        dateUpdated = [date.toDateString(), date.toLocaleTimeString()].join(' ');                    
-                        listTable += "<tr><td>" + row.Drug1 + "</td><td>" + row.relationship + "</td><td>" + row.Drug2 + "</td><td>" + row.assertion_type + "</td><td>" + dateUpdated + "</td><td><a href='#" + row.id + "'>" + quote + "</a></td></tr>";
-                    }
-                    listTable += "</table>";
-                    $("#annotation-list").html(listTable);  
-                } else {
-                    $("#annotation-list").html("No DDI annotations been made!");  
+                    claim = row.argues;                    
+                    claimListbox += "<option value='" + claim.label + "'>" + claim.label + "</option>";                        
+                    claimMenu += "<li id='" + row.id + "' onclick='showright(),dataEditorLoad(\"dose1\",\"" + row.id + "\");'><a href='#'>" + claim.label + "</a></li>";
                 }
+                claimListbox += "</select>";
+
+                // Method listbox
+                methodListbox = "<select id='mp-claim'><option value='clinical-trial'>Clinical Trial</option></select>";
+                // Claim 
+                claimPanel = "<table>";
+                claimPanel += "<tr><td>" + claimListbox + "</td></tr>";
+                claimPanel += "<tr><td>Methods: " + methodListbox + "</td></tr>"
+                claimPanel += "<tr><td><button type='button'>Edit claim</button>&nbsp;&nbsp;<button type='button'>View claim</button></td></tr></table>";
                 
-            }
-     
+                // Data & Material 
+                dataTable = "<table id='mp-data-tb'><tr><td>No. of Participants</td><td>Object Dose</td><td>Participant Dose</td><td>AUC</td><td>Clearance</td><td>Cmax</td><td>Half-life</td></tr><table>";
+                dataPanel = "<button type='button'>add new row for data & material</button><br>" + dataTable;
+
+                // Annotation table
+                annTable = "<table id='mp-claim-data-tb'>" +
+                    "<tr><td>Claim</td><td>Data & Material</td></tr>";             
+                annTable += "<tr><td>" + claimPanel + "</td><td>" + dataPanel + "</td></tr>";   
+                annTable += "</table>";
+
+                // update Annotation Table
+                $("#mp-annotation-tb").html(annTable);                  
+
+                // update mpadder - claim menu                
+                $(".mp-sub-menu-2").html(claimMenu);
+            }     
            });
 }
 

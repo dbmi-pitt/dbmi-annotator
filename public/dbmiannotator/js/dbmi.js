@@ -141,14 +141,39 @@ function showright(){
 function claimEditorLoad() {
     $("#mp-editor-type").html('claim');
     $("#mp-claim-form").show();
-    $("#mp-data-form-np").hide();
+    $("#mp-annotation-work-on").html('');
     showEnzyme();
+
+    $("#mp-data-nav").hide();
+    $("#mp-data-form-participants").hide();
+    $("#mp-data-form-dose1").hide();
+    $("#mp-data-form-dose2").hide();
 }
 
-function dataEditorParticipantsLoad() {
-    $("#mp-editor-type").html('participants');
+
+function dataEditorLoad(field, annotationId) {
+    console.log("dataEditorLoad: " + field);
+    if (field == null)
+        return;
+
+    fieldL = ["participants","dose1","dose2"];
+
+    $("#mp-editor-type").html(field);
+    if (annotationId != null)
+        $("#mp-annotation-work-on").html(annotationId);
+
+    $("#mp-data-nav").show();
     $("#mp-claim-form").hide();
-    $("#mp-data-form-np").show();
+
+    for (i = 0; i < fieldL.length; i++){
+        var dataid = "mp-data-form-"+fieldL[i];
+        if (fieldL[i] == field){
+            $("#"+dataid).show();            
+        } else {
+            $("#"+dataid).hide();
+        }
+    }
+    console.log("dbmi.js - dataEditorLoad - done!");
 }
 
 
@@ -192,7 +217,7 @@ $("#assertion_type").change(function changeFunc() {
     }
 });
 
-$( "#relationship" ).change(function showEnzyme() {
+$("#relationship").change(function showEnzyme() {
     if($("#relationship option:selected").text()=="inhibits"||$("#relationship option:selected").text()=="substrate of") {
         $("#enzymesection1").show();
         $("#enzyme").show();
@@ -204,67 +229,67 @@ $( "#relationship" ).change(function showEnzyme() {
 });
 
 function showEnzyme() {
-      if($("#relationship option:selected").text()=="inhibits"||$("#relationship option:selected").text()=="substrate of") {
-          $("#enzymesection1").show();
-          $("#enzyme").show();
-      }
-      if($("#relationship option:selected").text()=="interact with") {
-          $("#enzymesection1").hide();
-          $("#enzyme").hide();
-      }
-  }
+    if($("#relationship option:selected").text()=="inhibits"||$("#relationship option:selected").text()=="substrate of") {
+        $("#enzymesection1").show();
+        $("#enzyme").show();
+    }
+    if($("#relationship option:selected").text()=="interact with") {
+        $("#enzymesection1").hide();
+        $("#enzyme").hide();
+    }
+}
 
-  function flipdrug() {
-      var object = $("#Drug1 option:selected").text();
-      var precip = $("#Drug2 option:selected").text();
-      $("#Drug1 option").removeAttr("selected");
-      $("#Drug2 option").removeAttr("selected");
-      $("#Drug1 > option").each(function () {
-          if ($(this).text() == precip){ 
-            $(this).prop("selected", "selected");
-          }
-      });
-      $("#Drug2 > option").each(function () {
-          if ($(this).text() == object) 
-            $(this).prop("selected", "selected");
-      });
-  }
+// function flipdrug() {
+//     var object = $("#Drug1 option:selected").text();
+//     var precip = $("#Drug2 option:selected").text();
+//     $("#Drug1 option").removeAttr("selected");
+//     $("#Drug2 option").removeAttr("selected");
+//     $("#Drug1 > option").each(function () {
+//         if ($(this).text() == precip){ 
+//             $(this).prop("selected", "selected");
+//         }
+//     });
+//     $("#Drug2 > option").each(function () {
+//         if ($(this).text() == object) 
+//             $(this).prop("selected", "selected");
+//     });
+// }
 
-  function backtofirst() {
-      $("#firstsection").show(); 
-      $("#altersection").hide();
-      $("#forward").show();
-      $("#back").hide();
-  }
+// function backtofirst() {
+//     $("#firstsection").show(); 
+//     $("#altersection").hide();
+//     $("#forward").show();
+//     $("#back").hide();
+// }
 
-  function forwardtosecond() {
-      $("#firstsection").hide(); 
-      $("#altersection").show();
-      $("#forward").hide();
-      $("#back").show();
-      var object = $("#Drug1 option:selected").text(); 
-      $("#objectinalter").html("Object: "+object);
-      var precipt = $("#Drug2 option:selected").text(); 
-      $("#preciptinalter").html("Precipt: "+precipt);
-      var modal = $("#Modality:checked").val();
-      $("#modalityinalter").html("Modality: "+modal);
-      var evid = $("#Evidence_modality:checked").val();
-      $("#evidenceinalter").html("Evidence: "+evid);
-  }
+// function forwardtosecond() {
+//     $("#firstsection").hide(); 
+//     $("#altersection").show();
+//     $("#forward").hide();
+//     $("#back").show();
+//     var object = $("#Drug1 option:selected").text(); 
+//     $("#objectinalter").html("Object: "+object);
+//     var precipt = $("#Drug2 option:selected").text(); 
+//     $("#preciptinalter").html("Precipt: "+precipt);
+//     var modal = $("#Modality:checked").val();
+//     $("#modalityinalter").html("Modality: "+modal);
+//     var evid = $("#Evidence_modality:checked").val();
+//     $("#evidenceinalter").html("Evidence: "+evid);
+// }
 
-  function changeRole1(role) {
-      $(".Role2").each(function(){ 
-          if(this.value != role) 
-            this.checked = true; 
-          else 
-            this.checked = false;
-      });
-  }
+// function changeRole1(role) {
+//     $(".Role2").each(function(){ 
+//         if(this.value != role) 
+//             this.checked = true; 
+//         else 
+//             this.checked = false;
+//     });
+// }
 
-  function changeRole2(role) {
-      $(".Role1").each(function(){ 
-        if(this.value != role) 
-          this.checked = true; 
-        else this.checked = false;
-      });
-  }
+// function changeRole2(role) {
+//     $(".Role1").each(function(){ 
+//         if(this.value != role) 
+//           this.checked = true; 
+//         else this.checked = false;
+//       });
+// }

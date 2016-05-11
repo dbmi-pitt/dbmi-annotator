@@ -33,17 +33,19 @@
 	
 	<div id="tabs" style="position:fixed">
   <ul>
-    <li><a href="#tabs-1">Annotation List</a></li>
+    <li><a href="#tabs-1">Annotation Table</a></li>
     <li class="editorsection" ><a href="#tabs-2">Annotation Editor</a></li>
     <li><a href="#tabs-3">Plugin Settings</a></li>
   </ul>
 
   <div id="tabs-1">
-    <div id="annotation-list" name="<%=config.profile.userProfile.type %>" > </div>
+    
+
+    <div id="mp-annotation-tb" name="<%=config.profile.userProfile.type %>" > </div>
   </div>
 
   <div class="editorsection" id="tabs-2">
-    <div class="secondsection"> </div>
+    <div class="mpeditorsection"> </div>
   </div>
   
   <div id="tabs-3">
@@ -91,7 +93,7 @@
     </script>
     
     <!-- call annotator -->
-    <script src="js/ddi-plugin.js"></script>
+    <script src="js/annotator-init-mp.js"></script>
 
     <!-- screen spliter js lib -->
     <script type="text/javascript" src="js/jqx-all.js"></script>

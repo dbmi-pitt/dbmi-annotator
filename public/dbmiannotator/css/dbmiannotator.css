@@ -141,3 +141,59 @@ h1 {
   vertical-align: middle;
 }*/
 
+
+/* MP menu */
+.mp-main-menu-1 {
+    background-color: #4CAF50;
+    color: white;
+    padding: 6px;
+    font-size: 9px;
+    border: none;
+    cursor: pointer;
+}
+
+.mp-main-menu-2 {
+    background-color: #4CAF50;
+    color: white;
+    padding: 9px;
+    font-size: 9px;
+    border: none;
+    cursor: pointer;
+}
+
+/* The container <div> - needed to position the dropdown content */
+.mp-main-menu {
+    position: relative;
+    display: inline-block;
+    min-width: 100px;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.mp-sub-menu-2 {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 100px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+}
+
+/* Links inside the dropdown */
+.mp-sub-menu-2 a {
+    color: black;
+    padding: 6px 8px;
+    text-decoration: none;
+    display: block;
+}
+
+/* Change color of dropdown links on hover */
+.mp-sub-menu-2 a:hover {background-color: #f1f1f1}
+
+/* Show the dropdown menu on hover */
+.mp-main-menu:hover .mp-sub-menu-2 {
+    display: block;
+}
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+.mp-main-menu:hover {
+    background-color: #3e8e41;
+}
