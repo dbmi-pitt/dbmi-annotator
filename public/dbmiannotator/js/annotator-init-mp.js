@@ -7,15 +7,12 @@ if (typeof annotator === 'undefined') {
     // DBMIAnnotator with highlight and DDI plugin
     var app = new annotator.App();
 
-    // Plugin UI initialize
-    //console.log(config);
-
     var annType = $('#mp-annotation-tb').attr('name');
 
     if (annType == "DDI")
         app.include(annotator.ui.dbmimain);            
     else if (annType == "MP")
-        app.include(annotator.ui.mpmain);
+        app.include(annotator.ui.mpmain, {element: subcontent});
     else 
         alert("[ERROR] plugin settings wrong, neither DDI nor MP plugin!");
 
@@ -79,7 +76,7 @@ if (typeof annotator === 'undefined') {
 
 function annoList(sourceURL, email, annType, sortByColumn){
 
-    $.ajax({url: 'http://' + config.annotator.host + "/annotatorstore/search",
+    $.ajax({url: "http://" + config.annotator.host + "/annotatorstore/search",
             data: {annotationType: "MP", 
                    email: email, 
                    uri: sourceURL.replace(/[\/\\\-\:\.]/g, "")},
@@ -88,45 +85,129 @@ function annoList(sourceURL, email, annType, sortByColumn){
                 console.log(exception);
             },
             success : function(response){
-                // claim menu for mpadder
-                claimMenu = "";
 
-                // Claim listbox
-                claimListbox = "<select id='mp-claim'>";
-                for (i = 0; i < response.total; i++){ // add claim label as options
-                    row = response.rows[i];
+                try {
+                    // ann Id for selected claim, if null, set first claim as default 
+                    var annotationId = $("#mp-annotation-work-on").html();    
+                    console.log(response);
+                    if (annotationId == null || annotationId.trim() == ""){
+                        
+                        if (response.total > 0){
+                            $("#mp-annotation-work-on").html(response.rows[0].id);
+                            annotationId = response.rows[0].id;
+                        }
+                    }
 
-                    claim = row.argues;                    
-                    claimListbox += "<option value='" + claim.label + "'>" + claim.label + "</option>";                        
-                    claimMenu += "<li id='" + row.id + "' onclick='showright(),dataEditorLoad(\"dose1\",\"" + row.id + "\");'><a href='#'>" + claim.label + "</a></li>";
+                    updateClaimAndData(response.rows, annotationId);
+                }catch (err) {
+                    console.log(err);
                 }
-                claimListbox += "</select>";
-
-                // Method listbox
-                methodListbox = "<select id='mp-claim'><option value='clinical-trial'>Clinical Trial</option></select>";
-                // Claim 
-                claimPanel = "<table>";
-                claimPanel += "<tr><td>" + claimListbox + "</td></tr>";
-                claimPanel += "<tr><td>Methods: " + methodListbox + "</td></tr>"
-                claimPanel += "<tr><td><button type='button'>Edit claim</button>&nbsp;&nbsp;<button type='button'>View claim</button></td></tr></table>";
-                
-                // Data & Material 
-                dataTable = "<table id='mp-data-tb'><tr><td>No. of Participants</td><td>Object Dose</td><td>Participant Dose</td><td>AUC</td><td>Clearance</td><td>Cmax</td><td>Half-life</td></tr><table>";
-                dataPanel = "<button type='button'>add new row for data & material</button><br>" + dataTable;
-
-                // Annotation table
-                annTable = "<table id='mp-claim-data-tb'>" +
-                    "<tr><td>Claim</td><td>Data & Material</td></tr>";             
-                annTable += "<tr><td>" + claimPanel + "</td><td>" + dataPanel + "</td></tr>";   
-                annTable += "</table>";
-
-                // update Annotation Table
-                $("#mp-annotation-tb").html(annTable);                  
-
-                // update mpadder - claim menu                
-                $(".mp-sub-menu-2").html(claimMenu);
-            }     
+             }
            });
+}
+
+// update annotation table by selected annotaionId
+// @input: list of mp annotaitons
+// @input: annotationId for selected claim
+function updateClaimAndData(annotations, annotationId) {
+    // claim menu for mpadder
+    claimMenu = "";
+    // data table for selected claim
+    dataTable = "";
+    // loop all MP annotation to create Claim listbox and menu for adder
+    claimListbox = "<select id='mp-editor-claim-list' onChange='changeClaimInAnnoTable();'>";
+    // add claim label as options in annotation list and mpadder menu
+    for (i = 0; i < annotations.length; i++) { 
+        
+        annotation = annotations[i];
+        var claimIsSelected = "";
+        if (annotationId == annotation.id) {
+            console.log("mp selected: " + annotation.argues.label);
+            claimIsSelected = 'selected="selected"';
+            
+            if (annotation.argues.supportsBy.length > 0){
+                dataL = annotation.argues.supportsBy;
+                // create data table
+                dataTable = createDataTable(dataL, annotationId, annotation);       
+            }                        
+        }
+        
+        claim = annotation.argues;                    
+        claimListbox += "<option value='" + annotation.id + "' "+claimIsSelected+">" + claim.label + "</option>";                        
+        claimMenu += "<li id='" + annotation.id + "'><a href='#'>" + claim.label + "</a></li>";
+    }
+    claimListbox += "</select>";
+    
+    // Method listbox
+    methodListbox = "<select id='mp-editor-method'><option value='clinical-trial'>Clinical Trial</option></select>";
+    // Claim 
+    claimPanel = "<table>";
+    claimPanel += "<tr><td>" + claimListbox + "</td></tr>";
+    claimPanel += "<tr><td>Methods: " + methodListbox + "</td></tr>"
+    claimPanel += "<tr><td><button type='button'>Edit claim</button>&nbsp;&nbsp;<button type='button'>View claim</button></td></tr></table>";
+    
+    // Data & Material 
+    dataPanel = "<button type='button'>add new row for data & material</button><br>" + dataTable;
+    
+    // Annotation table
+    annTable = "<table id='mp-claim-data-tb'>" +
+        "<tr><td>Claim</td><td>Data & Material</td></tr>";             
+    annTable += "<tr><td>" + claimPanel + "</td><td>" + dataPanel + "</td></tr>";   
+    annTable += "</table>";
+    
+    // update Annotation Table
+    $("#mp-annotation-tb").html(annTable);                  
+    
+    // update mpadder - claim menu                
+    $(".mp-sub-menu-2").html(claimMenu);
+}
+
+
+
+// @input: data list in MP annotation
+// @input: MP annotation Id
+// return: table html for multiple data & materials 
+function createDataTable(dataL, annotationId, annotation){
+
+    dataTable = "<table id='mp-data-tb'><tr><td>No. of Participants</td><td>Drug1 Dose</td><td>Drug2 Dose</td><td>AUC</td><td>Clearance</td><td>Cmax</td><td>Half-life</td></tr>";
+    for (j = 0; j < dataL.length; j++){
+        data = dataL[j];
+        method = data.supportsBy;
+        material = data.supportsBy.supportsBy;
+        row = "<tr>";
+        row += "<td onclick='showright(),dataEditorLoad(annotation, \"participants\",\""+annotationId+"\");'>" + material.participants.value + "</td>";        
+        row += "<td onclick='showright(),dataEditorLoad(annotation, \"dose1\",\""+annotationId+"\");'>" + material.drug1Dose.value + "</td>";
+        row += "<td onclick='showright(),dataEditorLoad(annotation, \"dose2\",\""+annotationId+"\");'>" + material.drug2Dose.value + "</td>";
+        row += "<td></td><td></td><td></td><td></td></tr>";
+        dataTable += row;
+    }
+    dataTable += "</table>";
+
+    console.log(dataTable);
+
+    return dataTable;
+}
+
+// changed claim in annotation table, update data & material
+function changeClaimInAnnoTable() {
+    var newAnnotationId = $('#mp-editor-claim-list option:selected').val();
+    console.log("claim changed to :" + newAnnotationId);
+
+    sourceURL = getURLParameter("sourceURL").trim();
+    email = getURLParameter("email");
+
+    $.ajax({url: "http://" + config.annotator.host + "/annotatorstore/search",
+            data: {annotationType: "MP", 
+                   email: email, 
+                   uri: sourceURL.replace(/[\/\\\-\:\.]/g, "")},
+            method: 'GET',
+            error : function(jqXHR, exception){
+                console.log(exception);
+            },
+            success : function(response){
+                updateClaimAndData(response.rows, newAnnotationId);
+            }     
+           });    
 }
 
 
@@ -156,9 +237,6 @@ function sort(annotations, sortByColumn) {
 }
 
 
-
 function getURLParameter(name) {
     return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search)||[,""])[1].replace(/\+/g, '%20'))||null
 }
-
-

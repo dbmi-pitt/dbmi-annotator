@@ -2,7 +2,7 @@
     // splitter for show annotation panel
     $('#splitter').jqxSplitter({ showSplitBar: false, width: $(window).width(), height: $(window).height(), orientation: 'horizontal', panels: [{ size: '100%',min: 200 }, { size: '0%', min: 0}] });
 
-    // MP adder
+    // MP adder - open/close claim menu
     $(function() {
         $('.mp-menu-btn').hover(function() { 
             $('.mp-main-menu').show(); 
@@ -16,9 +16,117 @@
     $('.mp-main-menu-2').mouseleave(function(){
         $(this).find('.mp-sub-menu-2').slideUp();
     });
+
+
+
  
 });
 
+
+// load claim
+function claimEditorLoad() {
+    $("#mp-editor-type").html('claim');
+    $("#mp-claim-form").show();
+    $("#mp-annotation-work-on").html('');
+    showEnzyme();
+
+    $("#mp-data-nav").hide();
+    $("#mp-data-form-participants").hide();
+    $("#mp-data-form-dose1").hide();
+    $("#mp-data-form-dose2").hide();
+}
+
+// load data Editor (1) if annotation is null, then switch form for data field
+// (2) otherwise, load annotation to editor, then shown specific form
+function dataEditorLoad(annotation, field, annotationId) {
+    console.log("dataEditorLoad - id: " + annotationId + " | field: " + field);
+    console.log(annotation);
+
+    // updating current MP annotation
+    if (annotationId != null)
+        $("#mp-annotation-work-on").html(annotationId);
+
+    switchDataForm(field);
+
+    // call AnnotatorJs editor for update    
+    app.annotations.update(annotation);                        
+}
+
+
+function switchDataForm(field) {
+
+    fieldL = ["participants","dose1","dose2"];
+    
+    if (field == null) 
+        field = "participants";
+    $("#mp-editor-type").html(field);
+    
+    $("#mp-data-nav").show();
+    $("#mp-claim-form").hide();
+    
+    // shown specific data form, hide others
+    for (i = 0; i < fieldL.length; i++){
+        var dataid = "mp-data-form-"+fieldL[i];
+        if (fieldL[i] == field){
+            $("#"+dataid).show();            
+        } else {
+            $("#"+dataid).hide();
+        }
+    }
+}
+
+
+
+    // Claim editor - options 1) continue create claim, 2) add data, 3) done
+function serveClaimOptions(){
+
+    if ($("#mp-editor-type").html() == "claim") { 
+        $( "#claim-dialog-confirm" ).dialog({
+            resizable: false,
+            height: 'auto',
+            width: '400px',
+            modal: true,
+            buttons: {
+                "Add another claim": function() {
+                    $( this ).dialog( "close" );
+                },
+                "Add data": function() {
+                    $( this ).dialog( "close" );
+                },
+                "Done": function() {
+                    $( this ).dialog( "close" );
+                    showrightbyvalue();
+                }
+            }
+        });
+    } else {
+        showrightbyvalue();        
+    }
+}
+
+
+//show right splitter directly
+function showright(){
+    //open editor tab before editot is triggered
+    var index = $("#tabs-1").index();
+    $('#tabs').tabs("option", "active", index);
+    $('#splitter').jqxSplitter({
+        showSplitBar:false,
+        width: $(window).width(),
+        height: $(window).height(),
+        orientation: 'horizontal', 
+        panels: [{size: '80%', min: 200}, {size: '20%', min: 280}]
+    });
+    $('.editorsection').show();
+    $('.btn-success').val("show");
+    $('.annotator-editor').show();
+    $('.btn-success').css("margin-bottom",270);
+    $('.btn-home').css("margin-bottom",270);
+    $('#menu').html("&nbsp Collapse");
+    
+    var w = $(window).width()*0.85;
+    $('.annotator-widget').width(w);
+}
 
 
 var getUrlParameter = function getUrlParameter(sParam) {
@@ -114,67 +222,8 @@ var getUrlParameter = function getUrlParameter(sParam) {
     $('.annotator-widget').width(w);
   }
 
-//show right splitter directly
-function showright(){
-    //open editor tab before editot is triggered
-    var index = $("#tabs-1").index();
-    $('#tabs').tabs("option", "active", index);
-    $('#splitter').jqxSplitter({
-        showSplitBar:false,
-        width: $(window).width(),
-        height: $(window).height(),
-        orientation: 'horizontal', 
-        panels: [{size: '80%', min: 200}, {size: '20%', min: 280}]
-    });
-    $('.editorsection').show();
-    $('.btn-success').val("show");
-    $('.annotator-editor').show();
-    $('.btn-success').css("margin-bottom",270);
-    $('.btn-home').css("margin-bottom",270);
-    $('#menu').html("&nbsp Collapse");
-    
-    var w = $(window).width()*0.85;
-    $('.annotator-widget').width(w);
-}
-
-//move from editor.js 
-function claimEditorLoad() {
-    $("#mp-editor-type").html('claim');
-    $("#mp-claim-form").show();
-    $("#mp-annotation-work-on").html('');
-    showEnzyme();
-
-    $("#mp-data-nav").hide();
-    $("#mp-data-form-participants").hide();
-    $("#mp-data-form-dose1").hide();
-    $("#mp-data-form-dose2").hide();
-}
 
 
-function dataEditorLoad(field, annotationId) {
-    console.log("dataEditorLoad: " + field);
-    if (field == null)
-        return;
-
-    fieldL = ["participants","dose1","dose2"];
-
-    $("#mp-editor-type").html(field);
-    if (annotationId != null)
-        $("#mp-annotation-work-on").html(annotationId);
-
-    $("#mp-data-nav").show();
-    $("#mp-claim-form").hide();
-
-    for (i = 0; i < fieldL.length; i++){
-        var dataid = "mp-data-form-"+fieldL[i];
-        if (fieldL[i] == field){
-            $("#"+dataid).show();            
-        } else {
-            $("#"+dataid).hide();
-        }
-    }
-    console.log("dbmi.js - dataEditorLoad - done!");
-}
 
 
 $("#Drug1").change(function (){selectDrug();});
