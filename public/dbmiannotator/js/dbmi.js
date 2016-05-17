@@ -44,11 +44,36 @@ function claimEditorLoad() {
     $("#mp-data-form-dose2").hide();
 }
 
+
+// changed claim in annotation table, update data & material
+function changeClaimInAnnoTable() {
+    var newAnnotationId = $('#mp-editor-claim-list option:selected').val();
+    console.log("claim changed to :" + newAnnotationId);
+    $("#mp-annotation-work-on").html(newAnnotationId);
+
+    sourceURL = getURLParameter("sourceURL").trim();
+    email = getURLParameter("email");
+
+    $.ajax({url: "http://" + config.annotator.host + "/annotatorstore/search",
+            data: {annotationType: "MP", 
+                   email: email, 
+                   uri: sourceURL.replace(/[\/\\\-\:\.]/g, "")},
+            method: 'GET',
+            error : function(jqXHR, exception){
+                console.log(exception);
+            },
+            success : function(response){
+                updateClaimAndData(response.rows, newAnnotationId);
+            }     
+           });    
+}
+
+
 // open data Editor (1) if annotation is null, then switch form for data field
 // (2) otherwise, load annotation to editor, then shown specific form
 function dataEditorLoad(annotation, field, annotationId) {
     console.log("dataEditorLoad - id: " + annotationId + " | field: " + field);
-
+    
     // updating current MP annotation
     if (annotationId != null)
         $("#mp-annotation-work-on").html(annotationId);
@@ -63,22 +88,33 @@ function dataEditorLoad(annotation, field, annotationId) {
 // load data Editor based on selection from annotation table
 // (1) if annotation is null, then switch form for data field
 // (2) otherwise, load annotation to editor, then shown specific form
-function dataEditorLoad(annotation, field) {
+function dataEditorLoadAnnTable(field) {
 
     var annotationId = $('#mp-editor-claim-list option:selected').val();
     console.log("dataEditorLoad - id: " + annotationId + " | field: " + field);
 
-    // updating current MP annotation
-    if (annotationId != null)
-        $("#mp-annotation-work-on").html(annotationId);
+    $.ajax({url: "http://" + config.annotator.host + "/annotatorstore/annotations/" + annotationId,
+            data: {},
+            method: 'GET',
+            error : function(jqXHR, exception){
+                console.log(exception);
+            },
+            success : function(annotation){
 
-    switchDataForm(field);
+                console.log(annotation);
+                // updating current MP annotation
+                if (annotationId != null)
+                    $("#mp-annotation-work-on").html(annotationId);
 
-    // call AnnotatorJs editor for update    
-    app.annotations.update(annotation);                        
+                switchDataForm(field);
+
+                // call AnnotatorJs editor for update    
+                app.annotations.update(annotation);   
+            }
+           });                     
 }
 
-
+// open data editor with specific form
 function switchDataForm(field) {
 
     fieldL = ["participants","dose1","dose2"];
@@ -102,8 +138,7 @@ function switchDataForm(field) {
 }
 
 
-
-    // Claim editor - options 1) continue create claim, 2) add data, 3) done
+// Claim editor - options 1) continue create claim, 2) add data, 3) done
 function serveClaimOptions(){
 
     if ($("#mp-editor-type").html() == "claim") { 

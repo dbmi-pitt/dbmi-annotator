@@ -38,14 +38,14 @@ if (typeof annotator === 'undefined') {
 		        ann.email = email;
             },
             annotationCreated: function (ann) {
-                annoList(ann.rawurl, ann.email, annType);
+                annotationTable(ann.rawurl, ann.email);
             },
             annotationUpdated: function(ann) {
-                annoList(ann.rawurl, ann.email, annType);
+                annotationTable(ann.rawurl, ann.email);
             },
             annotationDeleted: function (ann) {
                 setTimeout(function(){
-                    annoList(source, email, annType);
+                    annotationTable(source, email);
                 },800);
             }
             
@@ -63,7 +63,7 @@ if (typeof annotator === 'undefined') {
 			                 app.annotations.load({uri: sourceURL.replace(/[\/\\\-\:\.]/g, ""), email: email});
 			             }, 1000);
 		             }).then(function(){
-                         annoList(sourceURL, email, annType);
+                         annotationTable(sourceURL, email);
                      });
 }
 
@@ -74,8 +74,9 @@ if (typeof annotator === 'undefined') {
 // @input: the column that data & material table sorting by
 // @output: update annotation table and mpadder 
 
-function annoList(sourceURL, email, annType, sortByColumn){
+function annotationTable(sourceURL, email, sortByColumn){
 
+    // request all mp annotaitons for current document and user
     $.ajax({url: "http://" + config.annotator.host + "/annotatorstore/search",
             data: {annotationType: "MP", 
                    email: email, 
@@ -86,23 +87,17 @@ function annoList(sourceURL, email, annType, sortByColumn){
             },
             success : function(response){
 
-                try {
                     // ann Id for selected claim, if null, set first claim as default 
                     var annotationId = $("#mp-annotation-work-on").html();    
-                    console.log(response);
-                    if (annotationId == null || annotationId.trim() == ""){
-                        
+
+                    if (annotationId == null || annotationId.trim() == "") {         
                         if (response.total > 0){
                             $("#mp-annotation-work-on").html(response.rows[0].id);
                             annotationId = response.rows[0].id;
                         }
                     }
-
                     updateClaimAndData(response.rows, annotationId);
-                }catch (err) {
-                    console.log(err);
-                }
-             }
+            }
            });
 }
 
@@ -120,16 +115,15 @@ function updateClaimAndData(annotations, annotationId) {
     for (i = 0; i < annotations.length; i++) { 
         
         annotation = annotations[i];
+        dataL = annotation.argues.supportsBy;
+
         var claimIsSelected = "";
         if (annotationId == annotation.id) {
             console.log("mp selected: " + annotation.argues.label);
-            claimIsSelected = 'selected="selected"';
-            
-            if (annotation.argues.supportsBy.length > 0){
+            claimIsSelected = 'selected="selected"';           
                 
-                // create data table
-                dataTable = createDataTable(annotationId, annotation);       
-            }                        
+            // create data table
+            dataTable = createDataTable(dataL, annotationId);                       
         }
         
         claim = annotation.argues;                    
@@ -167,50 +161,28 @@ function updateClaimAndData(annotations, annotationId) {
 // @input: data list in MP annotation
 // @input: MP annotation Id
 // return: table html for multiple data & materials 
-function createDataTable(annotationId, annotation){
+function createDataTable(dataL, annotationId){
+    console.log(annotationId);
 
-    dataL = annotation.argues.supportsBy;
     dataTable = "<table id='mp-data-tb'><tr><td>No. of Participants</td><td>Drug1 Dose</td><td>Drug2 Dose</td><td>AUC</td><td>Clearance</td><td>Cmax</td><td>Half-life</td></tr>";
+
     if (dataL.length > 0){
         for (j = 0; j < dataL.length; j++){
             data = dataL[j];
             method = data.supportsBy;
             material = data.supportsBy.supportsBy;
             row = "<tr>";
-            row += "<td onclick='showright(),dataEditorLoad(annotation, \"participants\");'>" + material.participants.value + "</td>";        
-            row += "<td onclick='showright(),dataEditorLoad(annotation, \"dose1\");'>" + material.drug1Dose.value + "</td>";
-            row += "<td onclick='showright(),dataEditorLoad(annotation, \"dose2\");'>" + material.drug2Dose.value + "</td>";
+            row += "<td onclick='showright(),dataEditorLoadAnnTable(\"participants\");'>" + material.participants.value + "</td>";        
+            row += "<td onclick='showright(),dataEditorLoadAnnTable(\"dose1\");'>" + material.drug1Dose.value + "</td>";
+            row += "<td onclick='showright(),dataEditorLoadAnnTable(\"dose2\");'>" + material.drug2Dose.value + "</td>";
             row += "<td></td><td></td><td></td><td></td></tr>";
             dataTable += row;
         }
     }
     dataTable += "</table>";
-
     return dataTable;
 }
 
-// changed claim in annotation table, update data & material
-function changeClaimInAnnoTable() {
-    var newAnnotationId = $('#mp-editor-claim-list option:selected').val();
-    console.log("claim changed to :" + newAnnotationId);
-    $("#mp-annotation-work-on").html(newAnnotationId);
-
-    sourceURL = getURLParameter("sourceURL").trim();
-    email = getURLParameter("email");
-
-    $.ajax({url: "http://" + config.annotator.host + "/annotatorstore/search",
-            data: {annotationType: "MP", 
-                   email: email, 
-                   uri: sourceURL.replace(/[\/\\\-\:\.]/g, "")},
-            method: 'GET',
-            error : function(jqXHR, exception){
-                console.log(exception);
-            },
-            success : function(response){
-                updateClaimAndData(response.rows, newAnnotationId);
-            }     
-           });    
-}
 
 // sort data & materail table by column 
 function sort(annotations, sortByColumn) {
