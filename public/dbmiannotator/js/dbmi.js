@@ -16,18 +16,26 @@
     $('.mp-main-menu-2').mouseleave(function(){
         $(this).find('.mp-sub-menu-2').slideUp();
     });
-
-
-
  
 });
 
+// modify annotaiton id when user pick claim on mpadder's menu
+// update annotation table if necessary
+function claimSelectedInMenu(annotationId) {
+    $("#mp-annotation-work-on").html(annotationId);
+    annTableId = $('#mp-editor-claim-list option:selected').val();
 
-// load claim
+    if (annotationId != annTableId){
+        $("#mp-editor-claim-list option[value='" + annotationId + "']").attr("selected", "true");
+        changeClaimInAnnoTable();
+    }
+}
+
+// open claim editor
 function claimEditorLoad() {
     $("#mp-editor-type").html('claim');
     $("#mp-claim-form").show();
-    $("#mp-annotation-work-on").html('');
+
     showEnzyme();
 
     $("#mp-data-nav").hide();
@@ -36,11 +44,29 @@ function claimEditorLoad() {
     $("#mp-data-form-dose2").hide();
 }
 
-// load data Editor (1) if annotation is null, then switch form for data field
+// open data Editor (1) if annotation is null, then switch form for data field
 // (2) otherwise, load annotation to editor, then shown specific form
 function dataEditorLoad(annotation, field, annotationId) {
     console.log("dataEditorLoad - id: " + annotationId + " | field: " + field);
-    console.log(annotation);
+
+    // updating current MP annotation
+    if (annotationId != null)
+        $("#mp-annotation-work-on").html(annotationId);
+
+    switchDataForm(field);
+
+    // call AnnotatorJs editor for update    
+    app.annotations.update(annotation);                        
+}
+
+
+// load data Editor based on selection from annotation table
+// (1) if annotation is null, then switch form for data field
+// (2) otherwise, load annotation to editor, then shown specific form
+function dataEditorLoad(annotation, field) {
+
+    var annotationId = $('#mp-editor-claim-list option:selected').val();
+    console.log("dataEditorLoad - id: " + annotationId + " | field: " + field);
 
     // updating current MP annotation
     if (annotationId != null)
@@ -107,7 +133,7 @@ function serveClaimOptions(){
 
 //show right splitter directly
 function showright(){
-    //open editor tab before editot is triggered
+    //open editor tab before editor is triggered
     var index = $("#tabs-1").index();
     $('#tabs').tabs("option", "active", index);
     $('#splitter').jqxSplitter({
@@ -223,11 +249,9 @@ var getUrlParameter = function getUrlParameter(sParam) {
   }
 
 
-
-
-
 $("#Drug1").change(function (){selectDrug();});
 $("#Drug2").change(function (){selectDrug();});
+
 function selectDrug() {
     var drug1 = $("#Drug1").val();
     var drug2 = $("#Drug2").val();
@@ -236,8 +260,11 @@ function selectDrug() {
     quotestring = quotestring.replace(drug1, "<span class='selecteddrug'>"+drug1+"</span>");
     $("#quote").html(quotestring);
 }
+
+
 $("#Drug1").mousedown(function (){deselectDrug();});
 $("#Drug2").mousedown(function (){deselectDrug();});
+
 function deselectDrug() {
     var drug1 = $("#Drug1").val();
     var drug2 = $("#Drug2").val();
@@ -247,24 +274,6 @@ function deselectDrug() {
     $("#quote").html(quotestring);
 }
 
-$("#assertion_type").change(function changeFunc() {
-    if($("#assertion_type option:selected").text()=="DDI clinical trial") { 
-        $("#firstsection").hide(); 
-        $("#altersection").show();
-        var object = $("#Drug1 option:selected").text(); 
-        $("#objectinalter").html("Object: "+object);
-        var precipt = $("#Drug2 option:selected").text(); 
-        $("#preciptinalter").html("Precipt: "+precipt);
-        $("#back").show();
-        var modal = $("#Modality:checked").val();
-        $("#modalityinalter").html("Modality: "+modal);
-        var evid = $("#Evidence_modality:checked").val();
-        $("#evidenceinalter").html("Evidence: "+evid);
-        
-    } else {
-        $("#altersection").hide();$("#forward").hide();
-    }
-});
 
 $("#relationship").change(function showEnzyme() {
     if($("#relationship option:selected").text()=="inhibits"||$("#relationship option:selected").text()=="substrate of") {
@@ -287,6 +296,26 @@ function showEnzyme() {
         $("#enzyme").hide();
     }
 }
+
+// $("#assertion_type").change(function changeFunc() {
+//     if($("#assertion_type option:selected").text()=="DDI clinical trial") { 
+//         $("#firstsection").hide(); 
+//         $("#altersection").show();
+//         var object = $("#Drug1 option:selected").text(); 
+//         $("#objectinalter").html("Object: "+object);
+//         var precipt = $("#Drug2 option:selected").text(); 
+//         $("#preciptinalter").html("Precipt: "+precipt);
+//         $("#back").show();
+//         var modal = $("#Modality:checked").val();
+//         $("#modalityinalter").html("Modality: "+modal);
+//         var evid = $("#Evidence_modality:checked").val();
+//         $("#evidenceinalter").html("Evidence: "+evid);
+        
+//     } else {
+//         $("#altersection").hide();$("#forward").hide();
+//     }
+// });
+
 
 // function flipdrug() {
 //     var object = $("#Drug1 option:selected").text();

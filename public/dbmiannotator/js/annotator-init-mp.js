@@ -126,15 +126,15 @@ function updateClaimAndData(annotations, annotationId) {
             claimIsSelected = 'selected="selected"';
             
             if (annotation.argues.supportsBy.length > 0){
-                dataL = annotation.argues.supportsBy;
+                
                 // create data table
-                dataTable = createDataTable(dataL, annotationId, annotation);       
+                dataTable = createDataTable(annotationId, annotation);       
             }                        
         }
         
         claim = annotation.argues;                    
         claimListbox += "<option value='" + annotation.id + "' "+claimIsSelected+">" + claim.label + "</option>";                        
-        claimMenu += "<li id='" + annotation.id + "'><a href='#'>" + claim.label + "</a></li>";
+        claimMenu += "<li onclick='claimSelectedInMenu(\""+annotation.id+"\");' ><a href='#'>" + claim.label + "</a></li>";
     }
     claimListbox += "</select>";
     
@@ -167,23 +167,24 @@ function updateClaimAndData(annotations, annotationId) {
 // @input: data list in MP annotation
 // @input: MP annotation Id
 // return: table html for multiple data & materials 
-function createDataTable(dataL, annotationId, annotation){
+function createDataTable(annotationId, annotation){
 
+    dataL = annotation.argues.supportsBy;
     dataTable = "<table id='mp-data-tb'><tr><td>No. of Participants</td><td>Drug1 Dose</td><td>Drug2 Dose</td><td>AUC</td><td>Clearance</td><td>Cmax</td><td>Half-life</td></tr>";
-    for (j = 0; j < dataL.length; j++){
-        data = dataL[j];
-        method = data.supportsBy;
-        material = data.supportsBy.supportsBy;
-        row = "<tr>";
-        row += "<td onclick='showright(),dataEditorLoad(annotation, \"participants\",\""+annotationId+"\");'>" + material.participants.value + "</td>";        
-        row += "<td onclick='showright(),dataEditorLoad(annotation, \"dose1\",\""+annotationId+"\");'>" + material.drug1Dose.value + "</td>";
-        row += "<td onclick='showright(),dataEditorLoad(annotation, \"dose2\",\""+annotationId+"\");'>" + material.drug2Dose.value + "</td>";
-        row += "<td></td><td></td><td></td><td></td></tr>";
-        dataTable += row;
+    if (dataL.length > 0){
+        for (j = 0; j < dataL.length; j++){
+            data = dataL[j];
+            method = data.supportsBy;
+            material = data.supportsBy.supportsBy;
+            row = "<tr>";
+            row += "<td onclick='showright(),dataEditorLoad(annotation, \"participants\");'>" + material.participants.value + "</td>";        
+            row += "<td onclick='showright(),dataEditorLoad(annotation, \"dose1\");'>" + material.drug1Dose.value + "</td>";
+            row += "<td onclick='showright(),dataEditorLoad(annotation, \"dose2\");'>" + material.drug2Dose.value + "</td>";
+            row += "<td></td><td></td><td></td><td></td></tr>";
+            dataTable += row;
+        }
     }
     dataTable += "</table>";
-
-    console.log(dataTable);
 
     return dataTable;
 }
@@ -192,6 +193,7 @@ function createDataTable(dataL, annotationId, annotation){
 function changeClaimInAnnoTable() {
     var newAnnotationId = $('#mp-editor-claim-list option:selected').val();
     console.log("claim changed to :" + newAnnotationId);
+    $("#mp-annotation-work-on").html(newAnnotationId);
 
     sourceURL = getURLParameter("sourceURL").trim();
     email = getURLParameter("email");
@@ -210,7 +212,7 @@ function changeClaimInAnnoTable() {
            });    
 }
 
-
+// sort data & materail table by column 
 function sort(annotations, sortByColumn) {
 
     //console.log("sortByColumn: " + sortByColumn);
