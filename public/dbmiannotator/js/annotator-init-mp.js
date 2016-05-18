@@ -1,4 +1,3 @@
-
 if (typeof annotator === 'undefined') {
     alert("Oops! it looks like you haven't built Annotator. " +
           "Either download a tagged release from GitHub, or build the " +
@@ -101,116 +100,145 @@ function annotationTable(sourceURL, email, sortByColumn){
            });
 }
 
-// update annotation table by selected annotaionId
-// @input: list of mp annotaitons
-// @input: annotationId for selected claim
-function updateClaimAndData(annotations, annotationId) {
-    // claim menu for mpadder
-    claimMenu = "";
-    // data table for selected claim
-    dataTable = "";
-    // loop all MP annotation to create Claim listbox and menu for adder
-    claimListbox = "<select id='mp-editor-claim-list' onChange='changeClaimInAnnoTable();'>";
-    // add claim label as options in annotation list and mpadder menu
-    for (i = 0; i < annotations.length; i++) { 
-        
-        annotation = annotations[i];
-        dataL = annotation.argues.supportsBy;
-
-        var claimIsSelected = "";
-        if (annotationId == annotation.id) {
-            console.log("mp selected: " + annotation.argues.label);
-            claimIsSelected = 'selected="selected"';           
-                
-            // create data table
-            dataTable = createDataTable(dataL, annotationId);                       
-        }
-        
-        claim = annotation.argues;                    
-        claimListbox += "<option value='" + annotation.id + "' "+claimIsSelected+">" + claim.label + "</option>";                        
-        claimMenu += "<li onclick='claimSelectedInMenu(\""+annotation.id+"\");' ><a href='#'>" + claim.label + "</a></li>";
-    }
-    claimListbox += "</select>";
-    
-    // Method listbox
-    methodListbox = "<select id='mp-editor-method'><option value='clinical-trial'>Clinical Trial</option></select>";
-    // Claim 
-    claimPanel = "<table>";
-    claimPanel += "<tr><td>" + claimListbox + "</td></tr>";
-    claimPanel += "<tr><td>Methods: " + methodListbox + "</td></tr>"
-    claimPanel += "<tr><td><button type='button'>Edit claim</button>&nbsp;&nbsp;<button type='button'>View claim</button></td></tr></table>";
-    
-    // Data & Material 
-    dataPanel = "<button type='button'>add new row for data & material</button><br>" + dataTable;
-    
-    // Annotation table
-    annTable = "<table id='mp-claim-data-tb'>" +
-        "<tr><td>Claim</td><td>Data & Material</td></tr>";             
-    annTable += "<tr><td>" + claimPanel + "</td><td>" + dataPanel + "</td></tr>";   
-    annTable += "</table>";
-    
-    // update Annotation Table
-    $("#mp-annotation-tb").html(annTable);                  
-    
-    // update mpadder - claim menu                
-    $(".mp-sub-menu-2").html(claimMenu);
-}
-
-
-
-// @input: data list in MP annotation
-// @input: MP annotation Id
-// return: table html for multiple data & materials 
-function createDataTable(dataL, annotationId){
-    console.log(annotationId);
-
-    dataTable = "<table id='mp-data-tb'><tr><td>No. of Participants</td><td>Drug1 Dose</td><td>Drug2 Dose</td><td>AUC</td><td>Clearance</td><td>Cmax</td><td>Half-life</td></tr>";
-
-    if (dataL.length > 0){
-        for (j = 0; j < dataL.length; j++){
-            data = dataL[j];
-            method = data.supportsBy;
-            material = data.supportsBy.supportsBy;
-            row = "<tr>";
-            row += "<td onclick='showright(),dataEditorLoadAnnTable(\"participants\");'>" + material.participants.value + "</td>";        
-            row += "<td onclick='showright(),dataEditorLoadAnnTable(\"dose1\");'>" + material.drug1Dose.value + "</td>";
-            row += "<td onclick='showright(),dataEditorLoadAnnTable(\"dose2\");'>" + material.drug2Dose.value + "</td>";
-            row += "<td></td><td></td><td></td><td></td></tr>";
-            dataTable += row;
-        }
-    }
-    dataTable += "</table>";
-    return dataTable;
-}
-
-
-// sort data & materail table by column 
-function sort(annotations, sortByColumn) {
-
-    //console.log("sortByColumn: " + sortByColumn);
-    // console.log($("#tb-annotation-list"));
-    // className = $("#tb-annotation-list").find('#' + sortByColumn).attr('class');
-    // console.log("className: " + className);
-
-    // if (className == "tb-list-unsorted"){
-        
-    //     $('#' + sortByColumn).attr('class','tb-list-asc');
-    //     annotations.sort(function(a, b){
-    //         return a[sortByColumn].localeCompare(b[sortByColumn]);
-    //     });
-    // } else if (className == "tb-list-asc"){
-    //     annotations.sort(function(a, b){
-    //         return a[sortByColumn].localeCompare(b[sortByColumn]);
-    //     }).reverse();
-    // }
-
-    $('#' + sortByColumn).attr('class','tb-list-asc');
-        annotations.sort(function(a, b){
-            return a[sortByColumn].localeCompare(b[sortByColumn]);
-        });
-}
-
-
 function getURLParameter(name) {
     return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search)||[,""])[1].replace(/\+/g, '%20'))||null
 }
+
+$(document).ready(function () {
+    // splitter for show annotation panel
+    $('#splitter').jqxSplitter({ showSplitBar: false, width: $(window).width(), height: $(window).height(), orientation: 'horizontal', panels: [{ size: '100%',min: 200 }, { size: '0%', min: 0}] });
+
+    // MP adder - open/close claim menu
+    $(function() {
+        $('.mp-menu-btn').hover(function() { 
+            $('.mp-main-menu').show(); 
+        });
+    });
+    
+    $('.mp-main-menu-2').mouseenter(function(){
+        $(this).find('.mp-sub-menu-2').slideDown();
+    });
+    
+    $('.mp-main-menu-2').mouseleave(function(){
+        $(this).find('.mp-sub-menu-2').slideUp();
+    });
+ 
+});
+
+
+//show right splitter directly
+function showright(){
+    //open editor tab before editor is triggered
+    var index = $("#tabs-1").index();
+    $('#tabs').tabs("option", "active", index);
+    $('#splitter').jqxSplitter({
+        showSplitBar:false,
+        width: $(window).width(),
+        height: $(window).height(),
+        orientation: 'horizontal', 
+        panels: [{size: '80%', min: 200}, {size: '20%', min: 280}]
+    });
+    $('.editorsection').show();
+    $('.btn-success').val("show");
+    $('.annotator-editor').show();
+    $('.btn-success').css("margin-bottom",270);
+    $('.btn-home').css("margin-bottom",270);
+    $('#menu').html("&nbsp Collapse");
+    
+    var w = $(window).width()*0.85;
+    $('.annotator-widget').width(w);
+}
+
+
+var getUrlParameter = function getUrlParameter(sParam) {
+    var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+        sURLVariables = sPageURL.split('&'),
+        sParameterName,
+        i;
+
+    for (i = 0; i < sURLVariables.length; i++) {
+        sParameterName = sURLVariables[i].split('=');
+
+        if (sParameterName[0] === sParam) {
+            return sParameterName[1] === undefined ? true : sParameterName[1];
+        }
+    }
+};
+
+//show right splitter by button "btn-success"
+  function buttonshowright(){
+    
+    if($('.btn-success').val()=="hide") {
+
+      $('#splitter').jqxSplitter({
+        showSplitBar:false,
+        width: $(window).width(),
+        height: $(window).height(),
+        orientation: 'horizontal', 
+        panels: [{size: '80%', min: 200}, {size: '20%', min: 280}]
+      });
+    
+      $('#tabs').tabs("option", "active", 0);
+      $('.editorsection').hide();
+      $('.btn-success').val("show");
+      $('.annotator-editor').show();
+      $('.btn-success').css("margin-bottom",270);
+      $('.btn-home').css("margin-bottom",270);
+      $('#menu').html("&nbsp Collapse");
+    }
+    else {
+      $('#splitter').jqxSplitter({
+        showSplitBar:false,
+        width: '100%',
+        height: $(window).height(),
+        orientation: 'horizontal', 
+        panels: [{size: '100%', min: 200}, {size: '0%', min: 0}]
+      });
+      $('.btn-success').val("hide");
+      $('.annotator-editor').hide();
+      $('.btn-success').css("margin-bottom",0);
+      $('.btn-home').css("margin-bottom",0);
+      $('#menu').html("&nbsp Menu");
+    }
+    var w = $(window).width()*0.85;
+    $('.annotator-widget').width(w);
+    
+    
+  }
+
+  function showrightbyvalue(){
+    
+    if($('.btn-success').val()=="hide") {
+      var tab = $('#tabs-2').attr('href');
+      $('#tabs').tabs('select', tab);
+      $('#splitter').jqxSplitter({
+        showSplitBar:false,
+        width: $(window).width(),
+        height: $(window).height(),
+        orientation: 'horizontal', 
+        panels: [{size: '80%', min: 200}, {size: '20%', min: 280}]
+      });
+      $('.editorsection').show();
+      $('.btn-success').val("show");
+      $('.annotator-editor').show();
+      $('.btn-success').css("margin-bottom",270);
+      $('.btn-home').css("margin-bottom",270);
+      $('#menu').html("&nbsp Collapse");
+    }
+    else {
+      $('#splitter').jqxSplitter({
+        showSplitBar:false,
+        width: '100%',
+        height: $(window).height(),
+        orientation: 'horizontal', 
+        panels: [{size: '100%', min: 200}, {size: '0%', min: 0}]
+      });
+      $('.btn-success').val("hide");
+      $('.annotator-editor').hide();
+      $('.btn-success').css("margin-bottom",0);
+      $('.btn-home').css("margin-bottom",0);
+      $('#menu').html("&nbsp Menu");
+    }
+    var w = $(window).width()*0.85;
+    $('.annotator-widget').width(w);
+  }
