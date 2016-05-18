@@ -27,22 +27,11 @@ Dependences:
 3. Postgres DB running on port 5432
    create database dbmiannotator
 
-   -- Table: USER
-   -- DROP TABLE IF EXISTS USER;
-   CREATE TABLE "user"(
-    id SERIAL NOT NULL PRIMARY KEY,
-    uid TEXT NOT NULL,
-    username TEXT NOT NULL,
-    admin BOOLEAN,
-    manager BOOLEAN,
-    email TEXT NOT NULL,
-    status INTEGER,
-    last_login_date timestamp,
-    registered_date timestamp,
-    activation_id INTEGER,
-    password TEXT NOT NULL
-    );
+    SQL script that create dbmiannotator schema
+    https://github.com/dbmi-pitt/dbmi-annotator/blob/master/db-script/dbmi-annotator/rdb-postgres-schema-04212016.sql 
 
+    SQL script that initialize plugin settings
+    https://github.com/dbmi-pitt/dbmi-annotator/blob/master/db-script/dbmi-annotator/rdb-postgres-initial-04182016.sql 
 
 --------------------------
 Installation:
@@ -51,7 +40,7 @@ Installation:
 1. nodejs packages
 $ npm install
 
-2. compile browser side JS packages
+2. compile browser side JS packages (rerun when made modifications on config/config.js)
 $ browserify app.js -o public/dbmiannotator/js/app.bundle.js
 
 --------------------------
