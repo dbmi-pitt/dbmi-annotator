@@ -3,6 +3,7 @@
 function claimEditorLoad() {
     $("#mp-editor-type").html('claim');
     $("#mp-claim-form").show();
+    $(".annotator-save").hide();
 
     showEnzyme();
 
@@ -63,8 +64,14 @@ function showEnzyme() {
 }
 
 
-// Claim editor - options 1) continue create claim, 2) add data, 3) done
-function serveClaimOptions(){
+// Claim editor submit with options 1) continue create claim, 2) add data, 3) done
+// Data editor save, keep form open
+function postEditorSave(){
+
+}
+
+// editor click save and close button
+function postEditorSaveAndClose() {
 
     if ($("#mp-editor-type").html() == "claim") { 
         $( "#claim-dialog-confirm" ).dialog({
@@ -75,19 +82,22 @@ function serveClaimOptions(){
             buttons: {
                 "Add another claim": function() {
                     $( this ).dialog( "close" );
+                    showrightbyvalue();
                 },
                 "Add data": function() {
                     $( this ).dialog( "close" );
+                    showrightbyvalue();
                 },
                 "Done": function() {
                     $( this ).dialog( "close" );
-                    showrightbyvalue();
+                    showAnnTable();
                 }
             }
         });
     } else {
-        showrightbyvalue();        
+        showAnnTable();
     }
+    
 }
 
 
@@ -108,7 +118,7 @@ function claimSelectedInMenu(annotationId) {
 // (2) otherwise, load annotation to editor, then shown specific form
 function dataEditorLoad(annotation, field, annotationId) {
     console.log("dataEditorLoad - id: " + annotationId + " | field: " + field);
-    
+    $(".annotator-save").show();
     // updating current MP annotation
     if (annotationId != null)
         $("#mp-annotation-work-on").html(annotationId);
@@ -125,6 +135,7 @@ function dataEditorLoad(annotation, field, annotationId) {
 // (2) otherwise, load annotation to editor, then shown specific form
 function dataEditorLoadAnnTable(field) {
 
+    $(".annotator-save").show();
     var annotationId = $('#mp-editor-claim-list option:selected').val();
     console.log("dataEditorLoad - id: " + annotationId + " | field: " + field);
 

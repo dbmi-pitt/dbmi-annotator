@@ -204,21 +204,31 @@ function praseWebContents(req, res, next){
     if(sourceUrl.match(/localhost.*pdf/g)){
         next();
     } else {
-
-    request(sourceUrl, function(err, res, body){
-
-        labelDecode = body.replace(/&amp;/g,'&').replace(/&nbsp;/g,' ');        
-
-        // normalize html source
-        tidy(labelDecode, function(err, html) {
-            if (err){
-                console.log(err);
-            }
-            req.htmlsource = html;
-            next();
-        });
         
-    });
+        // var options = {
+        //     host: sourceUrl,
+        //     method: 'POST'            
+        // }
+        var cheerio = require("cheerio");
+
+        request(sourceUrl, function(err, res, body){
+
+            labelDecode = body.replace(/&amp;/g,'&').replace(/&nbsp;/g,' ');   
+            //var $ = cheerio.load(labelDecode);
+            //var cntBody = $("body").html();
+
+            //console.log(cntBody);
+
+            // normalize html source
+            tidy(labelDecode, function(err, html) {
+                if (err){
+                    console.log(err);
+                }
+                req.htmlsource = html;
+                next();
+            });
+            
+        });
     }
 }
 
