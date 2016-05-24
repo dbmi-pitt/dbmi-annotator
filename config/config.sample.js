@@ -2,6 +2,7 @@ var config = {};
 config.store = {};
 config.annotator = {};
 config.elastico = {};
+config.profile = {};
 
 // postgres db
 config.postgres = process.env.DATABASE_URL || 'postgres://<username>:<password>@<hostname/ip addresss>:<port>/<schema name>'; 
