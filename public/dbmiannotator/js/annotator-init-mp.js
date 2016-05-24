@@ -48,8 +48,7 @@ if (typeof annotator === 'undefined') {
                 setTimeout(function(){
                     annotationTable(source, email);
                 },800);
-            }
-            
+            }            
     	};
     };
     app.include(annotationCreateHelper);
