@@ -13,6 +13,34 @@ function claimEditorLoad() {
     $("#mp-data-form-dose2").hide();
 }
 
+// scroll to the claim text span
+function viewClaim() {
+    annotationId = $('#mp-editor-claim-list option:selected').val();
+    document.getElementById(annotationId + "claim").scrollIntoView(true);
+}
+
+// edit claim
+function editClaim() {
+    annotationId = $('#mp-editor-claim-list option:selected').val();
+    document.getElementById(annotationId + "claim").scrollIntoView(true);
+
+    showEditor();
+    claimEditorLoad();
+
+    $.ajax({url: "http://" + config.annotator.host + "/annotatorstore/annotations/" + annotationId,
+            data: {},
+            method: 'GET',
+            error : function(jqXHR, exception){
+                console.log(exception);
+            },
+            success : function(annotation){
+
+                console.log(annotation);
+                // call AnnotatorJs editor for update    
+                app.annotations.update(annotation);   
+            }
+           });        
+}
 
 $("#Drug1").change(function (){selectDrug();});
 $("#Drug2").change(function (){selectDrug();});
@@ -64,12 +92,6 @@ function showEnzyme() {
 }
 
 
-// Claim editor submit with options 1) continue create claim, 2) add data, 3) done
-// Data editor save, keep form open
-function postEditorSave(){
-
-}
-
 // editor click save and close button
 function postEditorSaveAndClose() {
 
@@ -94,10 +116,9 @@ function postEditorSaveAndClose() {
                 }
             }
         });
-    } else {
-        showAnnTable();
     }
-    
+
+    showAnnTable();    
 }
 
 
@@ -129,6 +150,10 @@ function dataEditorLoad(annotation, field, annotationId) {
     app.annotations.update(annotation);                        
 }
 
+// Data editor save, keep form open
+function postEditorSave(){
+    showEditor();
+}
 
 // load data Editor based on selection from annotation table
 // (1) if annotation is null, then switch form for data field
@@ -137,7 +162,9 @@ function dataEditorLoadAnnTable(field) {
 
     $(".annotator-save").show();
     var annotationId = $('#mp-editor-claim-list option:selected').val();
-    console.log("dataEditorLoad - id: " + annotationId + " | field: " + field);
+    console.log("dataEditorLoad - id: " + annotationId + " | field: " + field)
+    // scroll to the position of annotation
+    document.getElementById(annotationId + field).scrollIntoView(true);
 
     $.ajax({url: "http://" + config.annotator.host + "/annotatorstore/annotations/" + annotationId,
             data: {},

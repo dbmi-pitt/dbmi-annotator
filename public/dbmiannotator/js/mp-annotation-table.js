@@ -35,7 +35,7 @@ function updateClaimAndData(annotations, annotationId) {
     claimPanel = "<table>";
     claimPanel += "<tr><td>" + claimListbox + "</td></tr>";
     claimPanel += "<tr><td>Methods: " + methodListbox + "</td></tr>"
-    claimPanel += "<tr><td><button type='button'>Edit claim</button>&nbsp;&nbsp;<button type='button'>View claim</button></td></tr></table>";
+    claimPanel += "<tr><td><button type='button' onclick='editClaim()'>Edit claim</button>&nbsp;&nbsp;<button type='button' onclick='viewClaim()'>View claim</button></td></tr></table>";
     
     // Data & Material 
     dataPanel = "<button type='button'>add new row for data & material</button><br>" + dataTable;
