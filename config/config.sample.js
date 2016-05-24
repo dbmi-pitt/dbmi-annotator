@@ -19,4 +19,9 @@ config.store.port = 'port';
 config.elastico.host = 'host name or ip address';
 config.elastico.port = 'port';
 
+// user default profile
+config.profile.def = 'MP';
+config.profile.pluginSetL = [];
+config.profile.userProfile = {};
+
 module.exports = config;
