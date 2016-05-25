@@ -164,27 +164,30 @@ function dataEditorLoadAnnTable(field) {
     var annotationId = $('#mp-editor-claim-list option:selected').val();
     console.log("dataEditorLoad - id: " + annotationId + " | field: " + field)
     // scroll to the position of annotation
-    document.getElementById(annotationId + field).scrollIntoView(true);
 
-    $.ajax({url: "http://" + config.annotator.host + "/annotatorstore/annotations/" + annotationId,
-            data: {},
-            method: 'GET',
-            error : function(jqXHR, exception){
-                console.log(exception);
-            },
-            success : function(annotation){
-
-                console.log(annotation);
-                // updating current MP annotation
-                if (annotationId != null)
-                    $("#mp-annotation-work-on").html(annotationId);
-
+    if (document.getElementById(annotationId + field)) {
+        document.getElementById(annotationId + field).scrollIntoView(true);
+        
+        $.ajax({url: "http://" + config.annotator.host + "/annotatorstore/annotations/" + annotationId,
+                data: {},
+                method: 'GET',
+                error : function(jqXHR, exception){
+                    console.log(exception);
+                },
+                success : function(annotation){
+                    
+                    console.log(annotation);
+                    // updating current MP annotation
+                    if (annotationId != null)
+                        $("#mp-annotation-work-on").html(annotationId);
+                    
                 switchDataForm(field);
-
-                // call AnnotatorJs editor for update    
-                app.annotations.update(annotation);   
-            }
-           });                     
+                    
+                    // call AnnotatorJs editor for update    
+                    app.annotations.update(annotation);   
+                }
+               });            
+    }         
 }
 
 
