@@ -37,20 +37,21 @@ if (typeof annotator === 'undefined') {
 		        ann.email = email;
             },
             annotationCreated: function (ann) {
-                $("#mp-annotation-work-on").html(ann.id);
-                annotationTable(ann.rawurl, ann.email);
+                if (ann.annotationType == "MP") {
+                    $("#mp-annotation-work-on").html(ann.id);
+                    annotationTable(ann.rawurl, ann.email);
+                    console.log("refresh ann table");
+                }
             },
             annotationUpdated: function(ann) {
-                $("#mp-annotation-work-on").html(ann.id);
-                annotationTable(ann.rawurl, ann.email);
-                // setTimeout(function(){
-                //     console.log("refresh ann table");
-                //     annotationTable(ann.rawurl, email);
-                // },800);
+                if (ann.annotationType == "MP") {
+                    $("#mp-annotation-work-on").html(ann.id);
+                    annotationTable(ann.rawurl, ann.email);
+                    console.log("refresh ann table");
+                }
             },
             annotationDeleted: function (ann) {
-                console.log(ann);
-
+                
                 setTimeout(function(){
                     console.log("refresh ann table");
                     annotationTable(source, email);
@@ -71,6 +72,7 @@ if (typeof annotator === 'undefined') {
 			             }, 1000);
 		             }).then(function(){
                          annotationTable(sourceURL, email);
+                         console.log("refresh ann table");
                      });
 }
 
