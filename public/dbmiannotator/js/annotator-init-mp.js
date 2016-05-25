@@ -42,10 +42,17 @@ if (typeof annotator === 'undefined') {
             },
             annotationUpdated: function(ann) {
                 $("#mp-annotation-work-on").html(ann.id);
-                annotationTable(ann.rawurl, ann.email);
+                //annotationTable(ann.rawurl, ann.email);
+                setTimeout(function(){
+                    console.log("refresh ann table");
+                    annotationTable(ann.rawurl, email);
+                },800);
             },
             annotationDeleted: function (ann) {
+                console.log(ann);
+
                 setTimeout(function(){
+                    console.log("refresh ann table");
                     annotationTable(source, email);
                 },800);
             }            
