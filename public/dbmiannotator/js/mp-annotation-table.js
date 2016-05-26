@@ -51,6 +51,7 @@ function updateClaimAndData(annotations, annotationId) {
     
     // update mpadder - claim menu                
     $(".mp-sub-menu-2").html(claimMenu);
+    console.log("claim menu ready!");
 }
 
 

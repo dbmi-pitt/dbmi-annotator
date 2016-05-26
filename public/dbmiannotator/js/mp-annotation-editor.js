@@ -5,7 +5,7 @@ function claimEditorLoad() {
     $("#mp-claim-form").show();
     $(".annotator-save").hide();
 
-    showEnzyme();
+    //showEnzyme();
 
     $("#mp-data-nav").hide();
     $("#mp-data-form-participants").hide();
@@ -68,20 +68,16 @@ function deselectDrug() {
 
 
 // when relationship is inhibits or substrate of, show field enzyme
-$("#relationship").change(function showEnzyme() {
-    if($("#relationship option:selected").text()=="inhibits"||$("#relationship option:selected").text()=="substrate of") {
-        $("#enzymesection1").show();
-        $("#enzyme").show();
-    }
-    if($("#relationship option:selected").text()=="interact with") {
-        $("#enzymesection1").hide();
-        $("#enzyme").hide();
-    }
-});
+// $("#relationship").change(function showEnzyme() {
+//     console.log("mp-annotation-editor - relationship change");
+//     showEnzyme();
+// });
 
 
 function showEnzyme() {
+    console.log("showEnzyme() called");
     if($("#relationship option:selected").text()=="inhibits"||$("#relationship option:selected").text()=="substrate of") {
+        $("#enzyme")[0].selectedIndex = 0;
         $("#enzymesection1").show();
         $("#enzyme").show();
     }
@@ -181,7 +177,7 @@ function dataEditorLoadAnnTable(field) {
                     if (annotationId != null)
                         $("#mp-annotation-work-on").html(annotationId);
                     
-                switchDataForm(field);
+                    switchDataForm(field);
                     
                     // call AnnotatorJs editor for update    
                     app.annotations.update(annotation);   

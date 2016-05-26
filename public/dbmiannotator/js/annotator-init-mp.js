@@ -68,11 +68,33 @@ if (typeof annotator === 'undefined') {
 			             $(".btn-success").css("display","block");
 		             }).then(function(){
 			             setTimeout(function(){
-			                 app.annotations.load({uri: sourceURL.replace(/[\/\\\-\:\.]/g, ""), email: email});
+			                 app.annotations.load({uri: sourceURL.replace(/[\/\\\-\:\.]/g, ""), email: email});                             
 			             }, 1000);
 		             }).then(function(){
                          annotationTable(sourceURL, email);
-                         console.log("refresh ann table");
+                         console.log("initial ann table");
+                     }).then(function(){
+                         // MP adder - open/close claim menu
+                         // PMC page not ready - hanging... (comment line below)
+                         // $(document).ready(function () {
+                         console.log("add hover for mpadder menu");
+                             
+                         $('.mp-menu-btn').hover(function() { 
+                             $('.mp-main-menu').show(); 
+                         });                             
+                         
+                         $('.mp-main-menu-2').mouseenter(function(){
+                             $(this).find('.mp-sub-menu-2').slideDown();
+                         });
+                         
+                         $('.mp-main-menu-2').mouseleave(function(){
+                             $(this).find('.mp-sub-menu-2').slideUp();
+                         });
+
+                         $('#relationship').change(function() {
+                             showEnzyme();
+                         });
+                         //});
                      });
 }
 
@@ -117,22 +139,6 @@ function getURLParameter(name) {
 $(document).ready(function () {
     // splitter for show annotation panel
     $('#splitter').jqxSplitter({ showSplitBar: false, width: $(window).width(), height: $(window).height(), orientation: 'horizontal', panels: [{ size: '100%',min: 200 }, { size: '0%', min: 0}] });
-
-    // MP adder - open/close claim menu
-    $(function() {
-        $('.mp-menu-btn').hover(function() { 
-            $('.mp-main-menu').show(); 
-        });
-    });
-    
-    $('.mp-main-menu-2').mouseenter(function(){
-        $(this).find('.mp-sub-menu-2').slideDown();
-    });
-    
-    $('.mp-main-menu-2').mouseleave(function(){
-        $(this).find('.mp-sub-menu-2').slideUp();
-    });
- 
 });
 
 
