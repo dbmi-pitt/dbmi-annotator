@@ -4,9 +4,6 @@ function claimEditorLoad() {
     $("#mp-editor-type").html('claim');
     $("#mp-claim-form").show();
     $(".annotator-save").hide();
-
-    //showEnzyme();
-
     $("#mp-data-nav").hide();
     $("#mp-data-form-participants").hide();
     $("#mp-data-form-dose1").hide();
