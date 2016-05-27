@@ -98,11 +98,11 @@ function postEditorSaveAndClose() {
             width: '400px',
             modal: true,
             buttons: {
-                "Add another claim": function() {
+                "Add another claim (not ready)": function() {
                     $( this ).dialog( "close" );
                     showrightbyvalue();
                 },
-                "Add data": function() {
+                "Add data (not ready)": function() {
                     $( this ).dialog( "close" );
                     showrightbyvalue();
                 },
@@ -116,6 +116,37 @@ function postEditorSaveAndClose() {
 
     showAnnTable();    
 }
+
+// function dialogDeleteClaim(){
+
+// }
+
+
+// editor click delete button
+function postEditorDelete() {
+
+    if ($("#mp-editor-type").html() == "claim") { 
+        $( "#dialog-claim-delete-confirm" ).dialog({
+            resizable: false,
+            height: 'auto',
+            width: '400px',
+            modal: true,
+            buttons: {
+                "confirm": function() {
+                    $( this ).dialog( "close" );
+                    //showrightbyvalue();
+                },
+                "cancel": function() {
+                    $( this ).dialog( "close" );
+                    //showrightbyvalue();
+                }
+            }
+        });
+    }
+
+    showAnnTable();    
+}
+
 
 
 // modify annotaiton id when user pick claim on mpadder's menu

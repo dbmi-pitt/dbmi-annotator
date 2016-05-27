@@ -37,8 +37,9 @@ function updateClaimAndData(annotations, annotationId) {
     claimPanel += "<tr><td>Methods: " + methodListbox + "</td></tr>"
     claimPanel += "<tr><td><button type='button' onclick='editClaim()'>Edit claim</button>&nbsp;&nbsp;<button type='button' onclick='viewClaim()'>View claim</button></td></tr></table>";
     
-    // Data & Material 
-    dataPanel = "<button type='button'>add new row for data & material</button><br>" + dataTable;
+    // Data & Material - comment add more data button for now 
+    //dataPanel = "<button type='button'>add new row for data & material</button><br>" + dataTable;
+    dataPanel = dataTable;
     
     // Annotation table
     annTable = "<table id='mp-claim-data-tb'>" +
@@ -64,7 +65,7 @@ function createDataTable(dataL, annotationId){
     dataTable = "<table id='mp-data-tb'><tr><td>No. of Participants</td><td>Drug1 Dose</td><td>Drug2 Dose</td><td>AUC</td><td>Clearance</td><td>Cmax</td><td>Half-life</td></tr>";
 
     if (dataL.length > 0){ // show all data items
-        for (j = 0; j < dataL.length; j++){
+        for (j = 0; j < dataL.length; j++) {
             data = dataL[j];
             method = data.supportsBy;
             material = data.supportsBy.supportsBy;
