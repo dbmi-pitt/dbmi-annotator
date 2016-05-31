@@ -72,6 +72,10 @@ function showEditor(){
     
     var w = $(window).width()*0.85;
     $('.annotator-widget').width(w);
+
+    // hide delete button
+    console.log("mp-menu - showEditor - disable delete button");
+    $("#annotator-delete").hide();
 }
 
 

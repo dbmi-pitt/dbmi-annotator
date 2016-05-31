@@ -10,6 +10,8 @@ function updateClaimAndData(annotations, annotationId) {
     claimListbox = "<select id='mp-editor-claim-list' onChange='changeClaimInAnnoTable();'>";
     // add claim label as options in annotation list and mpadder menu
     for (i = 0; i < annotations.length; i++) { 
+
+        console.log(annotationId + "| " + annotations[i].id);
         
         annotation = annotations[i];
         dataL = annotation.argues.supportsBy;
@@ -52,7 +54,7 @@ function updateClaimAndData(annotations, annotationId) {
     
     // update mpadder - claim menu                
     $(".mp-sub-menu-2").html(claimMenu);
-    console.log("claim menu ready!");
+    console.log("claim menu updated!");
 }
 
 

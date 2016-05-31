@@ -8,35 +8,41 @@ function claimEditorLoad() {
     $("#mp-data-form-participants").hide();
     $("#mp-data-form-dose1").hide();
     $("#mp-data-form-dose2").hide();
+
 }
 
 // scroll to the claim text span
 function viewClaim() {
     annotationId = $('#mp-editor-claim-list option:selected').val();
-    document.getElementById(annotationId + "claim").scrollIntoView(true);
+    if (document.getElementById(annotationId + "claim")) 
+        document.getElementById(annotationId + "claim").scrollIntoView(true);
 }
 
 // edit claim
 function editClaim() {
     annotationId = $('#mp-editor-claim-list option:selected').val();
-    document.getElementById(annotationId + "claim").scrollIntoView(true);
 
-    showEditor();
-    claimEditorLoad();
+    if (document.getElementById(annotationId + "claim")) {
+        document.getElementById(annotationId + "claim").scrollIntoView(true);
 
-    $.ajax({url: "http://" + config.annotator.host + "/annotatorstore/annotations/" + annotationId,
-            data: {},
-            method: 'GET',
-            error : function(jqXHR, exception){
-                console.log(exception);
-            },
-            success : function(annotation){
-
-                console.log(annotation);
-                // call AnnotatorJs editor for update    
-                app.annotations.update(annotation);   
-            }
-           });        
+        showEditor();
+        claimEditorLoad();
+        
+        $.ajax({url: "http://" + config.annotator.host + "/annotatorstore/annotations/" + annotationId,
+                data: {},
+                method: 'GET',
+                error : function(jqXHR, exception){
+                    console.log(exception);
+                },
+                success : function(annotation){
+                    // enable delete button
+                    $("#annotator-delete").show();
+                    
+                    // call AnnotatorJs editor for update    
+                    app.annotations.update(annotation);   
+                }
+               });        
+    }
 }
 
 $("#Drug1").change(function (){selectDrug();});
@@ -105,7 +111,7 @@ function postEditorSaveAndClose() {
                 },
                 "Done": function() {
                     $( this ).dialog( "close" );
-                    showAnnTable();
+                    //showAnnTable();
                 }
             }
         });
@@ -164,11 +170,22 @@ function claimSelectedInMenu(annotationId) {
 function dataEditorLoad(annotation, field, annotationId) {
     console.log("dataEditorLoad - id: " + annotationId + " | field: " + field);
     $(".annotator-save").show();
+    //$("#annotator-delete").hide();
+
     // updating current MP annotation
     if (annotationId != null)
         $("#mp-annotation-work-on").html(annotationId);
 
-    switchDataForm(field);
+    switchDataForm(field, annotation);
+
+    // show delete button
+    material = annotation.argues.supportsBy[0].supportsBy.supportsBy;
+    if (field == "participants" && material.participants.value != null)
+        $("#annotator-delete").show();
+    else if (field == "dose1" && material.drug1Dose.value != null)
+        $("#annotator-delete").show();
+    else if (field == "dose2" && material.drug2Dose.value != null)    
+        $("#annotator-delete").show();
 
     // call AnnotatorJs editor for update    
     app.annotations.update(annotation);                        
@@ -185,6 +202,8 @@ function postEditorSave(){
 function dataEditorLoadAnnTable(field) {
 
     $(".annotator-save").show();
+    //$("#annotator-delete").hide();
+
     var annotationId = $('#mp-editor-claim-list option:selected').val();
     console.log("dataEditorLoad - id: " + annotationId + " | field: " + field)
     // scroll to the position of annotation
@@ -199,13 +218,22 @@ function dataEditorLoadAnnTable(field) {
                     console.log(exception);
                 },
                 success : function(annotation){
-                    
+
                     console.log(annotation);
                     // updating current MP annotation
                     if (annotationId != null)
                         $("#mp-annotation-work-on").html(annotationId);
                     
-                    switchDataForm(field);
+                    switchDataForm(field, annotation);
+
+                    // show delete button
+                    material = annotation.argues.supportsBy[0].supportsBy.supportsBy;
+                    if (field == "participants" && material.participants.value != null)
+                        $("#annotator-delete").show();
+                    else if (field == "dose1" && material.drug1Dose.value != null)
+                        $("#annotator-delete").show();
+                    else if (field == "dose2" && material.drug2Dose.value != null) 
+                        $("#annotator-delete").show();
                     
                     // call AnnotatorJs editor for update    
                     app.annotations.update(annotation);   
@@ -218,7 +246,7 @@ function dataEditorLoadAnnTable(field) {
 
 
 // open data editor with specific form
-function switchDataForm(field) {
+function switchDataForm(field, annotation) {
 
     fieldL = ["participants","dose1","dose2"];
     
@@ -228,12 +256,12 @@ function switchDataForm(field) {
     
     $("#mp-data-nav").show();
     $("#mp-claim-form").hide();
-    
+
     // shown specific data form, hide others
     for (i = 0; i < fieldL.length; i++){
         var dataid = "mp-data-form-"+fieldL[i];
         if (fieldL[i] == field){
-            $("#"+dataid).show();            
+            $("#"+dataid).show();
         } else {
             $("#"+dataid).hide();
         }
