@@ -176,7 +176,7 @@ function dataEditorLoad(annotation, field, annotationId) {
     if (annotationId != null)
         $("#mp-annotation-work-on").html(annotationId);
 
-    switchDataForm(field, annotation);
+    switchDataForm(field);
 
     // show delete button
     material = annotation.argues.supportsBy[0].supportsBy.supportsBy;
@@ -224,7 +224,7 @@ function dataEditorLoadAnnTable(field) {
                     if (annotationId != null)
                         $("#mp-annotation-work-on").html(annotationId);
                     
-                    switchDataForm(field, annotation);
+                    switchDataForm(field);
 
                     // show delete button
                     material = annotation.argues.supportsBy[0].supportsBy.supportsBy;
@@ -246,9 +246,9 @@ function dataEditorLoadAnnTable(field) {
 
 
 // open data editor with specific form
-function switchDataForm(field, annotation) {
+function switchDataForm(field) {
 
-    fieldL = ["participants","dose1","dose2"];
+    fieldL = ["participants","dose1","dose2","auc","cmax","cl","halflife"];
     
     if (field == null) 
         field = "participants";

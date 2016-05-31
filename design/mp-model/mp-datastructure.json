@@ -78,7 +78,7 @@
                  'hasTarget' : '',
                  'ranges' : ''
              },
-             'clearance': {
+             'cl': {
                  'value': 'numeric',
                  'type' : 'options: unk, percent, fold',
                  'direction' : 'unk, increase, decrease',
