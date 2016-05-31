@@ -78,7 +78,7 @@ function deselectDrug() {
 
 
 function showEnzyme() {
-    console.log("showEnzyme() called");
+    // console.log("showEnzyme() called");
     if($("#relationship option:selected").text()=="inhibits"||$("#relationship option:selected").text()=="substrate of") {
         $("#enzyme")[0].selectedIndex = 0;
         $("#enzymesection1").show();
@@ -219,7 +219,7 @@ function dataEditorLoadAnnTable(field) {
                 },
                 success : function(annotation){
 
-                    console.log(annotation);
+                    // console.log(annotation);
                     // updating current MP annotation
                     if (annotationId != null)
                         $("#mp-annotation-work-on").html(annotationId);

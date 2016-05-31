@@ -11,8 +11,7 @@ function updateClaimAndData(annotations, annotationId) {
     // add claim label as options in annotation list and mpadder menu
     for (i = 0; i < annotations.length; i++) { 
 
-        console.log(annotationId + "| " + annotations[i].id);
-        
+        //console.log(annotationId + "| " + annotations[i].id);        
         annotation = annotations[i];
         dataL = annotation.argues.supportsBy;
 

@@ -74,7 +74,7 @@ function showEditor(){
     $('.annotator-widget').width(w);
 
     // hide delete button
-    console.log("mp-menu - showEditor - disable delete button");
+    // console.log("mp-menu - showEditor - disable delete button");
     $("#annotator-delete").hide();
 }
 
@@ -131,8 +131,7 @@ var getUrlParameter = function getUrlParameter(sParam) {
     }
     var w = $(window).width()*0.85;
     $('.annotator-widget').width(w);
-    
-    
+        
   }
 
   function showrightbyvalue(){
