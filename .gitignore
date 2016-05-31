@@ -1,6 +1,11 @@
 # config file
-#*config.py
+config/config.js
 
+# nodejs libs
+node_modules/
+
+# Mac hidden file
+.DS_Store
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
