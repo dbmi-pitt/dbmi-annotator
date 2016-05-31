@@ -36,6 +36,7 @@
     "passport-twitter": "~1.0.2",
     "pg": "^4.4.3",
     "q": "^1.4.1",
+    "request": "^2.72.0",
     "sequelize": "^3.18.0",
     "uuid": "^2.0.1",
     "valid-url": "^1.0.9",
