@@ -3,6 +3,8 @@
 function claimEditorLoad() {
     $("#mp-editor-type").html('claim');
     $("#mp-claim-form").show();
+    $('#quote').show();
+
     $(".annotator-save").hide();
     $("#mp-data-nav").hide();
     $("#mp-data-form-participants").hide();
@@ -167,6 +169,7 @@ function claimSelectedInMenu(annotationId) {
 function dataEditorLoad(annotation, field, annotationId) {
     console.log("dataEditorLoad - id: " + annotationId + " | field: " + field);
     $(".annotator-save").show();
+    $('#quote').hide();
     //$("#annotator-delete").hide();
 
     // updating current MP annotation
@@ -199,6 +202,7 @@ function postEditorSave(){
 function dataEditorLoadAnnTable(field) {
 
     $(".annotator-save").show();
+    $('#quote').hide();
     //$("#annotator-delete").hide();
 
     var annotationId = $('#mp-editor-claim-list option:selected').val();

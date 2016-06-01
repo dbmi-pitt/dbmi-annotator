@@ -38,8 +38,8 @@ function updateClaimAndData(annotations, annotationId) {
     claimPanel += "<tr><td>Methods: " + methodListbox + "</td></tr>"
     claimPanel += "<tr><td><button type='button' onclick='editClaim()'>Edit claim</button>&nbsp;&nbsp;<button type='button' onclick='viewClaim()'>View claim</button></td></tr></table>";
     
-    // Data & Material - comment add more data button for now 
-    //dataPanel = "<button type='button'>add new row for data & material</button><br>" + dataTable;
+    // Data & Material - add new data button 
+    dataPanel = "<button type='button' style='float: right;'>add new data & material (not ready)</button><br>" + dataTable;
     dataPanel = dataTable;
     
     // Annotation table
@@ -111,7 +111,7 @@ function createDataTable(dataL, annotationId){
             dataTable += row;
         }
     } else { // add empty row
-        dataTable += "<tr style='height:20px;'><td onclick='warnSelectTextSpan(\"participants\");'> </td><td onclick='warnSelectTextSpan(\"dose1\");'> </td><td onclick='warnSelectTextSpan(\"dose2\");'></td><td></td><td></td><td></td><td></td></tr>"
+        dataTable += "<tr style='height:20px;'><td onclick='warnSelectTextSpan(\"participants\");'> </td><td onclick='warnSelectTextSpan(\"dose1\");'> </td><td onclick='warnSelectTextSpan(\"dose2\");'></td><td onclick='warnSelectTextSpan(\"auc\");'></td><td onclick='warnSelectTextSpan(\"cmax\");'></td><td onclick='warnSelectTextSpan(\"cl\");'></td><td onclick='warnSelectTextSpan(\"halflife\");'></td></tr>"
     }
     dataTable += "</table>";
     return dataTable;
