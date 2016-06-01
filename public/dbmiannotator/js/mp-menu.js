@@ -26,7 +26,7 @@
 
 // show annotation table
 function showAnnTable(){
-
+    console.log("mp-menu - showAnnTable()");
     $('#tabs').tabs("option", "active", 0);
 
     $('#splitter').jqxSplitter({

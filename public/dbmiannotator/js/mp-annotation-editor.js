@@ -89,19 +89,19 @@ function showEnzyme() {
 }
 
 
-// editor click save and close button
+// editor click save and close button for claim
 function postEditorSaveAndClose() {
 
     if ($("#mp-editor-type").html() == "claim") { 
         $( "#claim-dialog-confirm" ).dialog({
             resizable: false,
             height: 'auto',
-            width: '400px',
+            width: '500px',
             modal: true,
             buttons: {
                 "Add another claim (not ready)": function() {
                     $( this ).dialog( "close" );
-                    showrightbyvalue();
+                    
                 },
                 "Add data (not ready)": function() {
                     $( this ).dialog( "close" );
@@ -109,7 +109,6 @@ function postEditorSaveAndClose() {
                 },
                 "Done": function() {
                     $( this ).dialog( "close" );
-                    //showAnnTable();
                 }
             }
         });
