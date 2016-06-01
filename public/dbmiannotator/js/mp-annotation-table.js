@@ -71,6 +71,7 @@ function createDataTable(dataL, annotationId){
             method = data.supportsBy;
             material = data.supportsBy.supportsBy;
             row = "<tr style='height:20px;'>";
+            // show mp material
             if (material.participants.value != null)
                 row += "<td onclick='showEditor(),dataEditorLoadAnnTable(\"participants\");'>" + material.participants.value + "</td>";      
             else 
@@ -85,7 +86,28 @@ function createDataTable(dataL, annotationId){
                 row += "<td onclick='showEditor(),dataEditorLoadAnnTable(\"dose2\");'>" + material.drug2Dose.value + "</td>";
             else 
                 row += "<td onclick='warnSelectTextSpan(\"dose2\");'></td>"; 
-            row += "<td></td><td></td><td></td><td></td></tr>";
+            // show mp data
+            if (data.auc.value != null)
+                row += "<td onclick='showEditor(),dataEditorLoadAnnTable(\"auc\");'>" + data.auc.value + "</td>";
+            else 
+                row += "<td onclick='warnSelectTextSpan(\"auc\");'></td>"; 
+
+            if (data.cmax.value != null)
+                row += "<td onclick='showEditor(),dataEditorLoadAnnTable(\"cmax\");'>" + data.cmax.value + "</td>";
+            else 
+                row += "<td onclick='warnSelectTextSpan(\"cmax\");'></td>"; 
+
+            if (data.cl.value != null)
+                row += "<td onclick='showEditor(),dataEditorLoadAnnTable(\"cl\");'>" + data.cl.value + "</td>";
+            else 
+                row += "<td onclick='warnSelectTextSpan(\"cl\");'></td>"; 
+
+            if (data.halflife.value != null)
+                row += "<td onclick='showEditor(),dataEditorLoadAnnTable(\"halflife\");'>" + data.halflife.value + "</td>";
+            else 
+                row += "<td onclick='warnSelectTextSpan(\"halflife\");'></td>"; 
+
+            row += "</tr>";
             dataTable += row;
         }
     } else { // add empty row

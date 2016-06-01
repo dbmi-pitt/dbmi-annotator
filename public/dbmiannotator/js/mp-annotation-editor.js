@@ -8,6 +8,10 @@ function claimEditorLoad() {
     $("#mp-data-form-participants").hide();
     $("#mp-data-form-dose1").hide();
     $("#mp-data-form-dose2").hide();
+    $("#mp-data-form-auc").hide();
+    $("#mp-data-form-cmax").hide();
+    $("#mp-data-form-cl").hide();
+    $("#mp-data-form-halflife").hide();
 
 }
 
@@ -71,14 +75,8 @@ function deselectDrug() {
 
 
 // when relationship is inhibits or substrate of, show field enzyme
-// $("#relationship").change(function showEnzyme() {
-//     console.log("mp-annotation-editor - relationship change");
-//     showEnzyme();
-// });
-
-
 function showEnzyme() {
-    // console.log("showEnzyme() called");
+
     if($("#relationship option:selected").text()=="inhibits"||$("#relationship option:selected").text()=="substrate of") {
         $("#enzyme")[0].selectedIndex = 0;
         $("#enzymesection1").show();
@@ -180,12 +178,12 @@ function dataEditorLoad(annotation, field, annotationId) {
 
     // show delete button
     material = annotation.argues.supportsBy[0].supportsBy.supportsBy;
-    if (field == "participants" && material.participants.value != null)
-        $("#annotator-delete").show();
-    else if (field == "dose1" && material.drug1Dose.value != null)
-        $("#annotator-delete").show();
-    else if (field == "dose2" && material.drug2Dose.value != null)    
-        $("#annotator-delete").show();
+    // if (field == "participants" && material.participants.value != null)
+    //     $("#annotator-delete").show();
+    // else if (field == "dose1" && material.drug1Dose.value != null)
+    //     $("#annotator-delete").show();
+    // else if (field == "dose2" && material.drug2Dose.value != null)    
+    //     $("#annotator-delete").show();
 
     // call AnnotatorJs editor for update    
     app.annotations.update(annotation);                        
