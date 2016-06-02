@@ -82,6 +82,10 @@ if (typeof annotator === 'undefined') {
                          $('.mp-menu-btn').hover(function() { 
                              $('.mp-main-menu').show(); 
                          });                             
+
+                         $('.mp-main-menu').mouseleave(function(){
+                             $('.mp-main-menu').hide(); 
+                         });
                          
                          $('.mp-main-menu-2').mouseenter(function(){
                              $(this).find('.mp-sub-menu-2').slideDown();
