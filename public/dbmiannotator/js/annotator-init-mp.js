@@ -7,11 +7,13 @@ if (typeof annotator === 'undefined') {
     var app = new annotator.App();
 
     var annType = $('#mp-annotation-tb').attr('name');
+    var sourceURL = getURLParameter("sourceURL").trim();
+    var email = getURLParameter("email");
 
     if (annType == "DDI")
         app.include(annotator.ui.dbmimain);            
     else if (annType == "MP")
-        app.include(annotator.ui.mpmain, {element: subcontent});
+        app.include(annotator.ui.mpmain, {element: subcontent, email: email, source: sourceURL});
     else 
         alert("[ERROR] plugin settings wrong, neither DDI nor MP plugin!");
 
@@ -24,42 +26,39 @@ if (typeof annotator === 'undefined') {
 	    prefix: 'http://' + config.store.host + ':' + config.store.port
     });
 
-    var sourceURL = getURLParameter("sourceURL").trim();
-    var email = getURLParameter("email");
+    // var annotationCreateHelper = function () {
 
-    var annotationCreateHelper = function () {
-
-	    source = getURLParameter("sourceURL").trim();
-    	return {
-            beforeAnnotationCreated: function (ann) {
-		        ann.rawurl = source;
-    		    ann.uri = source.replace(/[\/\\\-\:\.]/g, "");		
-		        ann.email = email;
-            },
-            annotationCreated: function (ann) {
-                if (ann.annotationType == "MP") {
-                    $("#mp-annotation-work-on").html(ann.id);
-                    annotationTable(ann.rawurl, ann.email);
-                    console.log("refresh ann table");
-                }
-            },
-            annotationUpdated: function(ann) {
-                if (ann.annotationType == "MP") {
-                    $("#mp-annotation-work-on").html(ann.id);
-                    annotationTable(ann.rawurl, ann.email);
-                    console.log("refresh ann table");
-                }
-            },
-            annotationDeleted: function (ann) {
+	//     source = getURLParameter("sourceURL").trim();
+    // 	return {
+    //         beforeAnnotationCreated: function (ann) {
+	// 	        ann.rawurl = source;
+    // 		    ann.uri = source.replace(/[\/\\\-\:\.]/g, "");		
+	// 	        ann.email = email;
+    //         },
+    //         annotationCreated: function (ann) {
+    //             if (ann.annotationType == "MP") {
+    //                 $("#mp-annotation-work-on").html(ann.id);
+    //                 annotationTable(ann.rawurl, ann.email);
+    //                 console.log("refresh ann table");
+    //             }
+    //         },
+    //         annotationUpdated: function(ann) {
+    //             if (ann.annotationType == "MP") {
+    //                 $("#mp-annotation-work-on").html(ann.id);
+    //                 annotationTable(ann.rawurl, ann.email);
+    //                 console.log("refresh ann table");
+    //             }
+    //         },
+    //         annotationDeleted: function (ann) {
                 
-                setTimeout(function(){
-                    console.log("refresh ann table");
-                    annotationTable(source, email);
-                },1000);
-            }            
-    	};
-    };
-    app.include(annotationCreateHelper);
+    //             setTimeout(function(){
+    //                 console.log("refresh ann table");
+    //                 annotationTable(source, email);
+    //             },1000);
+    //         }            
+    // 	};
+    // };
+    // app.include(annotationCreateHelper);
 
     // load annotation after page contents loaded
     app.start().then(function () 
@@ -98,43 +97,11 @@ if (typeof annotator === 'undefined') {
                          $('#relationship').change(function() {
                              showEnzyme();
                          });
-                         //});
+
                      });
 }
 
-// update 1) annotation table (claim and data) and  2) mpadder (claim menu)
-// @input: annotatio source url
-// @input: user email
-// @input: annotation type
-// @input: the column that data & material table sorting by
-// @output: update annotation table and mpadder 
 
-function annotationTable(sourceURL, email, sortByColumn){
-
-    // request all mp annotaitons for current document and user
-    $.ajax({url: "http://" + config.annotator.host + "/annotatorstore/search",
-            data: {annotationType: "MP", 
-                   email: email, 
-                   uri: sourceURL.replace(/[\/\\\-\:\.]/g, "")},
-            method: 'GET',
-            error : function(jqXHR, exception){
-                console.log(exception);
-            },
-            success : function(response){
-
-                    // ann Id for selected claim, if null, set first claim as default 
-                    var annotationId = $("#mp-annotation-work-on").html();    
-
-                    if (annotationId == null || annotationId.trim() == "") {         
-                        if (response.total > 0){
-                            $("#mp-annotation-work-on").html(response.rows[0].id);
-                            annotationId = response.rows[0].id;
-                        }
-                    }
-                    updateClaimAndData(response.rows, annotationId);
-            }
-           });
-}
 
 function getURLParameter(name) {
     return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search)||[,""])[1].replace(/\+/g, '%20'))||null
@@ -146,17 +113,17 @@ $(document).ready(function () {
 });
 
 
-var getUrlParameter = function getUrlParameter(sParam) {
-    var sPageURL = decodeURIComponent(window.location.search.substring(1)),
-        sURLVariables = sPageURL.split('&'),
-        sParameterName,
-        i;
+// var getUrlParameter = function getUrlParameter(sParam) {
+//     var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+//         sURLVariables = sPageURL.split('&'),
+//         sParameterName,
+//         i;
 
-    for (i = 0; i < sURLVariables.length; i++) {
-        sParameterName = sURLVariables[i].split('=');
+//     for (i = 0; i < sURLVariables.length; i++) {
+//         sParameterName = sURLVariables[i].split('=');
 
-        if (sParameterName[0] === sParam) {
-            return sParameterName[1] === undefined ? true : sParameterName[1];
-        }
-    }
-};
+//         if (sParameterName[0] === sParam) {
+//             return sParameterName[1] === undefined ? true : sParameterName[1];
+//         }
+//     }
+// };

@@ -1,3 +1,38 @@
+// update 1) annotation table (claim and data) and  2) mpadder (claim menu)
+// @input: annotatio source url
+// @input: user email
+// @input: annotation type
+// @input: the column that data & material table sorting by
+// @output: update annotation table and mpadder 
+
+function annotationTable(sourceURL, email, sortByColumn){
+    console.log("refresh ann table");
+    // request all mp annotaitons for current document and user
+    $.ajax({url: "http://" + config.annotator.host + "/annotatorstore/search",
+            data: {annotationType: "MP", 
+                   email: email, 
+                   uri: sourceURL.replace(/[\/\\\-\:\.]/g, "")},
+            method: 'GET',
+            error : function(jqXHR, exception){
+                console.log(exception);
+            },
+            success : function(response){
+
+                    // ann Id for selected claim, if null, set first claim as default 
+                    var annotationId = $("#mp-annotation-work-on").html();    
+
+                    if (annotationId == null || annotationId.trim() == "") {         
+                        if (response.total > 0){
+                            $("#mp-annotation-work-on").html(response.rows[0].id);
+                            annotationId = response.rows[0].id;
+                        }
+                    }
+                    updateClaimAndData(response.rows, annotationId);
+            }
+           });
+}
+
+
 // update annotation table by selected annotaionId
 // @input: list of mp annotaitons
 // @input: annotationId for selected claim
