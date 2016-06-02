@@ -197,3 +197,33 @@ h1 {
 .mp-main-menu:hover {
     background-color: #3e8e41;
 }
+
+/* annotation table - claim panel */
+#mp-claim-method-tb {
+    all: initial;
+    color: #333; /* Lighten up font color */
+    font-family: Helvetica, Arial, sans-serif; /* Nicer font */
+    width: 640px;
+    border-collapse:
+    collapse; border-spacing: 0;
+}
+
+/* annotation table - data & material panel */
+#mp-claim-data-tb {
+    all: initial; 
+    color: #333; /* Lighten up font color */
+    font-family: Helvetica, Arial, sans-serif; /* Nicer font */
+    width: 800px;
+    border-collapse:
+    collapse; border-spacing: 0;
+ }
+
+/* annotation editor */
+#tabs-2 {
+    all: initial;
+    color: #333; /* Lighten up font color */
+    font-family: Helvetica, Arial, sans-serif; /* Nicer font */
+    /* width: 800px; */
+    border-collapse:
+    collapse; border-spacing: 0;
+}

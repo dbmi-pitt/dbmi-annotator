@@ -33,7 +33,7 @@ function updateClaimAndData(annotations, annotationId) {
     // Method listbox
     methodListbox = "<select id='mp-editor-method'><option value='clinical-trial'>Clinical Trial</option></select>";
     // Claim 
-    claimPanel = "<table>";
+    claimPanel = "<table id='mp-claim-method-tb'>";
     claimPanel += "<tr><td>" + claimListbox + "</td></tr>";
     claimPanel += "<tr><td>Methods: " + methodListbox + "</td></tr>"
     claimPanel += "<tr><td><button type='button' onclick='editClaim()'>Edit claim</button>&nbsp;&nbsp;<button type='button' onclick='viewClaim()'>View claim</button></td></tr></table>";
