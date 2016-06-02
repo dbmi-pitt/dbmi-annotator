@@ -55,7 +55,7 @@ if (typeof annotator === 'undefined') {
                 setTimeout(function(){
                     console.log("refresh ann table");
                     annotationTable(source, email);
-                },800);
+                },1000);
             }            
     	};
     };
