@@ -40,8 +40,6 @@ module.exports = function(app, passport) {
     
     // MAIN ==============================
     app.get('/dbmiannotator/main', isLoggedIn, initPluginProfile, function(req, res) {
-        console.log(config.profile.userProfile);
-
         if (config.profile.userProfile != null) {
             annotationType = config.profile.userProfile.type;
         } else {
@@ -160,40 +158,90 @@ module.exports = function(app, passport) {
         });
     });
     
+    
+    // EXPORT TO JSON ==============================
+    app.get('/dbmiannotator/exportjson', isLoggedIn, function(req, res){
+	
+	    var url = "http://" + config.store.host + ":" + config.store.port + "/search?email=" + req.query.email + "&annotationType=" + config.profile.def;
+	    
+	    request({url: url, json: true}, function(error,response,body){
+	        if (!error && response.statusCode === 200) {
+                
+                var annsJsonRes = JSON.stringify(body.rows);
+                res.attachment('annotations-'+req.query.email+'.json');
+		        res.setHeader('Content-Type', 'application/json');
+		        res.end(annsJsonRes);		       		        
+	        } else {
+		        //req.flash('exportMessage', 'exported failed, annotation fetch exception, please see logs or contact Yifan at yin2@pitt.edu!');
+		        res.redirect('/dbmiannotator/main');		        
+	        }	
+	    });	    	    
+    });        
 
-    // EXPORT ==============================
+    // EXPORT TO CSV ==============================
     app.get('/dbmiannotator/exportcsv', isLoggedIn, function(req, res){
 	
-	var url = "http://" + config.store.host + ":" + config.store.port + "/search?email=" + req.query.email + "&annotationType=" + config.plugin.userProfile;
+	    var url = "http://" + config.store.host + ":" + config.store.port + "/search?email=" + req.query.email + "&annotationType=" + config.profile.def;
 	    
-	request({url: url, json: true}, function(error,response,body){
-	    if (!error && response.statusCode === 200) {
-		
-		var json2csv = require('json2csv');
-		json2csv({data: body.rows, fields: ['email', 'rawurl', 'annotationType', 'assertion_type', 'quote', 'relationship', 'Drug1', 'Type1', 'Role1', 'Drug2', 'Type2', 'Role2', 'enzyme', 'Modality', 'Evidence_modality','Number_participants','FormulationP','FormulationO','DoseMG_precipitant','DoseMG_object','Duration_precipitant','Duration_object','RegimentsP','RegimentsO','Aucval','AucType','AucDirection','Clval','ClType','ClDirection','cmaxval','cmaxType','cmaxDirection','cminval','cminType','cminDirection','t12','t12Type','t12Direction','Comment']}, function(err, csv) {
-		    
-		    if (err) console.log(err);
-		    
-		    res.attachment('annotations-'+req.query.email+'.csv');
-		    res.setHeader('Content-Type', 'text/csv');
-		    res.end(csv);
+	    request({url: url, json: true}, function(error,response,body){
+	        if (!error && response.statusCode === 200) {
+                
+                var jsonObjs = body.rows;
+                res.attachment('annotations-'+req.query.email+'.csv');
+		        res.setHeader('Content-Type', 'text/csv');
+                var csvTxt = ""; 
 
-		    //req.flash('exportMessage', 'successfully downloaded!');
-		    //res.redirect('/dbmiannotator/main');		    
-		});
-		
-	    } else {
-		//req.flash('exportMessage', 'exported failed, annotation fetch exception, please see logs or contact Yifan at yin2@pitt.edu!');
-		res.redirect('/dbmiannotator/main');
-		
-	    }	
-	});
-	
-	    
-    });
+                for (var i = 0; i < jsonObjs.length; i++) {
+                    jsonObj = jsonObjs[i];
+                    claim = jsonObj.argues;
+                    dataL = claim.supportsBy;                   
 
-    
+                    for (var j = 0; j < dataL.length; j ++) {
+                        data = dataL[j];
+                        method = data.supportsBy;
+                        material = method.supportsBy;
+
+                        var line = '"' + claim.label + '","' + claim.hasTarget.hasSelector.exact + '","' + material.participants.value + '","' + data.auc.value + '"';
+                        csvTxt += line + "\n";
+                    }
+                }
+
+		        res.attachment('annotations-'+req.query.email+'.csv');
+		        res.setHeader('Content-Type', 'text/csv');
+		        res.end(csvTxt);                    
+		        
+		        // var json2csv = require('json2csv');
+		        // //json2csv({data: body.rows, fields: ['email', 'rawurl', 'annotationType', 'assertion_type', 'quote', 'relationship', 'Drug1', 'Type1', 'Role1', 'Drug2', 'Type2', 'Role2', 'enzyme', 'Modality', 'Evidence_modality','Number_participants','FormulationP','FormulationO','DoseMG_precipitant','DoseMG_object','Duration_precipitant','Duration_object','RegimentsP','RegimentsO','Aucval','AucType','AucDirection','Clval','ClType','ClDirection','cmaxval','cmaxType','cmaxDirection','cminval','cminType','cminDirection','t12','t12Type','t12Direction','Comment']}, function(err, csv) {
+
+                // json2csv({data: jsonObjs, fields: [
+                //     {label: 'email', 
+                //      value: function (row) {
+                //          return row.email;
+                //      }, default: 'UNK'}, 
+                //     {label: 'auc', 
+                //      value: function(row) {
+                //          return row.argues.supportsBy[0].auc.value;
+                //      }, default: 'UNK'}
+                // ]}, function(err, csv) {
+		    
+		        //     if (err) console.log(err);
+		            
+		        //     res.attachment('annotations-'+req.query.email+'.csv');
+		        //     res.setHeader('Content-Type', 'text/csv');
+		        //     res.end(csv);                    
+		        //     //req.flash('exportMessage', 'successfully downloaded!');
+		        //     //res.redirect('/dbmiannotator/main');		    
+		        // });
+		        
+	        } else {
+		        //req.flash('exportMessage', 'exported failed, annotation fetch exception, please see logs or contact Yifan at yin2@pitt.edu!');
+		        res.redirect('/dbmiannotator/main');
+		        
+	        }	
+	    });	    	    
+    });        
 };
+
 
 // MIDDLE WARE FUNCTIONS ==============================
 
