@@ -119,38 +119,6 @@ function postEditorSaveAndClose() {
     showAnnTable();    
 }
 
-// function dialogDeleteClaim(){
-
-// }
-
-
-// editor click delete button
-function postEditorDelete() {
-
-    if ($("#mp-editor-type").html() == "claim") { 
-        $( "#dialog-claim-delete-confirm" ).dialog({
-            resizable: false,
-            height: 'auto',
-            width: '400px',
-            modal: true,
-            buttons: {
-                "confirm": function() {
-                    $( this ).dialog( "close" );
-                    //showrightbyvalue();
-                },
-                "cancel": function() {
-                    $( this ).dialog( "close" );
-                    //showrightbyvalue();
-                }
-            }
-        });
-    }
-
-    showAnnTable();    
-}
-
-
-
 // modify annotaiton id when user pick claim on mpadder's menu
 // update annotation table if necessary
 function claimSelectedInMenu(annotationId) {
@@ -170,7 +138,7 @@ function dataEditorLoad(annotation, field, annotationId) {
     console.log("dataEditorLoad - id: " + annotationId + " | field: " + field);
     $(".annotator-save").show();
     $('#quote').hide();
-    //$("#annotator-delete").hide();
+    $("#annotator-delete").show();
 
     // updating current MP annotation
     if (annotationId != null)
@@ -179,21 +147,13 @@ function dataEditorLoad(annotation, field, annotationId) {
     switchDataForm(field);
 
     // show delete button
-    material = annotation.argues.supportsBy[0].supportsBy.supportsBy;
-    // if (field == "participants" && material.participants.value != null)
-    //     $("#annotator-delete").show();
-    // else if (field == "dose1" && material.drug1Dose.value != null)
-    //     $("#annotator-delete").show();
-    // else if (field == "dose2" && material.drug2Dose.value != null)    
-    //     $("#annotator-delete").show();
+    data = annotation.argues.supportsBy[0];
+    material = data.supportsBy.supportsBy;
+    if ((field == "participants" && material.participants.value != null) || (field == "dose1" && material.drug1Dose.value != null) || (field == "dose2" && material.drug2Dose.value != null) || ((field == "auc" || field == "cmax" || field == "cl" || field == "halflife") && (data[field].value != null)))
+        $("#annotator-delete").show();
 
     // call AnnotatorJs editor for update    
     app.annotations.update(annotation);                        
-}
-
-// Data editor save, keep form open
-function postEditorSave(){
-    showEditor();
 }
 
 // load data Editor based on selection from annotation table
@@ -203,7 +163,6 @@ function dataEditorLoadAnnTable(field) {
 
     $(".annotator-save").show();
     $('#quote').hide();
-    //$("#annotator-delete").hide();
 
     var annotationId = $('#mp-editor-claim-list option:selected').val();
     console.log("dataEditorLoad - id: " + annotationId + " | field: " + field)
@@ -220,7 +179,6 @@ function dataEditorLoadAnnTable(field) {
                 },
                 success : function(annotation){
 
-                    // console.log(annotation);
                     // updating current MP annotation
                     if (annotationId != null)
                         $("#mp-annotation-work-on").html(annotationId);
@@ -228,12 +186,9 @@ function dataEditorLoadAnnTable(field) {
                     switchDataForm(field);
 
                     // show delete button
-                    material = annotation.argues.supportsBy[0].supportsBy.supportsBy;
-                    if (field == "participants" && material.participants.value != null)
-                        $("#annotator-delete").show();
-                    else if (field == "dose1" && material.drug1Dose.value != null)
-                        $("#annotator-delete").show();
-                    else if (field == "dose2" && material.drug2Dose.value != null) 
+                    data = annotation.argues.supportsBy[0];
+                    material = data.supportsBy.supportsBy;
+                    if ((field == "participants" && material.participants.value != null) || (field == "dose1" && material.drug1Dose.value != null) || (field == "dose2" && material.drug2Dose.value != null) || ((field == "auc" || field == "cmax" || field == "cl" || field == "halflife") && (data[field].value != null)))
                         $("#annotator-delete").show();
                     
                     // call AnnotatorJs editor for update    
@@ -242,8 +197,6 @@ function dataEditorLoadAnnTable(field) {
                });            
     }         
 }
-
-
 
 
 // open data editor with specific form
