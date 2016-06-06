@@ -188,7 +188,7 @@ module.exports = function(app, passport) {
                 var jsonObjs = body.rows;
                 res.attachment('annotations-'+req.query.email+'.csv');
 		        res.setHeader('Content-Type', 'text/csv');
-                var csvTxt = '"claim label","claim text","method","relationship","drug1","drug2","enzyme","drug1 dose","drug1 formulation","drug1 duration","drug1 regimens","drug2 dose","drug2 formulation","drug2 duration","drug2 regimens","auc","auc type","auc direction","cmax","cmax type","cmax direction","cl","cl type","cl direction","halflife","halflife type","halflife direction"\n'; 
+                var csvTxt = '"claim label","claim text","method","relationship","drug1","drug2","enzyme","parcipitants","parcipitants text","drug1 dose","drug1 formulation","drug1 duration","drug1 regimens","drug1 dose text","drug2 dose","drug2 formulation","drug2 duration","drug2 regimens","drug2 dose text","auc","auc type","auc direction","auc text","cmax","cmax type","cmax direction","cmax text","cl","cl type","cl direction","cl text","halflife","halflife type","halflife direction","halflife text"\n'; 
 
                 for (var i = 0; i < jsonObjs.length; i++) {
                     jsonObj = jsonObjs[i];
@@ -200,7 +200,7 @@ module.exports = function(app, passport) {
                         method = data.supportsBy;
                         material = method.supportsBy;
 
-                        var line = '"' + claim.label + '","' + claim.hasTarget.hasSelector.exact + '","' + method.type + '","' + claim.qualifiedBy.relationship + '","' + claim.qualifiedBy.drug1 + '","' + claim.qualifiedBy.drug2 + '","' + claim.qualifiedBy.enzyme + '","' + material.participants.value + '","' + material.drug1Dose.value + '","' + material.drug1Dose.formulation + '","'  + material.drug1Dose.duration + '","'+ material.drug1Dose.regimens + '","' + material.drug2Dose.value + '","' + material.drug2Dose.formulation + '","' + material.drug2Dose.duration + '","' + material.drug2Dose.regimens + '","' + data.auc.value + '","' + data.auc.direction + '","' + data.auc.type + '","' + data.cmax.value + '","' + data.cmax.direction + '","' + data.cmax.type + '","' + data.cl.value + '","' + data.cl.direction + '","' + data.cl.type + '","' + data.halflife.value + '","' + data.halflife.direction + '","' + data.halflife.type + '"';
+                        var line = '"' + claim.label + '","' + claim.hasTarget.hasSelector.exact + '","' + method.type + '","' + claim.qualifiedBy.relationship + '","' + claim.qualifiedBy.drug1 + '","' + claim.qualifiedBy.drug2 + '","' + claim.qualifiedBy.enzyme + '","' + material.participants.value + '","' + getSpanFromField(material.participants) + '","' + material.drug1Dose.value + '","' + material.drug1Dose.formulation + '","'  + material.drug1Dose.duration + '","' + material.drug1Dose.regimens + '","' + getSpanFromField(material.drug1Dose) + '","' + material.drug2Dose.value + '","' + material.drug2Dose.formulation + '","' + material.drug2Dose.duration + '","' + material.drug2Dose.regimens + '","'  + getSpanFromField(material.drug2Dose) + '","'+ data.auc.value + '","' + data.auc.direction + '","' + data.auc.type + '","' + getSpanFromField(data.auc) + '","' + data.cmax.value + '","' + data.cmax.direction + '","' + data.cmax.type + '","' + getSpanFromField(data.cmax) + '","' + data.cl.value + '","' + data.cl.direction + '","' + data.cl.type + '","' + getSpanFromField(data.cl) + '","' + data.halflife.value + '","' + data.halflife.direction + '","' + data.halflife.type + '","' + getSpanFromField(data.halflife) + '"';
                         csvTxt += line + "\n";
                     }
                 }
@@ -217,6 +217,18 @@ module.exports = function(app, passport) {
 	    });	    	    
     });        
 };
+
+// UTIL FUNCTIONS ==============================
+function getSpanFromField(field) {
+    if (field.hasTarget !=null) {
+        if (field.hasTarget.hasSelector !=null) 
+            return field.hasTarget.hasSelector.exact;
+    } else {
+        return "";
+    }
+}
+
+
 
 
 // MIDDLE WARE FUNCTIONS ==============================
@@ -300,20 +312,6 @@ function initPluginProfile(req, res, next){
 
     });
 }
-
-
-// get annotation list
-// function getAnnotationList(req, res, next){
-// 	// fetch annotations for current document
-// 	var url = "http://" + config.store.host +":" + config.store.port + "/search?email=" + req.user.email + "&annotationType=" + config.profile.userProfile.type;
-	
-// 	request({url: url, json: true}, function(error,response,body){
-// 	    if (!error && response.statusCode === 200) {
-//             req.annotations = body;
-//             next();
-//         }
-//     });
-// }
 
     
 // route middleware to make sure a user is logged in
