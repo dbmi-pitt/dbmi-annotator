@@ -98,7 +98,7 @@ function updateClaimAndData(annotations, annotationId) {
 // return: table html for multiple data & materials 
 function createDataTable(dataL, annotationId){
 
-    dataTable = "<table id='mp-data-tb'><tr><td>No. of Participants</td><td>Drug1 Dose</td><td>Drug2 Dose</td><td>AUC</td><td>Clearance</td><td>Cmax</td><td>Half-life</td></tr>";
+    dataTable = "<table id='mp-data-tb'><tr><td>No. of Participants</td><td>Drug1 Dose</td><td>Drug2 Dose</td><td>AUC</td><td>Cmax</td><td>Clearance</td><td>Half-life</td></tr>";
 
     if (dataL.length > 0){ // show all data items
         for (j = 0; j < dataL.length; j++) {
@@ -132,10 +132,10 @@ function createDataTable(dataL, annotationId){
             else 
                 row += "<td onclick='warnSelectTextSpan(\"cmax\");'></td>"; 
 
-            if (data.cl.value != null)
-                row += "<td onclick='showEditor(),dataEditorLoadAnnTable(\"cl\");'>" + data.cl.value + "</td>";
+            if (data.clearance.value != null)
+                row += "<td onclick='showEditor(),dataEditorLoadAnnTable(\"clearance\");'>" + data.clearance.value + "</td>";
             else 
-                row += "<td onclick='warnSelectTextSpan(\"cl\");'></td>"; 
+                row += "<td onclick='warnSelectTextSpan(\"clearance\");'></td>"; 
 
             if (data.halflife.value != null)
                 row += "<td onclick='showEditor(),dataEditorLoadAnnTable(\"halflife\");'>" + data.halflife.value + "</td>";
@@ -146,7 +146,7 @@ function createDataTable(dataL, annotationId){
             dataTable += row;
         }
     } else { // add empty row
-        dataTable += "<tr style='height:20px;'><td onclick='warnSelectTextSpan(\"participants\");'> </td><td onclick='warnSelectTextSpan(\"dose1\");'> </td><td onclick='warnSelectTextSpan(\"dose2\");'></td><td onclick='warnSelectTextSpan(\"auc\");'></td><td onclick='warnSelectTextSpan(\"cmax\");'></td><td onclick='warnSelectTextSpan(\"cl\");'></td><td onclick='warnSelectTextSpan(\"halflife\");'></td></tr>"
+        dataTable += "<tr style='height:20px;'><td onclick='warnSelectTextSpan(\"participants\");'> </td><td onclick='warnSelectTextSpan(\"dose1\");'> </td><td onclick='warnSelectTextSpan(\"dose2\");'></td><td onclick='warnSelectTextSpan(\"auc\");'></td><td onclick='warnSelectTextSpan(\"cmax\");'></td><td onclick='warnSelectTextSpan(\"clearance\");'></td><td onclick='warnSelectTextSpan(\"halflife\");'></td></tr>"
     }
     dataTable += "</table>";
     return dataTable;

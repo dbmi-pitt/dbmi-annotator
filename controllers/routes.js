@@ -188,7 +188,7 @@ module.exports = function(app, passport) {
                 var jsonObjs = body.rows;
                 res.attachment('annotations-'+req.query.email+'.csv');
 		        res.setHeader('Content-Type', 'text/csv');
-                var csvTxt = '"claim label","claim text","method","relationship","drug1","drug2","enzyme","parcipitants","parcipitants text","drug1 dose","drug1 formulation","drug1 duration","drug1 regimens","drug1 dose text","drug2 dose","drug2 formulation","drug2 duration","drug2 regimens","drug2 dose text","auc","auc type","auc direction","auc text","cmax","cmax type","cmax direction","cmax text","cl","cl type","cl direction","cl text","halflife","halflife type","halflife direction","halflife text"\n'; 
+                var csvTxt = '"claim label","claim text","method","relationship","drug1","drug2","enzyme","parcipitants","parcipitants text","drug1 dose","drug1 formulation","drug1 duration","drug1 regimens","drug1 dose text","drug2 dose","drug2 formulation","drug2 duration","drug2 regimens","drug2 dose text","auc","auc type","auc direction","auc text","cmax","cmax type","cmax direction","cmax text","cl","cl type","cl direction","cl text","halflife","halflife type","halflife direction","halflife text"\n';
 
                 for (var i = 0; i < jsonObjs.length; i++) {
                     jsonObj = jsonObjs[i];
@@ -211,8 +211,7 @@ module.exports = function(app, passport) {
 		        
 	        } else {
 		        //req.flash('exportMessage', 'exported failed, annotation fetch exception, please see logs or contact Yifan at yin2@pitt.edu!');
-		        res.redirect('/dbmiannotator/main');
-		        
+		        res.redirect('/dbmiannotator/main');		        
 	        }	
 	    });	    	    
     });        
@@ -224,7 +223,7 @@ function getSpanFromField(field) {
         if (field.hasTarget.hasSelector !=null) 
             return field.hasTarget.hasSelector.exact;
     } else {
-        return "";
+        return "undefined";
     }
 }
 

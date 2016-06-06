@@ -12,7 +12,7 @@ function claimEditorLoad() {
     $("#mp-data-form-dose2").hide();
     $("#mp-data-form-auc").hide();
     $("#mp-data-form-cmax").hide();
-    $("#mp-data-form-cl").hide();
+    $("#mp-data-form-clearance").hide();
     $("#mp-data-form-halflife").hide();
 
 }
@@ -149,7 +149,7 @@ function dataEditorLoad(annotation, field, annotationId) {
     // show delete button
     data = annotation.argues.supportsBy[0];
     material = data.supportsBy.supportsBy;
-    if ((field == "participants" && material.participants.value != null) || (field == "dose1" && material.drug1Dose.value != null) || (field == "dose2" && material.drug2Dose.value != null) || ((field == "auc" || field == "cmax" || field == "cl" || field == "halflife") && (data[field].value != null)))
+    if ((field == "participants" && material.participants.value != null) || (field == "dose1" && material.drug1Dose.value != null) || (field == "dose2" && material.drug2Dose.value != null) || ((field == "auc" || field == "cmax" || field == "clearance" || field == "halflife") && (data[field].value != null)))
         $("#annotator-delete").show();
 
     // call AnnotatorJs editor for update    
@@ -188,7 +188,7 @@ function dataEditorLoadAnnTable(field) {
                     // show delete button
                     data = annotation.argues.supportsBy[0];
                     material = data.supportsBy.supportsBy;
-                    if ((field == "participants" && material.participants.value != null) || (field == "dose1" && material.drug1Dose.value != null) || (field == "dose2" && material.drug2Dose.value != null) || ((field == "auc" || field == "cmax" || field == "cl" || field == "halflife") && (data[field].value != null)))
+                    if ((field == "participants" && material.participants.value != null) || (field == "dose1" && material.drug1Dose.value != null) || (field == "dose2" && material.drug2Dose.value != null) || ((field == "auc" || field == "cmax" || field == "clearance" || field == "halflife") && (data[field].value != null)))
                         $("#annotator-delete").show();
                     
                     // call AnnotatorJs editor for update    
@@ -202,7 +202,7 @@ function dataEditorLoadAnnTable(field) {
 // open data editor with specific form
 function switchDataForm(field) {
 
-    fieldL = ["participants","dose1","dose2","auc","cmax","cl","halflife"];
+    fieldL = ["participants","dose1","dose2","auc","cmax","clearance","halflife"];
     
     if (field == null) 
         field = "participants";
@@ -215,6 +215,7 @@ function switchDataForm(field) {
     for (i = 0; i < fieldL.length; i++){
         var dataid = "mp-data-form-"+fieldL[i];
         if (fieldL[i] == field){
+            console.log("switch shown " + dataid);
             $("#"+dataid).show();
         } else {
             $("#"+dataid).hide();
