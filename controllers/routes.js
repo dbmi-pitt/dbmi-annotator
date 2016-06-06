@@ -172,7 +172,6 @@ module.exports = function(app, passport) {
 		        res.setHeader('Content-Type', 'application/json');
 		        res.end(annsJsonRes);		       		        
 	        } else {
-		        //req.flash('exportMessage', 'exported failed, annotation fetch exception, please see logs or contact Yifan at yin2@pitt.edu!');
 		        res.redirect('/dbmiannotator/main');		        
 	        }	
 	    });	    	    
@@ -189,7 +188,7 @@ module.exports = function(app, passport) {
                 var jsonObjs = body.rows;
                 res.attachment('annotations-'+req.query.email+'.csv');
 		        res.setHeader('Content-Type', 'text/csv');
-                var csvTxt = ""; 
+                var csvTxt = '"claim label","claim text","method","relationship","drug1","drug2","enzyme","drug1 dose","drug1 formulation","drug1 duration","drug1 regimens","drug2 dose","drug2 formulation","drug2 duration","drug2 regimens","auc","auc type","auc direction","cmax","cmax type","cmax direction","cl","cl type","cl direction","halflife","halflife type","halflife direction"\n'; 
 
                 for (var i = 0; i < jsonObjs.length; i++) {
                     jsonObj = jsonObjs[i];
@@ -201,7 +200,7 @@ module.exports = function(app, passport) {
                         method = data.supportsBy;
                         material = method.supportsBy;
 
-                        var line = '"' + claim.label + '","' + claim.hasTarget.hasSelector.exact + '","' + material.participants.value + '","' + data.auc.value + '"';
+                        var line = '"' + claim.label + '","' + claim.hasTarget.hasSelector.exact + '","' + method.type + '","' + claim.qualifiedBy.relationship + '","' + claim.qualifiedBy.drug1 + '","' + claim.qualifiedBy.drug2 + '","' + claim.qualifiedBy.enzyme + '","' + material.participants.value + '","' + material.drug1Dose.value + '","' + material.drug1Dose.formulation + '","'  + material.drug1Dose.duration + '","'+ material.drug1Dose.regimens + '","' + material.drug2Dose.value + '","' + material.drug2Dose.formulation + '","' + material.drug2Dose.duration + '","' + material.drug2Dose.regimens + '","' + data.auc.value + '","' + data.auc.direction + '","' + data.auc.type + '","' + data.cmax.value + '","' + data.cmax.direction + '","' + data.cmax.type + '","' + data.cl.value + '","' + data.cl.direction + '","' + data.cl.type + '","' + data.halflife.value + '","' + data.halflife.direction + '","' + data.halflife.type + '"';
                         csvTxt += line + "\n";
                     }
                 }
@@ -209,29 +208,6 @@ module.exports = function(app, passport) {
 		        res.attachment('annotations-'+req.query.email+'.csv');
 		        res.setHeader('Content-Type', 'text/csv');
 		        res.end(csvTxt);                    
-		        
-		        // var json2csv = require('json2csv');
-		        // //json2csv({data: body.rows, fields: ['email', 'rawurl', 'annotationType', 'assertion_type', 'quote', 'relationship', 'Drug1', 'Type1', 'Role1', 'Drug2', 'Type2', 'Role2', 'enzyme', 'Modality', 'Evidence_modality','Number_participants','FormulationP','FormulationO','DoseMG_precipitant','DoseMG_object','Duration_precipitant','Duration_object','RegimentsP','RegimentsO','Aucval','AucType','AucDirection','Clval','ClType','ClDirection','cmaxval','cmaxType','cmaxDirection','cminval','cminType','cminDirection','t12','t12Type','t12Direction','Comment']}, function(err, csv) {
-
-                // json2csv({data: jsonObjs, fields: [
-                //     {label: 'email', 
-                //      value: function (row) {
-                //          return row.email;
-                //      }, default: 'UNK'}, 
-                //     {label: 'auc', 
-                //      value: function(row) {
-                //          return row.argues.supportsBy[0].auc.value;
-                //      }, default: 'UNK'}
-                // ]}, function(err, csv) {
-		    
-		        //     if (err) console.log(err);
-		            
-		        //     res.attachment('annotations-'+req.query.email+'.csv');
-		        //     res.setHeader('Content-Type', 'text/csv');
-		        //     res.end(csv);                    
-		        //     //req.flash('exportMessage', 'successfully downloaded!');
-		        //     //res.redirect('/dbmiannotator/main');		    
-		        // });
 		        
 	        } else {
 		        //req.flash('exportMessage', 'exported failed, annotation fetch exception, please see logs or contact Yifan at yin2@pitt.edu!');
