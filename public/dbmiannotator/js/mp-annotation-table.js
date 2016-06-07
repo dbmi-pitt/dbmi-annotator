@@ -108,45 +108,45 @@ function createDataTable(dataL, annotationId){
             row = "<tr style='height:20px;'>";
             // show mp material
             if (material.participants.value != null)
-                row += "<td onclick='showEditor(),dataEditorLoadAnnTable(\"participants\");'>" + material.participants.value + "</td>";      
+                row += "<td onclick='editDataCellByEditor(\"participants\");'>" + material.participants.value + "</td>";      
             else 
-                row += "<td onclick='warnSelectTextSpan(\"participants\");'></td>"; 
+                row += "<td onclick='addDataCellByEditor(\"participants\");'></td>";
 
             if (material.drug1Dose.value != null)    
-                row += "<td onclick='showEditor(),dataEditorLoadAnnTable(\"dose1\");'>" + material.drug1Dose.value + "</td>";
+                row += "<td onclick='editDataCellByEditor(\"dose1\");'>" + material.drug1Dose.value + "</td>";
             else 
-                row += "<td onclick='warnSelectTextSpan(\"dose1\");'></td>"; 
+                row += "<td onclick='addDataCellByEditor(\"dose1\");'></td>"; 
 
             if (material.drug2Dose.value != null)
-                row += "<td onclick='showEditor(),dataEditorLoadAnnTable(\"dose2\");'>" + material.drug2Dose.value + "</td>";
+                row += "<td onclick='editDataCellByEditor(\"dose2\");'>" + material.drug2Dose.value + "</td>";
             else 
-                row += "<td onclick='warnSelectTextSpan(\"dose2\");'></td>"; 
+                row += "<td onclick='addDataCellByEditor(\"dose2\");'></td>"; 
             // show mp data
             if (data.auc.value != null)
-                row += "<td onclick='showEditor(),dataEditorLoadAnnTable(\"auc\");'>" + data.auc.value + "</td>";
+                row += "<td onclick='editDataCellByEditor(\"auc\");'>" + data.auc.value + "</td>";
             else 
-                row += "<td onclick='warnSelectTextSpan(\"auc\");'></td>"; 
+                row += "<td onclick='addDataCellByEditor(\"auc\");'></td>"; 
 
             if (data.cmax.value != null)
-                row += "<td onclick='showEditor(),dataEditorLoadAnnTable(\"cmax\");'>" + data.cmax.value + "</td>";
+                row += "<td onclick='editDataCellByEditor(\"cmax\");'>" + data.cmax.value + "</td>";
             else 
-                row += "<td onclick='warnSelectTextSpan(\"cmax\");'></td>"; 
+                row += "<td onclick='addDataCellByEditor(\"cmax\");'></td>"; 
 
             if (data.clearance.value != null)
-                row += "<td onclick='showEditor(),dataEditorLoadAnnTable(\"clearance\");'>" + data.clearance.value + "</td>";
+                row += "<td onclick='editDataCellByEditor(\"clearance\");'>" + data.clearance.value + "</td>";
             else 
-                row += "<td onclick='warnSelectTextSpan(\"clearance\");'></td>"; 
+                row += "<td onclick='addDataCellByEditor(\"clearance\");'></td>"; 
 
             if (data.halflife.value != null)
-                row += "<td onclick='showEditor(),dataEditorLoadAnnTable(\"halflife\");'>" + data.halflife.value + "</td>";
+                row += "<td onclick='editDataCellByEditor(\"halflife\");'>" + data.halflife.value + "</td>";
             else 
-                row += "<td onclick='warnSelectTextSpan(\"halflife\");'></td>"; 
+                row += "<td onclick='addDataCellByEditor(\"halflife\");'></td>"; 
 
             row += "</tr>";
             dataTable += row;
         }
     } else { // add empty row
-        dataTable += "<tr style='height:20px;'><td onclick='warnSelectTextSpan(\"participants\");'> </td><td onclick='warnSelectTextSpan(\"dose1\");'> </td><td onclick='warnSelectTextSpan(\"dose2\");'></td><td onclick='warnSelectTextSpan(\"auc\");'></td><td onclick='warnSelectTextSpan(\"cmax\");'></td><td onclick='warnSelectTextSpan(\"clearance\");'></td><td onclick='warnSelectTextSpan(\"halflife\");'></td></tr>"
+        dataTable += "<tr style='height:20px;'><td onclick='addDataCellByEditor(\"participants\");'> </td><td onclick='addDataCellByEditor(\"dose1\");'> </td><td onclick='addDataCellByEditor(\"dose2\");'></td><td onclick='addDataCellByEditor(\"auc\");'></td><td onclick='addDataCellByEditor(\"cmax\");'></td><td onclick='addDataCellByEditor(\"clearance\");'></td><td onclick='addDataCellByEditor(\"halflife\");'></td></tr>"
     }
     dataTable += "</table>";
     return dataTable;

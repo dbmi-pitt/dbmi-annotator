@@ -9,6 +9,11 @@ if (typeof annotator === 'undefined') {
     var annType = $('#mp-annotation-tb').attr('name');
     var sourceURL = getURLParameter("sourceURL").trim();
     var email = getURLParameter("email");
+    
+    // global variables for keeping status of text selection
+    var isTextSelected = false;
+    var cachedOATarget = "";
+    var cachedOARanges = "";
 
     if (annType == "DDI")
         app.include(annotator.ui.dbmimain);            
@@ -16,7 +21,6 @@ if (typeof annotator === 'undefined') {
         app.include(annotator.ui.mpmain, {element: subcontent, email: email, source: sourceURL});
     else 
         alert("[ERROR] plugin settings wrong, neither DDI nor MP plugin!");
-
     
     app.include(annotator.storage.debug);
     app.include(annotator.identity.simple);
@@ -25,40 +29,6 @@ if (typeof annotator === 'undefined') {
     app.include(annotator.storage.http, {
 	    prefix: 'http://' + config.store.host + ':' + config.store.port
     });
-
-    // var annotationCreateHelper = function () {
-
-	//     source = getURLParameter("sourceURL").trim();
-    // 	return {
-    //         beforeAnnotationCreated: function (ann) {
-	// 	        ann.rawurl = source;
-    // 		    ann.uri = source.replace(/[\/\\\-\:\.]/g, "");		
-	// 	        ann.email = email;
-    //         },
-    //         annotationCreated: function (ann) {
-    //             if (ann.annotationType == "MP") {
-    //                 $("#mp-annotation-work-on").html(ann.id);
-    //                 annotationTable(ann.rawurl, ann.email);
-    //                 console.log("refresh ann table");
-    //             }
-    //         },
-    //         annotationUpdated: function(ann) {
-    //             if (ann.annotationType == "MP") {
-    //                 $("#mp-annotation-work-on").html(ann.id);
-    //                 annotationTable(ann.rawurl, ann.email);
-    //                 console.log("refresh ann table");
-    //             }
-    //         },
-    //         annotationDeleted: function (ann) {
-                
-    //             setTimeout(function(){
-    //                 console.log("refresh ann table");
-    //                 annotationTable(source, email);
-    //             },1000);
-    //         }            
-    // 	};
-    // };
-    // app.include(annotationCreateHelper);
 
     // load annotation after page contents loaded
     app.start().then(function () 
@@ -114,18 +84,3 @@ $(document).ready(function () {
     $('#splitter').jqxSplitter({ showSplitBar: false, width: $(window).width(), height: $(window).height(), orientation: 'horizontal', panels: [{ size: '100%',min: 200 }, { size: '0%', min: 0}] });
 });
 
-
-// var getUrlParameter = function getUrlParameter(sParam) {
-//     var sPageURL = decodeURIComponent(window.location.search.substring(1)),
-//         sURLVariables = sPageURL.split('&'),
-//         sParameterName,
-//         i;
-
-//     for (i = 0; i < sURLVariables.length; i++) {
-//         sParameterName = sURLVariables[i].split('=');
-
-//         if (sParameterName[0] === sParam) {
-//             return sParameterName[1] === undefined ? true : sParameterName[1];
-//         }
-//     }
-// };

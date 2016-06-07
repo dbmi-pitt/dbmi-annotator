@@ -91,34 +91,6 @@ function showEnzyme() {
 }
 
 
-// editor click save and close button for claim
-function postEditorSaveAndClose() {
-
-    if ($("#mp-editor-type").html() == "claim") { 
-        $( "#claim-dialog-confirm" ).dialog({
-            resizable: false,
-            height: 'auto',
-            width: '500px',
-            modal: true,
-            buttons: {
-                "Add another claim (not ready)": function() {
-                    $( this ).dialog( "close" );
-                    
-                },
-                "Add data (not ready)": function() {
-                    $( this ).dialog( "close" );
-                    showrightbyvalue();
-                },
-                "Done": function() {
-                    $( this ).dialog( "close" );
-                }
-            }
-        });
-    }
-
-    showAnnTable();    
-}
-
 // modify annotaiton id when user pick claim on mpadder's menu
 // update annotation table if necessary
 function claimSelectedInMenu(annotationId) {
@@ -132,44 +104,29 @@ function claimSelectedInMenu(annotationId) {
 }
 
 // MP DATA & MATERIAL ========================================================================
-// open data Editor (1) if annotation is null, then switch form for data field
-// (2) otherwise, load annotation to editor, then shown specific form
-function dataEditorLoad(annotation, field, annotationId) {
-    console.log("dataEditorLoad - id: " + annotationId + " | field: " + field);
-    $(".annotator-save").show();
-    $('#quote').hide();
-    $("#annotator-delete").show();
-
-    // updating current MP annotation
-    if (annotationId != null)
-        $("#mp-annotation-work-on").html(annotationId);
-
-    switchDataForm(field);
-
-    // show delete button
-    data = annotation.argues.supportsBy[0];
-    material = data.supportsBy.supportsBy;
-    if ((field == "participants" && material.participants.value != null) || (field == "dose1" && material.drug1Dose.value != null) || (field == "dose2" && material.drug2Dose.value != null) || ((field == "auc" || field == "cmax" || field == "clearance" || field == "halflife") && (data[field].value != null)))
-        $("#annotator-delete").show();
-
-    // call AnnotatorJs editor for update    
-    app.annotations.update(annotation);                        
-}
-
-// load data Editor based on selection from annotation table
-// (1) if annotation is null, then switch form for data field
-// (2) otherwise, load annotation to editor, then shown specific form
-function dataEditorLoadAnnTable(field) {
-
-    $(".annotator-save").show();
-    $('#quote').hide();
+// called when click annotation table cell when value of cell is empty
+// (1) if no text selection avaliable, then pop up warning message then return 
+// to mp annotation table
+// (2) otherwise, load annotation to editor, then shown specific data form
+function addDataCellByEditor(field) {
 
     var annotationId = $('#mp-editor-claim-list option:selected').val();
-    console.log("dataEditorLoad - id: " + annotationId + " | field: " + field)
-    // scroll to the position of annotation
+    console.log("addDataCellByEditor - id: " + annotationId + " | field: " + field);
 
-    if (document.getElementById(annotationId + field)) {
-        document.getElementById(annotationId + field).scrollIntoView(true);
+    // return if no text selection 
+    if (!isTextSelected) {
+        warnSelectTextSpan(field);
+    } else {
+        showEditor();
+        $(".annotator-save").show();
+        $('#quote').hide();
+        $("#annotator-delete").hide();
+        
+        // updating current MP annotation
+        if (annotationId != null)
+            $("#mp-annotation-work-on").html(annotationId);
+        
+        switchDataForm(field);       
         
         $.ajax({url: "http://" + config.annotator.host + "/annotatorstore/annotations/" + annotationId,
                 data: {},
@@ -178,26 +135,62 @@ function dataEditorLoadAnnTable(field) {
                     console.log(exception);
                 },
                 success : function(annotation){
-
-                    // updating current MP annotation
-                    if (annotationId != null)
-                        $("#mp-annotation-work-on").html(annotationId);
-                    
-                    switchDataForm(field);
-
-                    // show delete button
-                    data = annotation.argues.supportsBy[0];
-                    material = data.supportsBy.supportsBy;
-                    if ((field == "participants" && material.participants.value != null) || (field == "dose1" && material.drug1Dose.value != null) || (field == "dose2" && material.drug2Dose.value != null) || ((field == "auc" || field == "cmax" || field == "clearance" || field == "halflife") && (data[field].value != null)))
-                        $("#annotator-delete").show();
+                    // add data if not avaliable  
+                    if (annotation.argues.supportsBy.length == 0){ 
+                        var data = {type : "mp:data", auc : {}, cmax : {}, clearance : {}, halflife : {}, supportsBy : {type : "mp:method", supportsBy : {type : "mp:material", participants : {}, drug1Dose : {}, drug2Dose : {}}}};
+                        annotation.argues.supportsBy.push(data); 
+                    } 
                     
                     // call AnnotatorJs editor for update    
-                    app.annotations.update(annotation);   
-                }
-               });            
-    }         
+                    app.annotations.update(annotation);
+                }    
+               });
+        }
 }
+              
+        
+// called when click annotation table cell when value of cell is not null
+// (1) scroll to the annotation upon document
+// (2) load annotation to editor, then shown specific data form
+function editDataCellByEditor(field) {
 
+    showEditor();
+    $(".annotator-save").show();
+    $('#quote').hide();
+
+    var annotationId = $('#mp-editor-claim-list option:selected').val();
+    console.log("editDataCellByEditor - id: " + annotationId + " | field: " + field);
+
+    // scroll to the position of annotation
+    if (document.getElementById(annotationId + field)) {
+       document.getElementById(annotationId + field).scrollIntoView(true);
+        
+    $.ajax({url: "http://" + config.annotator.host + "/annotatorstore/annotations/" + annotationId,
+            data: {},
+            method: 'GET',
+            error : function(jqXHR, exception){
+                console.log(exception);
+            },
+            success : function(annotation){
+                
+                // updating current MP annotation
+                if (annotationId != null)
+                    $("#mp-annotation-work-on").html(annotationId);
+                
+                switchDataForm(field);
+                
+                // show delete button
+                data = annotation.argues.supportsBy[0];
+                material = data.supportsBy.supportsBy;
+                if ((field == "participants" && material.participants.value != null) || (field == "dose1" && material.drug1Dose.value != null) || (field == "dose2" && material.drug2Dose.value != null) || ((field == "auc" || field == "cmax" || field == "clearance" || field == "halflife") && (data[field].value != null)))
+                    $("#annotator-delete").show();
+                
+                // call AnnotatorJs editor for update    
+                app.annotations.update(annotation);   
+            }
+           });               
+    }
+}
 
 // open data editor with specific form
 function switchDataForm(field) {
