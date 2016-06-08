@@ -53,8 +53,10 @@ function updateClaimAndData(annotations, annotationId) {
         var claimIsSelected = "";
         if (annotationId == annotation.id) {
             console.log("mp selected: " + annotation.argues.label);
-            claimIsSelected = 'selected="selected"';           
-                
+            claimIsSelected = 'selected="selected"';     
+            // cache total number of data & material for current claim
+            totalDataNum = dataL.length;      
+            
             // create data table
             dataTable = createDataTable(dataL, annotationId);                       
         }
@@ -74,8 +76,7 @@ function updateClaimAndData(annotations, annotationId) {
     claimPanel += "<tr><td><button type='button' onclick='editClaim()'>Edit claim</button>&nbsp;&nbsp;<button type='button' onclick='viewClaim()'>View claim</button></td></tr></table>";
     
     // Data & Material - add new data button 
-    dataPanel = "<button type='button' style='float: right;'>add new data & material (not ready)</button><br>" + dataTable;
-    dataPanel = dataTable;
+    dataPanel = "<button type='button' onclick='addNewDataRow()' style='float: right;'>add new data & material</button><br>" + dataTable;
     
     // Annotation table
     annTable = "<table id='mp-claim-data-tb'>" +
@@ -91,6 +92,14 @@ function updateClaimAndData(annotations, annotationId) {
     console.log("claim menu updated!");
 }
 
+// append new row of data & material in annotation table
+function addNewDataRow() {
+    totalDataNum += 1;
+    dataNumLast = totalDataNum - 1;
+
+    $('#mp-data-tb tr:last').after("<tr style='height:20px;'><td onclick='addDataCellByEditor(\"participants\"," + dataNumLast + ", true);'> </td><td onclick='addDataCellByEditor(\"dose1\"," + dataNumLast + ", true);'> </td><td onclick='addDataCellByEditor(\"dose2\"," + dataNumLast + ", true);'></td><td onclick='addDataCellByEditor(\"auc\"," + dataNumLast + ", true);'></td><td onclick='addDataCellByEditor(\"cmax\"," + dataNumLast + ", true);'></td><td onclick='addDataCellByEditor(\"clearance\"," + dataNumLast + ", true);'></td><td onclick='addDataCellByEditor(\"halflife\"," + dataNumLast + ", true);'></td></tr>");
+}
+
 
 
 // @input: data list in MP annotation
@@ -101,52 +110,52 @@ function createDataTable(dataL, annotationId){
     dataTable = "<table id='mp-data-tb'><tr><td>No. of Participants</td><td>Drug1 Dose</td><td>Drug2 Dose</td><td>AUC</td><td>Cmax</td><td>Clearance</td><td>Half-life</td></tr>";
 
     if (dataL.length > 0){ // show all data items
-        for (j = 0; j < dataL.length; j++) {
-            data = dataL[j];
+        for (var dataNum = 0; dataNum < dataL.length; dataNum++) {
+            data = dataL[dataNum];
             method = data.supportsBy;
             material = data.supportsBy.supportsBy;
             row = "<tr style='height:20px;'>";
             // show mp material
             if (material.participants.value != null)
-                row += "<td onclick='editDataCellByEditor(\"participants\");'>" + material.participants.value + "</td>";      
+                row += "<td onclick='editDataCellByEditor(\"participants\",\""+dataNum+"\");'>" + material.participants.value + "</td>";      
             else 
-                row += "<td onclick='addDataCellByEditor(\"participants\");'></td>";
+                row += "<td onclick='addDataCellByEditor(\"participants\",\""+dataNum+"\");'></td>";
 
             if (material.drug1Dose.value != null)    
-                row += "<td onclick='editDataCellByEditor(\"dose1\");'>" + material.drug1Dose.value + "</td>";
+                row += "<td onclick='editDataCellByEditor(\"dose1\",\""+dataNum+"\");'>" + material.drug1Dose.value + "</td>";
             else 
-                row += "<td onclick='addDataCellByEditor(\"dose1\");'></td>"; 
+                row += "<td onclick='addDataCellByEditor(\"dose1\",\""+dataNum+"\");'></td>"; 
 
             if (material.drug2Dose.value != null)
-                row += "<td onclick='editDataCellByEditor(\"dose2\");'>" + material.drug2Dose.value + "</td>";
+                row += "<td onclick='editDataCellByEditor(\"dose2\",\""+dataNum+"\");'>" + material.drug2Dose.value + "</td>";
             else 
-                row += "<td onclick='addDataCellByEditor(\"dose2\");'></td>"; 
+                row += "<td onclick='addDataCellByEditor(\"dose2\",\""+dataNum+"\");'></td>"; 
             // show mp data
             if (data.auc.value != null)
-                row += "<td onclick='editDataCellByEditor(\"auc\");'>" + data.auc.value + "</td>";
+                row += "<td onclick='editDataCellByEditor(\"auc\",\""+dataNum+"\");'>" + data.auc.value + "</td>";
             else 
-                row += "<td onclick='addDataCellByEditor(\"auc\");'></td>"; 
+                row += "<td onclick='addDataCellByEditor(\"auc\",\""+dataNum+"\");'></td>"; 
 
             if (data.cmax.value != null)
-                row += "<td onclick='editDataCellByEditor(\"cmax\");'>" + data.cmax.value + "</td>";
+                row += "<td onclick='editDataCellByEditor(\"cmax\",\""+dataNum+"\");'>" + data.cmax.value + "</td>";
             else 
-                row += "<td onclick='addDataCellByEditor(\"cmax\");'></td>"; 
+                row += "<td onclick='addDataCellByEditor(\"cmax\",\""+dataNum+"\");'></td>"; 
 
             if (data.clearance.value != null)
-                row += "<td onclick='editDataCellByEditor(\"clearance\");'>" + data.clearance.value + "</td>";
+                row += "<td onclick='editDataCellByEditor(\"clearance\",\""+dataNum+"\");'>" + data.clearance.value + "</td>";
             else 
-                row += "<td onclick='addDataCellByEditor(\"clearance\");'></td>"; 
+                row += "<td onclick='addDataCellByEditor(\"clearance\",\""+dataNum+"\");'></td>"; 
 
             if (data.halflife.value != null)
-                row += "<td onclick='editDataCellByEditor(\"halflife\");'>" + data.halflife.value + "</td>";
+                row += "<td onclick='editDataCellByEditor(\"halflife\",\""+dataNum+"\");'>" + data.halflife.value + "</td>";
             else 
-                row += "<td onclick='addDataCellByEditor(\"halflife\");'></td>"; 
+                row += "<td onclick='addDataCellByEditor(\"halflife\",\""+dataNum+"\");'></td>"; 
 
             row += "</tr>";
             dataTable += row;
         }
     } else { // add empty row
-        dataTable += "<tr style='height:20px;'><td onclick='addDataCellByEditor(\"participants\");'> </td><td onclick='addDataCellByEditor(\"dose1\");'> </td><td onclick='addDataCellByEditor(\"dose2\");'></td><td onclick='addDataCellByEditor(\"auc\");'></td><td onclick='addDataCellByEditor(\"cmax\");'></td><td onclick='addDataCellByEditor(\"clearance\");'></td><td onclick='addDataCellByEditor(\"halflife\");'></td></tr>"
+        dataTable += "<tr style='height:20px;'><td onclick='addDataCellByEditor(\"participants\",0);'> </td><td onclick='addDataCellByEditor(\"dose1\",0);'> </td><td onclick='addDataCellByEditor(\"dose2\",0);'></td><td onclick='addDataCellByEditor(\"auc\",0);'></td><td onclick='addDataCellByEditor(\"cmax\",0);'></td><td onclick='addDataCellByEditor(\"clearance\",0);'></td><td onclick='addDataCellByEditor(\"halflife\",0);'></td></tr>";
     }
     dataTable += "</table>";
     return dataTable;

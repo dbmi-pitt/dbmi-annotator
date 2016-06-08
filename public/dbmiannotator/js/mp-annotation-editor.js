@@ -108,15 +108,21 @@ function claimSelectedInMenu(annotationId) {
 // (1) if no text selection avaliable, then pop up warning message then return 
 // to mp annotation table
 // (2) otherwise, load annotation to editor, then shown specific data form
-function addDataCellByEditor(field) {
+function addDataCellByEditor(field, dataNum, isNewData) {
 
     var annotationId = $('#mp-editor-claim-list option:selected').val();
-    console.log("addDataCellByEditor - id: " + annotationId + " | field: " + field);
+    console.log("addDataCellByEditor - id: " + annotationId + " | data: " + dataNum + " | field: " + field);
 
     // return if no text selection 
     if (!isTextSelected) {
         warnSelectTextSpan(field);
     } else {
+
+        // cached editing data cell
+        currAnnotationId = annotationId;
+        currDataNum = dataNum;
+        currDataField = field;
+
         showEditor();
         $(".annotator-save").show();
         $('#quote').hide();
@@ -136,7 +142,8 @@ function addDataCellByEditor(field) {
                 },
                 success : function(annotation){
                     // add data if not avaliable  
-                    if (annotation.argues.supportsBy.length == 0){ 
+                    if (annotation.argues.supportsBy.length == 0 || isNewData){ 
+                        console.log("add data item");
                         var data = {type : "mp:data", auc : {}, cmax : {}, clearance : {}, halflife : {}, supportsBy : {type : "mp:method", supportsBy : {type : "mp:material", participants : {}, drug1Dose : {}, drug2Dose : {}}}};
                         annotation.argues.supportsBy.push(data); 
                     } 
@@ -152,18 +159,23 @@ function addDataCellByEditor(field) {
 // called when click annotation table cell when value of cell is not null
 // (1) scroll to the annotation upon document
 // (2) load annotation to editor, then shown specific data form
-function editDataCellByEditor(field) {
+function editDataCellByEditor(field, dataNum) {
 
     showEditor();
     $(".annotator-save").show();
     $('#quote').hide();
 
     var annotationId = $('#mp-editor-claim-list option:selected').val();
-    console.log("editDataCellByEditor - id: " + annotationId + " | field: " + field);
+    console.log("editDataCellByEditor - id: " + annotationId + " | data: " + dataNum + " | field: " + field);
+    
+    // cached editing data cell
+    currAnnotationId = annotationId;
+    currDataNum = dataNum;
+    currDataField = field;
 
     // scroll to the position of annotation
-    if (document.getElementById(annotationId + field)) {
-       document.getElementById(annotationId + field).scrollIntoView(true);
+    // if (document.getElementById(annotationId + field)) {
+    //   document.getElementById(annotationId + field).scrollIntoView(true);
         
     $.ajax({url: "http://" + config.annotator.host + "/annotatorstore/annotations/" + annotationId,
             data: {},
@@ -180,7 +192,7 @@ function editDataCellByEditor(field) {
                 switchDataForm(field);
                 
                 // show delete button
-                data = annotation.argues.supportsBy[0];
+                data = annotation.argues.supportsBy[dataNum];
                 material = data.supportsBy.supportsBy;
                 if ((field == "participants" && material.participants.value != null) || (field == "dose1" && material.drug1Dose.value != null) || (field == "dose2" && material.drug2Dose.value != null) || ((field == "auc" || field == "cmax" || field == "clearance" || field == "halflife") && (data[field].value != null)))
                     $("#annotator-delete").show();
@@ -189,8 +201,8 @@ function editDataCellByEditor(field) {
                 app.annotations.update(annotation);   
             }
            });               
-    }
 }
+
 
 // open data editor with specific form
 function switchDataForm(field) {

@@ -15,6 +15,12 @@ if (typeof annotator === 'undefined') {
     var cachedOATarget = "";
     var cachedOARanges = "";
 
+    // global variables for tracking specific data item
+    var currAnnotationId = "";
+    var currDataNum = "";
+    var totalDataNum = "";
+    var currDataField = "";
+
     if (annType == "DDI")
         app.include(annotator.ui.dbmimain);            
     else if (annType == "MP")
