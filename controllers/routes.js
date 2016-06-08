@@ -200,7 +200,28 @@ module.exports = function(app, passport) {
                         method = data.supportsBy;
                         material = method.supportsBy;
 
-                        var line = '"' + claim.label + '","' + claim.hasTarget.hasSelector.exact + '","' + method.type + '","' + claim.qualifiedBy.relationship + '","' + claim.qualifiedBy.drug1 + '","' + claim.qualifiedBy.drug2 + '","' + claim.qualifiedBy.enzyme + '","' + material.participants.value + '","' + getSpanFromField(material.participants) + '","' + material.drug1Dose.value + '","' + material.drug1Dose.formulation + '","'  + material.drug1Dose.duration + '","' + material.drug1Dose.regimens + '","' + getSpanFromField(material.drug1Dose) + '","' + material.drug2Dose.value + '","' + material.drug2Dose.formulation + '","' + material.drug2Dose.duration + '","' + material.drug2Dose.regimens + '","'  + getSpanFromField(material.drug2Dose) + '","'+ data.auc.value + '","' + data.auc.direction + '","' + data.auc.type + '","' + getSpanFromField(data.auc) + '","' + data.cmax.value + '","' + data.cmax.direction + '","' + data.cmax.type + '","' + getSpanFromField(data.cmax) + '","' + data.cl.value + '","' + data.cl.direction + '","' + data.cl.type + '","' + getSpanFromField(data.cl) + '","' + data.halflife.value + '","' + data.halflife.direction + '","' + data.halflife.type + '","' + getSpanFromField(data.halflife) + '"';
+                        var line = '"' + claim.label + '","' + claim.hasTarget.hasSelector.exact + '","' + method.type + '","' + claim.qualifiedBy.relationship + '","' + claim.qualifiedBy.drug1 + '","' + claim.qualifiedBy.drug2 + '","' + claim.qualifiedBy.enzyme + '"';
+                        if (material.participants != null)
+                            line += ',"' + material.participants.value + '","' + getSpanFromField(material.participants) + '"';
+                        else 
+                            line += ',,'
+                        if (material.drug1Dose != null) 
+                            line += ',"' + material.drug1Dose.value + '","' + material.drug1Dose.formulation + '","'  + material.drug1Dose.duration + '","' + material.drug1Dose.regimens + '","' + getSpanFromField(material.drug1Dose) + '"';
+                        else 
+                            line += ',,,,';
+                        if (material.drug2Dose != null) 
+                            line += ',"' + material.drug2Dose.value + '","' + material.drug2Dose.formulation + '","' + material.drug2Dose.duration + '","' + material.drug2Dose.regimens + '","'  + getSpanFromField(material.drug2Dose) + '"';
+                        else 
+                            line += ',,,,';
+
+                        dataFieldsL = ["auc","cmax","clearance","halflife"];
+                        for (p = 0; p < dataFieldsL.length; p++) {
+                            field = dataFieldsL[p];
+                            if (data[field] != null)    
+                                line += ',"' + data[field].value + '","' + data[field].direction + '","' + data[field].type + '","' + getSpanFromField(data[field]) + '"' 
+                            else 
+                                line += ',,,,';
+                        }
                         csvTxt += line + "\n";
                     }
                 }
