@@ -94,6 +94,12 @@ function updateClaimAndData(annotations, annotationId) {
 
 // append new row of data & material in annotation table
 function addNewDataRow() {
+
+    var rowCount = $('#mp-data-tb tr').length;
+    // set maximum number of rows as 3
+    if (rowCount > 3)
+        return;
+
     totalDataNum += 1;
     dataNumLast = totalDataNum - 1;
 

@@ -47,7 +47,6 @@ if (typeof annotator === 'undefined') {
 			             }, 1000);
 		             }).then(function(){
                          annotationTable(sourceURL, email);
-                         console.log("initial ann table");
                      }).then(function(){
 
                          $('#splitter').jqxSplitter({ showSplitBar: false, width: $(window).width(), height: $(window).height(), orientation: 'horizontal', panels: [{ size: '100%',min: 200 }, { size: '0%', min: 0}] });
