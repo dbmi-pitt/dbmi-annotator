@@ -140,7 +140,7 @@ function addDataCellByEditor(field, dataNum, isNewData) {
                 success : function(annotation){
                     // add data if not avaliable  
                     if (annotation.argues.supportsBy.length == 0 || isNewData){ 
-                        console.log("add data item");
+
                         var data = {type : "mp:data", auc : {}, cmax : {}, clearance : {}, halflife : {}, supportsBy : {type : "mp:method", supportsBy : {type : "mp:material", participants : {}, drug1Dose : {}, drug2Dose : {}}}};
                         annotation.argues.supportsBy.push(data); 
                     } 

@@ -57,9 +57,15 @@ if (typeof annotator === 'undefined') {
                          // $(document).ready(function () {
                          console.log("add hover for mpadder menu");
                              
-                         $('.mp-menu-btn').hover(function() { 
-                             $('.mp-main-menu').show(); 
-                         });                             
+                         $('.mp-menu-btn').hover(
+                             function() { 
+                                 $('.mp-main-menu').show(); 
+                             }
+                         ); 
+                         // hide menu when mouse over drugMention adder
+                         $('.hl-adder-btn').mouseenter(function(){
+                             $('.mp-main-menu').hide();
+                         });
 
                          $('.mp-main-menu').mouseleave(function(){
                              $('.mp-main-menu').hide(); 
