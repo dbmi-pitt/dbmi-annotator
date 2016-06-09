@@ -20,36 +20,33 @@ function claimEditorLoad() {
 // scroll to the claim text span
 function viewClaim() {
     annotationId = $('#mp-editor-claim-list option:selected').val();
-    if (document.getElementById(annotationId + "claim")) 
-        document.getElementById(annotationId + "claim").scrollIntoView(true);
+    scrollToAnnotation(annotationId, "claim", 0);
 }
 
 // edit claim
 function editClaim() {
     annotationId = $('#mp-editor-claim-list option:selected').val();
 
-    if (document.getElementById(annotationId + "claim")) {
-        document.getElementById(annotationId + "claim").scrollIntoView(true);
-
-        showEditor();
-        claimEditorLoad();
+    scrollToAnnotation(annotationId, "claim", 0);
+    showEditor();
+    claimEditorLoad();
         
-        $.ajax({url: "http://" + config.annotator.host + "/annotatorstore/annotations/" + annotationId,
-                data: {},
-                method: 'GET',
-                error : function(jqXHR, exception){
-                    console.log(exception);
-                },
-                success : function(annotation){
-                    // enable delete button
-                    $("#annotator-delete").show();
-                    
-                    // call AnnotatorJs editor for update    
-                    app.annotations.update(annotation);   
-                }
-               });        
-    }
+    $.ajax({url: "http://" + config.annotator.host + "/annotatorstore/annotations/" + annotationId,
+            data: {},
+            method: 'GET',
+            error : function(jqXHR, exception){
+                console.log(exception);
+            },
+            success : function(annotation){
+                // enable delete button
+                $("#annotator-delete").show();
+                
+                // call AnnotatorJs editor for update    
+                app.annotations.update(annotation);   
+            }
+           });        
 }
+
 
 $("#Drug1").change(function (){selectDrug();});
 $("#Drug2").change(function (){selectDrug();});
@@ -174,8 +171,7 @@ function editDataCellByEditor(field, dataNum) {
     currDataField = field;
 
     // scroll to the position of annotation
-    // if (document.getElementById(annotationId + field)) {
-    //   document.getElementById(annotationId + field).scrollIntoView(true);
+    scrollToAnnotation(annotationId, field, dataNum);
         
     $.ajax({url: "http://" + config.annotator.host + "/annotatorstore/annotations/" + annotationId,
             data: {},
@@ -229,3 +225,8 @@ function switchDataForm(field) {
 }
 
 
+function scrollToAnnotation(annotationId, fieldName, dataNum) {
+    var divId = annotationId + "-" + fieldName + "-" + dataNum;
+    if (document.getElementById(divId))
+        document.getElementById(divId).scrollIntoView(true);
+}
