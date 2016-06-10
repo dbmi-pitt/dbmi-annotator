@@ -222,6 +222,9 @@ function switchDataForm(field) {
         if (fieldL[i] == field){
             console.log("switch shown " + dataid);
             $("#"+dataid).show();
+            // scroll to annotation when data field has value
+            // annotationId = $("#mp-annotation-work-on").html();
+            // scrollToAnnotation(annotationId, field, currDataNum)
         } else {
             $("#"+dataid).hide();
         }
