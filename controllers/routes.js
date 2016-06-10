@@ -188,7 +188,7 @@ module.exports = function(app, passport) {
                 var jsonObjs = body.rows;
                 res.attachment('annotations-'+req.query.email+'.csv');
 		        res.setHeader('Content-Type', 'text/csv');
-                var csvTxt = '"claim label","claim text","method","relationship","drug1","drug2","enzyme","parcipitants","parcipitants text","drug1 dose","drug1 formulation","drug1 duration","drug1 regimens","drug1 dose text","drug2 dose","drug2 formulation","drug2 duration","drug2 regimens","drug2 dose text","auc","auc type","auc direction","auc text","cmax","cmax type","cmax direction","cmax text","cl","cl type","cl direction","cl text","halflife","halflife type","halflife direction","halflife text"\n';
+                var csvTxt = '"claim label","claim text","method","relationship","drug1","drug2","precipitant","enzyme","particitants","participants text","drug1 dose","drug1 formulation","drug1 duration","drug1 regimens","drug1 dose text","drug2 dose","drug2 formulation","drug2 duration","drug2 regimens","drug2 dose text","auc","auc type","auc direction","auc text","cmax","cmax type","cmax direction","cmax text","cl","cl type","cl direction","cl text","halflife","halflife type","halflife direction","halflife text"\n';
 
                 for (var i = 0; i < jsonObjs.length; i++) {
                     jsonObj = jsonObjs[i];
@@ -200,7 +200,7 @@ module.exports = function(app, passport) {
                         method = data.supportsBy;
                         material = method.supportsBy;
 
-                        var line = '"' + claim.label + '","' + claim.hasTarget.hasSelector.exact + '","' + method.type + '","' + claim.qualifiedBy.relationship + '","' + claim.qualifiedBy.drug1 + '","' + claim.qualifiedBy.drug2 + '","' + claim.qualifiedBy.enzyme + '"';
+                        var line = '"' + claim.label + '","' + claim.hasTarget.hasSelector.exact + '","' + claim.method + '","' + claim.qualifiedBy.relationship + '","' + claim.qualifiedBy.drug1 + '","' + claim.qualifiedBy.drug2 + '","' + claim.qualifiedBy.precipitant + '","' + claim.qualifiedBy.enzyme + '"';
                         if (material.participants != null)
                             line += ',"' + material.participants.value + '","' + getSpanFromField(material.participants) + '"';
                         else 
