@@ -80,10 +80,14 @@ function showEnzyme() {
         $("#enzyme")[0].selectedIndex = 0;
         $("#enzymesection1").show();
         $("#enzyme").show();
+        $('input[type=radio][name=precipitant]').hide();
+        $('.precipitantLabel').hide();
     }
     if($("#relationship option:selected").text()=="interact with") {
         $("#enzymesection1").hide();
         $("#enzyme").hide();
+        $('input[type=radio][name=precipitant]').show();
+        $('.precipitantLabel').show();
     }
 }
 
