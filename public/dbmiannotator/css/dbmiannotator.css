@@ -101,30 +101,30 @@ h1 {
   }
 }
 
+/* Home and Annotator icons */
 .btn-success {
   position:fixed;
-  bottom: 20px;
-  left:0px;
-  color:#FFFFFF;
-  background-color:#448AFF;
-  border:none;
-  height:35px;
-  width:135px;
+  bottom: 2px;
+  left: 50px;
+  border-radius: 8px;
+  border: 2px solid #8c8c8c;
+  background-color:#FFFFFF;
+  height: 38px;
+  width: 43px;
   z-index: 999;
-  text-align: center;
 }
 
 .btn-home {
   position:fixed;
-  bottom: 60px;
-  left:0px;
-  border:none;
-  height:35px;
-  width:135px;
+  bottom:2px;
+  left:2px;
   color:#FFFFFF;
-  background-color:#448AFF;
+  border-radius: 8px;
+  border: 2px solid #8c8c8c;
+  background-color:#FFFFFF;
+  height: 38px;
+  width: 43x;
   z-index: 999;
-  text-align: center;
 }
 /*
 .btn-success {
@@ -144,24 +144,24 @@ h1 {
 
 /* MP menu */
 .mp-main-menu-1 {
-    background-color: #4CAF50;
+    background-color: #cccccc;
     color: white;
-    padding: 6px;
-    font-size: 9px;
-    border: none;
+    padding: 7px;
+    font-size: 11px;
+    border-radius: 5px;
     cursor: pointer;
 }
 
 .mp-main-menu-2 {
-    background-color: #4CAF50;
+    background-color: #cccccc;
     color: white;
-    padding: 9px;
-    font-size: 9px;
-    border: none;
+    padding: 10px;
+    font-size: 11px;
+    border-radius: 5px;
     cursor: pointer;
 }
 
-/* The container <div> - needed to position the dropdown content */
+/* The container <div> - needed to position the dropdown content*/
 .mp-main-menu {
     position: relative;
     display: inline-block;
@@ -197,3 +197,52 @@ h1 {
 .mp-main-menu:hover {
     background-color: #3e8e41;
 }
+
+/* annotator table */
+#mp-claim-data-tb{
+    margin-left: 15%;
+    margin-right: 15%;
+    width: 70%;
+    height: 80%;
+    font-size: 15px;
+    border-collapse: collapse;
+    border: 2px solid #D4E0EE;
+    text-align: center; 
+    font-family: "Trebuchet MS", Arial, sans-serif;
+    font-size: 17px;
+    background-color: #DDEBFA;
+}
+
+
+/* annotator table -material/data */
+#mp-data-tb{
+    width: 100%;
+    text-align: center; 
+    font-family: "Trebuchet MS", Arial, sans-serif;
+    font-size: 13px; 
+    background-color: #F7F9FC;
+    border: 2px solid #D4E0EE;
+}
+
+/* annotator claim pannel */
+#mp-claim-method-tb{
+
+   width: 100%;
+   height: 100%;
+   font-family: "Trebuchet MS", Arial, sans-serif;
+   font-size: 14px;
+   border-collapse: collapse;
+   border-style: hidden;
+
+}
+
+#mp-claim-tb tr, td{
+  border-style: hidden;
+  padding:10px;
+}
+
+.option{
+  font-family: "Trebuchet MS", Arial, sans-serif;
+  font-size: 8px;
+}
+

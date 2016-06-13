@@ -33,10 +33,10 @@ function updateClaimAndData(annotations, annotationId) {
     // Method listbox
     methodListbox = "<select id='mp-editor-method'><option value='clinical-trial'>Clinical Trial</option></select>";
     // Claim 
-    claimPanel = "<table>";
+    claimPanel = "<table id='mp-claim-method-tb'>";
     claimPanel += "<tr><td>" + claimListbox + "</td></tr>";
     claimPanel += "<tr><td>Methods: " + methodListbox + "</td></tr>"
-    claimPanel += "<tr><td><button type='button' onclick='editClaim()'>Edit claim</button>&nbsp;&nbsp;<button type='button' onclick='viewClaim()'>View claim</button></td></tr></table>";
+    claimPanel += "<tr><td><button type='button' onclick='editClaim()'>Edit Claim</button>&nbsp;&nbsp;<button type='button' onclick='viewClaim()'>View Claim</button></td></tr></table>";
     
     // Data & Material - comment add more data button for now 
     //dataPanel = "<button type='button'>add new row for data & material</button><br>" + dataTable;
@@ -44,7 +44,7 @@ function updateClaimAndData(annotations, annotationId) {
     
     // Annotation table
     annTable = "<table id='mp-claim-data-tb'>" +
-        "<tr><td>Claim</td><td>Data & Material</td></tr>";             
+        "<tr><td>Claim</td><td>Material/Data</td></tr>";             
     annTable += "<tr><td>" + claimPanel + "</td><td>" + dataPanel + "</td></tr>";   
     annTable += "</table>";
     
