@@ -246,3 +246,14 @@ h1 {
   font-size: 8px;
 }
 
+
+/* annotation editor */
+#tabs-2 {
+    all: initial;
+    color: #333; /* Lighten up font color */
+    font-family: Helvetica, Arial, sans-serif; /* Nicer font */
+    /* width: 800px; */
+    border-collapse:
+    collapse; border-spacing: 0;
+}
+

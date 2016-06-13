@@ -29,8 +29,9 @@
          'startOffset': 'integer',
          'endOffset': 'integer',
      },
-     
-    // mp:data (one or more mp:data supports claim)
+     // put method name here
+     'method' : '',
+     // mp:data (one or more mp:data supports claim)
      'supportsBy': 
      [
          {
@@ -40,9 +41,9 @@
              'supportsBy': { 
                  'id': 'uuid'
                  'type': 'mp:method',
-                 'name': '',
-                 'hasTarget': '',
-                 'ranges': ''
+                 // 'name': '',
+                 // 'hasTarget': '',
+                 // 'ranges': ''
                  // mp:material (material supports method)
                  'supportsBy': {
                     'id': 'uuid',
