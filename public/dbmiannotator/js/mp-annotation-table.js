@@ -1,3 +1,38 @@
+// update 1) annotation table (claim and data) and  2) mpadder (claim menu)
+// @input: annotatio source url
+// @input: user email
+// @input: annotation type
+// @input: the column that data & material table sorting by
+// @output: update annotation table and mpadder 
+
+function annotationTable(sourceURL, email, sortByColumn){
+    console.log("refresh ann table");
+    // request all mp annotaitons for current document and user
+    $.ajax({url: "http://" + config.annotator.host + "/annotatorstore/search",
+            data: {annotationType: "MP", 
+                   email: email, 
+                   uri: sourceURL.replace(/[\/\\\-\:\.]/g, "")},
+            method: 'GET',
+            error : function(jqXHR, exception){
+                console.log(exception);
+            },
+            success : function(response){
+
+                    // ann Id for selected claim, if null, set first claim as default 
+                    var annotationId = $("#mp-annotation-work-on").html();    
+
+                    if (annotationId == null || annotationId.trim() == "") {         
+                        if (response.total > 0){
+                            $("#mp-annotation-work-on").html(response.rows[0].id);
+                            annotationId = response.rows[0].id;
+                        }
+                    }
+                    updateClaimAndData(response.rows, annotationId);
+            }
+           });
+}
+
+
 // update annotation table by selected annotaionId
 // @input: list of mp annotaitons
 // @input: annotationId for selected claim
@@ -18,8 +53,10 @@ function updateClaimAndData(annotations, annotationId) {
         var claimIsSelected = "";
         if (annotationId == annotation.id) {
             console.log("mp selected: " + annotation.argues.label);
-            claimIsSelected = 'selected="selected"';           
-                
+            claimIsSelected = 'selected="selected"';     
+            // cache total number of data & material for current claim
+            totalDataNum = dataL.length;      
+            
             // create data table
             dataTable = createDataTable(dataL, annotationId);                       
         }
@@ -38,9 +75,8 @@ function updateClaimAndData(annotations, annotationId) {
     claimPanel += "<tr><td>Methods: " + methodListbox + "</td></tr>"
     claimPanel += "<tr><td><button type='button' onclick='editClaim()'>Edit Claim</button>&nbsp;&nbsp;<button type='button' onclick='viewClaim()'>View Claim</button></td></tr></table>";
     
-    // Data & Material - comment add more data button for now 
-    //dataPanel = "<button type='button'>add new row for data & material</button><br>" + dataTable;
-    dataPanel = dataTable;
+    // Data & Material - add new data button 
+    dataPanel = "<button type='button' onclick='addNewDataRow()' style='float: right;'>add new data & material</button><br>" + dataTable;
     
     // Annotation table
     annTable = "<table id='mp-claim-data-tb'>" +
@@ -56,6 +92,20 @@ function updateClaimAndData(annotations, annotationId) {
     console.log("claim menu updated!");
 }
 
+// append new row of data & material in annotation table
+function addNewDataRow() {
+
+    var rowCount = $('#mp-data-tb tr').length;
+    // set maximum number of rows as 3
+    if (rowCount > 3)
+        return;
+
+    totalDataNum += 1;
+    dataNumLast = totalDataNum - 1;
+
+    $('#mp-data-tb tr:last').after("<tr style='height:20px;'><td onclick='addDataCellByEditor(\"participants\"," + dataNumLast + ", true);'> </td><td onclick='addDataCellByEditor(\"dose1\"," + dataNumLast + ", true);'> </td><td onclick='addDataCellByEditor(\"dose2\"," + dataNumLast + ", true);'></td><td onclick='addDataCellByEditor(\"auc\"," + dataNumLast + ", true);'></td><td onclick='addDataCellByEditor(\"cmax\"," + dataNumLast + ", true);'></td><td onclick='addDataCellByEditor(\"clearance\"," + dataNumLast + ", true);'></td><td onclick='addDataCellByEditor(\"halflife\"," + dataNumLast + ", true);'></td></tr>");
+}
+
 
 
 // @input: data list in MP annotation
@@ -63,33 +113,55 @@ function updateClaimAndData(annotations, annotationId) {
 // return: table html for multiple data & materials 
 function createDataTable(dataL, annotationId){
 
-    dataTable = "<table id='mp-data-tb'><tr><td>No. of Participants</td><td>Drug1 Dose</td><td>Drug2 Dose</td><td>AUC</td><td>Clearance</td><td>Cmax</td><td>Half-life</td></tr>";
+    dataTable = "<table id='mp-data-tb'><tr><td>No. of Participants</td><td>Drug1 Dose</td><td>Drug2 Dose</td><td>AUC</td><td>Cmax</td><td>Clearance</td><td>Half-life</td></tr>";
 
     if (dataL.length > 0){ // show all data items
-        for (j = 0; j < dataL.length; j++) {
-            data = dataL[j];
+        for (var dataNum = 0; dataNum < dataL.length; dataNum++) {
+            data = dataL[dataNum];
             method = data.supportsBy;
             material = data.supportsBy.supportsBy;
             row = "<tr style='height:20px;'>";
+            // show mp material
             if (material.participants.value != null)
-                row += "<td onclick='showEditor(),dataEditorLoadAnnTable(\"participants\");'>" + material.participants.value + "</td>";      
+                row += "<td onclick='editDataCellByEditor(\"participants\",\""+dataNum+"\");'>" + material.participants.value + "</td>";      
             else 
-                row += "<td onclick='warnSelectTextSpan(\"participants\");'></td>"; 
+                row += "<td onclick='addDataCellByEditor(\"participants\",\""+dataNum+"\");'></td>";
 
             if (material.drug1Dose.value != null)    
-                row += "<td onclick='showEditor(),dataEditorLoadAnnTable(\"dose1\");'>" + material.drug1Dose.value + "</td>";
+                row += "<td onclick='editDataCellByEditor(\"dose1\",\""+dataNum+"\");'>" + material.drug1Dose.value + "</td>";
             else 
-                row += "<td onclick='warnSelectTextSpan(\"dose1\");'></td>"; 
+                row += "<td onclick='addDataCellByEditor(\"dose1\",\""+dataNum+"\");'></td>"; 
 
             if (material.drug2Dose.value != null)
-                row += "<td onclick='showEditor(),dataEditorLoadAnnTable(\"dose2\");'>" + material.drug2Dose.value + "</td>";
+                row += "<td onclick='editDataCellByEditor(\"dose2\",\""+dataNum+"\");'>" + material.drug2Dose.value + "</td>";
             else 
-                row += "<td onclick='warnSelectTextSpan(\"dose2\");'></td>"; 
-            row += "<td></td><td></td><td></td><td></td></tr>";
+                row += "<td onclick='addDataCellByEditor(\"dose2\",\""+dataNum+"\");'></td>"; 
+            // show mp data
+            if (data.auc.value != null)
+                row += "<td onclick='editDataCellByEditor(\"auc\",\""+dataNum+"\");'>" + data.auc.value + "</td>";
+            else 
+                row += "<td onclick='addDataCellByEditor(\"auc\",\""+dataNum+"\");'></td>"; 
+
+            if (data.cmax.value != null)
+                row += "<td onclick='editDataCellByEditor(\"cmax\",\""+dataNum+"\");'>" + data.cmax.value + "</td>";
+            else 
+                row += "<td onclick='addDataCellByEditor(\"cmax\",\""+dataNum+"\");'></td>"; 
+
+            if (data.clearance.value != null)
+                row += "<td onclick='editDataCellByEditor(\"clearance\",\""+dataNum+"\");'>" + data.clearance.value + "</td>";
+            else 
+                row += "<td onclick='addDataCellByEditor(\"clearance\",\""+dataNum+"\");'></td>"; 
+
+            if (data.halflife.value != null)
+                row += "<td onclick='editDataCellByEditor(\"halflife\",\""+dataNum+"\");'>" + data.halflife.value + "</td>";
+            else 
+                row += "<td onclick='addDataCellByEditor(\"halflife\",\""+dataNum+"\");'></td>"; 
+
+            row += "</tr>";
             dataTable += row;
         }
     } else { // add empty row
-        dataTable += "<tr style='height:20px;'><td onclick='warnSelectTextSpan(\"participants\");'> </td><td onclick='warnSelectTextSpan(\"dose1\");'> </td><td onclick='warnSelectTextSpan(\"dose2\");'></td><td></td><td></td><td></td><td></td></tr>"
+        dataTable += "<tr style='height:20px;'><td onclick='addDataCellByEditor(\"participants\",0);'> </td><td onclick='addDataCellByEditor(\"dose1\",0);'> </td><td onclick='addDataCellByEditor(\"dose2\",0);'></td><td onclick='addDataCellByEditor(\"auc\",0);'></td><td onclick='addDataCellByEditor(\"cmax\",0);'></td><td onclick='addDataCellByEditor(\"clearance\",0);'></td><td onclick='addDataCellByEditor(\"halflife\",0);'></td></tr>";
     }
     dataTable += "</table>";
     return dataTable;

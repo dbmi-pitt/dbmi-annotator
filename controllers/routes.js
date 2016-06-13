@@ -40,8 +40,6 @@ module.exports = function(app, passport) {
     
     // MAIN ==============================
     app.get('/dbmiannotator/main', isLoggedIn, initPluginProfile, function(req, res) {
-        console.log(config.profile.userProfile);
-
         if (config.profile.userProfile != null) {
             annotationType = config.profile.userProfile.type;
         } else {
@@ -160,40 +158,98 @@ module.exports = function(app, passport) {
         });
     });
     
+    
+    // EXPORT TO JSON ==============================
+    app.get('/dbmiannotator/exportjson', isLoggedIn, function(req, res){
+	
+	    var url = "http://" + config.store.host + ":" + config.store.port + "/search?email=" + req.query.email + "&annotationType=" + config.profile.def;
+	    
+	    request({url: url, json: true}, function(error,response,body){
+	        if (!error && response.statusCode === 200) {
+                
+                var annsJsonRes = JSON.stringify(body.rows);
+                res.attachment('annotations-'+req.query.email+'.json');
+		        res.setHeader('Content-Type', 'application/json');
+		        res.end(annsJsonRes);		       		        
+	        } else {
+		        res.redirect('/dbmiannotator/main');		        
+	        }	
+	    });	    	    
+    });        
 
-    // EXPORT ==============================
+    // EXPORT TO CSV ==============================
     app.get('/dbmiannotator/exportcsv', isLoggedIn, function(req, res){
 	
-	var url = "http://" + config.store.host + ":" + config.store.port + "/search?email=" + req.query.email + "&annotationType=" + config.plugin.userProfile;
+	    var url = "http://" + config.store.host + ":" + config.store.port + "/search?email=" + req.query.email + "&annotationType=" + config.profile.def;
 	    
-	request({url: url, json: true}, function(error,response,body){
-	    if (!error && response.statusCode === 200) {
-		
-		var json2csv = require('json2csv');
-		json2csv({data: body.rows, fields: ['email', 'rawurl', 'annotationType', 'assertion_type', 'quote', 'relationship', 'Drug1', 'Type1', 'Role1', 'Drug2', 'Type2', 'Role2', 'enzyme', 'Modality', 'Evidence_modality','Number_participants','FormulationP','FormulationO','DoseMG_precipitant','DoseMG_object','Duration_precipitant','Duration_object','RegimentsP','RegimentsO','Aucval','AucType','AucDirection','Clval','ClType','ClDirection','cmaxval','cmaxType','cmaxDirection','cminval','cminType','cminDirection','t12','t12Type','t12Direction','Comment']}, function(err, csv) {
-		    
-		    if (err) console.log(err);
-		    
-		    res.attachment('annotations-'+req.query.email+'.csv');
-		    res.setHeader('Content-Type', 'text/csv');
-		    res.end(csv);
+	    request({url: url, json: true}, function(error,response,body){
+	        if (!error && response.statusCode === 200) {
+                
+                var jsonObjs = body.rows;
+                res.attachment('annotations-'+req.query.email+'.csv');
+		        res.setHeader('Content-Type', 'text/csv');
+                var csvTxt = '"claim label","claim text","method","relationship","drug1","drug2","precipitant","enzyme","particitants","participants text","drug1 dose","drug1 formulation","drug1 duration","drug1 regimens","drug1 dose text","drug2 dose","drug2 formulation","drug2 duration","drug2 regimens","drug2 dose text","auc","auc type","auc direction","auc text","cmax","cmax type","cmax direction","cmax text","cl","cl type","cl direction","cl text","halflife","halflife type","halflife direction","halflife text"\n';
 
-		    //req.flash('exportMessage', 'successfully downloaded!');
-		    //res.redirect('/dbmiannotator/main');		    
-		});
-		
-	    } else {
-		//req.flash('exportMessage', 'exported failed, annotation fetch exception, please see logs or contact Yifan at yin2@pitt.edu!');
-		res.redirect('/dbmiannotator/main');
-		
-	    }	
-	});
-	
-	    
-    });
+                for (var i = 0; i < jsonObjs.length; i++) {
+                    jsonObj = jsonObjs[i];
+                    claim = jsonObj.argues;
+                    dataL = claim.supportsBy;                   
 
-    
+                    for (var j = 0; j < dataL.length; j ++) {
+                        data = dataL[j];
+                        method = data.supportsBy;
+                        material = method.supportsBy;
+
+                        var line = '"' + claim.label + '","' + claim.hasTarget.hasSelector.exact + '","' + claim.method + '","' + claim.qualifiedBy.relationship + '","' + claim.qualifiedBy.drug1 + '","' + claim.qualifiedBy.drug2 + '","' + claim.qualifiedBy.precipitant + '","' + claim.qualifiedBy.enzyme + '"';
+                        if (material.participants != null)
+                            line += ',"' + material.participants.value + '","' + getSpanFromField(material.participants) + '"';
+                        else 
+                            line += ',,'
+                        if (material.drug1Dose != null) 
+                            line += ',"' + material.drug1Dose.value + '","' + material.drug1Dose.formulation + '","'  + material.drug1Dose.duration + '","' + material.drug1Dose.regimens + '","' + getSpanFromField(material.drug1Dose) + '"';
+                        else 
+                            line += ',,,,';
+                        if (material.drug2Dose != null) 
+                            line += ',"' + material.drug2Dose.value + '","' + material.drug2Dose.formulation + '","' + material.drug2Dose.duration + '","' + material.drug2Dose.regimens + '","'  + getSpanFromField(material.drug2Dose) + '"';
+                        else 
+                            line += ',,,,';
+
+                        dataFieldsL = ["auc","cmax","clearance","halflife"];
+                        for (p = 0; p < dataFieldsL.length; p++) {
+                            field = dataFieldsL[p];
+                            if (data[field] != null)    
+                                line += ',"' + data[field].value + '","' + data[field].direction + '","' + data[field].type + '","' + getSpanFromField(data[field]) + '"' 
+                            else 
+                                line += ',,,,';
+                        }
+                        csvTxt += line + "\n";
+                    }
+                }
+
+		        res.attachment('annotations-'+req.query.email+'.csv');
+		        res.setHeader('Content-Type', 'text/csv');
+		        res.end(csvTxt);                    
+		        
+	        } else {
+		        //req.flash('exportMessage', 'exported failed, annotation fetch exception, please see logs or contact Yifan at yin2@pitt.edu!');
+		        res.redirect('/dbmiannotator/main');		        
+	        }	
+	    });	    	    
+    });        
 };
+
+// UTIL FUNCTIONS ==============================
+function getSpanFromField(field) {
+    if (field.hasTarget !=null) {
+        if (field.hasTarget.hasSelector !=null) 
+            return field.hasTarget.hasSelector.exact;
+    } else {
+        return "undefined";
+    }
+}
+
+
+
 
 // MIDDLE WARE FUNCTIONS ==============================
 
@@ -276,20 +332,6 @@ function initPluginProfile(req, res, next){
 
     });
 }
-
-
-// get annotation list
-// function getAnnotationList(req, res, next){
-// 	// fetch annotations for current document
-// 	var url = "http://" + config.store.host +":" + config.store.port + "/search?email=" + req.user.email + "&annotationType=" + config.profile.userProfile.type;
-	
-// 	request({url: url, json: true}, function(error,response,body){
-// 	    if (!error && response.statusCode === 200) {
-//             req.annotations = body;
-//             next();
-//         }
-//     });
-// }
 
     
 // route middleware to make sure a user is logged in
