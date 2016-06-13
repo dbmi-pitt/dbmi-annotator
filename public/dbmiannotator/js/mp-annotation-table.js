@@ -73,14 +73,14 @@ function updateClaimAndData(annotations, annotationId) {
     claimPanel = "<table id='mp-claim-method-tb'>";
     claimPanel += "<tr><td>" + claimListbox + "</td></tr>";
     claimPanel += "<tr><td>Methods: " + methodListbox + "</td></tr>"
-    claimPanel += "<tr><td><button type='button' onclick='editClaim()'>Edit claim</button>&nbsp;&nbsp;<button type='button' onclick='viewClaim()'>View claim</button></td></tr></table>";
+    claimPanel += "<tr><td><button type='button' onclick='editClaim()'>Edit Claim</button>&nbsp;&nbsp;<button type='button' onclick='viewClaim()'>View Claim</button></td></tr></table>";
     
     // Data & Material - add new data button 
     dataPanel = "<button type='button' onclick='addNewDataRow()' style='float: right;'>add new data & material</button><br>" + dataTable;
     
     // Annotation table
     annTable = "<table id='mp-claim-data-tb'>" +
-        "<tr><td>Claim</td><td>Data & Material</td></tr>";             
+        "<tr><td>Claim</td><td>Material/Data</td></tr>";             
     annTable += "<tr><td>" + claimPanel + "</td><td>" + dataPanel + "</td></tr>";   
     annTable += "</table>";
     
