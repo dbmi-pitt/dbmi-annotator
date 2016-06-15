@@ -116,9 +116,12 @@ function addDataCellByEditor(field, dataNum, isNewData) {
     console.log("addDataCellByEditor - id: " + annotationId + " | data: " + dataNum + " | field: " + field);
 
     // return if no text selection 
-    if (!isTextSelected) {
+    if (!isTextSelected && field != "evRelationship") {
         warnSelectTextSpan(field);
     } else {
+        // hide data fields navigation if editing evidence relationship 
+        if (field == "evRelationship")
+            $("#mp-data-nav").hide();
 
         // cached editing data cell
         currAnnotationId = annotationId;
@@ -149,9 +152,6 @@ function addDataCellByEditor(field, dataNum, isNewData) {
                         var data = {type : "mp:data", evRelationship: {}, auc : {}, cmax : {}, clearance : {}, halflife : {}, supportsBy : {type : "mp:method", supportsBy : {type : "mp:material", participants : {}, drug1Dose : {}, drug2Dose : {}}}};
                         annotation.argues.supportsBy.push(data); 
                     } 
-
-                    console.log("DEBUG");
-                    console.log(annotation);
                     
                     // call AnnotatorJs editor for update    
                     app.annotations.update(annotation);
@@ -217,7 +217,8 @@ function switchDataForm(field) {
         field = "participants";
     $("#mp-editor-type").html(field);
     
-    $("#mp-data-nav").show();
+    if (field != "evRelationship")
+        $("#mp-data-nav").show();
     $("#mp-claim-form").hide();
 
     // shown specific data form, hide others

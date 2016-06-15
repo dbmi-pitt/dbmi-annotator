@@ -176,7 +176,7 @@ function createDataTable(dataL, annotationId){
             dataTable += row;
         }
     } else { // add empty row
-        dataTable += "<tr style='height:20px;'><td onclick='addDataCellByEditor(\"participants\",0);'> </td><td onclick='addDataCellByEditor(\"dose1\",0);'> </td><td onclick='addDataCellByEditor(\"dose2\",0);'></td><td onclick='addDataCellByEditor(\"auc\",0);'></td><td onclick='addDataCellByEditor(\"cmax\",0);'></td><td onclick='addDataCellByEditor(\"clearance\",0);'></td><td onclick='addDataCellByEditor(\"halflife\",0);'></td></tr>";
+        dataTable += "<tr style='height:20px;'><td onclick='addDataCellByEditor(\"evRelationship\",0);'></td><td onclick='addDataCellByEditor(\"participants\",0);'></td><td onclick='addDataCellByEditor(\"dose1\",0);'> </td><td onclick='addDataCellByEditor(\"dose2\",0);'></td><td onclick='addDataCellByEditor(\"auc\",0);'></td><td onclick='addDataCellByEditor(\"cmax\",0);'></td><td onclick='addDataCellByEditor(\"clearance\",0);'></td><td onclick='addDataCellByEditor(\"halflife\",0);'></td></tr>";
     }
     dataTable += "</table>";
     return dataTable;
