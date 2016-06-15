@@ -55,12 +55,12 @@ if (args.length == 3) {
 
 function loadNERs(nersets, sourceType, email){
 
-    //for (i = 0; i < nersets.length; i++){
-    for (i = 0; i < 1; i++){
+    for (i = 0; i < nersets.length; i++){
+    //for (i = 0; i < 1; i++){
         subL = nersets[i];
         
-        //for (j = 0; j < subL.length; j++){
-        for (j = 0; j < 5; j++){
+        for (j = 0; j < subL.length; j++){
+        //for (j = 0; j < 5; j++){
             annotation = subL[j];
             if (annotation){
                 uriStr = "";
@@ -149,7 +149,7 @@ function loadAnnotation(annotation, uriStr, email){
         return null;
     } else {
         uriPost = uriStr.replace(/[\/\\\-\:\.]/g, "");
-        path = annotation.start.replace("/html[1]/body[1]","");
+        path = annotation.start.replace("/html[1]/body[1]","");        
 
         console.log("[INFO]: begin load for " + annotation.exact);
         var datetime = new Date();

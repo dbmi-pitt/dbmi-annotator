@@ -7,6 +7,7 @@ function claimEditorLoad() {
 
     $(".annotator-save").hide();
     $("#mp-data-nav").hide();
+    $("#mp-data-form-evRelationship").hide();
     $("#mp-data-form-participants").hide();
     $("#mp-data-form-dose1").hide();
     $("#mp-data-form-dose2").hide();
@@ -145,9 +146,12 @@ function addDataCellByEditor(field, dataNum, isNewData) {
                     // add data if not avaliable  
                     if (annotation.argues.supportsBy.length == 0 || isNewData){ 
 
-                        var data = {type : "mp:data", auc : {}, cmax : {}, clearance : {}, halflife : {}, supportsBy : {type : "mp:method", supportsBy : {type : "mp:material", participants : {}, drug1Dose : {}, drug2Dose : {}}}};
+                        var data = {type : "mp:data", evRelationship: {}, auc : {}, cmax : {}, clearance : {}, halflife : {}, supportsBy : {type : "mp:method", supportsBy : {type : "mp:material", participants : {}, drug1Dose : {}, drug2Dose : {}}}};
                         annotation.argues.supportsBy.push(data); 
                     } 
+
+                    console.log("DEBUG");
+                    console.log(annotation);
                     
                     // call AnnotatorJs editor for update    
                     app.annotations.update(annotation);
@@ -207,7 +211,7 @@ function editDataCellByEditor(field, dataNum) {
 // open data editor with specific form
 function switchDataForm(field) {
 
-    fieldL = ["participants","dose1","dose2","auc","cmax","clearance","halflife"];
+    fieldL = ["evRelationship","participants","dose1","dose2","auc","cmax","clearance","halflife"];
     
     if (field == null) 
         field = "participants";
