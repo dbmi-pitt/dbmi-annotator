@@ -1,0 +1,110 @@
+Abstract
+AIMS
+
+Anacetrapib is an orally active, potent inhibitor of cholesteryl ester transfer protein (CETP), which is in development for the treatment of dyslipidaemia. Because of the likely use of anacetrapib with hydroxy-3-methylglutaryl coenzyme A reductase inhibitors, we aimed to evaluate the potential for a pharmacokinetic interaction with simvastatin.
+
+METHODS
+
+A randomized, two-period, two-treatment, balanced, open-label, crossover study in 12 healthy subjects was performed. Subjects received simvastatin 40 mg alone or anacetrapib 150 mg co-administered with simvastatin 40 mg, once daily. Both treatments were administered following a low-fat breakfast for 14 days, separated by a wash-out period of at least 14 days. Safety and tolerability, simvastatin and simvastatin acid concentrations, and lipoproteins, were assessed.
+
+RESULTS
+
+Both treatments were well tolerated. The pharmacokinetics of simvastatin and simvastatin acid were similar with and without anacetrapib administration {AUC0–24 h geometric mean ratio [90% confidence interval (CI)] for simvastatin acid and simvastatin were 1.36 [1.17, 1.57] and 1.30 [1.14, 1.47], respectively} based on the prespecified comparability bounds of (0.50, 2.00). Treatment with simvastatin alone led to a mean (95% CI) % reduction from baseline in low-density lipoprotein-cholesterol (LDL-C) of −36% (−27, −46) compared with a reduction of −54% (−44, −63) for anacetrapib co-administered with simvastatin.
+
+CONCLUSIONS
+
+There appears to be no clinically meaningful effect of anacetrapib on the pharmacokinetic parameters of simvastatin. When co-administered with simvastatin, anacetrapib appeared to exhibit incremental LDL-C-lowering efficacy, due to CETP inhibition. Co-administration of anacetrapib and simvastatin was well tolerated.
+
+Keywords: CETP inhibition, LDL-C, simvastatin
+WHAT IS ALREADY KNOWN ABOUT THIS SUBJECT
+
+Inhibition of cholesteryl ester transfer protein (CETP) is considered a potential new mechanism for the treatment of dyslipidaemia, for which hydroxy-3-methylglutaryl coenzyme A reductase inhibitors remain a cornerstone of therapy.
+Clinical studies published to date with other investigational CETP inhibitors, torcetrapib (Pfizer) and dalcetrapib (Roche), have been evaluated in the presence of statins, but it remains unclear whether there is a clinically meaningful interaction between a CETP inhibitor and a statin, and whether the low-density lipoprotein-cholesterol (LDL-C)-lowering effects are additive with the combination.
+WHAT THIS STUDY ADDS
+
+This is the first study to show that there is no clinically meaningful effect of anacetrapib on the pharmacokinetic parameters of simvastatin.
+When co-administered with simvastatin, anacetrapib appeared to exhibit incremental LDL-C-and apolipoprotein (Apo) B-lowering efficacy, due to CETP inhibition, the magnitude of which appears greater than any combination of CETP inhibitor and statin evaluated to date.
+The study also provides useful insights into the LDL-C-and Apo B-lowering effects when a CETP inhibitor is given in combination with a statin.
+Go to:
+Introduction
+Anacetrapib (MK-0859) is an investigational cholesteryl ester transfer protein (CETP) inhibitor being developed for the treatment of dyslipidaemias including primary hypercholesterolaemia and mixed hyperlipidaemia that increase susceptibility to atherosclerotic cardiovascular disease [1–8].
+
+A midazolam clinical study in healthy subjects for the assessment of effects of CYP3A4 with multiple doses of anacetrapib revealed the compound was neither an inducer nor inhibitor of CYP3A4 [8]. Anacetrapib was also not a potent reversible inhibitor of human CYP1A2, 2B6, 2C8, 2C9, 2C19, 2D6, 2E1 or 3A4 in human liver microsomal incubations [8]. The potential for concomitant medications in patients with dyslipidaemia is fairly high (e.g. statins), and since CYP3A4 is a common pathway for metabolism of drugs, the assessment of an effect of anacetrapib on CYP3A4 activity could shed light on the extent of interaction between anacetrapib and a hydroxy-3-methylglutaryl coenzyme A (HMG CoA) reductase inhibitor. Because of the potential use of anacetrapib with HMG-CoA reductase inhibitors, it was also considered important to understand the extent of lipid-altering effects incrementally in addition to a statin treatment.
+
+Thus, the primary objective of this study was to investigate and quantify any potential pharmacokinetic interaction between simvastatin and anacetrapib, following multiple oral doses of each, when the drugs are co-administered in the morning following administration of a low-fat meal. A secondary objective was to evaluate the effect on lipids and lipoproteins between the two treatments. Safety and tolerability of treatment with anacetrapib and simvastatin were also assessed.
+
+Go to:
+Methods
+Study participants
+
+All study participants provided written informed consent prior to enrolment. The protocol was approved by IntegReview Ethical Review Board (Austin, TX, USA) and was conducted in accordance with the guidelines on good clinical practice and with ethical standards for human experimentation established by the Declaration of Helsinki. Healthy male or female subjects of nonreproductive potential, 18–50 years old, participated in this study, which was conducted in the USA. Subjects were in good general health according to routine medical history, physical examination, vital signs and laboratory data.
+
+Study design
+
+This was an open-label, randomized, two-period, two-treatment, balanced, crossover study in 12 healthy subjects. In Treatment A, subjects received a once daily oral dose of a 40-mg simvastatin tablet (ZOCOR™) for 14 days in the morning. In Treatment B, subjects received a once-daily oral dose of 150 mg anacetrapib, as liquid-filled capsules, co-administered with a once-daily oral dose of a 40-mg simvastatin tablet for 14 days in the morning. All doses were administered following a standardized low-fat breakfast, and there was a wash-out of at least 14 days in duration between treatment periods.
+
+Pharmacokinetic blood samples for simvastatin and simvastatin acid were collected on day 14 of Treatments A and B and predose on days 1, 12, 13 and 14, and measured simultaneously according to a liquid chromatography/tandem mass spectrometry method [9]. Serum samples were collected for the measurement of low-density lipoprotein-cholesterol (LDL-C), high-density lipoprotein-cholesterol (HDL-C), and the apolipoproteins (Apo) B and A1 predose on day 1 (Treatments A and B) and day 14 (Treatments A and B). Assays for HMG-CoA reductase activity were not performed.
+
+Pharmacokinetic data analysis
+
+Plasma concentration vs. time data were analysed by noncompartmental pharmacokinetic methods using WinNonlin (Enterprise version 5.0.1; Pharsight Corp., Mountain View, CA, USA) to determine the pharmacokinetic parameter estimates. The actual blood sampling times relative to the dosing times were used for all pharmacokinetic analysis. AUC0–∞ was calculated using the linear trapezoidal method for ascending concentrations and the log trapezoidal method for descending concentrations. Cmax and Tmax were obtained by inspection. The elimination rate constant (λz) was determined by linear regression of the terminal phase of the logarithm of plasma concentration vs. time data. A minimum of three data points were used. The t1/2 was calculated as the ratio of the natural log of 2 and λz.
+
+Safety and tolerability
+
+The safety and tolerability of anacetrapib and simvastatin were assessed throughout the study by physical examinations, vital signs, 12-lead ECG, laboratory safety tests (serum sodium, potassium, chloride, bicarbonate, calcium, creatinine, blood urea nitrogen, fasting serum glucose, bilirubin, aspartate aminotransferase, alanine aminotransferase, alkaline phosphatase, albumin; haemoglobin, haematocrit, platelet count, white blood cell count, absolute counts of neutrophils, eosinophils, basophils, lymphocytes, monocytes; urinalysis), and adverse experience monitoring.
+
+Statistical methods
+
+One subject discontinued from the study in period 1 and was excluded from analysis.
+
+The pharmacokinetic parameters for simvastatin acid and simvastatin, AUC0–24 h and Cmax, were natural log transformed and evaluated with a linear mixed-effects model with treatment as a fixed effect and subject as a random effect. Mean between-treatment differences and corresponding 90% confidence intervals (CIs) were obtained from the model and exponentiated to obtain geometric mean treatment ratios and CIs. The primary hypothesis was that the AUC0–24 h geometric mean ratio (GMR) of simvastatin and simvastatin acid following multiple oral doses of 40 mg simvastatin (vs. anacetrapib alone) is contained within the interval (0.50, 2.00). Summary statistics have been provided for systolic blood pressure, diastolic blood pressure, LDL-C, HDL-C, Apo A1 and Apo B.
+
+Go to:
+Results
+Anacetrapib administered in combination with simvastatin was generally well tolerated. There were no serious clinical or laboratory adverse experiences reported and no subject discontinued because of an adverse experience. There were no meaningful changes in blood pressure (Table S1). One subject discontinued from the study in period 1, who did not report to the clinical site for dosing and was lost to follow-up.
+
+The pharmacokinetics of simvastatin and simvastatin acid were similar with and without anacetrapib administration (Table 1; Figure 1). Specifically, the key parameter, AUC0–24 h GMR (90% CI) for simvastatin acid and simvastatin were 1.36 (1.17, 1.57) and 1.30 (1.14, 1.47), respectively. Similarly, the Cmax GMR (90% CI) for simvastatin acid and simvastatin were 1.26 (1.03, 1.55) and 1.24 (1.01, 1.52), respectively. There were no meaningful differences in Tmax or apparent T1/2 between the two treatments for either simvastatin acid or simvastatin. While calculated, the half-life values should be interpreted with caution given reversible metabolism of simvastatin to simvastatin acid.
+
+Table 1
+Table 1
+Summary of simvastatin acid and simvastatin pharmacokinetic parameters
+Figure 1
+Figure 1
+Plasma concentration–time profiles for simvastatin acid (A) and simvastatin (B). Treatment A (Simvastatin alone) (—•—); Treatment B (Simvastatin + Anacetrapib) (—○—)
+Table 2 lists the summary statistics for LDL-C, HDL-C, Apo B and A1 at baseline and on day 14 at 24 h post dose. Treatment with simvastatin alone led to a mean (95% CI) % reduction from baseline in LDL-C of −36% (−27, −46) compared with a reduction of −54% (−44, −63) for anacetrapib co-administered with simvastatin. The estimated difference (90% CI) (anacetrapib + simvastatin vs. simvastatin alone) in LDL-C mean % change from baseline was therefore −17% (−25, −9). Similarly, the estimated differences (90% CI) (anacetrapib + simvastatin vs. simvastatin alone) in other lipoprotein parameters were as follows: HDL-C 85% (66, 105); Apo B −14% (−18, −10); and Apo A1, 28% (19, 38).
+
+Table 2
+Table 2
+Summary of the % change from baseline in lipoproteins
+Go to:
+Discussion
+The study explored primarily the pharmacokinetic interaction between simvastatin and anacetrapib, as it relates to the effect of anacetrapib on simvastatin pharmacokinetics. Simvastatin is a lactone that is readily hydrolysed in vivo to the corresponding β-hydroxyacid, a potent inhibitor of HMG-CoA reductase. In vitro studies have demonstrated that CYP3A4 is the major enzyme system responsible for the metabolism of simvastatin [10]. Simvastatin is well absorbed (about 60–80%) after oral administration, but it undergoes extensive first-pass metabolism by the hepatic CYP3A4 system [10]. The bioavailability of active HMG-CoA reductase inhibitors following simvastatin tablets is <5% of the oral dose. Therefore, simvastatin was selected as the statin for this drug interaction study. Although the 80-mg dose of simvastatin is the highest currently approved dose, the recommended usual starting dose is 20–40 mg, and 40 mg in patients with high risk for a cardiovascular event [10]. Therefore, the study investigated a 40-mg dose of simvastatin with and without anacetrapib. This simvastatin dose was chosen to increase the sensitivity of the potential for a pharmacokinetic interaction of anacetrapib with simvastatin. The anacetrapib dose of 150 mg once daily with a low-fat breakfast evaluated in this study represents a higher end of the therapeutic dose range, which attained pharmacodynamic plateau in patients with dyslipidaemia [4,5,7]. A low-fat breakfast was employed since anacetrapib's pharmacokinetics is less variable in this state than with a high-fat breakfast [3]. Simvastatin's absorption is not affected by food, hence not impacted by the low-fat meal given in this study [10]. A multiple-dose study design was used where simvastatin and anacetrapib were dosed orally to steady state and the effect of anacetrapib on the plasma levels of simvastatin was studied. A duration of 14 days as multiple oral daily dosing was considered sufficient to achieve pharmacokinetic and pharmacodynamic steady state for each drug [[4,5,7,10,11].
+
+The result of this study shows that there is no clinically meaningful effect of anacetrapib on the pharmacokinetics of simvastatin (simvastatin acid or simvastatin). This is not unexpected, given data in the literature showing drug interactions with simvastatin were metabolic in nature, as a result of inhibition or induction of the CYP3A enzyme system [12–14]. The lack of clinically meaningful interaction with a sensitive CYP3A substrate such as simvastatin is consistent with the finding that anacetrapib does not induce or inhibit CYP3A [8].
+
+An exploratory objective was to evaluate the pharmacodynamic, particularly the lipid-altering biomarkers, interaction between simvastatin and anacetrapib. Anacetrapib is an investigational CETP inhibitor that has shown significant lipid-altering pharmacodynamic effects in both healthy subjects and in patients with dyslipidaemia, both alone as well as in the presence of atorvastatin [4,5,7]. Thus, the findings of this 14-day study on the lipoprotein parameters are quite interesting in light of available data on anacetrapib, as monotherapy and in combination with atorvastatin. Anacetrapib has been associated with maximal pharmacodynamic lipid effects in a completed Phase 2b study that resulted in decreases in LDL-C and Apo B of ∼40 and ∼30%, respectively, and increases in HDL-C and Apo A-I of 139 and 47%, respectively [7]. At the top doses of anacetrapib (150 and 300 mg), the maximal reductions in LDL-C and Apo B were similar to those with atorvastatin 20 mg [7]. Moreover, incremental reductions in LDL-C and Apo B were observed when anacetrapib was co-administered with atorvastatin 20 mg. The net result of treatment with anacetrapib and atorvastatin was approximately 70% lowering of LDL-C, approximately 50% lowering of Apo B, and more than doubling of HDL-C in patients with dyslipidaemia [7]. Anacetrapib does not meaningfully alter serum total cholesterol or triglycerides, and hence was not measured in the present study. Simvastatin is a highly effective marketed drug for the reduction of LDL-C and triglycerides that acts through competitive inhibition of HMG-CoA reductase, the enzyme that catalyses the rate-limiting step in cholesterol biosynthesis [10]. Simvastatin, at a dose of 80 mg per day, effectively reduced LDL-C by 47%, increased HDL-C by 8%, and lowered triglycerides by 24% in hypercholesterolaemic patients in the Upper Dose Comparison Study [10]. In the Multicenter Combined Hyperlipidemia Study, simvastatin, when administered either at 40 or 80 mg per day, elicited LDL-C decreases of 29–36%, HDL-C increases of 13–16%, and triglyceride decreases of 28–33% [10].
+
+In this study, simvastatin alone reduced LDL-C by 36% and Apo B by 29%, whereas in combination with anacetrapib, LDL-C was reduced by approximately 54% and Apo B by 43%. A 150-mg dose of anacetrapib, administered with a low-fat meal, is predicted to reduce LDL-C by approximately 40%, based on a model relating anacetrapib concentrations with LDL-C. A strictly additive effect would have resulted in a combined LDL-C-lowering effect of about 76%, which is about 22% higher than actually observed with the combination. Although there was still an incremental LDL-C lowering seen with the combination, the relative decrease in LDL-C was lower than what would have been expected as the sum of the effects of two drugs given alone. This is consistent with the findings observed with anacetrapib (10–300 mg) and atorvastatin 20 mg in the Phase 2b study, wherein atorvastatin 20 mg reduced LDL-C by approximately 42% and when atorvastatin 20 mg was given with anacetrapib 150 mg, LDL-C was reduced by about 65% [7]. In the same study, a 150-mg dose of anacetrapib was associated with LDL-C lowering of approximately 40%, which is about 17% lower than expected if an additive effect was considered. Thus, less than additive LDL-C-lowering effects were seen with two agents of the statin class with anacetrapib. Similar, less than strict additive effects have been observed with torcetrapib, another CETP inhibitor alone and in combination with atorvastatin [15].
+
+The exact reason for a lack of an additive effect on the LDL-C-lowering effect is unclear. There have been complex mechanistic pharmacodynamic interactions between statins and nonstatins reported in the literature, depending on the specific mechanism of action of the nonstatin [16]. Whereas additive or synergistic effects between nonstatin and statins have been observed with ezetemibe [14] and cholestyramine [[11,17], nonlinear and pharmacologically dependent effects have been observed with gemcabene [16], a discontinued lipid-altering drug. It should be noted that both ezetemibe and cholestyramine have distinctly different mechanisms of LDL-C-lowering effects compared with statins, whereas the exact mechanism by which gemcabene lowers LDL-C and, more importantly, whether there is a common element in the mechanism with statins, are largely unknown. Very little is known on whether the mechanism by which CETP inhibitors reduce LDL-C is shared with those known for statins, and understanding lipoprotein metabolism may explain this lack of an additive effect for anacetrapib and simvastatin. Recently, it was reported that whereas subjects treated with torcetrapib alone demonstrated an enhanced rate of LDL apoB100 catabolism, in subjects pretreated with atorvastatin, in which LDL apoB100 catabolism was already enhanced as a result of atorvastatin treatment, there was a reduced LDL apoB100 production rate [18]. Because CETP transfers triglycerides from triglycerides to LDL in exchange for cholesteryl ester, inhibition of CETP could have additional effects on the metabolism of Apo B-containing lipoproteins that may not be singularly related to exchange of lipids with HDL. It is not known whether anacetrapib would behave differently from torcetrapib with regard to lipoprotein metabolism, and this is currently being investigated. These results appear to suggest, at least for torcetrapib, that there may be a pharmacologically shared mechanism of LDL-C lowering, which presumably might explain the less than additive LDL-C-lowering effects observed with anacetrapib and simvastatin (current study) or with atorvastatin [7].
+
+Although anacetrapib appears to have less than additive lipid-altering effects with atorvastatin [7] and simvastatin (present study), the lipid-altering effects were anacetrapib dose dependent based on published dose-range studies with anacetrapib [[5,7]. The incremental effects with anacetrapib with a statin and influence on residual cardiovascular risk warrant further study.
+
+There appears to be no clinically meaningful effect of anacetrapib on the pharmacokinetics of simvastatin. When co-administered with simvastatin, anacetrapib appeared to exhibit incremental LDL-C-and Apo B-lowering efficacy. Co-administration of anacetrapib and simvastatin was well tolerated.
+
+Go to:
+Competing interests
+R.K., A.G., B.J., S.S.K., J.C. and J.A.W. are employees of Merck & Co., Inc., and may own stock or hold stock options in the company.
+
+This study was funded by Merck & Co., Inc. The authors acknowledge the assistance of Marissa Fallon and Stefan Zajic in pharmacokinetic calculations, the assistance of Deborah Miksch during the conduct of this study, the assistance of Rita Chiou and Jin Zhang in outsourcing of the simvastatin assay, and the assistance of Josee Cote at the conclusion of the study.
+
+Go to:
+Supporting Information
+Additional Supporting Information may be found in the online version of this article:
+
+Table S1
+
+Click here to view.(35K, doc)
+Summary statistics for blood pressure
+
+Please note: Wiley-Blackwell are not responsible for the content or functionality of any supporting materials supplied by the authors. Any queries (other than missing material) should be directed to the corresponding author for the article.
