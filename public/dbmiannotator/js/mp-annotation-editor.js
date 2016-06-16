@@ -169,7 +169,11 @@ function editDataCellByEditor(field, dataNum) {
     showEditor();
     $(".annotator-save").show();
     $('#quote').hide();
-
+    
+    // hide data fields navigation if editing evidence relationship 
+    if (field == "evRelationship")
+        $("#mp-data-nav").hide();
+    
     var annotationId = $('#mp-editor-claim-list option:selected').val();
     console.log("editDataCellByEditor - id: " + annotationId + " | data: " + dataNum + " | field: " + field);
     
