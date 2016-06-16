@@ -64,6 +64,8 @@
                     }                    
                  }
              },            
+             // evidence relationship - supports/refutes
+             'evRelationship': '',             
              // data attributes
              'auc': {
                  'value': 'numeric',

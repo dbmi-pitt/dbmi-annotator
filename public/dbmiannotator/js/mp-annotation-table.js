@@ -18,7 +18,7 @@ function annotationTable(sourceURL, email, sortByColumn){
             },
             success : function(response){
 
-                    // ann Id for selected claim, if null, set first claim as default 
+                    // ann Id for selected claim, if null, set first claim as default
                     var annotationId = $("#mp-annotation-work-on").html();    
 
                     if (annotationId == null || annotationId.trim() == "") {         
@@ -43,10 +43,11 @@ function updateClaimAndData(annotations, annotationId) {
     dataTable = "";
     // loop all MP annotation to create Claim listbox and menu for adder
     claimListbox = "<select id='mp-editor-claim-list' onChange='changeClaimInAnnoTable();'>";
+    // create claim listbox in claim creating dialog
+    dialogClaimListbox = "<select id='dialog-claim-options' onChange='changeClaimInDialog();'>";
     // add claim label as options in annotation list and mpadder menu
     for (i = 0; i < annotations.length; i++) { 
-
-        //console.log(annotationId + "| " + annotations[i].id);        
+      
         annotation = annotations[i];
         dataL = annotation.argues.supportsBy;
 
@@ -62,10 +63,14 @@ function updateClaimAndData(annotations, annotationId) {
         }
         
         claim = annotation.argues;                    
-        claimListbox += "<option value='" + annotation.id + "' "+claimIsSelected+">" + claim.label + "</option>";                        
+        option = "<option value='" + annotation.id + "' "+claimIsSelected+">" + claim.label + "</option>";                        
+        claimListbox += option;
+        dialogClaimListbox += option;
+
         claimMenu += "<li onclick='claimSelectedInMenu(\""+annotation.id+"\");' ><a href='#'>" + claim.label + "</a></li>";
     }
     claimListbox += "</select>";
+    dialogClaimListbox += "</select>";
     
     // Method listbox
     methodListbox = "<select id='mp-editor-method'><option value='clinical-trial'>Clinical Trial</option></select>";
@@ -85,10 +90,14 @@ function updateClaimAndData(annotations, annotationId) {
     annTable += "</table>";
     
     // update Annotation Table
-    $("#mp-annotation-tb").html(annTable);                  
+    $( "#mp-annotation-tb" ).html(annTable);                  
     
     // update mpadder - claim menu                
-    $(".mp-sub-menu-2").html(claimMenu);
+    $( ".mp-sub-menu-2" ).html(claimMenu);
+
+    // update claim options in dialog
+    $( "#dialog-claim-options" ).html(dialogClaimListbox);
+
     console.log("claim menu updated!");
 }
 
@@ -103,7 +112,7 @@ function addNewDataRow() {
     totalDataNum += 1;
     dataNumLast = totalDataNum - 1;
 
-    $('#mp-data-tb tr:last').after("<tr style='height:20px;'><td onclick='addDataCellByEditor(\"participants\"," + dataNumLast + ", true);'> </td><td onclick='addDataCellByEditor(\"dose1\"," + dataNumLast + ", true);'> </td><td onclick='addDataCellByEditor(\"dose2\"," + dataNumLast + ", true);'></td><td onclick='addDataCellByEditor(\"auc\"," + dataNumLast + ", true);'></td><td onclick='addDataCellByEditor(\"cmax\"," + dataNumLast + ", true);'></td><td onclick='addDataCellByEditor(\"clearance\"," + dataNumLast + ", true);'></td><td onclick='addDataCellByEditor(\"halflife\"," + dataNumLast + ", true);'></td></tr>");
+    $('#mp-data-tb tr:last').after("<tr style='height:20px;'><td onclick='addDataCellByEditor(\"evRelationship\"," + dataNumLast + ", true);'></td><td onclick='addDataCellByEditor(\"participants\"," + dataNumLast + ", true);'> </td><td onclick='addDataCellByEditor(\"dose1\"," + dataNumLast + ", true);'> </td><td onclick='addDataCellByEditor(\"dose2\"," + dataNumLast + ", true);'></td><td onclick='addDataCellByEditor(\"auc\"," + dataNumLast + ", true);'></td><td onclick='addDataCellByEditor(\"cmax\"," + dataNumLast + ", true);'></td><td onclick='addDataCellByEditor(\"clearance\"," + dataNumLast + ", true);'></td><td onclick='addDataCellByEditor(\"halflife\"," + dataNumLast + ", true);'></td></tr>");
 }
 
 
@@ -113,7 +122,7 @@ function addNewDataRow() {
 // return: table html for multiple data & materials 
 function createDataTable(dataL, annotationId){
 
-    dataTable = "<table id='mp-data-tb'><tr><td>No. of Participants</td><td>Drug1 Dose</td><td>Drug2 Dose</td><td>AUC</td><td>Cmax</td><td>Clearance</td><td>Half-life</td></tr>";
+    dataTable = "<table id='mp-data-tb'><tr><td>Ev Relationship</td><td>No. of Participants</td><td>Drug1 Dose</td><td>Drug2 Dose</td><td>AUC</td><td>Cmax</td><td>Clearance</td><td>Half-life</td></tr>";
 
     if (dataL.length > 0){ // show all data items
         for (var dataNum = 0; dataNum < dataL.length; dataNum++) {
@@ -121,6 +130,12 @@ function createDataTable(dataL, annotationId){
             method = data.supportsBy;
             material = data.supportsBy.supportsBy;
             row = "<tr style='height:20px;'>";
+            // evidence relationship
+            if (data.evRelationship != null)
+                row += "<td onclick='editDataCellByEditor(\"evRelationship\",\""+dataNum+"\");'>" + data.evRelationship + "</td>";      
+            else 
+                row += "<td onclick='addDataCellByEditor(\"evRelationship\",\""+dataNum+"\");'></td>";
+
             // show mp material
             if (material.participants.value != null)
                 row += "<td onclick='editDataCellByEditor(\"participants\",\""+dataNum+"\");'>" + material.participants.value + "</td>";      
@@ -161,7 +176,7 @@ function createDataTable(dataL, annotationId){
             dataTable += row;
         }
     } else { // add empty row
-        dataTable += "<tr style='height:20px;'><td onclick='addDataCellByEditor(\"participants\",0);'> </td><td onclick='addDataCellByEditor(\"dose1\",0);'> </td><td onclick='addDataCellByEditor(\"dose2\",0);'></td><td onclick='addDataCellByEditor(\"auc\",0);'></td><td onclick='addDataCellByEditor(\"cmax\",0);'></td><td onclick='addDataCellByEditor(\"clearance\",0);'></td><td onclick='addDataCellByEditor(\"halflife\",0);'></td></tr>";
+        dataTable += "<tr style='height:20px;'><td onclick='addDataCellByEditor(\"evRelationship\",0);'></td><td onclick='addDataCellByEditor(\"participants\",0);'></td><td onclick='addDataCellByEditor(\"dose1\",0);'> </td><td onclick='addDataCellByEditor(\"dose2\",0);'></td><td onclick='addDataCellByEditor(\"auc\",0);'></td><td onclick='addDataCellByEditor(\"cmax\",0);'></td><td onclick='addDataCellByEditor(\"clearance\",0);'></td><td onclick='addDataCellByEditor(\"halflife\",0);'></td></tr>";
     }
     dataTable += "</table>";
     return dataTable;
@@ -170,8 +185,57 @@ function createDataTable(dataL, annotationId){
 
 // changed claim in annotation table, update data & material
 function changeClaimInAnnoTable() {
-    var newAnnotationId = $('#mp-editor-claim-list option:selected').val();
-    console.log("claim changed to :" + newAnnotationId);
+    console.log("changeClaimInAnnoTable called");
+
+    var idFromAnnTable = $('#mp-editor-claim-list option:selected').val();
+
+    console.log($('#mp-editor-claim-list option:selected').val());
+
+    var idFromDialog = $('#dialog-claim-options option:selected').val();
+    var newAnnotationId = idFromAnnTable;
+
+    // update selection in dialog
+    if (idFromDialog != newAnnotationId) {
+        $("#dialog-claim-options > option").each(function () {
+            if (this.value === newAnnotationId) $(this).prop('selected', true);
+        });    
+    }
+
+
+    console.log("table - claim changed to :" + newAnnotationId);
+    $("#mp-annotation-work-on").html(newAnnotationId);
+
+    sourceURL = getURLParameter("sourceURL").trim();
+    email = getURLParameter("email");
+
+    $.ajax({url: "http://" + config.annotator.host + "/annotatorstore/search",
+            data: {annotationType: "MP", 
+                   email: email, 
+                   uri: sourceURL.replace(/[\/\\\-\:\.]/g, "")},
+            method: 'GET',
+            error : function(jqXHR, exception){
+                console.log(exception);
+            },
+            success : function(response){
+                updateClaimAndData(response.rows, newAnnotationId);
+            }     
+           });    
+}
+
+
+// changed claim in annotation table, update data & material
+function changeClaimInDialog() {
+    var idFromAnnTable = $('#mp-editor-claim-list option:selected').val();
+    var idFromDialog = $('#dialog-claim-options option:selected').val();
+    var newAnnotationId = idFromDialog;
+
+    // update selection in annotation table
+    if (idFromAnnTable != newAnnotationId) 
+        $("#mp-editor-claim-list > option").each(function () {
+            if (this.value === newAnnotationId) $(this).prop('selected', true);
+        });    
+
+    console.log("dialog - claim changed to :" + newAnnotationId);
     $("#mp-annotation-work-on").html(newAnnotationId);
 
     sourceURL = getURLParameter("sourceURL").trim();

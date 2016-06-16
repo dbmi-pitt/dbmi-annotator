@@ -7,6 +7,7 @@ function claimEditorLoad() {
 
     $(".annotator-save").hide();
     $("#mp-data-nav").hide();
+    $("#mp-data-form-evRelationship").hide();
     $("#mp-data-form-participants").hide();
     $("#mp-data-form-dose1").hide();
     $("#mp-data-form-dose2").hide();
@@ -115,9 +116,12 @@ function addDataCellByEditor(field, dataNum, isNewData) {
     console.log("addDataCellByEditor - id: " + annotationId + " | data: " + dataNum + " | field: " + field);
 
     // return if no text selection 
-    if (!isTextSelected) {
+    if (!isTextSelected && field != "evRelationship") {
         warnSelectTextSpan(field);
     } else {
+        // hide data fields navigation if editing evidence relationship 
+        if (field == "evRelationship")
+            $("#mp-data-nav").hide();
 
         // cached editing data cell
         currAnnotationId = annotationId;
@@ -145,7 +149,7 @@ function addDataCellByEditor(field, dataNum, isNewData) {
                     // add data if not avaliable  
                     if (annotation.argues.supportsBy.length == 0 || isNewData){ 
 
-                        var data = {type : "mp:data", auc : {}, cmax : {}, clearance : {}, halflife : {}, supportsBy : {type : "mp:method", supportsBy : {type : "mp:material", participants : {}, drug1Dose : {}, drug2Dose : {}}}};
+                        var data = {type : "mp:data", evRelationship: {}, auc : {}, cmax : {}, clearance : {}, halflife : {}, supportsBy : {type : "mp:method", supportsBy : {type : "mp:material", participants : {}, drug1Dose : {}, drug2Dose : {}}}};
                         annotation.argues.supportsBy.push(data); 
                     } 
                     
@@ -165,7 +169,11 @@ function editDataCellByEditor(field, dataNum) {
     showEditor();
     $(".annotator-save").show();
     $('#quote').hide();
-
+    
+    // hide data fields navigation if editing evidence relationship 
+    if (field == "evRelationship")
+        $("#mp-data-nav").hide();
+    
     var annotationId = $('#mp-editor-claim-list option:selected').val();
     console.log("editDataCellByEditor - id: " + annotationId + " | data: " + dataNum + " | field: " + field);
     
@@ -207,13 +215,14 @@ function editDataCellByEditor(field, dataNum) {
 // open data editor with specific form
 function switchDataForm(field) {
 
-    fieldL = ["participants","dose1","dose2","auc","cmax","clearance","halflife"];
+    fieldL = ["evRelationship","participants","dose1","dose2","auc","cmax","clearance","halflife"];
     
     if (field == null) 
         field = "participants";
     $("#mp-editor-type").html(field);
     
-    $("#mp-data-nav").show();
+    if (field != "evRelationship")
+        $("#mp-data-nav").show();
     $("#mp-claim-form").hide();
 
     // shown specific data form, hide others

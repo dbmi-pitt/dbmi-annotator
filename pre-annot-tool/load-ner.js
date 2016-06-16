@@ -149,7 +149,7 @@ function loadAnnotation(annotation, uriStr, email){
         return null;
     } else {
         uriPost = uriStr.replace(/[\/\\\-\:\.]/g, "");
-        path = annotation.start.replace("/html[1]/body[1]","/article[1]/div[1]/div[1]/div[1]");
+        path = annotation.start.replace("/html[1]/body[1]","");        
 
         console.log("[INFO]: begin load for " + annotation.exact);
         var datetime = new Date();
@@ -165,27 +165,29 @@ function loadAnnotation(annotation, uriStr, email){
                     "annotationType": "DrugMention",
                     "quote": annotation.drugname,
                     "permissions": {},
-                    "ranges": [
-                        {
-                            "start": path,
-                            "end": path,
-                            "startOffset": parseInt(annotation.startOffset),
-                            "endOffset": parseInt(annotation.endOffset),
-                        }
-                    ],
+                    "argues": {
+                        "hasTarget": {
+                            "hasSelector": {
+                                "@type": "TextQuoteSelector",
+                                "exact": annotation.exact,
+                                "prefix": annotation.prefix,
+                                "suffix": annotation.suffix
+                            }
+                        },
+                        "ranges": [
+                            {
+                                "start": path,
+                                "end": path,
+                                "startOffset": parseInt(annotation.startOffset),
+                                "endOffset": parseInt(annotation.endOffset),
+                            }
+                        ],
+                        "supportsBy": []
+                    },
                     "consumer": "mockconsumer",
                     "uri": uriPost,
                     "rawurl": uriStr,
-                    "user": "NER",
-                    target: {   //for OA text quote selector (JSON-LD)
-                        "source" : uriStr,
-                        "selector" : {
-                            "@type": "TextQuoteSelector",
-                            "exact": annotation.exact,
-                            "prefix": annotation.prefix,
-                            "suffix": annotation.suffix
-                        }
-                    }
+                    "user": "NER"
                 }
             }, function (err, resp) {
                 if (err)
