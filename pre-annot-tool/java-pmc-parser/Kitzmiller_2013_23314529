@@ -1,0 +1,72 @@
+Abstract
+Background
+
+Statins are indicated for prevention of atherosclerotic cardiovascular disease. Metabolism of certain statins involves the cytochrome P450 3A (CYP3A) enzymes, and CYP3A4*22 significantly influences the dose needed for achieving optimal lipid control for atorva statin, simvastatin, and lovastatin. CYP3A4/5 combined genotype approaches have proved useful in some studies involving CYP3A substrates. We intend to compare a combined genotype analysis to our previously reported single gene CYP3A4 analysis.
+
+Methods
+
+A total of 235 patients receiving stable statin doses were genotyped and grouped by CYP3A4/5 status.
+
+Results
+
+The number and demographic composition of the patients categorized into the combined genotype groups were consistent with those reported for other cohorts. Dose requirement was significantly associated with the ordered combined-genotype grouping; median daily doses were nearly 40% greater for CYP3A4/5 intermediate metabolizers compared with poor metabolizers, and median daily doses were nearly double for extensive metabolizers compared with poor metabolizers. The combined-genotype approach, however, did not improve the genotype-dosage correlation p-values when compared with the previously-reported analysis; values changed from 0.129 to 0.166, 0.036 to 0.185, and 0.014 to 0.044 for atorvastatin, simvastatin, and the combined statin analysis, respectively.
+
+Conclusions
+
+The previously-reported single-gene approach was superior for predicting statin dose requirement in this cohort.
+
+Keywords: CYP3A4/5 combined genotype, gene-gene interaction, pharmacogenomics, statin
+Go to:
+Introduction
+Cardiovascular disease causes substantial morbidity and mortality [1]. Statin therapy has proven to be highly effective in preventing the progression of cardiovascular disease for most patients, but considerable inter-individual variability in statin response and metabolism is reported. A multitude of genes and polymorphisms have demonstrated influence on statin pharmacokinetics and pharmacodynamics; however, these genetic factors by themselves are insufficient to guide therapy, and gene-gene interaction studies are largely lacking [2, 3]. Atorvastatin and lovastatin are primarily metabolized by cytochrome P450 3A4 (CYP3A4) and CYP3A5 in the gut and liver, and simvastatin is mainly metabolized by CYP3A4 and CYP3A5 but also by CYP2C8 [4]. The extent to which CYP3A4 and CYP3A5 contribute to statin metabolism depends on statin type and on the individual patient.
+
+Reported findings attempting to delineate their respective contributions are not very consistent and are largely contradictory, but CYP3A4 is typically more influential. For example, CYP3A4 and CYP3A5 were determined to be responsible for 85% and 15% of atorvastatin metabolism, respectively, in a reported in vitro study. Nonetheless, inter-individual variability in CYP3A metabolism is significant (20 – 40-fold) and is likely to be associated with genetic variations in both CYP3A4 and CYP3A5 – the two most prominent of the CYP3A enzymes [5].
+
+We recently described the significant influence of the CYP3A4*22 single nucleotide polymorphism (SNP): enzyme level and activity were 1.7 – 2.5-fold, respectively, greater in wild type homozygous patients than in decrease of function (DOF)-allele carriers, and DOF-allele carriers required only 20%–60% of the statin dose required by homozygotic wild-type patients taking stable doses of atorvastatin, simvastatin, or lovastatin for optimal lipid control [6]. Another study reported a significant association between CYP3A4*22 and increased lipid-lowering response to simvastatin [7].
+
+Other studies have recently reported similar influence of CYP3A4*22 on known CYP3A substrates and a CYP3A4/5 combined-genotype approach has been described and suggests some potential utility for guiding dose selection or predicting response to certain CYP3A substrates including tacrolimus and cyclosporine [8 – 10]. The combined genotype analysis involves categorizing individuals into one of three groups (poor metabolizers, PMs; intermediate metabolizers, IMs; or extensive metabolizers, EMs) based on their genetically-determined capacity for CYP3A4 and CYP3A5 metabolism.
+
+In recently-reported CYP3A4/5 combined-genotype analyses, the influence of the DOF CYP3A4*22 SNP and the largely non-functional CYP3A5*3 SNP were investigated individually and by using a combined-genotype analyses. Individuals possessing at least one CYP3A4*22 allele were considered reduced-expressers of CYP3A4, and individuals not possessing any CYP3A4*22 alleles were considered to be normal-expressers of CYP3A4. Individuals possessing at least one CYP3A5 *1 allele were considered CYP3A5 expressers, and CYP3A5*3 homozygotes were considered CYP3A5 non-expressers. PMs were defined as reduced expressersof CYP3A4 and CYP3A5 non-expressers, EMs were defined as expressers of both CYP3A4 and CYP3A5, and IMs were defined as expressers of either but not bothCYP3A enzymes.
+
+Although in vitro studies strongly suggest that CYP3A5 plays only a very limited role in statin metabolism [5], the findings of a few recent clinical studies suggest a more significant role [11]. Simvastatin exposure was higher for CYP3A5*3 homozygotes compared with CYP3A5* 1 homozygotes [12], and diminished lipid-lowering responses have been reported for CYP3A5 *1 homozygotes [13, 14]. Conversely, another study determined that drug exposure of the biologically active atorvastatin acid metabolite was not significantly influenced by CYP3A5 status [15], and no significant association was observed between CYP3A5*3 and efficacy or tolerability of simvastatin in another reported study [16].
+
+The findings reported in the current literature are contradictory; however, CYP3A5 likely plays only a secondary role in the metabolism of atorvastatin, simvastatin, and lovastatin. Nonetheless, our current investigation intends to use the CYP3A4/5 combined-genotype approach to determine whether the additional consideration of CYP3A5 can provide better dose prediction than our previously-reportedCYP3A4*22 analysis.
+
+Go to:
+Materials and methods
+Institutional Internal Review Board approval, the study population and genotyping methodology are described in great detail in the original article reporting our CYP3A4*22 analysis [6]. For this current analysis, study participants were categorized into one of the following CYP3A4/5 genotype groups: PMs, IMs, or EMs. PMs were defined as individuals that were CYP3A5 non- expressers (CYP3A5*3/*3) and carriers of at least one DOF CYP3A4*22 allele, EMs were defi ned as individuals who were CYP3A5 expressers (CYP3A5 *1/*1 or CYP3A5 *1/*3) and CYP3A4 normal-expressers (CYP3A4 *1/*1), and IMs were defi ned as individuals who were CYP3A4 normal-expressers (CYP3A4 *1/*1) and CYP3A5 nonexpressers (CYP3A5 *3/*3) or who were CYP3A5 expressers (CYP3A5 *1/*1 or CYP3A5 *1/*3) and carriers of at least one DOF CYP3A4 *22 allele.
+
+Numbers and percentages of individuals in each combined genotype group were determined and compared with those reported in the current literature. Demographic characteristics (age, gender, and race) were determined for each combined genotype group. Median, first quartile, and third quartile of atorvastatin, simvastatin, and lovastatin dose were determined for each combined genotype group. As utilized in our previous report, a composite statin dose (CSD) was determined after adjusting for differences in potency among the three statins. Potency differences were accounted for by normalizing the simvastatin and lovastatin doses to atorvastatin-equivalent doses (i.e., simvastatin and lovastatin have 83% and 58% the potency, respectively, of atorvastatin [5]).
+
+Numbers and percentages of individuals receiving statin doses within specific ranges (low, medium, and high) were determined for PMs, IMs, and EMs. χ 2 analyses were utilized to determine whether the percentages of patients in each dose group were significantly different from expected frequencies.
+
+A non-parametric one-way analysis of variance (ANOVA, Kruskal-Wallis) test was used to determine whether required statin dose was significantly different for the CYP3A4/5 combined-genotype groups (PM, IM, and EM). To compare the results with those of our previously-reported single-gene analysis approach, the CYP3A4/5 combined-genotype groups were merged so that means of only two groups (PMs vs. non-PMs and EMs vs. non-EMs) could be compared using the same type of statistical test (Mann-Whitney) used in the single-gene analysis. As ordered logistic regression cannot be applied to the multi-gene-analysis approach, results of non-parametric tests (Kruskal-Wallis) for the combined-gene approach were compared with the ordered logistic regression results of the single-gene approach. Covariates including ethnicity, gender, and age were considered in subsequent analyses to determine whether they influenced statin dose requirement in this cohort.
+
+Go to:
+Results
+The numbers and percentages of individuals in each CYP3A4/5 combined-genotype group are listed in Table 1. The percentage of individuals in each group (8%, 71%, and 21% for PMs, IMs, and EMs, respectively) are consistent with those reported for other study populations [8-10]. Table 1 also lists the study-population demographics (age, race, gender), and they suggest no significant associations with CYP3A4/5 combined-genotype status. The median and quartile values suggest statin dose requirement increased with the rank-ordered progression of CYP3A4/5- metabolizer status. Median daily dose requirements were 16.6, 23.2, and 33.2 mg for PMs, IMs, and EMs, respectively, in the analysis combining individuals on any of the three statins. The numbers and percentages of individuals in CYP3A4/5 combined-genotype groups for each dose level are listed in Table 2. For atorvastatin and simvastatin, the highest percentages of individuals in the PM group appear to occupy the lower dosing groups, and the highest percentages of individuals in the EM group appear to occupy the higher dosing groups. The χ2 analysis revealed that the proportions for IMs were significantly different from expected (0.33, 0.33, 0.33) for both atorvastatin and simvastatin, p = 0.034 and p = 1.7E-6, respectively. The proportions for EMs were significantly different from expected for simvastatin only, p = 0.04.
+
+Table 1
+Table 1
+Study population characteristics grouped by CYP3A4/5 combined genotype.
+Table 2
+Table 2
+Combined CYP3A4/5 genotype and dose levels.
+The statistical results from the combined-gene analyses and the single-gene analyses are presented in Table 3. The combined- CYP3A4/5 approach was inferior to the single-gene approach for atorvastatin, simvastatin, and for the combined statin analysis: the p-values for the ordered logistic regression model and the Kruskal-Wallis model were 0.129 and 0.166, respectively, for atorvastatin; 0.036 and 0.185, respectively, for simvastatin; and 0.014 and 0.044, respectively, for the combined statin analysis.
+
+Table 3
+Table 3
+CYP3A4 and CYP3A4/5 analyses results.
+Statistical significance for models that included covariates (ethnicity, gender, and age) did not differ significantly from those reported in Table 3: less than a 0.01 change in any p-value was observed. Additionally, including the covariates increased the Akaike information criterion and Bayesian information criterion, indicating they should not be included in the analysis of this data set.
+
+Go to:
+Discussion and conclusions
+For this cohort, CYP3A5 played a minor role in statin metabolism. Our previously-reported CYP3A4*22 analysis was superior for predicting statin dose requirement when compared with this current CYP3A4/5 combined-genotype approach. It is not surprising that the additional consideration of CYP3A5 did not improve the statistical results of the analysis – in vitro studies demonstrate a minor role for CYP3A5 in statin metabolism. For CYP3A substrates relying more heavily on CYP3A5 metabolism, such as tacrolimus, the combined-genotype approach has proven worthwhile [9].
+
+Despite the findings of our current investigation, a combined CYP3A4/5 approach should still be considered in statin pharmacogenomic studies, especially in those involving higher proportions of non-Caucasians because non-Caucasian populations have significantly higher CYP3A5*1 allele frequencies [17]. Although the statistical significance did not improve by adding CYP3A5 into our model, CYP3A5*1 carriers did have higher dose requirements than expected based solely on their CYP3A4 status. CYP3A4 is undoubtedly the most prominent of the CYP3A enzymes, but CYP3A5 may play an important role for patients with DOF CYP3A4 alleles.
+
+A limitation of our investigation is that genotyping of other genes (e.g., SCL01B1, ABCB1, and CYP2C8) known to influence statin pharmacokinetics were not included in the analyses. A larger cohort would have been required, however, to adequately investigate gene-gene interactions among the many genes that could ideally be included in such an analysis. The investigation was also limited because concomitant medications and statin use duration were not well-documented; study results may have been obscured because our analysis could not account for induction of CYP3A. In addition, our investigation was largely restricted in that no response-to-therapy data or lipid data were collected.
+
+Go to:
+Acknowledgments
+Research funding: The authors would like to acknowledge the NIH grants that supported this research K23 GM100372, U01 GM092655, UL1 RR025755.
