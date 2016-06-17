@@ -120,8 +120,12 @@ function addDataCellByEditor(field, dataNum, isNewData) {
         warnSelectTextSpan(field);
     } else {
         // hide data fields navigation if editing evidence relationship 
-        if (field == "evRelationship")
+        if (field == "evRelationship") {
             $("#mp-data-nav").hide();
+            $(".annotator-save").hide();
+        } else {
+            $(".annotator-save").show();            
+        }
 
         // cached editing data cell
         currAnnotationId = annotationId;
@@ -129,7 +133,6 @@ function addDataCellByEditor(field, dataNum, isNewData) {
         currDataField = field;
 
         showEditor();
-        $(".annotator-save").show();
         $('#quote').hide();
         $("#annotator-delete").hide();
         
@@ -167,13 +170,17 @@ function addDataCellByEditor(field, dataNum, isNewData) {
 function editDataCellByEditor(field, dataNum) {
 
     showEditor();
-    $(".annotator-save").show();
+    
     $('#quote').hide();
     
     // hide data fields navigation if editing evidence relationship 
-    if (field == "evRelationship")
+    if (field == "evRelationship") {
         $("#mp-data-nav").hide();
-    
+        $(".annotator-save").hide();
+    } else {
+        $(".annotator-save").show();
+    }
+
     var annotationId = $('#mp-editor-claim-list option:selected').val();
     console.log("editDataCellByEditor - id: " + annotationId + " | data: " + dataNum + " | field: " + field);
     
