@@ -32,11 +32,11 @@ module.exports = function(app, passport) {
     });
 
     app.post('/dbmiannotator/register', isRegisterFormValid, passport.authenticate('local-signup', {
-	    successRedirect : '/dbmiannotator/main', 
-	    failureRedirect : '/dbmiannotator/register', 
-	    failureFlash : true
+	successRedirect : '/dbmiannotator/main', 
+	failureRedirect : '/dbmiannotator/register', 
+	failureFlash : true
     })
-	        );
+	    );
     
     // MAIN ==============================
     app.get('/dbmiannotator/main', isLoggedIn, initPluginProfile, function(req, res) {
@@ -188,7 +188,7 @@ module.exports = function(app, passport) {
                 var jsonObjs = body.rows;
                 res.attachment('annotations-'+req.query.email+'.csv');
 		        res.setHeader('Content-Type', 'text/csv');
-                var csvTxt = '"claim label","claim text","method","relationship","drug1","drug2","precipitant","enzyme","particitants","participants text","drug1 dose","drug1 formulation","drug1 duration","drug1 regimens","drug1 dose text","drug2 dose","drug2 formulation","drug2 duration","drug2 regimens","drug2 dose text","auc","auc type","auc direction","auc text","cmax","cmax type","cmax direction","cmax text","cl","cl type","cl direction","cl text","halflife","halflife type","halflife direction","halflife text"\n';
+                var csvTxt = '"document"\t"claim label"\t"claim text"\t"method"\t"relationship"\t"drug1"\t"drug2"\t"precipitant"\t"enzyme"\t"particitants"\t"participants text"\t"drug1 dose"\t"drug1 formulation"\t"drug1 duration"\t"drug1 regimens"\t"drug1 dose text"\t"drug2 dose"\t"drug2 formulation"\t"drug2 duration"\t"drug2 regimens"\t"drug2 dose text"\t"auc"\t"auc type"\t"auc direction"\t"auc text"\t"cmax"\t"cmax type"\t"cmax direction"\t"cmax text"\t"cl"\t"cl type"\t"cl direction"\t"cl text"\t"halflife"\t"halflife type"\t"halflife direction"\t"halflife text"\n';
 
                 for (var i = 0; i < jsonObjs.length; i++) {
                     jsonObj = jsonObjs[i];
@@ -200,27 +200,27 @@ module.exports = function(app, passport) {
                         method = data.supportsBy;
                         material = method.supportsBy;
 
-                        var line = '"' + claim.label + '","' + claim.hasTarget.hasSelector.exact + '","' + claim.method + '","' + claim.qualifiedBy.relationship + '","' + claim.qualifiedBy.drug1 + '","' + claim.qualifiedBy.drug2 + '","' + claim.qualifiedBy.precipitant + '","' + claim.qualifiedBy.enzyme + '"';
+                        var line = '"' + jsonObj.rawurl + '"\t"' + claim.label + '"\t"' + claim.hasTarget.hasSelector.exact + '"\t"' + claim.method + '"\t"' + claim.qualifiedBy.relationship + '"\t"' + claim.qualifiedBy.drug1 + '"\t"' + claim.qualifiedBy.drug2 + '"\t"' + claim.qualifiedBy.precipitant + '"\t"' + claim.qualifiedBy.enzyme + '"';
                         if (material.participants != null)
-                            line += ',"' + material.participants.value + '","' + getSpanFromField(material.participants) + '"';
+                            line += '\t"' + material.participants.value + '"\t"' + getSpanFromField(material.participants) + '"';
                         else 
-                            line += ',,'
+                            line += '\t\t'
                         if (material.drug1Dose != null) 
-                            line += ',"' + material.drug1Dose.value + '","' + material.drug1Dose.formulation + '","'  + material.drug1Dose.duration + '","' + material.drug1Dose.regimens + '","' + getSpanFromField(material.drug1Dose) + '"';
+                            line += '\t"' + material.drug1Dose.value + '"\t"' + material.drug1Dose.formulation + '"\t"'  + material.drug1Dose.duration + '"\t"' + material.drug1Dose.regimens + '"\t"' + getSpanFromField(material.drug1Dose) + '"';
                         else 
-                            line += ',,,,';
+                            line += '\t\t\t\t';
                         if (material.drug2Dose != null) 
-                            line += ',"' + material.drug2Dose.value + '","' + material.drug2Dose.formulation + '","' + material.drug2Dose.duration + '","' + material.drug2Dose.regimens + '","'  + getSpanFromField(material.drug2Dose) + '"';
+                            line += '\t"' + material.drug2Dose.value + '"\t"' + material.drug2Dose.formulation + '"\t"' + material.drug2Dose.duration + '"\t"' + material.drug2Dose.regimens + '"\t"'  + getSpanFromField(material.drug2Dose) + '"';
                         else 
-                            line += ',,,,';
+                            line += '\t\t\t\t';
 
                         dataFieldsL = ["auc","cmax","clearance","halflife"];
                         for (p = 0; p < dataFieldsL.length; p++) {
                             field = dataFieldsL[p];
                             if (data[field] != null)    
-                                line += ',"' + data[field].value + '","' + data[field].direction + '","' + data[field].type + '","' + getSpanFromField(data[field]) + '"' 
+                                line += '\t"' + data[field].value + '"\t"' + data[field].direction + '"\t"' + data[field].type + '"\t"' + getSpanFromField(data[field]) + '"' 
                             else 
-                                line += ',,,,';
+                                line += '\t\t\t\t';
                         }
                         csvTxt += line + "\n";
                     }
