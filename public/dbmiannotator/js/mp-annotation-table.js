@@ -18,16 +18,13 @@ function annotationTable(sourceURL, email, sortByColumn){
             },
             success : function(response){
 
-                    // ann Id for selected claim, if null, set first claim as default
-                    var annotationId = $("#mp-annotation-work-on").html();    
-
-                    if (annotationId == null || annotationId.trim() == "") {         
-                        if (response.total > 0){
-                            $("#mp-annotation-work-on").html(response.rows[0].id);
-                            annotationId = response.rows[0].id;
-                        }
+                // ann Id for selected claim, if null, set first claim as default 
+                if (currAnnotationId == null || currAnnotationId.trim() == "") {         
+                    if (response.total > 0){
+                        currAnnotationId = response.rows[0].id;
                     }
-                    updateClaimAndData(response.rows, annotationId);
+                }
+                updateClaimAndData(response.rows, currAnnotationId);
             }
            });
 }
@@ -210,7 +207,7 @@ function changeClaimInAnnoTable() {
 
 
     console.log("table - claim changed to :" + newAnnotationId);
-    $("#mp-annotation-work-on").html(newAnnotationId);
+    currAnnotationId = newAnnotationId;
 
     sourceURL = getURLParameter("sourceURL").trim();
     email = getURLParameter("email");
@@ -243,7 +240,7 @@ function changeClaimInDialog() {
         });    
 
     console.log("dialog - claim changed to :" + newAnnotationId);
-    $("#mp-annotation-work-on").html(newAnnotationId);
+    currAnnotationId = newAnnotationId;
 
     sourceURL = getURLParameter("sourceURL").trim();
     email = getURLParameter("email");
@@ -266,7 +263,8 @@ function changeClaimInDialog() {
 // set current data field for editor form to the field that user chosen
 function warnSelectTextSpan(field) {
     $("#dialog-select-text-for-data").dialog();
-    $("#mp-editor-type").html(field);
+    //$("#mp-editor-type").html(field);
+    currFormType = field;
 }
 
 

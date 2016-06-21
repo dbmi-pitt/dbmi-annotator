@@ -19,7 +19,7 @@ if (typeof annotator === 'undefined') {
     var currAnnotationId = "";
     var currDataNum = "";
     var totalDataNum = "";
-    var currDataField = "";
+    var currFormType = "";
 
     if (annType == "DDI")
         app.include(annotator.ui.dbmimain);            
