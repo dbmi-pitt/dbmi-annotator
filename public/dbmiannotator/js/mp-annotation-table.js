@@ -49,17 +49,18 @@ function updateClaimAndData(annotations, annotationId) {
     for (i = 0; i < annotations.length; i++) { 
       
         annotation = annotations[i];
-        dataL = annotation.argues.supportsBy;
+        //dataL = annotation.argues.supportsBy;
 
         var claimIsSelected = "";
         if (annotationId == annotation.id) {
             console.log("mp selected: " + annotation.argues.label);
             claimIsSelected = 'selected="selected"';     
             // cache total number of data & material for current claim
-            totalDataNum = dataL.length;      
+            totalDataNum = annotation.argues.supportsBy.length;      
             
             // create data table
-            dataTable = createDataTable(dataL, annotationId);                       
+            // dataTable = createDataTable(dataL, annotationId);                     
+            dataTable = createDataTable(annotation);                       
         }
         
         claim = annotation.argues;                    
@@ -120,9 +121,15 @@ function addNewDataRow() {
 // @input: data list in MP annotation
 // @input: MP annotation Id
 // return: table html for multiple data & materials 
-function createDataTable(dataL, annotationId){
+function createDataTable(annotation){
 
-    dataTable = "<table id='mp-data-tb'><tr><td>Ev Relationship</td><td>No. of Participants</td><td>Drug1 Dose</td><td>Drug2 Dose</td><td>AUC</td><td>Cmax</td><td>Clearance</td><td>Half-life</td></tr>";
+    drugname1 = annotation.argues.qualifiedBy.drug1;
+    drugname2 = annotation.argues.qualifiedBy.drug2;
+
+    dataTable = "<table id='mp-data-tb'><tr><td>Ev Relationship</td><td>No. of Participants</td><td><div>" + drugname1 + " Dose</div></td><td>" + drugname2 + " Dose</td><td>AUC</td><td>Cmax</td><td>Clearance</td><td>Half-life</td></tr>";
+
+    annotationId = annotation.id;
+    dataL = annotation.argues.supportsBy;
 
     if (dataL.length > 0){ // show all data items
         for (var dataNum = 0; dataNum < dataL.length; dataNum++) {
