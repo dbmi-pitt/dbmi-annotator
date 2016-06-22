@@ -256,3 +256,4 @@ function scrollToAnnotation(annotationId, fieldName, dataNum) {
     if (document.getElementById(divId))
         document.getElementById(divId).scrollIntoView(true);
 }
+

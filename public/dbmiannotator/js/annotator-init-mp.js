@@ -82,6 +82,24 @@ if (typeof annotator === 'undefined') {
                              showEnzyme();
                          });
 
+                         // change event for auc unchanged checkbox
+                         $('#auc-unchanged-checkbox').change(function() {
+                             console.log("TESTING2");
+                             if ($(this).is(":checked")) {
+                                 $("#auc").val('');
+                                 $("#aucType")[0].selectedIndex = -1;
+                                 $("#aucDirection")[0].selectedIndex = -1;
+                                 
+                                 $("#auc").attr("disabled", true);
+                                 $("#aucType").attr("disabled", true);
+                                 $("#aucDirection").attr("disabled", true);
+                             } else {
+                                 $("#auc").attr("disabled", false);
+                                 $("#aucType").attr("disabled", false);
+                                 $("#aucDirection").attr("disabled", false);
+                             }
+                         });
+                         
                      });
 }
 
