@@ -135,7 +135,8 @@ function addDataCellByEditor(field, dataNum, isNewData) {
         currFormType = field;
 
         showEditor();
-        $('#quote').hide();
+        if (cachedOATarget.hasSelector != null)
+            $("#" + field + "quote").html(cachedOATarget.hasSelector.exact);
         $("#annotator-delete").hide();
         
         // updating current MP annotation
@@ -207,6 +208,9 @@ function editDataCellByEditor(field, dataNum) {
                     currAnnotationId = annotationId;
                 
                 switchDataForm(field);
+                // load quote for data field
+                // if (cachedOATarget.hasSelector != null)
+                //     $("#" + field + "quote").html(cachedOATarget.hasSelector.exact);
                 
                 // show delete button
                 data = annotation.argues.supportsBy[dataNum];
