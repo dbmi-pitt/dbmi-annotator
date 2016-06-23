@@ -18,16 +18,13 @@ function annotationTable(sourceURL, email, sortByColumn){
             },
             success : function(response){
 
-                    // ann Id for selected claim, if null, set first claim as default
-                    var annotationId = $("#mp-annotation-work-on").html();    
-
-                    if (annotationId == null || annotationId.trim() == "") {         
-                        if (response.total > 0){
-                            $("#mp-annotation-work-on").html(response.rows[0].id);
-                            annotationId = response.rows[0].id;
-                        }
+                // ann Id for selected claim, if null, set first claim as default 
+                if (currAnnotationId == null || currAnnotationId.trim() == "") {         
+                    if (response.total > 0){
+                        currAnnotationId = response.rows[0].id;
                     }
-                    updateClaimAndData(response.rows, annotationId);
+                }
+                updateClaimAndData(response.rows, currAnnotationId);
             }
            });
 }
@@ -49,17 +46,18 @@ function updateClaimAndData(annotations, annotationId) {
     for (i = 0; i < annotations.length; i++) { 
       
         annotation = annotations[i];
-        dataL = annotation.argues.supportsBy;
+        //dataL = annotation.argues.supportsBy;
 
         var claimIsSelected = "";
         if (annotationId == annotation.id) {
             console.log("mp selected: " + annotation.argues.label);
             claimIsSelected = 'selected="selected"';     
             // cache total number of data & material for current claim
-            totalDataNum = dataL.length;      
+            totalDataNum = annotation.argues.supportsBy.length;      
             
             // create data table
-            dataTable = createDataTable(dataL, annotationId);                       
+            // dataTable = createDataTable(dataL, annotationId);                     
+            dataTable = createDataTable(annotation);                       
         }
         
         claim = annotation.argues;                    
@@ -81,7 +79,7 @@ function updateClaimAndData(annotations, annotationId) {
     claimPanel += "<tr><td><button type='button' onclick='editClaim()'>Edit Claim</button>&nbsp;&nbsp;<button type='button' onclick='viewClaim()'>View Claim</button></td></tr></table>";
     
     // Data & Material - add new data button 
-    dataPanel = "<button type='button' onclick='addNewDataRow()' style='float: right;'>add new data & material</button><br>" + dataTable;
+    dataPanel = "<button type='button' onclick='addNewDataRow()' style='float: right;'>add new data & material</button>" + dataTable;
     
     // Annotation table
     annTable = "<table id='mp-claim-data-tb'>" +
@@ -120,9 +118,15 @@ function addNewDataRow() {
 // @input: data list in MP annotation
 // @input: MP annotation Id
 // return: table html for multiple data & materials 
-function createDataTable(dataL, annotationId){
+function createDataTable(annotation){
 
-    dataTable = "<table id='mp-data-tb'><tr><td>Ev Relationship</td><td>No. of Participants</td><td>Drug1 Dose</td><td>Drug2 Dose</td><td>AUC</td><td>Cmax</td><td>Clearance</td><td>Half-life</td></tr>";
+    drugname1 = annotation.argues.qualifiedBy.drug1;
+    drugname2 = annotation.argues.qualifiedBy.drug2;
+
+    dataTable = "<table id='mp-data-tb'><tr><td>Ev Relationship</td><td>No. of Participants</td><td><div>" + drugname1 + " Dose</div></td><td>" + drugname2 + " Dose</td><td>AUC</td><td>Cmax</td><td>Clearance</td><td>Half-life</td></tr>";
+
+    annotationId = annotation.id;
+    dataL = annotation.argues.supportsBy;
 
     if (dataL.length > 0){ // show all data items
         for (var dataNum = 0; dataNum < dataL.length; dataNum++) {
@@ -203,7 +207,7 @@ function changeClaimInAnnoTable() {
 
 
     console.log("table - claim changed to :" + newAnnotationId);
-    $("#mp-annotation-work-on").html(newAnnotationId);
+    currAnnotationId = newAnnotationId;
 
     sourceURL = getURLParameter("sourceURL").trim();
     email = getURLParameter("email");
@@ -236,7 +240,7 @@ function changeClaimInDialog() {
         });    
 
     console.log("dialog - claim changed to :" + newAnnotationId);
-    $("#mp-annotation-work-on").html(newAnnotationId);
+    currAnnotationId = newAnnotationId;
 
     sourceURL = getURLParameter("sourceURL").trim();
     email = getURLParameter("email");
@@ -259,7 +263,8 @@ function changeClaimInDialog() {
 // set current data field for editor form to the field that user chosen
 function warnSelectTextSpan(field) {
     $("#dialog-select-text-for-data").dialog();
-    $("#mp-editor-type").html(field);
+    //$("#mp-editor-type").html(field);
+    currFormType = field;
 }
 
 
