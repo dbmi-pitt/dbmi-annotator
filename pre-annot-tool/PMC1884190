@@ -1,0 +1,118 @@
+Abstract
+Aims
+
+To examine in vivo the effect of ketoconazole on the pharmacokinetics of rosuvastatin, a 3-hydroxy-3-methylglutaryl coenzyme A (HMG-CoA) reductase inhibitor.
+
+Methods
+
+This was a randomized, double-blind, two-way crossover, placebo-controlled trial. Healthy male volunteers (n = 14) received ketoconazole 200 mg or placebo twice daily for 7 days, and rosuvastatin 80 mg was coadministered on day 4 of dosing. Plasma concentrations of rosuvastatin, and active and total HMG-CoA reductase inhibitors were measured up to 96 h postdose.
+
+Results
+
+Following coadministration with ketoconazole, rosuvastatin geometric least square mean AUC(0,t) and Cmax were unchanged compared with placebo (treatment ratios (90% confidence intervals): 1.016 (0.839, 1.230), 0.954 (0.722, 1.260), respectively). Rosuvastatin accounted for essentially all of the circulating active HMG-CoA reductase inhibitors and most (> 85%) of the total inhibitors. Ketoconazole did not affect the proportion of circulating active or total inhibitors accounted for by circulating rosuvastatin.
+
+Conclusions
+
+Ketoconazole did not produce any change in rosuvastatin pharmacokinetics in healthy subjects. The data suggest that neither cytochrome P450 3A4 nor P-gp-mediated transport contributes to the elimination of rosuvastatin.
+
+Keywords: CYP3A4, ketoconazole, P-glycoprotein, rosuvastatin
+Go to:
+Introduction
+Rosuvastatin (Crestor®) is an inhibitor of 3-hydroxy-3-methylglutaryl coenzyme A (HMG-CoA) reductase, the rate-limiting enzyme in cholesterol biosynthesis, and is effective for the treatment of patients with dyslipidaemia. In clinical trials, rosuvastatin (1-80 mg) produced highly significant dose-dependent reductions in low-density lipoprotein cholesterol (up to 65%) and was well-tolerated [1].
+
+The pharmacokinetics of rosuvastatin following single- and multiple-dose administration of the drug to healthy volunteers have been investigated in several trials ([2] and AstraZeneca data on file [manuscript in preparation]). The absolute oral bioavailability was estimated as 20.1%, which, together with an estimated hepatic extraction ratio of 0.63, implies that absorption was greater than 20%. Systemic exposure was dose proportional over the dose range 10–80 mg, and the elimination half-life was about 20 h.
+
+Elimination of rosuvastatin is primarily via the liver. In a clinical trial [3], 90% of an orally administered dose of 14C-radiolabelled rosuvastatin was recovered in faeces as unchanged drug, a result consistent with metabolism being a minor route of clearance. In vitro studies with human hepatic microsomes and hepatocytes demonstrated only limited metabolism of rosuvastatin [4], and cytochrome P450 2C9 (CYP2C9) appeared to be the principal enzyme involved [4], with minor roles for CYP3A4 and CYP2C19 [4]. In addition, rosuvastatin had no significant inhibitory effect on the major CYP isoforms in human hepatic microsomes [4].
+
+Some of the other HMG-CoA reductase inhibitors (atorvastatin [5], simvastatin [6], and lovastatin [7]) are cleared primarily by metabolism involving CYP3A4. Thus, there is potential for interactions between these compounds and coadministered drugs affecting CYP3A4 activity. It has been shown that the metabolism of atorvastatin [8–10], simvastatin [11, 12], and lovastatin [13, 14] is inhibited by erythromycin and itraconazole, leading to increased serum/plasma drug concentrations and changes in their metabolic profiles.
+
+Although in vitro data suggest that CYP3A4 metabolism is not an important clearance mechanism for rosuvastatin, an in vivo interaction with coadministered drugs that inhibit CYP3A4 cannot be excluded. Accordingly, the present study was conducted to assess the effect of ketoconazole (a potent CYP3A4 inhibitor [15]) on the pharmacokinetics of rosuvastatin.
+
+Ketoconazole is also known to inhibit the activity of transport protein P-glycoprotein (P-gp) [16]. Active- or facilitated-transport processes may have a role in the absorption and disposition of rosuvastatin. Thus, studies with rats have demonstrated selective hepatic uptake of rosuvastatin by an active transport process [17], and rosuvastatin was shown to be a ligand for a liver-specific human organic-anion-transporting polypeptide present in the basolateral membranes of hepatic cells [18], although the identity of these transporters has not yet been clearly defined. Thus, the results of the present study may provide an indication of whether P-gp-mediated transport contributes to rosuvastatin disposition.
+
+Go to:
+Methods
+This trial was conducted in accordance with good clinical practice and the Declaration of Helsinki. All volunteers gave written informed consent, and a local independent ethics committee approved the protocol before the trial started.
+
+Trial population
+
+Healthy adult (18–65 years) male volunteers with no clinically relevant conditions identified from their medical history, physical examination, or electrocardiogram (ECG) were included in the trial. Volunteers were excluded if they had any clinically relevant abnormalities in clinical chemistry, haematology, or urinalysis results, or if total bilirubin, alanine aminotransferase, aspartate aminotransferase, alkaline phosphatase, or creatine kinase were outside the normal reference range at the start of the trial.
+
+Fourteen male Caucasian volunteers were enrolled. Their mean (range) age, height, and weight were 24.1 years (21–31), 182.1 cm (170–189), and 73.5 kg (60–83), respectively. Pharmacokinetic data were available from 13 volunteers [one volunteer withdrew due to personal reasons during the washout period following the first dosing period (rosuvastatin + placebo)]. This withdrawal was considered unlikely to have affected interpretation of the trial data.
+
+Trial design
+
+This randomized, double-blind, two-way crossover, placebo-controlled trial (4522IL/0057) was conducted at a single centre (AstraZeneca R&D, Lund, Sweden). Volunteers were randomized to receive daily oral doses of ketoconazole 400 mg (1 × 200-mg tablet every 12 h) or matching placebo (one tablet every 12 h) for 7 days, with a 2-week washout period between dosing periods. On day 4 of each dosing period, volunteers were given a single oral dose of rosuvastatin 80 mg (1 × 80-mg encapsulated tablet) with the morning dose of ketoconazole or placebo. Volunteers then remained in the Clinical Pharmacology Unit for the following 24 h.
+
+During the trial there were restrictions relating to the consumption of alcohol and physical exercise (none permitted from 96 h before the first dose on day 1 until 96 h after administration of rosuvastatin in each dosing period), the consumption of caffeine-containing drinks/food and smoking (none permitted from midnight before day 1 until 96 h after administration of rosuvastatin in each dosing period), and concomitant medications (none permitted from 96 h before the first dose on day 1 until after the post-trial medical).
+
+Determination of rosuvastatin plasma concentrations
+
+Blood samples (9 ml) for rosuvastatin assay were taken before administration of rosuvastatin on day 4 of each dosing period and 0.5, 1, 2, 3, 4, 5, 6, 8, 10, 12, 18, 24, 30, 48, 54, 72, and 96 h postdose. Additional samples were taken before administration of the first dose of ketoconazole or placebo on day 1 of the second dosing period. Blood samples were collected into tubes containing lithium heparin anticoagulant and centrifuged within 30 min. Plasma was then harvested from the samples, mixed 1:1 with sodium acetate buffer 0.1 m pH 4.0, and stored at −70°C until assay.
+
+Plasma samples were analysed using a validated method (high-performance liquid chromatography with mass-spectrometric detection) at Quintiles Scotland Ltd (Edinburgh, UK) [19]. Briefly, rosuvastatin was extracted from the samples by automated solid-phase extraction on 96-well plates containing a hydrophobic-lipophilic balanced copolymer sorbent using a Genesis RSP100 robotic sample-preparation system (Tecan, Reading, UK). The extract was injected onto a high-performance liquid chromatography column (a Luna column C18(2) 5 µm (4.6 mm i.d. × 150 mm l); the mobile phase was methanol : 0.2% formic acid in distilled water (70 : 30 v/v), and the flow rate was 1 ml min−1). Rosuvastatin was detected using a PE-Sciex API 365 triple quadruple mass spectrometer fitted with a turbo-ionspray source. The lower limit of quantification (LOQ) of rosuvastatin was verified as 0.1 ng ml−1. However, because all samples were diluted two-fold prior to assay, the effective LOQ was 0.2 ng ml−1. The coefficient of variation at the LOQ was ≤ 30%, and at 1 ng ml−1 was ≤ 20%. Correlation coefficients for rosuvastatin calibration curves were 0.996-0.999. Mean imprecision values and inaccuracy levels for quality control samples were < 9% and < 6% (at all concentrations), respectively.
+
+Determination of HMG-CoA reductase inhibitor activity
+
+Two meaningful measures of circulating HMG-CoA reductase inhibitor activity are possible: active inhibitors (the sum of parent compound and active metabolites) and total inhibitors (the sum of parent compound, active metabolites, and inactive lactones). An interacting drug may affect the absolute concentrations of circulating active and/or total inhibitors, and possibly change the contribution of the parent compound to active and/or total inhibition.
+
+The blood samples taken for rosuvastatin assay were also used to obtain plasma for active and total inhibitor assays. Samples were analysed using a validated method (radio-enzyme inhibition assay) at Medical Research Laboratories (Highland Heights, KT, USA). Briefly, drug-related components were isolated from plasma by using acetonitrile : acetone (95 : 5) to precipitate plasma proteins. The supernatant was assayed following hydrolysis (using potassium hydroxide to convert inactive lactones to active acids) for total inhibitors, and unhydrolysed for active inhibitors. The supernatant was evaporated to dryness under nitrogen, reconstituted with distilled water (50 µl), and incubated with buffer solution containing 14C-HMG-CoA cofactors, and HMG-CoA reductase from a human recombinant source. The 14C-mevalonate product of the enzyme reaction was separated from the substrate, after lactonization to 14C-mevalonolactone by hydrochloric acid, on a small ion-exchange column. The effluent from the column (which contained the 14C-mevalonolactone) was collected into scintillation vials and counted. The results were used to construct a standard curve. Concentrations are reported as ng equivalents of rosuvastatin ml−1. The lower LOQ was verified as 0.36 ng ml−1 and the coefficient of variation at the LOQ was ≤ 15%. Mean imprecision values and inaccuracy levels for quality control samples were < 11% and ≤ 16% (at all concentrations), respectively.
+
+Determination of ketoconazole plasma concentrations
+
+Blood samples (10 ml) were taken before and 2 h after administration of the first dose of ketoconazole or placebo on days 4, 5, 6 and 7 of each dosing period. Blood samples were collected into tubes containing EDTA anticoagulant and centrifuged. Plasma was then harvested from the samples and stored at −20°C until assay.
+
+Plasma samples were analysed using a validated method, using high-performance liquid chromatography with fluorescence detection at Phoenix International Life Sciences Inc. (Montreal, Quebec, Canada). The lower LOQ was verified as 20 ng ml−1. Mean accuracy values for quality control samples were 96.5–104.8%, and the imprecision (coefficient of variation) was 1.5–2.5%.
+
+Pharmacokinetic parameters
+
+The primary parameters of this trial were area under the plasma concentration-time curve from time zero to infinity (AUC) and maximum observed plasma drug concentration (Cmax) of rosuvastatin after dosing with ketoconazole compared with placebo. If less than 12 volunteers had AUC data available from both dosing periods, the area under the plasma concentration-time curve from time zero to the time of the last quantifiable concentration [AUC(0,t)] was substituted as a primary parameter for all volunteers. Secondary parameters included time to Cmax (tmax), and terminal elimination half-life (t½) of rosuvastatin, area under the plasma concentration-time curve and Cmax of active and total HMG-CoA reductase inhibitors, and plasma drug concentration of ketoconazole before and 2 h after administration of the first dose on days 4–7.
+
+AUC was determined using the linear trapezoidal rule from time zero to the time of the last quantifiable concentration followed by extrapolation to infinity using the terminal elimination rate constant (λz, calculated by log-linear regression of the terminal portion of the plasma concentration-time curves). AUC(0,t) was determined using the linear trapezoidal rule. Cmax and tmax were determined by visual inspection of the plasma concentration-time curves, t½ was calculated from the expression 0.693/λz.
+
+Statistical methods
+
+The trial had more than 90% power to ensure that the 90% confidence interval (CI) for the treatment ratio (rosuvastatin + ketoconazole/rosuvastatin + placebo) of the geometric least square means (glsmeans) for rosuvastatin AUC [or AUC(0,t)] was contained within the interval of 0.7–1.43 (which represented an increase of 43% or a decrease of 30%). If the 90% CI fell within this prespecified interval, the absence of an interaction was assumed [20].
+
+As rosuvastatin AUC [or AUC(0,t)] and Cmax were the primary parameters upon which sizing of the trial was based, only these were analysed statistically. The parameters were log-transformed and analysed using an analysis of variance model (anova), which accounted for the effects of volunteer, period, and treatment. The results are presented as glsmeans, treatment ratios, and the 90% CIs on the treatment ratios.
+
+Safety assessments
+
+The following safety assessments were performed: adverse event reports, clinical laboratory data (clinical chemistry, haematology, and urinalysis), vital signs, ECGs, and medical examinations.
+
+Go to:
+Results
+The geometric mean (gmean) plasma concentrations of rosuvastatin over time were similar when rosuvastatin was coadministered with ketoconazole and placebo (Figure 1). As AUC data from both dosing periods were available for less than 12 volunteers, AUC(0,t) was substituted as a primary parameter and subjected to statistical analysis. AUC(0,t) represented a high proportion (on average 96.8%) of AUC (where it was possible to determine a reliable value), and thus was considered to be a suitable replacement for AUC in the assessment of exposure. Following coadministration with ketoconazole, rosuvastatin glsmean AUC(0,t) and Cmax were unchanged compared with placebo (Table 1). The 90% CIs for the treatment ratios fell within the prespecified interval of 0.7–1.43, so it was concluded that ketoconazole had no effect on the pharmacokinetics of rosuvastatin.
+
+Figure 1
+Figure 1
+Geometric mean plasma concentrations of rosuvastatin over time when coadministered with ketoconazole or placebo. ○, Rosuvastatin + ketoconazole; ▪, rosuvastatin + placebo.
+Table 1
+Table 1
+Summary pharmacokinetic parameters of rosuvastatin, and results of the statistical analysis of the plasma AUC(0,t) and Cmax of rosuvastatin, when coadministered with ketoconazole and placebo
+Comparison of areas under the plasma concentration-time curves measured to a common point for rosuvastatin and active and total HMG-CoA reductase inhibitors indicated that, within the accuracy and precision s of the methods used, rosuvastatin accounted for essentially all of the circulating active inhibitors and most (> 85%) of the total inhibitors (Figure 2). The active inhibitors accounted for the majority (≥ 75%) of the total circulating inhibitors (Figure 2). Ketoconazole did not affect the proportion of circulating active or total HMG-CoA reductase inhibitors accounted for by circulating rosuvastatin.
+
+Figure 2
+Figure 2
+Geometric mean plasma concentrations of active and total HMG-CoA reductase inhibitors and rosuvastatin over time when rosuvastatin was coadministered with ketoconazole. A similar pattern was seen when rosuvastatin was coadministered with placebo. ○, ...
+The gmean plasma concentrations of ketoconazole before administration of the first dose on days 4–7 (data not shown) indicated that steady state was achieved before dosing with rosuvastatin and was maintained during sampling. The gmean plasma concentrations of ketoconazole 2 h after administration of the first dose on days 4–7 (4522, 6060, 6060, 5352 ng ml−1, respectively) suggested that concentrations fell within the range anticipated for a 200-mg dose of ketoconazole.
+
+Rosuvastatin and ketoconazole were well tolerated when coadministered. There were no serious adverse events and no clinically relevant changes in clinical laboratory parameters, vital signs, ECGs, or medical examinations during this trial.
+
+Go to:
+Discussion
+Coadministration of rosuvastatin and the potent CYP3A4 inhibitor ketoconazole did not produce any change in pharmacokinetics of the former. Furthermore, the results suggest that ketoconazole had no effect on the systemic clearance of rosuvastatin, as individual plasma concentration profiles, including the terminal elimination phase (where defined), were similar between dosing periods.
+
+In contrast to rosuvastatin, atorvastatin [5], simvastatin [6], and lovastatin [7] are cleared primarily by metabolism involving CYP3A4 and are known to interact with CYP3A4 inhibitors [8–14]. The increased circulating concentrations of these HMG-CoA reductase inhibitors reported following coadministration with CYP3A4 inhibitors may enhance the risk for serious adverse events such as skeletal muscle toxicity [12, 14].
+
+Circulating active and total HMG-CoA reductase inhibitor concentrations were measured in this trial. The finding that rosuvastatin accounted for essentially all of the circulating active inhibitors suggests the presence of only a small amount of circulating metabolite(s). The finding that the active inhibitors, and therefore rosuvastatin, constituted the majority of the total inhibitors indicates the presence of only a small proportion of circulating drug-related species with the potential to generate pharmacologically active species (i.e. lactones). These results provide good support for previous data indicating limited metabolism of rosuvastatin [3, 4].
+
+Other HMG-CoA reductase inhibitors have circulating metabolites that contribute significantly to inhibitory activity. Following coadministration with a CYP3A4 inhibitor, the absolute concentrations of HMG-CoA reductase inhibitors and the relative proportions of the parent compound and its metabolites may be affected. For example, in the case of atorvastatin, following coadministration with itraconazole, the mean AUC(0,72) of the active and total inhibitors was increased 1.6- and 1.7-fold, respectively; the mean AUC(0,72) of atorvastatin acid and lactone was increased 3.2- and 4.1-fold, respectively; and the mean AUC(0,72) of the principal metabolite 2-hydroxyatorvastatin acid and its lactone was decreased by 57% and 38%, respectively [10].
+
+There is increasing awareness that drug interactions can also occur as a result of competition for, or induction or inhibition of, transport proteins. Ketoconazole is known to have inhibitory effects on the transport protein P-gp [16]. Active- or facilitated-transport processes may have a role in the absorption and disposition of rosuvastatin [17, 18]. The identity of the rosuvastatin transporters that interact with rosuvastatin has not been clearly defined, but if it were a P-gp substrate, an increase in rosuvastatin exposure would be expected following coadministration with ketoconazole. The potency of ketoconazole to inhibit P-gp has been assessed in cell-based assays and in vivo animal experiments [16]. Based on these data, it is likely that the concentrations of ketoconazole achieved in the present study would have caused a degree of P-gp inhibition [16]. Therefore, our results suggest that rosuvastatin is not a ligand for P-gp. This finding is in agreement with the results of a study that showed no effect of rosuvastatin on the pharmacokinetics of the P-gp substrate digoxin [21].
+
+In conclusion, ketoconazole did not affect the pharmacokinetics of rosuvastatin in healthy subjects. Therefore, coadministration of ketoconazole and rosuvastatin is unlikely to increase the risk of toxicity at therapeutic doses of rosuvastatin. The data suggest that neither cytochrome P450 3A4 nor P-gp-mediated transport contributes to the elimination of rosuvastatin.
+
+Go to:
+Acknowledgments
+The authors thank Quintiles Scotland Ltd (Edinburgh, UK) for performing the rosuvastatin assays, Medical Research Laboratories (Highland Heights, Kentucky, USA) for performing the HMG-CoA reductase inhibitor assays, Phoenix International Life Sciences Inc. (Montreal, Quebec, Canada) for performing the ketoconazole assays, Olise M. Nwose MB BS for his support of this trial, and Elizabeth Eaton PhD for manuscript preparation.

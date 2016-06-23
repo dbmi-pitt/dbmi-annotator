@@ -1,10 +1,10 @@
 // MP CLAIM ================================================================================
 // open claim editor
 function claimEditorLoad() {
-    $("#mp-editor-type").html('claim');
+    currFormType = "claim";
     $("#mp-claim-form").show();
     $('#quote').show();
-
+    $("#claim-label-data-editor").hide();
     $(".annotator-save").hide();
     $("#mp-data-nav").hide();
     $("#mp-data-form-evRelationship").hide();
@@ -96,7 +96,7 @@ function showEnzyme() {
 // modify annotaiton id when user pick claim on mpadder's menu
 // update annotation table if necessary
 function claimSelectedInMenu(annotationId) {
-    $("#mp-annotation-work-on").html(annotationId);
+    currAnnotationId = annotationId;
     annTableId = $('#mp-editor-claim-list option:selected').val();
 
     if (annotationId != annTableId){
@@ -115,27 +115,32 @@ function addDataCellByEditor(field, dataNum, isNewData) {
     var annotationId = $('#mp-editor-claim-list option:selected').val();
     console.log("addDataCellByEditor - id: " + annotationId + " | data: " + dataNum + " | field: " + field);
 
+    $("#claim-label-data-editor").show();
+
     // return if no text selection 
     if (!isTextSelected && field != "evRelationship") {
         warnSelectTextSpan(field);
     } else {
         // hide data fields navigation if editing evidence relationship 
-        if (field == "evRelationship")
+        if (field == "evRelationship") {
             $("#mp-data-nav").hide();
+            $(".annotator-save").hide();
+        } else {
+            $(".annotator-save").show();            
+        }
 
         // cached editing data cell
         currAnnotationId = annotationId;
         currDataNum = dataNum;
-        currDataField = field;
+        currFormType = field;
 
         showEditor();
-        $(".annotator-save").show();
         $('#quote').hide();
         $("#annotator-delete").hide();
         
         // updating current MP annotation
         if (annotationId != null)
-            $("#mp-annotation-work-on").html(annotationId);
+            currAnnotationId = annotationId;
         
         switchDataForm(field);       
         
@@ -167,20 +172,24 @@ function addDataCellByEditor(field, dataNum, isNewData) {
 function editDataCellByEditor(field, dataNum) {
 
     showEditor();
-    $(".annotator-save").show();
+    $("#claim-label-data-editor").show();
     $('#quote').hide();
     
     // hide data fields navigation if editing evidence relationship 
-    if (field == "evRelationship")
+    if (field == "evRelationship") {
         $("#mp-data-nav").hide();
-    
+        $(".annotator-save").hide();
+    } else {
+        $(".annotator-save").show();
+    }
+
     var annotationId = $('#mp-editor-claim-list option:selected').val();
     console.log("editDataCellByEditor - id: " + annotationId + " | data: " + dataNum + " | field: " + field);
     
     // cached editing data cell
     currAnnotationId = annotationId;
     currDataNum = dataNum;
-    currDataField = field;
+    currFormType = field;
 
     // scroll to the position of annotation
     scrollToAnnotation(annotationId, field, dataNum);
@@ -195,7 +204,7 @@ function editDataCellByEditor(field, dataNum) {
                 
                 // updating current MP annotation
                 if (annotationId != null)
-                    $("#mp-annotation-work-on").html(annotationId);
+                    currAnnotationId = annotationId;
                 
                 switchDataForm(field);
                 
@@ -219,7 +228,8 @@ function switchDataForm(field) {
     
     if (field == null) 
         field = "participants";
-    $("#mp-editor-type").html(field);
+    //$("#mp-editor-type").html(field);
+    currDataField = field;
     
     if (field != "evRelationship")
         $("#mp-data-nav").show();
@@ -246,3 +256,4 @@ function scrollToAnnotation(annotationId, fieldName, dataNum) {
     if (document.getElementById(divId))
         document.getElementById(divId).scrollIntoView(true);
 }
+

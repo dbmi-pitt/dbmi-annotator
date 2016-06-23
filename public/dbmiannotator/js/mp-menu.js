@@ -1,30 +1,4 @@
-﻿// $(document).ready(function () {
-//     // splitter for show annotation panel
-//     $('#splitter').jqxSplitter({ showSplitBar: false, width: $(window).width(), height: $(window).height(), orientation: 'horizontal', panels: [{ size: '100%',min: 200 }, { size: '0%', min: 0}] });
-
-//     // MP adder - open/close claim menu
-//     $(function() {
-//         console.log("test1");
-//         $('.mp-menu-btn').hover(function() { 
-//             console.log("test2");
-//         //$('.annotator-addermp').hover(function() { 
-//             $('.mp-main-menu').show(); 
-//         });
-//     });
-    
-//     $('.mp-main-menu-2').mouseenter(function(){
-//         $(this).find('.mp-sub-menu-2').slideDown();
-//     });
-    
-//     $('.mp-main-menu-2').mouseleave(function(){
-//         $(this).find('.mp-sub-menu-2').slideUp();
-//     });
- 
-// });
-
-
-
-// show annotation table
+﻿// show annotation table
 function showAnnTable(){
     console.log("mp-menu - showAnnTable()");
     $('#tabs').tabs("option", "active", 0);
