@@ -123,7 +123,7 @@ function createDataTable(annotation){
     drugname1 = annotation.argues.qualifiedBy.drug1;
     drugname2 = annotation.argues.qualifiedBy.drug2;
 
-    dataTable = "<table id='mp-data-tb'><tr><td>Ev Relationship</td><td>No. of Participants</td><td><div>" + drugname1 + " Dose</div></td><td>" + drugname2 + " Dose</td><td>AUC</td><td>Cmax</td><td>Clearance</td><td>Half-life</td></tr>";
+    dataTable = "<table id='mp-data-tb'><tr><td>Ev Relationship</td><td>No. of Participants</td><td><div>" + drugname1 + " Dose</div></td><td>" + drugname2 + " Dose</td><td>AUC ratio</td><td>Cmax</td><td>Clearance</td><td>Half-life</td></tr>";
 
     annotationId = annotation.id;
     dataL = annotation.argues.supportsBy;
