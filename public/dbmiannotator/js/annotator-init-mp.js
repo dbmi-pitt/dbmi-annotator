@@ -84,7 +84,6 @@ if (typeof annotator === 'undefined') {
 
                          // change event for auc unchanged checkbox
                          $('#auc-unchanged-checkbox').change(function() {
-                             console.log("TESTING2");
                              if ($(this).is(":checked")) {
                                  $("#auc").val('');
                                  $("#aucType")[0].selectedIndex = -1;
@@ -100,6 +99,57 @@ if (typeof annotator === 'undefined') {
                              }
                          });
                          
+                         // change event for cmax unchanged checkbox
+                         $('#cmax-unchanged-checkbox').change(function() {
+                             if ($(this).is(":checked")) {
+                                 $("#cmax").val('');
+                                 $("#cmaxType")[0].selectedIndex = -1;
+                                 $("#cmaxDirection")[0].selectedIndex = -1;
+                                 
+                                 $("#cmax").attr("disabled", true);
+                                 $("#cmaxType").attr("disabled", true);
+                                 $("#cmaxDirection").attr("disabled", true);
+                             } else {
+                                 $("#cmax").attr("disabled", false);
+                                 $("#cmaxType").attr("disabled", false);
+                                 $("#cmaxDirection").attr("disabled", false);
+                             }
+                         });
+
+                         // change event for clearance unchanged checkbox
+                         $('#clearance-unchanged-checkbox').change(function() {
+                             if ($(this).is(":checked")) {
+                                 $("#clearance").val('');
+                                 $("#clearanceType")[0].selectedIndex = -1;
+                                 $("#clearanceDirection")[0].selectedIndex = -1;
+                                 
+                                 $("#clearance").attr("disabled", true);
+                                 $("#clearanceType").attr("disabled", true);
+                                 $("#clearanceDirection").attr("disabled", true);
+                             } else {
+                                 $("#clearance").attr("disabled", false);
+                                 $("#clearanceType").attr("disabled", false);
+                                 $("#clearanceDirection").attr("disabled", false);
+                             }
+                         });
+
+                         // change event for halflife unchanged checkbox
+                         $('#halflife-unchanged-checkbox').change(function() {
+                             if ($(this).is(":checked")) {
+                                 $("#halflife").val('');
+                                 $("#halflifeType")[0].selectedIndex = -1;
+                                 $("#halflifeDirection")[0].selectedIndex = -1;
+                                 
+                                 $("#halflife").attr("disabled", true);
+                                 $("#halflifeType").attr("disabled", true);
+                                 $("#halflifeDirection").attr("disabled", true);
+                             } else {
+                                 $("#halflife").attr("disabled", false);
+                                 $("#halflifeType").attr("disabled", false);
+                                 $("#halflifeDirection").attr("disabled", false);
+                             }
+                         });
+
                      });
 }
 
