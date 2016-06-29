@@ -243,7 +243,7 @@ function switchDataForm(field) {
     for (i = 0; i < fieldL.length; i++){
         var dataid = "mp-data-form-"+fieldL[i];
         if (fieldL[i] == field){
-            console.log("switch shown " + dataid);
+            // console.log("switch shown " + dataid);
             $("#"+dataid).show();
             // scroll to annotation when data field has value
             // annotationId = $("#mp-annotation-work-on").html();

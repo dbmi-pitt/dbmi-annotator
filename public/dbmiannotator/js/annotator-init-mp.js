@@ -33,7 +33,7 @@ if (typeof annotator === 'undefined') {
     app.include(annotator.authz.acl);
 
     app.include(annotator.storage.http, {
-	    prefix: 'http://' + config.store.host + ':' + config.store.port
+	prefix: 'http://' + config.store.host + ':' + config.store.port
     });
 
     // load annotation after page contents loaded
