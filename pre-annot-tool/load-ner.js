@@ -65,7 +65,11 @@ function loadNERs(nersets, sourceType, email){
             if (annotation){
                 uriStr = "";
                 if (sourceType == "pubmed")
-                    uriStr = "http://www.ncbi.nlm.nih.gov/pmc/articles/" + annotation.setid;
+		    // load for alive PMC articles
+                    // uriStr = "http://www.ncbi.nlm.nih.gov/pmc/articles/" + annotation.setid;
+
+		    // load for local pmc html articles
+		    uriStr = "http://localhost/dbmiannotator/" + annotation.setid + ".html";
                 else if (sourceType == "dailymed")
                     uriStr = "http://" + HOSTNAME + "/DDI-labels/" + annotation.setid + ".html";
                 else {
