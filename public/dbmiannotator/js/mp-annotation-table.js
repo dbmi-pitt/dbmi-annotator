@@ -8,6 +8,7 @@
 function annotationTable(sourceURL, email, sortByColumn){
     console.log("refresh ann table");
     // request all mp annotaitons for current document and user
+
     $.ajax({url: "http://" + config.annotator.host + "/annotatorstore/search",
             data: {annotationType: "MP", 
                    email: email, 
@@ -15,6 +16,7 @@ function annotationTable(sourceURL, email, sortByColumn){
             method: 'GET',
             error : function(jqXHR, exception){
                 console.log(exception);
+		console.log(jqXHR);
             },
             success : function(response){
 
