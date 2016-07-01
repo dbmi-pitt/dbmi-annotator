@@ -4,7 +4,7 @@ SET escape_string_warning=off;
 SET CONSTRAINTS ALL DEFERRED;
 
 -- Table: concept
--- DROP TABLE IF EXISTS concept;
+DROP TABLE IF EXISTS concept;
 create table concept 
    (concept_id INTEGER not null PRIMARY KEY, 
 	concept_name text not null, 
@@ -22,96 +22,109 @@ WITH (
 ALTER TABLE concept
   OWNER TO postgres;
 
+-- Table: oa_selector
+DROP TABLE IF EXISTS oa_selector;
+CREATE TABLE oa_selector (
+    selector_uid serial,
+    selector_type text,
+    exact text,
+    prefix text,
+    suffix text,
+    PRIMARY KEY (selector_uid)
+);
+
+
+-- Table: oa_target
+DROP TABLE IF EXISTS oa_target;
+CREATE TABLE oa_target (
+    target_uid integer,
+    has_source text,
+    has_selector integer,
+    PRIMARY KEY (target_uid),
+    FOREIGN KEY (has_selector) REFERENCES oa_selector (selector_uid)
+);
+
+
 -- Table: mp_claim
--- DROP TABLE IF EXISTS mp_claim;
+DROP TABLE IF EXISTS mp_claim;
 CREATE TABLE mp_claim
 (
-  claimId INTEGER not null PRIMARY KEY,
+  claim_id INTEGER not null PRIMARY KEY,
   concept_id INTEGER,
   label text,
   type text,
   uri text,
-  subject text,
-  object text,
-  predicate text,
-  npid INTEGER
+  np_id INTEGER,
+  qualified_by integer,
+  has_oa_target integer
 );
 
 
 -- Table: mp_data
--- DROP TABLE IF EXISTS mp_data;
+DROP TABLE IF EXISTS mp_data;
 CREATE TABLE mp_data
 (
-  dataId INTEGER not null PRIMARY KEY,
+  data_id INTEGER not null PRIMARY KEY,
+  claim_id INTEGER not null,
+  method_id INTEGER,
   concept_id INTEGER,
+  FOREIGN KEY (claim_id) REFERENCES mp_claim (claim_id)
+);
+
+
+-- Table: mp_data_field
+DROP TABLE IF EXISTS mp_data_field;
+CREATE TABLE mp_data_field
+(
+  data_field_id INTEGER not null PRIMARY KEY,
+  data_id INTEGER not null,
   type text,
   value_as_number INTEGER,
   value_as_string text,
-  value_as_concept_id INTEGER
+  value_as_concept_id INTEGER,
+  has_oa_target INTEGER not null,
+  FOREIGN KEY (data_id) REFERENCES mp_data (data_id), 
+  FOREIGN KEY (has_oa_target) REFERENCES oa_target (target_uid) 
 );
-
--- Table: mp_claim_data_relationship
--- DROP TABLE IF EXISTS mp_claim_data_relationship;
-CREATE TABLE mp_claim_data_relationship
-(
-  Id serial PRIMARY KEY,
-  concept_id INTEGER,
-  role_as_concept_id INTEGER not null,
-  claimId INTEGER,
-  dataId INTEGER,
-  FOREIGN KEY (claimId) REFERENCES mp_claim (claimId),
-  FOREIGN KEY (dataId) REFERENCES mp_data (dataId)
-);
-
 
 
 -- Table: mp_method
--- DROP TABLE IF EXISTS mp_method;
+DROP TABLE IF EXISTS mp_method;
 CREATE TABLE mp_method
 (
-  methodId INTEGER PRIMARY KEY,
+  method_id INTEGER PRIMARY KEY,
+  data_id INTEGER not null,
+  material_id INTEGER,
   concept_id INTEGER,
-  type text
+  type text,
+  FOREIGN KEY (data_id) REFERENCES mp_data (data_id)
 );
 
 
 -- Table: mp_material
--- DROP TABLE IF EXISTS mp_material;
+DROP TABLE IF EXISTS mp_material;
 CREATE TABLE mp_material
 (
-  materialId INTEGER PRIMARY KEY,
+  material_id INTEGER PRIMARY KEY,
+  method_id INTEGER,
   concept_id INTEGER,
+  type text,
+  FOREIGN KEY (method_id) REFERENCES mp_method (method_id)
+);
+
+-- Table: mp_material_field
+DROP TABLE IF EXISTS mp_material_field;
+CREATE TABLE mp_material_field
+(
+  material_field_id INTEGER PRIMARY KEY,
+  material_id INTEGER,
   type text,
   value_as_number INTEGER,
   value_as_string text,
-  value_as_concept_id INTEGER
-);
-
--- Table: mp_statement
--- DROP TABLE IF EXISTS mp_statement;
-
-CREATE TABLE mp_statement
-(
-  statementId INTEGER PRIMARY KEY,
-  concept_id INTEGER,
-  type text,
-  value_as_number INTEGER,
-  value_as_string text,
-  value_as_concept_id INTEGER
-);
-
-
--- Table: mp_claim_statement_relationship
--- DROP TABLE IF EXISTS mp_claim_statement_relationship;
-CREATE TABLE mp_claim_statement_relationship
-(
-  Id serial PRIMARY KEY,
-  concept_id INTEGER,
-  role_as_concept_id INTEGER not null,
-  claimId INTEGER,
-  statementId INTEGER,
-  FOREIGN KEY (claimId) REFERENCES mp_claim (claimId),
-  FOREIGN KEY (statementId) REFERENCES mp_statement (statementId)
+  value_as_concept_id INTEGER,
+  has_oa_target INTEGER,
+  FOREIGN KEY (material_id) REFERENCES mp_material (material_id),
+  FOREIGN KEY (has_oa_target) REFERENCES oa_target (target_uid) 
 );
 
 
@@ -119,7 +132,7 @@ CREATE TABLE mp_claim_statement_relationship
 --DROP TABLE IF EXISTS mp_reference;
 CREATE TABLE mp_reference
 (
-  referenceId INTEGER PRIMARY KEY,
+  reference_id INTEGER PRIMARY KEY,
   concept_id INTEGER,
   type text,
   reference text,
@@ -127,33 +140,38 @@ CREATE TABLE mp_reference
 );
 
 -- Table: mp_claim_reference_relationship
--- DROP TABLE IF EXISTS mp_claim_reference_relationship;
+DROP TABLE IF EXISTS mp_claim_reference_relationship;
 CREATE TABLE mp_claim_reference_relationship
 (
   Id serial PRIMARY KEY,
   concept_id INTEGER,
-  claimId INTEGER,
-  referenceId INTEGER,
-  FOREIGN KEY (claimId) REFERENCES mp_claim (claimId),
-  FOREIGN KEY (referenceId) REFERENCES mp_reference (referenceId)
+  claim_id INTEGER,
+  reference_id INTEGER,
+  FOREIGN KEY (claim_id) REFERENCES mp_claim (claim_id),
+  FOREIGN KEY (reference_id) REFERENCES mp_reference (reference_id)
 );
 
 
--- Table: mp_annotation
--- DROP TABLE IF EXISTS mp_annotation;
-CREATE TABLE mp_annotation
+-- Table: qualifier
+--DROP TABLE IF EXISTS qualifier;
+CREATE TABLE qualifier
 (
-  annotationId INTEGER PRIMARY KEY,
+  qualifier_id INTEGER PRIMARY KEY,
   concept_id INTEGER,
-  type text,
-  hasBodyDataId INTEGER,
-  hasBodyMethodId INTEGER,
-  hasBodyStatementId INTEGER,
-  annotatedAt date,
-  annotatedBy text,
-  hasSource text,
-  prefix text,
-  exact text,
-  postfix text
+  subject text,
+  predicate text,
+  object text
+);
+
+-- Table: mp_claim_qualifier_relationship
+DROP TABLE IF EXISTS mp_claim_qualifier_relationship;
+CREATE TABLE mp_claim_qualifier_relationship
+(
+  Id serial PRIMARY KEY,
+  concept_id INTEGER,
+  claim_id INTEGER,
+  qualifier_id INTEGER,
+  FOREIGN KEY (claim_id) REFERENCES mp_claim (claim_id),
+  FOREIGN KEY (qualifier_id) REFERENCES qualifier (qualifier_id)
 );
 
