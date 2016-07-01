@@ -6,7 +6,8 @@ if (typeof annotator === 'undefined') {
     // DBMIAnnotator with highlight and DDI plugin
     var app = new annotator.App();
 
-    var annType = $('#mp-annotation-tb').attr('name');
+    // var annType = $('#mp-annotation-tb').attr('name');
+    var annType = "MP";
     var sourceURL = getURLParameter("sourceURL").trim();
     var email = getURLParameter("email");
     

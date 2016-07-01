@@ -60,7 +60,7 @@ function loadNERs(nersets, sourceType, email){
         subL = nersets[i];
         
         for (j = 0; j < subL.length; j++){
-        //for (j = 0; j < 5; j++){
+        //for (j = 0; j < 20; j++){
             annotation = subL[j];
             if (annotation){
                 uriStr = "";
