@@ -151,6 +151,23 @@ if (typeof annotator === 'undefined') {
                              }
                          });
 
+
+//highlight drugs in quote dynamicly  
+//moved from mp-annotation-editor                      
+$("#Drug1").change(function (){selectDrug();});
+$("#Drug2").change(function (){selectDrug();});
+
+function selectDrug() {
+    var drug1 = $("#Drug1").val();
+    var drug2 = $("#Drug2").val();
+    var quotestring = $("#quote").html();
+    quotestring = quotestring.replace("<span class=\"selecteddrug\">", "<span class=\"highlightdrug\">");
+    quotestring = quotestring.replace("<span class=\"selecteddrug\">", "<span class=\"highlightdrug\">");
+    quotestring = quotestring.replace("<span class=\"highlightdrug\">"+drug2, "<span class=\"selecteddrug\">"+drug2);
+    quotestring = quotestring.replace("<span class=\"highlightdrug\">"+drug1, "<span class=\"selecteddrug\">"+drug1);
+    $("#quote").html(quotestring);
+}
+
                      });
 }
 
