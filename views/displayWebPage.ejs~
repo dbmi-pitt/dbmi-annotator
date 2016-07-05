@@ -28,7 +28,7 @@
 	  
           <button style="style:absolute;display:none" class="btn btn-success" onclick="showrightbyvalue()" value="hide"><span>Annotator</span></button>
 	  
-	  <div style="margin-top:30px" id="subcontent"> </div>  
+	  <div style="margin-top:0px" id="subcontent"> </div>  
 
 	</div>
 	

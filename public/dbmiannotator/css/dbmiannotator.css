@@ -8,7 +8,7 @@ $green: #3AB54A;
 $white: #FFFFFF;
 
 
-$font-face: 'Open Sans', sans-serif;
+$font-face:"Trebuchet MS", Arial, sans-serif;
 
 body {
   
@@ -27,7 +27,7 @@ body {
 h1 {
   text-align: center;
   font-family: $font-face;
-  font-size: 22px;
+  font-size: 19px;
   color: $dark;
   font-weight: 700;
   
@@ -38,7 +38,7 @@ h1 {
 }
 
 .container {
-  min-width: 640px;
+  min-width: 140px;
   
   display: flex;
   flex-direction: column;
@@ -57,7 +57,7 @@ h1 {
   border-radius: 5px;
   
   padding: 12px 55px;
-  margin: 0 10px;
+  margin: 0 50px;
   
   cursor: pointer;
   display: inline-block;
@@ -78,16 +78,18 @@ h1 {
   color: $white;
 }
   
-.custombutton.-green {
+/*.custombutton.-green {
   background: $green;
   color: $white;
 }
+*/
 
 .custombutton.-blue {
   background: $blue;
   color: $white;
 }
 
+/*
 .custombutton.-border {
   background: transparent;
   border: 2px solid $blue;
@@ -100,6 +102,7 @@ h1 {
     opacity: 1;
   }
 }
+*/
 
 /* Home and Annotator icons */
 .btn-success {
@@ -143,60 +146,89 @@ h1 {
 
 
 /* MP menu */
-.mp-main-menu-1 {
-    background-color: #cccccc;
-    color: white;
-    padding: 7px;
-    font-size: 11px;
-    border-radius: 5px;
-    cursor: pointer;
+.mp-main-menu-1{ 
+    display:block; 
+    list-style: none;
+    cursor:pointer; 
+    padding:3px 5px 5px 3px; 
+    border: 2px #336699 solid;
+    position:relative;
+    left: 25px;
+    top: -40px;
+    font-size: 12px;
+    font-weight: bold;
+    font-style: "Trebuchet MS", Arial, sans-serif;
+    background-color: white;
 }
-
-.mp-main-menu-2 {
-    background-color: #cccccc;
-    color: white;
-    padding: 10px;
-    font-size: 11px;
-    border-radius: 5px;
-    cursor: pointer;
+.mp-main-menu-2{
+    display:block; 
+    list-style: none;
+    cursor:pointer; 
+    padding:3px 5px 5px 3px; 
+    border:2px #336699 solid;
+    border-top: none;
+    position:relative;
+    left: 25px;
+    top: -40px;
+    font-size: 12px;
+    font-weight: bold;
+    font-style: "Trebuchet MS", Arial, sans-serif;
+    background-color: white;
 }
 
 /* The container <div> - needed to position the dropdown content*/
 .mp-main-menu {
     position: relative;
-    display: inline-block;
-    min-width: 100px;
+    display: block;
+    min-width: 85px;
+    min-height: 40px;
+    text-align: center;
+    list-style: none;
 }
 
-/* Dropdown Content (Hidden by Default) */
+/* Dropdown Content (Hidden by Default) 
 .mp-sub-menu-2 {
-    display: none;
+    display: block;
+    float: left;
     position: absolute;
-    background-color: #f9f9f9;
+    background-color: #336699;
     min-width: 100px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-}
+    color: white;
+}*/
 
 /* Links inside the dropdown */
-.mp-sub-menu-2 a {
-    color: black;
-    padding: 6px 8px;
-    text-decoration: none;
+.mp-sub-menu-2 a{
+    color: #336699;
+    font-size: 10px;
+    border: 2px #336699 solid;
+    border-left: none;
+    font-family: "Trebuchet MS", Arial, sans-serif;
+    padding:5px 4px 3px 0px; 
+    left: 40px;
+    top: -12px;
+    background-color: white;
     display: block;
+    text-decoration: none;
+    position: relative;
+    min-width: 110px;
+    min-height: 10px;
+    text-align: left;
+    list-style: none;
+
 }
 
-/* Change color of dropdown links on hover */
-.mp-sub-menu-2 a:hover {background-color: #f1f1f1}
+/* Change color of dropdown links on hover 
+.mp-sub-menu-2 a:hover {background-color: #f1f1f1}*/
 
-/* Show the dropdown menu on hover */
+/* Show the dropdown menu on hover 
 .mp-main-menu:hover .mp-sub-menu-2 {
     display: block;
 }
 
-/* Change the background color of the dropdown button when the dropdown content is shown */
+/* Change the background color of the dropdown button when the dropdown content is shown 
 .mp-main-menu:hover {
     background-color: #3e8e41;
-}
+}*/
 
 /* annotator table */
 #mp-claim-data-tb{
@@ -250,10 +282,38 @@ h1 {
 /* annotation editor */
 #tabs-2 {
     all: initial;
-    color: #333; /* Lighten up font color */
-    font-family: Helvetica, Arial, sans-serif; /* Nicer font */
+    color: white; /* Lighten up font color */
+    font-family: "Trebuchet MS", Arial, sans-serif; /* Nicer font */
     /* width: 800px; */
     border-collapse:
     collapse; border-spacing: 0;
+    margin-left: 30px;
+    
 }
 
+#tabs-1{
+  margin-left: 5%;
+  text-align: center;
+  font-size: 13px;
+  font-family: "Trebuchet MS", Arial, sans-serif;
+  font-size: 13px;
+  
+}
+
+#Drug1,#Drug2{
+  font-family: "Trebuchet MS", Arial, sans-serif;
+  font-size: 13px;
+  margin-right: 30px;
+}
+
+#drug1precipitant,#drug2precipitant,#relationship{
+  font-family: "Trebuchet MS", Arial, sans-serif;
+  font-size: 13px;
+  margin-right: 70px;
+}
+#quote{
+  background-color: #ebebeb;
+  margin-left: -35px;
+}
+
+/*annotator editor buttons- cancel/delete/save and close*/
