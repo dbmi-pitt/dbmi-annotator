@@ -83,6 +83,7 @@ function loadNERs(nersets, sourceType, email){
 }
 
 function loadNewAnnotation(annotation, uriStr, email){
+
     console.log("[INFO]: begin check for " + annotation.exact + " | " + email);
     uriPost = uriStr.replace(/[\/\\\-\:\.]/g, "");
 
