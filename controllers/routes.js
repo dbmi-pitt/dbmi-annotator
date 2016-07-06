@@ -2,6 +2,7 @@ config = require('./../config/config.js');
 var request = require("request");
 var tidy = require('htmltidy').tidy;
 var pg = require('pg');
+var htmltidyOptions = require('htmltidy-options');
 
 module.exports = function(app, passport) {
 
@@ -92,28 +93,27 @@ module.exports = function(app, passport) {
 
 	    if (validUrl.isUri(sourceUrl)){
            
-            if (sourceUrl.match(/.pdf/g)){ // local pdf resouces
-		        res.redirect("/dbmiannotator/viewer.html?file=" + sourceUrl+"&email=" + email);
-            } else { // local or external html resouces
-
-                console.log("routes - displayWebPage");
-                console.log(config);
-
-                res.render('displayWebPage.ejs', {
-                    htmlsource: req.htmlsource,
-                    pluginSetL: config.profile.pluginSetL,
-                    userProfile: config.profile.userProfile
-                });   
+		if (sourceUrl.match(/.pdf/g)){ // local pdf resouces
+		    res.redirect("/dbmiannotator/viewer.html?file=" + sourceUrl+"&email=" + email);
+		} else { // local or external html resouces
+		    
+                    console.log("routes - displayWebPage");
+		    
+                    res.render('displayWebPage.ejs', {
+			htmlsource: req.htmlsource,
+			pluginSetL: config.profile.pluginSetL,
+			userProfile: config.profile.userProfile
+                    });   
 	        }
-        }
+            }
         else {
-	        req.flash('loadMessage', 'The url you just entered is not valid!');
-	        res.redirect('/dbmiannotator/main');
+	    req.flash('loadMessage', 'The url you just entered is not valid!');
+	    res.redirect('/dbmiannotator/main');
 	    }
-	    
+	
     });
     
-
+    
     // PLUGIN PROFILE ==============================
     app.post('/dbmiannotator/savePluginProfile', function(req, res) {
         console.log(req.body.pluginset);
@@ -143,12 +143,12 @@ module.exports = function(app, passport) {
                         console.log("update user plugin profile");
                         client.query('UPDATE "user_profile" SET set_id = $1, created = now() FROM (SELECT * FROM "user" u where u.email = $2) AS u, "user_profile" up WHERE up.uid = u.uid AND up.status = true', [req.body.pluginset, req.user.email]);    
                         done();
-	                    res.redirect('/dbmiannotator/main');
+	                res.redirect('/dbmiannotator/main');
                     }
                     else {
                         console.log("user profile not need to update");
                         done();
-	                    res.redirect('/dbmiannotator/main');
+	                res.redirect('/dbmiannotator/main');
                     }
                 }, function(){
                     res.redirect('/dbmiannotator/main');
@@ -204,7 +204,7 @@ module.exports = function(app, passport) {
                         if (material.participants != null)
                             line += '\t"' + material.participants.value + '"\t"' + getSpanFromField(material.participants) + '"';
                         else 
-                            line += '\t\t'
+                            line += '\t\t';
                         if (material.drug1Dose != null) 
                             line += '\t"' + material.drug1Dose.value + '"\t"' + material.drug1Dose.formulation + '"\t"'  + material.drug1Dose.duration + '"\t"' + material.drug1Dose.regimens + '"\t"' + getSpanFromField(material.drug1Dose) + '"';
                         else 
@@ -276,7 +276,7 @@ function praseWebContents(req, res, next){
             //console.log(cntBody);
 
             // normalize html source
-            tidy(labelDecode, function(err, html) {
+            tidy(labelDecode, htmltidyOptions['Kastor tidy - XHTML Clean page UTF-8'], function(err, html) {
                 if (err){
                     console.log(err);
                 }

@@ -8,6 +8,7 @@
 function annotationTable(sourceURL, email, sortByColumn){
     console.log("refresh ann table");
     // request all mp annotaitons for current document and user
+
     $.ajax({url: "http://" + config.annotator.host + "/annotatorstore/search",
             data: {annotationType: "MP", 
                    email: email, 
@@ -15,6 +16,7 @@ function annotationTable(sourceURL, email, sortByColumn){
             method: 'GET',
             error : function(jqXHR, exception){
                 console.log(exception);
+		console.log(jqXHR);
             },
             success : function(response){
 
@@ -122,8 +124,14 @@ function createDataTable(annotation){
 
     drugname1 = annotation.argues.qualifiedBy.drug1;
     drugname2 = annotation.argues.qualifiedBy.drug2;
+    if (annotation.argues.qualifiedBy.relationship == "interact with") {
+        if (annotation.argues.qualifiedBy.precipitant == "drug1")
+            drugname1 += " (precipitant)";
+        else 
+            drugname2 += " (precipitant)";
+    }
 
-    dataTable = "<table id='mp-data-tb'><tr><td>Ev Relationship</td><td>No. of Participants</td><td><div>" + drugname1 + " Dose</div></td><td>" + drugname2 + " Dose</td><td>AUC</td><td>Cmax</td><td>Clearance</td><td>Half-life</td></tr>";
+    dataTable = "<table id='mp-data-tb'><tr><td>Ev Relationship</td><td>No. of Participants</td><td><div>" + drugname1 + " Dose</div></td><td>" + drugname2 + " Dose</td><td>AUC ratio</td><td>Cmax</td><td>Clearance</td><td>Half-life</td></tr>";
 
     annotationId = annotation.id;
     dataL = annotation.argues.supportsBy;

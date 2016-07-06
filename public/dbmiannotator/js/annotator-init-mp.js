@@ -6,7 +6,8 @@ if (typeof annotator === 'undefined') {
     // DBMIAnnotator with highlight and DDI plugin
     var app = new annotator.App();
 
-    var annType = $('#mp-annotation-tb').attr('name');
+    // var annType = $('#mp-annotation-tb').attr('name');
+    var annType = "MP";
     var sourceURL = getURLParameter("sourceURL").trim();
     var email = getURLParameter("email");
     
@@ -33,7 +34,7 @@ if (typeof annotator === 'undefined') {
     app.include(annotator.authz.acl);
 
     app.include(annotator.storage.http, {
-	    prefix: 'http://' + config.store.host + ':' + config.store.port
+	prefix: 'http://' + config.store.host + ':' + config.store.port
     });
 
     // load annotation after page contents loaded
@@ -84,7 +85,6 @@ if (typeof annotator === 'undefined') {
 
                          // change event for auc unchanged checkbox
                          $('#auc-unchanged-checkbox').change(function() {
-                             console.log("TESTING2");
                              if ($(this).is(":checked")) {
                                  $("#auc").val('');
                                  $("#aucType")[0].selectedIndex = -1;
@@ -100,6 +100,74 @@ if (typeof annotator === 'undefined') {
                              }
                          });
                          
+                         // change event for cmax unchanged checkbox
+                         $('#cmax-unchanged-checkbox').change(function() {
+                             if ($(this).is(":checked")) {
+                                 $("#cmax").val('');
+                                 $("#cmaxType")[0].selectedIndex = -1;
+                                 $("#cmaxDirection")[0].selectedIndex = -1;
+                                 
+                                 $("#cmax").attr("disabled", true);
+                                 $("#cmaxType").attr("disabled", true);
+                                 $("#cmaxDirection").attr("disabled", true);
+                             } else {
+                                 $("#cmax").attr("disabled", false);
+                                 $("#cmaxType").attr("disabled", false);
+                                 $("#cmaxDirection").attr("disabled", false);
+                             }
+                         });
+
+                         // change event for clearance unchanged checkbox
+                         $('#clearance-unchanged-checkbox').change(function() {
+                             if ($(this).is(":checked")) {
+                                 $("#clearance").val('');
+                                 $("#clearanceType")[0].selectedIndex = -1;
+                                 $("#clearanceDirection")[0].selectedIndex = -1;
+                                 
+                                 $("#clearance").attr("disabled", true);
+                                 $("#clearanceType").attr("disabled", true);
+                                 $("#clearanceDirection").attr("disabled", true);
+                             } else {
+                                 $("#clearance").attr("disabled", false);
+                                 $("#clearanceType").attr("disabled", false);
+                                 $("#clearanceDirection").attr("disabled", false);
+                             }
+                         });
+
+                         // change event for halflife unchanged checkbox
+                         $('#halflife-unchanged-checkbox').change(function() {
+                             if ($(this).is(":checked")) {
+                                 $("#halflife").val('');
+                                 $("#halflifeType")[0].selectedIndex = -1;
+                                 $("#halflifeDirection")[0].selectedIndex = -1;
+                                 
+                                 $("#halflife").attr("disabled", true);
+                                 $("#halflifeType").attr("disabled", true);
+                                 $("#halflifeDirection").attr("disabled", true);
+                             } else {
+                                 $("#halflife").attr("disabled", false);
+                                 $("#halflifeType").attr("disabled", false);
+                                 $("#halflifeDirection").attr("disabled", false);
+                             }
+                         });
+
+
+//highlight drugs in quote dynamicly  
+//moved from mp-annotation-editor                      
+$("#Drug1").change(function (){selectDrug();});
+$("#Drug2").change(function (){selectDrug();});
+
+function selectDrug() {
+    var drug1 = $("#Drug1").val();
+    var drug2 = $("#Drug2").val();
+    var quotestring = $("#quote").html();
+    quotestring = quotestring.replace("<span class=\"selecteddrug\">", "<span class=\"highlightdrug\">");
+    quotestring = quotestring.replace("<span class=\"selecteddrug\">", "<span class=\"highlightdrug\">");
+    quotestring = quotestring.replace("<span class=\"highlightdrug\">"+drug2, "<span class=\"selecteddrug\">"+drug2);
+    quotestring = quotestring.replace("<span class=\"highlightdrug\">"+drug1, "<span class=\"selecteddrug\">"+drug1);
+    $("#quote").html(quotestring);
+}
+
                      });
 }
 

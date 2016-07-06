@@ -60,12 +60,16 @@ function loadNERs(nersets, sourceType, email){
         subL = nersets[i];
         
         for (j = 0; j < subL.length; j++){
-        //for (j = 0; j < 5; j++){
+        //for (j = 0; j < 20; j++){
             annotation = subL[j];
             if (annotation){
                 uriStr = "";
                 if (sourceType == "pubmed")
-                    uriStr = "http://www.ncbi.nlm.nih.gov/pmc/articles/" + annotation.setid;
+		    // load for alive PMC articles
+                    // uriStr = "http://www.ncbi.nlm.nih.gov/pmc/articles/" + annotation.setid;
+
+		    // load for local pmc html articles
+		    uriStr = "http://localhost/dbmiannotator/" + annotation.setid + ".html";
                 else if (sourceType == "dailymed")
                     uriStr = "http://" + HOSTNAME + "/DDI-labels/" + annotation.setid + ".html";
                 else {
@@ -79,6 +83,7 @@ function loadNERs(nersets, sourceType, email){
 }
 
 function loadNewAnnotation(annotation, uriStr, email){
+
     console.log("[INFO]: begin check for " + annotation.exact + " | " + email);
     uriPost = uriStr.replace(/[\/\\\-\:\.]/g, "");
 
