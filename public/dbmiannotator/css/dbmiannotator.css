@@ -78,19 +78,19 @@ h1 {
   color: $white;
 }
   
-/*.custombutton.-green {
+.custombutton.-green {
   background: $green;
   color: $white;
 }
-*/
+
 
 .custombutton.-blue {
   background: $blue;
   color: $white;
 }
 
-/*
-.custombutton.-border {
+
+/*.custombutton.-border {
   background: transparent;
   border: 2px solid $blue;
   color: $blue;
@@ -101,8 +101,8 @@ h1 {
     
     opacity: 1;
   }
-}
 */
+
 
 /* Home and Annotator icons */
 .btn-success {
@@ -155,7 +155,7 @@ h1 {
     position:relative;
     left: 25px;
     top: -40px;
-    font-size: 12px;
+    font-size: 11px;
     font-weight: bold;
     font-style: "Trebuchet MS", Arial, sans-serif;
     background-color: white;
@@ -170,7 +170,7 @@ h1 {
     position:relative;
     left: 25px;
     top: -40px;
-    font-size: 12px;
+    font-size: 11px;
     font-weight: bold;
     font-style: "Trebuchet MS", Arial, sans-serif;
     background-color: white;
@@ -284,7 +284,7 @@ h1 {
     all: initial;
     color: white; /* Lighten up font color */
     font-family: "Trebuchet MS", Arial, sans-serif; /* Nicer font */
-    /* width: 800px; */
+    width: 800px; 
     border-collapse:
     collapse; border-spacing: 0;
     margin-left: 30px;
@@ -294,10 +294,8 @@ h1 {
 #tabs-1{
   margin-left: 5%;
   text-align: center;
-  font-size: 13px;
+  font-size: 12px;
   font-family: "Trebuchet MS", Arial, sans-serif;
-  font-size: 13px;
-  
 }
 
 #Drug1,#Drug2{
@@ -308,12 +306,8 @@ h1 {
 
 #drug1precipitant,#drug2precipitant,#relationship{
   font-family: "Trebuchet MS", Arial, sans-serif;
-  font-size: 13px;
+  font-size: 12px;
   margin-right: 70px;
-}
-#quote{
-  background-color: #ebebeb;
-  margin-left: -35px;
 }
 
 /*annotator editor buttons- cancel/delete/save and close*/

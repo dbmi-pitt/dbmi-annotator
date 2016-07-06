@@ -15,8 +15,8 @@ function showAnnTable(){
     $('.annotator-editor').hide();
 
     $('.btn-success').val("show");
-    $('.btn-success').css("margin-bottom",230);
-    $('.btn-home').css("margin-bottom",230);
+    $('.btn-success').css("margin-bottom",250);
+    $('.btn-home').css("margin-bottom",250);
     $('#menu').html("&nbsp Collapse");
     
     var w = $(window).width()*0.85;
@@ -40,8 +40,8 @@ function showEditor(){
     $('.editorsection').show();
     $('.btn-success').val("show");
     $('.annotator-editor').show();
-    $('.btn-success').css("margin-bottom",230);
-    $('.btn-home').css("margin-bottom",230);
+    $('.btn-success').css("margin-bottom",250);
+    $('.btn-home').css("margin-bottom",250);
     $('#menu').html("&nbsp Collapse");
     
     var w = $(window).width()*0.85;
@@ -85,8 +85,8 @@ var getUrlParameter = function getUrlParameter(sParam) {
       $('.editorsection').hide();
       $('.btn-success').val("show");
       $('.annotator-editor').show();
-      $('.btn-success').css("margin-bottom",230);
-      $('.btn-home').css("margin-bottom",230);
+      $('.btn-success').css("margin-bottom",250);
+      $('.btn-home').css("margin-bottom",250);
       $('#menu').html("&nbsp Collapse");
     }
     else {
@@ -123,8 +123,8 @@ var getUrlParameter = function getUrlParameter(sParam) {
       $('.editorsection').show();
       $('.btn-success').val("show");
       $('.annotator-editor').show();
-      $('.btn-success').css("margin-bottom",230);
-      $('.btn-home').css("margin-bottom",230);
+      $('.btn-success').css("margin-bottom",250);
+      $('.btn-home').css("margin-bottom",250);
       $('#menu').html("&nbsp Collapse");
     }
     else {
