@@ -23,6 +23,15 @@ function showAnnTable(){
     $('.annotator-widget').width(w);
 }
 
+//undraw currhigglighter
+function undrawCurrhighlighter() {
+
+    var currhighlighters =  $("span[name='annotator-currhl']");
+    for(var i=0;i<currhighlighters.length;i++) {
+        var h = currhighlighters[i];
+        $(h).replaceWith(h.childNodes);
+    }
+}
 
 
 //show annotaton editor
