@@ -2,6 +2,7 @@ config = require('./../config/config.js');
 var request = require("request");
 var tidy = require('htmltidy').tidy;
 var pg = require('pg');
+var htmltidyOptions = require('htmltidy-options');
 
 module.exports = function(app, passport) {
 
@@ -275,7 +276,7 @@ function praseWebContents(req, res, next){
             //console.log(cntBody);
 
             // normalize html source
-            tidy(labelDecode, function(err, html) {
+            tidy(labelDecode, htmltidyOptions['Kastor tidy - XHTML Clean page UTF-8'], function(err, html) {
                 if (err){
                     console.log(err);
                 }

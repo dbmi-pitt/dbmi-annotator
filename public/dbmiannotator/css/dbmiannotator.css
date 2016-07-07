@@ -8,7 +8,7 @@ $green: #3AB54A;
 $white: #FFFFFF;
 
 
-$font-face: 'Open Sans', sans-serif;
+$font-face:"Trebuchet MS", Arial, sans-serif;
 
 body {
   
@@ -88,7 +88,7 @@ h1 {
   color: $white;
 }
 
-.custombutton.-border {
+/*.custombutton.-border {
   background: transparent;
   border: 2px solid $blue;
   color: $blue;
@@ -99,7 +99,7 @@ h1 {
     
     opacity: 1;
   }
-}
+}*/
 
 /* Home and Annotator icons */
 .btn-success {
@@ -144,31 +144,46 @@ h1 {
 
 /* MP menu */
 .mp-main-menu-1 {
-    background-color: #cccccc;
-    color: white;
-    padding: 7px;
+    display:block; 
+    list-style: none;
+    cursor:pointer; 
+    padding:3px 5px 5px 3px; 
+    border: 2px #336699 solid;
+    position:relative;
+    left: 25px;
+    top: -40px;
     font-size: 11px;
-    border-radius: 5px;
-    cursor: pointer;
+    font-weight: bold;
+    font-style: "Trebuchet MS", Arial, sans-serif;
+    background-color: white;
 }
 
 .mp-main-menu-2 {
-    background-color: #cccccc;
-    color: white;
-    padding: 10px;
+    display:block; 
+    list-style: none;
+    cursor:pointer; 
+    padding:3px 5px 5px 3px; 
+    border:2px #336699 solid;
+    border-top: none;
+    position:relative;
+    left: 25px;
+    top: -40px;
     font-size: 11px;
-    border-radius: 5px;
-    cursor: pointer;
+    font-weight: bold;
+    font-style: "Trebuchet MS", Arial, sans-serif;
+    background-color: white;
 }
 
 /* The container <div> - needed to position the dropdown content*/
 .mp-main-menu {
     position: relative;
-    display: inline-block;
-    min-width: 100px;
+    display: block;
+    min-width: 85px;
+    min-height: 40px;
+    text-align: center;
+    list-style: none;
 }
-
-/* Dropdown Content (Hidden by Default) */
+/* Dropdown Content (Hidden by Default) 
 .mp-sub-menu-2 {
     display: none;
     position: absolute;
@@ -176,13 +191,25 @@ h1 {
     min-width: 100px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
 }
-
+*/
 /* Links inside the dropdown */
 .mp-sub-menu-2 a {
-    color: black;
-    padding: 6px 8px;
-    text-decoration: none;
+    color: #336699;
+    font-size: 10px;
+    border: 2px #336699 solid;
+    border-left: none;
+    font-family: "Trebuchet MS", Arial, sans-serif;
+    padding:5px 4px 3px 0px; 
+    left: 40px;
+    top: -12px;
+    background-color: white;
     display: block;
+    text-decoration: none;
+    position: relative;
+    min-width: 110px;
+    min-height: 10px;
+    text-align: left;
+    list-style: none;
 }
 
 /* Change color of dropdown links on hover */
@@ -193,10 +220,10 @@ h1 {
     display: block;
 }
 
-/* Change the background color of the dropdown button when the dropdown content is shown */
+/* Change the background color of the dropdown button when the dropdown content is shown 
 .mp-main-menu:hover {
     background-color: #3e8e41;
-}
+}*/
 
 /* annotator table */
 #mp-claim-data-tb{
@@ -255,5 +282,24 @@ h1 {
     /* width: 800px; */
     border-collapse:
     collapse; border-spacing: 0;
+}
+
+#tabs-1{
+  margin-left: 5%;
+  text-align: center;
+  font-size: 12px;
+  font-family: "Trebuchet MS", Arial, sans-serif;
+}
+
+#Drug1,#Drug2{
+  font-family: "Trebuchet MS", Arial, sans-serif;
+  font-size: 13px;
+  margin-right: 30px;
+}
+
+#drug1precipitant,#drug2precipitant,#relationship{
+  font-family: "Trebuchet MS", Arial, sans-serif;
+  font-size: 12px;
+  margin-right: 70px;
 }
 

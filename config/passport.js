@@ -11,13 +11,18 @@ module.exports = function(passport, User) {
     // passport session setup ==================================================
 
     passport.serializeUser(function(user, done) {
-        done(null, user.id);
+        //console.log(user);
+        var sessionUser = {id: user.id, uid: user.uid, username: user.username, email: user.email}
+        //done(null, user.id); 
+        done(null, sessionUser);
     });
 
-    passport.deserializeUser(function(id, done) {
-	    User.findById(id).then(function(user){
-	        done(null,user);
-	    });
+    passport.deserializeUser(function(sessionUser, done) {
+    //passport.deserializeUser(function(id, done) {
+	    // User.findById(id).then(function(user){
+	    //     done(null,user);
+	    // });
+        done(null, sessionUser);
     });
 
 
