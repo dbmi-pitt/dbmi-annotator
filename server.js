@@ -21,9 +21,6 @@ app.use(cookieParser()); // read cookies (needed for auth)
 app.use(bodyParser()); // get information from html forms
 app.use(expressValidator());
 
-//app.locals.host = config.annotator.host;
-//app.locals.port = config.annotator.port;
-
 app.use(express.static('public'));
 
 app.set('view engine', 'ejs'); 
@@ -38,7 +35,8 @@ var user = require('./models/user')(sequelize, Sequelize);
 user.sync();
 
 // required for passport
-app.use(session({ secret: 'dbmi2016' })); // session secret
+app.use(session({ secret: 'dbmi2016', cookie: {expires: new Date(Date.now() + 3600000)}})); // session secret
+// maxAge: new Date(Date.now() + 3600000) cause session expire one hr after server start 
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 app.use(flash()); 
