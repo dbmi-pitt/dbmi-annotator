@@ -229,7 +229,7 @@ function editDataCellByEditor(field, dataNum) {
 function switchDataForm(field, isNotNeedValid) {
     quoteF = $('#'+field+'quote').html();         
     console.log("switchDataFrom: " + field);
-    console.log(quoteF);
+    // console.log(quoteF);
 
     if (!isTextSelected && field != "evRelationship" && quoteF == "" && !isNotNeedValid) {
         warnSelectTextSpan(field);
