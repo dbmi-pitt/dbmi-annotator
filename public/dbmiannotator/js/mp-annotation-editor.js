@@ -272,3 +272,17 @@ function scrollToAnnotation(annotationId, fieldName, dataNum) {
         document.getElementById(divId).scrollIntoView(true);
 }
 
+
+
+
+// function addClaimDataAtSameSpan(options) {
+//     if (options === "data") {
+
+//         $( "#dialog-claim-confirm" ).dialog( "close" );        
+//         // keep using the same text span
+//         isTextSelected = true;
+//         cachedOATarget = ann.argues.hasTarget;
+//         cachedOARanges = ann.argues.ranges;        
+//         addDataCellByEditor("participants", 0);
+//     } 
+// }
