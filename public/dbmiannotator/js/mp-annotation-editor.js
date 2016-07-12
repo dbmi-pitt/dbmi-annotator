@@ -229,15 +229,25 @@ function editDataCellByEditor(field, dataNum) {
 function switchDataForm(field, isNotNeedValid) {
     quoteF = $('#'+field+'quote').html();         
     console.log("switchDataFrom: " + field);
-    // console.log(quoteF);
 
+    // pop up unsaved warning box  
+    if (unsaved) {
+        console.log("unsaved !!!");
+        var unsaveDialog = document.getElementById('remind-unsave-dialog');
+        var dialogBtn = document.getElementById('remind-dialog-ok-btn');
+        unsaveDialog.style.display = "block";
+
+        dialogBtn.onclick = function() {
+            unsaveDialog.style.display = "none";
+        }
+        return; 
+    }
+
+    // pop up warn for selecting span when switch to new field dring editing mode
     if (!isTextSelected && field != "evRelationship" && quoteF == "" && !isNotNeedValid) {
         warnSelectTextSpan(field);
         return;
-    } // else {
-    //     if (cachedOATarget.hasSelector != null)
-    //         $('#'+field+'quote').html(cachedOATarget.hasSelector.exact || '');         
-    // }
+    } 
     
     fieldL = ["evRelationship","participants","dose1","dose2","auc","cmax","clearance","halflife"];
     
@@ -271,18 +281,3 @@ function scrollToAnnotation(annotationId, fieldName, dataNum) {
     if (document.getElementById(divId))
         document.getElementById(divId).scrollIntoView(true);
 }
-
-
-
-
-// function addClaimDataAtSameSpan(options) {
-//     if (options === "data") {
-
-//         $( "#dialog-claim-confirm" ).dialog( "close" );        
-//         // keep using the same text span
-//         isTextSelected = true;
-//         cachedOATarget = ann.argues.hasTarget;
-//         cachedOARanges = ann.argues.ranges;        
-//         addDataCellByEditor("participants", 0);
-//     } 
-// }

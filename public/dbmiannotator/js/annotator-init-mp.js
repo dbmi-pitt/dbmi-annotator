@@ -22,6 +22,9 @@ if (typeof annotator === 'undefined') {
     var totalDataNum = "";
     var currFormType = "";
 
+    // track the form editing status from user
+    var unsaved = false;
+
     if (annType == "DDI")
         app.include(annotator.ui.dbmimain);            
     else if (annType == "MP")
@@ -55,7 +58,6 @@ if (typeof annotator === 'undefined') {
                          // MP adder - open/close claim menu
                          // PMC page not ready - hanging... (comment line below)
                          // $(document).ready(function () {
-                         console.log("add hover for mpadder menu");
                              
                          $('.mp-menu-btn').hover(
                              function() { 
@@ -88,6 +90,12 @@ if (typeof annotator === 'undefined') {
                          unchangedCheckBoxDialog("cmax");
                          unchangedCheckBoxDialog("clearance");
                          unchangedCheckBoxDialog("halflife");
+
+                         // jquery for checking form editing status
+                         $(":input").change(function(){
+                             console.log("[INFO] making changes - unsaved set to true");
+                             unsaved = true;
+                         });
 
                      });
 }
