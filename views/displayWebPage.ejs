@@ -17,14 +17,14 @@
 
     <article>
 
+      <!-- dialog for selecting text to begin with create claim/data -->
       <div id="dialog-select-text-for-data" title="Warning" style="display: none;">
         <p>Please select text span for the data field!</p>
       </div>
 
-      <!-- The Modal -->
-      <div id="create-claim-dialog" class="create-claim-dialog">        
-        <!-- Modal content -->
-        <div class="claim-dialog-content" style="display: none;">
+      <!-- dialog for options when creating claim -->
+      <div id="create-claim-dialog" class="dialog-background" style="display: none;">
+        <div class="dialog-content">
           <div class="modal-header">
             <span class="close">×</span>
             <h2>Select next step from options:</h2>
@@ -41,11 +41,22 @@
               <button id="finish-same-span-btn">OK</button>
             </p>
           </div>
-          <!-- <div class="modal-footer"> -->
-          <!--   <h3>Modal Footer</h3> -->
-          <!-- </div> -->
         </div>
         
+      </div>
+
+      <!-- dialog for warn that unchange checkbox will truncate form -->
+      <div id="unchanged-warn-dialog" class="dialog-background" style="display: none;">
+        <div class="dialog-content">
+          <div class="modal-header">
+            <span class="close">×</span>
+            <h2>Check unchanged will truncate current form</h2>
+          </div>
+          <div class="modal-body">
+            <button id="unchanged-dialog-ok-btn">OK</button>
+            <button id="unchanged-dialog-cancel-btn">Cancel</button>
+          </div>
+        </div>
       </div>
       
       
@@ -65,7 +76,7 @@
 	      <div style="margin-top:0px" id="subcontent"> <%- htmlsource %> </div>  
           
 	    </div>
-
+~
 	    
 	    <div id="tabs" style="position:fixed">
           <ul>
