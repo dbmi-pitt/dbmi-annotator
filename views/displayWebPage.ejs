@@ -27,7 +27,7 @@
         <div class="dialog-content">
           <div class="modal-header">
             <span class="close">×</span>
-            <h2>Select next step from options:</h2>
+            <strong>Select next step from options:</strong>
           </div>
           <div class="modal-body">
             <p><strong>Add data from the same text span for Claim:</strong> 
@@ -50,15 +50,28 @@
         <div class="dialog-content">
           <div class="modal-header">
             <span class="close">×</span>
-            <h2>Check unchanged will truncate current form</h2>
+            <strong>Check unchanged will truncate current form</strong>
           </div>
           <div class="modal-body">
-            <button id="unchanged-dialog-ok-btn">OK</button>
+            <button id="unchanged-dialog-ok-btn">OK</button>&nbsp;&nbsp;
             <button id="unchanged-dialog-cancel-btn">Cancel</button>
           </div>
         </div>
       </div>
       
+      <!-- dialog for user to save current editing -->
+      <div id="remind-unsave-dialog" class="dialog-background" style="display: none;">
+        <div class="dialog-content">
+          <div class="modal-header">
+            <span class="close">×</span>
+            <strong>Please save in order to move to next form</strong>
+          </div>
+          <div class="modal-body">
+            <button id="remind-dialog-ok-btn">OK</button>
+          </div>
+        </div>
+      </div>
+
       
       <div id="dialog-claim-delete-confirm" title="Delete Confirmation" style="display: none;"> <p> Delete claim will trancate all data & material assigned on it! </p>
       </div>
