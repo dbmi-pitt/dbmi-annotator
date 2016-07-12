@@ -232,7 +232,6 @@ function switchDataForm(field, isNotNeedValid) {
 
     // pop up unsaved warning box  
     if (unsaved) {
-        console.log("unsaved !!!");
         var unsaveDialog = document.getElementById('remind-unsave-dialog');
         var dialogBtn = document.getElementById('remind-dialog-ok-btn');
         unsaveDialog.style.display = "block";
