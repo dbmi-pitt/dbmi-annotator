@@ -17,15 +17,49 @@
 
     
 
+      <!-- dialog for selecting text to begin with create claim/data -->
       <div id="dialog-select-text-for-data" title="Warning" style="display: none;">
         <p>Please select text span for the data field!</p>
       </div>
 
-      <div id="claim-dialog-confirm" title="finished create claim?" style="display: none;">
-        <p>Add data from the same text span for Claim: <div id="dialog-claim-options" style="display: none;"></div>          
-        </p>        
+      <!-- dialog for options when creating claim -->
+      <div id="create-claim-dialog" class="dialog-background" style="display: none;">
+        <div class="dialog-content">
+          <div class="modal-header">
+            <span class="close">×</span>
+            <h2>Select next step from options:</h2>
+          </div>
+          <div class="modal-body">
+            <p><strong>Add data from the same text span for Claim:</strong> 
+              <div id="dialog-claim-options" style="display: inline;"></div>
+              <button id="add-data-same-span-btn">OK</button>
+            </p>
+            <p><strong>Add another claim from the same text span</strong> 
+              <button id="add-claim-same-span-btn">OK</button>
+            </p>
+            <p><strong>Move to different text span (finish) </strong>
+              <button id="finish-same-span-btn">OK</button>
+            </p>
+          </div>
+        </div>
+        
       </div>
 
+      <!-- dialog for warn that unchange checkbox will truncate form -->
+      <div id="unchanged-warn-dialog" class="dialog-background" style="display: none;">
+        <div class="dialog-content">
+          <div class="modal-header">
+            <span class="close">×</span>
+            <h2>Check unchanged will truncate current form</h2>
+          </div>
+          <div class="modal-body">
+            <button id="unchanged-dialog-ok-btn">OK</button>
+            <button id="unchanged-dialog-cancel-btn">Cancel</button>
+          </div>
+        </div>
+      </div>
+      
+      
       <div id="dialog-claim-delete-confirm" title="Delete Confirmation" style="display: none;"> <p> Delete claim will trancate all data & material assigned on it! </p>
       </div>
 
@@ -42,7 +76,7 @@
 	      <div style="margin-top:0px" id="subcontent"> <%- htmlsource %> </div>  
           
 	    </div>
-
+~
 	    
 	    <div id="tabs" style="position:fixed">
           <ul>

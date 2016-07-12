@@ -83,74 +83,14 @@ if (typeof annotator === 'undefined') {
                              showEnzyme();
                          });
 
-                         // change event for auc unchanged checkbox
-                         $('#auc-unchanged-checkbox').change(function() {
-                             if ($(this).is(":checked")) {
-                                 $("#auc").val('');
-                                 $("#aucType")[0].selectedIndex = -1;
-                                 $("#aucDirection")[0].selectedIndex = -1;
-                                 
-                                 $("#auc").attr("disabled", true);
-                                 $("#aucType").attr("disabled", true);
-                                 $("#aucDirection").attr("disabled", true);
-                             } else {
-                                 $("#auc").attr("disabled", false);
-                                 $("#aucType").attr("disabled", false);
-                                 $("#aucDirection").attr("disabled", false);
-                             }
-                         });
-                         
-                         // change event for cmax unchanged checkbox
-                         $('#cmax-unchanged-checkbox').change(function() {
-                             if ($(this).is(":checked")) {
-                                 $("#cmax").val('');
-                                 $("#cmaxType")[0].selectedIndex = -1;
-                                 $("#cmaxDirection")[0].selectedIndex = -1;
-                                 
-                                 $("#cmax").attr("disabled", true);
-                                 $("#cmaxType").attr("disabled", true);
-                                 $("#cmaxDirection").attr("disabled", true);
-                             } else {
-                                 $("#cmax").attr("disabled", false);
-                                 $("#cmaxType").attr("disabled", false);
-                                 $("#cmaxDirection").attr("disabled", false);
-                             }
-                         });
+                         // change event for auc, cmax, clearance, halflife unchanged checkbox
+                         unchangedCheckBoxDialog("auc");                        
+                         unchangedCheckBoxDialog("cmax");
+                         unchangedCheckBoxDialog("clearance");
+                         unchangedCheckBoxDialog("halflife");
 
-                         // change event for clearance unchanged checkbox
-                         $('#clearance-unchanged-checkbox').change(function() {
-                             if ($(this).is(":checked")) {
-                                 $("#clearance").val('');
-                                 $("#clearanceType")[0].selectedIndex = -1;
-                                 $("#clearanceDirection")[0].selectedIndex = -1;
-                                 
-                                 $("#clearance").attr("disabled", true);
-                                 $("#clearanceType").attr("disabled", true);
-                                 $("#clearanceDirection").attr("disabled", true);
-                             } else {
-                                 $("#clearance").attr("disabled", false);
-                                 $("#clearanceType").attr("disabled", false);
-                                 $("#clearanceDirection").attr("disabled", false);
-                             }
-                         });
-
-                         // change event for halflife unchanged checkbox
-                         $('#halflife-unchanged-checkbox').change(function() {
-                             if ($(this).is(":checked")) {
-                                 $("#halflife").val('');
-                                 $("#halflifeType")[0].selectedIndex = -1;
-                                 $("#halflifeDirection")[0].selectedIndex = -1;
-                                 
-                                 $("#halflife").attr("disabled", true);
-                                 $("#halflifeType").attr("disabled", true);
-                                 $("#halflifeDirection").attr("disabled", true);
-                             } else {
-                                 $("#halflife").attr("disabled", false);
-                                 $("#halflifeType").attr("disabled", false);
-                                 $("#halflifeDirection").attr("disabled", false);
-                             }
-                         });
-
+                     });
+}
 
 //highlight drugs in quote dynamicly  
 //moved from mp-annotation-editor                      
@@ -168,9 +108,6 @@ function selectDrug() {
     $("#quote").html(quotestring);
 }
 
-                     });
-}
-
 
 function getURLParameter(name) {
     return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search)||[,""])[1].replace(/\+/g, '%20'))||null
@@ -181,3 +118,48 @@ $(document).ready(function () {
     $('#splitter').jqxSplitter({ showSplitBar: false, width: $(window).width(), height: $(window).height(), orientation: 'horizontal', panels: [{ size: '100%',min: 200 }, { size: '0%', min: 0}] });
 });
 
+
+// dialog for confirm truncation when user check unchanged checkbox  
+// fields allowed: auc, cmax, clearance, halflife
+function unchangedCheckBoxDialog(field) {
+    if (field !== "auc" && field!== "cmax" && field!== "clearance" && field !== "halflife") {
+        return;
+    }
+
+    $('#' + field + '-unchanged-checkbox').change(function() {
+        if ($(this).is(":checked")) {
+            
+            // show unchanged warn dialog
+            var unchangedDialog = document.getElementById('unchanged-warn-dialog');
+            unchangedDialog.style.display = "block";
+            // When the user clicks anywhere outside of the dialog, close it
+            window.onclick = function(event) {
+                if (event.target == unchangedDialog) {
+                    unchangedDialog.style.display = "none";
+                }
+            }
+
+            var okBtn = document.getElementById("unchanged-dialog-ok-btn");
+            var cancelBtn = document.getElementById("unchanged-dialog-cancel-btn");
+            okBtn.onclick = function() {
+                unchangedDialog.style.display = "none";
+                $('#'+field).val('');
+                $('#'+field+'Type')[0].selectedIndex = -1;
+                $('#'+field+'Direction')[0].selectedIndex = -1;
+                
+                $('#'+field).attr('disabled', true);
+                $('#'+field+'Type').attr('disabled', true);
+                $('#'+field+'Direction').attr('disabled', true);   
+            }
+            cancelBtn.onclick = function() {
+                unchangedDialog.style.display = "none"; 
+                $('#'+field+'-unchanged-checkbox').attr('checked',false);
+            }
+                        
+        } else {
+            $('#'+field).attr('disabled', false);
+            $('#'+field+'Type').attr('disabled', false);
+            $('#'+field+'Direction').attr('disabled', false);   
+        }
+    });
+}

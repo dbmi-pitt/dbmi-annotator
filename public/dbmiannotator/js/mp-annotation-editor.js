@@ -207,7 +207,7 @@ function editDataCellByEditor(field, dataNum) {
                 if (annotationId != null)
                     currAnnotationId = annotationId;
                 
-                switchDataForm(field);
+                switchDataForm(field, true);
                 // load quote for data field
                 // if (cachedOATarget.hasSelector != null)
                 //     $("#" + field + "quote").html(cachedOATarget.hasSelector.exact);
@@ -226,13 +226,24 @@ function editDataCellByEditor(field, dataNum) {
 
 
 // open data editor with specific form
-function switchDataForm(field) {
+function switchDataForm(field, isNotNeedValid) {
+    quoteF = $('#'+field+'quote').html();         
+    console.log("switchDataFrom: " + field);
+    // console.log(quoteF);
 
+    if (!isTextSelected && field != "evRelationship" && quoteF == "" && !isNotNeedValid) {
+        warnSelectTextSpan(field);
+        return;
+    } // else {
+    //     if (cachedOATarget.hasSelector != null)
+    //         $('#'+field+'quote').html(cachedOATarget.hasSelector.exact || '');         
+    // }
+    
     fieldL = ["evRelationship","participants","dose1","dose2","auc","cmax","clearance","halflife"];
     
     if (field == null) 
         field = "participants";
-    //$("#mp-editor-type").html(field);
+
     currDataField = field;
     
     if (field != "evRelationship")
@@ -261,3 +272,17 @@ function scrollToAnnotation(annotationId, fieldName, dataNum) {
         document.getElementById(divId).scrollIntoView(true);
 }
 
+
+
+
+// function addClaimDataAtSameSpan(options) {
+//     if (options === "data") {
+
+//         $( "#dialog-claim-confirm" ).dialog( "close" );        
+//         // keep using the same text span
+//         isTextSelected = true;
+//         cachedOATarget = ann.argues.hasTarget;
+//         cachedOARanges = ann.argues.ranges;        
+//         addDataCellByEditor("participants", 0);
+//     } 
+// }
