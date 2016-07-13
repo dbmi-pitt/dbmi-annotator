@@ -49,7 +49,7 @@
       <div id="unchanged-warn-dialog" class="dialog-background" style="display: none;">
         <div class="dialog-content">
           <div class="modal-header">
-            <span class="close">×</span>
+            <span id="unchanged-dialog-close" class="close">×</span>
             <strong>Check unchanged will truncate current form</strong>
           </div>
           <div class="modal-body">
@@ -63,11 +63,11 @@
       <div id="remind-unsave-dialog" class="dialog-background" style="display: none;">
         <div class="dialog-content">
           <div class="modal-header">
-            <span class="close">×</span>
-            <strong>Please save in order to move to next form</strong>
+            <span id="unsave-dialog-close" class="close">×</span>
+            <strong>Data you just entered not saved yet!</strong>
           </div>
           <div class="modal-body">
-            <button id="remind-dialog-ok-btn">OK</button>
+            Please click save button before move to the next form<button id="remind-dialog-ok-btn">OK</button>
           </div>
         </div>
       </div>

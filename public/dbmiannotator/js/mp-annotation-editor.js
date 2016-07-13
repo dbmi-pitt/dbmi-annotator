@@ -234,11 +234,25 @@ function switchDataForm(field, isNotNeedValid) {
     if (unsaved) {
         var unsaveDialog = document.getElementById('remind-unsave-dialog');
         var dialogBtn = document.getElementById('remind-dialog-ok-btn');
+        var span = document.getElementById("unsave-dialog-close");
         unsaveDialog.style.display = "block";
 
         dialogBtn.onclick = function() {
             unsaveDialog.style.display = "none";
         }
+
+        // When the user clicks anywhere outside of the dialog, close it
+        window.onclick = function(event) {
+            if (event.target == dialogBtn) {
+                unsaveDialog.style.display = "none";
+            }
+        }
+
+        // When the user clicks on <span> (x), close the dialog
+        span.onclick = function() {
+            unsaveDialog.style.display = "none";
+        }
+        
         return; 
     }
 
