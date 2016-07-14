@@ -135,36 +135,48 @@ function unchangedCheckBoxDialog(field) {
     }
 
     $('#' + field + '-unchanged-checkbox').change(function() {
+        
         if ($(this).is(":checked")) {
             
-            // show unchanged warn dialog
-            var unchangedDialog = document.getElementById('unchanged-warn-dialog');
-            unchangedDialog.style.display = "block";
-            // When the user clicks anywhere outside of the dialog, close it
-            window.onclick = function(event) {
-                if (event.target == unchangedDialog) {
-                    unchangedDialog.style.display = "none";
+            if ($('#'+field).val() != null && $('#'+field).val().trim() != "") {
+                // show unchanged warn dialog
+                var unchangedDialog = document.getElementById('unchanged-warn-dialog');
+                unchangedDialog.style.display = "block";
+                // When the user clicks anywhere outside of the dialog, close it
+                window.onclick = function(event) {
+                    if (event.target == unchangedDialog) {
+                        unchangedDialog.style.display = "none";
+                    }
                 }
-            }
+                
+                var okBtn = document.getElementById("unchanged-dialog-ok-btn");
+                var cancelBtn = document.getElementById("unchanged-dialog-cancel-btn");
 
-            var okBtn = document.getElementById("unchanged-dialog-ok-btn");
-            var cancelBtn = document.getElementById("unchanged-dialog-cancel-btn");
-            okBtn.onclick = function() {
-                unchangedDialog.style.display = "none";
-                $('#'+field).val('');
+                okBtn.onclick = function() {
+                    unchangedDialog.style.display = "none";
+                    $('#'+field).val('');
+                    $('#'+field+'Type')[0].selectedIndex = -1;
+                    $('#'+field+'Direction')[0].selectedIndex = -1;
+                    
+                    $('#'+field).attr('disabled', true);
+                    $('#'+field+'Type').attr('disabled', true);
+                    $('#'+field+'Direction').attr('disabled', true);   
+                }
+                cancelBtn.onclick = function() {
+                    unchangedDialog.style.display = "none"; 
+                $('#'+field+'-unchanged-checkbox').attr('checked',false);
+                }
+            } else {                
                 $('#'+field+'Type')[0].selectedIndex = -1;
                 $('#'+field+'Direction')[0].selectedIndex = -1;
                 
                 $('#'+field).attr('disabled', true);
                 $('#'+field+'Type').attr('disabled', true);
-                $('#'+field+'Direction').attr('disabled', true);   
+                $('#'+field+'Direction').attr('disabled', true);                   
             }
-            cancelBtn.onclick = function() {
-                unchangedDialog.style.display = "none"; 
-                $('#'+field+'-unchanged-checkbox').attr('checked',false);
-            }
-                        
+            
         } else {
+            // TODO: grey out fields
             $('#'+field).attr('disabled', false);
             $('#'+field+'Type').attr('disabled', false);
             $('#'+field+'Direction').attr('disabled', false);   
