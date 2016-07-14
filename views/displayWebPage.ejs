@@ -67,7 +67,7 @@
             <strong>Data you just entered not saved yet!</strong>
           </div>
           <div class="modal-body">
-            Please click save button before move to the next form<button id="remind-dialog-ok-btn">OK</button>
+            Please click save button before exit current form<button id="remind-dialog-ok-btn">OK</button>
           </div>
         </div>
       </div>
@@ -82,14 +82,14 @@
       <div id='splitter'>
 	
 	    <div id="content" class="firstsection" style='overflow: auto'>
-          <button class="btn btn-success" onclick="buttonshowright()" value="hide"><img src="img/menu.png" height="25px" width="28px"></button>
-          <button class="btn btn-home" onclick="location.href = '/dbmiannotator/main';" value="hide"><img src="img/home.png" height="25px" width="28px"></button>
+          <button class="btn btn-success" onclick="annotationPanelClick()" value="hide"><img src="img/menu.png" height="25px" width="28px"></button>
+          <button class="btn btn-home" onclick="backToHome();" value="hide"><img src="img/home.png" height="25px" width="28px"></button>
 		  
 	      <!-- div with subcontent will be replaced with html document page -->
 	      <div style="margin-top:0px" id="subcontent"> <%- htmlsource %> </div>  
           
 	    </div>
-~
+
 	    
 	    <div id="tabs" style="position:fixed">
           <ul>

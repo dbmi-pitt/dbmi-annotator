@@ -127,7 +127,7 @@ function createDataTable(annotation){
     if (annotation.argues.qualifiedBy.relationship == "interact with") {
         if (annotation.argues.qualifiedBy.precipitant == "drug1")
             drugname1 += " (precipitant)";
-        else 
+        else if (annotation.argues.qualifiedBy.precipitant == "drug2")
             drugname2 += " (precipitant)";
     }
 
@@ -271,7 +271,6 @@ function changeClaimInDialog() {
 // set current data field for editor form to the field that user chosen
 function warnSelectTextSpan(field) {
     $("#dialog-select-text-for-data").dialog();
-    //$("#mp-editor-type").html(field);
     currFormType = field;
 }
 

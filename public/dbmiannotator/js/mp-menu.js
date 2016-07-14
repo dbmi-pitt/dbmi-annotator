@@ -69,63 +69,67 @@ var getUrlParameter = function getUrlParameter(sParam) {
 };
 
 //show annotator panel by button "btn-success"
-  function buttonshowright(){
+//deprecated buttonshowright
+function annotationPanelClick(){
     
     if($('.btn-success').val()=="hide") {
-
-      $('#splitter').jqxSplitter({
-        showSplitBar:false,
-        width: $(window).width(),
-        height: $(window).height(),
-        orientation: 'horizontal', 
-        panels: [{size: '80%', min: 200}, {size: '20%', min: 250}]
-      });
-    
-      $('#tabs').tabs("option", "active", 0);
-      $('.editorsection').hide();
-      $('.btn-success').val("show");
-      $('.annotator-editor').show();
-      $('.btn-success').css("margin-bottom",250);
-      $('.btn-home').css("margin-bottom",250);
-      $('#menu').html("&nbsp Collapse");
-    }
-    else {
-      $('#splitter').jqxSplitter({
-        showSplitBar:false,
-        width: '100%',
-        height: $(window).height(),
-        orientation: 'horizontal', 
-        panels: [{size: '100%', min: 200}, {size: '0%', min: 0}]
-      });
-      $('.btn-success').val("hide");
-      $('.annotator-editor').hide();
-      $('.btn-success').css("margin-bottom",0);
-      $('.btn-home').css("margin-bottom",0);
-      $('#menu').html("&nbsp Menu");
-    }
-    var w = $(window).width()*0.85;
-    $('.annotator-widget').width(w);
         
-  }
+        $('#splitter').jqxSplitter({
+            showSplitBar:false,
+            width: $(window).width(),
+            height: $(window).height(),
+            orientation: 'horizontal', 
+            panels: [{size: '80%', min: 200}, {size: '20%', min: 250}]
+        });
+        
+        $('#tabs').tabs("option", "active", 0);
+        $('.editorsection').hide();
+        $('.btn-success').val("show");
+        $('.annotator-editor').show();
+        $('.btn-success').css("margin-bottom",250);
+        $('.btn-home').css("margin-bottom",250);
+    }
+    else {
+        
+        // unsaved warning box  
+        if (!warnUnsavedDialog())
+            return;
 
-  function showrightbyvalue(){
+        $('#splitter').jqxSplitter({
+            showSplitBar:false,
+            width: '100%',
+            height: $(window).height(),
+            orientation: 'horizontal', 
+            panels: [{size: '100%', min: 200}, {size: '0%', min: 0}]
+        });
+        $('.btn-success').val("hide");
+        $('.annotator-editor').hide();
+        $('.btn-success').css("margin-bottom",0);
+        $('.btn-home').css("margin-bottom",0);
+    }
+    var w = $(window).width()*0.85;
+    $('.annotator-widget').width(w);
+    
+}
+
+function exitEditorToAnnTable(){
     
     if($('.btn-success').val()=="hide") {
-      var tab = $('#tabs-2').attr('href');
-      $('#tabs').tabs('select', tab);
-      $('#splitter').jqxSplitter({
-        showSplitBar:false,
-        width: $(window).width(),
-        height: $(window).height(),
-        orientation: 'horizontal', 
-        panels: [{size: '80%', min: 200}, {size: '20%', min: 250}]
-      });
-      $('.editorsection').show();
-      $('.btn-success').val("show");
-      $('.annotator-editor').show();
-      $('.btn-success').css("margin-bottom",250);
-      $('.btn-home').css("margin-bottom",250);
-      $('#menu').html("&nbsp Collapse");
+        var tab = $('#tabs-2').attr('href');
+        $('#tabs').tabs('select', tab);
+        $('#splitter').jqxSplitter({
+            showSplitBar:false,
+            width: $(window).width(),
+            height: $(window).height(),
+            orientation: 'horizontal', 
+            panels: [{size: '80%', min: 200}, {size: '20%', min: 250}]
+        });
+        $('.editorsection').show();
+        $('.btn-success').val("show");
+        $('.annotator-editor').show();
+        $('.btn-success').css("margin-bottom",250);
+        $('.btn-home').css("margin-bottom",250);
+        // $('#menu').html("&nbsp Collapse");
     }
     else {
       $('#splitter').jqxSplitter({
@@ -139,8 +143,53 @@ var getUrlParameter = function getUrlParameter(sParam) {
       $('.annotator-editor').hide();
       $('.btn-success').css("margin-bottom",0);
       $('.btn-home').css("margin-bottom",0);
-      $('#menu').html("&nbsp Menu");
+      // $('#menu').html("&nbsp Menu");
     }
     var w = $(window).width()*0.85;
     $('.annotator-widget').width(w);
   }
+
+
+// click home button back to main page
+function backToHome() {
+    // unsaved warning box  
+    if (!warnUnsavedDialog())
+        return;
+
+    location.href = '/dbmiannotator/main';
+}
+
+
+// if there is unsaved changes, pop up dialog for reminding 
+// return true if everything saved, otherwise return false
+function warnUnsavedDialog() {
+
+    if (unsaved) {
+        var unsaveDialog = document.getElementById('remind-unsave-dialog');
+        var dialogBtn = document.getElementById('remind-dialog-ok-btn');
+        var span = document.getElementById("unsave-dialog-close");
+        unsaveDialog.style.display = "block";
+
+        dialogBtn.onclick = function() {
+            unsaveDialog.style.display = "none";
+        }
+
+        // When the user clicks anywhere outside of the dialog, close it
+        window.onclick = function(event) {
+            if (event.target == dialogBtn) {
+                unsaveDialog.style.display = "none";
+            }
+        }
+
+        // When the user clicks on <span> (x), close the dialog
+        span.onclick = function() {
+            unsaveDialog.style.display = "none";
+        }
+        
+        return false; 
+    } else {
+        return true;
+    }
+
+
+}
