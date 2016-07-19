@@ -3,6 +3,7 @@ config/config.js
 
 # browserify compiled js bundle 
 public/dbmiannotator/js/app.bundle.js
+public/dbmiannotator/js/annotator.min.js
 
 # nodejs libs
 node_modules/

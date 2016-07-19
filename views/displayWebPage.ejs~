@@ -21,22 +21,20 @@
 
     
     <!-- div with id content will be reload with html label -->
-    <article>
+    
       <div id='splitter'>
 	
-	<div id="content" class="firstsection" style='overflow: auto'>
+	       <div id="content" class="firstsection" style='overflow: auto'>
 	  
           <button style="style:absolute;display:none" class="btn btn-success" onclick="showrightbyvalue()" value="hide"><span>Annotator</span></button>
 	  
-	  <div style="margin-top:30px" id="subcontent"> </div>  
+	        <div style="margin-top:0px" id="subcontent"> </div>  
 
-	</div>
+	      </div>
 	
-	<div class="secondsection"></div>
+	     <div class="secondsection"></div>
 	
-      </div>
-      
-    </article>
+    </div>
 
     
   </body>

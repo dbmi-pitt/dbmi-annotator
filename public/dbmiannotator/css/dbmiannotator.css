@@ -15,11 +15,12 @@ body {
   background: white;
   font-family: $font-face;
   
-  display: flex;
+  
   justify-content: center;
   align-items: center;
   
   width:100vw;
+  display: flex;
   height: 100vh;
   line-height: 1;
 }
@@ -39,9 +40,8 @@ h1 {
 
 .container {
   min-width: 640px;
-  
-  display: flex;
-  flex-direction: column;
+  /*display: flex;
+  flex-direction: column;*/
 }
 
 .button-container {
@@ -52,7 +52,7 @@ h1 {
 
 
 /* Copy button styles*/
-.custombutton {
+/*.custombutton {
   border: 0 none;
   border-radius: 5px;
   
@@ -86,7 +86,7 @@ h1 {
 .custombutton.-blue {
   background: $blue;
   color: $white;
-}
+}*/
 
 /*.custombutton.-border {
   background: transparent;

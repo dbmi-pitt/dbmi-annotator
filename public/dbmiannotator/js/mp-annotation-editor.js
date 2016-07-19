@@ -207,7 +207,7 @@ function editDataCellByEditor(field, dataNum) {
                 if (annotationId != null)
                     currAnnotationId = annotationId;
                 
-                switchDataForm(field);
+                switchDataForm(field, true);
                 // load quote for data field
                 // if (cachedOATarget.hasSelector != null)
                 //     $("#" + field + "quote").html(cachedOATarget.hasSelector.exact);
@@ -226,35 +226,59 @@ function editDataCellByEditor(field, dataNum) {
 
 
 // open data editor with specific form
-function switchDataForm(field) {
+function switchDataForm(field, isNotNeedValid) {
+    quoteF = $('#'+field+'quote').html();         
+    // unsaved warning box  
+    if (!warnUnsavedDialog())
+        return;
 
-    fieldL = ["evRelationship","participants","dose1","dose2","auc","cmax","clearance","halflife"];
+    // pop up warn for selecting span when switch to new field dring editing mode
+    if (!isTextSelected && field != "evRelationship" && quoteF == "" && !isNotNeedValid) {
+        warnSelectTextSpan(field);
+        return;
+    } 
+
+    fieldM = {"participants":"participants","dose1":"drug1Dose","dose2":"drug2Dose","auc":"auc","cmax":"cmax","clearance":"clearance","halflife":"halflife"};
     
     if (field == null) 
         field = "participants";
-    //$("#mp-editor-type").html(field);
+
     currDataField = field;
     
     if (field != "evRelationship")
         $("#mp-data-nav").show();
     $("#mp-claim-form").hide();
 
-    // shown specific data form, hide others
-    for (i = 0; i < fieldL.length; i++){
-        var dataid = "mp-data-form-"+fieldL[i];
-        if (fieldL[i] == field){
-            // console.log("switch shown " + dataid);
+    for (var prop in fieldM) {       
+        var dataid = "mp-data-form-"+prop;
+
+        if (prop === field) {
             $("#"+dataid).show();
-            // scroll to annotation when data field has value
-            // annotationId = $("#mp-annotation-work-on").html();
-            // scrollToAnnotation(annotationId, field, currDataNum)
+            // show delete button if form been filled
+            fieldVal = $("#" + fieldM[prop]).val();
+
+            if (fieldVal !=null && fieldVal != "") {
+                console.log("show delete button!");
+                $("#annotator-delete").show();
+            } else {
+                // check if unchanged checkbox is selected
+                if (prop == "auc" || prop == "cmax" || prop == "clearance" || prop == "halflife") {
+                    if ($('#' + prop + '-unchanged-checkbox').is(':checked')) 
+                        $("#annotator-delete").show();
+                    else 
+                        $("#annotator-delete").hide();                                        
+                } else {
+                    $("#annotator-delete").hide();                
+                }
+            }                
         } else {
             $("#"+dataid).hide();
-        }
+        }                           
     }
 }
 
 
+// scroll current focus on window to specific highlight piece
 function scrollToAnnotation(annotationId, fieldName, dataNum) {
     var divId = annotationId + "-" + fieldName + "-" + dataNum;
     if (document.getElementById(divId))
