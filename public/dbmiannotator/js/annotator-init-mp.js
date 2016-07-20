@@ -112,10 +112,12 @@ function selectDrug() {
     var drug2ID = $('#Drug2 option:selected').val();
 
     var quotestring = $("#quote").html();
-    quotestring = quotestring.split("class=\"highlightdrug\"").join("class=\"annotator-hl\" name=\"annotator-hl\"");
-    quotestring = quotestring.split("class=\"highlightdrug\"").join("class=\"annotator-hl\" name=\"annotator-hl\"");
-    quotestring = quotestring.split("class=\"annotator-hl\" name=\"annotator-hl\" id=\""+drug1ID+"\"").join("class=\"highlightdrug\" id=\""+drug1ID+"\"");
-    quotestring = quotestring.split("class=\"annotator-hl\" name=\"annotator-hl\" id=\""+drug2ID+"\"").join("class=\"highlightdrug\" id=\""+drug2ID+"\"");
+    quotestring = quotestring.split("class=\"highlightdrug\"").join("class=\"annotator-hl\"");
+    quotestring = quotestring.split("class=\"highlightdrug\"").join("class=\"annotator-hl\"");
+    quotestring = quotestring.split("class=\"annotator-hl\" id=\""+drug1ID+"\"").join("class=\"highlightdrug\" id=\""+drug1ID+"\"");
+    quotestring = quotestring.split("class=\"annotator-hl\" id=\""+drug2ID+"\"").join("class=\"highlightdrug\" id=\""+drug2ID+"\"");
+    quotestring = quotestring.split("id=\""+drug1ID+"\" class=\"annotator-hl\"").join("class=\"highlightdrug\" id=\""+drug1ID+"\"");
+    quotestring = quotestring.split("id=\""+drug2ID+"\" class=\"annotator-hl\"").join("class=\"highlightdrug\" id=\""+drug2ID+"\"");
     $("#quote").html(quotestring);
 }
 
