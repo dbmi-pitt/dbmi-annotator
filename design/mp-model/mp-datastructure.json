@@ -11,8 +11,11 @@
      'type': 'mp:claim',
      'qualifiedBy': {
          'Drug1': '',
+         'drug1ID' : '',
          'relationship': 'inhibits',
+         'drug2ID' : '',
          'Drug2': '',
+         'precipitant': 'drug1 or drug2'
      },
      'hasTarget' : {
          'id': 'uuid'
@@ -31,6 +34,9 @@
      },
      // put method name here
      'method' : '',
+     'grouprandom' : 'yes or no',
+     'parallelgroup' : 'yes or no',
+     'pkprocess' : 'yes or no',
      // mp:data (one or more mp:data supports claim)
      'supportsBy': 
      [
@@ -41,9 +47,6 @@
              'supportsBy': { 
                  'id': 'uuid'
                  'type': 'mp:method',
-                 // 'name': '',
-                 // 'hasTarget': '',
-                 // 'ranges': ''
                  // mp:material (material supports method)
                  'supportsBy': {
                     'id': 'uuid',
