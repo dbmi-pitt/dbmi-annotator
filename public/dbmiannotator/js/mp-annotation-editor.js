@@ -238,7 +238,7 @@ function switchDataForm(field, isNotNeedValid) {
         return;
     } 
 
-    fieldM = {"participants":"participants","dose1":"drug1Dose","dose2":"drug2Dose","auc":"auc","cmax":"cmax","clearance":"clearance","halflife":"halflife"};
+    fieldM = {"evRelationship":"evRelationship","participants":"participants","dose1":"drug1Dose","dose2":"drug2Dose","auc":"auc","cmax":"cmax","clearance":"clearance","halflife":"halflife"};
     
     if (field == null) 
         field = "participants";
