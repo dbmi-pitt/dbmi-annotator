@@ -106,13 +106,16 @@ $("#Drug1").change(function (){selectDrug();});
 $("#Drug2").change(function (){selectDrug();});
 
 function selectDrug() {
-    var drug1 = $("#Drug1").val();
-    var drug2 = $("#Drug2").val();
+    var drug1 = $('#Drug1 option:selected').text();
+    var drug2 = $('#Drug2 option:selected').text();
+    var drug1ID = $('#Drug1 option:selected').val();
+    var drug2ID = $('#Drug2 option:selected').val();
+
     var quotestring = $("#quote").html();
-    quotestring = quotestring.replace("<span class=\"selecteddrug\">", "<span class=\"highlightdrug\">");
-    quotestring = quotestring.replace("<span class=\"selecteddrug\">", "<span class=\"highlightdrug\">");
-    quotestring = quotestring.replace("<span class=\"highlightdrug\">"+drug2, "<span class=\"selecteddrug\">"+drug2);
-    quotestring = quotestring.replace("<span class=\"highlightdrug\">"+drug1, "<span class=\"selecteddrug\">"+drug1);
+    quotestring = quotestring.split("class=\"highlightdrug\"").join("class=\"annotator-hl\" name=\"annotator-hl\"");
+    quotestring = quotestring.split("class=\"highlightdrug\"").join("class=\"annotator-hl\" name=\"annotator-hl\"");
+    quotestring = quotestring.split("class=\"annotator-hl\" name=\"annotator-hl\" id=\""+drug1ID+"\"").join("class=\"highlightdrug\" id=\""+drug1ID+"\"");
+    quotestring = quotestring.split("class=\"annotator-hl\" name=\"annotator-hl\" id=\""+drug2ID+"\"").join("class=\"highlightdrug\" id=\""+drug2ID+"\"");
     $("#quote").html(quotestring);
 }
 
