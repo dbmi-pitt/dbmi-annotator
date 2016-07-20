@@ -80,7 +80,6 @@ function parseNERDIR(nerfile){
         nerM.forEach(function(item, setid) {
 
             labelFile = LABEL_HTML_DIR+ setid + ".html";
-
             var label = fs.readFileSync(labelFile, 'utf-8');
 
             tidy(label, htmltidyOptions['Kastor tidy - XHTML Clean page UTF-8'], function(err, html) {
@@ -90,7 +89,7 @@ function parseNERDIR(nerfile){
                 }
                 // search NERs in html document
                 console.log("[INFO] Begin document: " + setid);
-                selectorsL = findNERPositionInDoc(item, html, setid);
+                selectorsL = findNERsInDoc(item, html, setid);
                 if (selectorsL != null) {
                     if (selectorsL.length > 0) {
                         jsonResults.nersets.push(selectorsL);
@@ -118,129 +117,127 @@ function parseNERDIR(nerfile){
 // @INPUT: label setid : String
 // @RETURN: List of Ranges {startOffset, endOffset, start, end, etc...}
 
-function findNERPositionInDoc(drugNERsL, dochtml, setid){
+function findNERsInDoc(drugNERsL, dochtml, setid){
 
     if (drugNERsL == null || dochtml == null || setid == null) return null;
 
     doc = new dom().parseFromString(dochtml);        
-    var selectorL = [];
-    var notFoundNERs = new Set();
-        
-    // loop drugs that NER identified in document
-    for (i = 0; i < drugNERsL.length; i++){
-    // for (var i = 0; i < 10; i++){
-        drugItem = drugNERsL[i];
+    var selectorL = []; // OA and xpath selectors
+    var notFoundNERs = new Set(); // keep list of miss matched NER drug names
 
+    console.log("total NER: " + drugNERsL.length);
+
+    for (i = 0; i < drugNERsL.length; i++){ // loop NERs identified in document
+    //for (var i = 0; i < 3; i++){
+        drugItem = drugNERsL[i];
+        
         // oaselector from NER results
         prefix = drugItem.prefix.replace(/\s/g, ' ');
         suffix = drugItem.suffix.replace(/\s/g, ' ');
         exact = drugItem.exact.replace(/\s/g, ' ');
+
+        if (notFoundNERs.has(exact))
+            continue;
         
-        //drugMatchPattern = "//*[contains(text()[not(parent::script)],'" + exact + "')]";
-        drugMatchPattern = "//*[contains(text(),'" + exact + "')]";
-        //drugMatchPattern = "//*[matches(text(),'(^|\W)warfarin($|\W)','i')]";
-        //drugMatchPattern = "//re:*[. ='warfarin']";
-        // xpath search drug name matches on page
-        var drugNodes = xpath.select(drugMatchPattern, doc);
-
-        //var drugNodes = xpath.select('//p', doc);
-        //console.log(drugNodes);
-
-        // if (exact == "saquinavir") {
-        //     console.log(dochtml.indexOf(exact));
-        // }
+        // narrow down for testing 
+        // if (exact != "acetonitrile" && exact != "warfarin") 
+        //     continue;
         
-        if (drugNodes.length > 0){  
-            allSelectorL = [];  // NER if exact prefix/suffix match not found
-            matchedSelectorL = []; // prefix/suffix match
-            isNERMatchFound = false;
-          
-            for (j = 0; j < drugNodes.length; j++){
-                
-                if (!drugNodes[j]) continue;
+        //drugMatchPattern = "//*[contains(text(),\"" + exact + "\")]";
+        //var drugNodes = xpath.select(drugMatchPattern, doc);
 
-	            cntStr = drugNodes[j].firstChild.data;                
-                // get xpath from dom node
-	            pathL = getXPath(drugNodes[j]);
-                
-                // ignore matches in script or table 
-                var isValid = true;
-	            pathStr = ""; 
-                
-                // skip matches in table, script, head, etc
-	            for (p = 0; p < pathL.length; p++){
-                    if (pathL[p].match(/(table|script|head|h3|h2)/g)){
-                        isValid = false;
-                        break;
-                    }                                       
-	    	        pathStr += "/" + pathL[p];
-	            }
-                // skip matches that not in paragraph - [p] tag
-                if (pathStr.indexOf("p[") < 0)
-                   continue;
+        // get all p nodes
+        var pNodes = doc.getElementsByTagName("p");
+        var re = new RegExp(exact,"g");
+        allSelectorL = [];  // NER if exact prefix/suffix match not found
+        matchedSelectorL = []; // prefix/suffix match
+        isNERMatchFound = false;
 
-                if (cntStr != null && isValid){        
+        for (j = 0; j < pNodes.length; j++) {     
+
+            pCntStr = pNodes[j].textContent;
+            pPathStr = getFormattedXPathFromNode(pNodes[j]);               
+
+            if (pCntStr != null) {
+
+                while (res = re.exec(pCntStr)){
+                    //console.log(pCntStr);
+		            startOffset = res["index"];
+                    endOffset = startOffset + exact.length;
                     
-                    cntStr = cntStr.replace(/\s/g, ' ');                   
-                        
-	                var re = new RegExp(exact,"g");
-	                while (res = re.exec(cntStr)){
-
-		                startOffset = res["index"];
-                        endOffset = startOffset + exact.length;
-                        
-                        if (startOffset > PRE_POST_LEN)
-                            prefixSub = cntStr.substring(startOffset - PRE_POST_LEN, startOffset);
-                        else
-                            prefixSub = cntStr.substring(0, startOffset);
-                        
-                        if (cntStr.length - endOffset > PRE_POST_LEN)
-                            suffixSub = cntStr.substring(endOffset, endOffset + PRE_POST_LEN);
-                        else
-                            suffixSub = cntStr.substring(endOffset);
-
-                        if (!notFoundNERs.has(exact)) {
-                            //allSelectorL.push(JSON.parse('{"setid":"' + setid+'","drugname":"' + exact.toLowerCase() + '", "startOffset":"' + startOffset + '","endOffset":"' + endOffset + '", "start":"'+ pathStr + '", "end":"' + pathStr + '", "prefix":"' + prefixSub.replace(/"/g,'\\"') + '", "suffix":"' + suffixSub.replace(/"/g,'\\"') + '", "exact":"' + exact + '"}'));
-                            jsonSelector = JSON.stringify({setid: setid, drugname: exact.toLowerCase() , startOffset:  startOffset  ,endOffset:  endOffset  , start: pathStr  , end:  pathStr  , prefix:  prefixSub , suffix: suffixSub, exact:  exact });
-                            allSelectorL.push(JSON.parse(jsonSelector));
+                    if (startOffset > PRE_POST_LEN)
+                        prefixSub = pCntStr.substring(startOffset - PRE_POST_LEN, startOffset);
+                    else
+                        prefixSub = pCntStr.substring(0, startOffset);
                             
-                        }
-                        
-                        // if over lapping with prefix & suffix from NER 
-                        if ((prefixSub.indexOf(prefix)>=0 || prefix.indexOf(prefixSub) >=0) && (suffixSub.indexOf(suffix) >= 0 || suffix.indexOf(suffixSub) >=0)){
-                            
-		                    //selectorStr = '{"setid":"' + setid+'","drugname":"' + exact.toLowerCase() + '", "startOffset":"' + startOffset + '","endOffset":"' + endOffset + '", "start":"'+ pathStr + '", "end":"' + pathStr + '", "prefix":"' + prefixSub + '", "suffix":"' + suffixSub + '", "exact":"' + exact + '"}';
-                                                        
-                            //selector = JSON.parse(selectorStr);
-                            matchedSelectorL.push(JSON.parse(jsonSelector));
-                            isNERMatchFound = true;                            
-                        }
-	                }
-	            } else {
-                    console.log("[WARN] drug " + exact + " not in paragraph - skip");
-                    // console.log(prefix);
-                    // console.log(suffix);
-                }
-            }
+                    if (pCntStr.length - endOffset > PRE_POST_LEN)
+                        suffixSub = pCntStr.substring(endOffset, endOffset + PRE_POST_LEN);
+                    else
+                        suffixSub = pCntStr.substring(endOffset);
 
-            if (isNERMatchFound && !notFoundNERs.has(exact)) { // exact NER found
-                console.log("[INFO] NER found for exact: " + exact);
-                console.log("prefix: " + prefix);
-                console.log("suffix: " + suffix);
-                selectorL = selectorL.concat(matchedSelectorL);
-            } else if (!isNERMatchFound && !notFoundNERs.has(exact)) { // 2nd strategy: if exact NER not found, add all drugname matches, add exact to set for avoding add duplicated all matches 
-                notFoundNERs.add(exact);
-                console.log("[INFO] NER not found - add all drug mentions (" + allSelectorL.length + ") for exact: " + exact);
-                selectorL = selectorL.concat(allSelectorL);
+                    jsonSelector = JSON.stringify({setid: setid, drugname: exact.toLowerCase() , startOffset:  startOffset  ,endOffset:  endOffset  , start: pPathStr  , end:  pPathStr  , prefix:  prefixSub , suffix: suffixSub, exact:  exact });
+                    
+                    if (!notFoundNERs.has(exact)) {
+                        allSelectorL.push(JSON.parse(jsonSelector));              
+                    }
+                    // DEBUGING ====================
+                    // if (pCntStr.indexOf("mg intravenous dose of rifampin. Rifampin did not significantly alter R- or S-") > 0 && suffix.indexOf("area under the concentration-time curve (AUC) from") > 0) {
+                    //     console.log("subPrefix: |" + prefixSub + "|");
+                    //     console.log("subSuffix: |" + suffixSub + "|");
+                    // }                       
+                    
+                    // if over lapping with prefix & suffix from NER 
+                    if ((prefixSub.indexOf(prefix)>=0 || prefix.indexOf(prefixSub) >=0) && (suffixSub.indexOf(suffix) >= 0 || suffix.indexOf(suffixSub) >=0)){           
+                        matchedSelectorL.push(JSON.parse(jsonSelector));
+                        isNERMatchFound = true;                            
+                    }                    
+                }                                                              
             }
-            
-        } else {
-            console.log("[ERROR] drugname: " + exact + " not found in document!");
         }
+    
+        // exact NER found and haven't added all occurrances yet 
+        if (isNERMatchFound && !notFoundNERs.has(exact)) { 
+            //console.log("[INFO] NER found for exact: " + exact);
+            //console.log("prefix: " + prefix);
+            //console.log("suffix: " + suffix);
+            selectorL = selectorL.concat(matchedSelectorL);
+            matchedSelectorL = [];
+        } else if (!isNERMatchFound && !notFoundNERs.has(exact) && allSelectorL.length > 0) { // 2nd strategy: if exact NER not found, add all drugname matches, add exact to set for avoding add duplicated all matches 
+            //notFoundNERs.add(exact);
+            console.log("[INFO] exact NER not found - add all drug occurrances (" + allSelectorL.length + ") for exact: " + exact);
+            console.log("prefix: |" + prefix + "|");
+            console.log("suffix: " + suffix + "|");
+            //selectorL = selectorL.concat(allSelectorL);        
+            //allSelectorL = [];            
+        } 
+        
     }
-    return selectorL;  
+    return selectorL;    
 }
-         
+
+
+// get xpath in string format for DBMI annotator 
+// @input: DOM node
+// @output: xpath for the node, return null if xpath contains unwanted tags
+function getFormattedXPathFromNode(node) {
+    pathStr = "";
+    // get xpath from dom node
+	pathL = getXPath(node);
+    // skip matches in table, script, head, etc
+	for (p = 0; p < pathL.length; p++){
+        if (pathL[p].match(/(table|script|head|h3|h2)/g)){
+            return null;
+        }                                       
+	    pathStr += "/" + pathL[p];
+	}
+    // skip matches that not in paragraph - [p] tag
+    if (pathStr.indexOf("p[") < 0)
+        return null
+    else
+        return pathStr
+
+}
+
 
 // GET XPATH OF NODE
 function getXPath(node, path) {
@@ -276,4 +273,4 @@ function getXPath(node, path) {
         //path.push(node.nodeName.toLowerCase() + count > 0 ? "["+count+"]" : '[1]');
     }
     return path;
-};
+}
