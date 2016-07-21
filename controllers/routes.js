@@ -184,33 +184,36 @@ module.exports = function(app, passport) {
 	    
 	    request({url: url, json: true}, function(error,response,body){
 	        if (!error && response.statusCode === 200) {
-                
+
                 var jsonObjs = body.rows;
                 res.attachment('annotations-'+req.query.email+'.csv');
 		        res.setHeader('Content-Type', 'text/csv');
-                var csvTxt = '"document"\t"claim label"\t"claim text"\t"method"\t"relationship"\t"drug1"\t"drug2"\t"precipitant"\t"enzyme"\t"particitants"\t"participants text"\t"drug1 dose"\t"drug1 formulation"\t"drug1 duration"\t"drug1 regimens"\t"drug1 dose text"\t"drug2 dose"\t"drug2 formulation"\t"drug2 duration"\t"drug2 regimens"\t"drug2 dose text"\t"auc"\t"auc type"\t"auc direction"\t"auc text"\t"cmax"\t"cmax type"\t"cmax direction"\t"cmax text"\t"cl"\t"cl type"\t"cl direction"\t"cl text"\t"halflife"\t"halflife type"\t"halflife direction"\t"halflife text"\n';
+                var csvTxt = '"document"\t"claim label"\t"claim text"\t"method"\t"group randomization"\t"parallel group design"\t"pharmacokinetic processes"\t"relationship"\t"drug1"\t"drug2"\t"precipitant"\t"enzyme"\t"participants"\t"participants text"\t"drug1 dose"\t"drug1 formulation"\t"drug1 duration"\t"drug1 regimens"\t"drug1 dose text"\t"drug2 dose"\t"drug2 formulation"\t"drug2 duration"\t"drug2 regimens"\t"drug2 dose text"\t"auc"\t"auc type"\t"auc direction"\t"auc text"\t"cmax"\t"cmax type"\t"cmax direction"\t"cmax text"\t"cl"\t"cl type"\t"cl direction"\t"cl text"\t"halflife"\t"halflife type"\t"halflife direction"\t"halflife text"\n';
 
                 for (var i = 0; i < jsonObjs.length; i++) {
                     jsonObj = jsonObjs[i];
                     claim = jsonObj.argues;
                     dataL = claim.supportsBy;                   
 
+                    var line = '"' + jsonObj.rawurl + '"\t"' + claim.label + '"\t"' + claim.hasTarget.hasSelector.exact + '"\t"' + claim.method + '"\t"' + (claim.grouprandom || '') + '"\t"' + (claim.parallelgroup || '') + '"\t"' + (claim.pkprocess || '') + '"\t"' + claim.qualifiedBy.relationship + '"\t"' + claim.qualifiedBy.drug1 + '"\t"' + claim.qualifiedBy.drug2 + '"\t"' + (claim.qualifiedBy.precipitant || '') + '"\t"' + (claim.qualifiedBy.enzyme || '' ) + '"';
+
                     for (var j = 0; j < dataL.length; j ++) {
                         data = dataL[j];
                         method = data.supportsBy;
                         material = method.supportsBy;
 
-                        var line = '"' + jsonObj.rawurl + '"\t"' + claim.label + '"\t"' + claim.hasTarget.hasSelector.exact + '"\t"' + claim.method + '"\t"' + claim.qualifiedBy.relationship + '"\t"' + claim.qualifiedBy.drug1 + '"\t"' + claim.qualifiedBy.drug2 + '"\t"' + claim.qualifiedBy.precipitant + '"\t"' + claim.qualifiedBy.enzyme + '"';
                         if (material.participants != null)
-                            line += '\t"' + material.participants.value + '"\t"' + getSpanFromField(material.participants) + '"';
+                            line += '\t"' + (material.participants.value || '') + '"\t"' + (getSpanFromField(material.participants) || '') + '"';
                         else 
                             line += '\t\t';
+
                         if (material.drug1Dose != null) 
-                            line += '\t"' + material.drug1Dose.value + '"\t"' + material.drug1Dose.formulation + '"\t"'  + material.drug1Dose.duration + '"\t"' + material.drug1Dose.regimens + '"\t"' + getSpanFromField(material.drug1Dose) + '"';
+                            line += '\t"' + (material.drug1Dose.value || '') + '"\t"' + (material.drug1Dose.formulation || '') + '"\t"'  + (material.drug1Dose.duration || '') + '"\t"' + (material.drug1Dose.regimens || '') + '"\t"' + (getSpanFromField(material.drug1Dose) || '') + '"';
                         else 
                             line += '\t\t\t\t';
+
                         if (material.drug2Dose != null) 
-                            line += '\t"' + material.drug2Dose.value + '"\t"' + material.drug2Dose.formulation + '"\t"' + material.drug2Dose.duration + '"\t"' + material.drug2Dose.regimens + '"\t"'  + getSpanFromField(material.drug2Dose) + '"';
+                            line += '\t"' + (material.drug2Dose.value || '') + '"\t"' + (material.drug2Dose.formulation || '') + '"\t"'  + (material.drug2Dose.duration || '') + '"\t"' + (material.drug2Dose.regimens || '') + '"\t"' + (getSpanFromField(material.drug2Dose) || '') + '"';
                         else 
                             line += '\t\t\t\t';
 
@@ -218,12 +221,12 @@ module.exports = function(app, passport) {
                         for (p = 0; p < dataFieldsL.length; p++) {
                             field = dataFieldsL[p];
                             if (data[field] != null)    
-                                line += '\t"' + data[field].value + '"\t"' + data[field].direction + '"\t"' + data[field].type + '"\t"' + getSpanFromField(data[field]) + '"' 
+                                line += '\t"' + (data[field].value || '') + '"\t"' + (data[field].direction || '') + '"\t"' + (data[field].type || '') + '"\t"' + (getSpanFromField(data[field]) || '') + '"' 
                             else 
                                 line += '\t\t\t\t';
-                        }
-                        csvTxt += line + "\n";
+                        }                        
                     }
+                    csvTxt += line + "\n";
                 }
 
 		        res.attachment('annotations-'+req.query.email+'.csv');
@@ -244,7 +247,7 @@ function getSpanFromField(field) {
         if (field.hasTarget.hasSelector !=null) 
             return field.hasTarget.hasSelector.exact;
     } else {
-        return "undefined";
+        return "";
     }
 }
 
