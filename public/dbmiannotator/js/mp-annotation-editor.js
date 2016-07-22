@@ -81,6 +81,8 @@ function showEnzyme() {
         $("#enzyme")[0].selectedIndex = 0;
         $("#enzymesection1").show();
         $("#enzyme").show();
+
+        $('input[name=precipitant]').prop('checked', false);
         $('input[type=radio][name=precipitant]').hide();
         $('.precipitantLabel').hide();
     }
