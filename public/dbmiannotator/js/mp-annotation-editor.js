@@ -287,3 +287,9 @@ function scrollToAnnotation(annotationId, fieldName, dataNum) {
         document.getElementById(divId).scrollIntoView(true);
 }
 
+// unselect study type questions 
+function clearStudyTypeQuestions() {
+    $('input[name=grouprandom]').prop('checked', false);
+    $('input[name=parallelgroup]').prop('checked', false);
+    $('input[name=pkprocess]').prop('checked', false);
+}
