@@ -34,9 +34,6 @@
      },
      // put method name here
      'method' : '',
-     'grouprandom' : 'yes or no',
-     'parallelgroup' : 'yes or no',
-     'pkprocess' : 'yes or no',
      // mp:data (one or more mp:data supports claim)
      'supportsBy': 
      [
@@ -68,7 +65,10 @@
                  }
              },            
              // evidence relationship - supports/refutes
-             'evRelationship': '',             
+             'evRelationship': '',   
+             'grouprandom' : 'yes or no',
+             'parallelgroup' : 'yes or no',
+             'pkprocess' : 'yes or no',          
              // data attributes
              'auc': {
                  'value': 'numeric',

@@ -15,7 +15,7 @@ function claimEditorLoad() {
     $("#mp-data-form-cmax").hide();
     $("#mp-data-form-clearance").hide();
     $("#mp-data-form-halflife").hide();
-
+    $("#mp-data-form-question").hide();
 }
 
 // scroll to the claim text span
@@ -120,11 +120,11 @@ function addDataCellByEditor(field, dataNum, isNewData) {
     $("#claim-label-data-editor").show();
 
     // return if no text selection 
-    if (!isTextSelected && field != "evRelationship") {
+    if (!isTextSelected && field != "evRelationship" && field != "question") {
         warnSelectTextSpan(field);
     } else {
         // hide data fields navigation if editing evidence relationship 
-        if (field == "evRelationship") {
+        if (field == "evRelationship" || field == "question") {
             $("#mp-data-nav").hide();
             $(".annotator-save").hide();
         } else {
@@ -157,7 +157,7 @@ function addDataCellByEditor(field, dataNum, isNewData) {
                     // add data if not avaliable  
                     if (annotation.argues.supportsBy.length == 0 || isNewData){ 
 
-                        var data = {type : "mp:data", evRelationship: {}, auc : {}, cmax : {}, clearance : {}, halflife : {}, supportsBy : {type : "mp:method", supportsBy : {type : "mp:material", participants : {}, drug1Dose : {}, drug2Dose : {}}}};
+                        var data = {type : "mp:data", evRelationship: "", auc : {}, cmax : {}, clearance : {}, halflife : {}, supportsBy : {type : "mp:method", supportsBy : {type : "mp:material", participants : {}, drug1Dose : {}, drug2Dose : {}}}, grouprandom: "", parallelgroup: "", pkprocess: ""};
                         annotation.argues.supportsBy.push(data); 
                     } 
                     
@@ -179,7 +179,7 @@ function editDataCellByEditor(field, dataNum) {
     $('#quote').hide();
     
     // hide data fields navigation if editing evidence relationship 
-    if (field == "evRelationship") {
+    if (field == "evRelationship" || field == "question") {
         $("#mp-data-nav").hide();
         $(".annotator-save").hide();
     } else {
@@ -235,12 +235,12 @@ function switchDataForm(field, isNotNeedValid) {
         return;
 
     // pop up warn for selecting span when switch to new field dring editing mode
-    if (!isTextSelected && field != "evRelationship" && quoteF == "" && !isNotNeedValid) {
+    if (!isTextSelected && (field != "evRelationship" || field != "question") && quoteF == "" && !isNotNeedValid) {
         warnSelectTextSpan(field);
         return;
     } 
 
-    fieldM = {"evRelationship":"evRelationship","participants":"participants","dose1":"drug1Dose","dose2":"drug2Dose","auc":"auc","cmax":"cmax","clearance":"clearance","halflife":"halflife"};
+    fieldM = {"evRelationship":"evRelationship", "participants":"participants", "dose1":"drug1Dose", "dose2":"drug2Dose", "auc":"auc", "cmax":"cmax", "clearance":"clearance", "halflife":"halflife", "question":"question"};
     
     if (field == null) 
         field = "participants";
