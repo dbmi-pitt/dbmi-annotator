@@ -79,10 +79,16 @@ function updateClaimAndData(annotations, annotationId) {
     claimPanel = "<table id='mp-claim-method-tb'>";
     claimPanel += "<tr><td>" + claimListbox + "</td></tr>";
     claimPanel += "<tr><td>Methods: " + methodListbox + "</td></tr>"
-    claimPanel += "<tr><td><button id='edit-claim-btn' type='button' onclick='editClaim()'>Edit Claim</button>&nbsp;&nbsp;<button id='view-claim-btn' type='button' onclick='viewClaim()'>View Claim</button></td></tr></table>";
+
+    // claimPanel += "<tr><td><button id='edit-claim-btn' type='button' onclick='editClaim()'>Edit Claim</button>&nbsp;&nbsp;<button id='view-claim-btn' type='button' onclick='viewClaim()'>View Claim</button></td></tr></table>";
+    
+    // // Data & Material - add new data button 
+    // dataPanel = "<button id='add-new-data-row-btn' type='button' onclick='addNewDataRow()' style='float: right;'>add new data & material</button>" + dataTable;
+
+    claimPanel += "<tr><td><button id='edit-claim-btn' type='button' onclick='editClaim()' style='float:left; font-size:13px'>Edit Claim</button><button id='view-claim-btn' type='button' onclick='viewClaim()' style='float: right; font-size:13px'>View Claim</button></td></tr></table>";
     
     // Data & Material - add new data button 
-    dataPanel = "<button id='add-new-data-row-btn' type='button' onclick='addNewDataRow()' style='float: right;'>add new data & material</button>" + dataTable;
+    dataPanel = "<button id='add-new-data-row-btn' type='button' onclick='addNewDataRow()' style='float: right; font-size:13px'>add new data & material</button>" + dataTable;
     
     // Annotation table
     annTable = "<table id='mp-claim-data-tb'>" +
