@@ -18,8 +18,16 @@
     
 
       <!-- dialog for selecting text to begin with create claim/data -->
-      <div id="dialog-select-text-for-data" title="Warning" style="display: none;">
-        <p>Please select text span for the data field!</p>
+      <div id="dialog-select-text-for-data" class="dialog-background" style="display: none;">
+        <div class="dialog-content">
+          <div class="modal-header">
+            <span id="select-text-dialog-close" class="close">×</span>
+            <strong>Warning</strong>
+          </div>
+          <div class="modal-body">
+            <strong>Please select text span for the data field!</strong>
+          </div>
+        </div>
       </div>
 
       <!-- dialog for options when creating claim -->
@@ -72,11 +80,34 @@
         </div>
       </div>
 
-      
-      <div id="dialog-claim-delete-confirm" title="Delete Confirmation" style="display: none;"> <p> Delete claim will trancate all data & material assigned on it! </p>
+      <!-- dialog for warn that this claim will be deleted-->
+      <div id="dialog-claim-delete-confirm" class="dialog-background" style="display: none;">
+        <div class="dialog-content">
+          <div class="modal-header">
+            <span id="claim-delete-dialog-close" class="close">×</span>
+            <strong>Delete Confirmation</strong>
+          </div>
+          <div class="modal-body">
+            <p><strong> Delete claim will trancate all data & material assigned on it! </strong></p>
+            <button id="claim-delete-confirm-btn">Confirm</button>&nbsp;&nbsp;
+            <button id="claim-delete-cancel-btn">Cancel</button>
+          </div>
+        </div>
       </div>
 
-      <div id="dialog-data-delete-confirm" title="Delete Confirmation" style="display: none;"> <p> Delete data & material item? </p>
+      <!-- dialog for warn that this data will be deleted-->
+      <div id="dialog-data-delete-confirm" class="dialog-background" style="display: none;">
+        <div class="dialog-content">
+          <div class="modal-header">
+            <span id="data-delete-dialog-close" class="close">×</span>
+            <strong>Delete Confirmation</strong>
+          </div>
+          <div class="modal-body">
+            <p><strong> Delete data & material item? </strong></p>
+            <button id="data-delete-confirm-btn">Confirm</button>&nbsp;&nbsp;
+            <button id="data-delete-cancel-btn">Cancel</button>
+          </div>
+        </div>
       </div>
       
       <div id='splitter'>
