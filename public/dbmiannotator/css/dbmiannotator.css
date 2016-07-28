@@ -241,6 +241,7 @@ ul.mp-sub-menu-2{
 #mp-claim-data-tb{
     margin-left: 15%;
     margin-right: 15%;
+    margin-bottom: 5%;
     width: 70%;
     height: 80%;
     font-size: 15px;
@@ -281,14 +282,16 @@ ul.mp-sub-menu-2{
 
 /* method option for claim panel */
 #mp-editor-method {
-  font-size: 16px;
+  font-size: 14px;
   width: 70%;
+  color: black;
 }
 
 /*claim options for claim panel */
 #mp-editor-claim-list {
-  font-size: 16px;
+  font-size: 14px;
   width: 97%;
+  color: black;
 }
 
 /* annotation editor */
