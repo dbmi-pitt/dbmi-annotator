@@ -126,6 +126,11 @@ h1 {
   width: 43x;
   z-index: 999;
 }
+
+/*remove the button border in Chrome*/
+button:focus{
+  outline: 0 !important;
+}
 /*
 .btn-success {
   // Add .button-inline class for inline-block display
@@ -150,24 +155,20 @@ h1 {
     padding:3px 5px 5px 3px; 
     border: 2px #336699 solid;
     position:relative;
-    left: 25px;
-    top: -40px;
     font-size: 11px;
     font-weight: bold;
     font-style: "Trebuchet MS", Arial, sans-serif;
     background-color: white;
 }
 
+/*add data for */
 .mp-main-menu-2 {
     display:block; 
     list-style: none;
     cursor:pointer; 
     padding:3px 5px 5px 3px; 
-    border:2px #336699 solid;
-    border-top: none;
+    border: 2px #336699 solid;
     position:relative;
-    left: 25px;
-    top: -40px;
     font-size: 11px;
     font-weight: bold;
     font-style: "Trebuchet MS", Arial, sans-serif;
@@ -176,56 +177,67 @@ h1 {
 
 /* The container <div> - needed to position the dropdown content*/
 .mp-main-menu {
-    position: relative;
+    position: absolute;
+    top: 5%;
+    left: 5%;
     display: block;
     min-width: 85px;
     min-height: 40px;
     text-align: center;
     list-style: none;
+    color: black;
 }
-/* Dropdown Content (Hidden by Default) 
+/* add matertal/data -link*/
 .mp-sub-menu-2 {
     display: none;
     position: absolute;
-    background-color: #f9f9f9;
     min-width: 100px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    left: 43px;
+    top:-20%;
+    color: black;
+    font-family: "Trebuchet MS", Arial, sans-serif;
+    font-size: 11px;
+    font-weight: bold;
+
 }
-*/
+
 /* Links inside the dropdown */
 .mp-sub-menu-2 a {
-    color: #336699;
+    color: black;
     font-size: 10px;
     border: 2px #336699 solid;
-    border-left: none;
-    font-family: "Trebuchet MS", Arial, sans-serif;
     padding:5px 4px 3px 0px; 
-    left: 40px;
-    top: -12px;
     background-color: white;
     display: block;
     text-decoration: none;
-    position: relative;
-    min-width: 110px;
+    min-width: 140px;
     min-height: 10px;
     text-align: left;
     list-style: none;
 }
 
-/* Change color of dropdown links on hover */
-.mp-sub-menu-2 a:hover {background-color: #f1f1f1}
 
-/* Show the dropdown menu on hover */
+/* Change color of dropdown links on hover 
+.mp-sub-menu-2 a:hover {background-color: #f1f1f1} */
+
+/* Show the dropdown menu on hover 
 .mp-main-menu:hover .mp-sub-menu-2 {
     display: block;
+} */
+
+/* remove the circle list style */
+ul.mp-sub-menu-2{
+  list-style-type: none;
 }
+
+
 
 /* Change the background color of the dropdown button when the dropdown content is shown 
 .mp-main-menu:hover {
     background-color: #3e8e41;
 }*/
 
-/* annotator table */
+/* annotator table - material/data panel */
 #mp-claim-data-tb{
     margin-left: 15%;
     margin-right: 15%;
@@ -251,7 +263,7 @@ h1 {
     border: 2px solid #D4E0EE;
 }
 
-/* annotator claim pannel */
+/* annotator table - claim pannel */
 #mp-claim-method-tb{
 
    width: 100%;
@@ -260,7 +272,6 @@ h1 {
    font-size: 14px;
    border-collapse: collapse;
    border-style: hidden;
-
 }
 
 #mp-claim-tb tr, td{
@@ -268,11 +279,17 @@ h1 {
   padding:10px;
 }
 
-.option{
-  font-family: "Trebuchet MS", Arial, sans-serif;
-  font-size: 8px;
+/* method option for claim panel */
+#mp-editor-method {
+  font-size: 16px;
+  width: 70%;
 }
 
+/*claim options for claim panel */
+#mp-editor-claim-list {
+  font-size: 16px;
+  width: 97%;
+}
 
 /* annotation editor */
 #tabs-2 {
@@ -285,7 +302,6 @@ h1 {
 }
 
 #tabs-1{
-  margin-left: 5%;
   text-align: center;
   font-size: 12px;
   font-family: "Trebuchet MS", Arial, sans-serif;
@@ -302,4 +318,5 @@ h1 {
   font-size: 12px;
   margin-right: 70px;
 }
+
 

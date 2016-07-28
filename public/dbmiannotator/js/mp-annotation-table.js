@@ -16,12 +16,13 @@ function annotationTable(sourceURL, email, sortByColumn){
             method: 'GET',
             error : function(jqXHR, exception){
                 console.log(exception);
-		console.log(jqXHR);
+		        console.log(jqXHR);
             },
             success : function(response){
-
+                
                 // ann Id for selected claim, if null, set first claim as default 
-                if (currAnnotationId == null || currAnnotationId.trim() == "") {         
+                if (currAnnotationId == null || currAnnotationId.trim() == "") { 
+                    console.log("TESTING: " + response.total);
                     if (response.total > 0){
                         currAnnotationId = response.rows[0].id;
                     }
@@ -78,10 +79,16 @@ function updateClaimAndData(annotations, annotationId) {
     claimPanel = "<table id='mp-claim-method-tb'>";
     claimPanel += "<tr><td>" + claimListbox + "</td></tr>";
     claimPanel += "<tr><td>Methods: " + methodListbox + "</td></tr>"
-    claimPanel += "<tr><td><button type='button' onclick='editClaim()'>Edit Claim</button>&nbsp;&nbsp;<button type='button' onclick='viewClaim()'>View Claim</button></td></tr></table>";
+
+    // claimPanel += "<tr><td><button id='edit-claim-btn' type='button' onclick='editClaim()'>Edit Claim</button>&nbsp;&nbsp;<button id='view-claim-btn' type='button' onclick='viewClaim()'>View Claim</button></td></tr></table>";
+    
+    // // Data & Material - add new data button 
+    // dataPanel = "<button id='add-new-data-row-btn' type='button' onclick='addNewDataRow()' style='float: right;'>add new data & material</button>" + dataTable;
+
+    claimPanel += "<tr><td><button id='edit-claim-btn' type='button' onclick='editClaim()' style='float:left; font-size:13px'>Edit Claim</button><button id='view-claim-btn' type='button' onclick='viewClaim()' style='float: right; font-size:13px'>View Claim</button></td></tr></table>";
     
     // Data & Material - add new data button 
-    dataPanel = "<button type='button' onclick='addNewDataRow()' style='float: right;'>add new data & material</button>" + dataTable;
+    dataPanel = "<button id='add-new-data-row-btn' type='button' onclick='addNewDataRow()' style='float: right; font-size:13px'>add new data & material</button>" + dataTable;
     
     // Annotation table
     annTable = "<table id='mp-claim-data-tb'>" +
@@ -98,7 +105,19 @@ function updateClaimAndData(annotations, annotationId) {
     // update claim options in dialog
     $( "#dialog-claim-options" ).html(dialogClaimListbox);
 
-    console.log("claim menu updated!");
+    if (annotations.length > 0) {
+        $('#edit-claim-btn').show();
+        $('#view-claim-btn').show();
+        $('#mp-editor-method').show();
+        $('#add-new-data-row-btn').show();
+        $('#mp-editor-claim-list').show();
+    } else {
+        $('#edit-claim-btn').hide();                        
+        $('#view-claim-btn').hide();
+        $('#mp-editor-method').hide();
+        $('#add-new-data-row-btn').hide();
+        $('#mp-editor-claim-list').hide();
+    }
 }
 
 // append new row of data & material in annotation table
@@ -131,7 +150,7 @@ function createDataTable(annotation){
             drugname2 += " (precipitant)";
     }
 
-    dataTable = "<table id='mp-data-tb'><tr><td>Ev Relationship</td><td>No. of Participants</td><td><div>" + drugname1 + " Dose</div></td><td>" + drugname2 + " Dose</td><td>AUC ratio</td><td>Cmax</td><td>Clearance</td><td>Half-life</td></tr>";
+    dataTable = "<table id='mp-data-tb'><tr><td>Ev Relationship</td><td>No. of Participants</td><td><div>" + drugname1 + " Dose</div></td><td>" + drugname2 + " Dose</td><td>AUC ratio</td><td>Cmax</td><td>Clearance</td><td>Half-life</td><td>randomization</td><td>parallel design</td><td>PK process</td></tr>";
 
     annotationId = annotation.id;
     dataL = annotation.argues.supportsBy;
@@ -184,11 +203,26 @@ function createDataTable(annotation){
             else 
                 row += "<td onclick='addDataCellByEditor(\"halflife\",\""+dataNum+"\");'></td>"; 
 
+            if (data.grouprandom != null)
+                row += "<td onclick='editDataCellByEditor(\"question\",\""+dataNum+"\");'>" + data.grouprandom + "</td>";
+            else 
+                row += "<td onclick='addDataCellByEditor(\"question\",\""+dataNum+"\");'></td>"; 
+
+            if (data.parallelgroup != null)
+                row += "<td onclick='editDataCellByEditor(\"question\",\""+dataNum+"\");'>" + data.parallelgroup + "</td>";
+            else 
+                row += "<td onclick='addDataCellByEditor(\"question\",\""+dataNum+"\");'></td>"; 
+
+            if (data.pkprocess != null)
+                row += "<td onclick='editDataCellByEditor(\"question\",\""+dataNum+"\");'>" + data.pkprocess + "</td>";
+            else 
+                row += "<td onclick='addDataCellByEditor(\"question\",\""+dataNum+"\");'></td>"; 
+
             row += "</tr>";
             dataTable += row;
         }
     } else { // add empty row
-        dataTable += "<tr style='height:20px;'><td onclick='addDataCellByEditor(\"evRelationship\",0);'></td><td onclick='addDataCellByEditor(\"participants\",0);'></td><td onclick='addDataCellByEditor(\"dose1\",0);'> </td><td onclick='addDataCellByEditor(\"dose2\",0);'></td><td onclick='addDataCellByEditor(\"auc\",0);'></td><td onclick='addDataCellByEditor(\"cmax\",0);'></td><td onclick='addDataCellByEditor(\"clearance\",0);'></td><td onclick='addDataCellByEditor(\"halflife\",0);'></td></tr>";
+        dataTable += "<tr style='height:20px;'><td onclick='addDataCellByEditor(\"evRelationship\",0);'></td><td onclick='addDataCellByEditor(\"participants\",0);'></td><td onclick='addDataCellByEditor(\"dose1\",0);'> </td><td onclick='addDataCellByEditor(\"dose2\",0);'></td><td onclick='addDataCellByEditor(\"auc\",0);'></td><td onclick='addDataCellByEditor(\"cmax\",0);'></td><td onclick='addDataCellByEditor(\"clearance\",0);'></td><td onclick='addDataCellByEditor(\"halflife\",0);'></td><td onclick='addDataCellByEditor(\"question\",0);'></td><td onclick='addDataCellByEditor(\"question\",0);'></td><td onclick='addDataCellByEditor(\"question\",0);'></td>";
     }
     dataTable += "</table>";
     return dataTable;
