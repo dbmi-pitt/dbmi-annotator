@@ -79,12 +79,7 @@ function updateClaimAndData(annotations, annotationId) {
     claimPanel = "<table id='mp-claim-method-tb'>";
     claimPanel += "<tr><td>" + claimListbox + "</td></tr>";
     claimPanel += "<tr><td>Methods: " + methodListbox + "</td></tr>"
-
-    // claimPanel += "<tr><td><button id='edit-claim-btn' type='button' onclick='editClaim()'>Edit Claim</button>&nbsp;&nbsp;<button id='view-claim-btn' type='button' onclick='viewClaim()'>View Claim</button></td></tr></table>";
     
-    // // Data & Material - add new data button 
-    // dataPanel = "<button id='add-new-data-row-btn' type='button' onclick='addNewDataRow()' style='float: right;'>add new data & material</button>" + dataTable;
-
     claimPanel += "<tr><td><button id='edit-claim-btn' type='button' onclick='editClaim()' style='float:left; font-size:13px'>Edit Claim</button><button id='view-claim-btn' type='button' onclick='viewClaim()' style='float: right; font-size:13px'>View Claim</button></td></tr></table>";
     
     // Data & Material - add new data button 
@@ -131,7 +126,7 @@ function addNewDataRow() {
     totalDataNum += 1;
     dataNumLast = totalDataNum - 1;
 
-    $('#mp-data-tb tr:last').after("<tr style='height:20px;'><td onclick='addDataCellByEditor(\"evRelationship\"," + dataNumLast + ", true);'></td><td onclick='addDataCellByEditor(\"participants\"," + dataNumLast + ", true);'> </td><td onclick='addDataCellByEditor(\"dose1\"," + dataNumLast + ", true);'> </td><td onclick='addDataCellByEditor(\"dose2\"," + dataNumLast + ", true);'></td><td onclick='addDataCellByEditor(\"auc\"," + dataNumLast + ", true);'></td><td onclick='addDataCellByEditor(\"cmax\"," + dataNumLast + ", true);'></td><td onclick='addDataCellByEditor(\"clearance\"," + dataNumLast + ", true);'></td><td onclick='addDataCellByEditor(\"halflife\"," + dataNumLast + ", true);'></td></tr>");
+    $('#mp-data-tb tr:last').after("<tr style='height:20px;'><td onclick='addDataCellByEditor(\"evRelationship\"," + dataNumLast + ", true);'></td><td onclick='addDataCellByEditor(\"participants\"," + dataNumLast + ", true);'> </td><td onclick='addDataCellByEditor(\"dose1\"," + dataNumLast + ", true);'> </td><td onclick='addDataCellByEditor(\"dose2\"," + dataNumLast + ", true);'></td><td onclick='addDataCellByEditor(\"auc\"," + dataNumLast + ", true);'></td><td onclick='addDataCellByEditor(\"cmax\"," + dataNumLast + ", true);'></td><td onclick='addDataCellByEditor(\"clearance\"," + dataNumLast + ", true);'></td><td onclick='addDataCellByEditor(\"halflife\"," + dataNumLast + ", true);'><td onclick='addDataCellByEditor(\"question\"," + dataNumLast + ", true);'></td><td onclick='addDataCellByEditor(\"question\"," + dataNumLast + ", true);'></td></tr>");
 }
 
 
@@ -150,7 +145,7 @@ function createDataTable(annotation){
             drugname2 += " (precipitant)";
     }
 
-    dataTable = "<table id='mp-data-tb'><tr><td>Ev Relationship</td><td>No. of Participants</td><td><div>" + drugname1 + " Dose</div></td><td>" + drugname2 + " Dose</td><td>AUC ratio</td><td>Cmax</td><td>Clearance</td><td>Half-life</td><td>randomization</td><td>parallel design</td><td>PK process</td></tr>";
+    dataTable = "<table id='mp-data-tb'><tr><td>Ev Relationship</td><td>No. of Participants</td><td><div>" + drugname1 + " Dose</div></td><td>" + drugname2 + " Dose</td><td>AUC ratio</td><td>Cmax</td><td>Clearance</td><td>Half-life</td><td>randomization</td><td>parallel design</td></tr>";
 
     annotationId = annotation.id;
     dataL = annotation.argues.supportsBy;
@@ -210,11 +205,6 @@ function createDataTable(annotation){
 
             if (data.parallelgroup != null)
                 row += "<td onclick='editDataCellByEditor(\"question\",\""+dataNum+"\");'>" + data.parallelgroup + "</td>";
-            else 
-                row += "<td onclick='addDataCellByEditor(\"question\",\""+dataNum+"\");'></td>"; 
-
-            if (data.pkprocess != null)
-                row += "<td onclick='editDataCellByEditor(\"question\",\""+dataNum+"\");'>" + data.pkprocess + "</td>";
             else 
                 row += "<td onclick='addDataCellByEditor(\"question\",\""+dataNum+"\");'></td>"; 
 

@@ -157,7 +157,7 @@ function addDataCellByEditor(field, dataNum, isNewData) {
                     // add data if not avaliable  
                     if (annotation.argues.supportsBy.length == 0 || isNewData){ 
 
-                        var data = {type : "mp:data", evRelationship: "", auc : {}, cmax : {}, clearance : {}, halflife : {}, supportsBy : {type : "mp:method", supportsBy : {type : "mp:material", participants : {}, drug1Dose : {}, drug2Dose : {}}}, grouprandom: "", parallelgroup: "", pkprocess: ""};
+                        var data = {type : "mp:data", evRelationship: "", auc : {}, cmax : {}, clearance : {}, halflife : {}, supportsBy : {type : "mp:method", supportsBy : {type : "mp:material", participants : {}, drug1Dose : {}, drug2Dose : {}}}, grouprandom: "", parallelgroup: ""};
                         annotation.argues.supportsBy.push(data); 
                     } 
                     
@@ -291,5 +291,4 @@ function scrollToAnnotation(annotationId, fieldName, dataNum) {
 function clearStudyTypeQuestions() {
     $('input[name=grouprandom]').prop('checked', false);
     $('input[name=parallelgroup]').prop('checked', false);
-    $('input[name=pkprocess]').prop('checked', false);
 }
