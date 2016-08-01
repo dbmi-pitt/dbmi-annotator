@@ -67,8 +67,7 @@
              // evidence relationship - supports/refutes
              'evRelationship': '',   
              'grouprandom' : 'yes or no',
-             'parallelgroup' : 'yes or no',
-             'pkprocess' : 'yes or no',          
+             'parallelgroup' : 'yes or no',      
              // data attributes
              'auc': {
                  'value': 'numeric',
