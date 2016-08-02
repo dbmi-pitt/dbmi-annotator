@@ -115,7 +115,7 @@ function claimSelectedInMenu(annotationId) {
 function addDataCellByEditor(field, dataNum, isNewData) {
 
     var annotationId = $('#mp-editor-claim-list option:selected').val();
-    console.log("addDataCellByEditor - id: " + annotationId + " | data: " + dataNum + " | field: " + field);
+    //console.log("addDataCellByEditor - id: " + annotationId + " | data: " + dataNum + " | field: " + field);
 
     $("#claim-label-data-editor").show();
 
@@ -187,7 +187,7 @@ function editDataCellByEditor(field, dataNum) {
     }
 
     var annotationId = $('#mp-editor-claim-list option:selected').val();
-    console.log("editDataCellByEditor - id: " + annotationId + " | data: " + dataNum + " | field: " + field);
+    //console.log("editDataCellByEditor - id: " + annotationId + " | data: " + dataNum + " | field: " + field);
     
     // cached editing data cell
     currAnnotationId = annotationId;

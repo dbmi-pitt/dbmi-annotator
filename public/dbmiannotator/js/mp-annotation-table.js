@@ -22,7 +22,7 @@ function annotationTable(sourceURL, email, sortByColumn){
                 
                 // ann Id for selected claim, if null, set first claim as default 
                 if (currAnnotationId == null || currAnnotationId.trim() == "") { 
-                    console.log("TESTING: " + response.total);
+                    //console.log("TESTING: " + response.total);
                     if (response.total > 0){
                         currAnnotationId = response.rows[0].id;
                     }
@@ -53,7 +53,7 @@ function updateClaimAndData(annotations, annotationId) {
 
         var claimIsSelected = "";
         if (annotationId == annotation.id) {
-            console.log("mp selected: " + annotation.argues.label);
+            //console.log("mp selected: " + annotation.argues.label);
             claimIsSelected = 'selected="selected"';     
             // cache total number of data & material for current claim
             totalDataNum = annotation.argues.supportsBy.length;      
@@ -225,7 +225,7 @@ function changeClaimInAnnoTable() {
 
     var idFromAnnTable = $('#mp-editor-claim-list option:selected').val();
 
-    console.log($('#mp-editor-claim-list option:selected').val());
+    //console.log($('#mp-editor-claim-list option:selected').val());
 
     var idFromDialog = $('#dialog-claim-options option:selected').val();
     var newAnnotationId = idFromAnnTable;
@@ -238,7 +238,7 @@ function changeClaimInAnnoTable() {
     }
 
 
-    console.log("table - claim changed to :" + newAnnotationId);
+    //console.log("table - claim changed to :" + newAnnotationId);
     currAnnotationId = newAnnotationId;
 
     sourceURL = getURLParameter("sourceURL").trim();
@@ -271,7 +271,7 @@ function changeClaimInDialog() {
             if (this.value === newAnnotationId) $(this).prop('selected', true);
         });    
 
-    console.log("dialog - claim changed to :" + newAnnotationId);
+    //console.log("dialog - claim changed to :" + newAnnotationId);
     currAnnotationId = newAnnotationId;
 
     sourceURL = getURLParameter("sourceURL").trim();
