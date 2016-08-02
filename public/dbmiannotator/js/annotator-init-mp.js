@@ -18,6 +18,7 @@ if (typeof annotator === 'undefined') {
 
     // global variables for tracking specific data item
     var currAnnotationId = "";
+    var currAnnotation = undefined;
     var currDataNum = "";
     var totalDataNum = "";
     var currFormType = "";
@@ -120,6 +121,7 @@ function selectDrug() {
     quotestring = quotestring.split("id=\""+drug2ID+"\" class=\"annotator-hl\"").join("class=\"highlightdrug\" id=\""+drug2ID+"\"");
     $("#quote").html(quotestring);
 }
+
 
 
 function getURLParameter(name) {

@@ -104,6 +104,8 @@ function annotationPanelClick(){
         if (!warnUnsavedDialog())
             return;
 
+        undrawCurrhighlighter();
+
         $('#splitter').jqxSplitter({
             showSplitBar:false,
             width: '100%',
