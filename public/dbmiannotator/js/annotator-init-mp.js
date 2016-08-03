@@ -101,6 +101,17 @@ if (typeof annotator === 'undefined') {
                      });
 }
 
+var $wait = $('#wait').hide();
+          $(document)
+            .ajaxStart(function () {
+              $wait.show();
+            })
+            .ajaxStop(function () {
+              $wait.hide();
+            });
+
+
+
 //highlight drugs in quote dynamicly  
 //moved from mp-annotation-editor                      
 $("#Drug1").change(function (){selectDrug();});
