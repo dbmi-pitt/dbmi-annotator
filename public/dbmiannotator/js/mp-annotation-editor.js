@@ -245,7 +245,8 @@ function switchDataForm(field, isNotNeedValid) {
     if (field == null) 
         field = "participants";
 
-    currDataField = field;
+    
+    currFormType = field;
     
     if (field != "evRelationship")
         $("#mp-data-nav").show();
