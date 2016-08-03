@@ -115,7 +115,7 @@ function claimSelectedInMenu(annotationId) {
 function addDataCellByEditor(field, dataNum, isNewData) {
 
     var annotationId = $('#mp-editor-claim-list option:selected').val();
-    //console.log("addDataCellByEditor - id: " + annotationId + " | data: " + dataNum + " | field: " + field);
+    console.log("addDataCellByEditor - id: " + annotationId + " | data: " + dataNum + " | field: " + field);
 
     $("#claim-label-data-editor").show();
 
@@ -143,10 +143,11 @@ function addDataCellByEditor(field, dataNum, isNewData) {
         
         // updating current MP annotation
         if (annotationId != null)
-            currAnnotationId = annotationId;
-        
-        switchDataForm(field);       
-        
+            currAnnotationId = annotationId;     
+
+        //switchDataForm(field);        
+        preDataForm(field);
+
         $.ajax({url: "http://" + config.annotator.host + "/annotatorstore/annotations/" + annotationId,
                 data: {},
                 method: 'GET',
@@ -163,7 +164,8 @@ function addDataCellByEditor(field, dataNum, isNewData) {
                     
                     // call AnnotatorJs editor for update    
                     app.annotations.update(annotation);
-                }    
+  
+                }                 
                });
         }
 }
@@ -187,7 +189,7 @@ function editDataCellByEditor(field, dataNum) {
     }
 
     var annotationId = $('#mp-editor-claim-list option:selected').val();
-    //console.log("editDataCellByEditor - id: " + annotationId + " | data: " + dataNum + " | field: " + field);
+    console.log("editDataCellByEditor - id: " + annotationId + " | data: " + dataNum + " | field: " + field);
     
     // cached editing data cell
     currAnnotationId = annotationId;
@@ -209,11 +211,9 @@ function editDataCellByEditor(field, dataNum) {
                 if (annotationId != null)
                     currAnnotationId = annotationId;
                 
-                switchDataForm(field, true);
-                // load quote for data field
-                // if (cachedOATarget.hasSelector != null)
-                //     $("#" + field + "quote").html(cachedOATarget.hasSelector.exact);
-                
+                //switchDataForm(field, true);
+                preDataForm(field, true);
+
                 // show delete button
                 data = annotation.argues.supportsBy[dataNum];
                 material = data.supportsBy.supportsBy;
@@ -227,58 +227,86 @@ function editDataCellByEditor(field, dataNum) {
 }
 
 
-// open data editor with specific form
-function switchDataForm(field, isNotNeedValid) {
-    quoteF = $('#'+field+'quote').html();         
+function preDataForm(targetField, isNotNeedValid) {
+    quoteF = $('#'+targetField+'quote').html();         
     // unsaved warning box  
     if (!warnUnsavedDialog())
         return;
 
-    // pop up warn for selecting span when switch to new field dring editing mode
-    if (!isTextSelected && (field != "evRelationship" || field != "question") && quoteF == "" && !isNotNeedValid) {
-        warnSelectTextSpan(field);
+    // pop up warn for selecting span when switch to new targetField dring editing mode
+    if (!isTextSelected && (targetField != "evRelationship" || targetField != "question") && quoteF == "" && !isNotNeedValid) {
+        warnSelectTextSpan(targetField);
         return;
     } 
+    
+    if (targetField == null) 
+        targetField = "participants";
 
+    currFormType = targetField;
+}
+
+
+
+// switch data from from nav button
+function switchDataForm(targetField, isNotNeedValid) {
+    quoteF = $('#'+targetField+'quote').html();         
+    // unsaved warning box  
+    if (!warnUnsavedDialog())
+        return;
+
+    // pop up warn for selecting span when switch to new targetField dring editing mode
+    if (!isTextSelected && (targetField != "evRelationship" || targetField != "question") && quoteF == "" && !isNotNeedValid) {
+        warnSelectTextSpan(targetField);
+        return;
+    } 
+    
+    if (targetField == null) 
+        targetField = "participants";
+
+    currFormType = targetField;
+    switchDataFormHelper(targetField);
+}
+
+function switchDataFormHelper(targetField) {
+
+    // field actual div id mapping
     fieldM = {"evRelationship":"evRelationship", "participants":"participants", "dose1":"drug1Dose", "dose2":"drug2Dose", "auc":"auc", "cmax":"cmax", "clearance":"clearance", "halflife":"halflife", "question":"question"};
-    
-    if (field == null) 
-        field = "participants";
 
-    
-    currFormType = field;
-    
-    if (field != "evRelationship")
-        $("#mp-data-nav").show();
-    $("#mp-claim-form").hide();
+    var showDeleteBtn = false;
 
-    for (var prop in fieldM) {       
-        var dataid = "mp-data-form-"+prop;
+    for (var field in fieldM) {       
+        var dataid = "mp-data-form-"+field;
+        if (field === targetField) {
+            $("#"+dataid).show();  // show specific data form 
+            // inspect that is target form has value filled 
 
-        if (prop === field) {
-            $("#"+dataid).show();
-            // show delete button if form been filled
-            fieldVal = $("#" + fieldM[prop]).val();
+            if (field == "evRelationship" || field =="question") { // when field is radio button
+                fieldVal = $("input[name="+field+"]:checked").val();
+            } else if (field == "auc" || field == "cmax" || field == "clearance" || field == "halflife") { // when field is checkbox
+                $("#mp-data-nav").show();
+                if ($('#' + field + '-unchanged-checkbox').is(':checked')) 
+                    showDeleteBtn = true;                    
+                fieldVal = $("#" + fieldM[field]).val();
+            } else { // when field is text input
+                $("#mp-data-nav").show();
+                fieldVal = $("#" + fieldM[field]).val();
+            }
 
-            if (fieldVal !=null && fieldVal != "") {
-                console.log("show delete button!");
+            console.log(fieldVal);
+                
+            if (fieldVal !=null && fieldVal != "")
                 $("#annotator-delete").show();
-            } else {
-                // check if unchanged checkbox is selected
-                if (prop == "auc" || prop == "cmax" || prop == "clearance" || prop == "halflife") {
-                    if ($('#' + prop + '-unchanged-checkbox').is(':checked')) 
-                        $("#annotator-delete").show();
-                    else 
-                        $("#annotator-delete").hide();                                        
-                } else {
-                    $("#annotator-delete").hide();                
-                }
-            }                
-        } else {
+            else if (showDeleteBtn)
+                $("#annotator-delete").show();
+            else 
+                $("#annotator-delete").hide();
+        }                        
+        else {
             $("#"+dataid).hide();
         }                           
     }
 }
+
 
 
 // scroll current focus on window to specific highlight piece
