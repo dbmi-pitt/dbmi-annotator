@@ -15,7 +15,7 @@ function claimEditorLoad() {
     $("#mp-data-form-cmax").hide();
     $("#mp-data-form-clearance").hide();
     $("#mp-data-form-halflife").hide();
-    $("#mp-data-form-question").hide();
+    $("#mp-data-form-studytype").hide();
 }
 
 // scroll to the claim text span
@@ -120,11 +120,11 @@ function addDataCellByEditor(field, dataNum, isNewData) {
     $("#claim-label-data-editor").show();
 
     // return if no text selection 
-    if (!isTextSelected && field != "evRelationship" && field != "question") {
+    if (!isTextSelected && field != "evRelationship" && field != "studytype") {
         warnSelectTextSpan(field);
     } else {
         // hide data fields navigation if editing evidence relationship 
-        if (field == "evRelationship" || field == "question") {
+        if (field == "evRelationship" || field == "studytype") {
             $("#mp-data-nav").hide();
             $(".annotator-save").hide();
         } else {
@@ -181,7 +181,7 @@ function editDataCellByEditor(field, dataNum) {
     $('#quote').hide();
     
     // hide data fields navigation if editing evidence relationship 
-    if (field == "evRelationship" || field == "question") {
+    if (field == "evRelationship" || field == "studytype") {
         $("#mp-data-nav").hide();
         $(".annotator-save").hide();
     } else {
@@ -228,13 +228,14 @@ function editDataCellByEditor(field, dataNum) {
 
 
 function preDataForm(targetField, isNotNeedValid) {
+    $("#mp-claim-form").hide();
     quoteF = $('#'+targetField+'quote').html();         
     // unsaved warning box  
     if (!warnUnsavedDialog())
         return;
 
     // pop up warn for selecting span when switch to new targetField dring editing mode
-    if (!isTextSelected && (targetField != "evRelationship" || targetField != "question") && quoteF == "" && !isNotNeedValid) {
+    if (!isTextSelected && (targetField != "evRelationship" || targetField != "studytype") && quoteF == "" && !isNotNeedValid) {
         warnSelectTextSpan(targetField);
         return;
     } 
@@ -249,13 +250,15 @@ function preDataForm(targetField, isNotNeedValid) {
 
 // switch data from from nav button
 function switchDataForm(targetField, isNotNeedValid) {
+
+    $("#mp-claim-form").hide();
     quoteF = $('#'+targetField+'quote').html();         
     // unsaved warning box  
     if (!warnUnsavedDialog())
         return;
 
     // pop up warn for selecting span when switch to new targetField dring editing mode
-    if (!isTextSelected && (targetField != "evRelationship" || targetField != "question") && quoteF == "" && !isNotNeedValid) {
+    if (!isTextSelected && (targetField != "evRelationship" || targetField != "studytype") && quoteF == "" && !isNotNeedValid) {
         warnSelectTextSpan(targetField);
         return;
     } 
@@ -264,13 +267,14 @@ function switchDataForm(targetField, isNotNeedValid) {
         targetField = "participants";
 
     currFormType = targetField;
+
     switchDataFormHelper(targetField);
 }
 
 function switchDataFormHelper(targetField) {
 
     // field actual div id mapping
-    fieldM = {"evRelationship":"evRelationship", "participants":"participants", "dose1":"drug1Dose", "dose2":"drug2Dose", "auc":"auc", "cmax":"cmax", "clearance":"clearance", "halflife":"halflife", "question":"question"};
+    fieldM = {"evRelationship":"evRelationship", "participants":"participants", "dose1":"drug1Dose", "dose2":"drug2Dose", "auc":"auc", "cmax":"cmax", "clearance":"clearance", "halflife":"halflife", "studytype":"studytype"};
 
     var showDeleteBtn = false;
 
@@ -280,7 +284,7 @@ function switchDataFormHelper(targetField) {
             $("#"+dataid).show();  // show specific data form 
             // inspect that is target form has value filled 
 
-            if (field == "evRelationship" || field =="question") { // when field is radio button
+            if (field == "evRelationship" || field =="studytype") { // when field is radio button
                 fieldVal = $("input[name="+field+"]:checked").val();
             } else if (field == "auc" || field == "cmax" || field == "clearance" || field == "halflife") { // when field is checkbox
                 $("#mp-data-nav").show();
@@ -292,8 +296,6 @@ function switchDataFormHelper(targetField) {
                 fieldVal = $("#" + fieldM[field]).val();
             }
 
-            console.log(fieldVal);
-                
             if (fieldVal !=null && fieldVal != "")
                 $("#annotator-delete").show();
             else if (showDeleteBtn)
