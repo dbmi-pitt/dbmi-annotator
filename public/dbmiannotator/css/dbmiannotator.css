@@ -314,20 +314,3 @@ ul.mp-sub-menu-2{
   font-size: 12px;
   margin-right: 70px;
 }
-
-/* navigation button */
-button#evRelationship-btn:focus,
-button#participants-btn:focus,
-button#drug1-dose-switch-btn:focus,
-button#drug2-dose-switch-btn:focus,
-button#auc-btn:focus,
-button#cmax-btn:focus,
-button#clearance-btn:focus,
-button#halflife-btn:focus,
-button#question-btn:focus
-{
-  border-color: #336699;
-  border-width: 3px;
-  border-radius: 3px;
-} 
-
