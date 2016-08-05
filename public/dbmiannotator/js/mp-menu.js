@@ -175,6 +175,8 @@ function backToHome() {
 // return true if everything saved, otherwise return false
 function warnUnsavedDialog() {
 
+    console.log("warnUnsavedDialog");
+
     if (unsaved) {
         var unsaveDialog = document.getElementById('remind-unsave-dialog');
         var dialogBtn = document.getElementById('remind-dialog-ok-btn');
