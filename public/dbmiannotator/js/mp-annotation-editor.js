@@ -114,6 +114,8 @@ function claimSelectedInMenu(annotationId) {
 // (2) otherwise, load annotation to editor, then shown specific data form
 function addDataCellByEditor(field, dataNum, isNewData) {
 
+    $("#button#drug1-dose-switch-btn").focus();
+
     var annotationId = $('#mp-editor-claim-list option:selected').val();
     console.log("addDataCellByEditor - id: " + annotationId + " | data: " + dataNum + " | field: " + field);
 
@@ -145,7 +147,6 @@ function addDataCellByEditor(field, dataNum, isNewData) {
         if (annotationId != null)
             currAnnotationId = annotationId;     
 
-        //switchDataForm(field);        
         preDataForm(field);
 
         $.ajax({url: "http://" + config.annotator.host + "/annotatorstore/annotations/" + annotationId,
@@ -226,7 +227,7 @@ function editDataCellByEditor(field, dataNum) {
            });               
 }
 
-
+// warning dialog for opening data editor
 function preDataForm(targetField, isNotNeedValid) {
     $("#mp-claim-form").hide();
     quoteF = $('#'+targetField+'quote').html();         
@@ -234,7 +235,6 @@ function preDataForm(targetField, isNotNeedValid) {
     if (!warnUnsavedDialog())
         return;
 
-    // pop up warn for selecting span when switch to new targetField dring editing mode
     if (!isTextSelected && (targetField != "evRelationship" || targetField != "studytype") && quoteF == "" && !isNotNeedValid) {
         warnSelectTextSpan(targetField);
         return;
@@ -244,6 +244,7 @@ function preDataForm(targetField, isNotNeedValid) {
         targetField = "participants";
 
     currFormType = targetField;
+    focusOnDataField(targetField);
 }
 
 
@@ -271,6 +272,7 @@ function switchDataForm(targetField, isNotNeedValid) {
     switchDataFormHelper(targetField);
 }
 
+// when switch data field, show or hide delete button, nav buttons and data forms 
 function switchDataFormHelper(targetField) {
 
     // field actual div id mapping
@@ -302,13 +304,14 @@ function switchDataFormHelper(targetField) {
                 $("#annotator-delete").show();
             else 
                 $("#annotator-delete").hide();
+            focusOnDataField(targetField);
         }                        
         else {
+            cleanFocusOnDataField(field);
             $("#"+dataid).hide();
         }                           
     }
 }
-
 
 
 // scroll current focus on window to specific highlight piece
@@ -322,4 +325,14 @@ function scrollToAnnotation(annotationId, fieldName, dataNum) {
 function clearStudyTypeQuestions() {
     $('input[name=grouprandom]').prop('checked', false);
     $('input[name=parallelgroup]').prop('checked', false);
+}
+
+
+function focusOnDataField (fieldName) {
+    $("button#nav-"+fieldName+"-btn").css("border","3px solid #336699");
+}
+
+
+function cleanFocusOnDataField(fieldName) {
+    $("button#nav-"+fieldName+"-btn").css("border","");
 }
