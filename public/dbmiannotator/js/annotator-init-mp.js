@@ -101,13 +101,12 @@ if (typeof annotator === 'undefined') {
                      });
 }
 
-var $wait = $('#wait').hide();
           $(document)
             .ajaxStart(function () {
-              $wait.show();
+              $('#wait').show();
             })
             .ajaxStop(function () {
-              $wait.hide();
+              $('#wait').hide();
             });
 
 
