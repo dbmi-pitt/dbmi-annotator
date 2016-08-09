@@ -123,10 +123,19 @@ function addNewDataRow() {
     if (rowCount > 3)
         return;
 
-    totalDataNum += 1;
-    dataNumLast = totalDataNum - 1;
+    rowtext = "";
+    $('#mp-data-tb tr:last td').map(function() {
+        rowtext += $(this).text();
+    })
 
-    $('#mp-data-tb tr:last').after("<tr style='height:20px;'><td onclick='addDataCellByEditor(\"evRelationship\"," + dataNumLast + ", true);'></td><td onclick='addDataCellByEditor(\"participants\"," + dataNumLast + ", true);'> </td><td onclick='addDataCellByEditor(\"dose1\"," + dataNumLast + ", true);'> </td><td onclick='addDataCellByEditor(\"dose2\"," + dataNumLast + ", true);'></td><td onclick='addDataCellByEditor(\"auc\"," + dataNumLast + ", true);'></td><td onclick='addDataCellByEditor(\"cmax\"," + dataNumLast + ", true);'></td><td onclick='addDataCellByEditor(\"clearance\"," + dataNumLast + ", true);'></td><td onclick='addDataCellByEditor(\"halflife\"," + dataNumLast + ", true);'><td onclick='addDataCellByEditor(\"question\"," + dataNumLast + ", true);'></td><td onclick='addDataCellByEditor(\"question\"," + dataNumLast + ", true);'></td></tr>");
+    if (rowtext.trim() == "") {
+        return;
+    } else {
+        totalDataNum += 1;
+        dataNumLast = totalDataNum - 1;
+       
+        $('#mp-data-tb tr:last').after("<tr style='height:20px;'><td onclick='addDataCellByEditor(\"evRelationship\"," + dataNumLast + ", true);'></td><td onclick='addDataCellByEditor(\"participants\"," + dataNumLast + ", true);'> </td><td onclick='addDataCellByEditor(\"dose1\"," + dataNumLast + ", true);'> </td><td onclick='addDataCellByEditor(\"dose2\"," + dataNumLast + ", true);'></td><td onclick='addDataCellByEditor(\"auc\"," + dataNumLast + ", true);'></td><td onclick='addDataCellByEditor(\"cmax\"," + dataNumLast + ", true);'></td><td onclick='addDataCellByEditor(\"clearance\"," + dataNumLast + ", true);'></td><td onclick='addDataCellByEditor(\"halflife\"," + dataNumLast + ", true);'><td onclick='addDataCellByEditor(\"studytype\"," + dataNumLast + ", true);'></td></tr>");
+    }
 }
 
 
@@ -145,7 +154,7 @@ function createDataTable(annotation){
             drugname2 += " (precipitant)";
     }
 
-    dataTable = "<table id='mp-data-tb'><tr><td>Ev Relationship</td><td>No. of Participants</td><td><div>" + drugname1 + " Dose</div></td><td>" + drugname2 + " Dose</td><td>AUC ratio</td><td>Cmax ratio</td><td>Clearance ratio</td><td>Half-life ratio</td><td>randomization</td><td>parallel design</td></tr>";
+    dataTable = "<table id='mp-data-tb'><tr><td>Ev Relationship</td><td>No. of Participants</td><td><div>" + drugname1 + " Dose</div></td><td>" + drugname2 + " Dose</td><td>AUC ratio</td><td>Cmax ratio</td><td>Clearance ratio</td><td>Half-life ratio</td><td>Study type</td></tr>";
 
     annotationId = annotation.id;
     dataL = annotation.argues.supportsBy;
@@ -198,21 +207,16 @@ function createDataTable(annotation){
             else 
                 row += "<td onclick='addDataCellByEditor(\"halflife\",\""+dataNum+"\");'></td>"; 
 
-            if (data.grouprandom != null)
-                row += "<td onclick='editDataCellByEditor(\"question\",\""+dataNum+"\");'>" + data.grouprandom + "</td>";
+            if (data.grouprandom != null || data.parallelgroup != null)
+                row += "<td onclick='editDataCellByEditor(\"studytype\",\""+dataNum+"\");'>checked</td>";
             else 
-                row += "<td onclick='addDataCellByEditor(\"question\",\""+dataNum+"\");'></td>"; 
-
-            if (data.parallelgroup != null)
-                row += "<td onclick='editDataCellByEditor(\"question\",\""+dataNum+"\");'>" + data.parallelgroup + "</td>";
-            else 
-                row += "<td onclick='addDataCellByEditor(\"question\",\""+dataNum+"\");'></td>"; 
+                row += "<td onclick='addDataCellByEditor(\"studytype\",\""+dataNum+"\");'></td>"; 
 
             row += "</tr>";
             dataTable += row;
         }
     } else { // add empty row
-        dataTable += "<tr style='height:20px;'><td onclick='addDataCellByEditor(\"evRelationship\",0);'></td><td onclick='addDataCellByEditor(\"participants\",0);'></td><td onclick='addDataCellByEditor(\"dose1\",0);'> </td><td onclick='addDataCellByEditor(\"dose2\",0);'></td><td onclick='addDataCellByEditor(\"auc\",0);'></td><td onclick='addDataCellByEditor(\"cmax\",0);'></td><td onclick='addDataCellByEditor(\"clearance\",0);'></td><td onclick='addDataCellByEditor(\"halflife\",0);'></td><td onclick='addDataCellByEditor(\"question\",0);'></td><td onclick='addDataCellByEditor(\"question\",0);'></td>";
+        dataTable += "<tr style='height:20px;'><td onclick='addDataCellByEditor(\"evRelationship\",0);'></td><td onclick='addDataCellByEditor(\"participants\",0);'></td><td onclick='addDataCellByEditor(\"dose1\",0);'> </td><td onclick='addDataCellByEditor(\"dose2\",0);'></td><td onclick='addDataCellByEditor(\"auc\",0);'></td><td onclick='addDataCellByEditor(\"cmax\",0);'></td><td onclick='addDataCellByEditor(\"clearance\",0);'></td><td onclick='addDataCellByEditor(\"halflife\",0);'></td><td onclick='addDataCellByEditor(\"studytype\",0);'></td>";
     }
     dataTable += "</table>";
     return dataTable;
