@@ -94,7 +94,7 @@ if (typeof annotator === 'undefined') {
 
                          // jquery for checking form editing status
                          $(":input").change(function(){
-                             console.log("[INFO] making changes - unsaved set to true");
+                             //console.log("[INFO] making changes - unsaved set to true");
                              unsaved = true;
                          });
 
@@ -181,7 +181,7 @@ function unchangedCheckBoxDialog(field) {
                 }
                 cancelBtn.onclick = function() {
                     unchangedDialog.style.display = "none"; 
-                $('#'+field+'-unchanged-checkbox').attr('checked',false);
+                    $('#'+field+'-unchanged-checkbox').attr('checked',false);
                 }
             } else {                
                 $('#'+field+'Type')[0].selectedIndex = -1;
