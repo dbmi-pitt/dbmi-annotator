@@ -46,8 +46,6 @@ module.exports = function(app, passport) {
         } else {
             annotationType = config.profile.def;
         }
-
-        console.log("plugin init main.ejs: " + annotationType);
         
 	    // fetch all DDI annotations for current user
 	    var url = "http://" + config.store.host +":" + config.store.port + "/search?email=" + req.user.email + "&annotationType=" + annotationType;
@@ -92,25 +90,24 @@ module.exports = function(app, passport) {
 	    var validUrl = require('valid-url');
 
 	    if (validUrl.isUri(sourceUrl)){
-           
-		if (sourceUrl.match(/.pdf/g)){ // local pdf resouces
-		    res.redirect("/dbmiannotator/viewer.html?file=" + sourceUrl+"&email=" + email);
-		} else { // local or external html resouces
-		    
-                    console.log("routes - displayWebPage");
-		    
+		
+		// if (sourceUrl.match(/\.pdf/g)){ // local pdf resouces
+		//     res.redirect("/dbmiannotator/viewer.html?file=" + sourceUrl+"&email=" + email); 
+		// }
+		
+		if (sourceUrl.match(/localhost.*html/g)) { 		    
                     res.render('displayWebPage.ejs', {
 			htmlsource: req.htmlsource,
 			pluginSetL: config.profile.pluginSetL,
 			userProfile: config.profile.userProfile
                     });   
 	        }
-            }
-        else {
-	    req.flash('loadMessage', 'The url you just entered is not valid!');
-	    res.redirect('/dbmiannotator/main');
+		else {
+		    req.flash('loadMessage', 'The url you just entered is not valid!');
+		    res.redirect('/dbmiannotator/main');
+		}
+		    
 	    }
-	
     });
     
     
@@ -271,23 +268,16 @@ function getSpanFromField(field) {
 function praseWebContents(req, res, next){
     var sourceUrl = req.query.sourceURL.trim();
 
-    if(sourceUrl.match(/localhost.*pdf/g)){
-        next();
-    } else {
-        
-        // var options = {
-        //     host: sourceUrl,
-        //     method: 'POST'            
-        // }
-        var cheerio = require("cheerio");
+    if(sourceUrl.match(/localhost.*html/g)){
+        var options = {
+            host: sourceUrl,
+            method: 'POST'            
+        }
+        //var cheerio = require("cheerio");
 
         request(sourceUrl, function(err, res, body){
 
             labelDecode = body.replace(/&amp;/g,'&').replace(/&nbsp;/g,' ');   
-            //var $ = cheerio.load(labelDecode);
-            //var cntBody = $("body").html();
-
-            //console.log(cntBody);
 
             // normalize html source
             tidy(labelDecode, htmltidyOptions['Kastor tidy - XHTML Clean page UTF-8'], function(err, html) {
@@ -299,6 +289,9 @@ function praseWebContents(req, res, next){
             });
             
         });
+
+    } else {
+        next();        
     }
 }
 

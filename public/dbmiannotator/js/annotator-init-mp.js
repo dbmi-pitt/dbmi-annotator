@@ -44,8 +44,8 @@ if (typeof annotator === 'undefined') {
     // load annotation after page contents loaded
     app.start().then(function () 
 		             {
-			             app.ident.identity = email;
-			             $(".btn-success").css("display","block");
+			         app.ident.identity = email;
+			         $(".btn-success").css("display","block");
 		             }).then(function(){
 			             setTimeout(function(){
 			                 app.annotations.load({uri: sourceURL.replace(/[\/\\\-\:\.]/g, ""), email: email});                             

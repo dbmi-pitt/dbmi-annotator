@@ -72,13 +72,16 @@
 				      
 				      for (var item in dictAnnots){
 					  var dbmiurl = "";
-					      if (item.match(/localhost.*pdf/g)){
-					          dbmiurl = "viewer.html?file=" + item + "&email=" + user.email;
-					      }
-					      else {
-                              dbmiurl = "displayWebPage?sourceURL=" + item + "&email=" + user.email;
-					      }
+					  // if (item.match(/localhost.*\.pdf/g)){
+					  //     dbmiurl = "viewer.html?file=" + item + "&email=" + user.email;
+					  // }
+					  // else {
+					  //     dbmiurl = "displayWebPage?sourceURL=" + item + "&email=" + user.email;
+					  // }
 
+					  if (item.match(/localhost.*\.html/g)){
+					      dbmiurl = "displayWebPage?sourceURL=" + item + "&email=" + user.email;
+					  }
 					      %>
 		 <tr>
 						  <td><a href="<%=dbmiurl %>" > <%=item %> </a>  </td>
