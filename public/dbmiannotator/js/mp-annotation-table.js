@@ -299,7 +299,6 @@ function changeClaimInDialog() {
 // set current data field for editor form to the field that user chosen
 function warnSelectTextSpan(field) {
     $("#dialog-select-text-for-data").show();
-    currFormType = field;
     $("#select-text-dialog-close").click(function() {
         $("#dialog-select-text-for-data").hide();
     });
