@@ -6,8 +6,11 @@ if (typeof annotator === 'undefined') {
     
     // DBMIAnnotator with highlight and DDI plugin
     var app = new annotator.App();
+    var sourceURL = getURLParameter("file").trim();
+    var email = getURLParameter("email");
 
-    app.include(annotator.ui.dbmimain);
+
+    app.include(annotator.ui.mpmain, {element: '', email: email, source: sourceURL});
     app.include(annotator.storage.debug);
     app.include(annotator.identity.simple);
     app.include(annotator.authz.acl);
@@ -16,8 +19,7 @@ if (typeof annotator === 'undefined') {
 	prefix: 'http://' + config.store.host + ':' + config.store.port
     });
 
-    var sourceURL = getURLParameter("file").trim();
-    var email = getURLParameter("email");
+    
     
     var pageUri = function () {
 
