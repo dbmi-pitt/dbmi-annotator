@@ -48,7 +48,7 @@ See https://github.com/adobe-type-tools/cmap-resources
    
   </head>
 
-  <body onload="Init()" tabindex="1" class="loadingInProgress">
+  <body tabindex="1" class="loadingInProgress">
     <div id="outerContainer">
 
       <div id="sidebarContainer">
@@ -257,8 +257,8 @@ See https://github.com/adobe-type-tools/cmap-resources
           <div id="viewer" class="pdfViewer"></div>
         </div>
 
-        <button class="btn btn-success" onclick="buttonshowright()" value="hide"><img src="img/menu.png" height="25px" width="25px"><span id="menu">&nbsp Menu</span></button>
-          <button class="btn btn-home" onclick="location.href = '/dbmiannotator/main';" value="hide"><img src="img/home.png" height="20px" width="20px"><span>&nbsp&nbsp Home</span></button>
+          <button class="btn btn-success" onclick="annotationPanelClick()" value="hide"><img src="img/menu.png" height="25px" width="25px"><span id="menu">&nbsp Menu</span></button>
+          <button class="btn btn-home" onclick="backToHome();" value="hide"><img src="img/home.png" height="20px" width="20px"><span>&nbsp&nbsp Home</span></button>
       </div>
       <div id="tabs">
   <ul>
@@ -459,7 +459,13 @@ See https://github.com/adobe-type-tools/cmap-resources
 <script type="text/javascript" src="js/jqxcore.js"></script>
 <script type="text/javascript" src="js/jqxsplitter.js"></script>
 <script type="text/javascript" src="js/demos.js"></script>
-<script type="text/javascript" src="js/dbmi.js"></script>
+<!-- mp anotation table, editor -->
+        <script type="text/javascript" src="js/mp-annotation-table.js"></script>
+        <script type="text/javascript" src="js/mp-annotation-editor.js"></script>
+        
+        <!-- call annotator for mp plugin-->
+        <script src="js/annotator-init-mp.js"></script>
+        <script type="text/javascript" src="js/mp-menu.js"></script>
 <script>
     $( "#tabs" ).tabs();
 </script>
