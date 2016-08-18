@@ -98,16 +98,30 @@ if (typeof annotator === 'undefined') {
                              unsaved = true;
                          });
 
+                         window.addEventListener("resize", resetSplitter);
+
+                         function resetSplitter() {    
+                             console.log("resize window - resetSplitter called");
+                             $('#splitter').jqxSplitter({
+                                 showSplitBar: false, 
+                                 width: $(window).width(), 
+                                 height: $(window).height(), 
+                                 orientation: 'horizontal', 
+                                 //panels: [{ size: '100%',min: 200 }, { size: '0%', min: 0}] });
+                                 panels: [{size: '80%', min: 200}, {size: '20%', min: 250}]
+                             });
+                         }
                      });
+
 }
 
-          $(document)
-            .ajaxStart(function () {
-              $('#wait').show();
-            })
-            .ajaxStop(function () {
-              $('#wait').hide();
-            });
+$(document)
+    .ajaxStart(function () {
+        $('#wait').show();
+    })
+    .ajaxStop(function () {
+        $('#wait').hide();
+    });
 
 
 
