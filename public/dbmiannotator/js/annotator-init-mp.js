@@ -98,7 +98,13 @@ if (typeof annotator === 'undefined') {
                              unsaved = true;
                          });
 
-                         window.addEventListener("resize", resetSplitter);
+                         var resizeTimer;
+                         //window.addEventListener("resize", resetSplitter);
+
+                         $(window).resize(function() {
+                             clearTimeout(resizeTimer);
+                             resizeTimer = setTimeout(resetSplitter, 300);
+                         });
 
                          function resetSplitter() {    
                              console.log("resize window - resetSplitter called");
