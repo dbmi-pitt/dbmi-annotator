@@ -275,14 +275,14 @@ ul.mp-sub-menu-2{
 
 /* method option for claim panel */
 #mp-editor-method {
-  font-size: 14px;
-  width: 70%;
+  font-size: 16px;
+  width: 76%;
   color: black;
 }
 
 /*claim options for claim panel */
 #mp-editor-claim-list {
-  font-size: 14px;
+  font-size: 16px;
   width: 97%;
   color: black;
 }
@@ -297,10 +297,11 @@ ul.mp-sub-menu-2{
 }
 
 #tabs-1{
-  text-align: center;
   font-size: 12px;
   font-family: "Trebuchet MS", Arial, sans-serif;
   border: none;
+  line-height: 17px;
+  
 }
 
 #Drug1,#Drug2{
