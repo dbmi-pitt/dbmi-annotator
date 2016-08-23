@@ -5,7 +5,7 @@ config.elastico = {};
 config.profile = {};
 
 // postgres db
-config.postgres = process.env.DATABASE_URL || 'postgres://postgres:!Yr5402874@localhost:5432/dbmiannotator'; 
+config.postgres = process.env.DATABASE_URL || 'postgres://postgres:<password>@localhost:5432/dbmiannotator'; 
 
 // dbmi annotator 
 config.annotator.host = 'localhost';
