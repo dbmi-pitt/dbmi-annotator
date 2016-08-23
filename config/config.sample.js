@@ -5,20 +5,20 @@ config.elastico = {};
 config.profile = {};
 
 // postgres db
-config.postgres = process.env.DATABASE_URL || 'postgres://<username>:<password>@<hostname/ip addresss>:<port>/<schema name>'; 
+config.postgres = process.env.DATABASE_URL || 'postgres://postgres:!Yr5402874@localhost:5432/dbmiannotator'; 
 
 // dbmi annotator 
-config.annotator.host = 'host name or ip address';
-config.annotator.port = 'port';
+config.annotator.host = 'localhost';
+config.annotator.port = '3000';
 
 
 // annotator store
-config.store.host = 'host name or ip address';
-config.store.port = 'port';
+config.store.host = 'localhost';
+config.store.port = '5000';
 
 // elastico
-config.elastico.host = 'host name or ip address';
-config.elastico.port = 'port';
+config.elastico.host = 'localhost';
+config.elastico.port = '9250';
 
 // user default profile
 config.profile.def = 'MP';
