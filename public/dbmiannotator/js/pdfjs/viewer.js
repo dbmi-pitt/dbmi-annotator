@@ -433,6 +433,7 @@ var ProgressBar = (function ProgressBarClosure() {
       if (!this.visible) {
         return;
       }
+      
       this.visible = false;
       this.bar.classList.add('hidden');
       document.body.classList.remove('loadingInProgress');
@@ -3337,7 +3338,7 @@ var DEFAULT_CACHE_SIZE = 10;
 
 
 var CLEANUP_TIMEOUT = 30000;
-
+//todo
 var RenderingStates = {
   INITIAL: 0,
   RUNNING: 1,
@@ -4070,6 +4071,8 @@ var TextLayerBuilder = (function TextLayerBuilderClosure() {
     _finishRendering: function TextLayerBuilder_finishRendering() {
       this.renderingDone = true;
 
+        app.annotations.load({uri: sourceURL.replace(/[\/\\\-\:\.]/g, ""), email: email}, this.pageNumber);                             
+      //todo wen test
       var event = document.createEvent('CustomEvent');
       event.initCustomEvent('textlayerrendered', true, true, {
         pageNumber: this.pageNumber
@@ -5301,6 +5304,7 @@ var PDFViewer = (function pdfViewer() {
      * @param {PDFPage} pdfPage
      * @returns {AnnotationsLayerBuilder}
      */
+     //todo wen
     createAnnotationsLayerBuilder: function (pageDiv, pdfPage) {
       return new AnnotationsLayerBuilder({
         pageDiv: pageDiv,
@@ -6908,6 +6912,7 @@ var PDFViewerApplication = {
     for (var pageIndex = 0; pageIndex < pagesCount; pageIndex++) {
       var pageView = pdfViewer.getPageView(pageIndex);
       if (pageView && pageView.renderingState === RenderingStates.FINISHED) {
+
         var thumbnailView = thumbnailViewer.getThumbnail(pageIndex);
         thumbnailView.setImage(pageView);
       }
@@ -7451,6 +7456,7 @@ window.addEventListener('updateviewarea', function (evt) {
     PDFViewerApplication.pdfViewer.getPageView(PDFViewerApplication.page - 1);
 
   if (currentPage.renderingState === RenderingStates.FINISHED) {
+    //load can be added here
     pageNumberInput.classList.remove(PAGE_NUMBER_LOADING_INDICATOR);
   } else {
     pageNumberInput.classList.add(PAGE_NUMBER_LOADING_INDICATOR);
