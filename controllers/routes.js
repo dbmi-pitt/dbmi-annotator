@@ -88,14 +88,13 @@ module.exports = function(app, passport) {
 	    var sourceUrl = req.query.sourceURL.trim();
 	    var email = req.query.email;
 	    var validUrl = require('valid-url');
-
+        console.log(sourceUrl);
 	    if (validUrl.isUri(sourceUrl)){
 		    
-		    // if (sourceUrl.match(/\.pdf/g)){ // local pdf resouces
-		    //     res.redirect("/dbmiannotator/viewer.html?file=" + sourceUrl+"&email=" + email); 
-		    // }
-		    
-		    if (sourceUrl.match(/localhost.*html/g)) { 		    
+		    if (sourceUrl.match(/\.pdf/g)){ // local pdf resouces
+                console.log("load pdf");
+		        res.redirect("/dbmiannotator/viewer.html?file=" + sourceUrl+"&email=" + email); 
+		    } else if (sourceUrl.match(/localhost.*html/g)) { 		    
                 res.render('displayWebPage.ejs', {
 			        htmlsource: req.htmlsource,
 			        pluginSetL: config.profile.pluginSetL,
@@ -267,9 +266,10 @@ function getSpanFromField(field) {
 
 // parse web contents from url
 function praseWebContents(req, res, next){
-    var sourceUrl = req.query.sourceURL.trim();
 
-    if(sourceUrl.match(/localhost.*html/g)){
+    console.log("parseWebContent");
+    var sourceUrl = req.query.sourceURL.trim();
+        console.log(sourceUrl);
         var options = {
             host: sourceUrl,
             method: 'POST'            
@@ -291,9 +291,6 @@ function praseWebContents(req, res, next){
             
         });
 
-    } else {
-        next();        
-    }
 }
 
 

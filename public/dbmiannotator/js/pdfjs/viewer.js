@@ -43,7 +43,7 @@ var DISABLE_AUTO_FETCH_LOADING_BAR_TIMEOUT = 5000;
 //   PDFJS.cMapPacked = true;
 
 // adjust path in nodejs express framework
-PDFJS.imageResourcesPath = 'js/pdfjs/images/';
+  PDFJS.imageResourcesPath = 'js/pdfjs/images/';
   PDFJS.workerSrc = 'js/pdfjs/pdf.worker.js';
   PDFJS.cMapUrl = 'js/pdfjs/cmaps/';
   PDFJS.cMapPacked = true;
@@ -364,7 +364,7 @@ function getPDFFileNameFromURL(url) {
         // URIError "Malformed URI", e.g. for "%AA.pdf"
         // TypeError "null has no properties", e.g. for "%2F.pdf"
       }
-    }
+    
   }
   return suggestedFilename || 'document.pdf';
 }
