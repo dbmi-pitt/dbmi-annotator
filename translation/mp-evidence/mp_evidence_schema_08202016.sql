@@ -22,7 +22,7 @@ urn text,
 label text,
 claim_text text,
 np_assertion_id integer,
-is_oa_body_of integer,
+is_oa_body_of integer
 );
 
 
