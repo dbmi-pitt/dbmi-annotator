@@ -13,7 +13,7 @@ node_modules/
 
 # Mac hidden file
 .DS_Store
-.idea
+.idea/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
