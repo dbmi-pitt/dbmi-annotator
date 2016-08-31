@@ -162,7 +162,7 @@ CREATE TABLE method
 id INTEGER not null PRIMARY KEY,
 value text,
 mp_claim_id integer,
-mp_data_material_id integer,
+mp_data_index integer,
 FOREIGN KEY (mp_claim_id) REFERENCES mp_claim_annotation(id)
 );
 

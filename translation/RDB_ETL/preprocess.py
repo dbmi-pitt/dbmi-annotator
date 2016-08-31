@@ -87,7 +87,7 @@ def show_table(conn, table):
 # load table "method" one row
 def load_method(conn, row, mp_claim_id):
     cur = conn.cursor()
-    cur.execute("INSERT INTO method (value, mp_claim_id, mp_data_material_id)" +
+    cur.execute("INSERT INTO method (value, mp_claim_id, mp_data_index)" +
                 "VALUES ( '" + row['assertionType'] + "', " + str(mp_claim_id) + ", 1);")
 
 
