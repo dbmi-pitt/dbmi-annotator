@@ -16,7 +16,6 @@ node_modules/
 
 # Mac hidden file
 .DS_Store
-<<<<<<< HEAD
 .idea/
 
 # Byte-compiled / optimized / DLL files
