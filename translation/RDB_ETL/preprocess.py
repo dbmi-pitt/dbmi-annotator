@@ -16,7 +16,6 @@ def main():
 
     print("Using psycopg2")
     myConnection = psycopg2.connect(host=hostname, user=username, password=password, dbname=database)
-    #truncateall(myConnection)
     clearall(myConnection)
     myConnection.commit()
 
@@ -41,16 +40,6 @@ def load_data_from_csv(myConnection, reader, creator):
         load_mp_material_annotation(myConnection, row, mp_claim_id, oa_target_id, creator)
         load_method(myConnection, row, mp_claim_id)
 
-    '''
-    show_table(myConnection, "oa_data_body")
-    show_table(myConnection, "data_field")
-    show_table(myConnection, "oa_material_body")
-    show_table(myConnection, "material_field")
-    show_table(myConnection, "oa_data_body")
-    show_table(myConnection, "data_field")
-    show_table(myConnection, "oa_selector")
-    show_table(myConnection, "oa_target")
-    '''
     myConnection.commit()
 
 
@@ -70,7 +59,6 @@ def truncateall(conn):
     cur.execute("DROP TABLE claim_reference_relationship;")
     cur.execute("DROP TABLE mp_reference;")
     cur.execute("DROP TABLE mp_claim_annotation;")
-
 
 
 def clearall(conn):
@@ -311,6 +299,7 @@ def parse_date(csv_date):
     temp = csv_date.replace(' -0400', '');
     return temp
 
+
 #   add column: predicate, subject, object, subjectDose, objectDose
 def preprocess(csvfile):
     writer = csv.writer(open('preProcess.csv', 'w'), lineterminator='\n')
@@ -341,15 +330,6 @@ def preprocess(csvfile):
         all.append(row)
     writer.writerows(all)
 
+
 if __name__ == '__main__':
     main()
-# 1. extract data from csv
-#
-
-# reader = csv.DictReader(open(fileID, "rb"))
-# writefile = open("preProcess.csv", "wb+")
-# writer = csv.writer(writefile)
-# for record in reader:
-# record.append("new_thing")
-# writer.writerow(record)
-# writefile.close()
