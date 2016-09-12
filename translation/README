@@ -1,0 +1,33 @@
+--------------------------------------------------------------------
+build database : running DDL
+--------------------------------------------------------------------
+
+mp_evidence/mp_evidence_schema_08202016.sql
+
+--------------------------------------------------------------------
+insert data : running DML
+--------------------------------------------------------------------
+
+1. cd RDB_ETL/
+
+2. pip install psycopg2
+
+3. configure data in preProcess.py
+“
+csvfiles = ['pkddi-katrina-latest-08152016.csv', 'pkddi-amy-latest-08152016.csv']
+hostname = 'localhost'
+username = 'username'
+password = 'password'
+database = 'mpevidence'
+“
+
+4. python preProcess.py
+
+--------------------------------------------------------------------
+* content in preProcess.py
+--------------------------------------------------------------------
+1. preprocess csv, generate preProcess.csv
+2. insert data into every table
+3. delete all data in table
+
+
