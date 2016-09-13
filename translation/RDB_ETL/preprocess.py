@@ -3,9 +3,10 @@ import psycopg2
 import uuid
 import datetime
 
-#1. add psycopg2 module
+#1. pip install psycopg2
 #2. config
-csvfiles = ['pkddi-katrina-latest-08142016.csv', 'pkddi-amy-latest-08152016.csv']
+
+csvfiles = ['pkddi-katrina-latest-08152016.csv', 'pkddi-amy-latest-08152016.csv']
 hostname = 'localhost'
 username = 'username'
 password = 'password'
@@ -14,10 +15,11 @@ database = 'mpevidence'
 
 def main():
 
-    print("Using psycopg2")
+    print("insert data ...")
     myConnection = psycopg2.connect(host=hostname, user=username, password=password, dbname=database)
-    clearall(myConnection)
-    myConnection.commit()
+    #delete all data in table
+    #clearall(myConnection)
+    #myConnection.commit()
 
     for csvfile in csvfiles:
         preprocess(csvfile)
@@ -95,12 +97,20 @@ def load_method(conn, row, mp_claim_id):
 def load_oa_selector(conn, row):
     cur = conn.cursor()
     urn = uuid.uuid4().hex
+    if row['prefix'] == '':
+        prefix = 'NULL'
+    else:
+        prefix = "'" + row['prefix'] + "'"
+    if row['suffix'] == '':
+        suffix = 'NULL'
+    else:
+        suffix = "'" + row['suffix'] + "'"
     cur.execute("INSERT INTO oa_selector (urn, selector_type, exact, prefix, suffix)" +
-                "VALUES ( '" + urn + "', 'oa_selector', '" + str(row['exactText']) + "', NULL, NULL);")
+                "VALUES ( '" + urn + "', 'oa_selector', '" + row['exactText'] + "', " + prefix + ", " + suffix + ");")
     cur.execute("SELECT * FROM oa_selector WHERE urn = '" + urn + "';")
 
     for urn in cur.fetchall():
-        print(urn)
+        #print(urn)
         tempid = urn[0]
     return tempid
 
@@ -114,7 +124,7 @@ def load_oa_target(conn, row, has_selector):
     cur.execute("SELECT * FROM oa_target WHERE urn = '" + urn + "';")
 
     for urn in cur.fetchall():
-        print(urn)
+        #print(urn)
         tempid = urn[0]
     return tempid
 
@@ -129,7 +139,7 @@ def load_oa_claim_body(conn, row):
     cur.execute("SELECT * FROM oa_claim_body WHERE urn = '" + urn + "';")
 
     for urn in cur.fetchall():
-        print(urn)
+        #print(urn)
         tempid = urn[0]
     return tempid
 
@@ -159,7 +169,7 @@ def load_mp_claim_annotation(conn, row, has_body, has_target, creator):
     cur.execute("SELECT * FROM mp_claim_annotation WHERE urn = '" + urn + "';")
 
     for urn in cur.fetchall():
-        print(urn)
+        #print(urn)
         tempid = urn[0]
     return tempid
 
@@ -237,11 +247,6 @@ def load_mp_material_annotation(conn, row, mp_claim_id, has_target, creator):
         material_body_id = helper_load_material(conn, row, mp_claim_id, has_target, creator, 'participants')
         load_material_field(conn, row, material_body_id, 'participants')
 
-    cur.execute("SELECT * FROM mp_material_annotation WHERE mp_claim_id = " + str(mp_claim_id) + ";")
-
-    for urn in cur.fetchall():
-        print(urn)
-
 
 def helper_load_material(conn, row, mp_claim_id, has_target, creator, data_type):
     ev_supports = 'false'
@@ -302,31 +307,31 @@ def parse_date(csv_date):
 
 #   add column: predicate, subject, object, subjectDose, objectDose
 def preprocess(csvfile):
-    writer = csv.writer(open('preProcess.csv', 'w'), lineterminator='\n')
-    reader = csv.reader(
-        open(csvfile, 'r'))
+    csv_columns = ['source', 'date', 'assertionType', 'evidenceType', 'prefix', 'exactText', 'suffix',
+                   'modality', 'statementType', 'comment', 'drug1Lab', 'drug1Type', 'drug1Role', 'dose1',
+                   'drug2Lab', 'drug2Type', 'drug2Role', 'dose2', 'objectRegimens', 'objectFormulation',
+                   'objectDuration', 'preciptRegimens', 'preciptFormulation', 'preciptDuration',
+                   'numOfParticipants', 'auc', 'aucType', 'aucDirection', 'cl', 'clType', 'clDirection',
+                   'cmax', 'cmaxType', 'cmaxDirection', 't12', 't12Type', 't12Direction', 'predicate',
+                   'subject', 'object', 'subjectDose', 'objectDose']
+    writer = csv.DictWriter(open('preProcess.csv', 'w'), fieldnames=csv_columns)
+    writer.writeheader()
+    reader = csv.DictReader(open(csvfile, 'r'))
     all = []
-    row = next(reader)
-    row.append('predicate')
-    row.append('subject')
-    row.append('object')
-    row.append('subjectDose')
-    row.append('objectDose')
-    all.append(row)
     for row in reader:
-        row.append('interact_with')
-        if 'object' in row[10]:
-            row.append(row[12])
-            row.append(row[8])
-            row.append(row[15])
-            row.append(row[11])
+        #print(row)
+
+        row.update({'predicate': 'interact_with'})
+        if 'object' in row['drug1Role']:
+            row.update({'subject': row['drug2Lab'], 'object': row['drug1Lab'], 'subjectDose': row['dose2'], 'objectDose': row['dose1']})
         else:
-            row.append(row[8])
-            row.append(row[12])
-            row.append(row[11])
-            row.append(row[15])
-        if "'" in row[4]:
-            row[4] = row[4].replace("'", "''")
+            row.update({'subject': row['drug1Lab'], 'object': row['drug2Lab'], 'subjectDose': row['dose1'], 'objectDose': row['dose2']})
+        if "'" in row['prefix']:
+            row['prefix'] = row['prefix'].replace("'", "''")
+        if "'" in row['exactText']:
+            row['exactText'] = row['exactText'].replace("'", "''")
+        if "'" in row['suffix']:
+            row['suffix'] = row['suffix'].replace("'", "''")
         all.append(row)
     writer.writerows(all)
 

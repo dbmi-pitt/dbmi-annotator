@@ -198,7 +198,7 @@ module.exports = function(app, passport) {
                         var data = dataL[j];
                         var method = data.supportsBy;
                         var material = method.supportsBy;
-                        var dataRow = ""
+                        var dataRow = "";
 
                         if (material.participants != null)
                             dataRow += '\t"' + (material.participants.value || '') + '"\t"' + (getSpanFromField(material.participants) || '') + '"';
@@ -219,7 +219,7 @@ module.exports = function(app, passport) {
                         for (p = 0; p < dataFieldsL.length; p++) {
                             field = dataFieldsL[p];
                             if (data[field] != null)    
-                                dataRow += '\t"' + (data[field].value || '') + '"\t"' + (data[field].direction || '') + '"\t"' + (data[field].type || '') + '"\t"' + (getSpanFromField(data[field]) || '') + '"'; 
+                                dataRow += '\t"' + (data[field].value || '') + '"\t"' + (data[field].type || '') + '"\t"' + (data[field].direction || '') + '"\t"' + (getSpanFromField(data[field]) || '') + '"'; 
                             else 
                                 dataRow += '\t\t\t\t';
                         }                        
