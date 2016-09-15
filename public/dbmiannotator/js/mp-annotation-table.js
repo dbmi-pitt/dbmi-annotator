@@ -244,8 +244,11 @@ function changeClaimInAnnoTable() {
 
     //console.log("table - claim changed to :" + newAnnotationId);
     currAnnotationId = newAnnotationId;
-
-    sourceURL = getURLParameter("sourceURL").trim();
+    if (!window.location.search.substring(1).includes("file")) {
+        sourceURL = getURLParameter("sourceURL").trim();
+    } else {
+        sourceURL = getURLParameter("file").trim();
+    }
     email = getURLParameter("email");
 
     $.ajax({url: "http://" + config.annotator.host + "/annotatorstore/search",
@@ -277,8 +280,11 @@ function changeClaimInDialog() {
 
     //console.log("dialog - claim changed to :" + newAnnotationId);
     currAnnotationId = newAnnotationId;
-
-    sourceURL = getURLParameter("sourceURL").trim();
+    if (!window.location.search.substring(1).includes("file")) {
+        sourceURL = getURLParameter("sourceURL").trim();
+    } else {
+        sourceURL = getURLParameter("file").trim();
+    }
     email = getURLParameter("email");
 
     $.ajax({url: "http://" + config.annotator.host + "/annotatorstore/search",
