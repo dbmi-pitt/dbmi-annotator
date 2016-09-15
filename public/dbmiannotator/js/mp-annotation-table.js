@@ -80,14 +80,14 @@ function updateClaimAndData(annotations, annotationId) {
     claimPanel += "<tr><td>" + claimListbox + "</td></tr>";
     claimPanel += "<tr><td>Methods: " + methodListbox + "</td></tr>"
     
-    claimPanel += "<tr><td><button id='edit-claim-btn' type='button' onclick='editClaim()' style='float:left; font-size:13px'>Edit Claim</button><button id='view-claim-btn' type='button' onclick='viewClaim()' style='float: right; font-size:13px'>View Claim</button></td></tr></table>";
+    claimPanel += "<tr><td><button id='edit-claim-btn' type='button' onclick='editClaim()' style='float:left; font-size:12px'>Edit Claim</button><button id='view-claim-btn' type='button' onclick='viewClaim()' style='float: right; font-size:12px'>View Claim</button></td></tr></table>";
     
     // Data & Material - add new data button 
-    dataPanel = "<button id='add-new-data-row-btn' type='button' onclick='addNewDataRow()' style='float: right; font-size:13px'>add new data & material</button>" + dataTable;
+    dataPanel = "<button id='add-new-data-row-btn' type='button' onclick='addNewDataRow()' style='float: right; font-size:12px'>add new data & material</button>" + dataTable;
     
     // Annotation table
     annTable = "<table id='mp-claim-data-tb'>" +
-        "<tr><td>Claim</td><td>Material/Data</td></tr>";             
+        "<tr><td>Claim</td><td>Material/Data <strong id='wait' style='display:none;'>Loading...</strong></td></tr>";             
     annTable += "<tr><td>" + claimPanel + "</td><td>" + dataPanel + "</td></tr>";   
     annTable += "</table>";
     
@@ -133,7 +133,7 @@ function addNewDataRow() {
     } else {
         totalDataNum += 1;
         dataNumLast = totalDataNum - 1;
-        
+       
         $('#mp-data-tb tr:last').after("<tr style='height:20px;'><td onclick='addDataCellByEditor(\"evRelationship\"," + dataNumLast + ", true);'></td><td onclick='addDataCellByEditor(\"participants\"," + dataNumLast + ", true);'> </td><td onclick='addDataCellByEditor(\"dose1\"," + dataNumLast + ", true);'> </td><td onclick='addDataCellByEditor(\"dose2\"," + dataNumLast + ", true);'></td><td onclick='addDataCellByEditor(\"auc\"," + dataNumLast + ", true);'></td><td onclick='addDataCellByEditor(\"cmax\"," + dataNumLast + ", true);'></td><td onclick='addDataCellByEditor(\"clearance\"," + dataNumLast + ", true);'></td><td onclick='addDataCellByEditor(\"halflife\"," + dataNumLast + ", true);'><td onclick='addDataCellByEditor(\"studytype\"," + dataNumLast + ", true);'></td></tr>");
     }
 }
@@ -244,8 +244,11 @@ function changeClaimInAnnoTable() {
 
     //console.log("table - claim changed to :" + newAnnotationId);
     currAnnotationId = newAnnotationId;
-
-    sourceURL = getURLParameter("sourceURL").trim();
+    if (!window.location.search.substring(1).includes("file")) {
+        sourceURL = getURLParameter("sourceURL").trim();
+    } else {
+        sourceURL = getURLParameter("file").trim();
+    }
     email = getURLParameter("email");
 
     $.ajax({url: "http://" + config.annotator.host + "/annotatorstore/search",
@@ -277,8 +280,11 @@ function changeClaimInDialog() {
 
     //console.log("dialog - claim changed to :" + newAnnotationId);
     currAnnotationId = newAnnotationId;
-
-    sourceURL = getURLParameter("sourceURL").trim();
+    if (!window.location.search.substring(1).includes("file")) {
+        sourceURL = getURLParameter("sourceURL").trim();
+    } else {
+        sourceURL = getURLParameter("file").trim();
+    }
     email = getURLParameter("email");
 
     $.ajax({url: "http://" + config.annotator.host + "/annotatorstore/search",
@@ -299,7 +305,6 @@ function changeClaimInDialog() {
 // set current data field for editor form to the field that user chosen
 function warnSelectTextSpan(field) {
     $("#dialog-select-text-for-data").show();
-    currFormType = field;
     $("#select-text-dialog-close").click(function() {
         $("#dialog-select-text-for-data").hide();
     });

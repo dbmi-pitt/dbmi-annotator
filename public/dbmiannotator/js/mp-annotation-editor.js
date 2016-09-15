@@ -244,6 +244,8 @@ function preDataForm(targetField, isNotNeedValid) {
         targetField = "participants";
 
     currFormType = targetField;
+    console.log("TESTING3: " + currFormType);
+
     focusOnDataField(targetField);
 }
 
@@ -268,6 +270,8 @@ function switchDataForm(targetField, isNotNeedValid) {
         targetField = "participants";
 
     currFormType = targetField;
+    console.log("TESTING1 " + targetField);
+    console.log(currFormType);
 
     switchDataFormHelper(targetField);
 }

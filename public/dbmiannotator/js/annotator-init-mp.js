@@ -44,8 +44,8 @@ if (typeof annotator === 'undefined') {
     // load annotation after page contents loaded
     app.start().then(function () 
 		             {
-			             app.ident.identity = email;
-			             $(".btn-success").css("display","block");
+			         app.ident.identity = email;
+			         $(".btn-success").css("display","block");
 		             }).then(function(){
 			             setTimeout(function(){
 			                 app.annotations.load({uri: sourceURL.replace(/[\/\\\-\:\.]/g, ""), email: email});                             
@@ -94,21 +94,40 @@ if (typeof annotator === 'undefined') {
 
                          // jquery for checking form editing status
                          $(":input").change(function(){
-                             console.log("[INFO] making changes - unsaved set to true");
+                             //console.log("[INFO] making changes - unsaved set to true");
                              unsaved = true;
                          });
 
+                         var resizeTimer;
+                         //window.addEventListener("resize", resetSplitter);
+
+                         $(window).resize(function() {
+                             clearTimeout(resizeTimer);
+                             resizeTimer = setTimeout(resetSplitter, 300);
+                         });
+
+                         function resetSplitter() {    
+                             console.log("resize window - resetSplitter called");
+                             $('#splitter').jqxSplitter({
+                                 showSplitBar: false, 
+                                 width: $(window).width(), 
+                                 height: $(window).height(), 
+                                 orientation: 'horizontal', 
+                                 //panels: [{ size: '100%',min: 200 }, { size: '0%', min: 0}] });
+                                 panels: [{size: '80%', min: 200}, {size: '20%', min: 250}]
+                             });
+                         }
                      });
+
 }
 
-var $wait = $('#wait').hide();
-          $(document)
-            .ajaxStart(function () {
-              $wait.show();
-            })
-            .ajaxStop(function () {
-              $wait.hide();
-            });
+$(document)
+    .ajaxStart(function () {
+        $('#wait').show();
+    })
+    .ajaxStop(function () {
+        $('#wait').hide();
+    });
 
 
 
@@ -182,7 +201,7 @@ function unchangedCheckBoxDialog(field) {
                 }
                 cancelBtn.onclick = function() {
                     unchangedDialog.style.display = "none"; 
-                $('#'+field+'-unchanged-checkbox').attr('checked',false);
+                    $('#'+field+'-unchanged-checkbox').attr('checked',false);
                 }
             } else {                
                 $('#'+field+'Type')[0].selectedIndex = -1;

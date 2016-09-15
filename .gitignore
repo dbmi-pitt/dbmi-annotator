@@ -5,6 +5,9 @@ config/config.js
 public/dbmiannotator/js/app.bundle.js
 public/dbmiannotator/js/annotator.min.js
 
+# articles
+public/pdf2html
+
 # nodejs libs
 node_modules/
 

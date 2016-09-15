@@ -46,8 +46,6 @@ module.exports = function(app, passport) {
         } else {
             annotationType = config.profile.def;
         }
-
-        console.log("plugin init main.ejs: " + annotationType);
         
 	    // fetch all DDI annotations for current user
 	    var url = "http://" + config.store.host +":" + config.store.port + "/search?email=" + req.user.email + "&annotationType=" + annotationType;
@@ -90,27 +88,25 @@ module.exports = function(app, passport) {
 	    var sourceUrl = req.query.sourceURL.trim();
 	    var email = req.query.email;
 	    var validUrl = require('valid-url');
-
+        console.log(sourceUrl);
 	    if (validUrl.isUri(sourceUrl)){
-           
-		if (sourceUrl.match(/.pdf/g)){ // local pdf resouces
-		    res.redirect("/dbmiannotator/viewer.html?file=" + sourceUrl+"&email=" + email);
-		} else { // local or external html resouces
 		    
-                    console.log("routes - displayWebPage");
-		    
-                    res.render('displayWebPage.ejs', {
-			htmlsource: req.htmlsource,
-			pluginSetL: config.profile.pluginSetL,
-			userProfile: config.profile.userProfile
-                    });   
+		    if (sourceUrl.match(/\.pdf/g)){ // local pdf resouces
+                console.log("load pdf");
+		        res.redirect("/dbmiannotator/viewer.html?file=" + sourceUrl+"&email=" + email); 
+		    } else if (sourceUrl.match(/localhost.*html/g)) { 		    
+                res.render('displayWebPage.ejs', {
+			        htmlsource: req.htmlsource,
+			        pluginSetL: config.profile.pluginSetL,
+			        userProfile: config.profile.userProfile
+                });   
 	        }
-            }
-        else {
-	    req.flash('loadMessage', 'The url you just entered is not valid!');
-	    res.redirect('/dbmiannotator/main');
+		    else {
+		        req.flash('loadMessage', 'The url you just entered is not valid!');
+		        res.redirect('/dbmiannotator/main');
+		    }
+		    
 	    }
-	
     });
     
     
@@ -195,49 +191,50 @@ module.exports = function(app, passport) {
                     claim = jsonObj.argues;
                     dataL = claim.supportsBy;                   
 
-                    var line = '"' + jsonObj.rawurl + '"\t"' + claim.label + '"\t"' + claim.hasTarget.hasSelector.exact + '"\t"' + claim.method + '"\t"' + claim.qualifiedBy.relationship + '"\t"' + claim.qualifiedBy.drug1 + '"\t"' + claim.qualifiedBy.drug2 + '"\t"' + (claim.qualifiedBy.precipitant || '') + '"\t"' + (claim.qualifiedBy.enzyme || '' ) + '"';
-                    //+ '"\t"' + (claim.grouprandom || '') + '"\t"' + (claim.parallelgroup || '')
-                    for (var j = 0; j < dataL.length; j ++) {
-                        data = dataL[j];
-                        method = data.supportsBy;
-                        material = method.supportsBy;
+                    var claimRow = '"' + jsonObj.rawurl + '"\t"' + claim.label + '"\t"' + claim.hasTarget.hasSelector.exact + '"\t"' + claim.method + '"\t"' + claim.qualifiedBy.relationship + '"\t"' + claim.qualifiedBy.drug1 + '"\t"' + claim.qualifiedBy.drug2 + '"\t"' + (claim.qualifiedBy.precipitant || '') + '"\t"' + (claim.qualifiedBy.enzyme || '' ) + '"';
+
+                    for (var j = 0; j < dataL.length; j++) {
+                        var data = dataL[j];
+                        var method = data.supportsBy;
+                        var material = method.supportsBy;
+                        var dataRow = ""
 
                         if (material.participants != null)
-                            line += '\t"' + (material.participants.value || '') + '"\t"' + (getSpanFromField(material.participants) || '') + '"';
+                            dataRow += '\t"' + (material.participants.value || '') + '"\t"' + (getSpanFromField(material.participants) || '') + '"';
                         else 
-                            line += '\t\t';
+                            dataRow += '\t\t';
 
                         if (material.drug1Dose != null) 
-                            line += '\t"' + (material.drug1Dose.value || '') + '"\t"' + (material.drug1Dose.formulation || '') + '"\t"'  + (material.drug1Dose.duration || '') + '"\t"' + (material.drug1Dose.regimens || '') + '"\t"' + (getSpanFromField(material.drug1Dose) || '') + '"';
+                            dataRow += '\t"' + (material.drug1Dose.value || '') + '"\t"' + (material.drug1Dose.formulation || '') + '"\t"'  + (material.drug1Dose.duration || '') + '"\t"' + (material.drug1Dose.regimens || '') + '"\t"' + (getSpanFromField(material.drug1Dose) || '') + '"';
                         else 
-                            line += '\t\t\t\t';
+                            dataRow += '\t\t\t\t';
 
                         if (material.drug2Dose != null) 
-                            line += '\t"' + (material.drug2Dose.value || '') + '"\t"' + (material.drug2Dose.formulation || '') + '"\t"'  + (material.drug2Dose.duration || '') + '"\t"' + (material.drug2Dose.regimens || '') + '"\t"' + (getSpanFromField(material.drug2Dose) || '') + '"';
+                            dataRow += '\t"' + (material.drug2Dose.value || '') + '"\t"' + (material.drug2Dose.formulation || '') + '"\t"'  + (material.drug2Dose.duration || '') + '"\t"' + (material.drug2Dose.regimens || '') + '"\t"' + (getSpanFromField(material.drug2Dose) || '') + '"';
                         else 
-                            line += '\t\t\t\t';
+                            dataRow += '\t\t\t\t';
 
                         dataFieldsL = ["auc","cmax","clearance","halflife"];
                         for (p = 0; p < dataFieldsL.length; p++) {
                             field = dataFieldsL[p];
                             if (data[field] != null)    
-                                line += '\t"' + (data[field].value || '') + '"\t"' + (data[field].direction || '') + '"\t"' + (data[field].type || '') + '"\t"' + (getSpanFromField(data[field]) || '') + '"'; 
+                                dataRow += '\t"' + (data[field].value || '') + '"\t"' + (data[field].direction || '') + '"\t"' + (data[field].type || '') + '"\t"' + (getSpanFromField(data[field]) || '') + '"'; 
                             else 
-                                line += '\t\t\t\t';
+                                dataRow += '\t\t\t\t';
                         }                        
                         
                         if (data.grouprandom != null)
-                            line += '\t"' + (data.grouprandom || '') + '"';
+                            dataRow += '\t"' + (data.grouprandom || '') + '"';
                         else
-                            line += '\t';
+                            dataRow += '\t';
 
                         if (data.parallelgroup != null)
-                            line += '\t"' + (data.parallelgroup || '') + '"';
+                            dataRow += '\t"' + (data.parallelgroup || '') + '"';
                         else
-                            line += '\t';
-
+                            dataRow += '\t';
+                        
+                        csvTxt += claimRow + dataRow + "\n";
                     }
-                    csvTxt += line + "\n";
                 }
 
 		        res.attachment('annotations-'+req.query.email+'.csv');
@@ -269,25 +266,19 @@ function getSpanFromField(field) {
 
 // parse web contents from url
 function praseWebContents(req, res, next){
-    var sourceUrl = req.query.sourceURL.trim();
 
-    if(sourceUrl.match(/localhost.*pdf/g)){
-        next();
-    } else {
-        
-        // var options = {
-        //     host: sourceUrl,
-        //     method: 'POST'            
-        // }
-        var cheerio = require("cheerio");
+    console.log("parseWebContent");
+    var sourceUrl = req.query.sourceURL.trim();
+        console.log(sourceUrl);
+        var options = {
+            host: sourceUrl,
+            method: 'POST'            
+        }
+        //var cheerio = require("cheerio");
 
         request(sourceUrl, function(err, res, body){
 
             labelDecode = body.replace(/&amp;/g,'&').replace(/&nbsp;/g,' ');   
-            //var $ = cheerio.load(labelDecode);
-            //var cntBody = $("body").html();
-
-            //console.log(cntBody);
 
             // normalize html source
             tidy(labelDecode, htmltidyOptions['Kastor tidy - XHTML Clean page UTF-8'], function(err, html) {
@@ -299,7 +290,7 @@ function praseWebContents(req, res, next){
             });
             
         });
-    }
+
 }
 
 
