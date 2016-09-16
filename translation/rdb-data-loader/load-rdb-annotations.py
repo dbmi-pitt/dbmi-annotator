@@ -1,7 +1,9 @@
-import csv
+import csv, json
 import psycopg2
 import uuid
 import datetime
+
+from micropublication import Annotation, DataMaterialRow, DMItem, DataItem, MaterialDoseItem, MatarialParticipants
 
 # DB connection config
 hostname = 'localhost'
@@ -9,155 +11,192 @@ username = 'postgres'
 password = 'ning1fan'
 database = 'mpevidence'
 
-
-# Parent class of data or material item
-class dmItem:
-	prefix = ""
-	exact = ""
-	suffix = ""
-	dmIdx = 0
-
-	def setDmItem(self, prefix, exact, suffix):
-		dmItem.prefix = prefix
-		dmItem.exact = exact
-		dmItem.suffix = suffix
-		
-	def getDmIdx():
-		return dmItem.dmIdx
-
-	def setDmIdx(idx):
-		dmItem.dmIdx = idx
-
-# Data item in row of data 
-class DataItem(dmItem):
-	def __init__(self, field, value, type, direction):
-		self.field = field # options: auc, cmax, clearance, halflife
-		self.value = value 
-		self.type = type
-		self.direction = direction
-
-# Material dose item
-class MaterialDoseItem(dmItem):
-	def __init__(self, field, value, duration, formulation, regimens):
-		self.field = field # options: objectdose or subjectdose
-		self.value = value 
-		self.duration = duration
-		self.formulation = formulation
-		self.regimens = regimens
-
-# Material participant item
-class MatarialParticipants(dmItem):
-	def __init__(self, value):
-		self.value = value
-
-
-# represents single row of data & material in annotation table
-class DataMaterialRow(object):
-
-	index = 0 # mp data index for claim, default 0 
-	dataMaterialRowD = {"auc": None, "cmax": None, "clearance": None, "halflife": None, "participants": None, "objectdose": None, "subjectdose": None}
-
-	def addDataItem(obj):
-		if dataMartialRowD[obj.field] != None:
-			print "[Warning] Data item already has the field: " + obj.field
-		elif obj.field in ["auc", "cmax", "clearance", "halflife"]:
-			dataMartialRowD[obj.field] = obj
-		else:
-			print "[Error] data item undefined: " + obj.field
-
-	def addMaterialItem(obj):
-		if dataMartialRowD[obj.field] != None:
-			print "[Warning] Data item already has the field: " + obj.field
-		elif obj.field in ["subjectdose", "objectdose"]:
-			dataMartialRowD[obj.field] = obj			
-		else:
-			print "[Error] material item undefined: " + obj.field
-
-	def addParticipants(obj):
-		if dataMartialRowD["participants"] != None:
-			print "[Warning] Data item already has the field: participants"
-		else:
-			dataMartialRowD["participants"] = obj
-	# get one row of data & material items		
-	def getDataMaterialRow():
-		return self.dataMaterialRowD
-
-
-# Define data structure for mp annotation
-class Annotation(object):
-	csubject = ""
-	cpredicate = ""
-	cobject = ""
-	label = ""
-
-	mpDataMaterialD = {}
-
-	def addDataMaterialRow(dmRow):
-		if mpDataMaterialD[dmRow.getDmIdx()] == None:
-			mpDataMaterialD[dmRow.getDmIdx()] = dmRow.getDataMaterialRow()
-		else:
-			print "[Warning] Data row already been filled - index: " + dmRow.getDmIdx()
-
-	def getDataMaterial():
-		return self.mpDataMaterialD
-
-
 # query mp claim annotation by author name
-# return claim s, p, o and oa selector
+# return claim annotation with s, p, o, source and oa selector
 def queryMpClaim(conn):
-	qry = """select cann.id, t.has_source, cann.creator, cann.date_created, s.exact, cbody.label, qvalue, q.subject, q.predicate, q.object 
+	qry = """select cann.id, t.has_source, cann.creator, cann.date_created, s.exact, s.prefix, s.suffix, cbody.label, qvalue, q.subject, q.predicate, q.object 
 	from mp_claim_annotation cann, oa_claim_body cbody, oa_target t, oa_selector s, qualifier q
 	where cann.has_body = cbody.id
 	and cann.has_target = t.id
 	and t.has_selector = s.id
 	and cbody.id = q.claim_body_id"""
 
+	annotations = {} # key: id, value obj Annotation
+
 	cur = conn.cursor()
 	cur.execute(qry)
 
 	for row in cur.fetchall():
-		#print(row[1])
-		annotation = Annotation()
-		annotation.csubject = row[7]
-		annotation.cpredicate = row[8]
-		annotation.cobject = row[9]
+		id = row[0]
+		if id not in annotations:
+			annotation = Annotation()
+			annotations[id] = annotation
+		else:
+			annotation = annotations[id]
 
-		#print annotation
+		# claim qualifiers
+		if row[9] is True:
+			annotation.csubject = row[8]
+		elif row[10] is True:
+			annotation.cpredicate = row[8]
+		elif row[11] is True:
+			annotation.cobject = row[8]
+		else:
+			print "[ERROR] qualifier role unidentified qvalue: %s (claimid %s)" % (row[8], id) 
+		# claim source and label
+		if annotation.source == None:
+			annotation.source = row[1]
+		if annotation.label == None:
+			annotation.label = row[7]
 
+		if annotation.exact == None:
+			annotation.setOaSelector(row[5], row[4], row[6])
+
+	return annotations
+
+
+# query data items for claim annotation
+# return list of DataItems
+def queryMpData(conn, annotation, claimid):
+
+	qry = """	
+	select dann.type, df.data_field_type, df.value_as_string, df.value_as_number, s.exact, s.prefix, s.suffix, mp_data_index
+	from mp_data_annotation dann,oa_data_body dbody, data_field df, oa_target t, oa_selector s
+	where dann.mp_claim_id = %s
+	and dann.has_body = dbody.id
+	and df.data_body_id = dbody.id
+	and dann.has_target = t.id
+	and t.has_selector = s.id
+	""" % (claimid)
+
+	results = []
+
+	cur = conn.cursor()
+	cur.execute(qry)
+	for row in cur.fetchall():
+		dType = row[0]  # data type
+		dfType = row[1] # data field 
+
+		value = row[2] or row[3] # value as string or number
+		index = row[7] # data index
+
+		if annotation.getSpecificDataMaterial(index) == None:
+			dmRow = DataMaterialRow() # create new row of data & material
+			dataItem = DataItem(dType)
+			dataItem.setAttribute(dfType, value)
+			dmRow.setDataItem(dataItem)
+			annotation.setSpecificDataMaterial(dmRow, index)
+
+		else: # current row of data & material exists 
+			dmRow = annotation.getSpecificDataMaterial(index)
+
+			if dmRow.getDataItemInRow(dType) != None: # current DataItem exists
+				dataItem = dmRow.getDataItemInRow(dType)
+				dataItem.setAttribute(dfType, value)
+			else: # current DataItem not exists
+				dataItem = DataItem(dType) 
+				dataItem.setAttribute(dfType, value)
+				dmRow.setDataItem(dataItem)
+
+	return annotation
+
+
+# query material items for claim annotation
+# return list of MaterialItems
+def queryMpMaterial(conn, annotation, claimid):
+
+	qry = """	
+	select mann.type, mf.material_field_type, mf.value_as_string, mf.value_as_number, s.exact, s.prefix, s.suffix, mp_data_index
+	from mp_material_annotation mann,oa_material_body mbody, material_field mf, oa_target t, oa_selector s
+	where mann.mp_claim_id = %s
+	and mann.has_body = mbody.id
+	and mf.material_body_id = mbody.id
+	and mann.has_target = t.id
+	and t.has_selector = s.id
+	""" % (claimid)
+
+	results = []
+
+	cur = conn.cursor()
+	cur.execute(qry)
+
+	for row in cur.fetchall():
+
+		mType = row[0]  # material type
+		mfType = row[1] # material field 
+
+		value = row[2] or row[3] # value as string or number
+		index = row[7] # data & material index
+
+		if annotation.getSpecificDataMaterial(index) == None:
+			dmRow = DataMaterialRow() # create new row of data & material
+
+			if mType in ["object_dose","subject_dose"]: # dose
+				doseItem = MaterialDoseItem(mType)
+				doseItem.setAttribute(mfType, value)
+				dmRow.setMaterialDoseItem(doseItem)
+				annotation.setSpecificDataMaterial(dmRow, index)
+
+			elif mType == "participants":
+				partItem = ParticipantsItem()
+
+		else: # current row of material & material exists 
+			dmRow = annotation.getSpecificDataMaterial(index)
+
+			if dmRow.getMaterialDoseInRow(mType) != None: # current MaterialItem exists
+				doseItem = dmRow.getMaterialDoseInRow(mType)
+				doseItem.setAttribute(mfType, value)
+			else: # current MaterialItem not exists
+				doseItem = MaterialDoseItem(mType) 
+				doseItem.setAttribute(mfType, value)
+				dmRow.setMaterialDoseItem(doseItem)
+	return annotation
+
+# query all mp annotations
+# return annotations with claim, data and material
+def queryMpAnnotation(conn):
+	mpAnnotations = []
+
+	claimAnnos = queryMpClaim(conn)
+	for claimId,claimAnn in claimAnnos.items():
+		claimDataAnno = queryMpData(conn, claimAnn, claimId)
+		claimDataMatAnno = queryMpData(conn, claimAnn, claimId)
+
+		mpAnnotations.append(claimDataMatAnno)
+
+	return mpAnnotations
+
+# print out sample annotation for validation
+def printSample(mpannotations, idx):
+	mpAnnotation = mpannotations[idx]
+	dmRows = mpAnnotation.getDataMaterials()
+
+	print "label: " + mpAnnotation.label
+	print "source: " + mpAnnotation.source
+	print "exact: " + mpAnnotation.exact
+
+	for index,dm in dmRows.items():		
+		print "auc: %s" % (dm.getDataItemInRow("auc").value)
+		print "cmax: %s" % (dm.getDataItemInRow("cmax").value)
+		print "cl: %s" % (dm.getDataItemInRow("cl").value)
+		print "t12: %s" % (dm.getDataItemInRow("t12").value)
+
+		print "subject_dose: %s" % (dm.getMaterialDoseInRow("subject_dose"))
+		print "object_dose: %s" % (dm.getMaterialDoseInRow("object_dose"))
 
 ######################### MAIN ##########################
 
 def main():
 
-    print("postgres connection ...")
-    conn = psycopg2.connect(host=hostname, user=username, password=password, dbname=database)
-    #delete all data in table
-    #clearall(myConnection)
-    #myConnection.commit()
+	print("postgres connection ...")
+	conn = psycopg2.connect(host=hostname, user=username, password=password, dbname=database)
+	mpAnnotations = queryMpAnnotation(conn)
+	print len(mpAnnotations)
 
-    queryMpClaim(conn)
-    conn.close()
+	printSample(mpAnnotations, 783)
+
+	conn.close()
 
 
 if __name__ == '__main__':
-    main()
-
-
-'''
--- validate context 
-select cann.id, cann.has_target, dann.has_target, mann.has_target
-from mp_claim_annotation cann, mp_data_annotation dann, mp_material_annotation mann
-where cann.id = dann.mp_claim_id and cann.id = mann.mp_claim_id;
-
--- validate claim
-select cann.id, t.has_source, cann.creator, cann.date_created, cann.has_target, s.exact
-from mp_claim_annotation cann, mp_data_annotation dann, mp_material_annotation mann, 
-oa_target t, oa_selector s
-where cann.id = dann.mp_claim_id 
-and cann.id = mann.mp_claim_id
-and cann.has_target = t.id
-and t.has_selector = s.id;
-
--- query mp claim
-
-'''
+	main()

@@ -8,8 +8,8 @@ import datetime
 
 csvfiles = ['pkddi-katrina-latest-08152016.csv', 'pkddi-amy-latest-08152016.csv']
 hostname = 'localhost'
-username = 'username'
-password = 'password'
+username = 'postgres'
+password = 'ning1fan'
 database = 'mpevidence'
 
 
