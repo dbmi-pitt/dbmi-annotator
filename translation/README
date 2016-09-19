@@ -15,6 +15,9 @@ insert data : running DML
 3. configure data in preProcess.py
 “
 csvfiles = ['pkddi-katrina-latest-08152016.csv', 'pkddi-amy-latest-08152016.csv']
+
+Note: If csv comes from domeo, replace cl to clearance and t12 to halflife
+
 hostname = 'localhost'
 username = 'username'
 password = 'password'
