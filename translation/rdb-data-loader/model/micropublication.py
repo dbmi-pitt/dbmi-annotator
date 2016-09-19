@@ -118,12 +118,13 @@ class DataMaterialRow(object):
 
 # Define data structure for mp annotation
 class Annotation(object):
-	csubject = None; cpredicate = None; cobject = None
-	label = None
-	source = None
-	prefix = None; exact = None; suffix = None # oa selector
 
-	mpDataMaterialD = {} # data and material dict
+	def __init__(self):
+		self.csubject = None; self.cpredicate = None; self.cobject = None
+		self.label = None
+		self.source = None
+		self.prefix = None; self.exact = None; self.suffix = None # oa selector
+		self.mpDataMaterialD = {} # data and material dict		
 
 	def setOaSelector(self, prefix, exact, suffix):
 		self.prefix = prefix

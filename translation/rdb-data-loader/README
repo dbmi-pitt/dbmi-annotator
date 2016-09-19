@@ -1,0 +1,2 @@
+Query Micropublication annotations from Relational database (Postgres) mpevidence 
+Translate annotation to JSON format and load into Elastico document store

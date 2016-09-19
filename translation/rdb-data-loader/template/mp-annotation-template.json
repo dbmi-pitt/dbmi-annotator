@@ -1,0 +1,47 @@
+{"argues": {
+    "hasTarget": {
+        "hasSelector": {
+            "@type": "TextQuoteSelector",
+            "exact": "",
+            "prefix": "",
+            "suffix": ""}},
+    "ranges": [],
+    "qualifiedBy": {
+        "drug2": "",
+        "relationship": "",
+        "enzyme": "",
+        "drug1": "",
+        "drug1ID": "","drug2ID": "",
+        "precipitant": ""},
+    "method": "DDI clinical trial",
+    "label": "",
+    "supportsBy": [
+        {
+            "auc": { },
+            "cmax": { },
+            "clearance": { },
+            "halflife": { },
+
+            "supportsBy": {
+                "supportsBy": {
+                    "type": "mp:material",
+                    "drug1Dose": { },
+                    "drug2Dose": { },
+                    "participants": { }},
+                "type": "mp:method"},
+            "type": "mp:data"}],
+    "type": "mp:claim"},
+ "email": "yin2@gmail.com",
+ "created": "2016-09-15T18:43:29.425256+00:00",
+ "updated": "2016-09-15T20:18:34.611414+00:00",
+ "annotationType": "MP",
+ "permissions": {
+     "read": [
+         "group:__consumer__"
+     ]
+ },
+ "consumer": "mockconsumer",
+ "rawurl": "http://localhost/dbmiannotator/PMC1490169.html",
+ "user": "alice",
+ "uri": "httplocalhostdbmiannotatorPMC1490169html"
+}

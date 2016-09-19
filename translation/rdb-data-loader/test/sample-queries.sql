@@ -13,7 +13,7 @@ and cann.has_target = t.id
 and t.has_selector = s.id;
 
 -- query mp claim
-qry = select cann.id, t.has_source, cann.creator, cann.date_created, s.exact, s.prefix, s.suffix, cbody.label, qvalue, q.subject, q.predicate, q.object 
+select cann.id, t.has_source, cann.creator, cann.date_created, s.exact, s.prefix, s.suffix, cbody.label, qvalue, q.subject, q.predicate, q.object 
 from mp_claim_annotation cann, oa_claim_body cbody, oa_target t, oa_selector s, qualifier q
 where cann.has_body = cbody.id
 and cann.has_target = t.id
