@@ -13,6 +13,7 @@ if (typeof annotator === 'undefined') {
     
     // global variables for keeping status of text selection
     var isTextSelected = false;
+    var multiSelected = false;
     var cachedOATarget = "";
     var cachedOARanges = "";
 
