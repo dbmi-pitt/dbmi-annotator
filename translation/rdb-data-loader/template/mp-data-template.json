@@ -1,0 +1,15 @@
+{
+    "auc": {},
+    "cmax": {},
+    "clearance": {},
+    "halflife": {},
+    
+    "supportsBy": {
+        "supportsBy": {
+            "type": "mp:material",
+            "drug1Dose": {},
+            "drug2Dose": {},
+            "participants": {}},
+        "type": "mp:method"},
+    "type": "mp:data"
+}

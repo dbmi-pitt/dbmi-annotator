@@ -12,9 +12,10 @@ HOSTNAME = 'localhost'
 DB_SCHEMA = 'mpevidence'
 DB_CONFIG = "config/DB-config.txt"
 MP_ANN_TEMPLATE = "template/mp-annotation-template.json"
+MP_DATA_TEMPLATE = "template/mp-data-template.json"
 ES_PORT = 9250
 
-mpDataL = ["auc", "cmax", "cl", "t12"]
+mpDataL = ["auc", "cmax", "clearance", "halflife"]
 
 ######################### QUERY ##########################
 # query mp claim annotation by author name
@@ -77,12 +78,8 @@ def queryMpData(conn, annotation, claimid):
 
 	cur = conn.cursor()
 	cur.execute(qry)
-	
-	#print "claimid: " + str(claimid)
-
+		
 	for row in cur.fetchall():
-
-		#print str(row)
 
 		dType = row[0]  # data type
 		dfType = row[1] # data field 
@@ -90,8 +87,6 @@ def queryMpData(conn, annotation, claimid):
 		value = row[2] or row[3] # value as string or number
 		index = row[7] # data index
 		dmRow = None
-
-		#print dType + "," + dfType + "," + value
 
 		if annotation.getSpecificDataMaterial(index) == None:
 			dmRow = DataMaterialRow() # create new row of data & material
@@ -112,17 +107,6 @@ def queryMpData(conn, annotation, claimid):
 				dataItem = DataItem(dType) 
 				dataItem.setAttribute(dfType, value)
 				dmRow.setDataItem(dataItem)
-
-		if dmRow.getDataItemInRow("cmax") and dType == "cmax":		
-			cmax = dmRow.getDataItemInRow("cmax")
-			#print "before: " + str(cmax.value) + "," + str(cmax.type) + "," + str(cmax.direction)
-		#annotation.setSpecificDataMaterial(dmRow, index)
-
-	# if annotation.getSpecificDataMaterial(0) != None:
-	# 	dmRow = annotation.getSpecificDataMaterial(0)
-	# 	print "after: " + str(dmRow.getDataItemInRow("cmax").value)
-	# else:
-	# 	print None
 
 	return annotation
 
@@ -161,21 +145,31 @@ def queryMpMaterial(conn, annotation, claimid):
 				doseItem = MaterialDoseItem(mType)
 				doseItem.setAttribute(mfType, value)
 				dmRow.setMaterialDoseItem(doseItem)
-				annotation.setSpecificDataMaterial(dmRow, index)
 
 			elif mType == "participants":
-				partItem = ParticipantsItem()
+				partItem = MaterialParticipants(value)
+				dmRow.setParticipants(partItem)
+
+			annotation.setSpecificDataMaterial(dmRow, index)
 
 		else: # current row of material & material exists 
 			dmRow = annotation.getSpecificDataMaterial(index)
-
-			if dmRow.getMaterialDoseInRow(mType) != None: # current MaterialItem exists
-				doseItem = dmRow.getMaterialDoseInRow(mType)
-				doseItem.setAttribute(mfType, value)
-			else: # current MaterialItem not exists
-				doseItem = MaterialDoseItem(mType) 
-				doseItem.setAttribute(mfType, value)
+			if mType in ["object_dose","subject_dose"]:
+				if dmRow.getMaterialDoseInRow(mType): # current MaterialItem exists
+					doseItem = dmRow.getMaterialDoseInRow(mType)
+					doseItem.setAttribute(mfType, value)
+				else: # current MaterialItem not exists
+					doseItem = MaterialDoseItem(mType) 
+					doseItem.setAttribute(mfType, value)
 				dmRow.setMaterialDoseItem(doseItem)
+			elif mType is "participants":
+				if dmRow.getParticipantsInRow(): # participants exists
+					partItem = dmRow.getParticipantsInRow()
+					partItem.setValue(value)
+				else:
+					partItem = MatarialParticipants(value)
+					dmRow.setParticipants(partItem)
+
 	return annotation
 
 # query all mp annotations
@@ -199,27 +193,71 @@ def queryMpAnnotation(conn):
 	return mpAnnotations
 
 ######################### LOAD ##########################
-def loadMpAnnotation(annotation):
+def generateOASelector(prefix, exact, suffix):
+	oaSelector = "{\"hasSelector\": { \"@type\": \"TextQuoteSelector\", \"exact\": \""+exact+"\", \"prefix\": \""+ (prefix or "") + "\", \"suffix\": \"" + (suffix or "") + "\"}}"
+
+	return json.loads(oaSelector)
+
+
+
+
+def loadMpAnnotation(annotation, email):
 	
-	es = Elasticsearch(port=ES_PORT) # by default we connect to localhost:9200
+	es = Elasticsearch(port=ES_PORT) # by default we connect to localhost:9200	
 
 	print "label(%s), subject(%s), predicate(%s), object(%s)" % (annotation.label, annotation.csubject, annotation.cpredicate, annotation.cobject)
 
-	dmRows = annotation.getDataMaterials()
-	
-	if dmRows:
-		firstRow = dmRows[1]
-		for df in mpDataL:
-			if firstRow.getDataItemInRow(df):
-				print "%s: %s" % (df, str(firstRow.getDataItemInRow(df).value))
-			else:
-				print "%s: %s" % (df, None)
+	subjectDrug = annotation.csubject; predicate = annotation.cpredicate; objectDrug = annotation.cobject
+	prefix = annotation.prefix; exact = annotation.exact; suffix = annotation.suffix
 
 	mpAnn = loadTemplateInJson(MP_ANN_TEMPLATE)
-	#print mpAnn["argues"]["hasTarget"]["hasSelector"]["@type"]
+	oaSelector = generateOASelector(prefix, exact, suffix)
 
-	#jsonbody = mpAnn
-	#es.index(index="annotator", doc_type="annotation", id=uuid.uuid4(), body=jsonbody)
+	# MP Claim
+	mpAnn["argues"]["qualifiedBy"]["drug1"] = subjectDrug
+	mpAnn["argues"]["qualifiedBy"]["drug2"] = objectDrug
+	mpAnn["argues"]["qualifiedBy"]["relationship"] = predicate
+	mpAnn["argues"]["qualifiedBy"]["precipitant"] = "drug1" # for interact_with
+	mpAnn["argues"]["hasTarget"] = oaSelector
+	
+	# MP Data & Material
+	dmRows = annotation.getDataMaterials()	
+	if dmRows:
+		firstRow = dmRows[1] # only one data & material row
+		
+		mpData = loadTemplateInJson(MP_DATA_TEMPLATE) # data template
+		
+		# MP Data
+		for df in mpDataL: 
+		 	if firstRow.getDataItemInRow(df):
+				mpData[df]["value"] = str(firstRow.getDataItemInRow(df).value)
+				mpData[df]["type"] = str(firstRow.getDataItemInRow(df).type)
+				mpData[df]["direction"] = str(firstRow.getDataItemInRow(df).direction)
+				mpData[df]["hasTarget"] = oaSelector
+		# MP Material
+		if firstRow.getMaterialDoseInRow("subject_dose"):
+			mpData["supportsBy"]["supportsBy"]["drug1Dose"]["value"] = firstRow.getMaterialDoseInRow("subject_dose").value
+			mpData["supportsBy"]["supportsBy"]["drug1Dose"]["duration"] = firstRow.getMaterialDoseInRow("subject_dose").duration
+			mpData["supportsBy"]["supportsBy"]["drug1Dose"]["formulation"] = firstRow.getMaterialDoseInRow("subject_dose").formulation
+			mpData["supportsBy"]["supportsBy"]["drug1Dose"]["regimens"] = firstRow.getMaterialDoseInRow("subject_dose").regimens
+			mpData["supportsBy"]["supportsBy"]["drug1Dose"]["hasTarget"] = oaSelector
+
+		if firstRow.getMaterialDoseInRow("object_dose"):
+			mpData["supportsBy"]["supportsBy"]["drug2Dose"]["value"] = firstRow.getMaterialDoseInRow("object_dose").value
+			mpData["supportsBy"]["supportsBy"]["drug2Dose"]["duration"] = firstRow.getMaterialDoseInRow("object_dose").duration
+			mpData["supportsBy"]["supportsBy"]["drug2Dose"]["formulation"] = firstRow.getMaterialDoseInRow("object_dose").formulation
+			mpData["supportsBy"]["supportsBy"]["drug2Dose"]["regimens"] = firstRow.getMaterialDoseInRow("object_dose").regimens
+			mpData["supportsBy"]["supportsBy"]["drug2Dose"]["hasTarget"] = oaSelector
+
+		mpAnn["argues"]["supportsBy"].append(mpData)  # append mp data to claim
+
+	mpAnn["created"] = "2016-09-19T18:33:51.179625+00:00"
+	mpAnn["updated"] = "2016-09-19T18:33:51.179625+00:00"
+	mpAnn["email"] = email
+ 
+	#print mpAnn										  
+
+	es.index(index="annotator", doc_type="annotation", id=uuid.uuid4(), body=json.dumps(mpAnn))
 
 ######################### CONFIG ##########################
 # load json template
@@ -249,12 +287,13 @@ def connectPostgres():
 ######################### MAIN ##########################
 
 def main():
+	author = "yin2@gmail.com"
 
 	conn = connectPostgres()
 	mpAnnotations = queryMpAnnotation(conn)	
 	
 	for mpAnn in mpAnnotations:
-		loadMpAnnotation(mpAnn)		
+		loadMpAnnotation(mpAnn, author)		
 
 	#printSample(mpAnnotations, 6)
 

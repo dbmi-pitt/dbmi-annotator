@@ -62,18 +62,21 @@ class MatarialParticipants(DMItem):
 	def __init__(self, value):
 		self.value = value
 
+	def setValue(self, value):
+		self.value = value
+
 
 # represents single row of data & material in annotation table
 class DataMaterialRow(object):
 
 	def __init__(self):
 		self.index = 1 # mp data index for claim, default 0 
-		self.dataMaterialRowD = {"auc": None, "cmax": None, "cl": None, "t12": None, "participants": None, "object_dose": None, "subject_dose": None}
+		self.dataMaterialRowD = {"auc": None, "cmax": None, "clearance": None, "halflife": None, "participants": None, "object_dose": None, "subject_dose": None}
 
 	def setDataItem(self, obj): # obj: DataItem
 		if self.dataMaterialRowD[obj.field] != None:
 			print "[Warning] Data item already has the field: " + obj.field
-		elif obj.field in ["auc", "cmax", "cl", "t12"]:
+		elif obj.field in ["auc", "cmax", "clearance", "halflife"]:
 			self.dataMaterialRowD[obj.field] = obj
 		else:
 			print "[Error] data item undefined: " + obj.field
@@ -96,7 +99,7 @@ class DataMaterialRow(object):
 		return self.dataMaterialRowD
 
 	def getDataItemInRow(self, field): # return DataItem
-		if field in ["auc", "cmax", "cl", "t12"]:
+		if field in ["auc", "cmax", "clearance", "halflife"]:
 			return self.dataMaterialRowD[field]
 		else:
 			print "[Error] get DataItem field error: " + field
