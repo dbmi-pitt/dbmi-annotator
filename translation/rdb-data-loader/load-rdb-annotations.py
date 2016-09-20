@@ -258,7 +258,7 @@ def loadMpAnnotation(annotation, email):
 	mpAnn["updated"] = "2016-09-19T18:33:51.179625+00:00"
 	mpAnn["email"] = email
 
-	mpAnn["label"] = label
+	mpAnn["argues"]["label"] = label
 	mpAnn["rawurl"] = rawurl # Document source url
 	mpAnn["uri"] = uri
 

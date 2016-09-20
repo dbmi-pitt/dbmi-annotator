@@ -37,6 +37,9 @@ function annotationTable(sourceURL, email, sortByColumn){
 // @input: list of mp annotaitons
 // @input: annotationId for selected claim
 function updateClaimAndData(annotations, annotationId) {
+    console.log("ann table updateClaimAndData!!!!!!!");
+    console.log(annotations);
+
     // claim menu for mpadder
     claimMenu = "";
     // data table for selected claim
@@ -57,10 +60,8 @@ function updateClaimAndData(annotations, annotationId) {
             claimIsSelected = 'selected="selected"';     
             // cache total number of data & material for current claim
             totalDataNum = annotation.argues.supportsBy.length;      
-            
-            // create data table
-            // dataTable = createDataTable(dataL, annotationId);                     
-            dataTable = createDataTable(annotation);                       
+                        
+            dataTable = createDataTable(annotation); // create data table           
         }
         
         claim = annotation.argues;                    
