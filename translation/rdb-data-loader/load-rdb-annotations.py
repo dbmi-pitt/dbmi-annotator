@@ -1,4 +1,4 @@
-import sys, csv, json
+import sys, csv, json, re
 import psycopg2
 import uuid
 import datetime
@@ -205,10 +205,13 @@ def loadMpAnnotation(annotation, email):
 	
 	es = Elasticsearch(port=ES_PORT) # by default we connect to localhost:9200	
 
-	print "label(%s), subject(%s), predicate(%s), object(%s)" % (annotation.label, annotation.csubject, annotation.cpredicate, annotation.cobject)
+	print "[INFO] label(%s), subject(%s), predicate(%s), object(%s) \n" % (annotation.label, annotation.csubject, annotation.cpredicate, annotation.cobject)
 
 	subjectDrug = annotation.csubject; predicate = annotation.cpredicate; objectDrug = annotation.cobject
 	prefix = annotation.prefix; exact = annotation.exact; suffix = annotation.suffix
+	rawurl = annotation.source.replace("dbmi-icode-01.dbmi.pitt.edu:80","localhost")
+	uri = re.sub(r"[\/\\\-\:\.]", "", rawurl)
+	label = annotation.label.replace("interact_with","interact with")
 
 	mpAnn = loadTemplateInJson(MP_ANN_TEMPLATE)
 	oaSelector = generateOASelector(prefix, exact, suffix)
@@ -216,7 +219,7 @@ def loadMpAnnotation(annotation, email):
 	# MP Claim
 	mpAnn["argues"]["qualifiedBy"]["drug1"] = subjectDrug
 	mpAnn["argues"]["qualifiedBy"]["drug2"] = objectDrug
-	mpAnn["argues"]["qualifiedBy"]["relationship"] = predicate
+	mpAnn["argues"]["qualifiedBy"]["relationship"] = predicate.replace("interact_with","interact with")
 	mpAnn["argues"]["qualifiedBy"]["precipitant"] = "drug1" # for interact_with
 	mpAnn["argues"]["hasTarget"] = oaSelector
 	
@@ -251,12 +254,16 @@ def loadMpAnnotation(annotation, email):
 
 		mpAnn["argues"]["supportsBy"].append(mpData)  # append mp data to claim
 
-	mpAnn["created"] = "2016-09-19T18:33:51.179625+00:00"
+	mpAnn["created"] = "2016-09-19T18:33:51.179625+00:00" # Metadata
 	mpAnn["updated"] = "2016-09-19T18:33:51.179625+00:00"
 	mpAnn["email"] = email
+
+	mpAnn["label"] = label
+	mpAnn["rawurl"] = rawurl # Document source url
+	mpAnn["uri"] = uri
+
  
 	#print mpAnn										  
-
 	es.index(index="annotator", doc_type="annotation", id=uuid.uuid4(), body=json.dumps(mpAnn))
 
 ######################### CONFIG ##########################
