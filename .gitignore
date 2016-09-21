@@ -5,6 +5,9 @@ config/config.js
 public/dbmiannotator/js/app.bundle.js
 public/dbmiannotator/js/annotator.min.js
 
+# text editor cache file 
+*~
+
 # articles
 public/pdf2html
 
@@ -13,6 +16,7 @@ node_modules/
 
 # Mac hidden file
 .DS_Store
+.idea/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
