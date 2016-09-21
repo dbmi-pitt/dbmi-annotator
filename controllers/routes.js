@@ -197,11 +197,7 @@ module.exports = function(app, passport) {
                         var data = dataL[j];
                         var method = data.supportsBy;
                         var material = method.supportsBy;
-<<<<<<< HEAD
                         var dataRow = "";
-=======
-                        var dataRow = ""
->>>>>>> 40e5b3ea4d416d24ff7172b7b88e1038965d48f7
 
                         if (material.participants != null)
                             dataRow += '\t"' + (material.participants.value || '') + '"\t"' + (getSpanFromField(material.participants) || '') + '"';
