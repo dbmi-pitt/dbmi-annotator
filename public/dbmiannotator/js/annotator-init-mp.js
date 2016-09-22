@@ -42,99 +42,99 @@ if (typeof annotator === 'undefined') {
     });
 
     // load annotation after page contents loaded
-    app.start().then(function () 
-		             {
-			         app.ident.identity = email;
-			         $(".btn-success").css("display","block");
-		             }).then(function(){
-			             setTimeout(function(){
-			                 app.annotations.load({uri: sourceURL.replace(/[\/\\\-\:\.]/g, ""), email: email});                             
-			             }, 1000);
-		             }).then(function(){
-                         annotationTable(sourceURL, email);
-                     }).then(function(){
-
-                         $('#splitter').jqxSplitter({ showSplitBar: false, width: $(window).width(), height: $(window).height(), orientation: 'horizontal', panels: [{ size: '100%',min: 200 }, { size: '0%', min: 0}] });
-
-                         // MP adder - open/close claim menu
-                         // PMC page not ready - hanging... (comment line below)
-                         // $(document).ready(function () {
-                             
-                         $('.mp-menu-btn').hover(
-                             function() { 
-                                 $('.mp-main-menu').show(); 
-                             }
-                         ); 
-                         // hide menu when mouse over drugMention adder
-                         $('.hl-adder-btn').mouseenter(function(){
-                             $('.mp-main-menu').hide();
-                         });
-
-                         $('.mp-main-menu').mouseleave(function(){
-                             $('.mp-main-menu').hide(); 
-                         });
-                         
-                         $('.mp-main-menu-2').mouseenter(function(){
-                             $(this).find('.mp-sub-menu-2').slideDown();
-                         });
-                         
-                         $('.mp-main-menu-2').mouseleave(function(){
-                             $(this).find('.mp-sub-menu-2').slideUp();
-                         });
-
-                         $('#relationship').change(function() {
-                             showEnzyme();
-                         });
-
-                         // change event for auc, cmax, clearance, halflife unchanged checkbox
-                         unchangedCheckBoxDialog("auc");                        
-                         unchangedCheckBoxDialog("cmax");
-                         unchangedCheckBoxDialog("clearance");
-                         unchangedCheckBoxDialog("halflife");
-
-                         // jquery for checking form editing status
-                         $(":input").change(function(){
-                             //console.log("[INFO] making changes - unsaved set to true");
-                             unsaved = true;
-                         });
-
-                         var resizeTimer;
-                         //window.addEventListener("resize", resetSplitter);
-
-                         $(window).resize(function() {
-                             clearTimeout(resizeTimer);
-                             resizeTimer = setTimeout(resetSplitter, 300);
-                         });
-
-                         function resetSplitter() {    
-                             console.log("resize window - resetSplitter called");
-                             $('#splitter').jqxSplitter({
-                                 showSplitBar: false, 
-                                 width: $(window).width(), 
-                                 height: $(window).height(), 
-                                 orientation: 'horizontal', 
-                                 //panels: [{ size: '100%',min: 200 }, { size: '0%', min: 0}] });
-                                 panels: [{size: '80%', min: 200}, {size: '20%', min: 250}]
-                             });
-                         }
-                     });
-
+    app.start().then(
+        function () {
+			app.ident.identity = email;
+			$(".btn-success").css("display","block");            
+            
+            initMpAdder(); // initiate mp adder
+            
+            initLiseners(); // initiate listeners on data unchange button, claim relationship change, etc
+            
+            initSplitter(); // initiate screen splitter
+            
+            importAnnotationDialog(sourceURL, email); // annotation import dialog    
+        });
 }
 
-$(document)
-    .ajaxStart(function () {
-        $('#wait').show();
-    })
-    .ajaxStop(function () {
-        $('#wait').hide();
+
+// initiate splitter
+function initSplitter() {
+
+    $('#splitter').jqxSplitter({ showSplitBar: false, width: $(window).width(), height: $(window).height(), orientation: 'horizontal', panels: [{ size: '100%',min: 200 }, { size: '0%', min: 0}] });
+
+    var resizeTimer;           
+    $(window).resize(function() {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(resetSplitter, 300);
+    });    
+}
+
+// reset splitter when window size changed
+function resetSplitter() {    
+    console.log("resize window - resetSplitter called");
+    $('#splitter').jqxSplitter({
+        showSplitBar: false, 
+        width: $(window).width(), 
+        height: $(window).height(), 
+        orientation: 'horizontal', 
+        panels: [{size: '80%', min: 200}, {size: '20%', min: 250}]
+    });
+}
+
+
+// initiate Mp adder
+function initMpAdder() {
+    // MP adder - open/close claim menu           
+    $('.mp-menu-btn').hover(
+        function() { 
+            $('.mp-main-menu').show(); 
+        }
+    ); 
+    // hide menu when mouse over drugMention adder
+    $('.hl-adder-btn').mouseenter(function(){
+        $('.mp-main-menu').hide();
+    });
+    
+    $('.mp-main-menu').mouseleave(function(){
+        $('.mp-main-menu').hide(); 
+    });
+    
+    $('.mp-main-menu-2').mouseenter(function(){
+        $(this).find('.mp-sub-menu-2').slideDown();
+    });
+    
+    $('.mp-main-menu-2').mouseleave(function(){
+        $(this).find('.mp-sub-menu-2').slideUp();
+    });
+}
+
+
+// add action listeners 
+function initLiseners() {
+
+    $('#relationship').change(function() {
+        showEnzyme();
+    });
+            
+    // change event for auc, cmax, clearance, halflife unchanged checkbox
+    unchangedCheckBoxDialog("auc");                        
+    unchangedCheckBoxDialog("cmax");
+    unchangedCheckBoxDialog("clearance");
+    unchangedCheckBoxDialog("halflife");
+    
+    // jquery for checking form editing status
+    $(":input").change(function(){
+        unsaved = true;
     });
 
+    //highlight drugs in quote dynamicly  
+    //moved from mp-annotation-editor                      
+    $("#Drug1").change(function (){selectDrug();});
+    $("#Drug2").change(function (){selectDrug();});
+}
 
 
-//highlight drugs in quote dynamicly  
-//moved from mp-annotation-editor                      
-$("#Drug1").change(function (){selectDrug();});
-$("#Drug2").change(function (){selectDrug();});
 
 function selectDrug() {
     var drug1 = $('#Drug1 option:selected').text();
@@ -153,15 +153,11 @@ function selectDrug() {
 }
 
 
-
+// get parameter from url
 function getURLParameter(name) {
     return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search)||[,""])[1].replace(/\+/g, '%20'))||null
 }
 
-$(document).ready(function () {
-    // splitter for show annotation panel
-    $('#splitter').jqxSplitter({ showSplitBar: false, width: $(window).width(), height: $(window).height(), orientation: 'horizontal', panels: [{ size: '100%',min: 200 }, { size: '0%', min: 0}] });
-});
 
 
 // dialog for confirm truncation when user check unchanged checkbox  
@@ -220,3 +216,37 @@ function unchangedCheckBoxDialog(field) {
         }
     });
 }
+
+// pop up dialog for importable existing annotation sets  
+function importAnnotationDialog(sourceURL, email) {
+
+    var uri = sourceURL.replace(/[\/\\\-\:\.]/g, "");
+    var importDialog = document.getElementById('dialog-annotation-import');
+
+    importDialog.style.display = "block"; 
+
+    var okBtn = document.getElementById("ann-import-confirm-btn");
+    var cancelBtn = document.getElementById("ann-import-cancel-btn");
+
+    cancelBtn.onclick = function() {
+        importDialog.style.display = "none"; 
+        annotationTable(sourceURL, email);
+    }
+
+    okBtn.onclick = function() {
+        console.log("import clicked");
+		app.annotations.load({uri: uri, email: email});                             
+        importDialog.style.display = "none"; 
+        annotationTable(sourceURL, email);
+    }	
+}
+
+
+
+$(document)
+    .ajaxStart(function () {
+        $('#wait').show();
+    })
+    .ajaxStop(function () {
+        $('#wait').hide();
+    });

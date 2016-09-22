@@ -38,7 +38,7 @@ function annotationTable(sourceURL, email, sortByColumn){
 // @input: annotationId for selected claim
 function updateClaimAndData(annotations, annotationId) {
     console.log("ann table updateClaimAndData!!!!!!!");
-    console.log(annotations);
+    // console.log(annotations);
 
     // claim menu for mpadder
     claimMenu = "";
