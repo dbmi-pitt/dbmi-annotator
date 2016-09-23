@@ -223,6 +223,41 @@ function importAnnotationDialog(sourceURL, email) {
     var uri = sourceURL.replace(/[\/\\\-\:\.]/g, "");
     var importDialog = document.getElementById('dialog-annotation-import');
 
+    var allAnnsD = {}; // dict for all annotations on document {email: annotations}
+
+    $.ajax({url: "http://" + config.annotator.host + "/annotatorstore/search",
+            data: {annotationType: "MP", 
+                   uri: uri},
+            method: 'GET',
+            error : function(jqXHR, exception){
+                console.log(exception);
+		        console.log(jqXHR);
+            },
+            success : function(response){
+
+                for (var i=0; i < response.total; i++) {
+                    var ann = response.rows[i];
+                    var email = ann.email;
+                    if (allAnnsD[email] == null) {
+                        allAnnsD[email] = [ann];
+                    } else {
+                        allAnnsD[email].push(ann);
+                    }
+                }
+                console.log(allAnnsD);
+                var htmlCnt = ""; 
+
+                for (key in allAnnsD) {
+                    htmlCnt += "<b>"+key+": </b>" + allAnnsD[key].length;
+                    htmlCnt += "<input type='checkbox' name='anns-load-by-email' value='"+key+"'>";
+                    htmlCnt += "<br>";
+                }
+                
+                $('#import-annotation-selection').html(htmlCnt);                
+            }
+           });
+
+
     importDialog.style.display = "block"; 
 
     var okBtn = document.getElementById("ann-import-confirm-btn");
@@ -230,14 +265,23 @@ function importAnnotationDialog(sourceURL, email) {
 
     cancelBtn.onclick = function() {
         importDialog.style.display = "none"; 
-        annotationTable(sourceURL, email);
     }
 
     okBtn.onclick = function() {
-        console.log("import clicked");
-		app.annotations.load({uri: uri, email: email});                             
-        importDialog.style.display = "none"; 
-        annotationTable(sourceURL, email);
+        var emailL = [] // list of users been selected for import
+        var selectedAnnsL = []; // selected annotations
+
+        $("input:checkbox[name=anns-load-by-email]:checked").each(function(){
+            var email = $(this).val();
+            emailL.push(email);
+            selectedAnnsL = selectedAnnsL.concat(allAnnsD[email]);
+        });
+        
+        for (i=0; i<emailL.length; i++) // load selected annotations
+		    app.annotations.load({uri: uri, email: emailL[i]});
+
+        importDialog.style.display = "none"; // hide panel
+        updateAnnTable(selectedAnnsL); // update annotation table
     }	
 }
 

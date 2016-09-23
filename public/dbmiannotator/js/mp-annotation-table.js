@@ -33,6 +33,24 @@ function annotationTable(sourceURL, email, sortByColumn){
 }
 
 
+function updateAnnTable(selectedAnnsL) {
+    console.log("refresh ann table");
+
+    // ann Id for selected claim, if null, set first claim as default 
+    if (currAnnotationId == null || currAnnotationId.trim() == "") { 
+        //console.log("TESTING: " + response.total);
+        if (selectedAnnsL.length > 0){
+            currAnnotationId = selectedAnnsL[0].id;
+        }
+    }
+
+    console.log(selectedAnnsL);
+    updateClaimAndData(selectedAnnsL, currAnnotationId);
+
+}
+
+
+
 // update annotation table by selected annotaionId
 // @input: list of mp annotaitons
 // @input: annotationId for selected claim
