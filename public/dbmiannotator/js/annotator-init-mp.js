@@ -23,8 +23,11 @@ if (typeof annotator === 'undefined') {
     var totalDataNum = "";
     var currFormType = "";
 
-    // track the form editing status from user
+    // form editing status from user
     var unsaved = false;
+
+    // users annotation been imported
+    var userEmails = new Set();
 
     if (annType == "DDI")
         app.include(annotator.ui.dbmimain);            
@@ -268,20 +271,20 @@ function importAnnotationDialog(sourceURL, email) {
     }
 
     okBtn.onclick = function() {
-        var emailL = [] // list of users been selected for import
         var selectedAnnsL = []; // selected annotations
 
         $("input:checkbox[name=anns-load-by-email]:checked").each(function(){
             var email = $(this).val();
-            emailL.push(email);
+            userEmails.add(email); // add user emails to set as global variable
             selectedAnnsL = selectedAnnsL.concat(allAnnsD[email]);
         });
         
-        for (i=0; i<emailL.length; i++) // load selected annotations
-		    app.annotations.load({uri: uri, email: emailL[i]});
+        userEmails.forEach(function(email) {
+		    app.annotations.load({uri: uri, email: email});
+        });
 
         importDialog.style.display = "none"; // hide panel
-        updateAnnTable(selectedAnnsL); // update annotation table
+        initAnnTable(selectedAnnsL); // update annotation table
     }	
 }
 
