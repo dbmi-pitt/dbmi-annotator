@@ -42,15 +42,12 @@ function initAnnTable(selectedAnnsL) {
 
     // ann Id for selected claim, if null, set first claim as default 
     if (currAnnotationId == null || currAnnotationId.trim() == "") { 
-        //console.log("TESTING: " + response.total);
+
         if (selectedAnnsL.length > 0){
             currAnnotationId = selectedAnnsL[0].id;
         }
     }
-
-    console.log(selectedAnnsL);
     updateClaimAndData(selectedAnnsL, currAnnotationId);
-
 }
 
 
@@ -59,7 +56,7 @@ function initAnnTable(selectedAnnsL) {
 // @input: list of mp annotaitons
 // @input: annotationId for selected claim
 function updateClaimAndData(annotations, annotationId) {
-    console.log("ann table updateClaimAndData!!!!!!!");
+    console.log("ann table updateClaimAndData");
     // console.log(annotations);
 
     // claim menu for mpadder
@@ -265,21 +262,6 @@ function changeClaimInAnnoTable() {
     currAnnotationId = newAnnotationId;
     sourceURL = getURLParameter("sourceURL").trim();
     updateAnnTable(sourceURL);
-
-    // email = getURLParameter("email");
-
-    // $.ajax({url: "http://" + config.annotator.host + "/annotatorstore/search",
-    //         data: {annotationType: "MP", 
-    //                email: email, 
-    //                uri: sourceURL.replace(/[\/\\\-\:\.]/g, "")},
-    //         method: 'GET',
-    //         error : function(jqXHR, exception){
-    //             console.log(exception);
-    //         },
-    //         success : function(response){
-    //             updateClaimAndData(response.rows, newAnnotationId);
-    //         }     
-    //        });    
 }
 
 
@@ -323,33 +305,3 @@ function warnSelectTextSpan(field) {
         $("#dialog-select-text-for-data").hide();
     });
 }
-
-
-
-// sort data & materail table by column 
-function sort(annotations, sortByColumn) {
-
-    //console.log("sortByColumn: " + sortByColumn);
-    // console.log($("#tb-annotation-list"));
-    // className = $("#tb-annotation-list").find('#' + sortByColumn).attr('class');
-    // console.log("className: " + className);
-
-    // if (className == "tb-list-unsorted"){
-        
-    //     $('#' + sortByColumn).attr('class','tb-list-asc');
-    //     annotations.sort(function(a, b){
-    //         return a[sortByColumn].localeCompare(b[sortByColumn]);
-    //     });
-    // } else if (className == "tb-list-asc"){
-    //     annotations.sort(function(a, b){
-    //         return a[sortByColumn].localeCompare(b[sortByColumn]);
-    //     }).reverse();
-    // }
-
-    $('#' + sortByColumn).attr('class','tb-list-asc');
-        annotations.sort(function(a, b){
-            return a[sortByColumn].localeCompare(b[sortByColumn]);
-        });
-}
-
-

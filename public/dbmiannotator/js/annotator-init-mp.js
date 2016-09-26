@@ -247,7 +247,7 @@ function importAnnotationDialog(sourceURL, email) {
                         allAnnsD[email].push(ann);
                     }
                 }
-                console.log(allAnnsD);
+
                 var htmlCnt = ""; 
 
                 for (key in allAnnsD) {
