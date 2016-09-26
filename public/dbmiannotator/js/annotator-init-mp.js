@@ -226,11 +226,13 @@ function importAnnotationDialog(sourceURL, email) {
     var uri = sourceURL.replace(/[\/\\\-\:\.]/g, "");
     var importDialog = document.getElementById('dialog-annotation-import');
 
-    var allAnnsD = {}; // dict for all annotations on document {email: annotations}
-
+    var emailS = new Set();
+    var allMPAnnsD = {}; // dict for all MP annotations {email: annotations}
+    var allDrugAnnsD = {}; // dict for all drug mention annotation {email: annotations}
     $.ajax({url: "http://" + config.annotator.host + "/annotatorstore/search",
-            data: {annotationType: "MP", 
-                   uri: uri},
+            data: {
+                //annotationType: "MP", 
+                uri: uri},
             method: 'GET',
             error : function(jqXHR, exception){
                 console.log(exception);
@@ -241,21 +243,36 @@ function importAnnotationDialog(sourceURL, email) {
                 for (var i=0; i < response.total; i++) {
                     var ann = response.rows[i];
                     var email = ann.email;
-                    if (allAnnsD[email] == null) {
-                        allAnnsD[email] = [ann];
-                    } else {
-                        allAnnsD[email].push(ann);
-                    }
+                    emailS.add(email);
+
+                    if (ann.annotationType == "MP") {
+                        if (allMPAnnsD[email] == null) 
+                            allMPAnnsD[email] = [ann];
+                        else 
+                            allMPAnnsD[email].push(ann);                   
+                    } else if (ann.annotationType == "DrugMention") {
+                        if (allDrugAnnsD[email] == null) 
+                            allDrugAnnsD[email] = [ann];
+                        else 
+                            allDrugAnnsD[email].push(ann);                   
+                    }                    
                 }
+
+                //console.log(allMPAnnsD);
+                //console.log(allDrugAnnsD);
 
                 var htmlCnt = ""; 
+                emailS.forEach(function (email){
+                    var numsOfAnns = 0
+                    if (allMPAnnsD[email] != null)
+                        numsOfAnns += allMPAnnsD[email].length;
+                    if (allDrugAnnsD[email] != null)
+                        numsOfAnns += allDrugAnnsD[email].length;
 
-                for (key in allAnnsD) {
-                    htmlCnt += "<b>"+key+": </b>" + allAnnsD[key].length;
-                    htmlCnt += "<input type='checkbox' name='anns-load-by-email' value='"+key+"'>";
-                    htmlCnt += "<br>";
-                }
-                
+                    htmlCnt += "<b>"+email+": </b>" + numsOfAnns;
+                    htmlCnt += "<input type='checkbox' name='anns-load-by-email' value='"+email+"'><br>";
+                });
+                                
                 $('#import-annotation-selection').html(htmlCnt);                
             }
            });
@@ -267,24 +284,27 @@ function importAnnotationDialog(sourceURL, email) {
     var cancelBtn = document.getElementById("ann-import-cancel-btn");
 
     cancelBtn.onclick = function() {
+        initAnnTable([]); // update annotation table
         importDialog.style.display = "none"; 
     }
 
     okBtn.onclick = function() {
-        var selectedAnnsL = []; // selected annotations
+        var selectedMPAnnsL = []; // selected annotations
 
         $("input:checkbox[name=anns-load-by-email]:checked").each(function(){
             var email = $(this).val();
             userEmails.add(email); // add user emails to set as global variable
-            selectedAnnsL = selectedAnnsL.concat(allAnnsD[email]);
+            
+            selectedMPAnnsL = selectedMPAnnsL.concat(allMPAnnsD[email]);
         });
         
-        userEmails.forEach(function(email) {
+        userEmails.forEach(function(email) { // draw all annotaitons by email
 		    app.annotations.load({uri: uri, email: email});
         });
 
         importDialog.style.display = "none"; // hide panel
-        initAnnTable(selectedAnnsL); // update annotation table
+        
+        initAnnTable(selectedMPAnnsL); // update annotation table
     }	
 }
 

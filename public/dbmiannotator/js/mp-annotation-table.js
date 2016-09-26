@@ -3,7 +3,8 @@
 // @output: update annotation table and mpadder 
 
 function updateAnnTable(sourceURL){
-    console.log("refresh ann table");
+    console.log("update annotation table");
+    //console.log(userEmails);
     // request all mp annotaitons for current document and user
 
     $.ajax({url: "http://" + config.annotator.host + "/annotatorstore/search",
@@ -38,11 +39,11 @@ function updateAnnTable(sourceURL){
 // initiate annotation when user click annotation import button
 // @input: list of annotations have been selected for import 
 function initAnnTable(selectedAnnsL) {
-    console.log("refresh ann table");
+    console.log("init ann table");
+    if (selectedAnnsL == null) return null;
 
     // ann Id for selected claim, if null, set first claim as default 
-    if (currAnnotationId == null || currAnnotationId.trim() == "") { 
-
+    if ((currAnnotationId == null || currAnnotationId.trim()) == "" && selectedAnnsL != null) { 
         if (selectedAnnsL.length > 0){
             currAnnotationId = selectedAnnsL[0].id;
         }
@@ -71,7 +72,7 @@ function updateClaimAndData(annotations, annotationId) {
     for (i = 0; i < annotations.length; i++) { 
       
         annotation = annotations[i];
-        //dataL = annotation.argues.supportsBy;
+        //if (annotation.annotationType != "MP") continue;
 
         var claimIsSelected = "";
         if (annotationId == annotation.id) {
