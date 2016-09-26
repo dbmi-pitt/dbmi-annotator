@@ -7,7 +7,7 @@ CREATE DATABASE mpevidence
        LC_CTYPE = 'en_US.UTF-8'
 CONNECTION LIMIT = -1;
 
-
+-- MP Claim ------------------------------------
 --TABLE: mp_claim_annotation
 DROP TABLE IF EXISTS mp_claim_annotation CASCADE;
 CREATE TABLE mp_claim_annotation
@@ -35,17 +35,7 @@ is_oa_body_of integer
 );
 
 
---TABLE: oa_target
-DROP TABLE IF EXISTS oa_target CASCADE;
-CREATE TABLE oa_target
-(
-id INTEGER not null PRIMARY KEY,
-urn text,
-has_source text,
-has_selector integer
-);
-
-
+-- MP Data ------------------------------------
 --TABLE mp_data_annotation
 DROP TABLE IF EXISTS mp_data_annotation CASCADE;
 CREATE TABLE mp_data_annotation
@@ -91,7 +81,7 @@ value_as_number numeric(10,2),
 FOREIGN KEY (data_body_id) REFERENCES oa_data_body(id)
 );
 
-
+-- MP Material ------------------------------------
 --TABLE mp_material_annotation
 DROP TABLE IF EXISTS mp_material_annotation CASCADE;
 CREATE TABLE mp_material_annotation
@@ -154,7 +144,7 @@ vocabulary_id integer,
 FOREIGN KEY (claim_body_id) REFERENCES oa_claim_body(id)
 );
 
-
+-- MP Method -------------------------------------
 --TABLE method
 DROP TABLE IF EXISTS method CASCADE;
 CREATE TABLE method
@@ -166,6 +156,16 @@ mp_data_index integer,
 FOREIGN KEY (mp_claim_id) REFERENCES mp_claim_annotation(id)
 );
 
+-- Open annotation target & selector --------------
+--TABLE: oa_target
+DROP TABLE IF EXISTS oa_target CASCADE;
+CREATE TABLE oa_target
+(
+id INTEGER not null PRIMARY KEY,
+urn text,
+has_source text,
+has_selector integer
+);
 
 --TABLE oa_selector
 DROP TABLE IF EXISTS oa_selector CASCADE;
@@ -179,7 +179,7 @@ prefix text,
 suffix text
 );
 
-
+-- MP Reference ------------------------------------
 --TABLE mp_reference
 DROP TABLE IF EXISTS mp_reference CASCADE;
 CREATE TABLE mp_reference
@@ -245,3 +245,38 @@ ALTER TABLE claim_reference_relationship alter id set default nextval('claim_ref
 
 CREATE SEQUENCE mp_reference_id_seq;
 ALTER TABLE mp_reference alter id set default nextval('mp_reference_id_seq');
+
+
+-- Drug mention ----------------------------------
+--TABLE: drug_mention_annotation
+DROP TABLE IF EXISTS drug_mention_annotation CASCADE;
+CREATE TABLE drug_mention_annotation
+(
+id INTEGER not null PRIMARY KEY,
+urn text,
+has_body integer,
+has_target integer,
+creator text,
+date_created timestamp,
+date_updated timestamp
+);
+
+
+--TABLE: oa_claim_body
+DROP TABLE IF EXISTS oa_drug_mention_body CASCADE;
+CREATE TABLE oa_drug_mention_body
+(
+id INTEGER not null PRIMARY KEY,
+urn text,
+drugname text,
+uri text,
+is_oa_body_of integer,
+FOREIGN KEY (is_oa_body_of) REFERENCES drug_mention_annotation (id)
+);
+
+CREATE SEQUENCE drug_mention_annotation_id_seq;
+ALTER TABLE drug_mention_annotation alter id set default nextval('drug_mention_annotation_id_seq');
+
+CREATE SEQUENCE oa_drug_mention_body_id_seq;
+ALTER TABLE oa_drug_mention_body alter id set default nextval('oa_drug_mention_body_id_seq');
+
