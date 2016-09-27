@@ -9,7 +9,7 @@ if (typeof annotator === 'undefined') {
     // var annType = $('#mp-annotation-tb').attr('name');
     var annType = "MP";
     var sourceURL = getURLParameter("sourceURL").trim();
-    var email = getURLParameter("email");
+    var currEmail = getURLParameter("email");
     
     // global variables for keeping status of text selection
     var isTextSelected = false;
@@ -32,7 +32,7 @@ if (typeof annotator === 'undefined') {
     if (annType == "DDI")
         app.include(annotator.ui.dbmimain);            
     else if (annType == "MP")
-        app.include(annotator.ui.mpmain, {element: subcontent, email: email, source: sourceURL});
+        app.include(annotator.ui.mpmain, {element: subcontent, email: currEmail, source: sourceURL});
     else 
         alert("[ERROR] plugin settings wrong, neither DDI nor MP plugin!");
     
@@ -47,7 +47,7 @@ if (typeof annotator === 'undefined') {
     // load annotation after page contents loaded
     app.start().then(
         function () {
-			app.ident.identity = email;
+			app.ident.identity = currEmail;
 			$(".btn-success").css("display","block");            
             
             initMpAdder(); // initiate mp adder
@@ -56,7 +56,7 @@ if (typeof annotator === 'undefined') {
             
             initSplitter(); // initiate screen splitter
             
-            importAnnotationDialog(sourceURL, email); // annotation import dialog    
+            importAnnotationDialog(sourceURL, currEmail); // annotation import dialog    
         });
 }
 
@@ -166,14 +166,11 @@ function getURLParameter(name) {
 // dialog for confirm truncation when user check unchanged checkbox  
 // fields allowed: auc, cmax, clearance, halflife
 function unchangedCheckBoxDialog(field) {
-    if (field !== "auc" && field!== "cmax" && field!== "clearance" && field !== "halflife") {
-        return;
-    }
+    if (field !== "auc" && field!== "cmax" && field!== "clearance" && field !== "halflife") { return; }
 
     $('#' + field + '-unchanged-checkbox').change(function() {
         
-        if ($(this).is(":checked")) {
-            
+        if ($(this).is(":checked")) {            
             if ($('#'+field).val() != null && $('#'+field).val().trim() != "") {
                 // show unchanged warn dialog
                 var unchangedDialog = document.getElementById('unchanged-warn-dialog');
@@ -187,7 +184,6 @@ function unchangedCheckBoxDialog(field) {
                 
                 var okBtn = document.getElementById("unchanged-dialog-ok-btn");
                 var cancelBtn = document.getElementById("unchanged-dialog-cancel-btn");
-
                 okBtn.onclick = function() {
                     unchangedDialog.style.display = "none";
                     $('#'+field).val('');
@@ -209,8 +205,7 @@ function unchangedCheckBoxDialog(field) {
                 $('#'+field).attr('disabled', true);
                 $('#'+field+'Type').attr('disabled', true);
                 $('#'+field+'Direction').attr('disabled', true);                   
-            }
-            
+            }            
         } else {
             // TODO: grey out fields
             $('#'+field).attr('disabled', false);
@@ -260,60 +255,72 @@ function importAnnotationDialog(sourceURL, email) {
 
                 //console.log(allMPAnnsD);
                 //console.log(allDrugAnnsD);
-
                 var htmlCnt = ""; 
                 emailS.forEach(function (email){
-                    var numsOfAnns = 0
-                    if (allMPAnnsD[email] != null)
-                        numsOfAnns += allMPAnnsD[email].length;
-                    if (allDrugAnnsD[email] != null)
-                        numsOfAnns += allDrugAnnsD[email].length;
 
-                    htmlCnt += "<b>"+email+": </b>" + numsOfAnns;
-                    htmlCnt += "<input type='checkbox' name='anns-load-by-email' value='"+email+"'><br>";
-                });
-                                
+                    if (email != currEmail){ // only show other user's data set
+                        var numsOfAnns = 0
+                        if (allMPAnnsD[email] != null)
+                            numsOfAnns += allMPAnnsD[email].length;
+                        if (allDrugAnnsD[email] != null)
+                            numsOfAnns += allDrugAnnsD[email].length;
+                        
+                        htmlCnt += "<b>"+email+": </b>" + numsOfAnns;
+                        htmlCnt += "<input type='checkbox' name='anns-load-by-email' value='"+email+"'><br>";
+                    }
+                });                                
                 $('#import-annotation-selection').html(htmlCnt);                
             }
            });
 
-
     importDialog.style.display = "block"; 
+    var selectedMPAnnsL = []; // selected annotations
+    userEmails.add(currEmail); // add current user as default
 
     var okBtn = document.getElementById("ann-import-confirm-btn");
     var cancelBtn = document.getElementById("ann-import-cancel-btn");
-
-    cancelBtn.onclick = function() {
-        initAnnTable([]); // update annotation table
-        importDialog.style.display = "none"; 
-    }
+    var closeBtn = document.getElementById("annotation-import-dialog-close");
 
     okBtn.onclick = function() {
-        var selectedMPAnnsL = []; // selected annotations
 
+        // load all selected users
         $("input:checkbox[name=anns-load-by-email]:checked").each(function(){
             var email = $(this).val();
-            userEmails.add(email); // add user emails to set as global variable
-            
-            selectedMPAnnsL = selectedMPAnnsL.concat(allMPAnnsD[email]);
+            userEmails.add(email); // add user emails to set as global variable     
         });
         
         userEmails.forEach(function(email) { // draw all annotaitons by email
 		    app.annotations.load({uri: uri, email: email});
+            selectedMPAnnsL = selectedMPAnnsL.concat(allMPAnnsD[email]);
         });
 
-        importDialog.style.display = "none"; // hide panel
-        
         initAnnTable(selectedMPAnnsL); // update annotation table
+        importDialog.style.display = "none"; // hide panel        
     }	
+
+    cancelBtn.onclick = function() { // only load current user's annotation
+        
+        selectedMPAnnsL = allMPAnnsD[currEmail];        
+        userEmails.forEach(function(email) { // draw all annotaitons by email
+		    app.annotations.load({uri: uri, email: email});
+        });
+        initAnnTable(selectedMPAnnsL); // update annotation table
+        importDialog.style.display = "none"; 
+    }
+
+    closeBtn.onclick = function() {
+        selectedMPAnnsL = allMPAnnsD[currEmail];        
+        userEmails.forEach(function(email) { // draw all annotaitons by email
+		    app.annotations.load({uri: uri, email: email});
+        });
+        initAnnTable(selectedMPAnnsL); // update annotation table
+        importDialog.style.display = "none"; 
+    }
 }
 
 
-
-$(document)
-    .ajaxStart(function () {
-        $('#wait').show();
-    })
-    .ajaxStop(function () {
-        $('#wait').hide();
-    });
+$(document).ajaxStart(function () {
+    $('#wait').show();
+}).ajaxStop(function () {
+    $('#wait').hide();
+});

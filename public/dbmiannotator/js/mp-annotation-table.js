@@ -40,6 +40,8 @@ function updateAnnTable(sourceURL){
 // @input: list of annotations have been selected for import 
 function initAnnTable(selectedAnnsL) {
     console.log("init ann table");
+    console.log(selectedAnnsL);
+
     if (selectedAnnsL == null) return null;
 
     // ann Id for selected claim, if null, set first claim as default 
@@ -80,7 +82,6 @@ function updateClaimAndData(annotations, annotationId) {
             claimIsSelected = 'selected="selected"';     
             // cache total number of data & material for current claim
             totalDataNum = annotation.argues.supportsBy.length;      
-                        
             dataTable = createDataTable(annotation); // create data table           
         }
         
