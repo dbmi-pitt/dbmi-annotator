@@ -75,3 +75,5 @@ docs/_build/
 
 # PyBuilder
 target/
+
+translation/csv-data-loader/config/DB-config.txt

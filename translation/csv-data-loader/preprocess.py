@@ -4,24 +4,26 @@ import uuid
 import datetime
 
 #1. pip install psycopg2
-#2. config
+#2. create config file: "config/DB-config.txt"
 
 csvfiles = ['data/pkddi-katrina-latest-08152016.csv', 'data/pkddi-amy-latest-08152016.csv']
+db_config_files = "config/DB-config.txt"
 hostname = 'localhost'
-username = 'postgres'
-password = 'ning1fan'
 database = 'mpevidence'
 
 
 def main():
 
-	print("insert data ...")
-	myConnection = psycopg2.connect(host=hostname, user=username, password=password, dbname=database)
+	print("connect postgreSQL ...")
+	myConnection = connect_postgreSQL(db_config_files)
 	#delete all data in table
 	#clearall(myConnection)
 	#truncateall(myConnection)
 	#myConnection.commit()
-
+	#show table
+	#show_table(myConnection, 'mp_claim_annotation')
+	
+	print("insert data ...")
 	for csvfile in csvfiles:
 		preprocess(csvfile)
 		reader = csv.DictReader(open('data/preProcess.csv', 'r'))
@@ -29,6 +31,22 @@ def main():
 		load_data_from_csv(myConnection, reader, creator)
 
 	myConnection.close()
+
+
+def connect_postgreSQL(db_config_files):
+	dbconfig = file = open(db_config_files)
+	if dbconfig:
+		for line in dbconfig:
+			if "USERNAME" in line:
+				username = line[(line.find("USERNAME=")+len("USERNAME=")):line.find(";")]
+			elif "PASSWORD" in line:
+				password = line[(line.find("PASSWORD=")+len("PASSWORD=")):line.find(";")]
+		myConnection = psycopg2.connect(host=hostname, user=username, password=password, dbname=database)	
+		print("Postgres connection created")
+	else:
+		print "Postgres configuration file is not found: " + dbconfig
+
+	return myConnection
 
 
 def load_data_from_csv(myConnection, reader, creator):
