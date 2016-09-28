@@ -6,7 +6,7 @@ import datetime
 #1. pip install psycopg2
 #2. config
 
-csvfiles = ['pkddi-katrina-latest-08152016.csv', 'pkddi-amy-latest-08152016.csv']
+csvfiles = ['data/pkddi-katrina-latest-08152016.csv', 'data/pkddi-amy-latest-08152016.csv']
 hostname = 'localhost'
 username = 'postgres'
 password = 'ning1fan'
@@ -24,7 +24,7 @@ def main():
 
 	for csvfile in csvfiles:
 		preprocess(csvfile)
-		reader = csv.DictReader(open('preProcess.csv', 'r'))
+		reader = csv.DictReader(open('data/preProcess.csv', 'r'))
 		creator = csvfile.split('-')[1]
 		load_data_from_csv(myConnection, reader, creator)
 
