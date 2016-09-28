@@ -60,7 +60,7 @@ function loadNERs(nersets, sourceType, email){
         subL = nersets[i];
         
         for (j = 0; j < subL.length; j++){
-        //for (j = 0; j < 20; j++){
+        //for (j = 0; j < 10; j++){
             annotation = subL[j];
             if (annotation){
                 uriStr = "";
@@ -168,8 +168,9 @@ function loadAnnotation(annotation, uriStr, email){
                     "created": datetime, 
                     "updated": datetime, 
                     "annotationType": "DrugMention",
-                    "quote": annotation.drugname,
-                    "permissions": {},
+                    "permissions": {
+			"read": ["group:__consumer__"]
+		    },
                     "argues": {
                         "hasTarget": {
                             "hasSelector": {
@@ -192,7 +193,7 @@ function loadAnnotation(annotation, uriStr, email){
                     "consumer": "mockconsumer",
                     "uri": uriPost,
                     "rawurl": uriStr,
-                    "user": "NER"
+                    "user": "alice"
                 }
             }, function (err, resp) {
                 if (err)
