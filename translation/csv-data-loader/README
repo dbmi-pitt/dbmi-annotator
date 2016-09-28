@@ -14,16 +14,18 @@ pip install psycopg2
 
 (2) configure data in preProcess.py
 
+hostname = 'localhost'
+database = 'mpevidence'
 csvfiles = ['data/pkddi-katrina-latest-08152016.csv', 'data/pkddi-amy-latest-08152016.csv']
 
 Note: If csv comes from domeo, replace cl to clearance and t12 to halflife
 
-hostname = 'localhost'
-username = 'username'
-password = 'password'
-database = 'mpevidence'
+(3) create config/DB-config.txt to store account information
 
-(3) execute ETL program preprocess.py 
+USERNAME=<USERNAME>;
+PASSWORD=<PASSWORD>;
+
+(4) execute ETL program preprocess.py 
 
 $ python preprocess.py
 
