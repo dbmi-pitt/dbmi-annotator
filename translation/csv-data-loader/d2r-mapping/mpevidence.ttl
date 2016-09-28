@@ -21,7 +21,8 @@ map:database a d2rq:Database;
 # Table claim_reference_relationship
 map:claim_reference_relationship a d2rq:ClassMap;
 	d2rq:dataStorage map:database;
-	d2rq:uriPattern "claim_reference_relationship/@@claim_reference_relationship.id@@";
+	# d2rq:uriPattern "claim_reference_relationship/@@claim_reference_relationship.id@@";
+    d2rq:uriSqlExpression "CONCAT('http://dikb.org/mpevidence/claim_reference_relationship:', claim_reference_relationship.id)";
 	d2rq:class vocab:claim_reference_relationship;
 	d2rq:classDefinitionLabel "claim_reference_relationship";
 	.
@@ -53,7 +54,8 @@ map:claim_reference_relationship_mp_reference_id__ref a d2rq:PropertyBridge;
 # Table data_field
 map:data_field a d2rq:ClassMap;
 	d2rq:dataStorage map:database;
-	d2rq:uriPattern "data_field/@@data_field.id@@";
+	#d2rq:uriPattern "data_field/@@data_field.id@@";
+    d2rq:uriSqlExpression "CONCAT('http://dikb.org/mpevidence/data_field:', data_field.id)";
 	d2rq:class vocab:data_field;
 	d2rq:classDefinitionLabel "data_field";
 	.
@@ -104,7 +106,8 @@ map:data_field_data_body_id__ref a d2rq:PropertyBridge;
 # Table material_field
 map:material_field a d2rq:ClassMap;
 	d2rq:dataStorage map:database;
-	d2rq:uriPattern "material_field/@@material_field.id@@";
+	#d2rq:uriPattern "material_field/@@material_field.id@@";
+    d2rq:uriSqlExpression "CONCAT('http://dikb.org/mpevidence/material_field:', material_field.id)";
 	d2rq:class vocab:material_field;
 	d2rq:classDefinitionLabel "material_field";
 	.
@@ -155,7 +158,8 @@ map:material_field_material_body_id__ref a d2rq:PropertyBridge;
 # Table method
 map:method a d2rq:ClassMap;
 	d2rq:dataStorage map:database;
-	d2rq:uriPattern "method/@@method.id@@";
+	#d2rq:uriPattern "method/@@method.id@@";
+    d2rq:uriSqlExpression "CONCAT('http://dikb.org/mpevidence/method:', method.id)";
 	d2rq:class vocab:method;
 	d2rq:classDefinitionLabel "method";
 	.
@@ -194,7 +198,8 @@ map:method_mp_claim_id__ref a d2rq:PropertyBridge;
 # Table mp_claim_annotation
 map:mp_claim_annotation a d2rq:ClassMap;
 	d2rq:dataStorage map:database;
-	d2rq:uriPattern "mp_claim_annotation/@@mp_claim_annotation.id@@";
+	#d2rq:uriPattern "mp_claim_annotation/@@mp_claim_annotation.id@@";
+    d2rq:uriSqlExpression "CONCAT('http://dikb.org/mpevidence/mp_claim_annotation:', mp_claim_annotation.id)";
 	d2rq:class vocab:mp_claim_annotation;
 	d2rq:classDefinitionLabel "mp_claim_annotation";
 	.
@@ -260,7 +265,8 @@ map:mp_claim_annotation_date_updated a d2rq:PropertyBridge;
 # Table mp_data_annotation
 map:mp_data_annotation a d2rq:ClassMap;
 	d2rq:dataStorage map:database;
-	d2rq:uriPattern "mp_data_annotation/@@mp_data_annotation.id@@";
+	#d2rq:uriPattern "mp_data_annotation/@@mp_data_annotation.id@@";
+    d2rq:uriSqlExpression "CONCAT('http://dikb.org/mpevidence/mp_data_annotation:', mp_data_annotation.id)";
 	d2rq:class vocab:mp_data_annotation;
 	d2rq:classDefinitionLabel "mp_data_annotation";
 	.
@@ -341,7 +347,8 @@ map:mp_data_annotation_mp_claim_id__ref a d2rq:PropertyBridge;
 # Table mp_material_annotation
 map:mp_material_annotation a d2rq:ClassMap;
 	d2rq:dataStorage map:database;
-	d2rq:uriPattern "mp_material_annotation/@@mp_material_annotation.id@@";
+	#d2rq:uriPattern "mp_material_annotation/@@mp_material_annotation.id@@";
+    d2rq:uriSqlExpression "CONCAT('http://dikb.org/mpevidence/mp_material_annotation:', mp_material_annotation.id)";
 	d2rq:class vocab:mp_material_annotation;
 	d2rq:classDefinitionLabel "mp_material_annotation";
 	.
@@ -422,7 +429,8 @@ map:mp_material_annotation_mp_claim_id__ref a d2rq:PropertyBridge;
 # Table mp_reference
 map:mp_reference a d2rq:ClassMap;
 	d2rq:dataStorage map:database;
-	d2rq:uriPattern "mp_reference/@@mp_reference.id@@";
+	#d2rq:uriPattern "mp_reference/@@mp_reference.id@@";
+    d2rq:uriSqlExpression "CONCAT('http://dikb.org/mpevidence/mp_reference:', mp_reference.id)";
 	d2rq:class vocab:mp_reference;
 	d2rq:classDefinitionLabel "mp_reference";
 	.
@@ -467,7 +475,8 @@ map:mp_reference_reference_date a d2rq:PropertyBridge;
 # Table oa_claim_body
 map:oa_claim_body a d2rq:ClassMap;
 	d2rq:dataStorage map:database;
-	d2rq:uriPattern "oa_claim_body/@@oa_claim_body.id@@";
+	#d2rq:uriPattern "oa_claim_body/@@oa_claim_body.id@@";
+    d2rq:uriSqlExpression "CONCAT('http://dikb.org/mpevidence/oa_claim_body:', oa_claim_body.id)";
 	d2rq:class vocab:oa_claim_body;
 	d2rq:classDefinitionLabel "oa_claim_body";
 	.
@@ -519,7 +528,8 @@ map:oa_claim_body_is_oa_body_of a d2rq:PropertyBridge;
 # Table oa_data_body
 map:oa_data_body a d2rq:ClassMap;
 	d2rq:dataStorage map:database;
-	d2rq:uriPattern "oa_data_body/@@oa_data_body.id@@";
+	#d2rq:uriPattern "oa_data_body/@@oa_data_body.id@@";
+    d2rq:uriSqlExpression "CONCAT('http://dikb.org/mpevidence/oa_data_body:', oa_data_body.id)";
 	d2rq:class vocab:oa_data_body;
 	d2rq:classDefinitionLabel "oa_data_body";
 	.
@@ -570,7 +580,8 @@ map:oa_data_body_is_oa_body_of__ref a d2rq:PropertyBridge;
 # Table oa_material_body
 map:oa_material_body a d2rq:ClassMap;
 	d2rq:dataStorage map:database;
-	d2rq:uriPattern "oa_material_body/@@oa_material_body.id@@";
+	#d2rq:uriPattern "oa_material_body/@@oa_material_body.id@@";
+    d2rq:uriSqlExpression "CONCAT('http://dikb.org/mpevidence/oa_material_body:', oa_material_body.id)";
 	d2rq:class vocab:oa_material_body;
 	d2rq:classDefinitionLabel "oa_material_body";
 	.
@@ -621,7 +632,9 @@ map:oa_material_body_is_oa_body_of__ref a d2rq:PropertyBridge;
 # Table oa_selector
 map:oa_selector a d2rq:ClassMap;
 	d2rq:dataStorage map:database;
-	d2rq:uriPattern "oa_selector/@@oa_selector.id@@";
+	#d2rq:uriPattern "oa_selector/@@oa_selector.id@@";
+    d2rq:uriSqlExpression "CONCAT('http://dikb.org/mpevidence/oa_selector:', oa_selector.id)";
+
 	d2rq:class vocab:oa_selector;
 	d2rq:classDefinitionLabel "oa_selector";
 	.
@@ -671,7 +684,8 @@ map:oa_selector_suffix a d2rq:PropertyBridge;
 # Table oa_target
 map:oa_target a d2rq:ClassMap;
 	d2rq:dataStorage map:database;
-	d2rq:uriPattern "oa_target/@@oa_target.id@@";
+	#d2rq:uriPattern "oa_target/@@oa_target.id@@";
+    d2rq:uriSqlExpression "CONCAT('http://dikb.org/mpevidence/oa_target:', oa_target.id)";
 	d2rq:class vocab:oa_target;
 	d2rq:classDefinitionLabel "oa_target";
 	.
@@ -712,7 +726,8 @@ map:oa_target_has_selector__ref a d2rq:PropertyBridge;
 # Table qualifier
 map:qualifier a d2rq:ClassMap;
 	d2rq:dataStorage map:database;
-	d2rq:uriPattern "qualifier/@@qualifier.id@@";
+	#d2rq:uriPattern "qualifier/@@qualifier.id@@";
+    d2rq:uriSqlExpression "CONCAT('http://dikb.org/mpevidence/qualifier:', qualifier.id)";
 	d2rq:class vocab:qualifier;
 	d2rq:classDefinitionLabel "qualifier";
 	.
