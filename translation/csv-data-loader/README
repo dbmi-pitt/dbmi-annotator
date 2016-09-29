@@ -22,6 +22,8 @@ Note: If csv comes from domeo, replace cl to clearance and t12 to halflife
 
 (3) create config/DB-config.txt to store account information
 
+$ cp config/DB-config-sample.txt config/DB-config.txt
+
 USERNAME=<USERNAME>;
 PASSWORD=<PASSWORD>;
 

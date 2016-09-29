@@ -12,6 +12,22 @@ hostname = 'localhost'
 database = 'mpevidence'
 
 
+def connect_postgreSQL(db_config_files):
+	dbconfig = file = open(db_config_files)
+	if dbconfig:
+		for line in dbconfig:
+			if "USERNAME" in line:
+				username = line[(line.find("USERNAME=")+len("USERNAME=")):line.find(";")]
+			elif "PASSWORD" in line:
+				password = line[(line.find("PASSWORD=")+len("PASSWORD=")):line.find(";")]
+		myConnection = psycopg2.connect(host=hostname, user=username, password=password, dbname=database)	
+		print("Postgres connection created")
+	else:
+		print "Postgres configuration file is not found: " + dbconfig
+
+	return myConnection
+
+
 def main():
 
 	print("connect postgreSQL ...")
@@ -33,33 +49,21 @@ def main():
 	myConnection.close()
 
 
-def connect_postgreSQL(db_config_files):
-	dbconfig = file = open(db_config_files)
-	if dbconfig:
-		for line in dbconfig:
-			if "USERNAME" in line:
-				username = line[(line.find("USERNAME=")+len("USERNAME=")):line.find(";")]
-			elif "PASSWORD" in line:
-				password = line[(line.find("PASSWORD=")+len("PASSWORD=")):line.find(";")]
-		myConnection = psycopg2.connect(host=hostname, user=username, password=password, dbname=database)	
-		print("Postgres connection created")
-	else:
-		print "Postgres configuration file is not found: " + dbconfig
-
-	return myConnection
-
-
 def load_data_from_csv(myConnection, reader, creator):
 	for row in reader:
-		oa_selector_id = load_oa_selector(myConnection, row)
-		oa_target_id = load_oa_target(myConnection, row, oa_selector_id)
-		oa_claim_body_id = load_oa_claim_body(myConnection, row)
-		load_qualifier(myConnection, row, oa_claim_body_id)
-		mp_claim_id = load_mp_claim_annotation(myConnection, row, oa_claim_body_id, oa_target_id, creator)
-		update_oa_claim_body(myConnection, mp_claim_id, oa_claim_body_id)
-		load_mp_data_annotation(myConnection, row, mp_claim_id, oa_target_id, creator)
-		load_mp_material_annotation(myConnection, row, mp_claim_id, oa_target_id, creator)
-		load_method(myConnection, row, mp_claim_id)
+		# oa_selector_id = load_oa_selector(myConnection, row)
+		# oa_target_id = load_oa_target(myConnection, row, oa_selector_id)
+		# oa_claim_body_id = load_oa_claim_body(myConnection, row)
+		# load_qualifier(myConnection, row, oa_claim_body_id)
+		# mp_claim_id = load_mp_claim_annotation(myConnection, row, oa_claim_body_id, oa_target_id, creator)
+		# update_oa_claim_body(myConnection, mp_claim_id, oa_claim_body_id)
+		# load_mp_data_annotation(myConnection, row, mp_claim_id, oa_target_id, creator)
+		# load_mp_material_annotation(myConnection, row, mp_claim_id, oa_target_id, creator)
+		# load_method(myConnection, row, mp_claim_id)
+
+		subjectDrug = row["subject"], objectDrug = row["object"], source = row["source"]
+		print source + "| " + subjectDrug + " | " + objectDrug
+		
 
 	myConnection.commit()
 
