@@ -247,10 +247,10 @@ CREATE SEQUENCE mp_reference_id_seq;
 ALTER TABLE mp_reference alter id set default nextval('mp_reference_id_seq');
 
 
--- Drug mention ----------------------------------
---TABLE: drug_mention_annotation
-DROP TABLE IF EXISTS drug_mention_annotation CASCADE;
-CREATE TABLE drug_mention_annotation
+-- Highlight annotation ----------------------------------
+--TABLE: highlight_annotation
+DROP TABLE IF EXISTS highlight_annotation CASCADE;
+CREATE TABLE highlight_annotation
 (
 id INTEGER not null PRIMARY KEY,
 urn text,
@@ -263,20 +263,22 @@ date_updated timestamp
 
 
 --TABLE: oa_claim_body
-DROP TABLE IF EXISTS oa_drug_mention_body CASCADE;
-CREATE TABLE oa_drug_mention_body
+DROP TABLE IF EXISTS oa_highlight_body CASCADE;
+CREATE TABLE oa_highlight_body
 (
 id INTEGER not null PRIMARY KEY,
 urn text,
 drugname text,
 uri text,
+vocabulary_id integer,
+concept_code text,
 is_oa_body_of integer,
-FOREIGN KEY (is_oa_body_of) REFERENCES drug_mention_annotation (id)
+FOREIGN KEY (is_oa_body_of) REFERENCES highlight_annotation (id)
 );
 
-CREATE SEQUENCE drug_mention_annotation_id_seq;
-ALTER TABLE drug_mention_annotation alter id set default nextval('drug_mention_annotation_id_seq');
+CREATE SEQUENCE highlight_annotation_id_seq;
+ALTER TABLE highlight_annotation alter id set default nextval('highlight_annotation_id_seq');
 
-CREATE SEQUENCE oa_drug_mention_body_id_seq;
-ALTER TABLE oa_drug_mention_body alter id set default nextval('oa_drug_mention_body_id_seq');
+CREATE SEQUENCE oa_highlight_body_id_seq;
+ALTER TABLE oa_highlight_body alter id set default nextval('oa_highlight_body_id_seq');
 
