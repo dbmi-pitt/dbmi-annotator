@@ -254,6 +254,7 @@ CREATE TABLE highlight_annotation
 (
 id INTEGER not null PRIMARY KEY,
 urn text,
+type text,
 has_body integer,
 has_target integer,
 creator text,
@@ -262,7 +263,7 @@ date_updated timestamp
 );
 
 
---TABLE: oa_claim_body
+--TABLE: oa_highlight_body
 DROP TABLE IF EXISTS oa_highlight_body CASCADE;
 CREATE TABLE oa_highlight_body
 (
