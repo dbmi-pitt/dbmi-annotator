@@ -33,7 +33,7 @@ def main():
 	print("connect postgreSQL ...")
 	conn = connect_postgreSQL(db_config_files)
 
-	clearall(conn)
+	#clearall(conn)
 	#truncateall(conn)
 	conn.commit()
 
@@ -57,20 +57,20 @@ def load_data_from_csv(conn, reader, creator):
 		prefix = row["prefix"]; exact = row["exactText"]; suffix = row["suffix"]
 		source = row["source"]; date = row["date"]
 		subject = row["subject"]; predicate = row["predicate"]; object = row["object"]
-		# oa_selector_id = load_oa_selector(conn, prefix, exact, suffix)
-		# oa_target_id = load_oa_target(conn, source, oa_selector_id)
-		# oa_claim_body_id = load_oa_claim_body(conn, subject, predicate, object, exact)
-		# load_qualifier(conn, row, oa_claim_body_id)
-		# mp_claim_id = load_mp_claim_annotation(conn, date, oa_claim_body_id, oa_target_id, creator)
+		oa_selector_id = load_oa_selector(conn, prefix, exact, suffix)
+		oa_target_id = load_oa_target(conn, source, oa_selector_id)
+		oa_claim_body_id = load_oa_claim_body(conn, subject, predicate, object, exact)
+		load_qualifier(conn, row, oa_claim_body_id)
+		mp_claim_id = load_mp_claim_annotation(conn, date, oa_claim_body_id, oa_target_id, creator)
 
-		# update_oa_claim_body(conn, mp_claim_id, oa_claim_body_id)
-		# load_mp_data_annotation(conn, row, mp_claim_id, oa_target_id, creator)
-		# load_mp_material_annotation(conn, row, mp_claim_id, oa_target_id, creator)
-		# load_method(conn, row, mp_claim_id)
+		update_oa_claim_body(conn, mp_claim_id, oa_claim_body_id)
+		load_mp_data_annotation(conn, row, mp_claim_id, oa_target_id, creator)
+		load_mp_material_annotation(conn, row, mp_claim_id, oa_target_id, creator)
+		load_method(conn, row, mp_claim_id)
 
-		#generateHighlightSet(row, highlightD)   # add unique drugs to set
+		generateHighlightSet(row, highlightD)   # add unique drugs to set
 		
-	#load_highlight(conn, highlightD)  # load drug highlight annotation
+	load_highlight(conn, highlightD)  # load drug highlight annotation
 
 	conn.commit()
 

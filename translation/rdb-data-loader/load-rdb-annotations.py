@@ -183,9 +183,9 @@ def queryMpAnnotation(conn):
 	cnt = 0
 
 	for claimId,claimAnn in claimAnnos.items():
-		if cnt > 6:
-			break
-		cnt += 1
+		# if cnt > 6:
+		# 	break
+		# cnt += 1
 
 		claimDataAnno = queryMpData(conn, claimAnn, claimId)
 		claimDataMatAnno = queryMpData(conn, claimDataAnno, claimId)
@@ -228,8 +228,9 @@ def generateOASelector(prefix, exact, suffix):
 
 # load highlight annotations to documents
 def loadHighlightAnnotations(highlightD, email):
+
 	for url in highlightD:
-		if len(highlightD[url]) > 0:
+		if len(highlightD[url]) > 0 and "e9481622-7cc6-418a-acb6-c5450daae9b0" in url:
 			for name in highlightD[url]:
 				loadHighlightAnnotation(url, name, email)
 
@@ -255,7 +256,7 @@ def loadHighlightAnnotation(rawurl, content, email):
 # load mp annotation to specific account by email
 def loadMpAnnotation(annotation, email):		
 
-	#print "[INFO] label(%s), subject(%s), predicate(%s), object(%s) \n" % (annotation.label, annotation.csubject, annotation.cpredicate, annotation.cobject)
+	print "[INFO] label(%s), subject(%s), predicate(%s), object(%s) \n" % (annotation.label, annotation.csubject, annotation.cpredicate, annotation.cobject)
 
 	subjectDrug = annotation.csubject; predicate = annotation.cpredicate; objectDrug = annotation.cobject
 	prefix = annotation.prefix; exact = annotation.exact; suffix = annotation.suffix
@@ -269,6 +270,9 @@ def loadMpAnnotation(annotation, email):
 	# MP Claim
 	mpAnn["argues"]["qualifiedBy"]["drug1"] = subjectDrug
 	mpAnn["argues"]["qualifiedBy"]["drug2"] = objectDrug
+	mpAnn["argues"]["qualifiedBy"]["drug1ID"] = subjectDrug + "_1"
+	mpAnn["argues"]["qualifiedBy"]["drug2ID"] = objectDrug + "_1"
+
 	mpAnn["argues"]["qualifiedBy"]["relationship"] = predicate.replace("interact_with","interact with")
 	mpAnn["argues"]["qualifiedBy"]["precipitant"] = "drug1" # for interact_with
 	mpAnn["argues"]["hasTarget"] = oaSelector
@@ -347,14 +351,18 @@ def main():
 	author = "yin2@gmail.com"
 
 	conn = connectPostgres()
-	#mpAnnotations = queryMpAnnotation(conn)	
+	mpAnnotations = queryMpAnnotation(conn)	
 	
-	#for mpAnn in mpAnnotations:
-	#	loadMpAnnotation(mpAnn, author)		
+	for mpAnn in mpAnnotations:
+		if mpAnn.source == "http://dbmi-icode-01.dbmi.pitt.edu:80/DDI-labels/e9481622-7cc6-418a-acb6-c5450daae9b0.html":
+			loadMpAnnotation(mpAnn, author)		
 	#printSample(mpAnnotations, 6)
 
-
 	highlightD = queryHighlightAnns(conn)
+
+	#print highlightD.keys()
+	#print len(highlightD)
+
 	#print highlight
 	loadHighlightAnnotations(highlightD, author)
 
