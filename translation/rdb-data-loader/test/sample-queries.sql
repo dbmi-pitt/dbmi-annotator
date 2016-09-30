@@ -37,3 +37,9 @@ and mann.has_body = mbody.id
 and mf.material_body_id = mbody.id
 and mann.has_target = t.id
 and t.has_selector = s.id
+
+-- query highlight annotation
+SELECT h.id, t.has_source, s.exact
+FROM highlight_annotation h, oa_target t, oa_selector s
+WHERE h.has_target = t.id
+AND t.has_selector = s.id;

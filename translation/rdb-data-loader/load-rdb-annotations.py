@@ -3,6 +3,7 @@ import psycopg2
 import uuid
 import datetime
 from elasticsearch import Elasticsearch
+from sets import Set
 
 sys.path.insert(0, './model')
 from micropublication import Annotation, DataMaterialRow, DMItem, DataItem, MaterialDoseItem, MatarialParticipants
@@ -13,11 +14,12 @@ DB_SCHEMA = 'mpevidence'
 DB_CONFIG = "config/DB-config.txt"
 MP_ANN_TEMPLATE = "template/mp-annotation-template.json"
 MP_DATA_TEMPLATE = "template/mp-data-template.json"
+HIGHLIGHT_TEMPLATE = "template/highlight-annotation-template.json"
 ES_PORT = 9250
 
 mpDataL = ["auc", "cmax", "clearance", "halflife"]
 
-######################### QUERY ##########################
+######################### QUERY MP Annotation ##########################
 # query mp claim annotation by author name
 # return claim annotation with s, p, o, source and oa selector
 def queryMpClaim(conn):
@@ -192,20 +194,68 @@ def queryMpAnnotation(conn):
 
 	return mpAnnotations
 
+######################### QUERY Highlight Annotaiton ##########################
+
+# query all highlight annotation
+# return dict for drug set in document   dict {"doc url": "drug set"} 
+def queryHighlightAnns(conn):
+	highlightD = {}
+
+	qry = """SELECT h.id, t.has_source, s.exact 
+	FROM highlight_annotation h, oa_target t, oa_selector s
+	WHERE h.has_target = t.id
+	AND t.has_selector = s.id;"""
+
+	cur = conn.cursor()
+	cur.execute(qry)
+
+	for row in cur.fetchall():
+		source = row[1]; drugname = row[2]
+		
+		if source in highlightD:		
+			highlightD[source].add(drugname)
+		else:
+			highlightD[source] = Set([drugname])
+	return highlightD
+
 ######################### LOAD ##########################
+
+# return oa selector in json
 def generateOASelector(prefix, exact, suffix):
 	oaSelector = "{\"hasSelector\": { \"@type\": \"TextQuoteSelector\", \"exact\": \""+exact+"\", \"prefix\": \""+ (prefix or "") + "\", \"suffix\": \"" + (suffix or "") + "\"}}"
 
 	return json.loads(oaSelector)
 
+# load highlight annotations to documents
+def loadHighlightAnnotations(highlightD, email):
+	for url in highlightD:
+		if len(highlightD[url]) > 0:
+			for name in highlightD[url]:
+				loadHighlightAnnotation(url, name, email)
 
 
+# load highlight annotation to specific account by email
+def loadHighlightAnnotation(rawurl, content, email):
+	annotation = loadTemplateInJson(HIGHLIGHT_TEMPLATE)
 
-def loadMpAnnotation(annotation, email):
-	
+	oaSelector = generateOASelector("", content, "")
+	annotation["argues"]["hasTarget"] = oaSelector
+
+	uri = re.sub(r"[\/\\\-\:\.]", "", rawurl)
+	annotation["rawurl"] = rawurl # Document source url
+	annotation["uri"] = uri
+
+	annotation["email"] = email # Metadata
+	annotation["created"] = "2016-09-19T18:33:51.179625+00:00" 
+	annotation["updated"] = "2016-09-19T18:33:51.179625+00:00"
+
 	es = Elasticsearch(port=ES_PORT) # by default we connect to localhost:9200	
+	es.index(index="annotator", doc_type="annotation", id=uuid.uuid4(), body=json.dumps(annotation))
 
-	print "[INFO] label(%s), subject(%s), predicate(%s), object(%s) \n" % (annotation.label, annotation.csubject, annotation.cpredicate, annotation.cobject)
+# load mp annotation to specific account by email
+def loadMpAnnotation(annotation, email):		
+
+	#print "[INFO] label(%s), subject(%s), predicate(%s), object(%s) \n" % (annotation.label, annotation.csubject, annotation.cpredicate, annotation.cobject)
 
 	subjectDrug = annotation.csubject; predicate = annotation.cpredicate; objectDrug = annotation.cobject
 	prefix = annotation.prefix; exact = annotation.exact; suffix = annotation.suffix
@@ -262,8 +312,8 @@ def loadMpAnnotation(annotation, email):
 	mpAnn["rawurl"] = rawurl # Document source url
 	mpAnn["uri"] = uri
 
- 
-	#print mpAnn										  
+	#print mpAnn	
+	es = Elasticsearch(port=ES_PORT) # by default we connect to localhost:9200  
 	es.index(index="annotator", doc_type="annotation", id=uuid.uuid4(), body=json.dumps(mpAnn))
 
 ######################### CONFIG ##########################
@@ -297,12 +347,16 @@ def main():
 	author = "yin2@gmail.com"
 
 	conn = connectPostgres()
-	mpAnnotations = queryMpAnnotation(conn)	
+	#mpAnnotations = queryMpAnnotation(conn)	
 	
-	for mpAnn in mpAnnotations:
-		loadMpAnnotation(mpAnn, author)		
-
+	#for mpAnn in mpAnnotations:
+	#	loadMpAnnotation(mpAnn, author)		
 	#printSample(mpAnnotations, 6)
+
+
+	highlightD = queryHighlightAnns(conn)
+	#print highlight
+	loadHighlightAnnotations(highlightD, author)
 
 	conn.close()
 
