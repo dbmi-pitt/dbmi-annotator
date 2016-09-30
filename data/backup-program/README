@@ -1,0 +1,17 @@
+Elasticsearch 1.7.1 backup program 
+
+(1) snapshot script
+
+$ bash elastic-snapshot.sh
+
+If having error: location [] doesn't match any of the locations specified by path.repo
+Add below to /path/to/elasticsearch-1.7.1/config/elasticsearch.yml
+
+Paths:
+path.repo: /home/yin2/dbmiannotator-backup
+
+(2) restore program
+
+$ bash elastic-restore.sh
+
+Reference: https://www.elastic.co/guide/en/elasticsearch/reference/1.7/modules-snapshots.html 
