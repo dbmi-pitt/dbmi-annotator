@@ -71,7 +71,7 @@ if (typeof annotator === 'undefined') {
                      }).then(function(){
 
                          $('#splitter').jqxSplitter({ showSplitBar: false, width: $(window).width(), height: $(window).height(), orientation: 'horizontal', panels: [{ size: '100%',min: 200 }, { size: '0%', min: 0}] });
-
+                         $('.mp-main-menu').css({left: '40px', top: '15px'});
                          // MP adder - open/close claim menu
                          // PMC page not ready - hanging... (comment line below)
                          // $(document).ready(function () {
