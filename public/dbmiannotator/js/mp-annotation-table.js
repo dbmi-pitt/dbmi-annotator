@@ -1,17 +1,14 @@
 // update 1) annotation table (claim and data) and  2) mpadder (claim menu)
 // @input: annotatio source url
-// @input: user email
-// @input: annotation type
-// @input: the column that data & material table sorting by
 // @output: update annotation table and mpadder 
 
-function annotationTable(sourceURL, email, sortByColumn){
-    console.log("refresh ann table");
+function updateAnnTable(sourceURL){
+    console.log("update annotation table");
+    //console.log(userEmails);
     // request all mp annotaitons for current document and user
 
     $.ajax({url: "http://" + config.annotator.host + "/annotatorstore/search",
             data: {annotationType: "MP", 
-                   email: email, 
                    uri: sourceURL.replace(/[\/\\\-\:\.]/g, "")},
             method: 'GET',
             error : function(jqXHR, exception){
@@ -19,24 +16,52 @@ function annotationTable(sourceURL, email, sortByColumn){
 		        console.log(jqXHR);
             },
             success : function(response){
+
+                var selectedAnnsL = [];
+                for (var i=0; i < response.total; i++) {
+                    var ann = response.rows[i];
+                    if (userEmails.has(ann.email)) 
+                        selectedAnnsL.push(ann);                          
+                }
                 
                 // ann Id for selected claim, if null, set first claim as default 
                 if (currAnnotationId == null || currAnnotationId.trim() == "") { 
-                    //console.log("TESTING: " + response.total);
-                    if (response.total > 0){
-                        currAnnotationId = response.rows[0].id;
+                    if (selectedAnnsL.length > 0){
+                        currAnnotationId = selectedAnnsL[0].id;
                     }
                 }
-                updateClaimAndData(response.rows, currAnnotationId);
+
+                updateClaimAndData(selectedAnnsL, currAnnotationId);
             }
            });
 }
+
+// initiate annotation when user click annotation import button
+// @input: list of annotations have been selected for import 
+function initAnnTable(selectedAnnsL) {
+    console.log("init ann table");
+    console.log(selectedAnnsL);
+
+    if (selectedAnnsL == null) return null;
+
+    // ann Id for selected claim, if null, set first claim as default 
+    if ((currAnnotationId == null || currAnnotationId.trim()) == "" && selectedAnnsL != null) { 
+        if (selectedAnnsL.length > 0){
+            currAnnotationId = selectedAnnsL[0].id;
+        }
+    }
+    updateClaimAndData(selectedAnnsL, currAnnotationId);
+}
+
 
 
 // update annotation table by selected annotaionId
 // @input: list of mp annotaitons
 // @input: annotationId for selected claim
 function updateClaimAndData(annotations, annotationId) {
+    console.log("ann table updateClaimAndData");
+    // console.log(annotations);
+
     // claim menu for mpadder
     claimMenu = "";
     // data table for selected claim
@@ -49,7 +74,7 @@ function updateClaimAndData(annotations, annotationId) {
     for (i = 0; i < annotations.length; i++) { 
       
         annotation = annotations[i];
-        //dataL = annotation.argues.supportsBy;
+        //if (annotation.annotationType != "MP") continue;
 
         var claimIsSelected = "";
         if (annotationId == annotation.id) {
@@ -57,10 +82,7 @@ function updateClaimAndData(annotations, annotationId) {
             claimIsSelected = 'selected="selected"';     
             // cache total number of data & material for current claim
             totalDataNum = annotation.argues.supportsBy.length;      
-            
-            // create data table
-            // dataTable = createDataTable(dataL, annotationId);                     
-            dataTable = createDataTable(annotation);                       
+            dataTable = createDataTable(annotation); // create data table           
         }
         
         claim = annotation.argues;                    
@@ -229,8 +251,6 @@ function changeClaimInAnnoTable() {
 
     var idFromAnnTable = $('#mp-editor-claim-list option:selected').val();
 
-    //console.log($('#mp-editor-claim-list option:selected').val());
-
     var idFromDialog = $('#dialog-claim-options option:selected').val();
     var newAnnotationId = idFromAnnTable;
 
@@ -241,28 +261,16 @@ function changeClaimInAnnoTable() {
         });    
     }
 
-
-    //console.log("table - claim changed to :" + newAnnotationId);
     currAnnotationId = newAnnotationId;
+
     if (!window.location.search.substring(1).includes("file")) {
         sourceURL = getURLParameter("sourceURL").trim();
     } else {
         sourceURL = getURLParameter("file").trim();
     }
-    email = getURLParameter("email");
+    
+    updateAnnTable(sourceURL);
 
-    $.ajax({url: "http://" + config.annotator.host + "/annotatorstore/search",
-            data: {annotationType: "MP", 
-                   email: email, 
-                   uri: sourceURL.replace(/[\/\\\-\:\.]/g, "")},
-            method: 'GET',
-            error : function(jqXHR, exception){
-                console.log(exception);
-            },
-            success : function(response){
-                updateClaimAndData(response.rows, newAnnotationId);
-            }     
-           });    
 }
 
 
@@ -309,33 +317,3 @@ function warnSelectTextSpan(field) {
         $("#dialog-select-text-for-data").hide();
     });
 }
-
-
-
-// sort data & materail table by column 
-function sort(annotations, sortByColumn) {
-
-    //console.log("sortByColumn: " + sortByColumn);
-    // console.log($("#tb-annotation-list"));
-    // className = $("#tb-annotation-list").find('#' + sortByColumn).attr('class');
-    // console.log("className: " + className);
-
-    // if (className == "tb-list-unsorted"){
-        
-    //     $('#' + sortByColumn).attr('class','tb-list-asc');
-    //     annotations.sort(function(a, b){
-    //         return a[sortByColumn].localeCompare(b[sortByColumn]);
-    //     });
-    // } else if (className == "tb-list-asc"){
-    //     annotations.sort(function(a, b){
-    //         return a[sortByColumn].localeCompare(b[sortByColumn]);
-    //     }).reverse();
-    // }
-
-    $('#' + sortByColumn).attr('class','tb-list-asc');
-        annotations.sort(function(a, b){
-            return a[sortByColumn].localeCompare(b[sortByColumn]);
-        });
-}
-
-

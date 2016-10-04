@@ -7,7 +7,7 @@ CREATE DATABASE mpevidence
        LC_CTYPE = 'en_US.UTF-8'
 CONNECTION LIMIT = -1;
 
-
+-- MP Claim ------------------------------------
 --TABLE: mp_claim_annotation
 DROP TABLE IF EXISTS mp_claim_annotation CASCADE;
 CREATE TABLE mp_claim_annotation
@@ -35,17 +35,7 @@ is_oa_body_of integer
 );
 
 
---TABLE: oa_target
-DROP TABLE IF EXISTS oa_target CASCADE;
-CREATE TABLE oa_target
-(
-id INTEGER not null PRIMARY KEY,
-urn text,
-has_source text,
-has_selector integer
-);
-
-
+-- MP Data ------------------------------------
 --TABLE mp_data_annotation
 DROP TABLE IF EXISTS mp_data_annotation CASCADE;
 CREATE TABLE mp_data_annotation
@@ -91,7 +81,7 @@ value_as_number numeric(10,2),
 FOREIGN KEY (data_body_id) REFERENCES oa_data_body(id)
 );
 
-
+-- MP Material ------------------------------------
 --TABLE mp_material_annotation
 DROP TABLE IF EXISTS mp_material_annotation CASCADE;
 CREATE TABLE mp_material_annotation
@@ -154,7 +144,7 @@ vocabulary_id integer,
 FOREIGN KEY (claim_body_id) REFERENCES oa_claim_body(id)
 );
 
-
+-- MP Method -------------------------------------
 --TABLE method
 DROP TABLE IF EXISTS method CASCADE;
 CREATE TABLE method
@@ -166,6 +156,16 @@ mp_data_index integer,
 FOREIGN KEY (mp_claim_id) REFERENCES mp_claim_annotation(id)
 );
 
+-- Open annotation target & selector --------------
+--TABLE: oa_target
+DROP TABLE IF EXISTS oa_target CASCADE;
+CREATE TABLE oa_target
+(
+id INTEGER not null PRIMARY KEY,
+urn text,
+has_source text,
+has_selector integer
+);
 
 --TABLE oa_selector
 DROP TABLE IF EXISTS oa_selector CASCADE;
@@ -179,7 +179,7 @@ prefix text,
 suffix text
 );
 
-
+-- MP Reference ------------------------------------
 --TABLE mp_reference
 DROP TABLE IF EXISTS mp_reference CASCADE;
 CREATE TABLE mp_reference
@@ -245,3 +245,41 @@ ALTER TABLE claim_reference_relationship alter id set default nextval('claim_ref
 
 CREATE SEQUENCE mp_reference_id_seq;
 ALTER TABLE mp_reference alter id set default nextval('mp_reference_id_seq');
+
+
+-- Highlight annotation ----------------------------------
+--TABLE: highlight_annotation
+DROP TABLE IF EXISTS highlight_annotation CASCADE;
+CREATE TABLE highlight_annotation
+(
+id INTEGER not null PRIMARY KEY,
+urn text,
+type text,
+has_body integer,
+has_target integer,
+creator text,
+date_created timestamp,
+date_updated timestamp
+);
+
+
+--TABLE: oa_highlight_body
+DROP TABLE IF EXISTS oa_highlight_body CASCADE;
+CREATE TABLE oa_highlight_body
+(
+id INTEGER not null PRIMARY KEY,
+urn text,
+drugname text,
+uri text,
+vocabulary_id integer,
+concept_code text,
+is_oa_body_of integer,
+FOREIGN KEY (is_oa_body_of) REFERENCES highlight_annotation (id)
+);
+
+CREATE SEQUENCE highlight_annotation_id_seq;
+ALTER TABLE highlight_annotation alter id set default nextval('highlight_annotation_id_seq');
+
+CREATE SEQUENCE oa_highlight_body_id_seq;
+ALTER TABLE oa_highlight_body alter id set default nextval('oa_highlight_body_id_seq');
+

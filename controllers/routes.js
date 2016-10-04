@@ -1,8 +1,8 @@
 config = require('./../config/config.js');
 var request = require("request");
-var tidy = require('htmltidy').tidy;
+//var tidy = require('htmltidy').tidy;
 var pg = require('pg');
-var htmltidyOptions = require('htmltidy-options');
+//var htmltidyOptions = require('htmltidy-options');
 
 module.exports = function(app, passport) {
 
@@ -274,25 +274,26 @@ function praseWebContents(req, res, next){
             host: sourceUrl,
             method: 'POST'            
         }
-        //var cheerio = require("cheerio");
 
         request(sourceUrl, function(err, res, body){
 
+            // skip tidy beacuse changing of char encoding
             labelDecode = body.replace(/&amp;/g,'&').replace(/&nbsp;/g,' ');   
-
+            req.htmlsource = labelDecode;
+            next();
+            
             // normalize html source
-            tidy(labelDecode, htmltidyOptions['Kastor tidy - XHTML Clean page UTF-8'], function(err, html) {
-                if (err){
-                    console.log(err);
-                }
-                req.htmlsource = html;
-                next();
-            });
+            // tidy(labelDecode, htmltidyOptions['Kastor tidy - XHTML Clean page UTF-8'], function(err, html) {
+            //     if (err){
+            //         console.log(err);
+            //     }
+            //     req.htmlsource = html;
+            //     next();
+            // });
             
         });
 
 }
-
 
 // get plugin profile
 function initPluginProfile(req, res, next){

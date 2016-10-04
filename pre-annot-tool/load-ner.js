@@ -65,11 +65,11 @@ function loadNERs(nersets, sourceType, email){
             if (annotation){
                 uriStr = "";
                 if (sourceType == "pubmed")
-		    // load for alive PMC articles
+		            // load for alive PMC articles
                     // uriStr = "http://www.ncbi.nlm.nih.gov/pmc/articles/" + annotation.setid;
 
-		    // load for local pmc html articles
-		    uriStr = "http://localhost/dbmiannotator/" + annotation.setid + ".html";
+		            // load for local pmc html articles
+		            uriStr = "http://localhost/dbmiannotator/" + annotation.setid + ".html";
                 else if (sourceType == "dailymed")
                     uriStr = "http://" + HOSTNAME + "/DDI-labels/" + annotation.setid + ".html";
                 else {
@@ -181,12 +181,12 @@ function loadAnnotation(annotation, uriStr, email){
                             }
                         },
                         "ranges": [
-                            {
-                                "start": path,
-                                "end": path,
-                                "startOffset": parseInt(annotation.startOffset),
-                                "endOffset": parseInt(annotation.endOffset),
-                            }
+                            // {
+                            //     "start": path,
+                            //     "end": path,
+                            //     "startOffset": parseInt(annotation.startOffset),
+                            //     "endOffset": parseInt(annotation.endOffset),
+                            // }
                         ],
                         "supportsBy": []
                     },

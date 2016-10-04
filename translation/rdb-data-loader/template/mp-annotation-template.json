@@ -1,0 +1,28 @@
+{"argues": {
+    "hasTarget": {},
+    "ranges": [],
+    "qualifiedBy": {
+        "drug2": "",
+        "relationship": "",
+        "enzyme": "",
+        "drug1": "",
+        "drug1ID": "","drug2ID": "",
+        "precipitant": ""},
+    "method": "DDI clinical trial",
+    "label": "",
+    "supportsBy": [],
+    "type": "mp:claim"},
+ "email": "",
+ "created": "",
+ "updated": "",
+ "annotationType": "MP",
+ "permissions": {
+     "read": [
+         "group:__consumer__"
+     ]
+ },
+ "consumer": "mockconsumer",
+ "rawurl": "",
+ "user": "alice",
+ "uri": ""
+}

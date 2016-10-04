@@ -109,6 +109,25 @@
           </div>
         </div>
       </div>
+
+
+      <!-- dialog for annotations import panel-->
+      <div id="dialog-annotation-import" class="import-dialog-background" style="display: none;">
+        <div class="import-dialog-content">
+          <div class="modal-header">
+            <span id="annotation-import-dialog-close" class="close">×</span>
+            <strong>Annotation import</strong>
+          </div>
+          <div class="modal-body">
+            <p><strong> Select annotation set from other users to import </strong></p>
+            <!-- inject all public data sets from different users --> 
+            <div id="import-annotation-selection"></div>
+            <br>
+            <button id="ann-import-confirm-btn">Import</button>&nbsp;&nbsp;
+            <button id="ann-import-cancel-btn">Cancel</button>
+          </div>
+        </div>
+      </div>
       
       <div id='splitter'>
 	
@@ -199,5 +218,8 @@
         <!-- call annotator for mp plugin-->
         <script src="js/annotator-init-mp.js"></script>
         <script type="text/javascript" src="js/mp-menu.js"></script>
+
+        <!-- add mark.js -->
+        <script src="js/mark/mark.min.js"></script>
           
 </html>

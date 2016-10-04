@@ -9,7 +9,7 @@ if (typeof annotator === 'undefined') {
     // var annType = $('#mp-annotation-tb').attr('name');
     var annType = "MP";
     var sourceURL = getURLParameter("sourceURL").trim();
-    var email = getURLParameter("email");
+    var currEmail = getURLParameter("email");
     
     // global variables for keeping status of text selection
     var isTextSelected = false;
@@ -24,13 +24,16 @@ if (typeof annotator === 'undefined') {
     var totalDataNum = "";
     var currFormType = "";
 
-    // track the form editing status from user
+    // form editing status from user
     var unsaved = false;
+
+    // users annotation been imported
+    var userEmails = new Set();
 
     if (annType == "DDI")
         app.include(annotator.ui.dbmimain);            
     else if (annType == "MP")
-        app.include(annotator.ui.mpmain, {element: subcontent, email: email, source: sourceURL});
+        app.include(annotator.ui.mpmain, {element: subcontent, email: currEmail, source: sourceURL});
     else 
         alert("[ERROR] plugin settings wrong, neither DDI nor MP plugin!");
     
@@ -43,99 +46,99 @@ if (typeof annotator === 'undefined') {
     });
 
     // load annotation after page contents loaded
-    app.start().then(function () 
-		             {
-			         app.ident.identity = email;
-			         $(".btn-success").css("display","block");
-		             }).then(function(){
-			             setTimeout(function(){
-			                 app.annotations.load({uri: sourceURL.replace(/[\/\\\-\:\.]/g, ""), email: email});                             
-			             }, 1000);
-		             }).then(function(){
-                         annotationTable(sourceURL, email);
-                     }).then(function(){
-
-                         $('#splitter').jqxSplitter({ showSplitBar: false, width: $(window).width(), height: $(window).height(), orientation: 'horizontal', panels: [{ size: '100%',min: 200 }, { size: '0%', min: 0}] });
-
-                         // MP adder - open/close claim menu
-                         // PMC page not ready - hanging... (comment line below)
-                         // $(document).ready(function () {
-                             
-                         $('.mp-menu-btn').hover(
-                             function() { 
-                                 $('.mp-main-menu').show(); 
-                             }
-                         ); 
-                         // hide menu when mouse over drugMention adder
-                         $('.hl-adder-btn').mouseenter(function(){
-                             $('.mp-main-menu').hide();
-                         });
-
-                         $('.mp-main-menu').mouseleave(function(){
-                             $('.mp-main-menu').hide(); 
-                         });
-                         
-                         $('.mp-main-menu-2').mouseenter(function(){
-                             $(this).find('.mp-sub-menu-2').slideDown();
-                         });
-                         
-                         $('.mp-main-menu-2').mouseleave(function(){
-                             $(this).find('.mp-sub-menu-2').slideUp();
-                         });
-
-                         $('#relationship').change(function() {
-                             showEnzyme();
-                         });
-
-                         // change event for auc, cmax, clearance, halflife unchanged checkbox
-                         unchangedCheckBoxDialog("auc");                        
-                         unchangedCheckBoxDialog("cmax");
-                         unchangedCheckBoxDialog("clearance");
-                         unchangedCheckBoxDialog("halflife");
-
-                         // jquery for checking form editing status
-                         $(":input").change(function(){
-                             //console.log("[INFO] making changes - unsaved set to true");
-                             unsaved = true;
-                         });
-
-                         var resizeTimer;
-                         //window.addEventListener("resize", resetSplitter);
-
-                         $(window).resize(function() {
-                             clearTimeout(resizeTimer);
-                             resizeTimer = setTimeout(resetSplitter, 300);
-                         });
-
-                         function resetSplitter() {    
-                             console.log("resize window - resetSplitter called");
-                             $('#splitter').jqxSplitter({
-                                 showSplitBar: false, 
-                                 width: $(window).width(), 
-                                 height: $(window).height(), 
-                                 orientation: 'horizontal', 
-                                 //panels: [{ size: '100%',min: 200 }, { size: '0%', min: 0}] });
-                                 panels: [{size: '80%', min: 200}, {size: '20%', min: 250}]
-                             });
-                         }
-                     });
-
+    app.start().then(
+        function () {
+			app.ident.identity = currEmail;
+			$(".btn-success").css("display","block");            
+            
+            initMpAdder(); // initiate mp adder
+            
+            initLiseners(); // initiate listeners on data unchange button, claim relationship change, etc
+            
+            initSplitter(); // initiate screen splitter
+            
+            importAnnotationDialog(sourceURL, currEmail); // annotation import dialog    
+        });
 }
 
-$(document)
-    .ajaxStart(function () {
-        $('#wait').show();
-    })
-    .ajaxStop(function () {
-        $('#wait').hide();
+
+// initiate splitter
+function initSplitter() {
+
+    $('#splitter').jqxSplitter({ showSplitBar: false, width: $(window).width(), height: $(window).height(), orientation: 'horizontal', panels: [{ size: '100%',min: 200 }, { size: '0%', min: 0}] });
+
+    var resizeTimer;           
+    $(window).resize(function() {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(resetSplitter, 300);
+    });    
+}
+
+// reset splitter when window size changed
+function resetSplitter() {    
+    console.log("resize window - resetSplitter called");
+    $('#splitter').jqxSplitter({
+        showSplitBar: false, 
+        width: $(window).width(), 
+        height: $(window).height(), 
+        orientation: 'horizontal', 
+        panels: [{size: '80%', min: 200}, {size: '20%', min: 250}]
+    });
+}
+
+
+// initiate Mp adder
+function initMpAdder() {
+    // MP adder - open/close claim menu           
+    $('.mp-menu-btn').hover(
+        function() { 
+            $('.mp-main-menu').show(); 
+        }
+    ); 
+    // hide menu when mouse over drugMention adder
+    $('.hl-adder-btn').mouseenter(function(){
+        $('.mp-main-menu').hide();
+    });
+    
+    $('.mp-main-menu').mouseleave(function(){
+        $('.mp-main-menu').hide(); 
+    });
+    
+    $('.mp-main-menu-2').mouseenter(function(){
+        $(this).find('.mp-sub-menu-2').slideDown();
+    });
+    
+    $('.mp-main-menu-2').mouseleave(function(){
+        $(this).find('.mp-sub-menu-2').slideUp();
+    });
+}
+
+
+// add action listeners 
+function initLiseners() {
+
+    $('#relationship').change(function() {
+        showEnzyme();
+    });
+            
+    // change event for auc, cmax, clearance, halflife unchanged checkbox
+    unchangedCheckBoxDialog("auc");                        
+    unchangedCheckBoxDialog("cmax");
+    unchangedCheckBoxDialog("clearance");
+    unchangedCheckBoxDialog("halflife");
+    
+    // jquery for checking form editing status
+    $(":input").change(function(){
+        unsaved = true;
     });
 
+    //highlight drugs in quote dynamicly  
+    //moved from mp-annotation-editor                      
+    $("#Drug1").change(function (){selectDrug();});
+    $("#Drug2").change(function (){selectDrug();});
+}
 
 
-//highlight drugs in quote dynamicly  
-//moved from mp-annotation-editor                      
-$("#Drug1").change(function (){selectDrug();});
-$("#Drug2").change(function (){selectDrug();});
 
 function selectDrug() {
     var drug1 = $('#Drug1 option:selected').text();
@@ -154,28 +157,21 @@ function selectDrug() {
 }
 
 
-
+// get parameter from url
 function getURLParameter(name) {
     return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search)||[,""])[1].replace(/\+/g, '%20'))||null
 }
 
-$(document).ready(function () {
-    // splitter for show annotation panel
-    $('#splitter').jqxSplitter({ showSplitBar: false, width: $(window).width(), height: $(window).height(), orientation: 'horizontal', panels: [{ size: '100%',min: 200 }, { size: '0%', min: 0}] });
-});
 
 
 // dialog for confirm truncation when user check unchanged checkbox  
 // fields allowed: auc, cmax, clearance, halflife
 function unchangedCheckBoxDialog(field) {
-    if (field !== "auc" && field!== "cmax" && field!== "clearance" && field !== "halflife") {
-        return;
-    }
+    if (field !== "auc" && field!== "cmax" && field!== "clearance" && field !== "halflife") { return; }
 
     $('#' + field + '-unchanged-checkbox').change(function() {
         
-        if ($(this).is(":checked")) {
-            
+        if ($(this).is(":checked")) {            
             if ($('#'+field).val() != null && $('#'+field).val().trim() != "") {
                 // show unchanged warn dialog
                 var unchangedDialog = document.getElementById('unchanged-warn-dialog');
@@ -189,7 +185,6 @@ function unchangedCheckBoxDialog(field) {
                 
                 var okBtn = document.getElementById("unchanged-dialog-ok-btn");
                 var cancelBtn = document.getElementById("unchanged-dialog-cancel-btn");
-
                 okBtn.onclick = function() {
                     unchangedDialog.style.display = "none";
                     $('#'+field).val('');
@@ -211,8 +206,7 @@ function unchangedCheckBoxDialog(field) {
                 $('#'+field).attr('disabled', true);
                 $('#'+field+'Type').attr('disabled', true);
                 $('#'+field+'Direction').attr('disabled', true);                   
-            }
-            
+            }            
         } else {
             // TODO: grey out fields
             $('#'+field).attr('disabled', false);
@@ -221,3 +215,113 @@ function unchangedCheckBoxDialog(field) {
         }
     });
 }
+
+// pop up dialog for importable existing annotation sets  
+function importAnnotationDialog(sourceURL, email) {
+
+    var uri = sourceURL.replace(/[\/\\\-\:\.]/g, "");
+    var importDialog = document.getElementById('dialog-annotation-import');
+
+    var emailS = new Set();
+    var allMPAnnsD = {}; // dict for all MP annotations {email: annotations}
+    var allDrugAnnsD = {}; // dict for all drug mention annotation {email: annotations}
+    $.ajax({url: "http://" + config.annotator.host + "/annotatorstore/search",
+            data: {
+                //annotationType: "MP", 
+                uri: uri},
+            method: 'GET',
+            error : function(jqXHR, exception){
+                console.log(exception);
+		        console.log(jqXHR);
+            },
+            success : function(response){
+
+                for (var i=0; i < response.total; i++) {
+                    var ann = response.rows[i];
+                    var email = ann.email;
+                    emailS.add(email);
+
+                    if (ann.annotationType == "MP") {
+                        if (allMPAnnsD[email] == null) 
+                            allMPAnnsD[email] = [ann];
+                        else 
+                            allMPAnnsD[email].push(ann);                   
+                    } else if (ann.annotationType == "DrugMention") {
+                        if (allDrugAnnsD[email] == null) 
+                            allDrugAnnsD[email] = [ann];
+                        else 
+                            allDrugAnnsD[email].push(ann);                   
+                    }                    
+                }
+
+                //console.log(allMPAnnsD);
+                //console.log(allDrugAnnsD);
+                var htmlCnt = ""; 
+                emailS.forEach(function (email){
+
+                    if (email != currEmail){ // only show other user's data set
+                        var numsOfAnns = 0
+                        if (allMPAnnsD[email] != null)
+                            numsOfAnns += allMPAnnsD[email].length;
+                        if (allDrugAnnsD[email] != null)
+                            numsOfAnns += allDrugAnnsD[email].length;
+                        
+                        htmlCnt += "<b>"+email+": </b>" + numsOfAnns;
+                        htmlCnt += "<input type='checkbox' name='anns-load-by-email' value='"+email+"'><br>";
+                    }
+                });                                
+                $('#import-annotation-selection').html(htmlCnt);                
+            }
+           });
+
+    importDialog.style.display = "block"; 
+    var selectedMPAnnsL = []; // selected annotations
+    userEmails.add(currEmail); // add current user as default
+
+    var okBtn = document.getElementById("ann-import-confirm-btn");
+    var cancelBtn = document.getElementById("ann-import-cancel-btn");
+    var closeBtn = document.getElementById("annotation-import-dialog-close");
+
+    okBtn.onclick = function() {
+
+        // load all selected users
+        $("input:checkbox[name=anns-load-by-email]:checked").each(function(){
+            var email = $(this).val();
+            userEmails.add(email); // add user emails to set as global variable     
+        });
+        
+        userEmails.forEach(function(email) { // draw all annotaitons by email
+		    app.annotations.load({uri: uri, email: email});
+            selectedMPAnnsL = selectedMPAnnsL.concat(allMPAnnsD[email]);
+        });
+
+        initAnnTable(selectedMPAnnsL); // update annotation table
+        importDialog.style.display = "none"; // hide panel        
+    }	
+
+    cancelBtn.onclick = function() { // only load current user's annotation
+        
+        selectedMPAnnsL = allMPAnnsD[currEmail];        
+        userEmails.forEach(function(email) { // draw all annotaitons by email
+		    app.annotations.load({uri: uri, email: email});
+        });
+        initAnnTable(selectedMPAnnsL); // update annotation table
+        importDialog.style.display = "none"; 
+    }
+
+    closeBtn.onclick = function() {
+        selectedMPAnnsL = allMPAnnsD[currEmail];        
+        userEmails.forEach(function(email) { // draw all annotaitons by email
+		    app.annotations.load({uri: uri, email: email});
+        });
+        initAnnTable(selectedMPAnnsL); // update annotation table
+        importDialog.style.display = "none"; 
+    }
+}
+
+
+$(document).ajaxStart(function () {
+    $('#wait').show();
+}).ajaxStop(function () {
+    $('#wait').hide();
+});

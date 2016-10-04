@@ -2,6 +2,12 @@ import csv
 import psycopg2
 import uuid
 import datetime
+from sets import Set
+import sys  
+
+reload(sys)  
+sys.setdefaultencoding('utf8')
+
 
 #1. pip install psycopg2
 #2. create config file: "config/DB-config.txt"
@@ -10,27 +16,6 @@ csvfiles = ['data/pkddi-katrina-latest-08152016.csv', 'data/pkddi-amy-latest-081
 db_config_files = "config/DB-config.txt"
 hostname = 'localhost'
 database = 'mpevidence'
-
-
-def main():
-
-	print("connect postgreSQL ...")
-	myConnection = connect_postgreSQL(db_config_files)
-	#delete all data in table
-	#clearall(myConnection)
-	#truncateall(myConnection)
-	#myConnection.commit()
-	#show table
-	#show_table(myConnection, 'mp_claim_annotation')
-	
-	print("insert data ...")
-	for csvfile in csvfiles:
-		preprocess(csvfile)
-		reader = csv.DictReader(open('data/preProcess.csv', 'r'))
-		creator = csvfile.split('-')[1]
-		load_data_from_csv(myConnection, reader, creator)
-
-	myConnection.close()
 
 
 def connect_postgreSQL(db_config_files):
@@ -49,19 +34,112 @@ def connect_postgreSQL(db_config_files):
 	return myConnection
 
 
-def load_data_from_csv(myConnection, reader, creator):
-	for row in reader:
-		oa_selector_id = load_oa_selector(myConnection, row)
-		oa_target_id = load_oa_target(myConnection, row, oa_selector_id)
-		oa_claim_body_id = load_oa_claim_body(myConnection, row)
-		load_qualifier(myConnection, row, oa_claim_body_id)
-		mp_claim_id = load_mp_claim_annotation(myConnection, row, oa_claim_body_id, oa_target_id, creator)
-		update_oa_claim_body(myConnection, mp_claim_id, oa_claim_body_id)
-		load_mp_data_annotation(myConnection, row, mp_claim_id, oa_target_id, creator)
-		load_mp_material_annotation(myConnection, row, mp_claim_id, oa_target_id, creator)
-		load_method(myConnection, row, mp_claim_id)
+def utf_8_encoder(unicode_csv_data):
+    for line in unicode_csv_data:
+        yield line.encode('utf-8')
 
-	myConnection.commit()
+def main():
+
+	print("[info] connect postgreSQL ...")
+	conn = connect_postgreSQL(db_config_files)
+
+	print("[info] clean before load ...")
+	clearall(conn)
+	#truncateall(conn)
+	conn.commit()
+
+	#show_table(conn, 'mp_claim_annotation') 	#show table
+	
+	print("[info] load data ...")
+	for csvfile in csvfiles:
+		preprocess(csvfile)
+		reader = csv.DictReader(utf_8_encoder(open('data/preProcess.csv', 'r')))
+		creator = csvfile.split('-')[1]
+		load_data_from_csv(conn, reader, creator)
+
+	conn.close()
+
+
+def load_data_from_csv(conn, reader, creator):
+
+	highlightD = {} # drug highlight set in documents {"doc url" : "drug set"}
+
+	for row in reader:
+
+		prefix = row["prefix"]; exact = row["exactText"]; suffix = row["suffix"]
+		source = row["source"]; date = row["date"]
+		subject = row["subject"]; predicate = row["predicate"]; object = row["object"]
+		oa_selector_id = load_oa_selector(conn, prefix, exact, suffix)
+		oa_target_id = load_oa_target(conn, source, oa_selector_id)
+		oa_claim_body_id = load_oa_claim_body(conn, subject, predicate, object, exact)
+		load_qualifier(conn, row, oa_claim_body_id)
+		mp_claim_id = load_mp_claim_annotation(conn, date, oa_claim_body_id, oa_target_id, creator)
+
+		update_oa_claim_body(conn, mp_claim_id, oa_claim_body_id)
+		load_mp_data_annotation(conn, row, mp_claim_id, oa_target_id, creator)
+		load_mp_material_annotation(conn, row, mp_claim_id, oa_target_id, creator)
+		load_method(conn, row, mp_claim_id)
+
+		generateHighlightSet(row, highlightD)   # add unique drugs to set
+		
+	load_highlight(conn, highlightD)  # load drug highlight annotation
+
+	conn.commit()
+
+
+def load_highlight(conn, highlightD):
+
+	currentTime = datetime.datetime.now()
+
+	for url, drugS in highlightD.iteritems():
+		for drug in drugS:
+			oa_selector_id = load_oa_selector(conn, "", drug, "")
+			oa_target_id = load_oa_target(conn, url, oa_selector_id)
+			oa_highlight_body_id = load_oa_highlight_body(conn, drug, url)
+			highlight_annotation_id = load_highlight_annotation(conn, type, oa_highlight_body_id, oa_target_id, "Domeo", currentTime, currentTime)
+			update_oa_highlight_body(conn, highlight_annotation_id, oa_highlight_body_id)
+
+
+def load_highlight_annotation(conn, type, has_body, has_target, creator, date_created, date_updated):
+	urn = uuid.uuid4().hex
+	cur = conn.cursor()
+
+	qry2 = "INSERT INTO highlight_annotation (urn, type, has_body, has_target, creator, date_created, date_updated) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s');" % (urn, "all", str(has_body), str(has_target), creator, date_created, date_updated);
+	cur.execute(qry2);
+
+	qry2 = "SELECT * FROM highlight_annotation WHERE urn = '%s';" % (urn)
+	cur.execute(qry2)
+	for row in cur.fetchall():
+		return row[0]
+	return None
+
+def load_oa_highlight_body(conn, drug, url):
+	urn = uuid.uuid4().hex
+	cur = conn.cursor()
+
+	qry1 = "INSERT INTO oa_highlight_body (urn, drugname, uri) VALUES ('%s', '%s', '%s');" % (urn, drug, url);
+	cur.execute(qry1);
+	
+	qry2 = "SELECT * FROM oa_highlight_body WHERE urn = '%s';" % (urn)
+	cur.execute(qry2)
+	for row in cur.fetchall():
+		return row[0]
+	return None
+
+def update_oa_highlight_body(conn, highlight_annotation_id, oa_highlight_body_id):
+	cur = conn.cursor()
+	cur.execute("UPDATE oa_highlight_body SET is_oa_body_of = " + str(highlight_annotation_id) + " WHERE id = " + str(oa_highlight_body_id) + ";")
+
+
+def generateHighlightSet(row, highlightD):
+	subjectDrug = row["subject"]; objectDrug = row["object"]; source = row["source"].replace("dbmi-icode-01.dbmi.pitt.edu:80","localhost")
+	#print source + "| " + subjectDrug + " | " + objectDrug	
+
+	if source in highlightD:
+		highlightD[source].add(subjectDrug)
+		highlightD[source].add(objectDrug)
+	else:
+		highlightD[source] = Set([subjectDrug, objectDrug])
 
 
 def truncateall(conn):
@@ -80,6 +158,9 @@ def truncateall(conn):
 	cur.execute("DROP TABLE claim_reference_relationship;")
 	cur.execute("DROP TABLE mp_reference;")
 	cur.execute("DROP TABLE mp_claim_annotation;")
+	cur.execute("DROP TABLE highlight_annotation;")
+	cur.execute("DROP TABLE oa_highlight_body;")
+
 
 	cur.execute("DROP SEQUENCE mp_claim_annotation_id_seq;")
 	cur.execute("DROP SEQUENCE oa_selector_id_seq;")
@@ -95,9 +176,13 @@ def truncateall(conn):
 	cur.execute("DROP SEQUENCE method_id_seq;")
 	cur.execute("DROP SEQUENCE claim_reference_relationship_id_seq;")
 	cur.execute("DROP SEQUENCE mp_reference_id_seq;")
+	cur.execute("DROP SEQUENCE highlight_annotation_id_seq;")
+	cur.execute("DROP SEQUENCE oa_highlight_body_id_seq;")
 
 def clearall(conn):
 	cur = conn.cursor()
+	#cur.execute("ALTER TABLE mp_data_annotation DROP CONSTRAINT mp_data_annotation_mp_claim_id_fkey")
+
 	cur.execute("DELETE FROM qualifier;")
 	cur.execute("DELETE FROM oa_claim_body;")
 	cur.execute("DELETE FROM oa_selector;")
@@ -110,6 +195,11 @@ def clearall(conn):
 	cur.execute("DELETE FROM mp_material_annotation;")
 	cur.execute("DELETE FROM method;")
 	cur.execute("DELETE FROM mp_claim_annotation;")
+
+	cur.execute("DELETE FROM oa_highlight_body;")
+	cur.execute("DELETE FROM highlight_annotation;")
+
+	#cur.execute("ALTER TABLE mp_data_annotation ADD CONSTRAINT mp_data_annotation_mp_claim_id_fkey FOREIGN KEY (mp_claim_id) REFERENCES mp_claim_annotation (id)")
 
 
 def show_table(conn, table):
@@ -127,54 +217,54 @@ def load_method(conn, row, mp_claim_id):
 
 
 # load table "oa_selector" one row
-def load_oa_selector(conn, row):
+# input: conn, prefix, exact, suffix
+# return: selector id
+def load_oa_selector(conn, prefix, exact, suffix):
 	cur = conn.cursor()
 	urn = uuid.uuid4().hex
-	if row['prefix'] == '':
-		prefix = 'NULL'
-	else:
-		prefix = "'" + row['prefix'] + "'"
-	if row['suffix'] == '':
-		suffix = 'NULL'
-	else:
-		suffix = "'" + row['suffix'] + "'"
-	cur.execute("INSERT INTO oa_selector (urn, selector_type, exact, prefix, suffix)" +
-				"VALUES ( '" + urn + "', 'oa_selector', '" + row['exactText'] + "', " + prefix + ", " + suffix + ");")
-	cur.execute("SELECT * FROM oa_selector WHERE urn = '" + urn + "';")
 
-	for urn in cur.fetchall():
-		#print(urn)
-		tempid = urn[0]
-	return tempid
+	qry1 = "INSERT INTO oa_selector (urn, selector_type, exact, prefix, suffix) VALUES ('%s', '%s', '%s', '%s', '%s');" % (urn, "oa_selector", exact, prefix, suffix)
+	cur.execute(qry1)
 
+	qry2 = "SELECT * FROM oa_selector WHERE urn = '%s';" % (urn)
+	cur.execute(qry2)
+
+	for row in cur.fetchall():
+		return row[0]
+	return None
 
 # load table "oa_target" one row
-def load_oa_target(conn, row, has_selector):
-	cur = conn.cursor()
-	urn = uuid.uuid4().hex
-	cur.execute("INSERT INTO oa_target (urn, has_source, has_selector)" +
-				"VALUES ( '" + urn + "', '" + row['source'] + "', " + str(has_selector) + ");")
-	cur.execute("SELECT * FROM oa_target WHERE urn = '" + urn + "';")
+# input: conn, doc source url, selector id
+# return: target id
+def load_oa_target(conn, source, selector_id):
 
-	for urn in cur.fetchall():
-		#print(urn)
-		tempid = urn[0]
-	return tempid
+	cur = conn.cursor()
+	urn = uuid.uuid4().hex	
+
+	qry1 = "INSERT INTO oa_target (urn, has_source, has_selector) VALUES ('%s', '%s', '%s');" % (urn, source, selector_id)
+	cur.execute(qry1)
+	qry2 = "SELECT * FROM oa_target WHERE urn = '%s'" % (urn);
+	cur.execute(qry2)
+	for row in cur.fetchall():
+		return row[0]
+	return None
 
 
 # load table "oa_claim_body" one row
-def load_oa_claim_body(conn, row):
+# return claim body id
+def load_oa_claim_body(conn, subject, predicate, object, exact):
 	cur = conn.cursor()
 	urn = uuid.uuid4().hex
-	label = row['subject'] + "_" + row['predicate'] + "_" + row['object']
-	cur.execute("INSERT INTO oa_claim_body (urn, label, claim_text)" +
-				"VALUES ( '" + urn + "', '" + label + "', '" + row['exactText'] + "');")
-	cur.execute("SELECT * FROM oa_claim_body WHERE urn = '" + urn + "';")
+	label = subject + "_" + predicate + "_" + object
+	
+	qry1 = "INSERT INTO oa_claim_body (urn, label, claim_text) VALUES ('%s', '%s', '%s');" % (urn, label, exact)
+	cur.execute(qry1)
 
-	for urn in cur.fetchall():
-		#print(urn)
-		tempid = urn[0]
-	return tempid
+	qry2 = "SELECT * FROM oa_claim_body WHERE urn = '%s';" % (urn)
+	cur.execute(qry2)
+	for row in cur.fetchall():
+		return row[0]
+	return None
 
 
 def update_oa_claim_body(conn, is_oa_body_of, oa_claim_body_id):
@@ -193,18 +283,19 @@ def load_qualifier(conn, row, claim_body_id):
 
 
 # load table "mp_claim_annotation" one row
-def load_mp_claim_annotation(conn, row, has_body, has_target, creator):
+# return claim annotation id
+def load_mp_claim_annotation(conn, date, has_body, has_target, creator):
 	cur = conn.cursor()
 	urn = uuid.uuid4().hex
-	cur.execute("INSERT INTO mp_claim_annotation (urn, has_body, has_target, creator, date_created, date_updated)" +
-				"VALUES ( '" + urn + "', " + str(has_body) + ", " + str(has_target) + ",'" + creator + "', '" +
-				parse_date(row['date']) + "', '" + parse_date(row['date']) + "');")
+
+	qry1 = "INSERT INTO mp_claim_annotation (urn, has_body, has_target, creator, date_created, date_updated)" + "VALUES ('%s','%s','%s','%s','%s','%s');" % (urn, str(has_body), str(has_target), creator, parse_date(date), parse_date(date))
+	cur.execute(qry1)
+
 	cur.execute("SELECT * FROM mp_claim_annotation WHERE urn = '" + urn + "';")
 
-	for urn in cur.fetchall():
-		#print(urn)
-		tempid = urn[0]
-	return tempid
+	for row in cur.fetchall():
+		return row[0]
+	return None
 
 
 # load table "mp_data_annotation" and "oa_data_body" one row
@@ -347,9 +438,11 @@ def preprocess(csvfile):
 				   'numOfParticipants', 'auc', 'aucType', 'aucDirection', 'clearance', 'clearanceType', 'clearanceDirection',
 				   'cmax', 'cmaxType', 'cmaxDirection', 'halflife', 'halflifeType', 'halflifeDirection', 'predicate',
 				   'subject', 'object', 'subjectDose', 'objectDose']
-	writer = csv.DictWriter(open('preProcess.csv', 'w'), fieldnames=csv_columns)
+
+	writer = csv.DictWriter(open('data/preProcess.csv', 'w'), fieldnames=csv_columns)
 	writer.writeheader()
-	reader = csv.DictReader(open(csvfile, 'r'))
+	reader = csv.DictReader(utf_8_encoder(open(csvfile, 'r')))
+
 	all = []
 	for row in reader:
 		#print(row)
