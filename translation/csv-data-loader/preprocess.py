@@ -3,6 +3,10 @@ import psycopg2
 import uuid
 import datetime
 from sets import Set
+import sys  
+
+reload(sys)  
+sys.setdefaultencoding('utf8')
 
 #1. pip install psycopg2
 #2. create config file: "config/DB-config.txt"
@@ -27,22 +31,26 @@ def connect_postgreSQL(db_config_files):
 
 	return myConnection
 
+def utf_8_encoder(unicode_csv_data):
+    for line in unicode_csv_data:
+        yield line.encode('utf-8')
 
 def main():
 
-	print("connect postgreSQL ...")
+	print("[info] connect postgreSQL ...")
 	conn = connect_postgreSQL(db_config_files)
 
-	#clearall(conn)
+	print("[info] clean before load ...")
+	clearall(conn)
 	#truncateall(conn)
 	conn.commit()
 
 	#show_table(conn, 'mp_claim_annotation') 	#show table
 	
-	print("insert data ...")
+	print("[info] load data ...")
 	for csvfile in csvfiles:
 		preprocess(csvfile)
-		reader = csv.DictReader(open('data/preProcess.csv', 'r'))
+		reader = csv.DictReader(utf_8_encoder(open('data/preProcess.csv', 'r')))
 		creator = csvfile.split('-')[1]
 		load_data_from_csv(conn, reader, creator)
 
@@ -54,6 +62,7 @@ def load_data_from_csv(conn, reader, creator):
 	highlightD = {} # drug highlight set in documents {"doc url" : "drug set"}
 
 	for row in reader:
+
 		prefix = row["prefix"]; exact = row["exactText"]; suffix = row["suffix"]
 		source = row["source"]; date = row["date"]
 		subject = row["subject"]; predicate = row["predicate"]; object = row["object"]
@@ -168,6 +177,8 @@ def truncateall(conn):
 
 def clearall(conn):
 	cur = conn.cursor()
+	#cur.execute("ALTER TABLE mp_data_annotation DROP CONSTRAINT mp_data_annotation_mp_claim_id_fkey")
+
 	cur.execute("DELETE FROM qualifier;")
 	cur.execute("DELETE FROM oa_claim_body;")
 	cur.execute("DELETE FROM oa_selector;")
@@ -180,8 +191,11 @@ def clearall(conn):
 	cur.execute("DELETE FROM mp_material_annotation;")
 	cur.execute("DELETE FROM method;")
 	cur.execute("DELETE FROM mp_claim_annotation;")
-	cur.execute("DELETE FROM highlight_annotation;")
+
 	cur.execute("DELETE FROM oa_highlight_body;")
+	cur.execute("DELETE FROM highlight_annotation;")
+
+	#cur.execute("ALTER TABLE mp_data_annotation ADD CONSTRAINT mp_data_annotation_mp_claim_id_fkey FOREIGN KEY (mp_claim_id) REFERENCES mp_claim_annotation (id)")
 
 
 def show_table(conn, table):
@@ -422,7 +436,7 @@ def preprocess(csvfile):
 				   'subject', 'object', 'subjectDose', 'objectDose']
 	writer = csv.DictWriter(open('data/preProcess.csv', 'w'), fieldnames=csv_columns)
 	writer.writeheader()
-	reader = csv.DictReader(open(csvfile, 'r'))
+	reader = csv.DictReader(utf_8_encoder(open(csvfile, 'r')))
 	all = []
 	for row in reader:
 		#print(row)
@@ -444,3 +458,5 @@ def preprocess(csvfile):
 
 if __name__ == '__main__':
 	main()
+
+

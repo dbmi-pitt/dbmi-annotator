@@ -5,6 +5,9 @@ import datetime
 from elasticsearch import Elasticsearch
 from sets import Set
 
+reload(sys)  
+sys.setdefaultencoding('utf8')
+
 sys.path.insert(0, './model')
 from micropublication import Annotation, DataMaterialRow, DMItem, DataItem, MaterialDoseItem, MatarialParticipants
 
@@ -222,7 +225,7 @@ def queryHighlightAnns(conn):
 
 # return oa selector in json
 def generateOASelector(prefix, exact, suffix):
-	oaSelector = "{\"hasSelector\": { \"@type\": \"TextQuoteSelector\", \"exact\": \""+exact+"\", \"prefix\": \""+ (prefix or "") + "\", \"suffix\": \"" + (suffix or "") + "\"}}"
+	oaSelector = "{\"hasSelector\": { \"@type\": \"TextQuoteSelector\", \"exact\": \""+unicode(exact or "", "utf-8")+"\", \"prefix\": \""+ unicode(prefix or "", "utf-8") + "\", \"suffix\": \"" + unicode(suffix or "", "utf-8") + "\"}}"
 
 	return json.loads(oaSelector)
 
@@ -323,6 +326,7 @@ def loadMpAnnotation(annotation, email):
 ######################### CONFIG ##########################
 # load json template
 def loadTemplateInJson(path):
+
 	json_data=open(path)
 	data = json.load(json_data)
 	json_data.close()
@@ -363,7 +367,6 @@ def main():
 	#print highlightD.keys()
 	#print len(highlightD)
 
-	#print highlight
 	loadHighlightAnnotations(highlightD, author)
 
 	conn.close()
@@ -379,7 +382,7 @@ def printSample(mpannotations, idx):
 	dmRows = mpAnnotation.getDataMaterials()
 
 	print "label(%s), subject(%s), predicate(%s), object(%s) " % (mpAnnotation.label, mpAnnotation.csubject, mpAnnotation.cpredicate, mpAnnotation.cobject)
-	print "source: " + mpAnnotation.source
+	#print "source: " + mpAnnotation.source
 	#print "exact: " + mpAnnotation.exact	
 
 	for index,dm in dmRows.items():	
