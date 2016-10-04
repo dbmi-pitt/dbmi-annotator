@@ -88,7 +88,7 @@ module.exports = function(app, passport) {
 	    var sourceUrl = req.query.sourceURL.trim();
 	    var email = req.query.email;
 	    var validUrl = require('valid-url');
-        console.log(sourceUrl);
+
 	    if (validUrl.isUri(sourceUrl)){
 		    
 		    if (sourceUrl.match(/\.pdf/g)){ // local pdf resouces

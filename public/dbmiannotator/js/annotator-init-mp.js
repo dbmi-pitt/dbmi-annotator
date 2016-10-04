@@ -8,7 +8,13 @@ if (typeof annotator === 'undefined') {
 
     // var annType = $('#mp-annotation-tb').attr('name');
     var annType = "MP";
-    var sourceURL = getURLParameter("sourceURL").trim();
+
+    var sourceURL = getURLParameter("sourceURL");
+    if (sourceURL != null)
+        sourceURL = sourceURL.trim();
+    else 
+        sourceURL = getURLParameter("file");
+    
     var currEmail = getURLParameter("email");
     
     // global variables for keeping status of text selection

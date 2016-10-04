@@ -4070,7 +4070,7 @@ var TextLayerBuilder = (function TextLayerBuilderClosure() {
     _finishRendering: function TextLayerBuilder_finishRendering() {
       this.renderingDone = true;
 
-      app.annotations.load({uri: sourceURL.replace(/[\/\\\-\:\.]/g, ""), email: email}, this.pageNumber);                             
+      app.annotations.load({uri: sourceURL.replace(/[\/\\\-\:\.]/g, ""), email: currEmail}, this.pageNumber);                             
       //todo wen test
       var event = document.createEvent('CustomEvent');
       event.initCustomEvent('textlayerrendered', true, true, {
