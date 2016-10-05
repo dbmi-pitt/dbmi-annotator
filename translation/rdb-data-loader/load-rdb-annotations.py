@@ -240,6 +240,10 @@ def loadHighlightAnnotations(highlightD, email):
 
 # load highlight annotation to specific account by email
 def loadHighlightAnnotation(rawurl, content, email):
+
+	if "010f9162"  not in rawurl:
+		return
+
 	annotation = loadTemplateInJson(HIGHLIGHT_TEMPLATE)
 
 	oaSelector = generateOASelector("", content, "")
@@ -361,8 +365,8 @@ def main():
 	mpAnnotations = queryMpAnnotation(conn)	
 	
 	for mpAnn in mpAnnotations:
-		#if mpAnn.source == "http://dbmi-icode-01.dbmi.pitt.edu:80/DDI-labels/2f44db39-e1d9-451e-ba31-e4b10366a430.html":
-		loadMpAnnotation(mpAnn, author)		
+		if "010f9162" in mpAnn.source:
+			loadMpAnnotation(mpAnn, author)		
 	#printSample(mpAnnotations, 6)
 
 	highlightD = queryHighlightAnns(conn)
