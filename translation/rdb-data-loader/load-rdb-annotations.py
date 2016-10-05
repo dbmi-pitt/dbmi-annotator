@@ -233,7 +233,7 @@ def generateOASelector(prefix, exact, suffix):
 def loadHighlightAnnotations(highlightD, email):
 
 	for url in highlightD:
-		if len(highlightD[url]) > 0 and "e9481622-7cc6-418a-acb6-c5450daae9b0" in url:
+		if len(highlightD[url]) > 0:
 			for name in highlightD[url]:
 				loadHighlightAnnotation(url, name, email)
 
@@ -259,8 +259,6 @@ def loadHighlightAnnotation(rawurl, content, email):
 # load mp annotation to specific account by email
 def loadMpAnnotation(annotation, email):		
 
-	print "[INFO] label(%s), subject(%s), predicate(%s), object(%s) \n" % (annotation.label, annotation.csubject, annotation.cpredicate, annotation.cobject)
-
 	subjectDrug = annotation.csubject; predicate = annotation.cpredicate; objectDrug = annotation.cobject
 	prefix = annotation.prefix; exact = annotation.exact; suffix = annotation.suffix
 	rawurl = annotation.source.replace("dbmi-icode-01.dbmi.pitt.edu:80","localhost")
@@ -269,6 +267,8 @@ def loadMpAnnotation(annotation, email):
 
 	mpAnn = loadTemplateInJson(MP_ANN_TEMPLATE)
 	oaSelector = generateOASelector(prefix, exact, suffix)
+
+	print "[INFO] Load doc(%s), subject(%s), predicate(%s), object(%s) \n" % (rawurl, annotation.csubject, annotation.cpredicate, annotation.cobject)
 
 	# MP Claim
 	mpAnn["argues"]["qualifiedBy"]["drug1"] = subjectDrug
@@ -294,6 +294,8 @@ def loadMpAnnotation(annotation, email):
 				mpData[df]["type"] = str(firstRow.getDataItemInRow(df).type)
 				mpData[df]["direction"] = str(firstRow.getDataItemInRow(df).direction)
 				mpData[df]["hasTarget"] = oaSelector
+				mpData[df]["ranges"] = []
+
 		# MP Material
 		if firstRow.getMaterialDoseInRow("subject_dose"):
 			mpData["supportsBy"]["supportsBy"]["drug1Dose"]["value"] = firstRow.getMaterialDoseInRow("subject_dose").value
@@ -301,6 +303,7 @@ def loadMpAnnotation(annotation, email):
 			mpData["supportsBy"]["supportsBy"]["drug1Dose"]["formulation"] = firstRow.getMaterialDoseInRow("subject_dose").formulation
 			mpData["supportsBy"]["supportsBy"]["drug1Dose"]["regimens"] = firstRow.getMaterialDoseInRow("subject_dose").regimens
 			mpData["supportsBy"]["supportsBy"]["drug1Dose"]["hasTarget"] = oaSelector
+			mpData["supportsBy"]["supportsBy"]["drug1Dose"]["ranges"] = []
 
 		if firstRow.getMaterialDoseInRow("object_dose"):
 			mpData["supportsBy"]["supportsBy"]["drug2Dose"]["value"] = firstRow.getMaterialDoseInRow("object_dose").value
@@ -308,7 +311,7 @@ def loadMpAnnotation(annotation, email):
 			mpData["supportsBy"]["supportsBy"]["drug2Dose"]["formulation"] = firstRow.getMaterialDoseInRow("object_dose").formulation
 			mpData["supportsBy"]["supportsBy"]["drug2Dose"]["regimens"] = firstRow.getMaterialDoseInRow("object_dose").regimens
 			mpData["supportsBy"]["supportsBy"]["drug2Dose"]["hasTarget"] = oaSelector
-
+			mpData["supportsBy"]["supportsBy"]["drug2Dose"]["ranges"] = []
 		mpAnn["argues"]["supportsBy"].append(mpData)  # append mp data to claim
 
 	mpAnn["created"] = "2016-09-19T18:33:51.179625+00:00" # Metadata
@@ -358,15 +361,11 @@ def main():
 	mpAnnotations = queryMpAnnotation(conn)	
 	
 	for mpAnn in mpAnnotations:
-		if mpAnn.source == "http://dbmi-icode-01.dbmi.pitt.edu:80/DDI-labels/e9481622-7cc6-418a-acb6-c5450daae9b0.html":
-			loadMpAnnotation(mpAnn, author)		
+		#if mpAnn.source == "http://dbmi-icode-01.dbmi.pitt.edu:80/DDI-labels/2f44db39-e1d9-451e-ba31-e4b10366a430.html":
+		loadMpAnnotation(mpAnn, author)		
 	#printSample(mpAnnotations, 6)
 
 	highlightD = queryHighlightAnns(conn)
-
-	#print highlightD.keys()
-	#print len(highlightD)
-
 	loadHighlightAnnotations(highlightD, author)
 
 	conn.close()
