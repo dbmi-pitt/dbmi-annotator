@@ -55,7 +55,7 @@ def main():
 		load_data_from_csv(conn, reader, creator)
 
 	conn.close()
-
+	print("[info] load completed ...")
 
 def load_data_from_csv(conn, reader, creator):
 
@@ -440,6 +440,12 @@ def preprocess(csvfile):
 	all = []
 	for row in reader:
 		#print(row)
+
+		# translate Domeo old form for dose (tablet -> Oral)
+		if row['objectFormulation'] == "tablet":
+			row['objectFormulation'] = "Oral"
+		if row['preciptFormulation'] == "tablet":
+			row['preciptFormulation'] = "Oral"
 
 		row.update({'predicate': 'interact_with'})
 		if 'object' in row['drug1Role']:
