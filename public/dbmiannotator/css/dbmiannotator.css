@@ -38,81 +38,30 @@ h1 {
     margin: auto;
 }
 
-
-/* Copy button styles*/
-/*.custombutton {
-  border: 0 none;
-  border-radius: 5px;
-  
-  padding: 12px 55px;
-  margin: 0 10px;
-  
-  cursor: pointer;
-  display: inline-block;
-  
-  font-size: 14px;
-  color: #fff;
-  text-transform: none;
-  
-  transition: all 80ms ease-in-out;
-
-  &:hover {
-      opacity: .7;
-  }
-}
-
-.custombutton.-dark {
-  background: $dark;
-  color: $white;
-}
-  
-.custombutton.-green {
-  background: $green;
-  color: $white;
-}
-
-.custombutton.-blue {
-  background: $blue;
-  color: $white;
-}*/
-
-/*.custombutton.-border {
-  background: transparent;
-  border: 2px solid $blue;
-  color: $blue;
-  
-  &:hover {
-    border-color: $dark;
-    color: $dark;
-    
-    opacity: 1;
-  }
-}*/
-
 /* Home and Annotator icons */
 .btn-success {
-  position:fixed;
-  bottom: 2px;
-  left: 50px;
-  border-radius: 8px;
-  border: 2px solid #8c8c8c;
-  background-color:#FFFFFF;
-  height: 38px;
-  width: 43px;
-  z-index: 999;
+  position:fixed !important;
+  bottom: 2px !important;
+  left: 50px !important;
+  border-radius: 8px !important;
+  border: 2px solid #8c8c8c !important;
+  background-color:#FFFFFF !important;
+  height: 38px !important;
+  width: 43px !important;
+  z-index: 999 !important;
 }
 
 .btn-home {
-  position:fixed;
-  bottom:2px;
-  left:2px;
-  color:#FFFFFF;
-  border-radius: 8px;
-  border: 2px solid #8c8c8c;
-  background-color:#FFFFFF;
-  height: 38px;
-  width: 43x;
-  z-index: 999;
+  position:fixed !important;
+  bottom:2px !important;
+  left:2px !important;
+  color:#FFFFFF !important;
+  border-radius: 8px !important;
+  border: 2px solid #8c8c8c !important;
+  background-color:#FFFFFF !important;
+  height: 38px !important;
+  width: 43x !important;
+  z-index: 999 !important;
 }
 
 /*remove the button border in Chrome*/
@@ -152,56 +101,55 @@ button:focus{
 /*add data for */
 .mp-main-menu-2 {
     display:block; 
-    list-style: none;
-    cursor:pointer; 
-    padding:3px 5px 5px 3px; 
-    border: 2px #336699 solid;
-    position:relative;
-    font-size: 11px;
-    font-weight: bold;
-    font-style: "Trebuchet MS", Arial, sans-serif;
-    background-color: white;
+    list-style: none !important;
+    cursor:pointer !important; 
+    padding:3px 5px 5px 3px !important; 
+    border: 2px #336699 solid !important;
+    position:relative !important;
+    font-size: 11px !important;
+    font-weight: bold !important;
+    background-color: white !important;
 }
 
 /* The container <div> - needed to position the dropdown content*/
 .mp-main-menu {
-    position: absolute;
-    top: 5%;
-    left: 5%;
+    position: absolute !important; 
+    top: 5% !important;
     display: block;
-    min-width: 85px;
-    min-height: 40px;
-    text-align: center;
-    list-style: none;
-    color: black;
+    min-width: 130px !important;
+    min-height: 40px !important;
+    text-align: center !important;
+    list-style: none !important;
+    color: black !important;
+    padding-top: 20px !important;
+    padding-left: 40px !important;
 }
 /* add matertal/data -link*/
 .mp-sub-menu-2 {
     display: none;
-    position: absolute;
-    min-width: 100px;
-    left: 43px;
-    top:-20%;
-    color: black;
-    font-family: "Trebuchet MS", Arial, sans-serif;
-    font-size: 11px;
-    font-weight: bold;
+    position: absolute !important;
+    min-width: 100px !important;
+    left: 83px !important;
+    top:-20% !important;
+    color: black !important;
+    font-size: 11px !important;
+    font-weight: bold !important;
 
 }
 
 /* Links inside the dropdown */
 .mp-sub-menu-2 a {
-    color: black;
-    font-size: 10px;
-    border: 2px #336699 solid;
-    padding:5px 4px 3px 0px; 
-    background-color: white;
-    display: block;
-    text-decoration: none;
-    min-width: 140px;
-    min-height: 10px;
-    text-align: left;
-    list-style: none;
+    color: black !important;
+    font-size: 10px !important;
+    border: 2px #336699 solid !important;
+    padding:5px 4px 3px 0px !important;  
+    background-color: white !important;
+    display: block !important;
+    text-decoration: none !important;
+    min-width: 140px !important;
+    min-height: 10px !important;
+    text-align: left !important;
+    list-style: none !important;
 }
 
 
@@ -227,64 +175,58 @@ ul.mp-sub-menu-2{
 
 /* annotator table - material/data panel */
 #mp-claim-data-tb{
-    margin-left: 15%;
-    margin-right: 15%;
-    margin-bottom: 5%;
-    width: 70%;
-    /* height: 80%; */
-	min-width: 1000px;
-    max-height: 300px;
-    font-size: 15px;
-    border-collapse: collapse;
-    border: 2px solid #D4E0EE;
-    text-align: center; 
-    font-family: "Trebuchet MS", Arial, sans-serif;
-    font-size: 17px;
-    background-color: #DDEBFA;
+    margin-left: 15%  !important;
+    margin-right: 15% !important;
+    margin-bottom: 5% !important;
+    width: 70% !important;
+    /* height: 80% !important; */
+	min-width: 1000px !important;
+    max-height: 300px !important;
+    font-size: 15px !important;
+    border-collapse: initial !important;
+    border: 2px solid #D4E0EE !important;
+    text-align: center !important; 
+    font-size: 17px !important;
+    background-color: #DDEBFA !important;
 }
 
 
-/* annotator table -material/data */
-#mp-data-tb{
-    width: 100%;
-	min-width: 700px;
-    text-align: center; 
-    font-family: "Trebuchet MS", Arial, sans-serif;
-    font-size: 13px; 
-    background-color: #F7F9FC;
-    border: 2px solid #D4E0EE;
+/* annotator table -material/data  */
+#mp-data-tb {
+    border: 1px #D4E0EE !important;
+    width: 100% !important;
+	min-width: 700px !important;
+    text-align: center !important; 
+    font-size: 13px !important; 
+    border-collapse: collapse !important;
+    border: 1px solid black !important;
 }
 
 /* annotator table - claim pannel */
 #mp-claim-method-tb{
-
-   width: 100%;
-   height: 100%;
-   min-width: 300px;
-   max-hight: 240px;
-   font-family: "Trebuchet MS", Arial, sans-serif;
-   font-size: 14px;
-   border-collapse: collapse;
-   border-style: hidden;
-}
-
-#mp-claim-tb tr, td{
-  border-style: hidden;
-  padding:10px;
+   width: 100% !important;
+   height: 100% !important;
+   min-width: 300px !important;
+   max-hight: 240px !important;
+   font-size: 14px !important;
+   border-collapse: collapse !important;
+   border-style: hidden !important;
+  border-style: hidden !important;
+  padding:2px !important;
 }
 
 /* method option for claim panel */
 #mp-editor-method {
-  font-size: 16px;
-  width: 76%;
-  color: black;
+  font-size: 16px !important;
+  width: 76% !important;
+  color: black !important;
 }
 
 /*claim options for claim panel */
 #mp-editor-claim-list {
-  font-size: 16px;
-  width: 97%;
-  color: black;
+  font-size: 16px !important;
+  width: 97% !important;
+  color: black !important;
 }
 
 /* annotation editor */

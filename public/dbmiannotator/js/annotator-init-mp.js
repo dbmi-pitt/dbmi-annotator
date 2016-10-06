@@ -219,8 +219,6 @@ function unchangedCheckBoxDialog(field) {
 function importAnnotationDialog(sourceURL, email) {
 
     var uri = sourceURL.replace(/[\/\\\-\:\.]/g, "");
-    var importDialog = document.getElementById('dialog-annotation-import');
-
     var emailS = new Set();
     var allMPAnnsD = {}; // dict for all MP annotations {email: annotations}
     var allDrugAnnsD = {}; // dict for all drug mention annotation {email: annotations}
@@ -252,7 +250,6 @@ function importAnnotationDialog(sourceURL, email) {
                             allDrugAnnsD[email].push(ann);                   
                     }                    
                 }
-
                 //console.log(allMPAnnsD);
                 //console.log(allDrugAnnsD);
                 var htmlCnt = ""; 
@@ -263,20 +260,26 @@ function importAnnotationDialog(sourceURL, email) {
                         if (allMPAnnsD[email] != null)
                             numsOfAnns += allMPAnnsD[email].length;
                         if (allDrugAnnsD[email] != null)
-                            numsOfAnns += allDrugAnnsD[email].length;
-                        
+                            numsOfAnns += allDrugAnnsD[email].length;               
                         htmlCnt += "<b>"+email+": </b>" + numsOfAnns;
-                        htmlCnt += "<input type='checkbox' name='anns-load-by-email' value='"+email+"'><br>";
+                        htmlCnt += "&nbsp;&nbsp;<input type='checkbox' name='anns-load-by-email' value='"+email+"'><br>";
                     }
                 });                                
                 $('#import-annotation-selection').html(htmlCnt);                
             }
            });
 
-    importDialog.style.display = "block"; 
-    var selectedMPAnnsL = []; // selected annotations
     userEmails.add(currEmail); // add current user as default
+    importAnnotationActions(userEmails, allMPAnnsD, uri, email) // import, cancel, close buttons
+}
 
+// add actions for button in import panel
+// actions: import selected sets, cancel import, close window
+function importAnnotationActions(userEmails, allMPAnnsD, uri, email) {
+    var importDialog = document.getElementById('dialog-annotation-import');
+    importDialog.style.display = "block"; 
+
+    var selectedMPAnnsL = []; // selected annotations
     var okBtn = document.getElementById("ann-import-confirm-btn");
     var cancelBtn = document.getElementById("ann-import-cancel-btn");
     var closeBtn = document.getElementById("annotation-import-dialog-close");
@@ -291,7 +294,11 @@ function importAnnotationDialog(sourceURL, email) {
         
         userEmails.forEach(function(email) { // draw all annotaitons by email
 		    app.annotations.load({uri: uri, email: email});
-            selectedMPAnnsL = selectedMPAnnsL.concat(allMPAnnsD[email]);
+
+            // console.log("[DEBUG] anns by email: " + email);
+            // console.log(allMPAnnsD[email]);
+            if (allMPAnnsD[email] != null)
+                selectedMPAnnsL = selectedMPAnnsL.concat(allMPAnnsD[email]);
         });
 
         initAnnTable(selectedMPAnnsL); // update annotation table
@@ -317,6 +324,7 @@ function importAnnotationDialog(sourceURL, email) {
         importDialog.style.display = "none"; 
     }
 }
+
 
 
 $(document).ajaxStart(function () {
