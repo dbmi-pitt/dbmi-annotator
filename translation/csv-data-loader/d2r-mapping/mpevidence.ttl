@@ -15,7 +15,7 @@
 
 map:database a d2rq:Database;
 	d2rq:jdbcDriver "org.postgresql.Driver";
-    d2rq:jdbcDSN "jdbc:postgresql://localhost/mpevidence?autoReconnect=true&user=postgres&password=ning1fan";   
+    d2rq:jdbcDSN "jdbc:postgresql://localhost/mpevidence?autoReconnect=true&user=postgres&password=";   
 	.
 
 # Table claim_reference_relationship
