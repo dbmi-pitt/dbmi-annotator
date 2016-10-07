@@ -53,7 +53,7 @@
 	    <table class="table table-striped" >
 
 		    
-    <%  if (annotations.total > 0){   %>
+    <%  if (annotations.total == -1) {   %>
 	      <tr>
 		<td>Document source URL </td>
 		<td>Number of Annotations </td>
@@ -92,7 +92,7 @@
 				  } else { %>
 
 	    
-					      <strong>No annotations been made, below are sample document urls </strong><br><br>
+					      <strong>Sample document links </strong><br><br>
 
 					   <p>Local PMC articles: <br>
 					     <a href="displayWebPage?sourceURL=http://localhost/dbmiannotator/PMC1490169.html&email=<%=user.email%>">http://localhost/dbmiannotator/PMC1490169.html</a> <br>

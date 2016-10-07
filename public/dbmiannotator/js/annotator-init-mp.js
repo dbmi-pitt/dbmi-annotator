@@ -252,18 +252,22 @@ function importAnnotationDialog(sourceURL, email) {
                 }
                 //console.log(allMPAnnsD);
                 //console.log(allDrugAnnsD);
-                var htmlCnt = ""; 
+                var htmlCnt = "";
                 emailS.forEach(function (email){
+                    var numsOfAnns = 0
+                    if (allMPAnnsD[email] != null)
+                        numsOfAnns += allMPAnnsD[email].length;
+                    if (allDrugAnnsD[email] != null)
+                        numsOfAnns += allDrugAnnsD[email].length;    
 
-                    if (email != currEmail){ // only show other user's data set
-                        var numsOfAnns = 0
-                        if (allMPAnnsD[email] != null)
-                            numsOfAnns += allMPAnnsD[email].length;
-                        if (allDrugAnnsD[email] != null)
-                            numsOfAnns += allDrugAnnsD[email].length;               
-                        htmlCnt += "<b>"+email+": </b>" + numsOfAnns;
+                    htmlCnt += "<b>"+email+": </b>" + numsOfAnns;
+
+                    if (email != currEmail){ // other user's annotation set - optional      
                         htmlCnt += "&nbsp;&nbsp;<input type='checkbox' name='anns-load-by-email' value='"+email+"'><br>";
+                    } else { // load current user's annotation set by default
+                        htmlCnt += "&nbsp;&nbsp;<input type='checkbox' name='current-user-email' value='"+email+"' disabled='disabled' checked><br>";                        
                     }
+                    
                 });                                
                 $('#import-annotation-selection').html(htmlCnt);                
             }
