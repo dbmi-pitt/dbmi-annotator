@@ -19,6 +19,7 @@ MP_ANN_TEMPLATE = "template/mp-annotation-template.json"
 MP_DATA_TEMPLATE = "template/mp-data-template.json"
 HIGHLIGHT_TEMPLATE = "template/highlight-annotation-template.json"
 ES_PORT = 9250
+AUTHOR = "test@gmail.com"
 
 mpDataL = ["auc", "cmax", "clearance", "halflife"]
 
@@ -204,8 +205,6 @@ def queryMpAnnotation(conn):
 	mpAnnotations = []
 	claimAnnos = queryMpClaim(conn)
 
-	cnt = 0
-
 	for claimId,claimAnn in claimAnnos.items():
 
 		claimDataAnno = queryMpData(conn, claimAnn, claimId)
@@ -259,8 +258,8 @@ def loadHighlightAnnotations(highlightD, email):
 # load highlight annotation to specific account by email
 def loadHighlightAnnotation(rawurl, content, email):
 
-	if "036db1f2-52b3-42a0-acf9-817b7ba8c724"  not in rawurl:
-		return
+	#if "036db1f2-52b3-42a0-acf9-817b7ba8c724"  not in rawurl:
+	#	return
 
 	annotation = loadTemplateInJson(HIGHLIGHT_TEMPLATE)
 
@@ -388,14 +387,14 @@ def connectPostgres():
 ######################### MAIN ##########################
 
 def main():
-	author = "yin2@gmail.com"
+	author = AUTHOR
 
 	conn = connectPostgres()
 	mpAnnotations = queryMpAnnotation(conn)	
 	
 	for mpAnn in mpAnnotations:
-		if "036db1f2-52b3-42a0-acf9-817b7ba8c724" in mpAnn.source:
-			loadMpAnnotation(mpAnn, author)		
+		#if "036db1f2-52b3-42a0-acf9-817b7ba8c724" in mpAnn.source:
+		loadMpAnnotation(mpAnn, author)		
 	#printSample(mpAnnotations, 6)
 
 	highlightD = queryHighlightAnns(conn)
