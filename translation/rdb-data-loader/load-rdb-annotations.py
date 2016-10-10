@@ -72,7 +72,7 @@ def queryMpClaim(conn):
 def queryMpData(conn, annotation, claimid):
 
 	qry = """	
-	select dann.type, df.data_field_type, df.value_as_string, df.value_as_number, s.exact, s.prefix, s.suffix, mp_data_index
+	select dann.type, df.data_field_type, df.value_as_string, df.value_as_number, s.exact, s.prefix, s.suffix, dann.mp_data_index, dann.ev_supports
 	from mp_data_annotation dann,oa_data_body dbody, data_field df, oa_target t, oa_selector s
 	where dann.mp_claim_id = %s
 	and dann.has_body = dbody.id
@@ -91,15 +91,19 @@ def queryMpData(conn, annotation, claimid):
 
 		value = row[2] or row[3] # value as string or number
 		index = row[7] # data index
+		evRelationship = row[8] # EV supports or refutes
 		dmRow = None
 
 		if annotation.getSpecificDataMaterial(index) == None:
 			dmRow = DataMaterialRow() # create new row of data & material
 			dataItem = DataItem(dType)
 			dataItem.setAttribute(dfType, value)
-			dmRow.setDataItem(dataItem)
 
-			#print "before: " + str(dmRow.getDataItemInRow("auc").value)
+			dmRow.setDataItem(dataItem)
+			if evRelationship:				
+				dmRow.setEvRelationship("supports")
+			else:
+				dmRow.setEvRelationship("refutes")
 			annotation.setSpecificDataMaterial(dmRow, index)
 
 		else: # current row of data & material exists 
@@ -113,6 +117,11 @@ def queryMpData(conn, annotation, claimid):
 				dataItem.setAttribute(dfType, value)
 				dmRow.setDataItem(dataItem)
 
+				if dmRow.getEvRelationship() == None and evRelationship:
+					dmRow.setEvRelationship("supports")
+				elif dmRow.getEvRelationship() == None and not evRelationship:
+					dmRow.setEvRelationship("refutes")
+
 	return annotation
 
 
@@ -121,7 +130,7 @@ def queryMpData(conn, annotation, claimid):
 def queryMpMaterial(conn, annotation, claimid):
 
 	qry = """	
-	select mann.type, mf.material_field_type, mf.value_as_string, mf.value_as_number, s.exact, s.prefix, s.suffix, mp_data_index
+	select mann.type, mf.material_field_type, mf.value_as_string, mf.value_as_number, s.exact, s.prefix, s.suffix, mann.mp_data_index, mann.ev_supports
 	from mp_material_annotation mann,oa_material_body mbody, material_field mf, oa_target t, oa_selector s
 	where mann.mp_claim_id = %s
 	and mann.has_body = mbody.id
@@ -142,9 +151,15 @@ def queryMpMaterial(conn, annotation, claimid):
 
 		value = row[2] or row[3] # value as string or number
 		index = row[7] # data & material index
+		evRelationship = row[8] # EV supports or refutes
 
 		if annotation.getSpecificDataMaterial(index) == None:
 			dmRow = DataMaterialRow() # create new row of data & material
+
+			if evRelationship:				
+				dmRow.setEvRelationship("supports")
+			else:
+				dmRow.setEvRelationship("refutes")
 
 			if mType in ["object_dose","subject_dose"]: # dose
 				doseItem = MaterialDoseItem(mType)
@@ -159,6 +174,12 @@ def queryMpMaterial(conn, annotation, claimid):
 
 		else: # current row of material & material exists 
 			dmRow = annotation.getSpecificDataMaterial(index)
+
+			if dmRow.getEvRelationship() == None and evRelationship:
+				dmRow.setEvRelationship("supports")
+			elif dmRow.getEvRelationship() == None and not evRelationship:
+				dmRow.setEvRelationship("refutes")
+				
 			if mType in ["object_dose","subject_dose"]:
 				if dmRow.getMaterialDoseInRow(mType): # current MaterialItem exists
 					doseItem = dmRow.getMaterialDoseInRow(mType)
@@ -186,9 +207,6 @@ def queryMpAnnotation(conn):
 	cnt = 0
 
 	for claimId,claimAnn in claimAnnos.items():
-		# if cnt > 6:
-		# 	break
-		# cnt += 1
 
 		claimDataAnno = queryMpData(conn, claimAnn, claimId)
 		claimDataMatAnno = queryMpMaterial(conn, claimDataAnno, claimId)
@@ -324,6 +342,8 @@ def loadMpAnnotation(annotation, email):
 			mpData["supportsBy"]["supportsBy"]["drug2Dose"]["regimens"] = firstRow.getMaterialDoseInRow("object_dose").regimens
 			mpData["supportsBy"]["supportsBy"]["drug2Dose"]["hasTarget"] = oaSelector
 			mpData["supportsBy"]["supportsBy"]["drug2Dose"]["ranges"] = []
+
+		mpData["evRelationship"] = "supports"
 
 		mpAnn["argues"]["supportsBy"].append(mpData)  # append mp data to claim
 

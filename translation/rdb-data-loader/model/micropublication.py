@@ -71,7 +71,13 @@ class DataMaterialRow(object):
 
 	def __init__(self):
 		self.index = 1 # mp data index for claim, default 0 
-		self.dataMaterialRowD = {"auc": None, "cmax": None, "clearance": None, "halflife": None, "participants": None, "object_dose": None, "subject_dose": None}
+		self.dataMaterialRowD = {"auc": None, "cmax": None, "clearance": None, "halflife": None, "participants": None, "object_dose": None, "subject_dose": None, "evRelationship": None}
+
+	def setEvRelationship(self, value): # evidence relationship supports/refutes
+		self.dataMaterialRowD["evRelationship"] = value
+
+	def getEvRelationship(self):
+		return self.dataMaterialRowD["evRelationship"]
 
 	def setDataItem(self, obj): # obj: DataItem
 		if self.dataMaterialRowD[obj.field] != None:

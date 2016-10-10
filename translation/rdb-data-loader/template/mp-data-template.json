@@ -11,5 +11,6 @@
             "drug2Dose": {},
             "participants": {}},
         "type": "mp:method"},
-    "type": "mp:data"
+    "type": "mp:data",
+    "evRelationship": ""
 }
