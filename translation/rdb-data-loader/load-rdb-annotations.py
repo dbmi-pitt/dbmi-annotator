@@ -9,7 +9,7 @@ reload(sys)
 sys.setdefaultencoding('utf8')
 
 sys.path.insert(0, './model')
-from micropublication import Annotation, DataMaterialRow, DMItem, DataItem, MaterialDoseItem, MatarialParticipants
+from micropublication import Annotation, DataMaterialRow, DMItem, DataItem, MaterialDoseItem, MaterialParticipants
 
 ######################### VARIABLES ##########################
 HOSTNAME = 'localhost'
@@ -191,7 +191,7 @@ def queryMpAnnotation(conn):
 		# cnt += 1
 
 		claimDataAnno = queryMpData(conn, claimAnn, claimId)
-		claimDataMatAnno = queryMpData(conn, claimDataAnno, claimId)
+		claimDataMatAnno = queryMpMaterial(conn, claimDataAnno, claimId)
 
 		mpAnnotations.append(claimDataMatAnno)
 
@@ -241,7 +241,7 @@ def loadHighlightAnnotations(highlightD, email):
 # load highlight annotation to specific account by email
 def loadHighlightAnnotation(rawurl, content, email):
 
-	if "010f9162"  not in rawurl:
+	if "036db1f2-52b3-42a0-acf9-817b7ba8c724"  not in rawurl:
 		return
 
 	annotation = loadTemplateInJson(HIGHLIGHT_TEMPLATE)
@@ -301,7 +301,14 @@ def loadMpAnnotation(annotation, email):
 				mpData[df]["ranges"] = []
 
 		# MP Material
+		if firstRow.getParticipantsInRow():
+			#print firstRow.getParticipantsInRow().value
+			mpData["supportsBy"]["supportsBy"]["participants"]["value"] = firstRow.getParticipantsInRow().value
+			mpData["supportsBy"]["supportsBy"]["participants"]["hasTarget"] = oaSelector
+			mpData["supportsBy"]["supportsBy"]["participants"]["ranges"] = []
+
 		if firstRow.getMaterialDoseInRow("subject_dose"):
+			#print firstRow.getMaterialDoseInRow("subject_dose").value
 			mpData["supportsBy"]["supportsBy"]["drug1Dose"]["value"] = firstRow.getMaterialDoseInRow("subject_dose").value
 			mpData["supportsBy"]["supportsBy"]["drug1Dose"]["duration"] = firstRow.getMaterialDoseInRow("subject_dose").duration
 			mpData["supportsBy"]["supportsBy"]["drug1Dose"]["formulation"] = firstRow.getMaterialDoseInRow("subject_dose").formulation
@@ -310,12 +317,14 @@ def loadMpAnnotation(annotation, email):
 			mpData["supportsBy"]["supportsBy"]["drug1Dose"]["ranges"] = []
 
 		if firstRow.getMaterialDoseInRow("object_dose"):
+			#print firstRow.getMaterialDoseInRow("object_dose").value
 			mpData["supportsBy"]["supportsBy"]["drug2Dose"]["value"] = firstRow.getMaterialDoseInRow("object_dose").value
 			mpData["supportsBy"]["supportsBy"]["drug2Dose"]["duration"] = firstRow.getMaterialDoseInRow("object_dose").duration
 			mpData["supportsBy"]["supportsBy"]["drug2Dose"]["formulation"] = firstRow.getMaterialDoseInRow("object_dose").formulation
 			mpData["supportsBy"]["supportsBy"]["drug2Dose"]["regimens"] = firstRow.getMaterialDoseInRow("object_dose").regimens
 			mpData["supportsBy"]["supportsBy"]["drug2Dose"]["hasTarget"] = oaSelector
 			mpData["supportsBy"]["supportsBy"]["drug2Dose"]["ranges"] = []
+
 		mpAnn["argues"]["supportsBy"].append(mpData)  # append mp data to claim
 
 	mpAnn["created"] = "2016-09-19T18:33:51.179625+00:00" # Metadata
@@ -365,7 +374,7 @@ def main():
 	mpAnnotations = queryMpAnnotation(conn)	
 	
 	for mpAnn in mpAnnotations:
-		if "010f9162" in mpAnn.source:
+		if "036db1f2-52b3-42a0-acf9-817b7ba8c724" in mpAnn.source:
 			loadMpAnnotation(mpAnn, author)		
 	#printSample(mpAnnotations, 6)
 

@@ -58,7 +58,7 @@ class MaterialDoseItem(DMItem):
 			self.regimens = value 
 
 # Material participant item in material
-class MatarialParticipants(DMItem):
+class MaterialParticipants(DMItem):
 	def __init__(self, value):
 		self.value = value
 
@@ -90,7 +90,7 @@ class DataMaterialRow(object):
 			print "[Error] material item undefined: " + obj.field
 
 	def setParticipants(self, obj): # obj: MatarialParticipants
-		if self.dataMartialRowD["participants"] != None:
+		if self.dataMaterialRowD["participants"] != None:
 			print "[Warning] Data item already has the field: participants"
 		else:
 			self.dataMaterialRowD["participants"] = obj
