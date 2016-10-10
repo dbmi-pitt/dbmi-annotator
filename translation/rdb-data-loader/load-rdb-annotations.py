@@ -89,7 +89,7 @@ def queryMpData(conn, annotation, claimid):
 		dType = row[0]  # data type
 		dfType = row[1] # data field 
 
-		value = row[2] or row[3] # value as string or number
+		value = str(row[2] or row[3]) # value as string or number
 		index = row[7] # data index
 		evRelationship = row[8] # EV supports or refutes
 		dmRow = None
@@ -149,7 +149,7 @@ def queryMpMaterial(conn, annotation, claimid):
 		mType = row[0]  # material type
 		mfType = row[1] # material field 
 
-		value = row[2] or row[3] # value as string or number
+		value = str(row[2] or row[3]) # value as string or number
 		index = row[7] # data & material index
 		evRelationship = row[8] # EV supports or refutes
 
@@ -179,7 +179,7 @@ def queryMpMaterial(conn, annotation, claimid):
 				dmRow.setEvRelationship("supports")
 			elif dmRow.getEvRelationship() == None and not evRelationship:
 				dmRow.setEvRelationship("refutes")
-				
+
 			if mType in ["object_dose","subject_dose"]:
 				if dmRow.getMaterialDoseInRow(mType): # current MaterialItem exists
 					doseItem = dmRow.getMaterialDoseInRow(mType)
