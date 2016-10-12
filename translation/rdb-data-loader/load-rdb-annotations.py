@@ -87,8 +87,6 @@ def queryMpData(conn, annotation, claimid):
 		
 	for row in cur.fetchall():
 
-		print row
-
 		dType = row[0]  # data type
 		dfType = row[1] # data field 
 
@@ -103,9 +101,9 @@ def queryMpData(conn, annotation, claimid):
 			dataItem.setAttribute(dfType, value)
 
 			dmRow.setDataItem(dataItem)
-			if evRelationship:				
+			if evRelationship is True:				
 				dmRow.setEvRelationship("supports")
-			else:
+			elif evRelationship is False:
 				dmRow.setEvRelationship("refutes")
 			annotation.setSpecificDataMaterial(dmRow, index)
 
@@ -178,9 +176,9 @@ def queryMpMaterial(conn, annotation, claimid):
 		else: # current row of material & material exists 
 			dmRow = annotation.getSpecificDataMaterial(index)
 
-			if dmRow.getEvRelationship() == None and evRelationship:
+			if dmRow.getEvRelationship() == None and evRelationship is True:
 				dmRow.setEvRelationship("supports")
-			elif dmRow.getEvRelationship() == None and not evRelationship:
+			elif dmRow.getEvRelationship() == None and evRelationship is False:
 				dmRow.setEvRelationship("refutes")
 
 			if mType in ["object_dose","subject_dose"]:
@@ -260,7 +258,7 @@ def loadHighlightAnnotations(highlightD, email):
 # load highlight annotation to specific account by email
 def loadHighlightAnnotation(rawurl, content, email):
 
-	if "036db1f2-52b3-42a0-acf9-817b7ba8c724"  not in rawurl:
+	if "036db1f2-52b3-42a0-acf9-817b7ba8c724" not in rawurl:
 		return
 
 	annotation = loadTemplateInJson(HIGHLIGHT_TEMPLATE)
@@ -291,7 +289,7 @@ def loadMpAnnotation(annotation, email):
 	mpAnn = loadTemplateInJson(MP_ANN_TEMPLATE)
 	oaSelector = generateOASelector(prefix, exact, suffix)
 
-	print "[INFO] Load doc(%s), subject(%s), predicate(%s), object(%s) \n" % (rawurl, annotation.csubject, annotation.cpredicate, annotation.cobject)
+	#print "[INFO] Load doc(%s), subject(%s), predicate(%s), object(%s) \n" % (rawurl, annotation.csubject, annotation.cpredicate, annotation.cobject)
 
 	# MP Claim
 	mpAnn["argues"]["qualifiedBy"]["drug1"] = subjectDrug
@@ -344,7 +342,7 @@ def loadMpAnnotation(annotation, email):
 			mpData["supportsBy"]["supportsBy"]["drug2Dose"]["hasTarget"] = oaSelector
 			mpData["supportsBy"]["supportsBy"]["drug2Dose"]["ranges"] = []
 
-		mpData["evRelationship"] = "supports"
+		mpData["evRelationship"] = firstRow.getEvRelationship()
 
 		mpAnn["argues"]["supportsBy"].append(mpData)  # append mp data to claim
 
