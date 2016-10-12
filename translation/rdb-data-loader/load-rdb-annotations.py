@@ -87,6 +87,8 @@ def queryMpData(conn, annotation, claimid):
 		
 	for row in cur.fetchall():
 
+		print row
+
 		dType = row[0]  # data type
 		dfType = row[1] # data field 
 
@@ -258,8 +260,8 @@ def loadHighlightAnnotations(highlightD, email):
 # load highlight annotation to specific account by email
 def loadHighlightAnnotation(rawurl, content, email):
 
-	#if "036db1f2-52b3-42a0-acf9-817b7ba8c724"  not in rawurl:
-	#	return
+	if "036db1f2-52b3-42a0-acf9-817b7ba8c724"  not in rawurl:
+		return
 
 	annotation = loadTemplateInJson(HIGHLIGHT_TEMPLATE)
 
@@ -393,8 +395,8 @@ def main():
 	mpAnnotations = queryMpAnnotation(conn)	
 	
 	for mpAnn in mpAnnotations:
-		#if "036db1f2-52b3-42a0-acf9-817b7ba8c724" in mpAnn.source:
-		loadMpAnnotation(mpAnn, author)		
+		if "036db1f2-52b3-42a0-acf9-817b7ba8c724" in mpAnn.source:
+			loadMpAnnotation(mpAnn, author)		
 	#printSample(mpAnnotations, 6)
 
 	highlightD = queryHighlightAnns(conn)

@@ -35,54 +35,6 @@ def utf_8_encoder(unicode_csv_data):
     for line in unicode_csv_data:
         yield line.encode('utf-8')
 
-def main():
-
-	print("[info] connect postgreSQL ...")
-	conn = connect_postgreSQL(db_config_files)
-
-	print("[info] clean before load ...")
-	clearall(conn)
-	#truncateall(conn)
-	conn.commit()
-
-	#show_table(conn, 'mp_claim_annotation') 	#show table
-	
-	print("[info] load data ...")
-	for csvfile in csvfiles:
-		preprocess(csvfile)
-		reader = csv.DictReader(utf_8_encoder(open('data/preprocess-domeo.csv', 'r')))
-		creator = csvfile.split('-')[1]
-		load_data_from_csv(conn, reader, creator)
-
-	conn.close()
-	print("[info] load completed ...")
-
-def load_data_from_csv(conn, reader, creator):
-
-	highlightD = {} # drug highlight set in documents {"doc url" : "drug set"}
-
-	for row in reader:
-
-		prefix = row["prefix"]; exact = row["exactText"]; suffix = row["suffix"]
-		source = row["source"]; date = row["date"]
-		subject = row["subject"]; predicate = row["predicate"]; object = row["object"]
-		oa_selector_id = load_oa_selector(conn, prefix, exact, suffix)
-		oa_target_id = load_oa_target(conn, source, oa_selector_id)
-		oa_claim_body_id = load_oa_claim_body(conn, subject, predicate, object, exact)
-		load_qualifier(conn, row, oa_claim_body_id)
-		mp_claim_id = load_mp_claim_annotation(conn, date, oa_claim_body_id, oa_target_id, creator)
-
-		update_oa_claim_body(conn, mp_claim_id, oa_claim_body_id)
-		load_mp_data_annotation(conn, row, mp_claim_id, oa_target_id, creator)
-		load_mp_material_annotation(conn, row, mp_claim_id, oa_target_id, creator)
-		load_method(conn, row, mp_claim_id)
-
-		generateHighlightSet(row, highlightD)   # add unique drugs to set
-		
-	load_highlight(conn, highlightD)  # load drug highlight annotation
-
-	conn.commit()
-
 
 def load_highlight(conn, highlightD):
 
@@ -461,6 +413,55 @@ def preprocess(csvfile):
 			row['suffix'] = row['suffix'].replace("'", "''")
 		all.append(row)
 	writer.writerows(all)
+
+
+def load_data_from_csv(conn, reader, creator):
+
+	highlightD = {} # drug highlight set in documents {"doc url" : "drug set"}
+
+	for row in reader:
+
+		prefix = row["prefix"]; exact = row["exactText"]; suffix = row["suffix"]
+		source = row["source"]; date = row["date"]
+		subject = row["subject"]; predicate = row["predicate"]; object = row["object"]
+		oa_selector_id = load_oa_selector(conn, prefix, exact, suffix)
+		oa_target_id = load_oa_target(conn, source, oa_selector_id)
+		oa_claim_body_id = load_oa_claim_body(conn, subject, predicate, object, exact)
+		load_qualifier(conn, row, oa_claim_body_id)
+		mp_claim_id = load_mp_claim_annotation(conn, date, oa_claim_body_id, oa_target_id, creator)
+
+		update_oa_claim_body(conn, mp_claim_id, oa_claim_body_id)
+		load_mp_data_annotation(conn, row, mp_claim_id, oa_target_id, creator)
+		load_mp_material_annotation(conn, row, mp_claim_id, oa_target_id, creator)
+		load_method(conn, row, mp_claim_id)
+
+		generateHighlightSet(row, highlightD)   # add unique drugs to set
+		
+	load_highlight(conn, highlightD)  # load drug highlight annotation
+
+	conn.commit()
+
+def main():
+
+	print("[info] connect postgreSQL ...")
+	conn = connect_postgreSQL(db_config_files)
+
+	print("[info] clean before load ...")
+	clearall(conn)
+	#truncateall(conn)
+	conn.commit()
+
+	#show_table(conn, 'mp_claim_annotation') 	#show table
+	
+	print("[info] load data ...")
+	for csvfile in csvfiles:
+		preprocess(csvfile)
+		reader = csv.DictReader(utf_8_encoder(open('data/preprocess-domeo.csv', 'r')))
+		creator = csvfile.split('-')[1]
+		load_data_from_csv(conn, reader, creator)
+
+	conn.close()
+	print("[info] load completed ...")
 
 
 if __name__ == '__main__':
