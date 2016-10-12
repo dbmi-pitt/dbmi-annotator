@@ -6,13 +6,13 @@ RDB schema creation script in Postgres DB:
 ../mp_evidence_schema/mp_evidence_schema_08202016.sql
 
 --------------------------------------------------------------------
-data translate from csv and load into postgres DB
+preparetion
 --------------------------------------------------------------------
 
 (1) install python postgres connector 
 pip install psycopg2
 
-(2) configure data in preProcess.py
+(2) configure data for loadDomeoAnnsToRDB.py
 
 hostname = 'localhost'
 database = 'mpevidence'
@@ -27,13 +27,29 @@ $ cp config/DB-config-sample.txt config/DB-config.txt
 USERNAME=<USERNAME>;
 PASSWORD=<PASSWORD>;
 
-(4) execute ETL program preprocess.py 
+--------------------------------------------------------------------
+domeo annotations translate from csv and load into postgres DB
+--------------------------------------------------------------------
 
-$ python preprocess.py
+(1) execute ETL program loadDomeoAnnsToRDB.py 
 
-1. preprocess csv, generate preProcess.csv
-2. insert data into every table
-3. delete all data in table
+$ python loadDomeoAnnsToRDB.py
+
+1. optional: clean all data in table
+2. preprocess csv, generate preprocess-domeo.csv
+3. load data into schema mpevidence
+
+--------------------------------------------------------------------
+dbmi-annotator annotations translate from csv and load into postgres DB
+--------------------------------------------------------------------
+
+(1) execute ETL program loadAnnotatorAnnsToRDB.py 
+
+$ python loadAnnotatorAnnsToRDB.py
+
+1. optional: clean all data in table
+2. preprocess csv, generate preprocess-annotator.csv
+3. load data into schema mpevidence
 
 --------------------------------------------------------------------
 D2R server mapping

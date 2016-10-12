@@ -11,7 +11,7 @@ sys.setdefaultencoding('utf8')
 #1. pip install psycopg2
 #2. create config file: "config/DB-config.txt"
 
-csvfiles = ['data/pkddi-katrina-latest-08152016.csv', 'data/pkddi-amy-latest-08152016.csv']
+csvfiles = ['data/mp-annotat2-10102016.csv']
 db_config_files = "config/DB-config.txt"
 hostname = 'localhost'
 database = 'mpevidence'
@@ -50,7 +50,7 @@ def main():
 	print("[info] load data ...")
 	for csvfile in csvfiles:
 		preprocess(csvfile)
-		reader = csv.DictReader(utf_8_encoder(open('data/preProcess.csv', 'r')))
+		reader = csv.DictReader(utf_8_encoder(open('data/preprocess-annotator.csv', 'r')))
 		creator = csvfile.split('-')[1]
 		load_data_from_csv(conn, reader, creator)
 
@@ -60,26 +60,30 @@ def main():
 def load_data_from_csv(conn, reader, creator):
 
 	highlightD = {} # drug highlight set in documents {"doc url" : "drug set"}
+	curr_date = datetime.datetime.now()
 
 	for row in reader:
 
-		prefix = row["prefix"]; exact = row["exactText"]; suffix = row["suffix"]
-		source = row["source"]; date = row["date"]
+		prefix = ""; exact = row["claim text"]; suffix = ""
+		source = row["document"]; date = ""
 		subject = row["subject"]; predicate = row["predicate"]; object = row["object"]
 		oa_selector_id = load_oa_selector(conn, prefix, exact, suffix)
 		oa_target_id = load_oa_target(conn, source, oa_selector_id)
 		oa_claim_body_id = load_oa_claim_body(conn, subject, predicate, object, exact)
-		load_qualifier(conn, row, oa_claim_body_id)
-		mp_claim_id = load_mp_claim_annotation(conn, date, oa_claim_body_id, oa_target_id, creator)
+		load_qualifier(conn, subject, predicate, object, oa_claim_body_id)
+
+
+		mp_claim_id = load_mp_claim_annotation(conn, curr_date, oa_claim_body_id, oa_target_id, creator)
 
 		update_oa_claim_body(conn, mp_claim_id, oa_claim_body_id)
+
 		load_mp_data_annotation(conn, row, mp_claim_id, oa_target_id, creator)
 		load_mp_material_annotation(conn, row, mp_claim_id, oa_target_id, creator)
 		load_method(conn, row, mp_claim_id)
 
-		generateHighlightSet(row, highlightD)   # add unique drugs to set
+		#generateHighlightSet(row, highlightD)   # add unique drugs to set
 		
-	load_highlight(conn, highlightD)  # load drug highlight annotation
+	#load_highlight(conn, highlightD)  # load drug highlight annotation
 
 	conn.commit()
 
@@ -270,21 +274,22 @@ def update_oa_claim_body(conn, is_oa_body_of, oa_claim_body_id):
 
 
 # load table "qualifier" one row
-def load_qualifier(conn, row, claim_body_id):
+def load_qualifier(conn, subject, predicate, object, claim_body_id):
 	cur = conn.cursor()
 	cur.execute("INSERT INTO qualifier (urn, claim_body_id, subject, predicate, object, concept_code, vocabulary_id, qvalue)" +
-				"VALUES ( '" + uuid.uuid4().hex + "', " + str(claim_body_id) + ", true, false, false, NULL, NULL, '" + row['subject'] + "')," +
-				"( '" + uuid.uuid4().hex + "', " + str(claim_body_id) + ", false, true, false, NULL, NULL, '" + row['predicate'] + "')," +
-				"( '" + uuid.uuid4().hex + "', " + str(claim_body_id) + ", false, false, true, NULL, NULL, '" + row['object'] + "');")
+				"VALUES ( '" + uuid.uuid4().hex + "', " + str(claim_body_id) + ", true, false, false, NULL, NULL, '" + subject + "')," +
+				"( '" + uuid.uuid4().hex + "', " + str(claim_body_id) + ", false, true, false, NULL, NULL, '" + predicate + "')," +
+				"( '" + uuid.uuid4().hex + "', " + str(claim_body_id) + ", false, false, true, NULL, NULL, '" + object + "');")
 
 
 # load table "mp_claim_annotation" one row
 # return claim annotation id
-def load_mp_claim_annotation(conn, date, has_body, has_target, creator):
+def load_mp_claim_annotation(conn, curr_date, has_body, has_target, creator):
 	cur = conn.cursor()
 	urn = uuid.uuid4().hex
 
-	qry1 = "INSERT INTO mp_claim_annotation (urn, has_body, has_target, creator, date_created, date_updated)" + "VALUES ('%s','%s','%s','%s','%s','%s');" % (urn, str(has_body), str(has_target), creator, parse_date(date), parse_date(date))
+	qry1 = "INSERT INTO mp_claim_annotation (urn, has_body, has_target, creator, date_created, date_updated)" + "VALUES ('%s','%s','%s','%s','%s','%s');" % (urn, str(has_body), str(has_target), creator, curr_date, curr_date)
+
 	cur.execute(qry1)
 
 	cur.execute("SELECT * FROM mp_claim_annotation WHERE urn = '" + urn + "';")
@@ -306,7 +311,7 @@ def load_mp_data_annotation(conn, row, mp_claim_id, has_target, creator):
 		data_body_id = helper_load_data(conn, row, mp_claim_id, has_target, creator, 'cmax')
 		load_data_field(conn, row, data_body_id, 'cmax')
 
-	if (row['clearance'] != '') and (row['clearance'].lower() != 'unk'):
+	if (row['cl'] != '') and (row['cl'].lower() != 'unk'):
 		data_body_id = helper_load_data(conn, row, mp_claim_id, has_target, creator, 'clearance')
 		load_data_field(conn, row, data_body_id, 'clearance')
 
@@ -316,14 +321,14 @@ def load_mp_data_annotation(conn, row, mp_claim_id, has_target, creator):
 
 
 def helper_load_data(conn, row, mp_claim_id, has_target, creator, data_type):
-	ev_supports = 'false'
-	if 'supports' in row['evidenceType']:
-		ev_supports = 'true'
+
+	ev_supports = 'true'
 	cur = conn.cursor()
 	urn = uuid.uuid4().hex
-	cur.execute("INSERT INTO mp_data_annotation (urn, type, has_target, creator, mp_claim_id, mp_data_index, ev_supports, date_created)" +
-				"VALUES ( '" + urn + "', '" + data_type + "', " + str(has_target) + ", '" + creator + "', " +
-				str(mp_claim_id) + ", 1, " + ev_supports + ", '" + parse_date(row['date']) + "');")
+	curr_date = datetime.datetime.now()
+	qry1 = "INSERT INTO mp_data_annotation (urn, type, has_target, creator, mp_claim_id, mp_data_index, ev_supports, date_created) VALUES (%s,%s,%s,%s,%s,%s,%s);" % (urn ,data_type, str(has_target), creator, str(mp_claim_id), 1, ev_supports, curr_date)
+
+	cur.execute(qry1)
 	cur.execute("SELECT * FROM mp_data_annotation WHERE urn = '" + urn + "';")
 	for result in cur.fetchall():
 		data_annotation_id = result[0]
@@ -342,8 +347,8 @@ def helper_load_data(conn, row, mp_claim_id, has_target, creator, data_type):
 def load_data_field(conn, row, data_body_id, data_type):
 	cur = conn.cursor()
 	value = data_type
-	ttype = data_type + "Type"
-	direction = data_type + "Direction"
+	ttype = data_type + " type"
+	direction = data_type + " direction"
 
 	cur.execute("INSERT INTO data_field (urn, data_body_id, data_field_type, value_as_string, value_as_number)" +
 				"VALUES ( '" + uuid.uuid4().hex + "', " + str(data_body_id) + ", 'value', '" + row[value] + "', NULL)," +
@@ -355,28 +360,27 @@ def load_data_field(conn, row, data_body_id, data_type):
 def load_mp_material_annotation(conn, row, mp_claim_id, has_target, creator):
 	cur = conn.cursor()
 
-	if (row['objectDose'] != '') and (row['objectDose'].lower() != 'unk'):
+	if (row['drug1 dose'] != '') and (row['drug1 dose'].lower() != 'unk'):
 		material_body_id = helper_load_material(conn, row, mp_claim_id, has_target, creator, 'object_dose')
-		load_material_field(conn, row, material_body_id, 'object')
+		load_material_field(conn, row, material_body_id, 'drug1')
 
-	if (row['subjectDose'] != '') and (row['subjectDose'].lower() != 'unk'):
+	if (row['drug2 dose'] != '') and (row['drug2 dose'].lower() != 'unk'):
 		material_body_id = helper_load_material(conn, row, mp_claim_id, has_target, creator, 'subject_dose')
-		load_material_field(conn, row, material_body_id, 'precipt')
+		load_material_field(conn, row, material_body_id, 'drug2')
 
-	if (row['numOfParticipants'] != '') and (row['numOfParticipants'].lower() != 'unk'):
+	if (row['participants'] != '') and (row['participants'].lower() != 'unk'):
 		material_body_id = helper_load_material(conn, row, mp_claim_id, has_target, creator, 'participants')
 		load_material_field(conn, row, material_body_id, 'participants')
 
 
 def helper_load_material(conn, row, mp_claim_id, has_target, creator, data_type):
-	ev_supports = 'false'
-	if 'supports' in row['evidenceType']:
-		ev_supports = 'true'
+	ev_supports = 'true'
+
 	cur = conn.cursor()
 	urn = uuid.uuid4().hex
 	cur.execute("INSERT INTO mp_material_annotation (urn, type, has_target, creator, mp_claim_id, mp_data_index, ev_supports, date_created)" +
 				"VALUES ( '" + urn + "', '" + data_type + "', " + str(has_target) + ", '" + creator + "', " +
-				str(mp_claim_id) + ", 1, " + ev_supports + ", '" + parse_date(row['date']) + "');")
+				str(mp_claim_id) + ", 1, " + ev_supports + ", '" + date + "');")
 	cur.execute("SELECT * FROM mp_material_annotation WHERE urn = '" + urn + "';")
 	for result in cur.fetchall():
 		material_annotation_id = result[0]
@@ -399,12 +403,10 @@ def load_material_field(conn, row, material_body_id, material_type):
 		cur.execute("INSERT INTO material_field (urn, material_body_id, material_field_type, value_as_string, value_as_number)" +
 					"VALUES ( '" + uuid.uuid4().hex + "', " + str(material_body_id) + ", 'participants', NULL, " + row['numOfParticipants'] + ");")
 	else:
-		value = material_type + "Dose"
-		regimens = material_type + "Regimens"
-		formulation = material_type + "Formulation"
-		duration = material_type + "Duration"
-		if material_type == "precipt":
-			value = "subjectDose"
+		value = material_type + " dose"
+		regimens = material_type + " regimens"
+		formulation = material_type + " formulation"
+		duration = material_type + " duration"
 
 		cur.execute("INSERT INTO material_field (urn, material_body_id, material_field_type, value_as_string, value_as_number)" +
 					"VALUES ( '" + uuid.uuid4().hex + "', " + str(material_body_id) + ", 'value', '" + row[value] + "', NULL);")
@@ -427,37 +429,41 @@ def parse_date(csv_date):
 
 #   add column: predicate, subject, object, subjectDose, objectDose
 def preprocess(csvfile):
-	csv_columns = ['source', 'date', 'assertionType', 'evidenceType', 'prefix', 'exactText', 'suffix',
-				   'modality', 'statementType', 'comment', 'drug1Lab', 'drug1Type', 'drug1Role', 'dose1',
-				   'drug2Lab', 'drug2Type', 'drug2Role', 'dose2', 'objectRegimens', 'objectFormulation',
-				   'objectDuration', 'preciptRegimens', 'preciptFormulation', 'preciptDuration',
-				   'numOfParticipants', 'auc', 'aucType', 'aucDirection', 'clearance', 'clearanceType', 'clearanceDirection',
-				   'cmax', 'cmaxType', 'cmaxDirection', 'halflife', 'halflifeType', 'halflifeDirection', 'predicate',
-				   'subject', 'object', 'subjectDose', 'objectDose']
-	writer = csv.DictWriter(open('data/preProcess.csv', 'w'), fieldnames=csv_columns)
+	csv_columns = ['document','claim label','claim text','method','relationship','drug1','drug2','precipitant','enzyme','participants','participants text','drug1 dose','drug1 formulation','drug1 duration','drug1 regimens','drug1 dose text','drug2 dose','drug2 formulation','drug2 duration','drug2 regimens','drug2 dose text','auc','auc type','auc direction','auc text','cmax','cmax type','cmax direction','cmax text','cl','cl type','cl direction','cl text','halflife','halflife type','halflife direction','halflife text','group randomization','parallel group design','predicate','subject','object','subjectDose','objectDose']
+
+	writer = csv.DictWriter(open('data/preprocess-annotator.csv', 'w'), fieldnames=csv_columns)
 	writer.writeheader()
-	reader = csv.DictReader(utf_8_encoder(open(csvfile, 'r')))
+	reader = csv.DictReader(utf_8_encoder(open(csvfile, 'r')), delimiter="\t")
 	all = []
 	for row in reader:
 		#print(row)
 
-		# translate Domeo old form for dose (tablet -> Oral)
-		if row['objectFormulation'] == "tablet":
-			row['objectFormulation'] = "Oral"
-		if row['preciptFormulation'] == "tablet":
-			row['preciptFormulation'] = "Oral"
+		row.update({'predicate': 'relationship'})
+		if row['precipitant'] == 'drug1':
+			row.update({'subject': row['drug1'], 'object': row['drug2'], 'subjectDose': row['drug1 dose'], 'objectDose': row['drug2 dose']})
+		elif row['precipitant'] == 'drug2':
+			row.update({'subject': row['drug2'], 'object': row['drug1'], 'subjectDose': row['drug2 dose'], 'objectDose': row['drug1 dose']})
 
-		row.update({'predicate': 'interact_with'})
-		if 'object' in row['drug1Role']:
-			row.update({'subject': row['drug2Lab'], 'object': row['drug1Lab'], 'subjectDose': row['dose2'], 'objectDose': row['dose1']})
-		else:
-			row.update({'subject': row['drug1Lab'], 'object': row['drug2Lab'], 'subjectDose': row['dose1'], 'objectDose': row['dose2']})
-		if "'" in row['prefix']:
-			row['prefix'] = row['prefix'].replace("'", "''")
-		if "'" in row['exactText']:
-			row['exactText'] = row['exactText'].replace("'", "''")
-		if "'" in row['suffix']:
-			row['suffix'] = row['suffix'].replace("'", "''")
+		# fix single quote in text
+		if "'" in row['claim text']: 
+			row['claim text'] = row['claim text'].replace("'", "''")
+		if "'" in row['participants text']:
+			row['participants text'] = row['participants text'].replace("'", "''")
+		if "'" in row['drug1 dose text']:
+			row['drug1 dose text'] = row['drug1 dose text'].replace("'", "''")
+		if "'" in row['drug2 dose text']:
+			row['drug2 dose text'] = row['drug2 dose text'].replace("'", "''")
+
+		if "'" in row['auc text']:
+			row['auc text'] = row['auc text'].replace("'", "''")
+		if "'" in row['cmax text']:
+			row['cmax text'] = row['cmax text'].replace("'", "''")
+		if "'" in row['cl text']:
+			row['cl text'] = row['cl text'].replace("'", "''")
+		if "'" in row['halflife text']:
+			row['halflife text'] = row['halflife text'].replace("'", "''")
+
+
 		all.append(row)
 	writer.writerows(all)
 
