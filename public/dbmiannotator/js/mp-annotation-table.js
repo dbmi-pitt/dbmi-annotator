@@ -40,7 +40,7 @@ function updateAnnTable(sourceURL){
 // @input: list of annotations have been selected for import 
 function initAnnTable(selectedAnnsL) {
     console.log("init ann table");
-    console.log(selectedAnnsL);
+    //console.log(selectedAnnsL);
 
     if (selectedAnnsL == null) return null;
 

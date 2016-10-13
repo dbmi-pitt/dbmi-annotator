@@ -20,6 +20,7 @@ if (typeof annotator === 'undefined') {
     // global variables for keeping status of text selection
     var isTextSelected = false;
     var multiSelected = false;
+    var redrawDrug = false;
     var cachedOATarget = "";
     var cachedOARanges = "";
 
@@ -73,7 +74,7 @@ function initSplitter() {
 
     $('#splitter').jqxSplitter({ showSplitBar: false, width: $(window).width(), height: $(window).height(), orientation: 'horizontal', panels: [{ size: '100%',min: 200 }, { size: '0%', min: 0}] });
 
-    var resizeTimer;           
+    var resizeTimer;
     $(window).resize(function() {
         clearTimeout(resizeTimer);
         resizeTimer = setTimeout(resetSplitter, 300);
@@ -143,8 +144,6 @@ function initLiseners() {
     $("#Drug1").change(function (){selectDrug();});
     $("#Drug2").change(function (){selectDrug();});
 }
-
-
 
 function selectDrug() {
     var drug1 = $('#Drug1 option:selected').text();
@@ -295,33 +294,43 @@ function importAnnotationDialog(sourceURL, email) {
             var email = $(this).val();
             userEmails.add(email); // add user emails to set as global variable     
         });
-        
-        userEmails.forEach(function(email) { // draw all annotaitons by email
-		    app.annotations.load({uri: uri, email: email});
+        unsaved = false;
+        if (sourceURL.match(/localhost.*html/g)) {
+            userEmails.forEach(function(email) { // draw all annotaitons by email
+        		app.annotations.load({uri: uri, email: email});
+                selectedMPAnnsL = selectedMPAnnsL.concat(allMPAnnsD[email]);
+            });
+        }
+        userEmails.forEach(function(email) { 
             selectedMPAnnsL = selectedMPAnnsL.concat(allMPAnnsD[email]);
         });
-
         initAnnTable(selectedMPAnnsL); // update annotation table
         importDialog.style.display = "none"; // hide panel        
     }	
 
     cancelBtn.onclick = function() { // only load current user's annotation
         
-        selectedMPAnnsL = allMPAnnsD[currEmail];        
-        userEmails.forEach(function(email) { // draw all annotaitons by email
-		    app.annotations.load({uri: uri, email: email});
-        });
+        selectedMPAnnsL = allMPAnnsD[currEmail];
+        if (sourceURL.match(/localhost.*html/g)) {        
+            userEmails.forEach(function(email) { // draw all annotaitons by email
+    		    app.annotations.load({uri: uri, email: email});
+            });
+        }
         initAnnTable(selectedMPAnnsL); // update annotation table
         importDialog.style.display = "none"; 
+        unsaved = false;
     }
 
     closeBtn.onclick = function() {
-        selectedMPAnnsL = allMPAnnsD[currEmail];        
-        userEmails.forEach(function(email) { // draw all annotaitons by email
-		    app.annotations.load({uri: uri, email: email});
-        });
+        selectedMPAnnsL = allMPAnnsD[currEmail];
+        if (sourceURL.match(/localhost.*html/g)) {
+            userEmails.forEach(function(email) { // draw all annotaitons by email
+    		    app.annotations.load({uri: uri, email: email});
+            });
+        }
         initAnnTable(selectedMPAnnsL); // update annotation table
         importDialog.style.display = "none"; 
+        unsaved = false;
     }
 }
 
