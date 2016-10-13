@@ -265,10 +265,16 @@ function switchDataForm(targetField, isNotNeedValid) {
         return;
     } 
     
+
     if (targetField == null) 
         targetField = "participants";
 
     currFormType = targetField;
+
+    //redraw data currhighlight
+    app.annotations.update(currAnnotation);
+    // scroll to the position of annotation
+    scrollToAnnotation(currAnnotation.id, currFormType, currDataNum);
 
     switchDataFormHelper(targetField);
 }
