@@ -193,7 +193,7 @@ module.exports = function(app, passport) {
                 var jsonObjs = body.rows;
                 res.attachment('annotations-'+req.query.email+'.csv');
 		        res.setHeader('Content-Type', 'text/csv');
-                var csvTxt = '"document"\t"claim label"\t"claim text"\t"method"\t"relationship"\t"drug1"\t"drug2"\t"precipitant"\t"enzyme"\t"participants"\t"participants text"\t"drug1 dose"\t"drug1 formulation"\t"drug1 duration"\t"drug1 regimens"\t"drug1 dose text"\t"drug2 dose"\t"drug2 formulation"\t"drug2 duration"\t"drug2 regimens"\t"drug2 dose text"\t"auc"\t"auc type"\t"auc direction"\t"auc text"\t"cmax"\t"cmax type"\t"cmax direction"\t"cmax text"\t"cl"\t"cl type"\t"cl direction"\t"cl text"\t"halflife"\t"halflife type"\t"halflife direction"\t"halflife text"\t"group randomization"\t"parallel group design"\n';
+                var csvTxt = '"document"\t"claim label"\t"claim text"\t"method"\t"relationship"\t"drug1"\t"drug2"\t"precipitant"\t"enzyme"\t"evRelationship"\t"participants"\t"participants text"\t"drug1 dose"\t"drug1 formulation"\t"drug1 duration"\t"drug1 regimens"\t"drug1 dose text"\t"drug2 dose"\t"drug2 formulation"\t"drug2 duration"\t"drug2 regimens"\t"drug2 dose text"\t"auc"\t"auc type"\t"auc direction"\t"auc text"\t"cmax"\t"cmax type"\t"cmax direction"\t"cmax text"\t"cl"\t"cl type"\t"cl direction"\t"cl text"\t"halflife"\t"halflife type"\t"halflife direction"\t"halflife text"\t"group randomization"\t"parallel group design"\n';
 
                 for (var i = 0; i < jsonObjs.length; i++) {
                     jsonObj = jsonObjs[i];
@@ -207,6 +207,8 @@ module.exports = function(app, passport) {
                         var method = data.supportsBy;
                         var material = method.supportsBy;
                         var dataRow = "";
+
+                        dataRow += '\t"' + (data.evRelationship || '') + '"';
 
                         if (material.participants != null)
                             dataRow += '\t"' + (material.participants.value || '') + '"\t"' + (getSpanFromField(material.participants) || '') + '"';
