@@ -6,6 +6,11 @@ class DMItem:
 		self.exact = exact
 		self.suffix = suffix
 		self.dmIdx = dmIdx
+
+	def setSelector(self, prefix, exact, suffix):
+		self.prefix = prefix
+		self.exact = exact
+		self.suffix = suffix		
 		
 	def getDmIdx(self):
 		return self.dmIdx

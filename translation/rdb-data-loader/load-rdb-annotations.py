@@ -89,22 +89,25 @@ def queryMpData(conn, annotation, claimid):
 
 		dType = row[0]  # data type
 		dfType = row[1] # data field 
-
-		value = str(row[2] or row[3]) # value as string or number
+		exact = row[4]; value = str(row[2] or row[3]) # value as string or number
 		index = row[7] # data index
 		evRelationship = row[8] # EV supports or refutes
 		dmRow = None
 
+
 		if annotation.getSpecificDataMaterial(index) == None:
 			dmRow = DataMaterialRow() # create new row of data & material
 			dataItem = DataItem(dType)
-			dataItem.setAttribute(dfType, value)
+			dataItem.setAttribute(dfType, value) # add value
+			dataItem.setSelector("", exact, "")
 
 			dmRow.setDataItem(dataItem)
+
 			if evRelationship is True:				
 				dmRow.setEvRelationship("supports")
 			elif evRelationship is False:
 				dmRow.setEvRelationship("refutes")
+
 			annotation.setSpecificDataMaterial(dmRow, index)
 
 		else: # current row of data & material exists 
@@ -112,16 +115,18 @@ def queryMpData(conn, annotation, claimid):
 
 			if dmRow.getDataItemInRow(dType) != None: # current DataItem exists
 				dataItem = dmRow.getDataItemInRow(dType)
-				dataItem.setAttribute(dfType, value)
+
 			else: # current DataItem not exists
 				dataItem = DataItem(dType) 
-				dataItem.setAttribute(dfType, value)
 				dmRow.setDataItem(dataItem)
 
-				if dmRow.getEvRelationship() == None and evRelationship:
-					dmRow.setEvRelationship("supports")
-				elif dmRow.getEvRelationship() == None and not evRelationship:
-					dmRow.setEvRelationship("refutes")
+			dataItem.setAttribute(dfType, value)
+			dataItem.setSelector("", exact, "")
+
+			if dmRow.getEvRelationship() == None and evRelationship:
+				dmRow.setEvRelationship("supports")
+			elif dmRow.getEvRelationship() == None and not evRelationship:
+				dmRow.setEvRelationship("refutes")
 
 	return annotation
 
@@ -150,7 +155,7 @@ def queryMpMaterial(conn, annotation, claimid):
 		mType = row[0]  # material type
 		mfType = row[1] # material field 
 
-		value = str(row[2] or row[3]) # value as string or number
+		exact = row[4]; value = str(row[2] or row[3]) # value as string or number
 		index = row[7] # data & material index
 		evRelationship = row[8] # EV supports or refutes
 
@@ -165,10 +170,12 @@ def queryMpMaterial(conn, annotation, claimid):
 			if mType in ["object_dose","subject_dose"]: # dose
 				doseItem = MaterialDoseItem(mType)
 				doseItem.setAttribute(mfType, value)
+				doseItem.setSelector("", exact, "")
 				dmRow.setMaterialDoseItem(doseItem)
 
 			elif mType == "participants":
 				partItem = MaterialParticipants(value)
+				partItem.setSelector("", exact, "")
 				dmRow.setParticipants(partItem)
 
 			annotation.setSpecificDataMaterial(dmRow, index)
@@ -184,18 +191,21 @@ def queryMpMaterial(conn, annotation, claimid):
 			if mType in ["object_dose","subject_dose"]:
 				if dmRow.getMaterialDoseInRow(mType): # current MaterialItem exists
 					doseItem = dmRow.getMaterialDoseInRow(mType)
-					doseItem.setAttribute(mfType, value)
-				else: # current MaterialItem not exists
+				else:
 					doseItem = MaterialDoseItem(mType) 
-					doseItem.setAttribute(mfType, value)
+
+				doseItem.setAttribute(mfType, value)
+				doseItem.setSelector("", exact, "")				
 				dmRow.setMaterialDoseItem(doseItem)
-			elif mType is "participants":
+
+			elif mType == "participants":
 				if dmRow.getParticipantsInRow(): # participants exists
 					partItem = dmRow.getParticipantsInRow()
 					partItem.setValue(value)
 				else:
-					partItem = MatarialParticipants(value)
+					partItem = MaterialParticipants(value)
 					dmRow.setParticipants(partItem)
+				partItem.setSelector("", exact, "")
 
 	return annotation
 
@@ -287,7 +297,7 @@ def loadMpAnnotation(annotation, email):
 	label = annotation.label.replace("interact_with","interact with")
 
 	mpAnn = loadTemplateInJson(MP_ANN_TEMPLATE)
-	oaSelector = generateOASelector(prefix, exact, suffix)
+	claimSelector = generateOASelector(prefix, exact, suffix)
 
 	#print "[INFO] Load doc(%s), subject(%s), predicate(%s), object(%s) \n" % (rawurl, annotation.csubject, annotation.cpredicate, annotation.cobject)
 
@@ -299,7 +309,7 @@ def loadMpAnnotation(annotation, email):
 
 	mpAnn["argues"]["qualifiedBy"]["relationship"] = predicate.replace("interact_with","interact with")
 	mpAnn["argues"]["qualifiedBy"]["precipitant"] = "drug1" # for interact_with
-	mpAnn["argues"]["hasTarget"] = oaSelector
+	mpAnn["argues"]["hasTarget"] = claimSelector
 	
 	# MP Data & Material
 	dmRows = annotation.getDataMaterials()	
@@ -314,32 +324,37 @@ def loadMpAnnotation(annotation, email):
 				mpData[df]["value"] = str(firstRow.getDataItemInRow(df).value)
 				mpData[df]["type"] = str(firstRow.getDataItemInRow(df).type)
 				mpData[df]["direction"] = str(firstRow.getDataItemInRow(df).direction)
-				mpData[df]["hasTarget"] = oaSelector
+				dataExact = firstRow.getDataItemInRow(df).exact
+				dataSelector = generateOASelector("", dataExact, "")
+				mpData[df]["hasTarget"] = dataSelector
 				mpData[df]["ranges"] = []
 
 		# MP Material
 		if firstRow.getParticipantsInRow():
-			#print firstRow.getParticipantsInRow().value
+			partExact = firstRow.getParticipantsInRow().exact
+			partSelector = generateOASelector("", partExact, "")
 			mpData["supportsBy"]["supportsBy"]["participants"]["value"] = firstRow.getParticipantsInRow().value
-			mpData["supportsBy"]["supportsBy"]["participants"]["hasTarget"] = oaSelector
+			mpData["supportsBy"]["supportsBy"]["participants"]["hasTarget"] = partSelector
 			mpData["supportsBy"]["supportsBy"]["participants"]["ranges"] = []
 
 		if firstRow.getMaterialDoseInRow("subject_dose"):
-			#print firstRow.getMaterialDoseInRow("subject_dose").value
+			subDoseExact = firstRow.getMaterialDoseInRow("subject_dose").exact
+			subDoseSelector = generateOASelector("", subDoseExact, "")
 			mpData["supportsBy"]["supportsBy"]["drug1Dose"]["value"] = firstRow.getMaterialDoseInRow("subject_dose").value
 			mpData["supportsBy"]["supportsBy"]["drug1Dose"]["duration"] = firstRow.getMaterialDoseInRow("subject_dose").duration
 			mpData["supportsBy"]["supportsBy"]["drug1Dose"]["formulation"] = firstRow.getMaterialDoseInRow("subject_dose").formulation
 			mpData["supportsBy"]["supportsBy"]["drug1Dose"]["regimens"] = firstRow.getMaterialDoseInRow("subject_dose").regimens
-			mpData["supportsBy"]["supportsBy"]["drug1Dose"]["hasTarget"] = oaSelector
+			mpData["supportsBy"]["supportsBy"]["drug1Dose"]["hasTarget"] = subDoseSelector
 			mpData["supportsBy"]["supportsBy"]["drug1Dose"]["ranges"] = []
 
 		if firstRow.getMaterialDoseInRow("object_dose"):
-			#print firstRow.getMaterialDoseInRow("object_dose").value
+			objDoseExact = firstRow.getMaterialDoseInRow("object_dose").exact
+			objDoseSelector = generateOASelector("", objDoseExact, "")
 			mpData["supportsBy"]["supportsBy"]["drug2Dose"]["value"] = firstRow.getMaterialDoseInRow("object_dose").value
 			mpData["supportsBy"]["supportsBy"]["drug2Dose"]["duration"] = firstRow.getMaterialDoseInRow("object_dose").duration
 			mpData["supportsBy"]["supportsBy"]["drug2Dose"]["formulation"] = firstRow.getMaterialDoseInRow("object_dose").formulation
 			mpData["supportsBy"]["supportsBy"]["drug2Dose"]["regimens"] = firstRow.getMaterialDoseInRow("object_dose").regimens
-			mpData["supportsBy"]["supportsBy"]["drug2Dose"]["hasTarget"] = oaSelector
+			mpData["supportsBy"]["supportsBy"]["drug2Dose"]["hasTarget"] = objDoseSelector
 			mpData["supportsBy"]["supportsBy"]["drug2Dose"]["ranges"] = []
 
 		mpData["evRelationship"] = firstRow.getEvRelationship()
@@ -387,18 +402,17 @@ def connectPostgres():
 ######################### MAIN ##########################
 
 def main():
-	author = AUTHOR
 
 	conn = connectPostgres()
 	mpAnnotations = queryMpAnnotation(conn)	
 	
-	for mpAnn in mpAnnotations:
+	#for mpAnn in mpAnnotations:
 		#if "036db1f2-52b3-42a0-acf9-817b7ba8c724" in mpAnn.source:
-		loadMpAnnotation(mpAnn, author)		
+	#	loadMpAnnotation(mpAnn, AUTHOR)		
 	#printSample(mpAnnotations, 6)
 
-	highlightD = queryHighlightAnns(conn)
-	loadHighlightAnnotations(highlightD, author)
+	#highlightD = queryHighlightAnns(conn)
+	#loadHighlightAnnotations(highlightD, AUTHOR)
 
 	conn.close()
 
