@@ -59,6 +59,7 @@ function initAnnTable(selectedAnnsL) {
 // @input: list of mp annotaitons
 // @input: annotationId for selected claim
 function updateClaimAndData(annotations, annotationId) {
+
     console.log("ann table updateClaimAndData");
     // console.log(annotations);
 
@@ -81,6 +82,8 @@ function updateClaimAndData(annotations, annotationId) {
 
             var claimIsSelected = "";
             if (annotationId == annotation.id) {
+                //set global variable
+                currAnnotation = annotation;
                 //console.log("mp selected: " + annotation.argues.label);
                 claimIsSelected = 'selected="selected"';     
                 // cache total number of data & material for current claim
