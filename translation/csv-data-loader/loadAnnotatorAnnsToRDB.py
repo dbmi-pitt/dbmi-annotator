@@ -84,18 +84,18 @@ def show_table(conn, table):
 
 
 # LOAD HIGHLIGHT ANNOTATION ########################################################
-def load_highlight(conn, highlightD):
+def load_highlight_annotation(conn, highlightD, creator):
 
 	for url, drugS in highlightD.iteritems():
 		for drug in drugS:
-			oa_selector_id = load_oa_selector(conn, "", drug, "")
-			oa_target_id = load_oa_target(conn, url, oa_selector_id)
-			oa_highlight_body_id = load_oa_highlight_body(conn, drug, url)
-			highlight_annotation_id = load_highlight_annotation(conn, type, oa_highlight_body_id, oa_target_id, "Domeo", curr_date, curr_date)
+			selector_id = load_oa_selector(conn, "", drug, "")
+			target_id = load_oa_target(conn, url, selector_id)
+			oa_highlight_body_id = insert_oa_highlight_body(conn, drug, url)
+			highlight_annotation_id = insert_highlight_annotation(conn, type, oa_highlight_body_id, target_id, creator, curr_date, curr_date)
 			update_oa_highlight_body(conn, highlight_annotation_id, oa_highlight_body_id)
 
 
-def load_highlight_annotation(conn, type, has_body, has_target, creator, date_created, date_updated):
+def insert_highlight_annotation(conn, type, has_body, has_target, creator, date_created, date_updated):
 	urn = uuid.uuid4().hex
 	cur = conn.cursor()
 
@@ -108,7 +108,7 @@ def load_highlight_annotation(conn, type, has_body, has_target, creator, date_cr
 		return row[0]
 	return None
 
-def load_oa_highlight_body(conn, drug, url):
+def insert_oa_highlight_body(conn, drug, url):
 	urn = uuid.uuid4().hex
 	cur = conn.cursor()
 
@@ -127,9 +127,7 @@ def update_oa_highlight_body(conn, highlight_annotation_id, oa_highlight_body_id
 
 
 def generateHighlightSet(row, highlightD):
-	subjectDrug = row["subject"]; objectDrug = row["object"]; source = row["source"].replace("dbmi-icode-01.dbmi.pitt.edu:80","localhost")
-	#print source + "| " + subjectDrug + " | " + objectDrug	
-
+	subjectDrug = row["subject"]; objectDrug = row["object"]; source = row["document"]
 	if source in highlightD:
 		highlightD[source].add(subjectDrug.lower())
 		highlightD[source].add(objectDrug.lower())
@@ -462,9 +460,9 @@ def load_data_from_csv(conn, reader, creator):
 		load_mp_material_annotation(conn, row, mp_claim_id, creator)
 		load_method(conn, row, mp_claim_id)
 
-		#generateHighlightSet(row, highlightD)   # add unique drugs to set
+		generateHighlightSet(row, highlightD)   # add unique drugs to set
 		
-	#load_highlight(conn, highlightD)  # load drug highlight annotation
+	load_highlight_annotation(conn, highlightD, creator)  # load drug highlight annotation
 
 	conn.commit()
 
