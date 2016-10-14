@@ -446,8 +446,8 @@ def main():
 	print("[info] connect postgreSQL ...")
 	conn = connect_postgreSQL(db_config_files)
 
-	print("[info] clean before load ...")
-	clearall(conn)
+	#print("[info] clean before load ...")
+	#clearall(conn)
 	#truncateall(conn)
 	conn.commit()
 

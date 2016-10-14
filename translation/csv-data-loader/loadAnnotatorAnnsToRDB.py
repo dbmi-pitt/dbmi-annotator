@@ -44,7 +44,7 @@ def preprocess(csvfile):
 	for row in reader:
 		#print(row)
 
-		row.update({'predicate': 'relationship'})
+		row.update({'predicate': row['relationship']})
 		if row['precipitant'] == 'drug1':
 			row.update({'subject': row['drug1'], 'object': row['drug2'], 'subjectDose': row['drug1 dose'], 'objectDose': row['drug2 dose']})
 		elif row['precipitant'] == 'drug2':
