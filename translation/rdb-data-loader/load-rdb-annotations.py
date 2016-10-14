@@ -406,13 +406,13 @@ def main():
 	conn = connectPostgres()
 	mpAnnotations = queryMpAnnotation(conn)	
 	
-	#for mpAnn in mpAnnotations:
+	for mpAnn in mpAnnotations:
 		#if "036db1f2-52b3-42a0-acf9-817b7ba8c724" in mpAnn.source:
-	#	loadMpAnnotation(mpAnn, AUTHOR)		
+		loadMpAnnotation(mpAnn, AUTHOR)		
 	#printSample(mpAnnotations, 6)
 
-	#highlightD = queryHighlightAnns(conn)
-	#loadHighlightAnnotations(highlightD, AUTHOR)
+	highlightD = queryHighlightAnns(conn)
+	loadHighlightAnnotations(highlightD, AUTHOR)
 
 	conn.close()
 
