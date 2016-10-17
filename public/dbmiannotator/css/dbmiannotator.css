@@ -90,6 +90,7 @@ button:focus{
     list-style: none;
     cursor:pointer; 
     padding:3px 5px 5px 3px; 
+    margin: 0px !important;
     border: 2px #336699 solid;
     position:relative;
     font-size: 11px;
@@ -103,7 +104,8 @@ button:focus{
     display:block; 
     list-style: none !important;
     cursor:pointer !important; 
-    padding:3px 5px 5px 3px !important; 
+    padding:3px 5px 5px 3px !important;
+    margin: 0px !important;
     border: 2px #336699 solid !important;
     position:relative !important;
     font-size: 11px !important;
@@ -115,6 +117,7 @@ button:focus{
 .mp-main-menu {
     position: absolute !important; 
     top: 5% !important;
+    margin: 0px !important;
     display: block;
     min-width: 130px !important;
     min-height: 40px !important;
@@ -126,6 +129,7 @@ button:focus{
 }
 /* add matertal/data -link*/
 .mp-sub-menu-2 {
+    margin: 0px !important;
     display: none;
     position: absolute !important;
     min-width: 100px !important;
@@ -139,6 +143,7 @@ button:focus{
 
 /* Links inside the dropdown */
 .mp-sub-menu-2 a {
+    margin: 0px !important;
     color: black !important;
     font-size: 10px !important;
     border: 2px #336699 solid !important;
@@ -163,6 +168,7 @@ button:focus{
 
 /* remove the circle list style */
 ul.mp-sub-menu-2{
+  margin: 0px !important;
   list-style-type: none;
 }
 
@@ -200,6 +206,7 @@ ul.mp-sub-menu-2{
     font-size: 13px !important; 
     border-collapse: collapse !important;
     border: 1px solid black !important;
+    background-color: white !important;
 }
 
 /* annotator table - claim pannel */
