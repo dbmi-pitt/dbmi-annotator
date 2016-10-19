@@ -9,9 +9,9 @@ reload(sys)
 sys.setdefaultencoding('utf8')
 
 #1. pip install psycopg2
-#2. create config file: "config/DB-config.txt"
+#2. create/edit config file: "config/DB-config.txt"
 
-csvfiles = ['data/mp-annotat2-10132016.csv']
+csvfiles = ['data/mp-annotat2-10182016.tsv']
 db_config_files = "config/DB-config.txt"
 hostname = 'localhost'
 database = 'mpevidence'
@@ -35,7 +35,7 @@ def connect_postgreSQL(db_config_files):
 
 # add column: predicate, subject, object, subjectDose, objectDose
 def preprocess(csvfile):
-	csv_columns = ['document','claim label','claim text','method','relationship','drug1','drug2','precipitant','enzyme','evRelationship','participants','participants text','drug1 dose','drug1 formulation','drug1 duration','drug1 regimens','drug1 dose text','drug2 dose','drug2 formulation','drug2 duration','drug2 regimens','drug2 dose text','auc','auc type','auc direction','auc text','cmax','cmax type','cmax direction','cmax text','cl','cl type','cl direction','cl text','halflife','halflife type','halflife direction','halflife text','group randomization','parallel group design','predicate','subject','object','subjectDose','objectDose']
+	csv_columns = ['document','claim label','claim text','method','relationship','drug1','drug2','precipitant','enzyme','evRelationship','participants','participants text','drug1 dose','drug1 formulation','drug1 duration','drug1 regimens','drug1 dose text','drug2 dose','drug2 formulation','drug2 duration','drug2 regimens','drug2 dose text','auc','auc type','auc direction','auc text','cmax','cmax type','cmax direction','cmax text','cl','cl type','cl direction','cl text','halflife','halflife type','halflife direction','halflife text','group randomization','id','parallel group design','predicate','subject','object','subjectDose','objectDose']
 
 	writer = csv.DictWriter(open('data/preprocess-annotator.csv', 'w'), fieldnames=csv_columns)
 	writer.writeheader()
@@ -194,10 +194,10 @@ def clearall(conn):
 	#cur.execute("ALTER TABLE mp_data_annotation ADD CONSTRAINT mp_data_annotation_mp_claim_id_fkey FOREIGN KEY (mp_claim_id) REFERENCES mp_claim_annotation (id)")
 
 # load table "method" one row
-def load_method(conn, row, mp_claim_id):
+def load_method(conn, row, mp_claim_id, mp_data_index):
 	cur = conn.cursor()
 	cur.execute("INSERT INTO method (value, mp_claim_id, mp_data_index)" +
-				"VALUES ( '" + row['method'] + "', " + str(mp_claim_id) + ", 1);")
+				"VALUES ( '" + row['method'] + "', " + str(mp_claim_id) + ", "+str(mp_data_index)+");")
 
 # OPEN ANNOTATION - TARGET AND SELECTOR #############################################
 # load table "oa_selector" one row
@@ -244,7 +244,7 @@ def load_qualifier(conn, subject, predicate, object, claim_body_id):
 
 # LOAD MP MATERIAL ################################################################
 # load table "mp_material_annotation" and "oa_material_body" one row
-def load_mp_material_annotation(conn, row, mp_claim_id, creator):
+def load_mp_material_annotation(conn, row, mp_claim_id, creator, mp_data_index):
 	cur = conn.cursor()
 	source = row['document']
 
@@ -252,32 +252,32 @@ def load_mp_material_annotation(conn, row, mp_claim_id, creator):
 		exact = row['drug1 dose text']
 		selector_id = load_oa_selector(conn, '', exact, '')
 		target_id = load_oa_target(conn, source, selector_id)	
-		material_body_id = insert_material_annotation(conn, row, mp_claim_id, target_id, creator, 'object_dose')
+		material_body_id = insert_material_annotation(conn, row, mp_claim_id, target_id, creator, 'object_dose', mp_data_index)
 		load_material_field(conn, row, material_body_id, 'drug1')
 
 	if (row['drug2 dose'] != '') and (row['drug2 dose'].lower() != 'unk'):
 		exact = row['drug2 dose text']
 		selector_id = load_oa_selector(conn, '', exact, '')
 		target_id = load_oa_target(conn, source, selector_id)	
-		material_body_id = insert_material_annotation(conn, row, mp_claim_id, target_id, creator, 'subject_dose')
+		material_body_id = insert_material_annotation(conn, row, mp_claim_id, target_id, creator, 'subject_dose', mp_data_index)
 		load_material_field(conn, row, material_body_id, 'drug2')
 
 	if (row['participants'] != '') and (row['participants'].lower() != 'unk'):
 		exact = row['participants text']
 		selector_id = load_oa_selector(conn, '', exact, '')
 		target_id = load_oa_target(conn, source, selector_id)	
-		material_body_id = insert_material_annotation(conn, row, mp_claim_id, target_id, creator, 'participants')
+		material_body_id = insert_material_annotation(conn, row, mp_claim_id, target_id, creator, 'participants', mp_data_index)
 		load_material_field(conn, row, material_body_id, 'participants')
 
 
-def insert_material_annotation(conn, row, mp_claim_id, has_target, creator, data_type):
+def insert_material_annotation(conn, row, mp_claim_id, has_target, creator, data_type, mp_data_index):
 	ev_supports = 'false'
 	if 'supports' in row['evRelationship']:
 		ev_supports = 'true'
 
 	cur = conn.cursor()
 	urn = uuid.uuid4().hex
-	qry1= "INSERT INTO mp_material_annotation (urn, type, has_target, creator, mp_claim_id, mp_data_index, ev_supports, date_created) VALUES ('%s','%s','%s','%s','%s','%s','%s','%s');" % (urn, data_type, has_target, creator, mp_claim_id, 1, ev_supports, curr_date)
+	qry1= "INSERT INTO mp_material_annotation (urn, type, has_target, creator, mp_claim_id, mp_data_index, ev_supports, date_created) VALUES ('%s','%s','%s','%s','%s','%s','%s','%s');" % (urn, data_type, has_target, creator, mp_claim_id, mp_data_index, ev_supports, curr_date)
 	cur.execute(qry1)
 	cur.execute("SELECT * FROM mp_material_annotation WHERE urn = '" + urn + "';")
 	for result in cur.fetchall():
@@ -322,46 +322,46 @@ def load_material_field(conn, row, material_body_id, material_type):
 
 # LOAD MP DATA ################################################################
 # load table "mp_data_annotation" and "oa_data_body" one row
-def load_mp_data_annotation(conn, row, mp_claim_id, creator):
+def load_mp_data_annotation(conn, row, mp_claim_id, creator, mp_data_index):
 	source = row['document']
 
 	if (row['auc'] != '') and (row['auc'].lower() != 'unk'):
 		exact = row['auc text']
 		selector_id = load_oa_selector(conn, '', exact, '')
 		target_id = load_oa_target(conn, source, selector_id)		
-		data_body_id = insert_mp_data_annotation(conn, row, mp_claim_id, target_id, creator, 'auc')
+		data_body_id = insert_mp_data_annotation(conn, row, mp_claim_id, target_id, creator, 'auc', mp_data_index)
 		load_data_field(conn, row, data_body_id, 'auc')
 
 	if (row['cmax'] != '') and (row['cmax'].lower() != 'unk'):
 		exact = row['cmax text']
 		selector_id = load_oa_selector(conn, '', exact, '')
 		target_id = load_oa_target(conn, source, selector_id)
-		data_body_id = insert_mp_data_annotation(conn, row, mp_claim_id, target_id, creator, 'cmax')
+		data_body_id = insert_mp_data_annotation(conn, row, mp_claim_id, target_id, creator, 'cmax', mp_data_index)
 		load_data_field(conn, row, data_body_id, 'cmax')
 
 	if (row['cl'] != '') and (row['cl'].lower() != 'unk'):
 		exact = row['cl text']
 		selector_id = load_oa_selector(conn, '', exact, '')
 		target_id = load_oa_target(conn, source, selector_id)
-		data_body_id = insert_mp_data_annotation(conn, row, mp_claim_id, target_id, creator, 'clearance')
+		data_body_id = insert_mp_data_annotation(conn, row, mp_claim_id, target_id, creator, 'clearance', mp_data_index)
 		load_data_field(conn, row, data_body_id, 'cl')
 
 	if (row['halflife'] != '') and (row['halflife'].lower() != 'unk'):
 		exact = row['halflife text']
 		selector_id = load_oa_selector(conn, '', exact, '')
 		target_id = load_oa_target(conn, source, selector_id)
-		data_body_id = insert_mp_data_annotation(conn, row, mp_claim_id, target_id, creator, 'halflife')
+		data_body_id = insert_mp_data_annotation(conn, row, mp_claim_id, target_id, creator, 'halflife', mp_data_index)
 		load_data_field(conn, row, data_body_id, 'halflife')
 
 
-def insert_mp_data_annotation(conn, row, mp_claim_id, has_target, creator, data_type):
+def insert_mp_data_annotation(conn, row, mp_claim_id, has_target, creator, data_type, mp_data_index):
 	ev_supports = 'false'
 	if 'supports' in row['evRelationship']:
 		ev_supports = 'true'
 
 	cur = conn.cursor()
 	urn = uuid.uuid4().hex
-	qry1 = "INSERT INTO mp_data_annotation (urn, type, has_target, creator, mp_claim_id, mp_data_index, ev_supports, date_created) VALUES ('%s','%s','%s','%s','%s','%s','%s','%s');" % (str(urn) ,data_type, has_target, creator, mp_claim_id, 1, ev_supports, curr_date)
+	qry1 = "INSERT INTO mp_data_annotation (urn, type, has_target, creator, mp_claim_id, mp_data_index, ev_supports, date_created) VALUES ('%s','%s','%s','%s','%s','%s','%s','%s');" % (str(urn) ,data_type, has_target, creator, mp_claim_id, mp_data_index, ev_supports, curr_date)
 
 	cur.execute(qry1)
 	cur.execute("SELECT * FROM mp_data_annotation WHERE urn = '" + urn + "';")
@@ -415,14 +415,13 @@ def update_oa_claim_body(conn, is_oa_body_of, oa_claim_body_id):
 
 # insert to table "mp_claim_annotation" 
 # return claim annotation id
-def insert_mp_claim_annotation(conn, curr_date, has_body, has_target, creator):
+def insert_mp_claim_annotation(conn, curr_date, has_body, has_target, creator, annId):
 	cur = conn.cursor()
-	urn = uuid.uuid4().hex
+	urn = annId
 
 	qry1 = "INSERT INTO mp_claim_annotation (urn, has_body, has_target, creator, date_created, date_updated)" + "VALUES ('%s','%s','%s','%s','%s','%s');" % (urn, str(has_body), str(has_target), creator, curr_date, curr_date)
 
 	cur.execute(qry1)
-
 	cur.execute("SELECT * FROM mp_claim_annotation WHERE urn = '" + urn + "';")
 
 	for row in cur.fetchall():
@@ -439,10 +438,37 @@ def load_mp_claim_annotation(conn, row, creator):
 	oa_claim_body_id = load_oa_claim_body(conn, subject, predicate, object, claimE)
 	load_qualifier(conn, subject, predicate, object, oa_claim_body_id)
 	
-	mp_claim_id = insert_mp_claim_annotation(conn, curr_date, oa_claim_body_id, claim_target_id, creator)
+	mp_claim_id = insert_mp_claim_annotation(conn, curr_date, oa_claim_body_id, claim_target_id, creator, row['id'])
 	update_oa_claim_body(conn, mp_claim_id, oa_claim_body_id)
+	conn.commit()
+
 	return mp_claim_id
 
+
+def findClaimIdByAnnId(conn, annId):
+	cur = conn.cursor()
+	cur.execute("SELECT * FROM mp_claim_annotation WHERE urn = '" + annId + "';")
+
+	for row in cur.fetchall():
+		return row[0]
+	return None
+
+# return the number of data rows for target claim 
+# return 0 if no data avaliable
+def findNumOfDataItems(conn, claimId):
+	cur = conn.cursor()
+	qry = """	
+	select max(dann.mp_data_index)
+	from mp_data_annotation dann
+	where dann.mp_claim_id = %s
+	""" % (claimId)
+
+	cur = conn.cursor()
+	cur.execute(qry)
+		
+	for row in cur.fetchall():
+		return row[0]
+	return 0
 
 # LOAD MAIN ################################################################
 def load_data_from_csv(conn, reader, creator):
@@ -451,22 +477,24 @@ def load_data_from_csv(conn, reader, creator):
 	curr_date = datetime.datetime.now()
 
 	for row in reader:
+		annId = row['id']
 
-		# MP Claim
-		mp_claim_id = load_mp_claim_annotation(conn, row, creator)
+		# MP Claim - use claim id if exists
+		mp_claim_id = findClaimIdByAnnId(conn, annId)
+		if not mp_claim_id:
+			mp_claim_id = load_mp_claim_annotation(conn, row, creator)
+
+		mp_data_index = (findNumOfDataItems(conn, mp_claim_id) or 0) + 1 
 
 		# MP data
-		load_mp_data_annotation(conn, row, mp_claim_id, creator)
-		load_mp_material_annotation(conn, row, mp_claim_id, creator)
-		load_method(conn, row, mp_claim_id)
+		load_mp_data_annotation(conn, row, mp_claim_id, creator, mp_data_index)
+		load_mp_material_annotation(conn, row, mp_claim_id, creator, mp_data_index)
+		load_method(conn, row, mp_claim_id, mp_data_index)
 
-		generateHighlightSet(row, highlightD)   # add unique drugs to set
+		generateHighlightSet(row, highlightD)  # add unique drugs to set
 		
 	load_highlight_annotation(conn, highlightD, creator)  # load drug highlight annotation
-
 	conn.commit()
-
-
 
 def main():
 
