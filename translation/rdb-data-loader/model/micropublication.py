@@ -86,7 +86,8 @@ class DataMaterialRow(object):
 
 	def setDataItem(self, obj): # obj: DataItem
 		if self.dataMaterialRowD[obj.field] != None:
-			print "[Warning] Data item already has the field: " + obj.field
+			#print "[Warning] Data item already has the field: " + obj.field
+			return
 		elif obj.field in ["auc", "cmax", "clearance", "halflife"]:
 			self.dataMaterialRowD[obj.field] = obj
 		else:
@@ -94,7 +95,8 @@ class DataMaterialRow(object):
 
 	def setMaterialDoseItem(self, obj): # obj: MaterialDoseItem
 		if self.dataMaterialRowD[obj.field] != None:
-			print "[Warning] Data item already has the field: " + obj.field
+			#print "[Warning] Data item already has the field: " + obj.field
+			return
 		elif obj.field in ["subject_dose", "object_dose"]:
 			self.dataMaterialRowD[obj.field] = obj
 		else:
@@ -102,7 +104,8 @@ class DataMaterialRow(object):
 
 	def setParticipants(self, obj): # obj: MatarialParticipants
 		if self.dataMaterialRowD["participants"] != None:
-			print "[Warning] Data item already has the field: participants"
+			#print "[Warning] Data item already has the field: participants"
+			return
 		else:
 			self.dataMaterialRowD["participants"] = obj
 	

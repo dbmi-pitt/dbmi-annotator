@@ -94,6 +94,10 @@ def queryMpData(conn, annotation, claimid):
 		evRelationship = row[8] # EV supports or refutes
 		dmRow = None
 
+		# if claimid == 7650:
+		# 	print row
+		# 	print annotation.getSpecificDataMaterial(1)
+		# 	print annotation.getSpecificDataMaterial(2)
 
 		if annotation.getSpecificDataMaterial(index) == None:
 			dmRow = DataMaterialRow() # create new row of data & material
@@ -127,7 +131,6 @@ def queryMpData(conn, annotation, claimid):
 				dmRow.setEvRelationship("supports")
 			elif dmRow.getEvRelationship() == None and not evRelationship:
 				dmRow.setEvRelationship("refutes")
-
 	return annotation
 
 
@@ -221,6 +224,8 @@ def queryMpAnnotation(conn):
 		claimDataMatAnno = queryMpMaterial(conn, claimDataAnno, claimId)
 
 		mpAnnotations.append(claimDataMatAnno)
+
+		print claimDataMatAnno.getDataMaterials()
 
 	return mpAnnotations
 
@@ -399,6 +404,32 @@ def connectPostgres():
 
 	return conn
 
+######################### TESTING ##########################
+# print out sample annotation for validation
+def printSample(mpannotations, idx):
+	mpAnnotation = mpannotations[idx]
+	dmRows = mpAnnotation.getDataMaterials()
+
+	print "================"
+	print dmRows
+
+	print "label(%s), subject(%s), predicate(%s), object(%s) " % (mpAnnotation.label, mpAnnotation.csubject, mpAnnotation.cpredicate, mpAnnotation.cobject)
+	#print "source: " + mpAnnotation.source
+	#print "exact: " + mpAnnotation.exact	
+
+	for index,dm in dmRows.items():	
+		print index
+
+		for df in mpDataL:
+			if dm.getDataItemInRow(df):
+				print "%s: %s" % (df, dm.getDataItemInRow(df).value)
+		if dm.getMaterialDoseInRow("subject_dose"):
+			print "subject_dose: %s" % (dm.getMaterialDoseInRow("subject_dose").value) 
+		if dm.getMaterialDoseInRow("object_dose"):
+			print "object_dose: %s" % (dm.getMaterialDoseInRow("object_dose").value)
+
+
+
 ######################### MAIN ##########################
 
 def main():
@@ -409,10 +440,10 @@ def main():
 	for mpAnn in mpAnnotations:
 		#if "036db1f2-52b3-42a0-acf9-817b7ba8c724" in mpAnn.source:
 		loadMpAnnotation(mpAnn, AUTHOR)		
-	#printSample(mpAnnotations, 6)
+	#printSample(mpAnnotations, 2)
 
-	highlightD = queryHighlightAnns(conn)
-	loadHighlightAnnotations(highlightD, AUTHOR)
+	#highlightD = queryHighlightAnns(conn)
+	#loadHighlightAnnotations(highlightD, AUTHOR)
 
 	conn.close()
 
@@ -420,23 +451,4 @@ def main():
 if __name__ == '__main__':
 	main()
 
-######################### TESTING ##########################
-# print out sample annotation for validation
-def printSample(mpannotations, idx):
-	mpAnnotation = mpannotations[idx]
-	dmRows = mpAnnotation.getDataMaterials()
-
-	print "label(%s), subject(%s), predicate(%s), object(%s) " % (mpAnnotation.label, mpAnnotation.csubject, mpAnnotation.cpredicate, mpAnnotation.cobject)
-	#print "source: " + mpAnnotation.source
-	#print "exact: " + mpAnnotation.exact	
-
-	for index,dm in dmRows.items():	
-
-		for df in mpDataL:
-			if dm.getDataItemInRow(df):
-				print "%s: %s" % (df, dm.getDataItemInRow(df).value)
-		if dm.getMaterialDoseInRow("subject_dose"):
-			print "subject_dose: %s" % (dm.getMaterialDoseInRow("subject_dose").value) 
-		if dm.getMaterialDoseInRow("object_dose"):
-			print "object_dose: %s" % (dm.getMaterialDoseInRow("object_dose").value)
 		
