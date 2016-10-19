@@ -94,11 +94,6 @@ def queryMpData(conn, annotation, claimid):
 		evRelationship = row[8] # EV supports or refutes
 		dmRow = None
 
-		# if claimid == 7650:
-		# 	print row
-		# 	print annotation.getSpecificDataMaterial(1)
-		# 	print annotation.getSpecificDataMaterial(2)
-
 		if annotation.getSpecificDataMaterial(index) == None:
 			dmRow = DataMaterialRow() # create new row of data & material
 			dataItem = DataItem(dType)
@@ -224,9 +219,6 @@ def queryMpAnnotation(conn):
 		claimDataMatAnno = queryMpMaterial(conn, claimDataAnno, claimId)
 
 		mpAnnotations.append(claimDataMatAnno)
-
-		print claimDataMatAnno.getDataMaterials()
-
 	return mpAnnotations
 
 ######################### QUERY Highlight Annotaiton ##########################
@@ -320,8 +312,6 @@ def loadMpAnnotation(annotation, email):
 	dmRows = annotation.getDataMaterials()	
 
 	for index,dmRow in dmRows.items(): # walk though all datas for claim
-		print index
-		print dmRow
 		
 		mpData = loadTemplateInJson(MP_DATA_TEMPLATE) # data template
 		
@@ -410,13 +400,9 @@ def printSample(mpannotations, idx):
 	mpAnnotation = mpannotations[idx]
 	dmRows = mpAnnotation.getDataMaterials()
 
-	print "================"
-	print dmRows
-
 	print "label(%s), subject(%s), predicate(%s), object(%s) " % (mpAnnotation.label, mpAnnotation.csubject, mpAnnotation.cpredicate, mpAnnotation.cobject)
 
 	for index,dm in dmRows.items():	
-		print index
 
 		for df in mpDataL:
 			if dm.getDataItemInRow(df):
