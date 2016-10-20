@@ -449,7 +449,7 @@ def main():
 	#print("[info] clean before load ...")
 	#clearall(conn)
 	#truncateall(conn)
-	conn.commit()
+	#conn.commit()
 
 	#show_table(conn, 'mp_claim_annotation') 	#show table
 	

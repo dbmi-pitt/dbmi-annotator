@@ -8,6 +8,7 @@
 @prefix jdbc: <http://d2rq.org/terms/jdbc/> .
 @prefix d2r: <http://sites.wiwiss.fu-berlin.de/suhl/bizer/d2r-server/config.rdf#> .
 @prefix meta: <http://www4.wiwiss.fu-berlin.de/bizer/d2r-server/metadata#> .
+@prefix obo: <http://purl.obolibrary.org/obo/> .
 
 <> a d2r:Server;
       rdfs:label "D2R Server for mpevidence";
@@ -18,10 +19,28 @@ map:database a d2rq:Database;
     d2rq:jdbcDSN "jdbc:postgresql://localhost/mpevidence?autoReconnect=true&user=postgres&password=";   
 	.
 
+########################## DIDEO ONTOLOGY MAPPING TABLES ########################### 
+# MP Data Mapping
+map:mpDataTranslate a d2rq:TranslationTable;
+    d2rq:translation [ d2rq:databaseValue "auc"; d2rq:rdfValue obo:DIDEO_00000093; ];
+    d2rq:translation [ d2rq:databaseValue "cmax"; d2rq:rdfValue obo:DIDEO_00000099; ];
+    d2rq:translation [ d2rq:databaseValue "clearance"; d2rq:rdfValue obo:DIDEO_00000101; ];
+    d2rq:translation [ d2rq:databaseValue "halflife"; d2rq:rdfValue obo:DIDEO_00000100; ];
+.
+
+# MP Data Field Mapping
+map:mpDataFieldTranslate a d2rq:TranslationTable;
+    d2rq:translation [ d2rq:databaseValue "percent"; d2rq:rdfValue obo:UO_0000187; ];
+    d2rq:translation [ d2rq:databaseValue "fold"; d2rq:rdfValue obo:DIDEO_00000091; ];
+.
+# MP Method Mapping
+map:mpMethodTranslate a d2rq:TranslationTable;
+    d2rq:translation [ d2rq:databaseValue "DDI clinical trial"; d2rq:rdfValue obo:DIDEO_00000071; ];
+.
+
 # Table claim_reference_relationship
 map:claim_reference_relationship a d2rq:ClassMap;
 	d2rq:dataStorage map:database;
-	# d2rq:uriPattern "claim_reference_relationship/@@claim_reference_relationship.id@@";
     d2rq:uriSqlExpression "CONCAT('http://dikb.org/mpevidence/claim_reference_relationship:', claim_reference_relationship.id)";
 	d2rq:class vocab:claim_reference_relationship;
 	d2rq:classDefinitionLabel "claim_reference_relationship";
@@ -88,6 +107,7 @@ map:data_field_value_as_string a d2rq:PropertyBridge;
 	d2rq:property vocab:data_field_value_as_string;
 	d2rq:propertyDefinitionLabel "data_field value_as_string";
 	d2rq:column "data_field.value_as_string";
+    d2rq:translateWith map:mpDataFieldTranslate;
 	.
 map:data_field_value_as_number a d2rq:PropertyBridge;
 	d2rq:belongsToClassMap map:data_field;
@@ -180,6 +200,7 @@ map:method_value a d2rq:PropertyBridge;
 	d2rq:property vocab:method_value;
 	d2rq:propertyDefinitionLabel "method value";
 	d2rq:column "method.value";
+    d2rq:translateWith map:mpMethodTranslate;
 	.
 map:method_mp_data_index a d2rq:PropertyBridge;
 	d2rq:belongsToClassMap map:method;
@@ -288,12 +309,16 @@ map:mp_data_annotation_urn a d2rq:PropertyBridge;
 	d2rq:propertyDefinitionLabel "mp_data_annotation urn";
 	d2rq:column "mp_data_annotation.urn";
 	.
+
+# MP DATA AUC/CMAX/CLEARANCE/HALFLIFE
 map:mp_data_annotation_type a d2rq:PropertyBridge;
 	d2rq:belongsToClassMap map:mp_data_annotation;
 	d2rq:property vocab:mp_data_annotation_type;
 	d2rq:propertyDefinitionLabel "mp_data_annotation type";
 	d2rq:column "mp_data_annotation.type";
+    d2rq:translateWith map:mpDataTranslate;
 	.
+
 map:mp_data_annotation_has_body a d2rq:PropertyBridge;
 	d2rq:belongsToClassMap map:mp_data_annotation;
 	d2rq:property vocab:mp_data_annotation_has_body;
@@ -556,6 +581,7 @@ map:oa_data_body_data_type a d2rq:PropertyBridge;
 	d2rq:property vocab:oa_data_body_data_type;
 	d2rq:propertyDefinitionLabel "oa_data_body data_type";
 	d2rq:column "oa_data_body.data_type";
+    d2rq:translateWith map:mpDataTranslate;
 	.
 map:oa_data_body_vocabulary_id a d2rq:PropertyBridge;
 	d2rq:belongsToClassMap map:oa_data_body;
