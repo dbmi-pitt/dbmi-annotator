@@ -199,6 +199,7 @@ ul.mp-sub-menu-2{
 #mp-claim-data-tb tr, #mp-claim-data-tb td{
     border: 1px solid #ddd !important;
     padding: 0.2em !important;
+    background-color: #DDEBFA !important;
 }
 
 /* annotator table -material/data  */
