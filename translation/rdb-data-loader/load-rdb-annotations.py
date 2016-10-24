@@ -64,7 +64,6 @@ def queryMpClaim(conn):
 
 		if annotation.exact == None:
 			annotation.setOaSelector(row[5], row[4], row[6])
-
 	return annotations
 
 
