@@ -272,11 +272,16 @@ function switchDataForm(targetField, isNotNeedValid) {
     currFormType = targetField;
 
     //redraw data currhighlight
-    app.annotations.update(currAnnotation);
-    // scroll to the position of annotation
-    scrollToAnnotation(currAnnotation.id, currFormType, currDataNum);
-
-    switchDataFormHelper(targetField);
+    try {
+        app.annotations.update(currAnnotation);
+        // scroll to the position of annotation
+        scrollToAnnotation(currAnnotation.id, currFormType, currDataNum);
+        
+        switchDataFormHelper(targetField);
+        addDataCellByEditor(currFormType, 0); // call add data function when switched form    
+    } catch (err) {
+        console.log(err);
+    }
 }
 
 // when switch data field, show or hide delete button, nav buttons and data forms 
