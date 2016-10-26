@@ -250,7 +250,7 @@ function preDataForm(targetField, isNotNeedValid) {
 
 
 
-// switch data from from nav button
+// switch data from nav button
 function switchDataForm(targetField, isNotNeedValid) {
 
     $("#mp-claim-form").hide();
@@ -271,14 +271,15 @@ function switchDataForm(targetField, isNotNeedValid) {
 
     currFormType = targetField;
 
-    //redraw data currhighlight
     try {
+        
+        //redraw data currhighlight & add/edit data to currAnnotation
         app.annotations.update(currAnnotation);
         // scroll to the position of annotation
         scrollToAnnotation(currAnnotation.id, currFormType, currDataNum);
         
         switchDataFormHelper(targetField);
-        addDataCellByEditor(currFormType, 0); // call add data function when switched form    
+
     } catch (err) {
         console.log(err);
     }
