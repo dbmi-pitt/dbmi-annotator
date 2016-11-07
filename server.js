@@ -1,6 +1,7 @@
 // SET UP
 var _dirname = "/home/yin2/dbmi-annotator/";
 var config = require('./config/config');
+var pg = require('pg');
 
 // Load packages
 fs = require('fs');
@@ -22,13 +23,13 @@ app.use(bodyParser()); // get information from html forms
 app.use(expressValidator());
 
 app.use(express.static('public'));
-
 app.set('view engine', 'ejs'); 
 
 // bring sequelize in
-var Sequelize = require('sequelize');
-var conStr = require('./config/config');
-var sequelize = new Sequelize(config.postgres, {dialect:'postgres', define:{freezeTableName:true, timestamps: false} });
+ var Sequelize = require('sequelize');
+
+var sequelize = new Sequelize(config.postgres, {dialect:'postgres', define:{freezeTableName:true, timestamps: false}});
+
 // model initialize
 var user = require('./models/user')(sequelize, Sequelize);
 

@@ -1,0 +1,42 @@
+postgres:
+    image: yin2/postgres-9.3:latest
+    ports:
+        - 5432:5432
+    container_name: "postgres"
+
+elasticsearch:
+    image: yin2/elasticsearch-1.7:1.7.3
+    ports:
+        - 9200:9200
+    container_name: "elasticsearch"
+
+annotator-store:
+    image: yin2/annotator-store
+    links:
+        - elasticsearch
+    command: bash -c "sleep 5; python /home/yin2/annotator-store/run.py"
+    ports:
+        - 5000:5000
+    container_name: "annotator-store"
+
+http:
+    image: yin2/apache2-2.4    
+    links:
+        - dbmi-annotator
+    ports:
+        - 80:80
+    container_name: "apache-server"
+
+dbmi-annotator:
+    build: .
+    links:
+        - postgres
+        - elasticsearch
+        - annotator-store
+    environment:
+        - PGHOST=postgres
+        - PGDATABASE=dbmiannotator
+        - PGUSER=dbmiannotator
+    ports:
+        - 3000:3000
+    container_name: "dbmi-annotator"

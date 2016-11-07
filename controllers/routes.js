@@ -1,8 +1,6 @@
 config = require('./../config/config.js');
 var request = require("request");
-//var tidy = require('htmltidy').tidy;
 var pg = require('pg');
-//var htmltidyOptions = require('htmltidy-options');
 
 module.exports = function(app, passport) {
 
@@ -282,6 +280,9 @@ function getSpanFromField(field) {
 function praseWebContents(req, res, next){
     var sourceUrl = req.query.sourceURL.trim();
 
+    console.log("[DEBUG] parseWebContents");
+    console.log(sourceUrl);
+
     if(sourceUrl.match(/localhost.*html/g)){
         var options = {
             host: sourceUrl,
@@ -289,6 +290,12 @@ function praseWebContents(req, res, next){
         }
 
         request(sourceUrl, function(err, res, body){
+
+            if (err){
+                console.log(err);
+                console.log(res);
+                return;
+            }             
 
             // skip tidy beacuse changing of char encoding
             labelDecode = body.replace(/&amp;/g,'&').replace(/&nbsp;/g,' ');   
@@ -313,6 +320,9 @@ function praseWebContents(req, res, next){
 
 // get plugin profile
 function initPluginProfile(req, res, next){
+
+    console.log("routes.js - initPluginProfile");
+
     var pluginSetL = [];
     var userProfileL = [];
 
