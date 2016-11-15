@@ -47,6 +47,8 @@ if (typeof annotator === 'undefined') {
     // load annotation after page contents loaded
     app.start().then(
         function () {
+            console.log(config);
+
 			app.ident.identity = currEmail;
 			$(".btn-success").css("display","block");            
             

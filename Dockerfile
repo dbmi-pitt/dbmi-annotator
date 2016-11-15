@@ -18,5 +18,8 @@ RUN npm install
 # Bundle dbmi-annotator source
 COPY . /home/yin2/dbmi-annotator
 
+# Use Production mode configuration
+COPY docker/production.conf /home/yin2/dbmi-annotator/config/config.js
+
 EXPOSE 3000
 CMD [ "npm", "start" ]

@@ -281,14 +281,13 @@ function praseWebContents(req, res, next){
     var sourceUrl = req.query.sourceURL.trim();
 
     console.log("[DEBUG] parseWebContents");
-    console.log(sourceUrl);
 
     if(sourceUrl.match(/localhost.*html/g)){
-        var options = {
-            host: sourceUrl,
-            method: 'POST'            
-        }
 
+        if (process.env.APACHE2_HOST != null) // use apache2 in docker network
+            sourceUrl = sourceUrl.replace("localhost", process.env.APACHE2_HOST);
+
+        console.log(sourceUrl);
         request(sourceUrl, function(err, res, body){
 
             if (err){
@@ -300,17 +299,7 @@ function praseWebContents(req, res, next){
             // skip tidy beacuse changing of char encoding
             labelDecode = body.replace(/&amp;/g,'&').replace(/&nbsp;/g,' ');   
             req.htmlsource = labelDecode;
-            next();
-            
-            // normalize html source
-            // tidy(labelDecode, htmltidyOptions['Kastor tidy - XHTML Clean page UTF-8'], function(err, html) {
-            //     if (err){
-            //         console.log(err);
-            //     }
-            //     req.htmlsource = html;
-            //     next();
-            // });
-            
+            next();                        
         });
 
     } else {
