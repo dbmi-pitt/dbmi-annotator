@@ -1,2 +1,0 @@
-2. compile browser side JS packages (rerun when made modifications on config/config.js)
-$ browserify docker/production.config -o docker/app.bundle.js

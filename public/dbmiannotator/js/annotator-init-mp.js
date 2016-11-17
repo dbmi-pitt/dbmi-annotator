@@ -229,7 +229,7 @@ function importAnnotationDialog(sourceURL, email) {
     var emailS = new Set();
     var allMPAnnsD = {}; // dict for all MP annotations {email: annotations}
     var allDrugAnnsD = {}; // dict for all drug mention annotation {email: annotations}
-    $.ajax({url: "http://" + config.annotator.host + "/annotatorstore/search",
+    $.ajax({url: "http://" + config.apache2.host + ":" + config.apache2.port + "/annotatorstore/search",
             data: {
                 //annotationType: "MP", 
                 uri: uri},
