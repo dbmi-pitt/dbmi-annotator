@@ -1,8 +1,3 @@
-############################ POSTGRES ############################
-
-# install postgres db
-# FROM ubuntu:14.04
-
 ############################ DBMI-ANNOTATOR ############################
 # build image from nodejs server
 FROM node:0.12.17
@@ -19,7 +14,9 @@ RUN npm install
 COPY . /home/yin2/dbmi-annotator
 
 # Use Production mode configuration
-COPY docker/production.conf /home/yin2/dbmi-annotator/config/config.js
+COPY config/production.conf /home/yin2/dbmi-annotator/config/config.js
+
+RUN ./node_modules/.bin/browserify config/production-app.js -o /home/yin2/dbmi-annotator/public/dbmiannotator/js/app.bundle.js
 
 EXPOSE 3000
 CMD [ "npm", "start" ]

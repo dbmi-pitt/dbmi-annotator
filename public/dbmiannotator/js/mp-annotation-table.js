@@ -7,7 +7,7 @@ function updateAnnTable(sourceURL){
     //console.log(userEmails);
     // request all mp annotaitons for current document and user
 
-    $.ajax({url: "http://" + config.annotator.host + "/annotatorstore/search",
+    $.ajax({url: "http://" + config.apache2.host + ":" + config.apache2.port + "/annotatorstore/search",
             data: {annotationType: "MP", 
                    uri: sourceURL.replace(/[\/\\\-\:\.]/g, "")},
             method: 'GET',
@@ -291,7 +291,7 @@ function changeClaimInDialog() {
     sourceURL = getURLParameter("sourceURL").trim();
     email = getURLParameter("email");
 
-    $.ajax({url: "http://" + config.annotator.host + "/annotatorstore/search",
+    $.ajax({url: "http://" + config.apache2.host + ":" + config.apache2.port + "/annotatorstore/search",
             data: {annotationType: "MP", 
                    email: email, 
                    uri: sourceURL.replace(/[\/\\\-\:\.]/g, "")},
