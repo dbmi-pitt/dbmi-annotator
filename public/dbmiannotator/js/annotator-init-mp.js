@@ -143,23 +143,65 @@ function initLiseners() {
     $("#Drug1").change(function (){selectDrug();});
     $("#Drug2").change(function (){selectDrug();});
 }
-
+    //helper function
+    function findIndex(string, old, no) {
+        var i = 0;
+        var pos = -1;
+        while(i <= no && (pos = string.indexOf(old, pos + 1)) != -1) {
+            i++;
+        }
+        return pos;
+    }
+    function replaceIndex(string, at, old, repl) {
+        return string.replace(new RegExp(old, 'g'), function(match, i) {
+            if( i === at ) return repl;
+                return match;
+        });
+    }
 
 
 function selectDrug() {
+
     var drug1 = $('#Drug1 option:selected').text();
     var drug2 = $('#Drug2 option:selected').text();
+    //console.log("select new drug:" + drug1 + "," + drug2);
     var drug1ID = $('#Drug1 option:selected').val();
     var drug2ID = $('#Drug2 option:selected').val();
+    var drug1Index = parseInt(drug1ID.split("_")[1]);
+    var drug2Index = parseInt(drug2ID.split("_")[1]);
 
-    var quotestring = $("#quote").html();
-    quotestring = quotestring.split("class=\"highlightdrug\"").join("class=\"annotator-hl\"");
-    quotestring = quotestring.split("class=\"highlightdrug\"").join("class=\"annotator-hl\"");
-    quotestring = quotestring.split("class=\"annotator-hl\" id=\""+drug1ID+"\"").join("class=\"highlightdrug\" id=\""+drug1ID+"\"");
-    quotestring = quotestring.split("class=\"annotator-hl\" id=\""+drug2ID+"\"").join("class=\"highlightdrug\" id=\""+drug2ID+"\"");
-    quotestring = quotestring.split("id=\""+drug1ID+"\" class=\"annotator-hl\"").join("class=\"highlightdrug\" id=\""+drug1ID+"\"");
-    quotestring = quotestring.split("id=\""+drug2ID+"\" class=\"annotator-hl\"").join("class=\"highlightdrug\" id=\""+drug2ID+"\"");
-    $("#quote").html(quotestring);
+    //deselect drug
+    var quotecontent = $("#quotearea").html();
+    var element = $(quotecontent);//convert string to JQuery element
+
+    element.find(".highlightdrug").each(function(index) {
+        var text = $(this).text();//get span content
+        $(this).replaceWith(text);//replace all span with just content
+    });
+
+    quotecontent = "<p>" + element.html() + "</p>";//get back new string
+
+    //select drug
+    drug1Index = findIndex(quotecontent, drug1, drug1Index);
+    drug2Index = findIndex(quotecontent, drug2, drug2Index);
+    var drug1End = drug1Index + drug1.length;
+    var drug2End = drug2Index + drug2.length;
+    if ((drug1Index <= drug2Index && drug1End >= drug2Index) || (drug2Index <= drug1Index && drug2End >= drug1Index)) {
+        var end = Math.max(drug1End, drug2End);
+        var start = Math.min(drug1Index, drug2Index);
+        quotecontent = quotecontent.substring(0, start) + "<span class=\"highlightdrug\">" + quotecontent.substring(start, end) + "</span>" + quotecontent.substring(end, quotecontent.length);
+    } else {
+        if (drug1Index <= drug2Index) {
+            quotecontent = quotecontent.substring(0, drug1Index) + "<span class=\"highlightdrug\">" + drug1 + "</span>" +
+                            quotecontent.substring(drug1End, drug2Index) + "<span class=\"highlightdrug\">" + drug2 + "</span>" +
+                            quotecontent.substring(drug2End, quotecontent.length);
+        } else {
+            quotecontent = quotecontent.substring(0, drug2Index) + "<span class=\"highlightdrug\">" + drug2 + "</span>" +
+                            quotecontent.substring(drug2End, drug1Index) + "<span class=\"highlightdrug\">" + drug1 + "</span>" +
+                            quotecontent.substring(drug1End, quotecontent.length);
+        }
+    }
+    $("#quotearea").html(quotecontent);
 }
 
 
