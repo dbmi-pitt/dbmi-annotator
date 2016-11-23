@@ -1,2 +1,11 @@
-Query Micropublication annotations from Relational database (Postgres) mpevidence 
-Translate annotation to JSON format and load into Elastico document store
+(1) Query Micropublication annotations from Relational database (Postgres) mpevidence 
+(2) Translate annotation to JSON format and load into Elastico document store
+
+python load-rdb-annotations.py <pg hostname> <pg username> <pg password> <es hostname> <annotation author>
+
+Development mode:
+ex. 
+$ python load-rdb-annotations.py localhost dbmiannotator dbmi2016 localhost test@gmail.com
+
+Docker container:
+$ python load-rdb-annotations.py postgres dbmiannotator dbmi2016 elasticsearch test@gmail.com

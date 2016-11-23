@@ -22,7 +22,7 @@ if len(sys.argv) > 5:
 	PASSWORD = str(sys.argv[4])
 	isClean = str(sys.argv[5])
 else:
-	print "Usage: loadAnnotatorAnnsToRDB.py <pghostname> <pgport> <pguser> <pgpassword> <clean existing data (1: yes, 0: no)>"
+	print "Usage: loadAnnotatorAnnsToRDB.py <pg hostname> <pg port> <pg username> <pg password> <clean existing data (1: yes, 0: no)>"
 	sys.exit(1)
 
 # UTILS ##########################################################################

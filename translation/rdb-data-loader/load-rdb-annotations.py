@@ -12,17 +12,24 @@ sys.path.insert(0, './model')
 from micropublication import Annotation, DataMaterialRow, DMItem, DataItem, MaterialDoseItem, MaterialParticipants
 
 ######################### VARIABLES ##########################
-#HOSTNAME = 'localhost'
-HOSTNAME = 'postgres'
+ES_PORT = 9200
 DB_SCHEMA = 'mpevidence'
-DB_CONFIG = "config/DB-config.txt"
 MP_ANN_TEMPLATE = "template/mp-annotation-template.json"
 MP_DATA_TEMPLATE = "template/mp-data-template.json"
 HIGHLIGHT_TEMPLATE = "template/highlight-annotation-template.json"
-ES_PORT = 9200
-AUTHOR = "test@gmail.com"
 
 mpDataL = ["auc", "cmax", "clearance", "halflife"]
+
+if len(sys.argv) > 5:
+	PG_HOSTNAME = str(sys.argv[1])
+	PG_USERNAME = str(sys.argv[2])
+	PG_PASSWORD = str(sys.argv[3])
+	ES_HOSTNAME = str(sys.argv[4])
+	AUTHOR = str(sys.argv[5])
+else:
+	print "Usage: loadDomeoAnnsToRDB.py <pg hostname> <pg username> <pg password> <es hostname> <annotation author>"
+	sys.exit(1)
+
 
 ######################### QUERY MP Annotation ##########################
 # query mp claim annotation by author name
@@ -281,7 +288,7 @@ def loadHighlightAnnotation(rawurl, content, email):
 	annotation["created"] = "2016-09-19T18:33:51.179625+00:00" 
 	annotation["updated"] = "2016-09-19T18:33:51.179625+00:00"
 
-	es = Elasticsearch(hosts = [{'host': 'elasticsearch', 'port'=ES_PORT}]) # by default we connect to localhost:9200	
+	es = Elasticsearch(hosts = [{'host': ES_HOSTNAME, 'port': ES_PORT}]) # by default we connect to localhost:9200	
 	es.index(index="annotator", doc_type="annotation", id=uuid.uuid4(), body=json.dumps(annotation))
 
 # load mp annotation to specific account by email
@@ -365,7 +372,7 @@ def loadMpAnnotation(annotation, email):
 	mpAnn["rawurl"] = rawurl # Document source url
 	mpAnn["uri"] = uri
 
-	es = Elasticsearch([{'host': 'elasticsearch', 'port'=ES_PORT}]) # by default we connect to localhost:9200  
+	es = Elasticsearch([{'host': ES_HOSTNAME, 'port': ES_PORT}]) # by default we connect to localhost:9200  
 	es.index(index="annotator", doc_type="annotation", id=uuid.uuid4(), body=json.dumps(mpAnn))
 
 ######################### CONFIG ##########################
@@ -380,18 +387,8 @@ def loadTemplateInJson(path):
 # postgres connection
 def connectPostgres():
 
-	dbconfig = file = open(DB_CONFIG)
-	if dbconfig:
-		for line in dbconfig:
-			if "USERNAME" in line:
-				DB_USER = line[(line.find("USERNAME=")+len("USERNAME=")):line.find(";")]
-			elif "PASSWORD" in line:
-				DB_PWD = line[(line.find("PASSWORD=")+len("PASSWORD=")):line.find(";")]
-		conn = psycopg2.connect(host=HOSTNAME, user=DB_USER, password=DB_PWD, dbname=DB_SCHEMA)
-		print("Postgres connection created")
-	else:
-		print "Postgres configuration file is not found: " + dbconfig
-
+	conn = psycopg2.connect(host=PG_HOSTNAME, user=PG_USERNAME, password=PG_PASSWORD, dbname=DB_SCHEMA)
+	print("Postgres connection created")
 	return conn
 
 ######################### TESTING ##########################

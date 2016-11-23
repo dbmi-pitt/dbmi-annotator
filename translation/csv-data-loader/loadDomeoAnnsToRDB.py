@@ -21,7 +21,7 @@ if len(sys.argv) > 5:
 	PASSWORD = str(sys.argv[4])
 	isClean = str(sys.argv[5])
 else:
-	print "Usage: loadDomeoAnnsToRDB.py <pghostname> <pgport> <pguser> <pgpassword> <clean existing data (1: yes, 0: no)>"
+	print "Usage: loadDomeoAnnsToRDB.py <pg hostname> <pg port> <pg username> <pg password> <clean existing data (1: yes, 0: no)>"
 	sys.exit(1)
 
 
@@ -452,7 +452,7 @@ def main():
 		clearall(conn)
 		# truncateall(conn) # don't need delete tables
 		conn.commit()
-		print("[INFO] clean tables done ...")
+		print("[INFO] clean data done ...")
 	
 	print("[INFO] begin load data ...")
 	for csvfile in csvfiles:
