@@ -9,31 +9,32 @@ reload(sys)
 sys.setdefaultencoding('utf8')
 
 #1. pip install psycopg2
-#2. create config file: "config/DB-config.txt"
 
 csvfiles = ['data/pkddi-katrina-latest-08152016.csv', 'data/pkddi-amy-latest-08152016.csv']
-db_config_files = "config/DB-config.txt"
-hostname = 'localhost'
-database = 'mpevidence'
 
-def connect_postgreSQL(db_config_files):
-	dbconfig = file = open(db_config_files)
-	if dbconfig:
-		for line in dbconfig:
-			if "USERNAME" in line:
-				username = line[(line.find("USERNAME=")+len("USERNAME=")):line.find(";")]
-			elif "PASSWORD" in line:
-				password = line[(line.find("PASSWORD=")+len("PASSWORD=")):line.find(";")]
-		myConnection = psycopg2.connect(host=hostname, user=username, password=password, dbname=database)	
-		print("Postgres connection created")
-	else:
-		print "Postgres configuration file is not found: " + dbconfig
+DATABASE = 'mpevidence'
 
+if len(sys.argv) > 5:
+	HOSTNAME = str(sys.argv[1])
+	PORT = str(sys.argv[2])
+	USERNAME = str(sys.argv[3])
+	PASSWORD = str(sys.argv[4])
+	isClean = str(sys.argv[5])
+else:
+	print "Usage: loadDomeoAnnsToRDB.py <pghostname> <pgport> <pguser> <pgpassword> <clean existing data (1: yes, 0: no)>"
+	sys.exit(1)
+
+
+def connect_postgreSQL():
+
+	myConnection = psycopg2.connect(host=HOSTNAME, user=USERNAME, password=PASSWORD, dbname=DATABASE)	
+	print("Postgres connection created")
 	return myConnection
 
+
 def utf_8_encoder(unicode_csv_data):
-    for line in unicode_csv_data:
-        yield line.encode('utf-8')
+	for line in unicode_csv_data:
+		yield line.encode('utf-8')
 
 
 def load_highlight(conn, highlightD):
@@ -443,17 +444,17 @@ def load_data_from_csv(conn, reader, creator):
 
 def main():
 
-	print("[info] connect postgreSQL ...")
-	conn = connect_postgreSQL(db_config_files)
+	print("[INFO] connect postgreSQL ...")
+	conn = connect_postgreSQL()
 
-	#print("[info] clean before load ...")
-	#clearall(conn)
-	#truncateall(conn)
-	#conn.commit()
-
-	#show_table(conn, 'mp_claim_annotation') 	#show table
+	if isClean == 1:
+		print("[INFO] begin clean before load ...")
+		clearall(conn)
+		# truncateall(conn) # don't need delete tables
+		conn.commit()
+		print("[INFO] clean tables done ...")
 	
-	print("[info] load data ...")
+	print("[INFO] begin load data ...")
 	for csvfile in csvfiles:
 		preprocess(csvfile)
 		reader = csv.DictReader(utf_8_encoder(open('data/preprocess-domeo.csv', 'r')))
@@ -461,7 +462,7 @@ def main():
 		load_data_from_csv(conn, reader, creator)
 
 	conn.close()
-	print("[info] load completed ...")
+	print("[INFO] load completed ...")
 
 
 if __name__ == '__main__':

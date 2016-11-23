@@ -12,25 +12,24 @@ sys.setdefaultencoding('utf8')
 #2. create/edit config file: "config/DB-config.txt"
 
 csvfiles = ['data/mp-annotat2-10182016.tsv']
-db_config_files = "config/DB-config.txt"
-hostname = 'localhost'
-database = 'mpevidence'
+DATABASE = 'mpevidence'
 curr_date = datetime.datetime.now()
 
-# UTILS ##########################################################################
-def connect_postgreSQL(db_config_files):
-	dbconfig = file = open(db_config_files)
-	if dbconfig:
-		for line in dbconfig:
-			if "USERNAME" in line:
-				username = line[(line.find("USERNAME=")+len("USERNAME=")):line.find(";")]
-			elif "PASSWORD" in line:
-				password = line[(line.find("PASSWORD=")+len("PASSWORD=")):line.find(";")]
-		myConnection = psycopg2.connect(host=hostname, user=username, password=password, dbname=database)	
-		print("Postgres connection created")
-	else:
-		print "Postgres configuration file is not found: " + dbconfig
+if len(sys.argv) > 5:
+	HOSTNAME = str(sys.argv[1])
+	PORT = str(sys.argv[2])
+	USERNAME = str(sys.argv[3])
+	PASSWORD = str(sys.argv[4])
+	isClean = str(sys.argv[5])
+else:
+	print "Usage: loadAnnotatorAnnsToRDB.py <pghostname> <pgport> <pguser> <pgpassword> <clean existing data (1: yes, 0: no)>"
+	sys.exit(1)
 
+# UTILS ##########################################################################
+def connect_postgreSQL():
+
+	myConnection = psycopg2.connect(host=HOSTNAME, user=USERNAME, password=PASSWORD, dbname=DATABASE)	
+	print("Postgres connection created")	
 	return myConnection
 
 # add column: predicate, subject, object, subjectDose, objectDose
@@ -498,25 +497,24 @@ def load_data_from_csv(conn, reader, creator):
 
 def main():
 
-	print("[info] connect postgreSQL ...")
-	conn = connect_postgreSQL(db_config_files)
+	print("[INFO] connect postgreSQL ...")
+	conn = connect_postgreSQL()
 
-	print("[info] clean before load ...")
-	clearall(conn)
-	#truncateall(conn)
-	conn.commit()
-
-	#show_table(conn, 'mp_claim_annotation') 	#show table
+	if isClean == 1:
+		print("[INFO] begin clean before load ...")
+		clearall(conn)
+		#truncateall(conn) # don't need delete tables
+		conn.commit()
+		print("[INFO] clean data done ...")
 	
-	print("[info] load data ...")
+	print("[INFO] begin load data ...")
 	for csvfile in csvfiles:
 		preprocess(csvfile)
 		reader = csv.DictReader(utf_8_encoder(open('data/preprocess-annotator.csv', 'r')))
 		creator = csvfile.split('-')[1]
 		load_data_from_csv(conn, reader, creator)
-
 	conn.close()
-	print("[info] load completed ...")
+	print("[INFO] load completed ...")
 
 
 if __name__ == '__main__':

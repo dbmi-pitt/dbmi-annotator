@@ -2,30 +2,23 @@
 build database : running DDL
 --------------------------------------------------------------------
 
-RDB schema creation script in Postgres DB:
+(1) Install postgres DB if it's development mode. Create database "mpevidence". Pg username "dbmiannotator" and password "dbmi2016" as default 
+
+(2) Execute RDB schema creation script in Postgres DB:
 ../mp_evidence_schema/mp_evidence_schema_08202016.sql
 
 --------------------------------------------------------------------
 preparetion
 --------------------------------------------------------------------
 
-(1) install python postgres connector 
+(1) Install python postgres connector 
 pip install psycopg2
 
-(2) configure data for loadDomeoAnnsToRDB.py
+(2) Configure data for loadDomeoAnnsToRDB.py
 
-hostname = 'localhost'
-database = 'mpevidence'
 csvfiles = ['data/pkddi-katrina-latest-08152016.csv', 'data/pkddi-amy-latest-08152016.csv']
 
 Note: If csv comes from domeo, replace cl to clearance and t12 to halflife
-
-(3) create config/DB-config.txt to store account information
-
-$ cp config/DB-config-sample.txt config/DB-config.txt
-
-USERNAME=<USERNAME>;
-PASSWORD=<PASSWORD>;
 
 --------------------------------------------------------------------
 domeo annotations translate from csv and load into postgres DB
@@ -33,7 +26,13 @@ domeo annotations translate from csv and load into postgres DB
 
 (1) execute ETL program loadDomeoAnnsToRDB.py 
 
-$ python loadDomeoAnnsToRDB.py
+$ python loadDomeoAnnsToRDB.py <pghostname> <pgport> <pguser> <pgpassword> <clean existing data (1: yes, 0: no)>
+
+Development mode:
+ex. python loadDomeoAnnsToRDB.py localhost 5432 dbmiannotator dbmi2016 1
+
+Docker container:
+$ python loadDomeoAnnsToRDB.py postgres 5432 dbmiannotator dbmi2016 1
 
 1. optional: clean all data in table
 2. preprocess csv, generate preprocess-domeo.csv
@@ -45,11 +44,17 @@ dbmi-annotator annotations translate from csv and load into postgres DB
 
 (1) execute ETL program loadAnnotatorAnnsToRDB.py 
 
-$ python loadAnnotatorAnnsToRDB.py
+$ python loadAnnotatorAnnsToRDB.py <pghostname> <pgport> <pguser> <pgpassword> <clean existing data (1: yes, 0: no)>
+
+Development mode:
+ex. $ python loadAnnotatorAnnsToRDB.py localhost 5432 dbmiannotator dbmi2016 0
+
+Docker container:
+$ python loadAnnotatorAnnsToRDB.py postgres 5432 dbmiannotator dbmi2016 0
 
 1. optional: clean all data in table
 2. preprocess csv, generate preprocess-annotator.csv
-3. load data into schema mpevidence
+3. load data into postgres database schema mpevidence
 
 --------------------------------------------------------------------
 D2R server mapping

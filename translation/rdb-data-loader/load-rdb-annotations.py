@@ -12,13 +12,14 @@ sys.path.insert(0, './model')
 from micropublication import Annotation, DataMaterialRow, DMItem, DataItem, MaterialDoseItem, MaterialParticipants
 
 ######################### VARIABLES ##########################
-HOSTNAME = 'localhost'
+#HOSTNAME = 'localhost'
+HOSTNAME = 'postgres'
 DB_SCHEMA = 'mpevidence'
 DB_CONFIG = "config/DB-config.txt"
 MP_ANN_TEMPLATE = "template/mp-annotation-template.json"
 MP_DATA_TEMPLATE = "template/mp-data-template.json"
 HIGHLIGHT_TEMPLATE = "template/highlight-annotation-template.json"
-ES_PORT = 9250
+ES_PORT = 9200
 AUTHOR = "test@gmail.com"
 
 mpDataL = ["auc", "cmax", "clearance", "halflife"]
@@ -280,7 +281,7 @@ def loadHighlightAnnotation(rawurl, content, email):
 	annotation["created"] = "2016-09-19T18:33:51.179625+00:00" 
 	annotation["updated"] = "2016-09-19T18:33:51.179625+00:00"
 
-	es = Elasticsearch(port=ES_PORT) # by default we connect to localhost:9200	
+	es = Elasticsearch(hosts = [{'host': 'elasticsearch', 'port'=ES_PORT}]) # by default we connect to localhost:9200	
 	es.index(index="annotator", doc_type="annotation", id=uuid.uuid4(), body=json.dumps(annotation))
 
 # load mp annotation to specific account by email
@@ -364,7 +365,7 @@ def loadMpAnnotation(annotation, email):
 	mpAnn["rawurl"] = rawurl # Document source url
 	mpAnn["uri"] = uri
 
-	es = Elasticsearch(port=ES_PORT) # by default we connect to localhost:9200  
+	es = Elasticsearch([{'host': 'elasticsearch', 'port'=ES_PORT}]) # by default we connect to localhost:9200  
 	es.index(index="annotator", doc_type="annotation", id=uuid.uuid4(), body=json.dumps(mpAnn))
 
 ######################### CONFIG ##########################
