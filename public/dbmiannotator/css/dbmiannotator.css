@@ -181,12 +181,12 @@ ul.mp-sub-menu-2{
 
 /* annotator table - material/data panel */
 #mp-claim-data-tb{
-    margin-left: 15%  !important;
-    margin-right: 15% !important;
+    margin-left: 8%  !important;
+    margin-right: 8% !important;
     margin-bottom: 5% !important;
-    width: 70% !important;
+    width: 80% !important;
     /* height: 80% !important; */
-	min-width: 1000px !important;
+	  min-width: 100px !important;
     max-height: 300px !important;
     font-size: 15px !important;
     border-collapse: initial !important;
