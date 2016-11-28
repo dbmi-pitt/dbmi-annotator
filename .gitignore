@@ -1,5 +1,6 @@
 # config file
 config/config.js
+config/production.conf
 
 # browserify compiled js bundle 
 public/dbmiannotator/js/app.bundle.js

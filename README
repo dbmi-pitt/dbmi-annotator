@@ -1,7 +1,10 @@
 ############################################################
 Author
 ############################################################
-Yifan Ning, Wen Zhang
+Yifan Ning, Wen Zhang, Richard Boyce
+
+University of Pittsburgh
+The MIT License (MIT)
 
 ############################################################
 Overview 
@@ -13,7 +16,62 @@ DDI annotation is purpose for represents a drug drug interaction information in 
 Drug highlight annotation in the text quote of DDI annotation will be added to the field drug mentions, a list box including all drug mention options.
 
 ############################################################
-How to run 
+How to run - Production
+############################################################
+
+(1) Install docker(v1.12.3), docker-compose (v1.8.1) and apache (v2.4) server
+
+    Apache2 server configuration:
+
+    ## DBMI-Annotator Docker configuration ###############################
+    # proxy for docker exposed service at port 8085
+    ProxyPass /dbmiannotator http://localhost:8085/dbmiannotator
+    RewriteRule /dbmiannotator(.*) http://localhost:8085/dbmiannotator$1 [P]
+
+    # proxy for docker exposed service at port 8085 for annotator store
+    ProxyPass /annotatorstore http://localhost:8085/annotatorstore
+    RewriteRule /annotatorstore(.*) http://localhost:8085/annotatorstore$1 [P]
+
+    # stylesheet folder relocate at Document root(dailymed, PMC, wiley)
+    RewriteRule /dbmiannotator/dailymed(.*) http://localhost/DDI-labels/dailymed$1 [P]
+    RewriteRule /dbmiannotator/PMC(.*)_files/(.*) http://localhost/PMC/PMC$1_files/$2 [P]
+    RewriteRule /dbmiannotator/wiley(.*)_files/(.*) http://localhost/wiley/wiley$1_files/$2 [P]
+
+(2) Create local volume for postgres and elasticsearch data mount point
+
+    $ docker volume create --name postgres-volume -d local
+    $ docker volume create --name elasticsearch-volume -d local
+
+(3) Run dbmi-annotator with all dependencies in docker container
+
+    git clone 
+    $ cd docker-dbmi-annotator/dbmi-annotator
+    $ docker-compose up
+
+Optional: pre-load annotations from csv to DB mpevidence 
+
+    $ python loadDomeoAnnsToRDB.py <pghostname> <pgport> <pguser> <pgpassword> <clean existing data (1: yes, 0: no)>
+
+    ex. $ python loadDomeoAnnsToRDB.py postgres 5432 dbmiannotator dbmi2016 1
+
+    1. optional: clean all data in table
+    2. preprocess csv, generate preprocess-domeo.csv
+    3. load data into schema mpevidence
+
+Optional: pre-load annotations from postgres DB mpevidence to elasticsearch
+
+    $ docker exec -it dbmi-annotator bash
+    $ cd translation/rdb-data-loader
+    $ python load-rdb-annotations.py <pg hostname> <pg username> <pg password> <es hostname> <annotation author>
+
+    ex. python load-rdb-annotations.py postgres dbmiannotator dbmi2016 elasticsearch test@gmail.com
+
+
+For how to build production mode via docker:
+https://github.com/dbmi-pitt/docker-dbmi-annotator/blob/master/README
+
+############################################################
+How to run - Devlopment
 ############################################################
 
 --------------------------
