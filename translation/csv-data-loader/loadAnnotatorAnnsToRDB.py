@@ -128,10 +128,10 @@ def update_oa_highlight_body(conn, highlight_annotation_id, oa_highlight_body_id
 def generateHighlightSet(row, highlightD):
 	subjectDrug = row["subject"]; objectDrug = row["object"]; source = row["document"]
 	if source in highlightD:
-		highlightD[source].add(subjectDrug.lower())
-		highlightD[source].add(objectDrug.lower())
+		highlightD[source].add(subjectDrug)
+		highlightD[source].add(objectDrug)
 	else:
-		highlightD[source] = Set([subjectDrug.lower(), objectDrug.lower()])
+		highlightD[source] = Set([subjectDrug, objectDrug])
 
 # CLEAN SCHEMA ################################################################
 def truncateall(conn):

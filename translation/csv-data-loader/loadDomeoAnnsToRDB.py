@@ -86,10 +86,10 @@ def generateHighlightSet(row, highlightD):
 	#print source + "| " + subjectDrug + " | " + objectDrug	
 
 	if source in highlightD:
-		highlightD[source].add(subjectDrug.lower())
-		highlightD[source].add(objectDrug.lower())
+		highlightD[source].add(subjectDrug)
+		highlightD[source].add(objectDrug)
 	else:
-		highlightD[source] = Set([subjectDrug.lower(), objectDrug.lower()])
+		highlightD[source] = Set([subjectDrug, objectDrug])
 
 
 def truncateall(conn):
