@@ -21,11 +21,11 @@ RUN npm install
 # Bundle dbmi-annotator source
 COPY . /home/dbmi-annotator
 
-# Configure client side requests
-RUN ./node_modules/.bin/browserify app.js -o ./public/dbmiannotator/js/app.bundle.js
-
 # Use Production mode configuration for server side requests
 COPY config/production.conf /home/dbmi-annotator/config/config.js
+
+# Configure client side requests
+RUN ./node_modules/.bin/browserify app.js -o ./public/dbmiannotator/js/app.bundle.js
 
 # Install dependencies for annotation pre-load program
 RUN pip install psycopg2 elasticsearch
