@@ -6,7 +6,7 @@ MAINTAINER Yifan Ning "yin2@pitt.edu"
 # FROM node:0.12.17
 
 RUN apt-get update
-RUN apt-get install -y nodejs npm python-pip libpq-dev python-dev emacs
+RUN apt-get install -y nodejs npm python-pip libpq-dev python-dev emacs curl
 
 RUN update-alternatives --install /usr/bin/node node /usr/bin/nodejs 10
 
@@ -29,13 +29,6 @@ RUN ./node_modules/.bin/browserify app.js -o ./public/dbmiannotator/js/app.bundl
 
 # Install dependencies for annotation pre-load program
 RUN pip install psycopg2 elasticsearch
-
-# # Load SPLs annotation to database mpevidence 
-# WORKDIR /home/dbmi-annotator/translation/csv-data-loader
-# CMD [ "python", "loadDomeoAnnsToRDB.py"]
-
-# Start nodejs server
-# WORKDIR /home/dbmi-annotator
 
 EXPOSE 3000
 CMD [ "npm", "start" ]
