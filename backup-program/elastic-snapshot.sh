@@ -7,7 +7,7 @@
 
 
 # Register repo
-# $ curl -XPUT 'http://localhost:9200/_snapshot/dbmiannotator-elastic-snapshot' -d '{
+# $ curl -XPUT 'http://<host>:<port>/_snapshot/dbmiannotator-elastic-snapshot' -d '{
 #     "type": "fs",
 #     "settings": {
 #         "location": "/home/dbmiannotator-elastic-snapshot",
@@ -16,24 +16,37 @@
 # }'
 
 
+
 # Configuration
 LIMIT=30  # Number of backups
 REPO=dbmiannotator-elastic-snapshot # Name of snapshot repository
-PORT=9200  # Elastic port
 
-# Create snapshot
-SNAPSHOT=`date +%Y%m%d-%H%M%S`
-curl -XPUT "localhost:$PORT/_snapshot/$REPO/$SNAPSHOT?wait_for_completion=true"
+HOST=$1
+PORT=$2
+
+if [[ -z $HOST || -z $PORT ]]; then
+    echo "Usage: bash elastic-snapshot.sh <hostname> <port>"
+    echo "ex. bash elastic-snapshot.sh localhost 9200"
+    exit
+else
+
+    curl -XPUT "http://$HOST:$PORT/_snapshot/dbmiannotator-elastic-snapshot" -d '{ "type": "fs", "settings": { "location": "/home/dbmiannotator-elastic-snapshot", "compress": true }}'
+
+    # Create snapshot
+    SNAPSHOT=`date +%Y%m%d-%H%M%S`
+    curl -XPUT "$HOST:$PORT/_snapshot/$REPO/$SNAPSHOT?wait_for_completion=true"
 
 
-# Get a list of snapshots that we want to delete
-SNAPSHOTS=`curl -s -XGET "localhost:$PORT/_snapshot/$REPO/_all" \
-  | jq -r ".snapshots[:-${LIMIT}][].snapshot"`
+    # Get a list of snapshots that we want to delete
+    SNAPSHOTS=`curl -s -XGET "$HOST:$PORT/_snapshot/$REPO/_all" | jq -r ".snapshots[:-${LIMIT}][].snapshot"`
 
-# Loop over the results and delete each snapshot
-for SNAPSHOT in $SNAPSHOTS
-do
- echo "Deleting snapshot: $SNAPSHOT"
- curl -s -XDELETE "localhost:$PORT/_snapshot/$REPO/$SNAPSHOT?pretty"
-done
-echo "Done!"
+    # Loop over the results and delete each snapshot
+    for SNAPSHOT in $SNAPSHOTS
+    do
+        echo "Deleting snapshot: $SNAPSHOT"
+        curl -s -XDELETE "$HOST:$PORT/_snapshot/$REPO/$SNAPSHOT?pretty"
+    done
+    echo "Create snapshot - Done!"
+fi
+
+

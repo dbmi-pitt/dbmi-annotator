@@ -3,16 +3,28 @@
 # Restore a snapshot 
 
 # Configuration
-SNAPSHOT=20160822-164139
+
 REPO=dbmiannotator-elastic-snapshot # Name of snapshot repository
-PORT=9200
-INDEX=annotator
 
-# Close the index
-curl -XPOST 'http://localhost:$PORT/$INDEX/_close'
+HOST=$1
+PORT=$2
+SNAPSHOT=$3
 
-# Restore the snapshot 
-curl -XPOST 'http://localhost:$PORT/_snapshot/$REPO/$SNAPSHOT/_restore'
+if [[ -z $HOST || -z $PORT || -z $SNAPSHOT ]]; then
+   echo "Usage: bash elastic-restore.sh <hostname> <port> <snapshot name>"
+   echo "ex. bash elastic-restore.sh localhost 9200 20160822-164139"
+   exit
+else
+    INDEX=annotator
 
-# Re-open the index
-curl -XPOST 'http://localhost:$PORT/$INDEX/_open'
+    # Close the index
+    curl -XPOST "http://$HOST:$PORT/$INDEX/_close"
+
+    # Restore the snapshot 
+    curl -XPOST "http://$HOST:$PORT/_snapshot/$REPO/$SNAPSHOT/_restore"
+    
+    # Re-open the index
+    curl -XPOST "http://$HOST:$PORT/$INDEX/_open"
+    echo "Restore snapshot - Done!"
+fi
+

@@ -2,7 +2,9 @@ Elasticsearch 1.7.1 backup program
 
 (1) snapshot script
 
-$ bash elastic-snapshot.sh
+$ bash elastic-snapshot.sh <host> <port>
+
+ex. bash elastic-snapshot.sh localhost 9200
 
 If having error: location [] doesn't match any of the locations specified by path.repo
 Add below to /path/to/elasticsearch-1.7.1/config/elasticsearch.yml
@@ -12,7 +14,9 @@ path.repo: /home/dbmiannotator-elastic-snapshot
 
 (2) restore program
 
-$ bash elastic-restore.sh
+$ bash elastic-restore.sh <host> <port> <snapshot name>
+
+ex. bash elastic-restore.sh localhost 9200 20160822-164139
 
 Reference: https://www.elastic.co/guide/en/elasticsearch/reference/1.7/modules-snapshots.html 
 
@@ -41,7 +45,7 @@ curl -XPUT 'http://localhost:9200/_snapshot/dbmiannotator-elastic-snapshot' -d '
 curl -XPUT "localhost:9200/_snapshot/dbmiannotator-elastic-snapshot/test?wait_for_completion=true" -d '{"ignore_unavailable": true}'
 
 # List all snapshots
-curl -XPUT "localhost:9200/_snapshot/_all"
+curl -XGET "localhost:9200/_snapshot/_all"
 
 # Delete snapshot
 curl -s -XDELETE "localhost:9200/_snapshot/dbmiannotator-elastic-snapshot/test?pretty"

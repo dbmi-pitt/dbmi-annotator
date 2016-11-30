@@ -6,7 +6,7 @@ MAINTAINER Yifan Ning "yin2@pitt.edu"
 # FROM node:0.12.17
 
 RUN apt-get update
-RUN apt-get install -y nodejs npm python-pip libpq-dev python-dev emacs curl
+RUN apt-get install -y nodejs npm python-pip libpq-dev python-dev emacs curl jq
 
 RUN update-alternatives --install /usr/bin/node node /usr/bin/nodejs 10
 
