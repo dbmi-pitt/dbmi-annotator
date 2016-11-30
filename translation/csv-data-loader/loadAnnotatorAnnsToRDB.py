@@ -9,7 +9,6 @@ reload(sys)
 sys.setdefaultencoding('utf8')
 
 #1. pip install psycopg2
-#2. create/edit config file: "config/DB-config.txt"
 
 csvfiles = ['data/mp-annotat2-10182016.tsv']
 DATABASE = 'mpevidence'

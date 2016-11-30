@@ -8,7 +8,7 @@ If having error: location [] doesn't match any of the locations specified by pat
 Add below to /path/to/elasticsearch-1.7.1/config/elasticsearch.yml
 
 Paths:
-path.repo: /home/yin2/dbmiannotator-backup
+path.repo: /home/dbmiannotator-elastic-snapshot
 
 (2) restore program
 
@@ -35,16 +35,16 @@ curl -XPUT 'localhost:9200/annotator/_settings' -d '{"index.routing.allocation.d
 (4) Manually backup
 
 # register repo
-curl -XPUT 'http://localhost:9200/_snapshot/dbmiannotator_backup' -d '{ "type": "fs", "settings": { "location": "/home/yin2/dbmiannotator-backup", "compress": true }}'
+curl -XPUT 'http://localhost:9200/_snapshot/dbmiannotator-elastic-snapshot' -d '{ "type": "fs", "settings": { "location": "/home/dbmiannotator-elastic-snapshot", "compress": true }}'
 
 # Create snapshot
-curl -XPUT "localhost:9200/_snapshot/dbmiannotator_backup/test?wait_for_completion=true" -d '{"ignore_unavailable": true}'
+curl -XPUT "localhost:9200/_snapshot/dbmiannotator-elastic-snapshot/test?wait_for_completion=true" -d '{"ignore_unavailable": true}'
 
 # List all snapshots
 curl -XPUT "localhost:9200/_snapshot/_all"
 
 # Delete snapshot
-curl -s -XDELETE "localhost:9200/_snapshot/dbmiannotator_backup/test?pretty"
+curl -s -XDELETE "localhost:9200/_snapshot/dbmiannotator-elastic-snapshot/test?pretty"
 
 # Get cluster status
 curl -XGET http://localhost:9200/_cat/shards

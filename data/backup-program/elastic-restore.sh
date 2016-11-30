@@ -4,8 +4,8 @@
 
 # Configuration
 SNAPSHOT=20160822-164139
-REPO=dbmiannotator_backup # Name of snapshot repository
-PORT=9250
+REPO=dbmiannotator-elastic-snapshot # Name of snapshot repository
+PORT=9200
 INDEX=annotator
 
 # Close the index

@@ -7,10 +7,10 @@
 
 
 # Register repo
-# $ curl -XPUT 'http://localhost:9200/_snapshot/dbmiannotator_backup' -d '{
+# $ curl -XPUT 'http://localhost:9200/_snapshot/dbmiannotator-elastic-snapshot' -d '{
 #     "type": "fs",
 #     "settings": {
-#         "location": "/home/yin2/dbmiannotator-backup",
+#         "location": "/home/dbmiannotator-elastic-snapshot",
 #         "compress": true
 #     }
 # }'
@@ -18,8 +18,8 @@
 
 # Configuration
 LIMIT=30  # Number of backups
-REPO=dbmiannotator_backup # Name of snapshot repository
-PORT=9250  # Elastic port
+REPO=dbmiannotator-elastic-snapshot # Name of snapshot repository
+PORT=9200  # Elastic port
 
 # Create snapshot
 SNAPSHOT=`date +%Y%m%d-%H%M%S`
