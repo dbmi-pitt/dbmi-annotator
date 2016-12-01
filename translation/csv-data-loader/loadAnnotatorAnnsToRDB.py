@@ -499,7 +499,7 @@ def main():
 	print("[INFO] connect postgreSQL ...")
 	conn = connect_postgreSQL()
 
-	if isClean == 1:
+	if isClean == "1":
 		print("[INFO] begin clean before load ...")
 		clearall(conn)
 		#truncateall(conn) # don't need delete tables
