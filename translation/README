@@ -1,0 +1,113 @@
+--------------------------------------------------------------------
+Create database mpevidence: running DDL
+--------------------------------------------------------------------
+
+(1) Install postgres DB if it's development mode. Create database "mpevidence". Pg username "dbmiannotator" and password "dbmi2016" as default 
+
+(2) Execute RDB schema creation script in Postgres DB:
+../mp_evidence_schema/mp_evidence_schema_08202016.sql
+
+--------------------------------------------------------------------
+Preparetion
+--------------------------------------------------------------------
+
+(1) Install python postgres connector 
+pip install psycopg2
+
+(2) Configure data for loadDomeoAnnsToRDB.py
+
+csvfiles = ['data/pkddi-katrina-latest-08152016.csv', 'data/pkddi-amy-latest-08152016.csv']
+
+Note: If csv comes from domeo, replace cl to clearance and t12 to halflife
+
+--------------------------------------------------------------------
+Load domeo annotations from csv and load into postgres DB
+--------------------------------------------------------------------
+
+(1) execute ETL program loadDomeoAnnsToRDB.py 
+
+$ python loadDomeoAnnsToRDB.py <pghostname> <pgport> <pguser> <pgpassword> <clean existing data (1: yes, 0: no)>
+
+Development mode:
+ex. python loadDomeoAnnsToRDB.py localhost 5432 dbmiannotator dbmi2016 1
+
+Docker container:
+$ python loadDomeoAnnsToRDB.py postgres 5432 dbmiannotator dbmi2016 1
+
+1. optional: clean all data in table
+2. preprocess csv, generate preprocess-domeo.csv
+3. load data into schema mpevidence
+
+--------------------------------------------------------------------
+Load dbmi-annotator annotations from csv and load into postgres DB
+--------------------------------------------------------------------
+
+(1) execute ETL program loadAnnotatorAnnsToRDB.py 
+
+$ python loadAnnotatorAnnsToRDB.py <pghostname> <pgport> <pguser> <pgpassword> <clean existing data (1: yes, 0: no)>
+
+Development mode:
+ex. $ python loadAnnotatorAnnsToRDB.py localhost 5432 dbmiannotator dbmi2016 0
+
+Docker container:
+$ python loadAnnotatorAnnsToRDB.py postgres 5432 dbmiannotator dbmi2016 0
+
+1. optional: clean all data in table
+2. preprocess csv, generate preprocess-annotator.csv
+3. load data into postgres database schema mpevidence
+
+--------------------------------------------------------------------
+D2R server mapping
+--------------------------------------------------------------------
+
+D2R server reference: 
+http://d2rq.org/getting-started
+http://d2rq.org/d2r-server#command-line
+
+Run:
+$ cd <path to d2rq directory>
+$ ./d2r-server --port 2020 <path to csv-data-loader/d2r-mapping/mpevidence.ttl>
+
+Open browser at "http://localhost:2020"
+
+--------------------------------------------------------------------
+D2R server RDF dump (graph mpevidence.rdf)
+--------------------------------------------------------------------
+
+Gernerate RDF graph based on d2r mapping configuration 
+Reference: http://d2rq.org/dump-rdf
+
+./dump-rdf -f RDF/XML -o mpevidence.rdf --verbose <path to csv-data-loader/d2r-mapping/mpevidence.ttl>
+
+Count instances of claim in RDF graph for validation
+grep -r "rdf:Description rdf:about=\"http://dikb.org/mpevidence/mp_claim_annotation" mpevidence.rdf 
+
+
+--------------------------------------------------------------------
+Load annotations from postgres DB mpevidence to Elasticsearch store
+--------------------------------------------------------------------
+
+(1) Query Micropublication annotations from Relational database (Postgres) mpevidence 
+(2) Translate annotation to JSON format and load into Elastico document store
+
+python load-rdb-annotations.py <pg hostname> <pg username> <pg password> <es hostname> <annotation author>
+
+Development mode:
+ex. 
+$ python load-rdb-annotations.py localhost dbmiannotator dbmi2016 localhost test@gmail.com
+
+Docker container:
+$ python load-rdb-annotations.py postgres dbmiannotator dbmi2016 elasticsearch test@gmail.com
+
+--------------------------------------------------------------------
+delete specific set of annotations
+--------------------------------------------------------------------
+
+(1) delete by specified query condition
+curl -XDELETE 'http://localhost:9200/annotator/annotation/_query?q=<field>:<value>'
+
+(2) free store size after deletion 
+curl -XPOST 'http://localhost:9200/_optimize?only_expunge_deletes=true'
+
+(3) delete the whole index
+curl -XDELETE 'http://localhost:9200/annotator/'

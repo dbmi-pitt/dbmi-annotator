@@ -388,7 +388,7 @@ def loadTemplateInJson(path):
 def connectPostgres():
 
 	conn = psycopg2.connect(host=PG_HOSTNAME, user=PG_USERNAME, password=PG_PASSWORD, dbname=DB_SCHEMA)
-	print("Postgres connection created")
+	print("[INFO] Postgres connection created ...")
 	return conn
 
 ######################### TESTING ##########################
@@ -427,6 +427,7 @@ def main():
 	loadHighlightAnnotations(highlightD, AUTHOR)
 
 	conn.close()
+	print "[INFO] elasticsearch load completed"
 
 
 if __name__ == '__main__':
