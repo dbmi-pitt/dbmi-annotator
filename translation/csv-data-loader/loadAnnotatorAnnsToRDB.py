@@ -10,7 +10,7 @@ sys.setdefaultencoding('utf8')
 
 #1. pip install psycopg2
 
-csvfiles = ['data/mp-annotat2-10182016.tsv']
+csvfiles = ['data/mp-annotation.tsv']
 DATABASE = 'mpevidence'
 curr_date = datetime.datetime.now()
 
