@@ -33,8 +33,8 @@
          'endOffset': 'integer',
      },
      'negation': 'string',  // assertion supports or refutes
-     // put method name here
-     'method' : {'entered': 'string', 'inferred': 'string'},
+     // put user entered method name here
+     'method' : 'string',
      // mp:data (one or more mp:data supports claim)
      'supportsBy': 
      [
@@ -45,6 +45,8 @@
              'supportsBy': { 
                  'id': 'uuid'
                  'type': 'mp:method',
+                 'value': 'string' // inferred specific evidence type
+
                  // mp:material (material supports method)
                  'supportsBy': {
                     'id': 'uuid',
