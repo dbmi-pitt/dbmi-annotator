@@ -3,8 +3,8 @@
  'uri' : 'httplocalhostDDIlabelstesthtml',
  'rawuri' : 'http://localhost/DDI-labels/test.html',
  'email' : 'xx@gmail.com',
- 'updated' : '2016-05-03T17:39:44.986668+00:00',
- 'created' : '2016-05-03T17:39:44.986668+00:00',
+ 'updated' : '',
+ 'created' : '',
  
  'argues' : { // mp claim
      'id': 'uuid',
@@ -12,7 +12,7 @@
      'qualifiedBy': {
          'Drug1': '',
          'drug1ID' : '',
-         'relationship': 'inhibits',
+         'relationship': '',
          'drug2ID' : '',
          'Drug2': '',
          'precipitant': 'drug1 or drug2'
@@ -32,8 +32,9 @@
          'startOffset': 'integer',
          'endOffset': 'integer',
      },
+     'negation': 'string',  // assertion supports or refutes
      // put method name here
-     'method' : '',
+     'method' : {'entered': 'string', 'inferred': 'string'},
      // mp:data (one or more mp:data supports claim)
      'supportsBy': 
      [
