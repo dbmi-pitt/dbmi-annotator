@@ -87,8 +87,11 @@ function updateClaimAndData(annotations, annotationId) {
                 //console.log("mp selected: " + annotation.argues.label);
                 claimIsSelected = 'selected="selected"';     
                 // cache total number of data & material for current claim
-                totalDataNum = annotation.argues.supportsBy.length;      
-                dataTable = createDataTable(annotation); // create data table           
+                totalDataNum = annotation.argues.supportsBy.length;  
+                //if it is not rejected, show the data table
+                if (currAnnotation.rejected == null || currAnnotation.rejected == undefined) {
+                    dataTable = createDataTable(annotation); // create data table  
+                }            
             }
             
             claim = annotation.argues;                    
@@ -106,16 +109,19 @@ function updateClaimAndData(annotations, annotationId) {
         // Claim 
         claimPanel = "<table id='mp-claim-method-tb'>";
         claimPanel += "<tr><td>" + claimListbox + "</td></tr>";
-        claimPanel += "<tr><td>Methods: " + methodListbox + "</td></tr>"
+        claimPanel += "<tr><td>Methods: " + methodListbox + "</td></tr>";
         
         claimPanel += "<tr><td><button id='edit-claim-btn' type='button' onclick='editClaim()' style='float:left; font-size:12px'>Edit Claim</button><button id='view-claim-btn' type='button' onclick='viewClaim()' style='float: right; font-size:12px'>View Claim</button></td></tr></table>";
         
-        // Data & Material - add new data button 
-        dataPanel = "<button id='add-new-data-row-btn' type='button' onclick='addNewDataRow()' style='float: right; font-size:12px'>add new data & material</button>" + dataTable;
-    
+        var dataPanel = "";
+        if (currAnnotation.rejected == null || currAnnotation.rejected == undefined) {
+            // Data & Material - add new data button 
+            dataPanel = "<button id='add-new-data-row-btn' type='button' onclick='addNewDataRow()' style='float: right; font-size:12px'>add new data & material</button>" + dataTable;
+        }
+
     // Annotation table
     annTable = "<table id='mp-claim-data-tb'>" +
-        "<tr><td>Claim</td><td>Material/Data <strong id='wait' style='display:none;'>Loading...</strong></td></tr>";             
+        "<tr><td style='width:310px;'>Claim</td><td>Material/Data <strong id='wait' style='display:none;'>Loading...</strong></td></tr>";             
     annTable += "<tr><td>" + claimPanel + "</td><td>" + dataPanel + "</td></tr>";   
     annTable += "</table>";
     

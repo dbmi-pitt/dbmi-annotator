@@ -131,7 +131,9 @@ function initLiseners() {
     $('#relationship').change(function() {
         showEnzyme();
     });
-            
+    
+    rejectEvidenceCheckBox("rejected-evidence");
+
     // change event for auc, cmax, clearance, halflife unchanged checkbox
     unchangedCheckBoxDialog("auc");                        
     unchangedCheckBoxDialog("cmax");
@@ -215,6 +217,21 @@ function getURLParameter(name) {
     return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search)||[,""])[1].replace(/\+/g, '%20'))||null
 }
 
+function rejectEvidenceCheckBox(field) {
+    $('#' + field).change(function() {
+        if ($('#' + field).is(':checked')) {
+            $('#reject-reason').show();
+            $('#reject-reason-1').show();
+            $('#reject-reason-comment').show();
+            $('#reject-reason-comment-1').show();
+        } else {
+            $('#reject-reason').hide();
+            $('#reject-reason-comment').hide();
+            $('#reject-reason-1').hide();
+            $('#reject-reason-comment-1').hide();
+        }
+    });
+}
 
 
 // dialog for confirm truncation when user check unchanged checkbox  

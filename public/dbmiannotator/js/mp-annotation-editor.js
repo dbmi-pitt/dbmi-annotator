@@ -83,14 +83,14 @@ function showEnzyme() {
         $("#enzyme").show();
 
         $('input[name=precipitant]').prop('checked', false);
-        $('input[type=radio][name=precipitant]').hide();
-        $('.precipitantLabel').hide();
+        $('input[type=radio][name=precipitant]').parent().hide();
+        $('.precipitantLabel').parent().hide();
     }
     if($("#relationship option:selected").text()=="interact with") {
         $("#enzymesection1").hide();
         $("#enzyme").hide();
-        $('input[type=radio][name=precipitant]').show();
-        $('.precipitantLabel').show();
+        $('input[type=radio][name=precipitant]').parent().show();
+        $('.precipitantLabel').parent().show();
     }
 }
 
