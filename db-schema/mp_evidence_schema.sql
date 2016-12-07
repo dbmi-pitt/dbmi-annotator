@@ -18,7 +18,8 @@ has_body integer,
 has_target integer,
 creator text,
 date_created timestamp,
-date_updated timestamp
+date_updated timestamp,
+negation: text
 );
 
 
@@ -150,7 +151,8 @@ DROP TABLE IF EXISTS method CASCADE;
 CREATE TABLE method
 (
 id INTEGER not null PRIMARY KEY,
-value text,
+entered_value text,
+inferred_value text,
 mp_claim_id integer,
 mp_data_index integer,
 FOREIGN KEY (mp_claim_id) REFERENCES mp_claim_annotation(id)
