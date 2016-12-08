@@ -255,6 +255,7 @@ function changeClaimInAnnoTable() {
     console.log("changeClaimInAnnoTable called");
 
     var idFromAnnTable = $('#mp-editor-claim-list option:selected').val();
+    scrollToAnnotation(idFromAnnTable, "claim", 0); // jump to claim
 
     var idFromDialog = $('#dialog-claim-options option:selected').val();
     var newAnnotationId = idFromAnnTable;
@@ -311,4 +312,10 @@ function warnSelectTextSpan(field) {
     $("#select-text-dialog-close").click(function() {
         $("#dialog-select-text-for-data").hide();
     });
+}
+
+// scroll to the claim text span
+function viewClaim() {
+    annotationId = $('#mp-editor-claim-list option:selected').val();
+    scrollToAnnotation(annotationId, "claim", 0);
 }

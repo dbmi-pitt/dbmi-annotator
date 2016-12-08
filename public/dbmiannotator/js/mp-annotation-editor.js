@@ -18,11 +18,6 @@ function claimEditorLoad() {
     $("#mp-data-form-studytype").hide();
 }
 
-// scroll to the claim text span
-function viewClaim() {
-    annotationId = $('#mp-editor-claim-list option:selected').val();
-    scrollToAnnotation(annotationId, "claim", 0);
-}
 
 // edit claim
 function editClaim() {
