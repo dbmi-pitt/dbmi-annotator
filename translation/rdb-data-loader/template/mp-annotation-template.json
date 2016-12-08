@@ -8,7 +8,7 @@
         "drug1": "",
         "drug1ID": "","drug2ID": "",
         "precipitant": ""},
-    "method": "DDI clinical trial",
+    "method": "",
     "label": "",
     "supportsBy": [],
     "type": "mp:claim"},

@@ -19,7 +19,7 @@ has_target integer,
 creator text,
 date_created timestamp,
 date_updated timestamp,
-negation: text
+negation text
 );
 
 

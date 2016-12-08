@@ -35,12 +35,16 @@ else:
 # query mp claim annotation by author name
 # return claim annotation with s, p, o, source and oa selector
 def queryMpClaim(conn):
-	qry = """select cann.id, t.has_source, cann.creator, cann.date_created, s.exact, s.prefix, s.suffix, cbody.label, qvalue, q.subject, q.predicate, q.object 
-	from mp_claim_annotation cann, oa_claim_body cbody, oa_target t, oa_selector s, qualifier q
+
+	qry = """
+	select distinct cann.id, t.has_source, cann.creator, cann.date_created, s.exact, s.prefix, s.suffix, cbody.label, qvalue, q.subject, q.predicate, q.object, met.entered_value, cann.negation 
+	from mp_claim_annotation cann, oa_claim_body cbody, oa_target t, oa_selector s, qualifier q, method met
 	where cann.has_body = cbody.id
 	and cann.has_target = t.id
 	and t.has_selector = s.id
-	and cbody.id = q.claim_body_id"""
+	and cbody.id = q.claim_body_id
+	and cann.id = met.mp_claim_id
+"""
 
 	annotations = {} # key: id, value obj Annotation
 
@@ -72,6 +76,14 @@ def queryMpClaim(conn):
 
 		if annotation.exact == None:
 			annotation.setOaSelector(row[5], row[4], row[6])
+
+		# user entered method
+		if annotation.method == None:
+			annotation.method = row[12]
+		# assertion negation 
+		if annotation.negation == None and row[13] != None:
+			annotation.negation = row[13]
+
 	return annotations
 
 
@@ -306,6 +318,9 @@ def loadMpAnnotation(annotation, email):
 	#print "[INFO] Load doc(%s), subject(%s), predicate(%s), object(%s) \n" % (rawurl, annotation.csubject, annotation.cpredicate, annotation.cobject)
 
 	# MP Claim
+	mpAnn["argues"]["method"] = annotation.method
+	mpAnn["argues"]["negation"] = annotation.negation
+
 	mpAnn["argues"]["qualifiedBy"]["drug1"] = subjectDrug
 	mpAnn["argues"]["qualifiedBy"]["drug2"] = objectDrug
 	mpAnn["argues"]["qualifiedBy"]["drug1ID"] = subjectDrug + "_1"

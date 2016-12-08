@@ -94,6 +94,7 @@ def generateHighlightSet(row, highlightD):
 
 def truncateall(conn):
 	cur = conn.cursor()
+
 	cur.execute("DROP TABLE qualifier;")
 	cur.execute("DROP TABLE oa_claim_body;")
 	cur.execute("DROP TABLE oa_selector;")
@@ -108,8 +109,8 @@ def truncateall(conn):
 	cur.execute("DROP TABLE claim_reference_relationship;")
 	cur.execute("DROP TABLE mp_reference;")
 	cur.execute("DROP TABLE mp_claim_annotation;")
-	cur.execute("DROP TABLE highlight_annotation;")
 	cur.execute("DROP TABLE oa_highlight_body;")
+	cur.execute("DROP TABLE highlight_annotation;")
 
 	cur.execute("DROP SEQUENCE mp_claim_annotation_id_seq;")
 	cur.execute("DROP SEQUENCE oa_selector_id_seq;")
@@ -161,8 +162,14 @@ def show_table(conn, table):
 # load table "method" one row
 def load_method(conn, row, mp_claim_id):
 	cur = conn.cursor()
-	cur.execute("INSERT INTO method (value, mp_claim_id, mp_data_index)" +
-				"VALUES ( '" + row['assertionType'] + "', " + str(mp_claim_id) + ", 1);")
+
+	enteredVal = ""
+	if row['assertionType'] == "DDI-clinical-trial":
+		enteredVal = "clinical trial"
+	elif row['assertionType'] == "drug-drug-interaction":
+		enteredVal = "statement"
+
+	cur.execute("INSERT INTO method (entered_value, inferred_value, mp_claim_id, mp_data_index)" + "VALUES ( '" + enteredVal + "', '" + enteredVal + "', " + str(mp_claim_id) + ", 1);")
 
 
 # load table "oa_selector" one row
@@ -233,11 +240,11 @@ def load_qualifier(conn, row, claim_body_id):
 
 # load table "mp_claim_annotation" one row
 # return claim annotation id
-def load_mp_claim_annotation(conn, date, has_body, has_target, creator):
+def load_mp_claim_annotation(conn, date, has_body, has_target, creator, negation):
 	cur = conn.cursor()
 	urn = uuid.uuid4().hex
 
-	qry1 = "INSERT INTO mp_claim_annotation (urn, has_body, has_target, creator, date_created, date_updated)" + "VALUES ('%s','%s','%s','%s','%s','%s');" % (urn, str(has_body), str(has_target), creator, parse_date(date), parse_date(date))
+	qry1 = "INSERT INTO mp_claim_annotation (urn, has_body, has_target, creator, date_created, date_updated, negation)" + "VALUES ('%s','%s','%s','%s','%s','%s','%s');" % (urn, str(has_body), str(has_target), creator, parse_date(date), parse_date(date), negation)
 	cur.execute(qry1)
 
 	cur.execute("SELECT * FROM mp_claim_annotation WHERE urn = '" + urn + "';")
@@ -425,11 +432,13 @@ def load_data_from_csv(conn, reader, creator):
 		prefix = row["prefix"]; exact = row["exactText"]; suffix = row["suffix"]
 		source = row["source"]; date = row["date"]
 		subject = row["subject"]; predicate = row["predicate"]; object = row["object"]
+		negation = row["evidenceType"].replace("evidence-","").replace("challenges","refutes")
+
 		oa_selector_id = load_oa_selector(conn, prefix, exact, suffix)
 		oa_target_id = load_oa_target(conn, source, oa_selector_id)
 		oa_claim_body_id = load_oa_claim_body(conn, subject, predicate, object, exact)
 		load_qualifier(conn, row, oa_claim_body_id)
-		mp_claim_id = load_mp_claim_annotation(conn, date, oa_claim_body_id, oa_target_id, creator)
+		mp_claim_id = load_mp_claim_annotation(conn, date, oa_claim_body_id, oa_target_id, creator, negation)
 
 		update_oa_claim_body(conn, mp_claim_id, oa_claim_body_id)
 		load_mp_data_annotation(conn, row, mp_claim_id, oa_target_id, creator)

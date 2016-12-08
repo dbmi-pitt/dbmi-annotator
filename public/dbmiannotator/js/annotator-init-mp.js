@@ -133,7 +133,7 @@ function initLiseners() {
     });
 
     $("#method").change(function() {
-        if ($("#method option:selected").text() == "Statement") {
+        if ($("#method option:selected").text() == "statement") {
             $('#negationdiv').show();
             $('#negationlabel').show();
         } else {

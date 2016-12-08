@@ -18,6 +18,12 @@ class DMItem:
 	def setDmIdx(idx):
 		self.dmIdx = idx
 
+# # Method that supports data & material
+# class Method():
+# 	def __init__(self, entered_value, inferred_value):
+# 		self.entered_value = entered_value
+# 		self.inferred_value = inferred_value
+
 # Data item in row of data 
 class DataItem(DMItem):
 
@@ -142,6 +148,9 @@ class Annotation(object):
 		self.source = None
 		self.prefix = None; self.exact = None; self.suffix = None # oa selector
 		self.mpDataMaterialD = {} # data and material dict		
+
+		self.method = None  # user entered method
+		self.negation = None # assertion negation supports or refutes
 
 	def setOaSelector(self, prefix, exact, suffix):
 		self.prefix = prefix
