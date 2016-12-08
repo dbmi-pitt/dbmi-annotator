@@ -432,7 +432,10 @@ def load_data_from_csv(conn, reader, creator):
 		prefix = row["prefix"]; exact = row["exactText"]; suffix = row["suffix"]
 		source = row["source"]; date = row["date"]
 		subject = row["subject"]; predicate = row["predicate"]; object = row["object"]
-		negation = row["evidenceType"].replace("evidence-","").replace("challenges","refutes")
+		# when method is statement, negation is evidence supports/refutes
+		negation = ""
+		if row["assertionType"] == "drug-drug-interaction":
+			negation = row["evidenceType"].replace("evidence-","").replace("challenges","refutes")			
 
 		oa_selector_id = load_oa_selector(conn, prefix, exact, suffix)
 		oa_target_id = load_oa_target(conn, source, oa_selector_id)
