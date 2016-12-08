@@ -131,6 +131,16 @@ function initLiseners() {
     $('#relationship').change(function() {
         showEnzyme();
     });
+
+    $("#method").change(function() {
+        if ($("#method option:selected").text() == "Statement") {
+            $('#negationdiv').show();
+            $('#negationlabel').show();
+        } else {
+            $('#negationdiv').hide();
+            $('#negationlabel').hide();
+        }
+    });
             
     // change event for auc, cmax, clearance, halflife unchanged checkbox
     unchangedCheckBoxDialog("auc");                        
