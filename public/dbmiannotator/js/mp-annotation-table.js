@@ -40,9 +40,6 @@ function updateAnnTable(sourceURL){
 // @input: list of annotations have been selected for import 
 function initAnnTable(selectedAnnsL) {
     console.log("init ann table");
-    console.log(selectedAnnsL);
-
-    //if (selectedAnnsL == null) return null;
 
     // ann Id for selected claim, if null, set first claim as default 
     if ((currAnnotationId == null || currAnnotationId.trim()) == "" && selectedAnnsL != null) { 
@@ -71,6 +68,7 @@ function updateClaimAndData(annotations, annotationId) {
     claimListbox = "<select id='mp-editor-claim-list' onChange='changeClaimInAnnoTable();'>";
     // create claim listbox in claim creating dialog
     dialogClaimListbox = "<select id='dialog-claim-options' onChange='changeClaimInDialog();'>";
+    method_entered = "";
     
     //only when this user has annotations, these content will be generated
     if (annotations != undefined) {
@@ -84,14 +82,16 @@ function updateClaimAndData(annotations, annotationId) {
             if (annotationId == annotation.id) {
                 //set global variable
                 currAnnotation = annotation;
-                //console.log("mp selected: " + annotation.argues.label);
                 claimIsSelected = 'selected="selected"';     
+                method_entered = annotation.argues.method;
                 // cache total number of data & material for current claim
                 totalDataNum = annotation.argues.supportsBy.length;  
                 //if it is not rejected, show the data table
                 if (currAnnotation.rejected == null || currAnnotation.rejected == undefined) {
                     dataTable = createDataTable(annotation); // create data table  
                 }            
+                totalDataNum = annotation.argues.supportsBy.length;      
+                dataTable = createDataTable(annotation); // create data table 
             }
             
             claim = annotation.argues;                    
@@ -104,21 +104,21 @@ function updateClaimAndData(annotations, annotationId) {
         claimListbox += "</select>";
         dialogClaimListbox += "</select>";
     }
-        // Method listbox
-        methodListbox = "<select id='mp-editor-method'><option value='clinical-trial'>Clinical Trial</option></select>";
-        // Claim 
-        claimPanel = "<table id='mp-claim-method-tb'>";
-        claimPanel += "<tr><td>" + claimListbox + "</td></tr>";
-        claimPanel += "<tr><td>Methods: " + methodListbox + "</td></tr>";
+
+    // Claim 
+    claimPanel = "<table id='mp-claim-method-tb'>";
+    claimPanel += "<tr><td>" + claimListbox + "</td></tr>";
+
+    // Method listbox - user entered method
+    claimPanel += "<tr><td>Method: " + method_entered + "</td></tr>"
         
-        claimPanel += "<tr><td><button id='edit-claim-btn' type='button' onclick='editClaim()' style='float:left; font-size:12px'>Edit Claim</button><button id='view-claim-btn' type='button' onclick='viewClaim()' style='float: right; font-size:12px'>View Claim</button></td></tr></table>";
+    claimPanel += "<tr><td><button id='edit-claim-btn' type='button' onclick='editClaim()' style='float:left; font-size:12px'>Edit Claim</button><button id='view-claim-btn' type='button' onclick='viewClaim()' style='float: right; font-size:12px'>View Claim</button></td></tr></table>";
         
         var dataPanel = "";
         if (currAnnotation == undefined || currAnnotation.rejected == null || currAnnotation.rejected == undefined) {
             // Data & Material - add new data button 
             dataPanel = "<button id='add-new-data-row-btn' type='button' onclick='addNewDataRow()' style='float: right; font-size:12px'>add new data & material</button>" + dataTable;
         }
-
     // Annotation table
     annTable = "<table id='mp-claim-data-tb'>" +
         "<tr><td style='width:310px;'>Claim</td><td>Material/Data <strong id='wait' style='display:none;'>Loading...</strong></td></tr>";             
@@ -278,6 +278,7 @@ function changeClaimInAnnoTable() {
     console.log("changeClaimInAnnoTable called");
 
     var idFromAnnTable = $('#mp-editor-claim-list option:selected').val();
+    scrollToAnnotation(idFromAnnTable, "claim", 0); // jump to claim
 
     var idFromDialog = $('#dialog-claim-options option:selected').val();
     var newAnnotationId = idFromAnnTable;
@@ -334,4 +335,10 @@ function warnSelectTextSpan(field) {
     $("#select-text-dialog-close").click(function() {
         $("#dialog-select-text-for-data").hide();
     });
+}
+
+// scroll to the claim text span
+function viewClaim() {
+    annotationId = $('#mp-editor-claim-list option:selected').val();
+    scrollToAnnotation(annotationId, "claim", 0);
 }

@@ -142,6 +142,16 @@ function initLiseners() {
     
     rejectEvidenceCheckBox("rejected-evidence");
 
+    $("#method").change(function() {
+        if ($("#method option:selected").text() == "statement") {
+            $('#negationdiv').show();
+            $('#negationlabel').show();
+        } else {
+            $('#negationdiv').hide();
+            $('#negationlabel').hide();
+        }
+    });
+            
     // change event for auc, cmax, clearance, halflife unchanged checkbox
     unchangedCheckBoxDialog("auc");                        
     unchangedCheckBoxDialog("cmax");

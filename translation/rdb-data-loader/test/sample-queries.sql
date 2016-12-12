@@ -43,3 +43,98 @@ SELECT h.id, t.has_source, s.exact
 FROM highlight_annotation h, oa_target t, oa_selector s
 WHERE h.has_target = t.id
 AND t.has_selector = s.id;
+
+
+-- create tablefunc
+-- psql -U postgre
+-- \c mpevidence
+CREATE EXTENSION tablefunc; 
+
+-- Get fold increase from data_field table - pivot table data_field
+SELECT * FROM crosstab('SELECT df.data_body_id, df.data_field_type, df.value_as_string FROM data_field df ORDER BY 1,2')
+AS results(data_body_id INTEGER, direction TEXT, type TEXT, value TEXT)
+WHERE type = 'Fold';
+
+
+-- Get Dose information - pivot table material_field
+SELECT *
+FROM crosstab('SELECT mf.material_body_id, mf.material_field_type, mf.value_as_string FROM material_field mf ORDER BY 1,2')
+AS mf(material_body_id INTEGER, duration TEXT, formulation TEXT, regimens TEXT, value TEXT)
+WHERE mf.value != ''
+
+
+-- Get fold increase data with claim id
+SELECT md.mp_claim_id, md.creator, md.ev_supports, md.type, df.type, df.value, df.direction
+FROM crosstab('SELECT df.data_body_id, df.data_field_type, df.value_as_string FROM data_field df ORDER BY 1,2')
+AS df(data_body_id INTEGER, direction TEXT, type TEXT, value TEXT)
+JOIN oa_data_body db ON df.data_body_id = db.id
+JOIN mp_data_annotation md on db.id = md.has_body
+WHERE df.type = 'Fold'
+AND db.data_type = 'auc';
+
+
+-- Get object dose and precipitant dose information with claim id
+SELECT mm.mp_claim_id, mb.material_type, mf.duration, mf.formulation, mf.regimens, mf.value
+FROM crosstab('SELECT mf.material_body_id, mf.material_field_type, mf.value_as_string FROM material_field mf ORDER BY 1,2')
+AS mf(material_body_id INTEGER, duration TEXT, formulation TEXT, regimens TEXT, value TEXT)
+JOIN oa_material_body mb ON mf.material_body_id = mb.id
+JOIN mp_material_annotation mm ON mb.is_oa_body_of = mm.id
+WHERE mf.value != ''
+
+
+-- FUNCTIONS
+
+CREATE OR REPLACE FUNCTION qualifierRole(boolean, boolean, boolean) 
+RETURNS TEXT AS
+$BODY$
+BEGIN
+IF $1 THEN RETURN 'subject';
+ELSIF $2 THEN RETURN 'predicate';
+ELSIF $3 THEN RETURN 'object';
+ELSE RETURN 'error';
+END IF;
+END;
+$BODY$ language plpgsql;
+
+-- Claim - subject - predicate - object - pivot material_field table
+SELECT *
+FROM crosstab('select mc.id, qualifierrole(q.subject, q.predicate, q.object) as qtype, qvalue
+FROM mp_claim_annotation mc, oa_claim_body cb, oa_target t, oa_selector s, qualifier q
+WHERE mc.has_body = cb.id
+AND mc.has_target = t.id
+AND t.has_selector = s.id
+AND cb.id = q.claim_body_id ORDER BY 1,2')
+AS mc(id INTEGER, predicate TEXT, object TEXT,  subject TEXT) 
+
+------------------------ CREATE VIEWS -----------------------------------
+
+-- Claim - subject - predicate - object - pivot material_field table
+CREATE VIEW claim_qualifier_view AS SELECT *
+FROM crosstab('select mc.id, qualifierrole(q.subject, q.predicate, q.object) as qtype, qvalue
+FROM mp_claim_annotation mc, oa_claim_body cb, oa_target t, oa_selector s, qualifier q
+WHERE mc.has_body = cb.id
+AND mc.has_target = t.id
+AND t.has_selector = s.id
+AND cb.id = q.claim_body_id ORDER BY 1,2')
+AS mc(id INTEGER, object TEXT, predicate TEXT, subject TEXT) 
+
+
+-- Get fold increase data with claim id
+CREATE VIEW auc_fold_view AS SELECT * FROM
+(SELECT md.mp_claim_id, md.creator, md.ev_supports, md.type as datatype, df.type as dftype, df.value, df.direction
+FROM crosstab('SELECT df.data_body_id, df.data_field_type, df.value_as_string FROM data_field df ORDER BY 1,2')
+AS df(data_body_id INTEGER, direction TEXT, type TEXT, value TEXT)
+JOIN oa_data_body db ON df.data_body_id = db.id
+JOIN mp_data_annotation md ON db.id = md.has_body
+WHERE df.type = 'Fold'
+AND db.data_type = 'auc') AS fi;
+
+
+-- Get object dose and precipitant dose information with claim id
+CREATE VIEW material_dose_view AS SELECT * FROM
+(SELECT mm.mp_claim_id, mb.material_type, mf.duration, mf.formulation, mf.regimens, mf.value
+FROM crosstab('SELECT mf.material_body_id, mf.material_field_type, mf.value_as_string FROM material_field mf ORDER BY 1,2')
+AS mf(material_body_id INTEGER, duration TEXT, formulation TEXT, regimens TEXT, value TEXT)
+JOIN oa_material_body mb ON mf.material_body_id = mb.id
+JOIN mp_material_annotation mm ON mb.is_oa_body_of = mm.id
+WHERE mf.value != '') AS md

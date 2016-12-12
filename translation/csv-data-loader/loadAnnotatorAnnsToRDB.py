@@ -9,9 +9,8 @@ reload(sys)
 sys.setdefaultencoding('utf8')
 
 #1. pip install psycopg2
-#2. create/edit config file: "config/DB-config.txt"
 
-csvfiles = ['data/mp-annotat2-10182016.tsv']
+csvfiles = ['data/mp-annotation.tsv']
 DATABASE = 'mpevidence'
 curr_date = datetime.datetime.now()
 
@@ -150,8 +149,8 @@ def truncateall(conn):
 	cur.execute("DROP TABLE claim_reference_relationship;")
 	cur.execute("DROP TABLE mp_reference;")
 	cur.execute("DROP TABLE mp_claim_annotation;")
-	cur.execute("DROP TABLE highlight_annotation;")
 	cur.execute("DROP TABLE oa_highlight_body;")
+	cur.execute("DROP TABLE highlight_annotation;")
 
 	cur.execute("DROP SEQUENCE mp_claim_annotation_id_seq;")
 	cur.execute("DROP SEQUENCE oa_selector_id_seq;")
@@ -195,8 +194,13 @@ def clearall(conn):
 # load table "method" one row
 def load_method(conn, row, mp_claim_id, mp_data_index):
 	cur = conn.cursor()
-	cur.execute("INSERT INTO method (value, mp_claim_id, mp_data_index)" +
-				"VALUES ( '" + row['method'] + "', " + str(mp_claim_id) + ", "+str(mp_data_index)+");")
+	enteredVal = ""
+	if row['method'] == "DDI clinical trial":
+		enteredVal = "clinical trial"
+	else:
+		enteredVal = row['method']
+
+	cur.execute("INSERT INTO method (entered_value, inferred_value, mp_claim_id, mp_data_index)" + "VALUES ( '" + enteredVal + "', '" + enteredVal + "', " + str(mp_claim_id) + ", "+str(mp_data_index)+");")
 
 # OPEN ANNOTATION - TARGET AND SELECTOR #############################################
 # load table "oa_selector" one row
@@ -414,11 +418,11 @@ def update_oa_claim_body(conn, is_oa_body_of, oa_claim_body_id):
 
 # insert to table "mp_claim_annotation" 
 # return claim annotation id
-def insert_mp_claim_annotation(conn, curr_date, has_body, has_target, creator, annId):
+def insert_mp_claim_annotation(conn, curr_date, has_body, has_target, creator, annId, negation):
 	cur = conn.cursor()
 	urn = annId
 
-	qry1 = "INSERT INTO mp_claim_annotation (urn, has_body, has_target, creator, date_created, date_updated)" + "VALUES ('%s','%s','%s','%s','%s','%s');" % (urn, str(has_body), str(has_target), creator, curr_date, curr_date)
+	qry1 = "INSERT INTO mp_claim_annotation (urn, has_body, has_target, creator, date_created, date_updated, negation)" + "VALUES ('%s','%s','%s','%s','%s','%s','%s');" % (urn, str(has_body), str(has_target), creator, curr_date, curr_date, negation)
 
 	cur.execute(qry1)
 	cur.execute("SELECT * FROM mp_claim_annotation WHERE urn = '" + urn + "';")
@@ -432,12 +436,18 @@ def load_mp_claim_annotation(conn, row, creator):
 	curr_date = datetime.datetime.now()
 	source = row["document"]; 
 	subject = row["subject"]; predicate = row["predicate"]; object = row["object"]
+
+	# when method is statement, negation is evidence supports/refutes
+	negation = ""
+	if row["method"] == "statement":
+		negation = row["evRelationship"]
+
 	claim_selector_id = load_oa_selector(conn, claimP, claimE, claimS)
 	claim_target_id = load_oa_target(conn, source, claim_selector_id)
 	oa_claim_body_id = load_oa_claim_body(conn, subject, predicate, object, claimE)
 	load_qualifier(conn, subject, predicate, object, oa_claim_body_id)
 	
-	mp_claim_id = insert_mp_claim_annotation(conn, curr_date, oa_claim_body_id, claim_target_id, creator, row['id'])
+	mp_claim_id = insert_mp_claim_annotation(conn, curr_date, oa_claim_body_id, claim_target_id, creator, row['id'], negation)
 	update_oa_claim_body(conn, mp_claim_id, oa_claim_body_id)
 	conn.commit()
 
@@ -500,7 +510,7 @@ def main():
 	print("[INFO] connect postgreSQL ...")
 	conn = connect_postgreSQL()
 
-	if isClean == 1:
+	if isClean == "1":
 		print("[INFO] begin clean before load ...")
 		clearall(conn)
 		#truncateall(conn) # don't need delete tables

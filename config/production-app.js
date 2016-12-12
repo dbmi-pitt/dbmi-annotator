@@ -1,1 +1,0 @@
-config = require('./production.conf');

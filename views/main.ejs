@@ -3,12 +3,7 @@
 
     <style> body        { padding-top:80px; word-wrap:break-word; } </style>
     <script src="js/jquery-1.11.1.min.js"></script>
-    <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script> -->
-
     <script src="js/bootstrap.min.js" crossorigin="anonymous"></script>
-
-    <!-- <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">  -->
-    <!-- <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"> -->
     <link rel="stylesheet" href="css/bootstrap.min.css"> <!-- load bootstrap css -->
     <link rel="stylesheet" href="css/font-awesome.min.css"> <!-- load fontawesome -->
     
@@ -56,7 +51,7 @@
     <%  if (annotations.total == -1) {   %>
 	      <tr>
 		<td>Document source URL </td>
-		<td>Number of Annotations </td>
+           		<td>Number of Annotations </td>
 	      </tr>
 
 	      <%
@@ -95,20 +90,27 @@
 					      <strong>Sample document links </strong><br><br>
 
 					   <p>Local PMC articles: <br>
-					     <a href="displayWebPage?sourceURL=http://localhost/PMC/PMC1490169.html&email=<%=user.email%>">http://localhost/PMC/PMC1490169.html</a> <br>
-					     <a href="displayWebPage?sourceURL=http://localhost/PMC/PMC3477350.html&email=<%=user.email%>">http://localhost/PMC/PMC3477350.html</a> <br>
-					     <a href="displayWebPage?sourceURL=http://localhost/PMC/PMC2686069.html&email=<%=user.email%>">http://localhost/PMC/PMC2686069.html</a> 
+					     <a href="displayWebPage?sourceURL=http://localhost/PMC/PMC1884190.html&email=<%=user.email%>">http://localhost/PMC/PMC1884190.html</a> <br>
+					     <a href="displayWebPage?sourceURL=http://localhost/PMC/PMC90851.html&email=<%=user.email%>">http://localhost/PMC/PMC90851.html</a> <br>
+					     <a href="displayWebPage?sourceURL=http://localhost/PMC/PMC3187007.html&email=<%=user.email%>">http://localhost/PMC/PMC3187007.html</a> <br>
+					     <a href="displayWebPage?sourceURL=http://localhost/PMC/PMC3900249.html&email=<%=user.email%>">http://localhost/PMC/PMC3900249.html</a> <br>
+					     <a href="displayWebPage?sourceURL=http://localhost/PMC/PMC3769672.html&email=<%=user.email%>">http://localhost/PMC/PMC3769672.html</a> <br> 
+					     <a href="displayWebPage?sourceURL=http://localhost/PMC/PMC2764168.html&email=<%=user.email%>">http://localhost/PMC/PMC2764168.html</a> <br>
+					     <a href="displayWebPage?sourceURL=http://localhost/PMC/PMC2686069.html&email=<%=user.email%>">http://localhost/PMC/PMC2686069.html</a> <br>
+					     <a href="displayWebPage?sourceURL=http://localhost/PMC/PMC3703233.html&email=<%=user.email%>">http://localhost/PMC/PMC3703233.html</a> <br>
+					     <a href="displayWebPage?sourceURL=http://localhost/PMC/PMC3091944.html&email=<%=user.email%>">http://localhost/PMC/PMC3091944.html</a> <br>
 					   </p>
 					      
 					   <p>Local dailymed html labels: <br>
-					     <a href="displayWebPage?sourceURL=http://<%-host %>/DDI-labels/2f7d4d67-10c1-4bf4-a7f2-c185fbad64ba.html&email=<%=user.email%>" >http://<%-host %>/DDI-labels/2f7d4d67-10c1-4bf4-a7f2-c185fbad64ba.html</a> <br>
-					     <a href="displayWebPage?sourceURL=http://<%-host %>/DDI-labels/5550433b-8c9c-4378-058f-6bb724c4f18c.html&email=<%=user.email%>" >http://<%-host %>/DDI-labels/5550433b-8c9c-4378-058f-6bb724c4f18c.html</a>	     
+					     <a href="displayWebPage?sourceURL=http://localhost/DDI-labels/ba74e3cd-b06f-4145-b284-5fd6b84ff3c9.html&email=<%=user.email%>" >http://localhost/DDI-labels/ba74e3cd-b06f-4145-b284-5fd6b84ff3c9.html</a> <br>
+					     <a href="displayWebPage?sourceURL=http://localhost/DDI-labels/d76d5540-7bae-4719-8166-f2a9106338df.html&email=<%=user.email%>" >http://localhost/DDI-labels/d76d5540-7bae-4719-8166-f2a9106338df.html</a> <br>	     
+					     <a href="displayWebPage?sourceURL=http://localhost/DDI-labels/7b8e5b26-b9e4-4704-921b-3c3c0d159916.html&email=<%=user.email%>" >http://localhost/DDI-labels/7b8e5b26-b9e4-4704-921b-3c3c0d159916.html</a> <br>
+					     <a href="displayWebPage?sourceURL=http://localhost/DDI-labels/9c4bedb4-2d59-4fcd-aad7-fce988cd96d8.html&email=<%=user.email%>" >http://localhost/DDI-labels/9c4bedb4-2d59-4fcd-aad7-fce988cd96d8.html</a> <br>	     
+					     <a href="displayWebPage?sourceURL=http://localhost/DDI-labels/036db1f2-52b3-42a0-acf9-817b7ba8c724.html&email=<%=user.email%>" >http://localhost/DDI-labels/036db1f2-52b3-42a0-acf9-817b7ba8c724.html</a> <br>	     
 					   </p>
 
-					   <p>Local wiley html labels: <br>
-					     <a href="displayWebPage?sourceURL=http://<%-host %>/wiley/wiley19236630.html&email=<%=user.email%>" >http://<%-host %>/wiley/wiley19236630.html</a> <br>
-					     <a href="displayWebPage?sourceURL=http://<%-host %>/wiley/wiley21443601.html&email=<%=user.email%>" >http://<%-host %>/wiley/wiley21443601.html</a> <br>
-					     <a href="displayWebPage?sourceURL=http://<%-host %>/wiley/wiley21228405.html&email=<%=user.email%>" >http://<%-host %>/wiley/wiley21228405.html</a>					   </p>
+					   <!-- <p>Local wiley html labels: <br> -->
+					   <!--   <a href="displayWebPage?sourceURL=http://localhost/wiley/wiley19236630.html&email=<%=user.email%>" >http://localhost/wiley/wiley19236630.html</a> <br> -->
 					   
 					   <% } %>
 	    </table>
