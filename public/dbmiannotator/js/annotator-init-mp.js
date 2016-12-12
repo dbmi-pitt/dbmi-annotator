@@ -131,6 +131,14 @@ function initLiseners() {
     $('#relationship').change(function() {
         showEnzyme();
     });
+
+    $('#method').change(function() {
+        showPhenotype();
+    });
+
+    $('#phenotypeType').change(function() {
+        showPhenotypeType();
+    });
     
     rejectEvidenceCheckBox("rejected-evidence");
 

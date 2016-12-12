@@ -5,7 +5,7 @@
  'email' : 'xx@gmail.com',
  'updated' : '2016-05-03T17:39:44.986668+00:00',
  'created' : '2016-05-03T17:39:44.986668+00:00',
- 
+
  'argues' : { // mp claim
      'id': 'uuid',
      'type': 'mp:claim',
@@ -61,6 +61,12 @@
                          'value': 'numeric',
                          'hasTarget': '',
                          'ranges': ''                        
+                    },
+                    'phenotype': {
+                        'type':'',
+                        'typeVal':'',
+                        'metabolizer':'',
+                        'population':''
                     }                    
                  }
              },            

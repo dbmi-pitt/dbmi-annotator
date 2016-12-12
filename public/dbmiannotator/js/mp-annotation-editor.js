@@ -11,6 +11,7 @@ function claimEditorLoad() {
     $("#mp-data-form-participants").hide();
     $("#mp-data-form-dose1").hide();
     $("#mp-data-form-dose2").hide();
+    $("#mp-data-form-phenotype").hide();
     $("#mp-data-form-auc").hide();
     $("#mp-data-form-cmax").hide();
     $("#mp-data-form-clearance").hide();
@@ -73,11 +74,49 @@ function deselectDrug() {
     $("#quote").html(quotestring);
 }
 
+// when method is phenotype and relationship is inhibits or substrate of
+function showPhenotype() {
+    if (($("#method option:selected").text() == "Phenotype Clinical Study") && ($("#relationship option:selected").text() == "inhibits"||$("#relationship option:selected").text()=="substrate of")) {
+        $("#Drug1-1").html("Drug: ");
+        $("#Drug2-1").parent().hide();
+        $("#Drug2").parent().hide();
+    } else {
+        $("#Drug1-1").html("Drug1: ");
+        $("#Drug2-1").parent().show();
+        $("#Drug2").parent().show();
+    }
+}
+
+// when type is Genotype
+function showPhenotypeType() {
+    console.log($("input:radio[@name=phenotypeType]:checked").val());
+    console.log($("input:radio[@name=phenotypeMetabolizer]:checked").val());
+    if ($("input:radio[name=phenotypeType]:checked").val() == "Genotype") {
+        $('#geneFamily').show();
+        $('#geneFamily-label').show();
+        $('#markerDrug').hide();
+        $('#markerDrug-label').hide();
+    } else {
+        $('#geneFamily').hide();
+        $('#geneFamily-label').hide();
+        $('#markerDrug').show();
+        $('#markerDrug-label').show();
+    }
+}
 
 // when relationship is inhibits or substrate of, show field enzyme
 function showEnzyme() {
 
-    if($("#relationship option:selected").text()=="inhibits"||$("#relationship option:selected").text()=="substrate of") {
+    if($("#relationship option:selected").text() == "inhibits"||$("#relationship option:selected").text()=="substrate of") {
+        if ($("#method option:selected").text() == "Phenotype Clinical Study") {
+            $("#Drug1-1").html("Drug: ");
+            $("#Drug2-1").parent().hide();
+            $("#Drug2").parent().hide();
+        } else {
+            $("#Drug1-1").html("Drug1: ");
+            $("#Drug2-1").parent().show();
+            $("#Drug2").parent().show();
+        }
         $("#enzyme")[0].selectedIndex = 0;
         $("#enzymesection1").show();
         $("#enzyme").show();
@@ -87,6 +126,9 @@ function showEnzyme() {
         $('.precipitantLabel').parent().hide();
     }
     if($("#relationship option:selected").text()=="interact with") {
+        $("#Drug1-1").html("Drug1: ");
+        $("#Drug2-1").parent().show();
+        $("#Drug2").parent().show();
         $("#enzymesection1").hide();
         $("#enzyme").hide();
         $('input[type=radio][name=precipitant]').parent().show();
@@ -248,8 +290,6 @@ function preDataForm(targetField, isNotNeedValid) {
     focusOnDataField(targetField);
 }
 
-
-
 // switch data from nav button
 function switchDataForm(targetField, isNotNeedValid) {
 
@@ -289,7 +329,7 @@ function switchDataForm(targetField, isNotNeedValid) {
 function switchDataFormHelper(targetField) {
 
     // field actual div id mapping
-    fieldM = {"evRelationship":"evRelationship", "participants":"participants", "dose1":"drug1Dose", "dose2":"drug2Dose", "auc":"auc", "cmax":"cmax", "clearance":"clearance", "halflife":"halflife", "studytype":"studytype"};
+    fieldM = {"evRelationship":"evRelationship", "participants":"participants", "dose1":"drug1Dose", "dose2":"drug2Dose", "phenotype":"phenotype", "auc":"auc", "cmax":"cmax", "clearance":"clearance", "halflife":"halflife", "studytype":"studytype"};
 
     var showDeleteBtn = false;
 
