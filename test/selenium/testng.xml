@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+
+<suite name="DBMI-Annotator"  preserve-order="true" parallel="false">
+  <test name="BasicTests">
+    <classes>
+    <class name="authentication.Login"/>  
+	<!-- <class name="authentication.Register"/>     -->
+    </classes>
+  </test> <!-- Test -->
+</suite> <!-- Suite -->
