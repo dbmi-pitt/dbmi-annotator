@@ -87,7 +87,7 @@ function updateClaimAndData(annotations, annotationId) {
                 // cache total number of data & material for current claim
                 totalDataNum = annotation.argues.supportsBy.length;  
                 //if it is not rejected, show the data table
-                if (currAnnotation.rejected == null || currAnnotation.rejected == undefined) {
+                if (currAnnotation.argues.method != "statement") {
                     dataTable = createDataTable(annotation); // create data table  
                 }            
                 totalDataNum = annotation.argues.supportsBy.length;      
@@ -115,7 +115,7 @@ function updateClaimAndData(annotations, annotationId) {
     claimPanel += "<tr><td><button id='edit-claim-btn' type='button' onclick='editClaim()' style='float:left; font-size:12px'>Edit Claim</button><button id='view-claim-btn' type='button' onclick='viewClaim()' style='float: right; font-size:12px'>View Claim</button></td></tr></table>";
         
         var dataPanel = "";
-        if (currAnnotation == undefined || currAnnotation.rejected == null || currAnnotation.rejected == undefined) {
+        if (currAnnotation == undefined || currAnnotation.argues.method != "statement") {
             // Data & Material - add new data button 
             dataPanel = "<button id='add-new-data-row-btn' type='button' onclick='addNewDataRow()' style='float: right; font-size:12px'>add new data & material</button>" + dataTable;
         }

@@ -70,23 +70,53 @@ function deselectDrug() {
 }
 
 // when method is phenotype and relationship is inhibits or substrate of
-function showPhenotype() {
-    if (($("#method option:selected").text() == "Phenotype Clinical Study") && ($("#relationship option:selected").text() == "inhibits"||$("#relationship option:selected").text()=="substrate of")) {
-        $("#Drug1-1").html("Drug: ");
-        $("#Drug2-1").parent().hide();
-        $("#Drug2").parent().hide();
+function changeCausedbyMethod() {
+    var methodValue = $("#method option:selected").text();
+    //statement
+    if (methodValue == "statement") {
+        $('#negationdiv').show();
+        $('#negation-label').show();
     } else {
-        $("#Drug1-1").html("Drug1: ");
-        $("#Drug2-1").parent().show();
+        $('#negationdiv').hide();
+        $('#negation-label').hide();
+    }
+    //phenotype - no interact with
+    if (methodValue == "Phenotype clinical study") {
+        $("#relationship option[value = 'interact with']").attr('disabled', 'disabled');
+        $("#relationship option[value = 'interact with']").hide();
+
+        if ($("#relationship option:selected").text() == "interact with") {
+            $("#relationship option:selected").prop("selected", false);
+        }
+    } else {
+        $("#relationship option[value = 'interact with']").removeAttr('disabled');
+        $("#relationship option[value = 'interact with']").show();
+    }
+    //phenotype & statement
+    if ((methodValue == "Phenotype clinical study" || methodValue == "statement") && ($("#relationship option:selected").text() == "inhibits"||$("#relationship option:selected").text()=="substrate of")) {
+        $("#Drug1-label").html("Drug: ");
+        $("#Drug2-label").parent().hide();
+        $("#Drug2").parent().hide();
+        $("#enzymesection1").show();
+        $("#enzyme").show();
+
+        $('input[name=precipitant]').prop('checked', false);
+        $('input[type=radio][name=precipitant]').parent().hide();
+        $('.precipitantLabel').parent().hide();
+    } else {
+        $("#Drug1-label").html("Drug1: ");
+        $("#Drug2-label").parent().show();
         $("#Drug2").parent().show();
+        $("#Drug2")[0].selectedIndex = -1;
+        console.log($("#Drug2 option:selected").text());
     }
 }
 
 // when type is Genotype
 function showPhenotypeType() {
-    console.log($("input:radio[@name=phenotypeType]:checked").val());
-    console.log($("input:radio[@name=phenotypeMetabolizer]:checked").val());
-    if ($("input:radio[name=phenotypeType]:checked").val() == "Genotype") {
+    console.log($("input[name=phenotypeGenre]:checked").val());
+    console.log($("input[name=phenotypeMetabolizer]:checked").val());
+    if ($("input:radio[name=phenotypeGenre]:checked").val() == "Genotype") {
         $('#geneFamily').show();
         $('#geneFamily-label').show();
         $('#markerDrug').hide();
@@ -103,13 +133,13 @@ function showPhenotypeType() {
 function showEnzyme() {
 
     if($("#relationship option:selected").text() == "inhibits"||$("#relationship option:selected").text()=="substrate of") {
-        if ($("#method option:selected").text() == "Phenotype Clinical Study") {
-            $("#Drug1-1").html("Drug: ");
-            $("#Drug2-1").parent().hide();
+        if ($("#method option:selected").text() == "Phenotype clinical study" || $("#method option:selected").text() == "statement") {
+            $("#Drug1-label").html("Drug: ");
+            $("#Drug2-label").parent().hide();
             $("#Drug2").parent().hide();
         } else {
-            $("#Drug1-1").html("Drug1: ");
-            $("#Drug2-1").parent().show();
+            $("#Drug1-label").html("Drug1: ");
+            $("#Drug2-label").parent().show();
             $("#Drug2").parent().show();
         }
         $("#enzyme")[0].selectedIndex = 0;
@@ -121,8 +151,8 @@ function showEnzyme() {
         $('.precipitantLabel').parent().hide();
     }
     if($("#relationship option:selected").text()=="interact with") {
-        $("#Drug1-1").html("Drug1: ");
-        $("#Drug2-1").parent().show();
+        $("#Drug1-label").html("Drug1: ");
+        $("#Drug2-label").parent().show();
         $("#Drug2").parent().show();
         $("#enzymesection1").hide();
         $("#enzyme").hide();
@@ -196,7 +226,7 @@ function addDataCellByEditor(field, dataNum, isNewData) {
                     // add data if not avaliable  
                     if (annotation.argues.supportsBy.length == 0 || isNewData){ 
 
-                        var data = {type : "mp:data", evRelationship: "", auc : {}, cmax : {}, clearance : {}, halflife : {}, supportsBy : {type : "mp:method", supportsBy : {type : "mp:material", participants : {}, drug1Dose : {}, drug2Dose : {}}}, grouprandom: "", parallelgroup: ""};
+                        var data = {type : "mp:data", evRelationship: "", auc : {}, cmax : {}, clearance : {}, halflife : {}, supportsBy : {type : "mp:method", supportsBy : {type : "mp:material", participants : {}, drug1Dose : {}, drug2Dose : {}, phenotype: {}}}, grouprandom: "", parallelgroup: ""};
                         annotation.argues.supportsBy.push(data); 
                     } 
                     

@@ -133,24 +133,14 @@ function initLiseners() {
     });
 
     $('#method').change(function() {
-        showPhenotype();
+        changeCausedbyMethod();
     });
 
-    $('#phenotypeType').change(function() {
+    $('input[name=phenotypeGenre]').change(function() {
         showPhenotypeType();
     });
     
     rejectEvidenceCheckBox("rejected-evidence");
-
-    $("#method").change(function() {
-        if ($("#method option:selected").text() == "statement") {
-            $('#negationdiv').show();
-            $('#negationlabel').show();
-        } else {
-            $('#negationdiv').hide();
-            $('#negationlabel').hide();
-        }
-    });
             
     // change event for auc, cmax, clearance, halflife unchanged checkbox
     unchangedCheckBoxDialog("auc");                        
@@ -191,9 +181,16 @@ function selectDrug() {
     var drug2 = $('#Drug2 option:selected').text();
     //console.log("select new drug:" + drug1 + "," + drug2);
     var drug1ID = $('#Drug1 option:selected').val();
-    var drug2ID = $('#Drug2 option:selected').val();
     var drug1Index = parseInt(drug1ID.split("_")[1]);
-    var drug2Index = parseInt(drug2ID.split("_")[1]);
+    var drug2ID;
+    var drug2Index;
+    
+    if ($("#Drug2")[0].selectedIndex != -1) {
+        drug2ID = $('#Drug2 option:selected').val();
+        drug2Index = parseInt(drug2ID.split("_")[1]);
+    } else {
+        drug2 = "";
+    }
 
     //deselect drug
     var quotecontent = $("#quotearea").html();
@@ -208,7 +205,7 @@ function selectDrug() {
 
     //select drug
     drug1Index = findIndex(quotecontent, drug1, drug1Index);
-    drug2Index = findIndex(quotecontent, drug2, drug2Index);
+    drug2Index = drug2 == "" ? drug1Index : findIndex(quotecontent, drug2, drug2Index);
     var drug1End = drug1Index + drug1.length;
     var drug2End = drug2Index + drug2.length;
     if ((drug1Index <= drug2Index && drug1End >= drug2Index) || (drug2Index <= drug1Index && drug2End >= drug1Index)) {
@@ -239,14 +236,14 @@ function rejectEvidenceCheckBox(field) {
     $('#' + field).change(function() {
         if ($('#' + field).is(':checked')) {
             $('#reject-reason').show();
-            $('#reject-reason-1').show();
+            $('#reject-reason-label').show();
             $('#reject-reason-comment').show();
-            $('#reject-reason-comment-1').show();
+            $('#reject-reason-comment-label').show();
         } else {
             $('#reject-reason').hide();
             $('#reject-reason-comment').hide();
-            $('#reject-reason-1').hide();
-            $('#reject-reason-comment-1').hide();
+            $('#reject-reason-label').hide();
+            $('#reject-reason-comment-label').hide();
         }
     });
 }
