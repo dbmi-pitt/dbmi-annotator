@@ -4,8 +4,7 @@
 <suite name="DBMI-Annotator"  preserve-order="true" parallel="false">
   <test name="BasicTests">
     <classes>
-    <class name="authentication.Login"/>  
-	<!-- <class name="authentication.Register"/>     -->
+    <class name="dbmi.Login"/>  
     </classes>
   </test> <!-- Test -->
 </suite> <!-- Suite -->
