@@ -88,10 +88,14 @@ function updateClaimAndData(annotations, annotationId) {
                 totalDataNum = annotation.argues.supportsBy.length;  
                 //if it is not rejected, show the data table
                 if (currAnnotation.argues.method != "statement") {
-                    dataTable = createDataTable(annotation); // create data table  
+                    if (currAnnotation.argues.method == "Case Report") {
+                        dataTable = createDipsTable(annotation);
+                    } else {
+                        dataTable = createDataTable(annotation); // create data table  
+                    }
                 }            
                 totalDataNum = annotation.argues.supportsBy.length;      
-                dataTable = createDataTable(annotation); // create data table 
+                //dataTable = createDataTable(annotation); // create data table 
             }
             
             claim = annotation.argues;                    
@@ -147,6 +151,7 @@ function updateClaimAndData(annotations, annotationId) {
         $('#add-new-data-row-btn').show();
         $('#mp-editor-claim-list').show();
     }
+
 }
 
 // append new row of data & material in annotation table
@@ -173,12 +178,10 @@ function addNewDataRow() {
 }
 
 
-
-// @input: data list in MP annotation
-// @input: MP annotation Id
-// return: table html for multiple data & materials 
-function createDataTable(annotation){
-
+// @input: annotation
+// return: table html for multiple DIPS score and dosing info
+function createDipsTable(annotation){
+    //precipitant info
     drugname1 = annotation.argues.qualifiedBy.drug1;
     drugname2 = annotation.argues.qualifiedBy.drug2;
     if (annotation.argues.qualifiedBy.relationship == "interact with") {
@@ -187,13 +190,133 @@ function createDataTable(annotation){
         else if (annotation.argues.qualifiedBy.precipitant == "drug2")
             drugname2 += " (precipitant)";
     }
-    if (drugname2 == "") {
-        dataTable = "<table id='mp-data-tb'><tr><td>Ev Relationship</td><td>No. of Participants</td><td><div>" + drugname1 + " Dose</div></td><td>Phenotype</td><td>AUC ratio</td><td>Cmax ratio</td><td>Clearance ratio</td><td>Half-life ratio</td><td>Study type</td></tr>";
+    //reject info
+    if (annotation.rejected == undefined || annotation.rejected == null ) {
+        dataTable = "<table style='color:green;'";
     } else {
-        dataTable = "<table id='mp-data-tb'><tr><td>Ev Relationship</td><td>No. of Participants</td><td><div>" + drugname1 + " Dose</div></td><td>" + drugname2 + " Dose</td><td>AUC ratio</td><td>Cmax ratio</td><td>Clearance ratio</td><td>Half-life ratio</td><td>Study type</td></tr>";
+        dataTable = "<table style='color:red;'";
+    }
+
+    dataTable += " id='mp-dips-tb'><tr><td>Reviewer</td><td><div>" + drugname1 + " Dose</div></td><td>" + drugname2 + " Dose</td><td>Q1</td><td>Q2</td><td>Q3</td><td>Q4</td><td>Q5</td><td>Q6</td><td>Q7</td><td>Q8</td><td>Q9</td><td>Q10</td><td>Total</td></tr>";
+    dataL = annotation.argues.supportsBy;
+
+    if (dataL.length > 0){ // show all data items
+        for (var dataNum = 0; dataNum < dataL.length; dataNum++) {
+            data = dataL[dataNum];
+            method = data.supportsBy;
+            material = data.supportsBy.supportsBy;
+            row = "<tr style='height:20px;'>";
+            // evidence relationship
+            if (data.reviewer.reviewer != null)
+                row += "<td onclick='editDataCellByEditor(\"reviewer\",\""+dataNum+"\");'>" + data.reviewer.reviewer + "</td>";      
+            else 
+                row += "<td onclick='addDataCellByEditor(\"reviewer\",\""+dataNum+"\");'></td>";
+
+            // show mp material
+            if (material.drug1Dose.value != null)    
+                row += "<td onclick='editDataCellByEditor(\"dose1\",\""+dataNum+"\");'>" + material.drug1Dose.value + "</td>";
+            else 
+                row += "<td onclick='addDataCellByEditor(\"dose1\",\""+dataNum+"\");'></td>"; 
+            
+            if (material.drug2Dose.value != null)
+                row += "<td onclick='editDataCellByEditor(\"dose2\",\""+dataNum+"\");'>" + material.drug2Dose.value + "</td>";
+            else 
+                row += "<td onclick='addDataCellByEditor(\"dose2\",\""+dataNum+"\");'></td>"; 
+            $('#nav-dose2-btn').show();
+            $('nav-phenotype-btn').hide();
+
+            // show mp data
+            if (data.dips.q1 != null)
+                row += "<td onclick='editDataCellByEditor(\"q1\",\""+dataNum+"\");'>" + data.dips.q1 + "</td>";
+            else 
+                row += "<td onclick='addDataCellByEditor(\"q1\",\""+dataNum+"\");'></td>"; 
+
+            if (data.dips.q2 != null)
+                row += "<td onclick='editDataCellByEditor(\"q2\",\""+dataNum+"\");'>" + data.dips.q2 + "</td>";
+            else 
+                row += "<td onclick='addDataCellByEditor(\"q2\",\""+dataNum+"\");'></td>"; 
+
+            if (data.dips.q3 != null)
+                row += "<td onclick='editDataCellByEditor(\"q3\",\""+dataNum+"\");'>" + data.dips.q3 + "</td>";
+            else 
+                row += "<td onclick='addDataCellByEditor(\"q3\",\""+dataNum+"\");'></td>"; 
+
+            if (data.dips.q4 != null)
+                row += "<td onclick='editDataCellByEditor(\"q4\",\""+dataNum+"\");'>" + data.dips.q4 + "</td>";
+            else 
+                row += "<td onclick='addDataCellByEditor(\"q4\",\""+dataNum+"\");'></td>"; 
+
+            if (data.dips.q5 != null)
+                row += "<td onclick='editDataCellByEditor(\"q5\",\""+dataNum+"\");'>" + data.dips.q5 + "</td>";
+            else 
+                row += "<td onclick='addDataCellByEditor(\"q5\",\""+dataNum+"\");'></td>"; 
+
+            if (data.dips.q6 != null)
+                row += "<td onclick='editDataCellByEditor(\"q6\",\""+dataNum+"\");'>" + data.dips.q6 + "</td>";
+            else 
+                row += "<td onclick='addDataCellByEditor(\"q6\",\""+dataNum+"\");'></td>"; 
+
+            if (data.dips.q7 != null)
+                row += "<td onclick='editDataCellByEditor(\"q7\",\""+dataNum+"\");'>" + data.dips.q7 + "</td>";
+            else 
+                row += "<td onclick='addDataCellByEditor(\"q7\",\""+dataNum+"\");'></td>"; 
+
+            if (data.dips.q8 != null)
+                row += "<td onclick='editDataCellByEditor(\"q8\",\""+dataNum+"\");'>" + data.dips.q8 + "</td>";
+            else 
+                row += "<td onclick='addDataCellByEditor(\"q8\",\""+dataNum+"\");'></td>";
+
+            if (data.dips.q9 != null)
+                row += "<td onclick='editDataCellByEditor(\"q9\",\""+dataNum+"\");'>" + data.dips.q9 + "</td>";
+            else 
+                row += "<td onclick='addDataCellByEditor(\"q9\",\""+dataNum+"\");'></td>"; 
+
+            if (data.dips.q10 != null)
+                row += "<td onclick='editDataCellByEditor(\"q10\",\""+dataNum+"\");'>" + data.dips.q10 + "</td>";
+            else 
+                row += "<td onclick='addDataCellByEditor(\"q10\",\""+dataNum+"\");'></td>";
+
+            if (data.reviewer.total != null)
+                row += "<td>" + data.reviewer.total + "</td>";
+            else 
+                row += "<td>NA</td>"; 
+
+            row += "</tr>";
+            dataTable += row;
+        }
+    } else { // add empty row
+        dataTable += "<tr style='height:20px;'><td onclick='addDataCellByEditor(\"reviewer\",0);'></td><td onclick='addDataCellByEditor(\"dose1\",0);'> </td><td onclick='addDataCellByEditor(\"dose2\",0);'></td><td onclick='addDataCellByEditor(\"q1\",0);'></td><td onclick='addDataCellByEditor(\"q2\",0);'></td><td onclick='addDataCellByEditor(\"q3\",0);'></td><td onclick='addDataCellByEditor(\"q4\",0);'></td><td onclick='addDataCellByEditor(\"q5\",0);'></td>";
+        dataTable += "<td onclick='addDataCellByEditor(\"q6\",0);'></td><td onclick='addDataCellByEditor(\"q7\",0);'></td><td onclick='addDataCellByEditor(\"q8\",0);'></td><td onclick='addDataCellByEditor(\"q9\",0);'></td><td onclick='addDataCellByEditor(\"q10\",0);'></td><td>NA</td>";
+    }
+    dataTable += "</table>";
+    return dataTable;
+}
+
+
+// @input: data list in MP annotation
+// @input: MP annotation Id
+// return: table html for multiple data & materials 
+function createDataTable(annotation){
+    var dataTable;
+    drugname1 = annotation.argues.qualifiedBy.drug1;
+    drugname2 = annotation.argues.qualifiedBy.drug2;
+    if (annotation.argues.qualifiedBy.relationship == "interact with") {
+        if (annotation.argues.qualifiedBy.precipitant == "drug1")
+            drugname1 += " (precipitant)";
+        else if (annotation.argues.qualifiedBy.precipitant == "drug2")
+            drugname2 += " (precipitant)";
+    }
+    if (annotation.rejected == undefined || annotation.rejected == null ) {
+        dataTable = "<table style='color:green;'";
+    } else {
+        dataTable = "<table style='color:red;'";
+    }
+    if (drugname2 == "") {
+        dataTable += " id='mp-data-tb'><tr><td>Ev Relationship</td><td>No. of Participants</td><td><div>" + drugname1 + " Dose</div></td><td>Phenotype</td><td>AUC ratio</td><td>Cmax ratio</td><td>Clearance ratio</td><td>Half-life ratio</td><td>Study type</td></tr>";
+    } else {
+        dataTable += " id='mp-data-tb'><tr><td>Ev Relationship</td><td>No. of Participants</td><td><div>" + drugname1 + " Dose</div></td><td>" + drugname2 + " Dose</td><td>AUC ratio</td><td>Cmax ratio</td><td>Clearance ratio</td><td>Half-life ratio</td><td>Study type</td></tr>";
     }
     
-
     annotationId = annotation.id;
     dataL = annotation.argues.supportsBy;
 

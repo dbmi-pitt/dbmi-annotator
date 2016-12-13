@@ -92,6 +92,21 @@ function changeCausedbyMethod() {
         $("#relationship option[value = 'interact with']").removeAttr('disabled');
         $("#relationship option[value = 'interact with']").show();
     }
+    //case report - no substrate of or inhibits
+    if (methodValue == "Case Report") {
+        $("#relationship option[value = 'inhibits']").attr('disabled', 'disabled');
+        $("#relationship option[value = 'inhibits']").hide();
+        $("#relationship option[value = 'substrate of']").attr('disabled', 'disabled');
+        $("#relationship option[value = 'substrate of']").hide();
+        if ($("#relationship option:selected").text() == "inhibits" || $("#relationship option:selected").text() == "substrate of") {
+            $("#relationship option:selected").prop("selected", false);
+        }
+    } else {
+        $("#relationship option[value = 'inhibits']").removeAttr('disabled');
+        $("#relationship option[value = 'inhibits']").show();
+        $("#relationship option[value = 'substrate of']").removeAttr('disabled');
+        $("#relationship option[value = 'substrate of']").show();
+    }
     //phenotype & statement
     if ((methodValue == "Phenotype clinical study" || methodValue == "statement") && ($("#relationship option:selected").text() == "inhibits"||$("#relationship option:selected").text()=="substrate of")) {
         $("#Drug1-label").html("Drug: ");
@@ -107,7 +122,7 @@ function changeCausedbyMethod() {
         $("#Drug1-label").html("Drug1: ");
         $("#Drug2-label").parent().show();
         $("#Drug2").parent().show();
-        $("#Drug2")[0].selectedIndex = -1;
+        $("#Drug2")[0].selectedIndex = 0;
         console.log($("#Drug2 option:selected").text());
     }
 }
@@ -187,9 +202,11 @@ function addDataCellByEditor(field, dataNum, isNewData) {
     console.log("addDataCellByEditor - id: " + annotationId + " | data: " + dataNum + " | field: " + field);
 
     $("#claim-label-data-editor").show();
+    //fields whitch don't need text selected
+    var selectedTextNotNeed = ["evRelationship", "studytype", "reviewer", "q1", "q2", "q3", "q4", "q5", "q6", "q7", "q8", "q9", "q10"];
 
     // return if no text selection 
-    if (!isTextSelected && field != "evRelationship" && field != "studytype") {
+    if (!isTextSelected && !selectedTextNotNeed.includes(field)) {
         warnSelectTextSpan(field);
     } else {
         // hide data fields navigation if editing evidence relationship 
@@ -226,7 +243,7 @@ function addDataCellByEditor(field, dataNum, isNewData) {
                     // add data if not avaliable  
                     if (annotation.argues.supportsBy.length == 0 || isNewData){ 
 
-                        var data = {type : "mp:data", evRelationship: "", auc : {}, cmax : {}, clearance : {}, halflife : {}, supportsBy : {type : "mp:method", supportsBy : {type : "mp:material", participants : {}, drug1Dose : {}, drug2Dose : {}, phenotype: {}}}, grouprandom: "", parallelgroup: ""};
+                        var data = {type : "mp:data", evRelationship: "", auc : {}, cmax : {}, clearance : {}, halflife : {}, reviewer: {}, dips: {}, supportsBy : {type : "mp:method", supportsBy : {type : "mp:material", participants : {}, drug1Dose : {}, drug2Dose : {}, phenotype: {}}}, grouprandom: "", parallelgroup: ""};
                         annotation.argues.supportsBy.push(data); 
                     } 
                     
@@ -354,9 +371,14 @@ function switchDataForm(targetField, isNotNeedValid) {
 function switchDataFormHelper(targetField) {
 
     // field actual div id mapping
-    fieldM = {"evRelationship":"evRelationship", "participants":"participants", "dose1":"drug1Dose", "dose2":"drug2Dose", "phenotype":"phenotype", "auc":"auc", "cmax":"cmax", "clearance":"clearance", "halflife":"halflife", "studytype":"studytype"};
+    fieldM = {"reviewer":"reviewer", "evRelationship":"evRelationship", "participants":"participants", "dose1":"drug1Dose", "dose2":"drug2Dose", "phenotype":"phenotype", "auc":"auc", "cmax":"cmax", "clearance":"clearance", "halflife":"halflife", "studytype":"studytype"};
 
     var showDeleteBtn = false;
+    var questionList = ["reviewer", "q1", "q2", "q3", "q4", "q5", "q6", "q7", "q8", "q9", "q10"];
+    if (questionList.includes(targetField)){
+        console.log("show dips editor");
+        $("#mp-data-form-"+targetField).show();
+    }
 
     for (var field in fieldM) {       
         var dataid = "mp-data-form-"+field;
@@ -383,8 +405,7 @@ function switchDataFormHelper(targetField) {
             else 
                 $("#annotator-delete").hide();
             focusOnDataField(targetField);
-        }                        
-        else {
+        }  else {
             cleanFocusOnDataField(field);
             $("#"+dataid).hide();
         }                           

@@ -203,7 +203,7 @@ ul.mp-sub-menu-2{
 }
 
 /* annotator table -material/data  */
-#mp-data-tb{
+#mp-data-tb, #mp-dips-tb{
     border: 1px #D4E0EE !important;
     width: 100% !important;
 	  min-width: 700px !important;
@@ -214,7 +214,7 @@ ul.mp-sub-menu-2{
     background-color: white !important;
 }
 
-#mp-data-tb tr, #mp-data-tb td {
+#mp-data-tb tr, #mp-data-tb td, #mp-dips-tb tr, #mp-dips-tb td {
     border-collapse: collapse !important;
     border: 1px solid #D4E0EE !important;
     background-color: white !important;
@@ -316,3 +316,4 @@ body.loading {
 body.loading .modal {
     display: block;
 }
+

@@ -134,6 +134,7 @@ function initLiseners() {
 
     $('#method').change(function() {
         changeCausedbyMethod();
+        showEnzyme();
     });
 
     $('input[name=phenotypeGenre]').change(function() {
