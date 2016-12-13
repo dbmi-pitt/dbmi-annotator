@@ -223,15 +223,20 @@ function createDataTable(annotation){
             if (drugname2 == "") {
                 console.log("drugname2");
                 console.log(drugname2);
-                if (material.phenotype != null)
+                if (material.phenotype != null) {
                     row += "<td onclick='editDataCellByEditor(\"phenotype\",\""+dataNum+"\");'>" + material.phenotype.type + "</td>";
-                else 
+                } else {
                     row += "<td onclick='addDataCellByEditor(\"phenotype\",\""+dataNum+"\");'></td>";
+                }
+                $('#nav-dose2-btn').hide();
+                $('nav-phenotype-btn').show();
             } else {
                 if (material.drug2Dose.value != null)
                     row += "<td onclick='editDataCellByEditor(\"dose2\",\""+dataNum+"\");'>" + material.drug2Dose.value + "</td>";
                 else 
                     row += "<td onclick='addDataCellByEditor(\"dose2\",\""+dataNum+"\");'></td>"; 
+                $('#nav-dose2-btn').show();
+                $('nav-phenotype-btn').hide();
             }
             // show mp data
             if (data.auc.value != null)
