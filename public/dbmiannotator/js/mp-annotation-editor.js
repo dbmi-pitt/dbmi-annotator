@@ -11,6 +11,7 @@ function claimEditorLoad() {
     $("#mp-data-form-participants").hide();
     $("#mp-data-form-dose1").hide();
     $("#mp-data-form-dose2").hide();
+    $("#mp-data-form-phenotype").hide();
     $("#mp-data-form-auc").hide();
     $("#mp-data-form-cmax").hide();
     $("#mp-data-form-clearance").hide();
@@ -68,24 +69,110 @@ function deselectDrug() {
     $("#quote").html(quotestring);
 }
 
+// when method is phenotype and relationship is inhibits or substrate of
+function changeCausedbyMethod() {
+    var methodValue = $("#method option:selected").text();
+    //statement
+    if (methodValue == "statement") {
+        $('#negationdiv').show();
+        $('#negation-label').show();
+    } else {
+        $('#negationdiv').hide();
+        $('#negation-label').hide();
+    }
+    //phenotype - no interact with
+    if (methodValue == "Phenotype clinical study") {
+        $("#relationship option[value = 'interact with']").attr('disabled', 'disabled');
+        $("#relationship option[value = 'interact with']").hide();
+
+        if ($("#relationship option:selected").text() == "interact with") {
+            $("#relationship option:selected").prop("selected", false);
+        }
+    } else {
+        $("#relationship option[value = 'interact with']").removeAttr('disabled');
+        $("#relationship option[value = 'interact with']").show();
+    }
+    //case report - no substrate of or inhibits
+    if (methodValue == "Case Report") {
+        $("#relationship option[value = 'inhibits']").attr('disabled', 'disabled');
+        $("#relationship option[value = 'inhibits']").hide();
+        $("#relationship option[value = 'substrate of']").attr('disabled', 'disabled');
+        $("#relationship option[value = 'substrate of']").hide();
+        if ($("#relationship option:selected").text() == "inhibits" || $("#relationship option:selected").text() == "substrate of") {
+            $("#relationship option:selected").prop("selected", false);
+        }
+    } else {
+        $("#relationship option[value = 'inhibits']").removeAttr('disabled');
+        $("#relationship option[value = 'inhibits']").show();
+        $("#relationship option[value = 'substrate of']").removeAttr('disabled');
+        $("#relationship option[value = 'substrate of']").show();
+    }
+    //phenotype & statement
+    if ((methodValue == "Phenotype clinical study" || methodValue == "statement") && ($("#relationship option:selected").text() == "inhibits"||$("#relationship option:selected").text()=="substrate of")) {
+        $("#Drug1-label").html("Drug: ");
+        $("#Drug2-label").parent().hide();
+        $("#Drug2").parent().hide();
+        $("#enzymesection1").show();
+        $("#enzyme").show();
+
+        $('input[name=precipitant]').prop('checked', false);
+        $('input[type=radio][name=precipitant]').parent().hide();
+        $('.precipitantLabel').parent().hide();
+    } else {
+        $("#Drug1-label").html("Drug1: ");
+        $("#Drug2-label").parent().show();
+        $("#Drug2").parent().show();
+        $("#Drug2")[0].selectedIndex = 0;
+        console.log($("#Drug2 option:selected").text());
+    }
+}
+
+// when type is Genotype
+function showPhenotypeType() {
+    console.log($("input[name=phenotypeGenre]:checked").val());
+    console.log($("input[name=phenotypeMetabolizer]:checked").val());
+    if ($("input:radio[name=phenotypeGenre]:checked").val() == "Genotype") {
+        $('#geneFamily').show();
+        $('#geneFamily-label').show();
+        $('#markerDrug').hide();
+        $('#markerDrug-label').hide();
+    } else {
+        $('#geneFamily').hide();
+        $('#geneFamily-label').hide();
+        $('#markerDrug').show();
+        $('#markerDrug-label').show();
+    }
+}
 
 // when relationship is inhibits or substrate of, show field enzyme
 function showEnzyme() {
 
-    if($("#relationship option:selected").text()=="inhibits"||$("#relationship option:selected").text()=="substrate of") {
+    if($("#relationship option:selected").text() == "inhibits"||$("#relationship option:selected").text()=="substrate of") {
+        if ($("#method option:selected").text() == "Phenotype clinical study" || $("#method option:selected").text() == "statement") {
+            $("#Drug1-label").html("Drug: ");
+            $("#Drug2-label").parent().hide();
+            $("#Drug2").parent().hide();
+        } else {
+            $("#Drug1-label").html("Drug1: ");
+            $("#Drug2-label").parent().show();
+            $("#Drug2").parent().show();
+        }
         $("#enzyme")[0].selectedIndex = 0;
         $("#enzymesection1").show();
         $("#enzyme").show();
 
         $('input[name=precipitant]').prop('checked', false);
-        $('input[type=radio][name=precipitant]').hide();
-        $('.precipitantLabel').hide();
+        $('input[type=radio][name=precipitant]').parent().hide();
+        $('.precipitantLabel').parent().hide();
     }
     if($("#relationship option:selected").text()=="interact with") {
+        $("#Drug1-label").html("Drug1: ");
+        $("#Drug2-label").parent().show();
+        $("#Drug2").parent().show();
         $("#enzymesection1").hide();
         $("#enzyme").hide();
-        $('input[type=radio][name=precipitant]').show();
-        $('.precipitantLabel').show();
+        $('input[type=radio][name=precipitant]').parent().show();
+        $('.precipitantLabel').parent().show();
     }
 }
 
@@ -115,9 +202,11 @@ function addDataCellByEditor(field, dataNum, isNewData) {
     console.log("addDataCellByEditor - id: " + annotationId + " | data: " + dataNum + " | field: " + field);
 
     $("#claim-label-data-editor").show();
+    //fields whitch don't need text selected
+    var selectedTextNotNeed = ["evRelationship", "studytype", "reviewer", "q1", "q2", "q3", "q4", "q5", "q6", "q7", "q8", "q9", "q10"];
 
     // return if no text selection 
-    if (!isTextSelected && field != "evRelationship" && field != "studytype") {
+    if (!isTextSelected && !selectedTextNotNeed.includes(field)) {
         warnSelectTextSpan(field);
     } else {
         // hide data fields navigation if editing evidence relationship 
@@ -154,7 +243,7 @@ function addDataCellByEditor(field, dataNum, isNewData) {
                     // add data if not avaliable  
                     if (annotation.argues.supportsBy.length == 0 || isNewData){ 
 
-                        var data = {type : "mp:data", evRelationship: "", auc : {}, cmax : {}, clearance : {}, halflife : {}, supportsBy : {type : "mp:method", supportsBy : {type : "mp:material", participants : {}, drug1Dose : {}, drug2Dose : {}}}, grouprandom: "", parallelgroup: ""};
+                        var data = {type : "mp:data", evRelationship: "", auc : {}, cmax : {}, clearance : {}, halflife : {}, reviewer: {}, dips: {}, supportsBy : {type : "mp:method", supportsBy : {type : "mp:material", participants : {}, drug1Dose : {}, drug2Dose : {}, phenotype: {}}}, grouprandom: "", parallelgroup: ""};
                         annotation.argues.supportsBy.push(data); 
                     } 
                     
@@ -243,8 +332,6 @@ function preDataForm(targetField, isNotNeedValid) {
     focusOnDataField(targetField);
 }
 
-
-
 // switch data from nav button
 function switchDataForm(targetField, isNotNeedValid) {
 
@@ -284,9 +371,14 @@ function switchDataForm(targetField, isNotNeedValid) {
 function switchDataFormHelper(targetField) {
 
     // field actual div id mapping
-    fieldM = {"evRelationship":"evRelationship", "participants":"participants", "dose1":"drug1Dose", "dose2":"drug2Dose", "auc":"auc", "cmax":"cmax", "clearance":"clearance", "halflife":"halflife", "studytype":"studytype"};
+    fieldM = {"reviewer":"reviewer", "evRelationship":"evRelationship", "participants":"participants", "dose1":"drug1Dose", "dose2":"drug2Dose", "phenotype":"phenotype", "auc":"auc", "cmax":"cmax", "clearance":"clearance", "halflife":"halflife", "studytype":"studytype"};
 
     var showDeleteBtn = false;
+    var questionList = ["reviewer", "q1", "q2", "q3", "q4", "q5", "q6", "q7", "q8", "q9", "q10"];
+    if (questionList.includes(targetField)){
+        console.log("show dips editor");
+        $("#mp-data-form-"+targetField).show();
+    }
 
     for (var field in fieldM) {       
         var dataid = "mp-data-form-"+field;
@@ -313,8 +405,7 @@ function switchDataFormHelper(targetField) {
             else 
                 $("#annotator-delete").hide();
             focusOnDataField(targetField);
-        }                        
-        else {
+        }  else {
             cleanFocusOnDataField(field);
             $("#"+dataid).hide();
         }                           
