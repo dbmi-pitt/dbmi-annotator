@@ -87,15 +87,16 @@ function updateClaimAndData(annotations, annotationId) {
                 // cache total number of data & material for current claim
                 totalDataNum = annotation.argues.supportsBy.length;  
                 //if it is not rejected, show the data table
-                if (currAnnotation.argues.method != "statement") {
-                    if (currAnnotation.argues.method == "Case Report") {
-                        dataTable = createDipsTable(annotation);
-                    } else {
-                        dataTable = createDataTable(annotation); // create data table  
-                    }
-                }            
+
+                if (currAnnotation.argues.method == "Case Report") {
+                    dataTable = createDipsTable(annotation);                    
+                } else if (currAnnotation.argues.method == "statement") {
+                    dataTable = createStatTable(annotation);
+                } else {
+                    dataTable = createDataTable(annotation); // create data table  
+                }
+                            
                 totalDataNum = annotation.argues.supportsBy.length;      
-                //dataTable = createDataTable(annotation); // create data table 
             }
             
             claim = annotation.argues;                    
@@ -118,11 +119,16 @@ function updateClaimAndData(annotations, annotationId) {
         
     claimPanel += "<tr><td><button id='edit-claim-btn' type='button' onclick='editClaim()' style='float:left; font-size:12px'>Edit Claim</button><button id='view-claim-btn' type='button' onclick='viewClaim()' style='float: right; font-size:12px'>View Claim</button></td></tr></table>";
         
-        var dataPanel = "";
-        if (currAnnotation == undefined || currAnnotation.argues.method != "statement") {
-            // Data & Material - add new data button 
-            dataPanel = "<button id='add-new-data-row-btn' type='button' onclick='addNewDataRow()' style='float: right; font-size:12px'>add new data & material</button>" + dataTable;
-        }
+    // When method is statement, disable adding rows
+    var dataPanel = "";
+    if (currAnnotation == undefined || currAnnotation.argues.method != "statement") {
+        // Data & Material - add new data button 
+        dataPanel = "<button id='add-new-data-row-btn' type='button' onclick='addNewDataRow()' style='float: right; font-size:12px'>add new data & material</button>" + dataTable;
+    } else if (currAnnotation.argues.method == "statement") {
+        dataPanel = dataTable;
+    }
+
+
     // Annotation table
     annTable = "<table id='mp-claim-data-tb'>" +
         "<tr><td style='width:310px;'>Claim</td><td>Material/Data <strong id='wait' style='display:none;'>Loading...</strong></td></tr>";             
@@ -397,6 +403,12 @@ function createDataTable(annotation){
             dataTable += "<tr style='height:20px;'><td onclick='addDataCellByEditor(\"evRelationship\",0);'></td><td onclick='addDataCellByEditor(\"participants\",0);'></td><td onclick='addDataCellByEditor(\"dose1\",0);'> </td><td onclick='addDataCellByEditor(\"dose2\",0);'></td><td onclick='addDataCellByEditor(\"auc\",0);'></td><td onclick='addDataCellByEditor(\"cmax\",0);'></td><td onclick='addDataCellByEditor(\"clearance\",0);'></td><td onclick='addDataCellByEditor(\"halflife\",0);'></td><td onclick='addDataCellByEditor(\"studytype\",0);'></td>";
     }   }
     dataTable += "</table>";
+    return dataTable;
+}
+
+function createStatTable(annotation) {
+    negation = annotation.argues.negation;
+    dataTable = "<table style='font-size: 13px !important; background-color: white !important;'><tr><td>Negation</td></tr><tr><td>"+negation+"</td></tr></table>";
     return dataTable;
 }
 
