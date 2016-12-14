@@ -17,6 +17,17 @@ function claimEditorLoad() {
     $("#mp-data-form-clearance").hide();
     $("#mp-data-form-halflife").hide();
     $("#mp-data-form-studytype").hide();
+    $("#mp-data-form-reviewer").hide();
+    $("#mp-data-form-q1").hide();
+    $("#mp-data-form-q2").hide();
+    $("#mp-data-form-q3").hide();
+    $("#mp-data-form-q4").hide();
+    $("#mp-data-form-q5").hide();
+    $("#mp-data-form-q6").hide();
+    $("#mp-data-form-q7").hide();
+    $("#mp-data-form-q8").hide();
+    $("#mp-data-form-q9").hide();
+    $("#mp-data-form-q10").hide();
 }
 
 
@@ -371,14 +382,10 @@ function switchDataForm(targetField, isNotNeedValid) {
 function switchDataFormHelper(targetField) {
 
     // field actual div id mapping
-    fieldM = {"reviewer":"reviewer", "evRelationship":"evRelationship", "participants":"participants", "dose1":"drug1Dose", "dose2":"drug2Dose", "phenotype":"phenotype", "auc":"auc", "cmax":"cmax", "clearance":"clearance", "halflife":"halflife", "studytype":"studytype"};
+    fieldM = {"reviewer":"reviewer", "evRelationship":"evRelationship", "participants":"participants", "dose1":"drug1Dose", "dose2":"drug2Dose", "phenotype":"phenotype", "auc":"auc", "cmax":"cmax", "clearance":"clearance", "halflife":"halflife", "studytype":"studytype",
+    "q1":"q1", "q2":"q2", "q3":"q3", "q4":"q4", "q5":"q5", "q6":"q6", "q7":"q7", "q8":"q8", "q9":"q9", "q10":"q10"};
 
     var showDeleteBtn = false;
-    var questionList = ["reviewer", "q1", "q2", "q3", "q4", "q5", "q6", "q7", "q8", "q9", "q10"];
-    if (questionList.includes(targetField)){
-        console.log("show dips editor");
-        $("#mp-data-form-"+targetField).show();
-    }
 
     for (var field in fieldM) {       
         var dataid = "mp-data-form-"+field;
