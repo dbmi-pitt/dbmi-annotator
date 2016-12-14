@@ -7,6 +7,7 @@ function claimEditorLoad() {
     $("#claim-label-data-editor").hide();
     $(".annotator-save").hide();
     $("#mp-data-nav").hide();
+    $("#mp-dips-nav").hide();
     $("#mp-data-form-evRelationship").hide();
     $("#mp-data-form-participants").hide();
     $("#mp-data-form-dose1").hide();
@@ -135,6 +136,33 @@ function changeCausedbyMethod() {
         $("#Drug2").parent().show();
         $("#Drug2")[0].selectedIndex = 0;
         console.log($("#Drug2 option:selected").text());
+    }
+}
+
+// when reviewer is author
+function showLackQuestionInfo() {
+    var reviewerValue = $("input[name=dips-reviewer]:checked").val();
+    console.log(reviewerValue);
+    if (reviewerValue == "Author") {
+        $("#author-lackscore").show();
+        $("#author-lackscore-label").show();
+    } else {
+        $("#author-lackscore").hide();
+        $("#author-lackscore-label").hide();
+        $("#author-total").hide();
+        $("#author-total-label").hide();
+    }
+}
+
+// when question score is lack, input total score directly
+function showTotalScore() {
+    var lackScore = $("#author-lackscore").is(':checked');
+    if (lackScore) {
+        $("#author-total").show();
+        $("#author-total-label").show();
+    } else {
+        $("#author-total").hide();
+        $("#author-total-label").hide();
     }
 }
 
@@ -400,7 +428,10 @@ function switchDataFormHelper(targetField) {
                 if ($('#' + field + '-unchanged-checkbox').is(':checked')) 
                     showDeleteBtn = true;                    
                 fieldVal = $("#" + fieldM[field]).val();
-            } else { // when field is text input
+            } else if (currAnnotation.argues.method == "Case Report"){ // when field is text input
+                $("#mp-dips-nav").show();
+                fieldVal = $("#" + fieldM[field]).val();
+            } else {
                 $("#mp-data-nav").show();
                 fieldVal = $("#" + fieldM[field]).val();
             }

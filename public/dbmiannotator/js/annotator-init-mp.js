@@ -70,6 +70,14 @@ if (typeof annotator === 'undefined') {
         ajaxStart: function() { $body.addClass("loading"); },
         ajaxStop: function() { $body.removeClass("loading"); }    
     });
+
+    $( function() {
+        $( document ).tooltip();
+    });
+
+    $( function() {
+        $( "#datepicker" ).datepicker();
+    });
 }
 
 
@@ -139,6 +147,14 @@ function initLiseners() {
 
     $('input[name=phenotypeGenre]').change(function() {
         showPhenotypeType();
+    });
+
+    $('input[name=dips-reviewer]').change(function() {
+        showLackQuestionInfo();
+    });
+
+    $('#author-lackscore').change(function() {
+        showTotalScore();
     });
     
     rejectEvidenceCheckBox("rejected-evidence");

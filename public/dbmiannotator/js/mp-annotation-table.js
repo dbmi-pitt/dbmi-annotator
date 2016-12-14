@@ -203,7 +203,11 @@ function createDipsTable(annotation){
         dataTable = "<table style='color:red;'";
     }
 
-    dataTable += " id='mp-dips-tb'><tr><td>Reviewer</td><td><div>" + drugname1 + " Dose</div></td><td>" + drugname2 + " Dose</td><td>Q1</td><td>Q2</td><td>Q3</td><td>Q4</td><td>Q5</td><td>Q6</td><td>Q7</td><td>Q8</td><td>Q9</td><td>Q10</td><td>Total</td></tr>";
+    dataTable += " id='mp-dips-tb'><tr><td>Reviewer</td><td><div>" + drugname1 + " Dose</div></td><td>" + drugname2 + " Dose</td>";
+    for (var i = 1; i <= 10; i++) {
+        dataTable += "<td><a href='#' title='" + $("#dips-q" + i + "-label").text() + "'>Q" + i + "</a></td>";
+    }
+    dataTable += "<td>Total</td></tr>"
     dataL = annotation.argues.supportsBy;
 
     if (dataL.length > 0){ // show all data items
@@ -228,8 +232,6 @@ function createDipsTable(annotation){
                 row += "<td onclick='editDataCellByEditor(\"dose2\",\""+dataNum+"\");'>" + material.drug2Dose.value + "</td>";
             else 
                 row += "<td onclick='addDataCellByEditor(\"dose2\",\""+dataNum+"\");'></td>"; 
-            $('#nav-dose2-btn').show();
-            $('nav-phenotype-btn').hide();
 
             // show mp data
             if (data.dips.q1 != null)
