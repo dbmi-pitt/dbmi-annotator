@@ -121,11 +121,16 @@ function updateClaimAndData(annotations, annotationId) {
         
     // When method is statement, disable adding rows
     var dataPanel = "";
-    if (currAnnotation == undefined || currAnnotation.argues.method != "statement") {
+
+    if (currAnnotation == undefined || (currAnnotation.argues.method != "statement" && currAnnotation.argues.method != "Case Report")) {
         // Data & Material - add new data button 
         dataPanel = "<button id='add-new-data-row-btn' type='button' onclick='addNewDataRow()' style='float: right; font-size:12px'>add new data & material</button>" + dataTable;
     } else if (currAnnotation.argues.method == "statement") {
         dataPanel = dataTable;
+    } else if (currAnnotation.argues.method == "Case Report") {
+        var dose1 = currAnnotation.argues.supportsBy.length == 0 ? "" : currAnnotation.argues.supportsBy[0].supportsBy.supportsBy.drug1Dose.value;
+        var dose2 = currAnnotation.argues.supportsBy.length == 0 ? "" : currAnnotation.argues.supportsBy[0].supportsBy.supportsBy.drug2Dose.value;
+        dataPanel = "<button id='add-new-data-row-btn' type='button' onclick='addNewDipsRow("+dose1+","+dose2+")' style='float: right; font-size:12px'>add new data & material</button>" + dataTable;
     }
 
 
@@ -183,6 +188,33 @@ function addNewDataRow() {
     }
 }
 
+// append new row of dips score in annotation table
+function addNewDipsRow(dose1, dose2) {
+    var rowCount = $('#mp-dips-tb tr').length;
+    // set maximum number of rows as 3
+    if (rowCount > 3)
+        return;
+
+    rowtext = "";
+    $('#mp-dips-tb tr:last td').map(function() {
+        rowtext += $(this).text();
+    })
+
+    if (rowtext.trim() == "") {
+        return;
+    } else {
+        totalDataNum += 1;
+        dataNumLast = totalDataNum - 1;
+        var temp = "<tr style='height:20px;'>" + "<td onclick='addDataCellByEditor(\"reviewer\",\""+dataNumLast+"\", true);'></td><td onclick='addDataCellByEditor(\"dose1\",\"" + dataNumLast + "\", true);'>"+(dose1==undefined?"":dose1)+"</td><td onclick='addDataCellByEditor(\"dose2\",\"" + dataNumLast + "\", true);'>"+(dose2==undefined?"":dose2)+"</td>"
+        for (var i = 1; i <= 10; i++) {
+            //temp += "<td onclick='addDataCellByEditor(\"q"+i+"\",\""+dataNumLast+"\");'></td>";
+            temp += "<td><img src='img/cell-uneditorable.png' style='width:20px;height:17px;'></td>";
+        }
+        temp += "<td>NA</td></tr>";
+        $('#mp-dips-tb tr:last').after(temp);
+    }
+}
+
 
 // @input: annotation
 // return: table html for multiple DIPS score and dosing info
@@ -215,14 +247,16 @@ function createDipsTable(annotation){
             data = dataL[dataNum];
             method = data.supportsBy;
             material = data.supportsBy.supportsBy;
-            row = "<tr style='height:20px;'>";
-            // evidence relationship
+            
+            var row = "<tr style='height:20px;'>";
+
+            // show reviewer info
             if (data.reviewer.reviewer != null)
                 row += "<td onclick='editDataCellByEditor(\"reviewer\",\""+dataNum+"\");'>" + data.reviewer.reviewer + "</td>";      
             else 
                 row += "<td onclick='addDataCellByEditor(\"reviewer\",\""+dataNum+"\");'></td>";
 
-            // show mp material
+            // show dosing info
             if (material.drug1Dose.value != null)    
                 row += "<td onclick='editDataCellByEditor(\"dose1\",\""+dataNum+"\");'>" + material.drug1Dose.value + "</td>";
             else 
@@ -233,57 +267,22 @@ function createDipsTable(annotation){
             else 
                 row += "<td onclick='addDataCellByEditor(\"dose2\",\""+dataNum+"\");'></td>"; 
 
-            // show mp data
-            if (data.dips.q1 != null)
-                row += "<td onclick='editDataCellByEditor(\"q1\",\""+dataNum+"\");'>" + data.dips.q1 + "</td>";
-            else 
-                row += "<td onclick='addDataCellByEditor(\"q1\",\""+dataNum+"\");'></td>"; 
+            // show dips question
+            if (data.reviewer.lackInfo) {
+                for (var i = 1; i <= 10; i++) {
+                    row += "<td><img src='img/cell-uneditorable.png' style='width:20px;height:17px;'></td>"; 
+                }
+            } else {
+                for (var i = 1; i <= 10; i++) {
+                    if (data.dips["q" + i] != null) {
+                        row += "<td onclick='editDataCellByEditor(\"q"+i+"\",\""+dataNum+"\");'>" + data.dips["q"+i] + "</td>";
+                    } else {
+                        row += "<td onclick='addDataCellByEditor(\"q"+i+"\",\""+dataNum+"\");'></td>"; 
+                    }
+                }
+            }
 
-            if (data.dips.q2 != null)
-                row += "<td onclick='editDataCellByEditor(\"q2\",\""+dataNum+"\");'>" + data.dips.q2 + "</td>";
-            else 
-                row += "<td onclick='addDataCellByEditor(\"q2\",\""+dataNum+"\");'></td>"; 
-
-            if (data.dips.q3 != null)
-                row += "<td onclick='editDataCellByEditor(\"q3\",\""+dataNum+"\");'>" + data.dips.q3 + "</td>";
-            else 
-                row += "<td onclick='addDataCellByEditor(\"q3\",\""+dataNum+"\");'></td>"; 
-
-            if (data.dips.q4 != null)
-                row += "<td onclick='editDataCellByEditor(\"q4\",\""+dataNum+"\");'>" + data.dips.q4 + "</td>";
-            else 
-                row += "<td onclick='addDataCellByEditor(\"q4\",\""+dataNum+"\");'></td>"; 
-
-            if (data.dips.q5 != null)
-                row += "<td onclick='editDataCellByEditor(\"q5\",\""+dataNum+"\");'>" + data.dips.q5 + "</td>";
-            else 
-                row += "<td onclick='addDataCellByEditor(\"q5\",\""+dataNum+"\");'></td>"; 
-
-            if (data.dips.q6 != null)
-                row += "<td onclick='editDataCellByEditor(\"q6\",\""+dataNum+"\");'>" + data.dips.q6 + "</td>";
-            else 
-                row += "<td onclick='addDataCellByEditor(\"q6\",\""+dataNum+"\");'></td>"; 
-
-            if (data.dips.q7 != null)
-                row += "<td onclick='editDataCellByEditor(\"q7\",\""+dataNum+"\");'>" + data.dips.q7 + "</td>";
-            else 
-                row += "<td onclick='addDataCellByEditor(\"q7\",\""+dataNum+"\");'></td>"; 
-
-            if (data.dips.q8 != null)
-                row += "<td onclick='editDataCellByEditor(\"q8\",\""+dataNum+"\");'>" + data.dips.q8 + "</td>";
-            else 
-                row += "<td onclick='addDataCellByEditor(\"q8\",\""+dataNum+"\");'></td>";
-
-            if (data.dips.q9 != null)
-                row += "<td onclick='editDataCellByEditor(\"q9\",\""+dataNum+"\");'>" + data.dips.q9 + "</td>";
-            else 
-                row += "<td onclick='addDataCellByEditor(\"q9\",\""+dataNum+"\");'></td>"; 
-
-            if (data.dips.q10 != null)
-                row += "<td onclick='editDataCellByEditor(\"q10\",\""+dataNum+"\");'>" + data.dips.q10 + "</td>";
-            else 
-                row += "<td onclick='addDataCellByEditor(\"q10\",\""+dataNum+"\");'></td>";
-
+            //show dips total score
             if (data.reviewer.total != null)
                 row += "<td>" + data.reviewer.total + "</td>";
             else 
@@ -293,8 +292,11 @@ function createDipsTable(annotation){
             dataTable += row;
         }
     } else { // add empty row
-        dataTable += "<tr style='height:20px;'><td onclick='addDataCellByEditor(\"reviewer\",0);'></td><td onclick='addDataCellByEditor(\"dose1\",0);'> </td><td onclick='addDataCellByEditor(\"dose2\",0);'></td><td onclick='addDataCellByEditor(\"q1\",0);'></td><td onclick='addDataCellByEditor(\"q2\",0);'></td><td onclick='addDataCellByEditor(\"q3\",0);'></td><td onclick='addDataCellByEditor(\"q4\",0);'></td><td onclick='addDataCellByEditor(\"q5\",0);'></td>";
-        dataTable += "<td onclick='addDataCellByEditor(\"q6\",0);'></td><td onclick='addDataCellByEditor(\"q7\",0);'></td><td onclick='addDataCellByEditor(\"q8\",0);'></td><td onclick='addDataCellByEditor(\"q9\",0);'></td><td onclick='addDataCellByEditor(\"q10\",0);'></td><td>NA</td>";
+        dataTable += "<tr style='height:20px;'><td onclick='addDataCellByEditor(\"reviewer\",0);'></td><td onclick='addDataCellByEditor(\"dose1\",0);'> </td><td onclick='addDataCellByEditor(\"dose2\",0);'></td>";
+        for (var i = 1; i <= 10; i++) {
+            dataTable += "<td><img src='img/cell-uneditorable.png' style='width:20px;height:17px;'></td>"; 
+        }
+        dataTable += "<td>NA</td></tr>";
     }
     dataTable += "</table>";
     return dataTable;

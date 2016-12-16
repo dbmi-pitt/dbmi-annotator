@@ -158,10 +158,13 @@ function showLackQuestionInfo() {
 function showTotalScore() {
     var lackScore = $("#author-lackscore").is(':checked');
     if (lackScore) {
+        $('.dipsQuestion').prop('disabled', true);
         $("#author-total").show();
         $("#author-total-label").show();
     } else {
+        $('.dipsQuestion').prop('disabled', false);
         $("#author-total").hide();
+        $("#author-total").val('NA');
         $("#author-total-label").hide();
     }
 }
@@ -235,6 +238,7 @@ function claimSelectedInMenu(annotationId) {
 // (2) otherwise, load annotation to editor, then shown specific data form
 function addDataCellByEditor(field, dataNum, isNewData) {
 
+    
     $("#button#drug1-dose-switch-btn").focus();
 
     var annotationId = $('#mp-editor-claim-list option:selected').val();
@@ -249,11 +253,27 @@ function addDataCellByEditor(field, dataNum, isNewData) {
         warnSelectTextSpan(field);
     } else {
         // hide data fields navigation if editing evidence relationship 
-        if (field == "evRelationship" || field == "studytype") {
+        if (field == "evRelationship" || field =="studytype") {
             $("#mp-data-nav").hide();
             $(".annotator-save").hide();
+        } else if (field == "auc" || field == "cmax" || field == "clearance" || field == "halflife") { // when field is checkbox
+            $("#mp-data-nav").show();
+            $("#mp-dips-nav").hide();
+            $(".annotator-save").show(); 
+        } else if (currAnnotation.argues.method == "Case Report"){ // when field is text input
+            $("#mp-data-nav").hide();
+            $("#mp-dips-nav").show();
+            $(".annotator-save").show(); 
+            var flag = currAnnotation.argues.supportsBy[dataNum];
+            if (flag == undefined || flag.reviewer.lackInfo) {
+                $('.dipsQuestion').prop('disabled', true);
+            } else {
+                $('.dipsQuestion').prop('disabled', false);
+            }
         } else {
-            $(".annotator-save").show();            
+            $("#mp-data-nav").show();
+            $("#mp-dips-nav").hide();
+            $(".annotator-save").show(); 
         }
 
         // cached editing data cell
@@ -305,11 +325,27 @@ function editDataCellByEditor(field, dataNum) {
     $('#quote').hide();
     
     // hide data fields navigation if editing evidence relationship 
-    if (field == "evRelationship" || field == "studytype") {
+    if (field == "evRelationship" || field =="studytype") {
         $("#mp-data-nav").hide();
         $(".annotator-save").hide();
+    } else if (field == "auc" || field == "cmax" || field == "clearance" || field == "halflife") { // when field is checkbox
+        $("#mp-data-nav").show();
+        $("#mp-dips-nav").hide();
+        $(".annotator-save").show(); 
+    } else if (currAnnotation.argues.method == "Case Report"){ // when field is text input
+        $("#mp-data-nav").hide();
+        $("#mp-dips-nav").show();
+        $(".annotator-save").show(); 
+        // freeze question nav
+        if (currAnnotation.argues.supportsBy[dataNum].reviewer.lackInfo) {
+            $('.dipsQuestion').prop('disabled', true);
+        } else {
+            $('.dipsQuestion').prop('disabled', false);
+        }
     } else {
-        $(".annotator-save").show();
+        $("#mp-data-nav").show();
+        $("#mp-dips-nav").hide();
+        $(".annotator-save").show(); 
     }
 
     var annotationId = $('#mp-editor-claim-list option:selected').val();
@@ -425,14 +461,17 @@ function switchDataFormHelper(targetField) {
                 fieldVal = $("input[name="+field+"]:checked").val();
             } else if (field == "auc" || field == "cmax" || field == "clearance" || field == "halflife") { // when field is checkbox
                 $("#mp-data-nav").show();
+                $("#mp-dips-nav").hide();
                 if ($('#' + field + '-unchanged-checkbox').is(':checked')) 
                     showDeleteBtn = true;                    
                 fieldVal = $("#" + fieldM[field]).val();
             } else if (currAnnotation.argues.method == "Case Report"){ // when field is text input
+                $("#mp-data-nav").hide();
                 $("#mp-dips-nav").show();
                 fieldVal = $("#" + fieldM[field]).val();
             } else {
                 $("#mp-data-nav").show();
+                $("#mp-dips-nav").hide();
                 fieldVal = $("#" + fieldM[field]).val();
             }
 
