@@ -1,16 +1,16 @@
 ############################################################
 Overview 
 ############################################################
-DBMI-Annotator is a web based annotation tool that enable the creation of multiple annotation plugins in order to meet various use cases. In current release version, we narrow the scope specific to biomedical domain that drug mention annotation plugin and DDI (drug-drug interaction) annotation plugin are implemented for annotating drug interactions upon Dailymed drug product label and articles from set of publishers. The tool is extensible for adding more user scenarios as extra annotation plugins. It’s aiming for annotate any publicly accessible web resources including PDF documents, tables and figures on web page. 
+AnnotationPress is designed to provide a user friendly tool that helps scientists annotate scientific claims, data, and evidence in HTML and PDF documents. The current version is configured to annotated drug-drug interactions in both full text journal articles and structured product labeling. This is a particularly challenging domain that required the development of several annotation workflows which we think will be useful for for other scientific domains. A key aspect of AnnotationPress is its use of annotation plug-ins which make the tool is easily adaptable to other annotation use cases. Another distinctive feature is that AnnotationPress implements the [Micropublication](https://jbiomedsem.biomedcentral.com/articles/10.1186/2041-1480-5-28) and [Open Annotation data](http://www.openannotation.org/spec/core/) standards. These standards specify how to relate annotations in target documents about data, methods, and materials to scientific claims.
 
-For the implemented two plugins in this release, the drug mention annotation helps user to mark drug mention on the context. It could be occurrences of clinical drug, active ingredient, drug product, metabolite or drug group. DDI annotation is purpose for identify drug drug interaction information in a structured way upon plain text. Contents that related to the interaction on the page will be collected as evidence supports or refutes as well. 
+If you are new to AnnotationPress, please watch our [video](https://www.youtube.com/) that show two annotation plugins in action.
 
-Drug mention annotation is precondition of DDI annotation. They work as a partner. On the same sentence span, drug mention will be marked first in order to identify an interaction among drug mentions by DDI annotation plugin. An predesigned model called Micropublication is applied for DDI annotation. The claim that consist of drug mentions and their relation, such as interact with and inhibits, information will be created first. Afterwards, contents that related to the claim will be collected as Micropublication data/material with relation supports or refutes to the claim. 
+AnnotationPress is an Apache licensed open source project available on [github](https://github.com/dbmi-pitt/dbmi-annotator). Please contact us if you are interested in contributing to its development, if you would like to request new features, or have any other questions.
 
 ############################################################
 Licensing
 ############################################################
-DBMI-Annotator is licensed under the Apache License, Version 2.0. See LICENSE for the full license text.
+AnnotationPress is licensed under the Apache License, Version 2.0. See LICENSE for the full license text.
 
 
 ############################################################
@@ -21,7 +21,7 @@ How to run - Production
 
     Apache2 server configuration:
 
-    ## DBMI-Annotator Docker configuration ###############################
+    ## AnnotationPress Docker configuration ###############################
     # proxy for docker exposed service at port 8085
     ProxyPass /dbmiannotator http://localhost:8085/dbmiannotator
     RewriteRule /dbmiannotator(.*) http://localhost:8085/dbmiannotator$1 [P]
@@ -39,6 +39,7 @@ How to run - Production
 
     $ docker volume create --name postgres-volume -d local
     $ docker volume create --name elasticsearch-volume -d local
+    $ docker volume create --name elastic-snapshot-volume -d local
 
 (3) Run dbmi-annotator with all dependencies in docker container
 
@@ -76,7 +77,7 @@ How to run - Devlopment
 Dependences:
 --------------------------
 
-1. Elasticsearch version 1.7 running on port 9250
+1. Elasticsearch version 1.7 running on port 9200
 
 2. Annotator Store running on port 5000
 
@@ -84,10 +85,12 @@ Dependences:
    create database dbmiannotator
 
     SQL script that create dbmiannotator schema
-    https://github.com/dbmi-pitt/dbmi-annotator/blob/master/db-script/dbmi-annotator/rdb-postgres-schema-04212016.sql 
+    https://github.com/dbmi-pitt/dbmi-annotator/blob/master/db-schema/rdb-postgres-schema.sql
 
     SQL script that initialize plugin settings
-    https://github.com/dbmi-pitt/dbmi-annotator/blob/master/db-script/dbmi-annotator/rdb-postgres-initial-04182016.sql 
+    https://github.com/dbmi-pitt/dbmi-annotator/blob/master/db-schema/rdb-postgres-initial.sql
+
+4. Apache2 server running on port 80
 
 --------------------------
 Installation:
@@ -107,6 +110,16 @@ Configuration:
 $ cp config/config.sample.js config/config.js
 
 2.Edit config.js based on system environment  
+
+3. Apache2 configurations:
+
+    proxy for local nodejs server on port 3000
+    RewriteRule /dbmiannotator$ http://localhost:3000/dbmiannotator [P]
+    RewriteRule /dbmiannotator/(.*) http://localhost:3000/dbmiannotator/$1 [P]
+
+    proxy for local annotator store on port 5000
+    ProxyPass /annotatorstore http://localhost:5000/
+    RewriteRule /annotatorstore(.*) http://localhost:5000$1 [P]
 
 --------------------------
 Run node server:
