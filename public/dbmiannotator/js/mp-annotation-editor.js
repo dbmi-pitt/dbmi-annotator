@@ -355,6 +355,15 @@ function editDataCellByEditor(field, dataNum) {
         $(".annotator-save").show(); 
     }
 
+    if (currAnnotation.argues.method == "Phenotype clinical study") {
+        $('#nav-dose2-btn').hide();
+        $('#nav-phenotype-btn').show();
+    } else {
+        $('#nav-dose2-btn').show();
+        $('#nav-phenotype-btn').hide();
+    }
+
+
     var annotationId = $('#mp-editor-claim-list option:selected').val();
     console.log("editDataCellByEditor - id: " + annotationId + " | data: " + dataNum + " | field: " + field);
     
