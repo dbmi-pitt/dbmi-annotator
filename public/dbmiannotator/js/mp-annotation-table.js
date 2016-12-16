@@ -230,7 +230,7 @@ function createDipsTable(annotation){
     }
     //reject info
     if (annotation.rejected == undefined || annotation.rejected == null ) {
-        dataTable = "<table style='color:green;'";
+        dataTable = "<table style='border-color:green;color:green;'";
     } else {
         dataTable = "<table style='color:red;'";
     }
