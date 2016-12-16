@@ -63,16 +63,11 @@ public class TestBase {
 			System.setProperty("webdriver.ie.driver", "res/IEDriverServer.exe"); 
 			driver = new InternetExplorerDriver();			
 		} else if (browser.equals("chrome")) {
-            System.out.println("Test in Chrome !!!!!!!!!!!!!!!!!!!!!!!!");
-            //System.setProperty("webdriver.gecko.driver", "/usr/bin/geckodriver");
 			System.setProperty("webdriver.chrome.driver", "/home/yin2/dbmi-annotator/test/selenium/libs/chromedriver"); 
             driver = new ChromeDriver();
 		} else {
-			//System.setProperty("webdriver.firefox.driver", "/usr/bin/firefox");
-            //System.setProperty("webdriver.gecko.driver", "/usr/bin/geckodriver");
-			WebDriver driver = new FirefoxDriver();
-            driver.get("http://www.yahoo.com");
-
+            System.setProperty("webdriver.gecko.driver", "/usr/bin/geckodriver");
+			driver = new FirefoxDriver();
 		}
 		driver.get(appUrl);
 		driver.manage().timeouts().pageLoadTimeout(1000, TimeUnit.SECONDS);
