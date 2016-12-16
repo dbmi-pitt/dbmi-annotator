@@ -275,13 +275,12 @@ function addDataCellByEditor(field, dataNum, isNewData) {
             $("#mp-dips-nav").hide();
             $(".annotator-save").show(); 
         }
-
-        if (currAnnotation.argues.qualifiedBy.drug2 == "") {
+        if (currAnnotation.argues.method == "Phenotype clinical study") {
             $('#nav-dose2-btn').hide();
-            $('nav-phenotype-btn').show();
+            $('#nav-phenotype-btn').show();
         } else {
             $('#nav-dose2-btn').show();
-            $('nav-phenotype-btn').hide();
+            $('#nav-phenotype-btn').hide();
         }
 
         // cached editing data cell
