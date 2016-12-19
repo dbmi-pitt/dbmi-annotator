@@ -1,9 +1,8 @@
 var config = {};
-config.store = {};
 config.annotator = {};
-config.elastico = {};
 config.profile = {};
 config.apache2 = {};
+config.protocal = 'http' // options: http or https
 
 // postgres db
 config.postgres = process.env.DATABASE_URL || 'postgres://postgres:<password>@<domain name>:5432/dbmiannotator'; 

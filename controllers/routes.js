@@ -61,7 +61,7 @@ module.exports = function(app, passport) {
         }
         
 	    // fetch all DDI annotations for current user
-	    var url = "http://" + config.store.host +":" + config.store.port + "/search?email=" + req.user.email + "&annotationType=" + annotationType;
+	    var url = config.protocal + "://" + config.apache2.host +":" + config.apache2.port + "/annotatorstore/search?email=" + req.user.email + "&annotationType=" + annotationType;
 
 	    
 		res.render('main.ejs', {
@@ -69,7 +69,7 @@ module.exports = function(app, passport) {
 		    annotations : [],
 		    exportMessage : req.flash('exportMessage'),
 		    loadMessage : req.flash('loadMessage'),
-		    host : config.annotator.host,
+		    host : config.annotator.host
 		});
 
 	    // request({url: url, json: true}, function(error,response,body){
@@ -180,7 +180,7 @@ module.exports = function(app, passport) {
     // EXPORT TO JSON ==============================
     app.get('/dbmiannotator/exportjson', isLoggedIn, function(req, res){
 	
-	    var url = "http://" + config.store.host + ":" + config.store.port + "/search?email=" + req.query.email + "&annotationType=" + config.profile.def;
+	    var url = config.protocal + "://" + config.apache2.host + ":" + config.apache2.port + "/annotatorstore/search?email=" + req.query.email + "&annotationType=" + config.profile.def;
 	    
 	    request({url: url, json: true}, function(error,response,body){
 	        if (!error && response.statusCode === 200) {
@@ -198,7 +198,7 @@ module.exports = function(app, passport) {
     // EXPORT TO CSV ==============================
     app.get('/dbmiannotator/exportcsv', isLoggedIn, function(req, res){
 	
-	    var url = "http://" + config.store.host + ":" + config.store.port + "/search?email=" + req.query.email + "&annotationType=" + config.profile.def;
+	    var url = config.protocal + "://" + config.apache2.host + ":" + config.apache2.port + "/annotatorstore/search?email=" + req.query.email + "&annotationType=" + config.profile.def;
 	    
 	    request({url: url, json: true}, function(error,response,body){
 	        if (!error && response.statusCode === 200) {
