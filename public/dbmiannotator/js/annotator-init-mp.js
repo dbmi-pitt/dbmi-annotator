@@ -40,13 +40,9 @@ if (typeof annotator === 'undefined') {
     app.include(annotator.identity.simple);
     app.include(annotator.authz.acl);
 
-    // app.include(annotator.storage.http, {
-	// prefix: 'http://' + config.store.host + ':' + config.store.port
-    // });
-
     // call apache2 server, instead of annotator store at port 5000
     app.include(annotator.storage.http, {
-	prefix: 'http://' + config.apache2.host + ':' + config.apache2.port + '/annotatorstore' 
+	prefix: config.protocal + '://' + config.apache2.host + ':' + config.apache2.port + '/annotatorstore' 
     });
 
     // load annotation after page contents loaded
@@ -325,7 +321,11 @@ function importAnnotationDialog(sourceURL, email) {
     var emailS = new Set();
     var allMPAnnsD = {}; // dict for all MP annotations {email: annotations}
     var allDrugAnnsD = {}; // dict for all drug mention annotation {email: annotations}
-    $.ajax({url: "http://" + config.apache2.host + ":" + config.apache2.port + "/annotatorstore/search",
+    var urlReq = config.protocal + "://" + config.apache2.host + ":" + config.apache2.port + "/annotatorstore/search";
+
+    console.log(urlReq);
+
+    $.ajax({url: urlReq,
             data: {
                 //annotationType: "MP", 
                 uri: uri},

@@ -9,7 +9,7 @@ config.postgres = process.env.DATABASE_URL || 'postgres://postgres:<password>@<d
 
 // apache2 
 config.apache2.host = '<domain name>';
-config.apache2.port = '80'
+config.apache2.port = '80'  // 443 for https
 
 // dbmi annotator 
 config.annotator.host = '<domain name>';

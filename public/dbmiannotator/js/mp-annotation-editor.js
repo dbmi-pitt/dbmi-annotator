@@ -40,7 +40,7 @@ function editClaim() {
     showEditor();
     claimEditorLoad();
         
-    $.ajax({url: "http://" + config.annotator.host + "/annotatorstore/annotations/" + annotationId,
+    $.ajax({url: config.protocal + "://" + config.apache2.host + "/annotatorstore/annotations/" + annotationId,
             data: {},
             method: 'GET',
             error : function(jqXHR, exception){
@@ -299,7 +299,7 @@ function addDataCellByEditor(field, dataNum, isNewData) {
 
         preDataForm(field);
 
-        $.ajax({url: "http://" + config.annotator.host + "/annotatorstore/annotations/" + annotationId,
+        $.ajax({url: config.protocal + "://" + config.apache2.host + "/annotatorstore/annotations/" + annotationId,
                 data: {},
                 method: 'GET',
                 error : function(jqXHR, exception){
@@ -375,7 +375,7 @@ function editDataCellByEditor(field, dataNum) {
     // scroll to the position of annotation
     scrollToAnnotation(annotationId, field, dataNum);
         
-    $.ajax({url: "http://" + config.annotator.host + "/annotatorstore/annotations/" + annotationId,
+    $.ajax({url: config.protocal + "://" + config.apache2.host + "/annotatorstore/annotations/" + annotationId,
             data: {},
             method: 'GET',
             error : function(jqXHR, exception){

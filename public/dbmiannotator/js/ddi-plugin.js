@@ -76,7 +76,7 @@ function annoList(sourceURL, email, annType, sortByColumn){
 
     console.log("annType:" + annType);
 
-    $.ajax({url: 'http://' + config.annotator.host + "/annotatorstore/search",
+    $.ajax({url: 'http://' + config.apache2.host + "/annotatorstore/search",
             data: {annotationType: annType, 
                    email: email, 
                    uri: sourceURL.replace(/[\/\\\-\:\.]/g, "")},
