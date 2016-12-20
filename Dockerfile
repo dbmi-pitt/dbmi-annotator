@@ -28,7 +28,7 @@ COPY config/production.conf /home/dbmi-annotator/config/config.js
 RUN ./node_modules/.bin/browserify app.js -o ./public/dbmiannotator/js/app.bundle.js
 
 # Install dependencies for annotation pre-load program
-RUN pip install psycopg2 elasticsearch
+RUN pip install psycopg2 elasticsearch bcrypt
 
 EXPOSE 3000
 CMD [ "npm", "start" ]
