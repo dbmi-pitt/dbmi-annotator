@@ -122,15 +122,17 @@ function updateClaimAndData(annotations, annotationId) {
     // When method is statement, disable adding rows
     var dataPanel = "";
 
-    if (currAnnotation == undefined || (currAnnotation.argues.method != "statement" && currAnnotation.argues.method != "Case Report")) {
+    if (currAnnotation != undefined && currAnnotation.argues != undefined) {
         // Data & Material - add new data button 
-        dataPanel = "<button id='add-new-data-row-btn' type='button' onclick='addNewDataRow()' style='float: right; font-size:12px'>add new data & material</button>" + dataTable;
-    } else if (currAnnotation.argues.method == "statement") {
-        dataPanel = dataTable;
-    } else if (currAnnotation.argues.method == "Case Report") {
-        var dose1 = currAnnotation.argues.supportsBy.length == 0 ? "" : currAnnotation.argues.supportsBy[0].supportsBy.supportsBy.drug1Dose.value;
-        var dose2 = currAnnotation.argues.supportsBy.length == 0 ? "" : currAnnotation.argues.supportsBy[0].supportsBy.supportsBy.drug2Dose.value;
-        dataPanel = "<button id='add-new-data-row-btn' type='button' onclick='addNewDipsRow("+dose1+","+dose2+")' style='float: right; font-size:12px'>add new data & material</button>" + dataTable;
+        if (currAnnotation.argues.method == "statement") {
+            dataPanel = dataTable;
+        } else if (currAnnotation.argues.method == "Case Report") {
+            var dose1 = currAnnotation.argues.supportsBy.length == 0 ? "" : currAnnotation.argues.supportsBy[0].supportsBy.supportsBy.drug1Dose.value;
+            var dose2 = currAnnotation.argues.supportsBy.length == 0 ? "" : currAnnotation.argues.supportsBy[0].supportsBy.supportsBy.drug2Dose.value;
+            dataPanel = "<button id='add-new-data-row-btn' type='button' onclick='addNewDipsRow("+dose1+","+dose2+")' style='float: right; font-size:12px'>add new data & material</button>" + dataTable;
+        } else {
+            dataPanel = "<button id='add-new-data-row-btn' type='button' onclick='addNewDataRow()' style='float: right; font-size:12px'>add new data & material</button>" + dataTable;
+        }
     }
 
 
