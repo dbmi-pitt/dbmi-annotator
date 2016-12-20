@@ -207,7 +207,7 @@ function addNewDipsRow(dose1, dose2) {
     } else {
         totalDataNum += 1;
         dataNumLast = totalDataNum - 1;
-        var temp = "<tr style='height:20px;'>" + "<td onclick='addDataCellByEditor(\"reviewer\",\""+dataNumLast+"\", true);'></td><td onclick='addDataCellByEditor(\"dose1\",\"" + dataNumLast + "\", true);'>"+(dose1==undefined?"":dose1)+"</td><td onclick='addDataCellByEditor(\"dose2\",\"" + dataNumLast + "\", true);'>"+(dose2==undefined?"":dose2)+"</td>"
+        var temp = "<tr style='height:20px;'>" + "<td onclick='addDataCellByEditor(\"reviewer\",\""+dataNumLast+"\", true);'></td><td onclick='addDataCellByEditor(\"dose1\",\"" + dataNumLast + "\", true);'>"+"</td><td onclick='addDataCellByEditor(\"dose2\",\"" + dataNumLast + "\", true);'>"+"</td>"
         for (var i = 1; i <= 10; i++) {
             //temp += "<td onclick='addDataCellByEditor(\"q"+i+"\",\""+dataNumLast+"\");'></td>";
             temp += "<td><img src='img/cell-uneditorable.png' style='width:20px;height:17px;'></td>";

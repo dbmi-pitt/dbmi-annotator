@@ -31,6 +31,12 @@ function claimEditorLoad() {
     $("#mp-data-form-q10").hide();
 }
 
+function reviewerChange() {
+    if ($("input[name=dips-reviewer]:checked").val() == 'External') {
+        $("#author-lackscore").prop('checked', false);
+        $("#author-total").val('NA');
+    }
+}
 
 // edit claim
 function editClaim() {
