@@ -20,6 +20,7 @@
     <title>AnnotationPress</title>
     <link rel="stylesheet" href="css/bootstrap.min.css"> <!-- load bootstrap css -->
     <link rel="stylesheet" href="css/font-awesome.min.css"> <!-- load fontawesome -->
+    <link rel="stylesheet" href="css/dbmiannotator.css"> <!-- customed css -->
 
     <style>
         body        { padding-top:80px; }
@@ -32,7 +33,9 @@
         <h2><span class="fa fa-lock"></span> AnnotationPress</h2>
 
         <a href="/dbmiannotator/login" class="btn btn-default"><span class="fa fa-user"></span>Login</a>
-        <a href="/dbmiannotator/register" class="btn btn-default"><span class="fa fa-user"></span>Register</a>
+
+        <!-- disable the register for public release -->
+        <a id="index-register-btn" href="/dbmiannotator/register" class="btn btn-default"><span class="fa fa-user"></span>Register</a>
 
     </div>
     
