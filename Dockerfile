@@ -6,7 +6,10 @@ MAINTAINER Yifan Ning "yin2@pitt.edu"
 # FROM node:0.12.17
 
 RUN apt-get update
-RUN apt-get install -y nodejs npm python-pip libpq-dev python-dev emacs curl jq
+RUN apt-get install -y build-essential libssl-dev libffi-dev nodejs npm python-pip libpq-dev python-dev emacs curl jq
+
+# Install dependencies for annotation pre-load program
+RUN pip install bcrypt psycopg2 elasticsearch 
 
 RUN update-alternatives --install /usr/bin/node node /usr/bin/nodejs 10
 
@@ -26,9 +29,6 @@ COPY config/production.conf /home/dbmi-annotator/config/config.js
 
 # Configure client side requests
 RUN ./node_modules/.bin/browserify app.js -o ./public/dbmiannotator/js/app.bundle.js
-
-# Install dependencies for annotation pre-load program
-RUN pip install psycopg2 elasticsearch bcrypt
 
 EXPOSE 3000
 CMD [ "npm", "start" ]
