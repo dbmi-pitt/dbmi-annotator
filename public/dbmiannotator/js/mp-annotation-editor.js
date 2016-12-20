@@ -56,31 +56,6 @@ function editClaim() {
            });        
 }
 
-
-$("#Drug1").change(function (){selectDrug();});
-$("#Drug2").change(function (){selectDrug();});
-
-function selectDrug() {
-    var drug1 = $("#Drug1").val();
-    var drug2 = $("#Drug2").val();
-    var quotestring = $("#quote").html();
-    quotestring = quotestring.replace(drug2, "<span class='selecteddrug'>"+drug2+"</span>");
-    quotestring = quotestring.replace(drug1, "<span class='selecteddrug'>"+drug1+"</span>");
-    $("#quote").html(quotestring);
-}
-
-$("#Drug1").mousedown(function (){deselectDrug();});
-$("#Drug2").mousedown(function (){deselectDrug();});
-
-function deselectDrug() {
-    var drug1 = $("#Drug1").val();
-    var drug2 = $("#Drug2").val();
-    var quotestring = $("#quote").html();
-    quotestring = quotestring.replace("<span class='selecteddrug'>"+drug2+"</span>", drug2);
-    quotestring = quotestring.replace("<span class='selecteddrug'>"+drug1+"</span>", drug1);
-    $("#quote").html(quotestring);
-}
-
 // when method is phenotype and relationship is inhibits or substrate of
 function changeCausedbyMethod() {
     var methodValue = $("#method option:selected").text();
@@ -96,9 +71,9 @@ function changeCausedbyMethod() {
     if (methodValue == "Phenotype clinical study") {
         $("#relationship option[value = 'interact with']").attr('disabled', 'disabled');
         $("#relationship option[value = 'interact with']").hide();
-
         if ($("#relationship option:selected").text() == "interact with") {
             $("#relationship option:selected").prop("selected", false);
+            $("#relationship option[value='inhibits']").prop("selected", true);
         }
     } else {
         $("#relationship option[value = 'interact with']").removeAttr('disabled');
@@ -112,6 +87,7 @@ function changeCausedbyMethod() {
         $("#relationship option[value = 'substrate of']").hide();
         if ($("#relationship option:selected").text() == "inhibits" || $("#relationship option:selected").text() == "substrate of") {
             $("#relationship option:selected").prop("selected", false);
+            $("#relationship option[value='interact with']").prop("selected", true);
         }
     } else {
         $("#relationship option[value = 'inhibits']").removeAttr('disabled');
@@ -124,6 +100,7 @@ function changeCausedbyMethod() {
         $("#Drug1-label").html("Drug: ");
         $("#Drug2-label").parent().hide();
         $("#Drug2").parent().hide();
+        $("#Drug2")[0].selectedIndex = 0;
         $("#enzymesection1").show();
         $("#enzyme").show();
 
@@ -134,9 +111,11 @@ function changeCausedbyMethod() {
         $("#Drug1-label").html("Drug1: ");
         $("#Drug2-label").parent().show();
         $("#Drug2").parent().show();
-        $("#Drug2")[0].selectedIndex = 0;
+        //$("#Drug2")[0].selectedIndex = 0;
         console.log($("#Drug2 option:selected").text());
     }
+    showEnzyme();
+    selectDrug();
 }
 
 // when reviewer is author
