@@ -414,7 +414,7 @@ function createDataTable(annotation){
 
 function createStatTable(annotation) {
     negation = annotation.argues.negation;
-    dataTable = "<table style='font-size: 13px !important; background-color: white !important;'><tr><td>Negation</td></tr><tr><td>"+negation+"</td></tr></table>";
+    dataTable = "<table id='mp-data-tb' style='font-size: 13px !important; background-color: white !important;'><tr><td>Negate this claim</td></tr><tr><td>"+negation+"</td></tr></table>";
     return dataTable;
 }
 
