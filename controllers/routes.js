@@ -42,7 +42,9 @@ module.exports = function(app, passport) {
 
     // SIGNUP ==============================
     app.get('/dbmiannotator/register', function(req, res) {
-        res.render('register.ejs', { message: req.flash('signupMessage') });
+        // res.render('register.ejs', { message: req.flash('signupMessage') });
+        // disable register for public release
+        res.render('index.ejs', { message: req.flash('signupMessage') });
     });
 
     app.post('/dbmiannotator/register', isRegisterFormValid, passport.authenticate('local-signup', {
