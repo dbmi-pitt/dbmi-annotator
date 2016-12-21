@@ -32,7 +32,11 @@ MP_ANN_TEMPLATE = "template/mp-annotation-template.json"
 MP_DATA_TEMPLATE = "template/mp-data-template.json"
 HIGHLIGHT_TEMPLATE = "template/highlight-annotation-template.json"
 
+# list of data items
 mpDataL = ["auc", "cmax", "clearance", "halflife"]
+
+# dict for method name translate
+methodM = {"clinical trial": "DDI clinical trial", "statement": "Statement"}
 
 if len(sys.argv) > 5:
 	PG_HOSTNAME = str(sys.argv[1])
@@ -332,7 +336,7 @@ def loadMpAnnotation(annotation, email):
 	#print "[INFO] Load doc(%s), subject(%s), predicate(%s), object(%s) \n" % (rawurl, annotation.csubject, annotation.cpredicate, annotation.cobject)
 
 	# MP Claim
-	mpAnn["argues"]["method"] = annotation.method
+	mpAnn["argues"]["method"] = methodM[annotation.method] # method name translate
 	mpAnn["argues"]["negation"] = annotation.negation
 
 	mpAnn["argues"]["qualifiedBy"]["drug1"] = subjectDrug
