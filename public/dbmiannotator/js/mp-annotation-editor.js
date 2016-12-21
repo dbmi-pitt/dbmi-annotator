@@ -66,7 +66,7 @@ function editClaim() {
 function changeCausedbyMethod() {
     var methodValue = $("#method option:selected").text();
     //statement
-    if (methodValue == "statement") {
+    if (methodValue == "Statement") {
         $('#negationdiv').show();
         $('#negation-label').show();
     } else {
@@ -102,7 +102,7 @@ function changeCausedbyMethod() {
         $("#relationship option[value = 'substrate of']").show();
     }
     //phenotype & statement
-    if ((methodValue == "Phenotype clinical study" || methodValue == "statement") && ($("#relationship option:selected").text() == "inhibits"||$("#relationship option:selected").text()=="substrate of")) {
+    if ((methodValue == "Phenotype clinical study" || methodValue == "Statement") && ($("#relationship option:selected").text() == "inhibits"||$("#relationship option:selected").text()=="substrate of")) {
         $("#Drug1-label").html("Drug: ");
         $("#Drug2-label").parent().hide();
         $("#Drug2").parent().hide();
@@ -175,7 +175,7 @@ function showPhenotypeType() {
 function showEnzyme() {
 
     if($("#relationship option:selected").text() == "inhibits"||$("#relationship option:selected").text()=="substrate of") {
-        if ($("#method option:selected").text() == "Phenotype clinical study" || $("#method option:selected").text() == "statement") {
+        if ($("#method option:selected").text() == "Phenotype clinical study" || $("#method option:selected").text() == "Statement") {
             $("#Drug1-label").html("Drug: ");
             $("#Drug2-label").parent().hide();
             $("#Drug2").parent().hide();

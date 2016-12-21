@@ -212,6 +212,8 @@ def load_method(conn, row, mp_claim_id, mp_data_index):
 	enteredVal = ""
 	if row['method'] == "DDI clinical trial":
 		enteredVal = "clinical trial"
+	elif row['method'] == "Statement":
+		enteredVal = "statement"
 	else:
 		enteredVal = row['method']
 
@@ -455,7 +457,7 @@ def load_mp_claim_annotation(conn, row, creator):
 	# when method is statement, negation is evidence supports/refutes
 
 	negation = "No"
-	if row["method"] == "statement":
+	if row["method"] == "Statement":
 		if "refutes" in row["evRelationship"]: 
 			negation = "Yes"
 

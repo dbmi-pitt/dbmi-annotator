@@ -90,7 +90,7 @@ function updateClaimAndData(annotations, annotationId) {
 
                 if (currAnnotation.argues.method == "Case Report") {
                     dataTable = createDipsTable(annotation);                    
-                } else if (currAnnotation.argues.method == "statement") {
+                } else if (currAnnotation.argues.method == "Statement") {
                     dataTable = createStatTable(annotation);
                 } else {
                     dataTable = createDataTable(annotation); // create data table  
@@ -124,7 +124,7 @@ function updateClaimAndData(annotations, annotationId) {
 
     if (currAnnotation != undefined && currAnnotation.argues != undefined) {
         // Data & Material - add new data button 
-        if (currAnnotation.argues.method == "statement") {
+        if (currAnnotation.argues.method == "Statement") {
             dataPanel = dataTable;
         } else if (currAnnotation.argues.method == "Case Report") {
             var dose1 = currAnnotation.argues.supportsBy.length == 0 ? "" : currAnnotation.argues.supportsBy[0].supportsBy.supportsBy.drug1Dose.value;
