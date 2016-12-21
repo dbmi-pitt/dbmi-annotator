@@ -124,14 +124,15 @@ function updateClaimAndData(annotations, annotationId) {
 
     if (currAnnotation != undefined && currAnnotation.argues != undefined) {
         // Data & Material - add new data button 
+        var isReject = (currAnnotation.rejected == undefined || currAnnotation.rejected == null)?"This claim is not rejected":"This claim is rejected";
         if (currAnnotation.argues.method == "statement") {
             dataPanel = dataTable;
         } else if (currAnnotation.argues.method == "Case Report") {
             var dose1 = currAnnotation.argues.supportsBy.length == 0 ? "" : currAnnotation.argues.supportsBy[0].supportsBy.supportsBy.drug1Dose.value;
             var dose2 = currAnnotation.argues.supportsBy.length == 0 ? "" : currAnnotation.argues.supportsBy[0].supportsBy.supportsBy.drug2Dose.value;
-            dataPanel = "<button id='add-new-data-row-btn' type='button' onclick='addNewDipsRow("+dose1+","+dose2+")' style='float: right; font-size:12px'>add new data & material</button>" + dataTable;
+            dataPanel = "<img id='isReject' title='"+isReject+"' src='img/faq.png' style='float:right;margin-right:0px;width:16px;height:16px;'><button id='add-new-data-row-btn' type='button' onclick='addNewDipsRow("+dose1+","+dose2+")' style='float: right; font-size:12px'>add new data & material</button>" + dataTable;
         } else {
-            dataPanel = "<button id='add-new-data-row-btn' type='button' onclick='addNewDataRow()' style='float: right; font-size:12px'>add new data & material</button>" + dataTable;
+            dataPanel = "<img id='isReject' title='"+isReject+"' src='img/faq.png' style='float:right;margin-right:0px;width:16px;height:16px;'><button id='add-new-data-row-btn' type='button' onclick='addNewDataRow()' style='float: right; font-size:12px'>add new data & material</button>" + dataTable;
         }
     }
 
