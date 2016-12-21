@@ -27,6 +27,7 @@ sys.setdefaultencoding('utf8')
 csvfiles = ['data/mp-annotation.tsv']
 DATABASE = 'mpevidence'
 curr_date = datetime.datetime.now()
+CREATOR = "DBMI ETL"
 
 if len(sys.argv) > 5:
 	HOSTNAME = str(sys.argv[1])
@@ -452,9 +453,11 @@ def load_mp_claim_annotation(conn, row, creator):
 	subject = row["subject"]; predicate = row["predicate"]; object = row["object"]
 
 	# when method is statement, negation is evidence supports/refutes
-	negation = ""
+
+	negation = "No"
 	if row["method"] == "statement":
-		negation = row["evRelationship"]
+		if "refutes" in row["evRelationship"]: 
+			negation = "Yes"
 
 	claim_selector_id = load_oa_selector(conn, claimP, claimE, claimS)
 	claim_target_id = load_oa_target(conn, source, claim_selector_id)
@@ -535,8 +538,9 @@ def main():
 	for csvfile in csvfiles:
 		preprocess(csvfile)
 		reader = csv.DictReader(utf_8_encoder(open('data/preprocess-annotator.csv', 'r')))
-		creator = csvfile.split('-')[1]
-		load_data_from_csv(conn, reader, creator)
+
+		#creator = csvfile.split('-')[1]		
+		load_data_from_csv(conn, reader, CREATOR)
 	conn.close()
 	print("[INFO] load completed ...")
 

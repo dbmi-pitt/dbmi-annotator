@@ -447,9 +447,11 @@ def load_data_from_csv(conn, reader, creator):
 		source = row["source"]; date = row["date"]
 		subject = row["subject"]; predicate = row["predicate"]; object = row["object"]
 		# when method is statement, negation is evidence supports/refutes
-		negation = ""
+
+		negation = "No" # translate negation from Domeo SPLs an
 		if row["assertionType"] == "drug-drug-interaction":
-			negation = row["evidenceType"].replace("evidence-","").replace("challenges","refutes")			
+			if "challenges" in row["evidenceType"]:
+				negation = "Yes"			
 
 		oa_selector_id = load_oa_selector(conn, prefix, exact, suffix)
 		oa_target_id = load_oa_target(conn, source, oa_selector_id)
