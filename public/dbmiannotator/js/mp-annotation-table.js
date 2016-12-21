@@ -376,7 +376,7 @@ function createDataTable(annotation){
             if (drugname2 == "") {
                 console.log("drugname2");
                 console.log(drugname2);
-                if (material.phenotype != null) {
+                if (material.phenotype.type != null) {
                     row += "<td onclick='editDataCellByEditor(\"phenotype\",\""+dataNum+"\");'>" + material.phenotype.type + "</td>";
                 } else {
                     row += "<td onclick='addDataCellByEditor(\"phenotype\",\""+dataNum+"\");'></td>";
