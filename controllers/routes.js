@@ -200,9 +200,10 @@ module.exports = function(app, passport) {
 	
 	    var url = config.protocal + "://" + config.apache2.host + ":" + config.apache2.port + "/annotatorstore/search?email=" + req.query.email + "&annotationType=" + config.profile.def;
 	    
-	    request({url: url, json: true}, function(error,response,body){
+	    request({url: url, json: true, followAllRedirects: true}, function(error,response,body){
+            console.log(body.total);
+            
 	        if (!error && response.statusCode === 200) {
-
                 var jsonObjs = body.rows;
 
                 res.attachment('annotations-'+req.query.email+'.csv');
@@ -270,6 +271,7 @@ module.exports = function(app, passport) {
 		        
 	        } else {
 		        //req.flash('exportMessage', 'exported failed, annotation fetch exception, please see logs or contact Yifan at yin2@pitt.edu!');
+                console.log(error);
 		        res.redirect('/dbmiannotator/main');		        
 	        }	
 	    });	    	    
