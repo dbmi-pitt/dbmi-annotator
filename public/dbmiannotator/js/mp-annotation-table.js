@@ -207,7 +207,7 @@ function addNewDipsRow(dose1, dose2) {
     } else {
         totalDataNum += 1;
         dataNumLast = totalDataNum - 1;
-        var temp = "<tr style='height:20px;'>" + "<td onclick='addDataCellByEditor(\"reviewer\",\""+dataNumLast+"\", true);'></td><td onclick='addDataCellByEditor(\"dose1\",\"" + dataNumLast + "\", true);'>"+(dose1==undefined?"":dose1)+"</td><td onclick='addDataCellByEditor(\"dose2\",\"" + dataNumLast + "\", true);'>"+(dose2==undefined?"":dose2)+"</td>"
+        var temp = "<tr style='height:20px;'>" + "<td onclick='addDataCellByEditor(\"reviewer\",\""+dataNumLast+"\", true);'></td><td onclick='addDataCellByEditor(\"dose1\",\"" + dataNumLast + "\", true);'>"+"</td><td onclick='addDataCellByEditor(\"dose2\",\"" + dataNumLast + "\", true);'>"+"</td>"
         for (var i = 1; i <= 10; i++) {
             //temp += "<td onclick='addDataCellByEditor(\"q"+i+"\",\""+dataNumLast+"\");'></td>";
             temp += "<td><img src='img/cell-uneditorable.png' style='width:20px;height:17px;'></td>";
@@ -414,7 +414,7 @@ function createDataTable(annotation){
 
 function createStatTable(annotation) {
     negation = annotation.argues.negation;
-    dataTable = "<table style='font-size: 13px !important; background-color: white !important;'><tr><td>Negation</td></tr><tr><td>"+negation+"</td></tr></table>";
+    dataTable = "<table id='mp-data-tb' style='font-size: 13px !important; background-color: white !important;'><tr><td>Negate this claim</td></tr><tr><td>"+negation+"</td></tr></table>";
     return dataTable;
 }
 

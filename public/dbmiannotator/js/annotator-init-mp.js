@@ -152,6 +152,10 @@ function initLiseners() {
     $('#author-lackscore').change(function() {
         showTotalScore();
     });
+
+    $('#dips-reviewer').change(function() {
+        reviewerChange();
+    });
     
     rejectEvidenceCheckBox("rejected-evidence");
             
