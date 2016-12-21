@@ -286,7 +286,7 @@ function createDipsTable(annotation){
 
             //show dips total score
             if (data.reviewer.total != null)
-                row += "<td>" + data.reviewer.total + "</td>";
+                row += "<td>" + dipsScale(data.reviewer.total) + "</td>";
             else 
                 row += "<td>NA</td>"; 
 
@@ -302,6 +302,22 @@ function createDipsTable(annotation){
     }
     dataTable += "</table>";
     return dataTable;
+}
+
+function dipsScale(totalScore) {
+    var scale = "";
+    if (totalScore == "NA") {
+        return totalScore;
+    } else if (totalScore > 8) {
+        scale = "Highly Probable";
+    } else if (totalScore >= 5 && totalScore <= 8) {
+        scale = "Probable";
+    } else if (totalScore < 2) {
+        scale = "Doubtful";
+    } else {
+        scale = "Possible";
+    }
+    return "<a href='#' title='" + scale + "' >" + totalScore + "</a>";
 }
 
 
