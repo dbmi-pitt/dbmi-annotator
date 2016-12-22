@@ -201,8 +201,6 @@ module.exports = function(app, passport) {
     app.get('/dbmiannotator/exportcsv', isLoggedIn, function(req, res){
 	
 	    var url = config.protocal + "://" + config.apache2.host + ":" + config.apache2.port + "/annotatorstore/search?email=" + req.query.email + "&annotationType=" + config.profile.def;
-
-        console.log(url);
 	    
 	    request({url: url, json: true, followAllRedirects: true, "rejectUnauthorized": false}, function(error,response,body){
             
@@ -214,60 +212,72 @@ module.exports = function(app, passport) {
                 var csvTxt = '"document"\t"claim label"\t"claim text"\t"method"\t"relationship"\t"drug1"\t"drug2"\t"precipitant"\t"enzyme"\t"evRelationship"\t"participants"\t"participants text"\t"drug1 dose"\t"drug1 formulation"\t"drug1 duration"\t"drug1 regimens"\t"drug1 dose text"\t"drug2 dose"\t"drug2 formulation"\t"drug2 duration"\t"drug2 regimens"\t"drug2 dose text"\t"auc"\t"auc type"\t"auc direction"\t"auc text"\t"cmax"\t"cmax type"\t"cmax direction"\t"cmax text"\t"cl"\t"cl type"\t"cl direction"\t"cl text"\t"halflife"\t"halflife type"\t"halflife direction"\t"halflife text"\t"group randomization"\t"parallel group design"\t"id"\n';
 
                 for (var i = 0; i < jsonObjs.length; i++) {
+
                     jsonObj = jsonObjs[i];
                     claim = jsonObj.argues;
                     dataL = claim.supportsBy;                   
 
                     var claimRow = '"' + jsonObj.rawurl + '"\t"' + claim.label + '"\t"' + claim.hasTarget.hasSelector.exact + '"\t"' + claim.method + '"\t"' + claim.qualifiedBy.relationship + '"\t"' + claim.qualifiedBy.drug1 + '"\t"' + claim.qualifiedBy.drug2 + '"\t"' + (claim.qualifiedBy.precipitant || '') + '"\t"' + (claim.qualifiedBy.enzyme || '' ) + '"';
 
-                    for (var j = 0; j < dataL.length; j++) {
-                        var data = dataL[j];
-                        var method = data.supportsBy;
-                        var material = method.supportsBy;
-                        var dataRow = "";
 
-                        dataRow += '\t"' + (data.evRelationship || '') + '"';
-
-                        if (material.participants != null)
-                            dataRow += '\t"' + (material.participants.value || '') + '"\t"' + (getSpanFromField(material.participants) || '') + '"';
-                        else 
-                            dataRow += '\t\t';
-
-                        if (material.drug1Dose != null) 
-                            dataRow += '\t"' + (material.drug1Dose.value || '') + '"\t"' + (material.drug1Dose.formulation || '') + '"\t"'  + (material.drug1Dose.duration || '') + '"\t"' + (material.drug1Dose.regimens || '') + '"\t"' + (getSpanFromField(material.drug1Dose) || '') + '"';
-                        else 
-                            dataRow += '\t\t\t\t';
-
-                        if (material.drug2Dose != null) 
-                            dataRow += '\t"' + (material.drug2Dose.value || '') + '"\t"' + (material.drug2Dose.formulation || '') + '"\t"'  + (material.drug2Dose.duration || '') + '"\t"' + (material.drug2Dose.regimens || '') + '"\t"' + (getSpanFromField(material.drug2Dose) || '') + '"';
-                        else 
-                            dataRow += '\t\t\t\t';
-
-                        dataFieldsL = ["auc","cmax","clearance","halflife"];
-                        for (p = 0; p < dataFieldsL.length; p++) {
-                            field = dataFieldsL[p];
-                            if (data[field] != null)    
-                                dataRow += '\t"' + (data[field].value || '') + '"\t"' + (data[field].type || '') + '"\t"' + (data[field].direction || '') + '"\t"' + (getSpanFromField(data[field]) || '') + '"'; 
+                    var dataRow = null;
+                    if (dataL.length > 0) { // clinical trial annotation
+                        for (var j = 0; j < dataL.length; j++) {
+                            var data = dataL[j];
+                            var method = data.supportsBy;
+                            var material = method.supportsBy;
+                            dataRow = "";
+                            
+                            dataRow += '\t"' + (data.evRelationship || '') + '"';
+                            
+                            if (material.participants != null)
+                                dataRow += '\t"' + (material.participants.value || '') + '"\t"' + (getSpanFromField(material.participants) || '') + '"';
+                            else 
+                                dataRow += '\t\t';
+                            
+                            if (material.drug1Dose != null) 
+                                dataRow += '\t"' + (material.drug1Dose.value || '') + '"\t"' + (material.drug1Dose.formulation || '') + '"\t"'  + (material.drug1Dose.duration || '') + '"\t"' + (material.drug1Dose.regimens || '') + '"\t"' + (getSpanFromField(material.drug1Dose) || '') + '"';
                             else 
                                 dataRow += '\t\t\t\t';
-                        }                        
-                        
-                        if (data.grouprandom != null)
-                            dataRow += '\t"' + (data.grouprandom || '') + '"';
-                        else
-                            dataRow += '\t';
+                            
+                            if (material.drug2Dose != null) 
+                                dataRow += '\t"' + (material.drug2Dose.value || '') + '"\t"' + (material.drug2Dose.formulation || '') + '"\t"'  + (material.drug2Dose.duration || '') + '"\t"' + (material.drug2Dose.regimens || '') + '"\t"' + (getSpanFromField(material.drug2Dose) || '') + '"';
+                            else 
+                                dataRow += '\t\t\t\t';
+                            
+                            dataFieldsL = ["auc","cmax","clearance","halflife"];
+                            for (p = 0; p < dataFieldsL.length; p++) {
+                                field = dataFieldsL[p];
+                                if (data[field] != null)    
+                                    dataRow += '\t"' + (data[field].value || '') + '"\t"' + (data[field].type || '') + '"\t"' + (data[field].direction || '') + '"\t"' + (getSpanFromField(data[field]) || '') + '"'; 
+                                else 
+                                    dataRow += '\t\t\t\t';
+                            }                        
+                            
+                            if (data.grouprandom != null)
+                                dataRow += '\t"' + (data.grouprandom || '') + '"';
+                            else
+                                dataRow += '\t';
+                            
+                            if (data.parallelgroup != null)
+                                dataRow += '\t"' + (data.parallelgroup || '') + '"';
+                            else
+                                dataRow += '\t';                            
 
-                        if (data.parallelgroup != null)
-                            dataRow += '\t"' + (data.parallelgroup || '') + '"';
-                        else
-                            dataRow += '\t';
-
+                            // for multiple data case
+                            dataRow += '\t"' + jsonObj.id + '"'
+                            dataRow = claimRow + dataRow + '\n';
+                            csvTxt += dataRow;
+                        }
+                    } else { // statement annotation
+                        dataRow = '\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t';
                         dataRow += '\t"' + jsonObj.id + '"'
                         dataRow = claimRow + dataRow + '\n';
                         csvTxt += dataRow;
                     }
-                }
 
+                }
+                
 		        res.attachment('annotations-'+req.query.email+'.csv');
 		        res.setHeader('Content-Type', 'text/csv');
 		        res.end(csvTxt);                    
@@ -307,7 +317,6 @@ function praseWebContents(req, res, next){
         if (process.env.APACHE2_HOST != null) // use apache2 in docker network
             sourceUrl = sourceUrl.replace("localhost", process.env.APACHE2_HOST);
 
-        console.log(sourceUrl);
         request(sourceUrl, function(err, res, body){
 
             if (err){
