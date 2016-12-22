@@ -204,9 +204,9 @@ module.exports = function(app, passport) {
 
         console.log(url);
 	    
-	    request({url: url, json: true, followAllRedirects: true}, function(error,response,body){
+	    request({url: url, json: true, followAllRedirects: true, "rejectUnauthorized": false}, function(error,response,body){
             
-	        if (!error && response.statusCode === 200) {
+	        if (!error && (response.statusCode === 200 || response.statusCode ===302)) {
                 var jsonObjs = body.rows;
 
                 res.attachment('annotations-'+req.query.email+'.csv');
