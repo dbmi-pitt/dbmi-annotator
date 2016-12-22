@@ -199,9 +199,10 @@ module.exports = function(app, passport) {
     app.get('/dbmiannotator/exportcsv', isLoggedIn, function(req, res){
 	
 	    var url = config.protocal + "://" + config.apache2.host + ":" + config.apache2.port + "/annotatorstore/search?email=" + req.query.email + "&annotationType=" + config.profile.def;
+
+        console.log(url);
 	    
 	    request({url: url, json: true, followAllRedirects: true}, function(error,response,body){
-            console.log(body.total);
             
 	        if (!error && response.statusCode === 200) {
                 var jsonObjs = body.rows;
