@@ -45,7 +45,7 @@
 	    
 	    <!-- document load  -->
 	    <strong>Load document: </strong>
-	    (Please input valid html web resources or PDF document URL): 
+	    (Load html document is disabled, please click following sample document links to load PMC article or Dailymed Product label): 
 	    <br>
 		  
 		  
@@ -61,6 +61,14 @@
 				     <div class="alert alert-warning"><%=loadMessage %></div>
 				     <% } %>
 	    </div>
+
+
+	    <!-- annotation download  -->
+	    <form action="/dbmiannotator/exportcsv" method="get">
+	      <strong>Download my annotations in csv: </strong>
+	      <input type="text" id="email" name="email" value="<%= user.email %>" style="display: none;" />
+	      <button id="exportButton" class="btn btn-success">Download</button>
+	    </form>
 		  
 		  
             <h3><span class="fa fa-user"></span>&nbsp;Profile (Overview annotation tasks) </h3>
@@ -250,13 +258,7 @@
 	    <br><br>
 
 	    
-	    <!-- annotation download  -->
 
-	    <form action="/dbmiannotator/exportcsv" method="get">
-	      <strong>Download my annotations in csv: </strong>
-	      <input type="text" id="email" name="email" value="<%= user.email %>" style="display: none;" />
-	      <button id="exportButton" class="btn btn-success">Download</button>
-	    </form>
 	    
 	  </div>
 	  
