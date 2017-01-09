@@ -23,7 +23,8 @@ How to run - Production
 
 (1) Install docker(v1.12.3), docker-compose (v1.8.1) and apache (v2.4) server
 
-    Apache2 server configuration::
+    Apache2 server configuration
+    .. code-block::
 
     ## AnnotationPress Docker configuration ###############################
     # proxy for docker exposed service at port 8085
