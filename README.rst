@@ -28,15 +28,19 @@ How to run - Production
     .. code-block::
 
     # AnnotationPress Docker configuration ###############################
+    
     # proxy for docker exposed service at port 8085
+    
     ProxyPass /dbmiannotator http://localhost:8085/dbmiannotator
     RewriteRule /dbmiannotator(.*) http://localhost:8085/dbmiannotator$1 [P]
 
     # proxy for docker exposed service at port 8085 for annotator store
+    
     ProxyPass /annotatorstore http://localhost:8085/annotatorstore
     RewriteRule /annotatorstore(.*) http://localhost:8085/annotatorstore$1 [P]
 
     # stylesheet folder relocate at Document root(dailymed, PMC, wiley)
+    
     RewriteRule /dbmiannotator/dailymed(.*) http://localhost/DDI-labels/dailymed$1 [P]
     RewriteRule /dbmiannotator/PMC(.*)_files/(.*) http://localhost/PMC/PMC$1_files/$2 [P]
     RewriteRule /dbmiannotator/wiley(.*)_files/(.*) http://localhost/wiley/wiley$1_files/$2 [P]
@@ -145,7 +149,7 @@ access AnnotationPress through ``'http://localhost/dbmiannotator'``
 Directories
 -----------
 
-Nodejs based program - folder structures
+Node.js based program - folder structures
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 config/ - configurations
 models/ - represents data, implements business logic and handles storage
