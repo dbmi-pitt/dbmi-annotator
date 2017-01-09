@@ -24,13 +24,14 @@ How to run - Production
 (1) Install docker(v1.12.3), docker-compose (v1.8.1) and apache (v2.4) server
 
     Apache2 server configuration
+    
     .. code-block::
 
     # AnnotationPress Docker configuration ###############################
     # proxy for docker exposed service at port 8085
     ProxyPass /dbmiannotator http://localhost:8085/dbmiannotator
     RewriteRule /dbmiannotator(.*) http://localhost:8085/dbmiannotator$1 [P]
-    
+
     # proxy for docker exposed service at port 8085 for annotator store
     ProxyPass /annotatorstore http://localhost:8085/annotatorstore
     RewriteRule /annotatorstore(.*) http://localhost:8085/annotatorstore$1 [P]
@@ -118,6 +119,7 @@ Configuration:
 2.Edit config.js based on system environment  
 
 3.Apache2 configurations:
+
 .. code-block::
 
     #proxy for local nodejs server on port 3000
