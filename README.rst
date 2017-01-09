@@ -26,11 +26,11 @@ How to run - Production
     Apache2 server configuration
     .. code-block::
 
-    ## AnnotationPress Docker configuration ###############################
+    # AnnotationPress Docker configuration ###############################
     # proxy for docker exposed service at port 8085
-    
     ProxyPass /dbmiannotator http://localhost:8085/dbmiannotator
     RewriteRule /dbmiannotator(.*) http://localhost:8085/dbmiannotator$1 [P]
+    
     # proxy for docker exposed service at port 8085 for annotator store
     ProxyPass /annotatorstore http://localhost:8085/annotatorstore
     RewriteRule /annotatorstore(.*) http://localhost:8085/annotatorstore$1 [P]
@@ -39,7 +39,7 @@ How to run - Production
     RewriteRule /dbmiannotator/dailymed(.*) http://localhost/DDI-labels/dailymed$1 [P]
     RewriteRule /dbmiannotator/PMC(.*)_files/(.*) http://localhost/PMC/PMC$1_files/$2 [P]
     RewriteRule /dbmiannotator/wiley(.*)_files/(.*) http://localhost/wiley/wiley$1_files/$2 [P]
-    
+
 
 
 (2) Create local volume for postgres and elasticsearch data mount point::
@@ -120,11 +120,11 @@ Configuration:
 3.Apache2 configurations:
 .. code-block::
 
-    proxy for local nodejs server on port 3000
+    #proxy for local nodejs server on port 3000
     RewriteRule /dbmiannotator$ http://localhost:3000/dbmiannotator [P]
     RewriteRule /dbmiannotator/(.*) http://localhost:3000/dbmiannotator/$1 [P]
 
-    proxy for local annotator store on port 5000
+    #proxy for local annotator store on port 5000
     ProxyPass /annotatorstore http://localhost:5000/
     RewriteRule /annotatorstore(.*) http://localhost:5000$1 [P]
 
