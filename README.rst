@@ -39,13 +39,13 @@ How to run - Production
     RewriteRule /dbmiannotator/PMC(.*)_files/(.*) http://localhost/PMC/PMC$1_files/$2 [P]
     RewriteRule /dbmiannotator/wiley(.*)_files/(.*) http://localhost/wiley/wiley$1_files/$2 [P]
 
-(2) Create local volume for postgres and elasticsearch data mount point
+(2) Create local volume for postgres and elasticsearch data mount point::
 
     $ docker volume create --name postgres-volume -d local
     $ docker volume create --name elasticsearch-volume -d local
     $ docker volume create --name elastic-snapshot-volume -d local
 
-(3) Run dbmi-annotator with all dependencies in docker container
+(3) Run dbmi-annotator with all dependencies in docker container::
 
     git clone 
     $ cd docker-dbmi-annotator/dbmi-annotator
@@ -85,11 +85,10 @@ Dependences:
 2. Annotator Store running on port 5000
 
 3. Postgres DB running on port 5432
-   create database dbmiannotator
-
+   
+    create database dbmiannotator
     SQL script that create dbmiannotator schema
     https://github.com/dbmi-pitt/dbmi-annotator/blob/master/db-schema/rdb-postgres-schema.sql
-
     SQL script that initialize plugin settings
     https://github.com/dbmi-pitt/dbmi-annotator/blob/master/db-schema/rdb-postgres-initial.sql
 
@@ -99,37 +98,37 @@ Installation:
 ^^^^^^^^^^^^^
 
 1. nodejs packages
-$ npm install
+``$ npm install``
 
 2. compile browser side JS packages (rerun when made modifications on config/config.js)
-$ browserify app.js -o public/dbmiannotator/js/app.bundle.js
+``$ browserify app.js -o public/dbmiannotator/js/app.bundle.js``
 
 
 Configuration:
 ^^^^^^^^^^^^^^
 
 1.Create config.js 
-$ cp config/config.sample.js config/config.js
+``$ cp config/config.sample.js config/config.js``
 
 2.Edit config.js based on system environment  
 
 3. Apache2 configurations:
 
-    proxy for local nodejs server on port 3000
-    RewriteRule /dbmiannotator$ http://localhost:3000/dbmiannotator [P]
-    RewriteRule /dbmiannotator/(.*) http://localhost:3000/dbmiannotator/$1 [P]
+proxy for local nodejs server on port 3000
+RewriteRule /dbmiannotator$ http://localhost:3000/dbmiannotator [P]
+RewriteRule /dbmiannotator/(.*) http://localhost:3000/dbmiannotator/$1 [P]
 
-    proxy for local annotator store on port 5000
-    ProxyPass /annotatorstore http://localhost:5000/
-    RewriteRule /annotatorstore(.*) http://localhost:5000$1 [P]
+proxy for local annotator store on port 5000
+ProxyPass /annotatorstore http://localhost:5000/
+RewriteRule /annotatorstore(.*) http://localhost:5000$1 [P]
 
 
-Run server:
-^^^^^^^^^^^
-::
-$ cd dbmi-annotator
-$ nodemon server.js (run '$ npm install -g nodemon', if command is not available)
-$ service apache2 start
+Run server::
+^^^^^^^^^^
+
+    $ cd dbmi-annotator
+    $ nodemon server.js (run '$ npm install -g nodemon', if command is not available)
+    $ service apache2 start
 
 access AnnotationPress through 'http://localhost/dbmiannotator'
 
@@ -150,8 +149,8 @@ package.json - remembers all packages that your app depends on and their version
 reference: https://www.terlici.com/2014/08/25/best-practices-express-structure.html
 
 
-design/ 
-^^^^^^^
+design
+^^^^^^
 (1) design/diagram-workspaces/
 keep source code of diagram
 
