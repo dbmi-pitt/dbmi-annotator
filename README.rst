@@ -39,6 +39,8 @@ How to run - Production
     RewriteRule /dbmiannotator/dailymed(.*) http://localhost/DDI-labels/dailymed$1 [P]
     RewriteRule /dbmiannotator/PMC(.*)_files/(.*) http://localhost/PMC/PMC$1_files/$2 [P]
     RewriteRule /dbmiannotator/wiley(.*)_files/(.*) http://localhost/wiley/wiley$1_files/$2 [P]
+    
+
 
 (2) Create local volume for postgres and elasticsearch data mount point::
 
