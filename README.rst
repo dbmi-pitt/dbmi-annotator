@@ -27,9 +27,9 @@ How to run - Production
 
     ## AnnotationPress Docker configuration ###############################
     # proxy for docker exposed service at port 8085
+    
     ProxyPass /dbmiannotator http://localhost:8085/dbmiannotator
     RewriteRule /dbmiannotator(.*) http://localhost:8085/dbmiannotator$1 [P]
-
     # proxy for docker exposed service at port 8085 for annotator store
     ProxyPass /annotatorstore http://localhost:8085/annotatorstore
     RewriteRule /annotatorstore(.*) http://localhost:8085/annotatorstore$1 [P]
@@ -114,21 +114,22 @@ Configuration:
 
 2.Edit config.js based on system environment  
 
-3.Apache2 configurations::
+3.Apache2 configurations:
+.. code-block::
 
-proxy for local nodejs server on port 3000
-RewriteRule /dbmiannotator$ http://localhost:3000/dbmiannotator [P]
-RewriteRule /dbmiannotator/(.*) http://localhost:3000/dbmiannotator/$1 [P]
+    proxy for local nodejs server on port 3000
+    RewriteRule /dbmiannotator$ http://localhost:3000/dbmiannotator [P]
+    RewriteRule /dbmiannotator/(.*) http://localhost:3000/dbmiannotator/$1 [P]
 
-proxy for local annotator store on port 5000
-ProxyPass /annotatorstore http://localhost:5000/
-RewriteRule /annotatorstore(.*) http://localhost:5000$1 [P]
+    proxy for local annotator store on port 5000
+    ProxyPass /annotatorstore http://localhost:5000/
+    RewriteRule /annotatorstore(.*) http://localhost:5000$1 [P]
 
 
 Run server:
 ^^^^^^^^^^
-::
-ß
+.. code-block::
+
     $ cd dbmi-annotator
     $ nodemon server.js (run '$ npm install -g nodemon', if command is not available)
     $ service apache2 start
