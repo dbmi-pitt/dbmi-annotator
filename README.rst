@@ -84,12 +84,14 @@ Dependences:
 
 2. Annotator Store running on port 5000
 
-3. Postgres DB running on port 5432::
+3. Postgres DB running on port 5432:
    
     create database dbmiannotator
-    SQL script that create dbmiannotator schema
+    
+    SQL script that create dbmiannotator schema:
     https://github.com/dbmi-pitt/dbmi-annotator/blob/master/db-schema/rdb-postgres-schema.sql
-    SQL script that initialize plugin settings
+
+    SQL script that initialize plugin settings:
     https://github.com/dbmi-pitt/dbmi-annotator/blob/master/db-schema/rdb-postgres-initial.sql
 
 4. Apache2 server running on port 80
@@ -112,7 +114,7 @@ Configuration:
 
 2.Edit config.js based on system environment  
 
-3. Apache2 configurations::
+3.Apache2 configurations::
 
 proxy for local nodejs server on port 3000
 RewriteRule /dbmiannotator$ http://localhost:3000/dbmiannotator [P]
@@ -123,9 +125,10 @@ ProxyPass /annotatorstore http://localhost:5000/
 RewriteRule /annotatorstore(.*) http://localhost:5000$1 [P]
 
 
-Run server::
+Run server:
 ^^^^^^^^^^
-
+::
+ß
     $ cd dbmi-annotator
     $ nodemon server.js (run '$ npm install -g nodemon', if command is not available)
     $ service apache2 start
