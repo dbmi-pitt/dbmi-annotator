@@ -23,7 +23,7 @@ How to run - Production
 
 (1) Install docker(v1.12.3), docker-compose (v1.8.1) and apache (v2.4) server
 
-    Apache2 server configuration:
+    Apache2 server configuration::
 
     ## AnnotationPress Docker configuration ###############################
     # proxy for docker exposed service at port 8085
@@ -47,7 +47,7 @@ How to run - Production
 
 (3) Run dbmi-annotator with all dependencies in docker container::
 
-    git clone 
+    $ git clone 
     $ cd docker-dbmi-annotator/dbmi-annotator
     $ docker-compose up
 
@@ -84,7 +84,7 @@ Dependences:
 
 2. Annotator Store running on port 5000
 
-3. Postgres DB running on port 5432
+3. Postgres DB running on port 5432::
    
     create database dbmiannotator
     SQL script that create dbmiannotator schema
@@ -112,7 +112,7 @@ Configuration:
 
 2.Edit config.js based on system environment  
 
-3. Apache2 configurations:
+3. Apache2 configurations::
 
 proxy for local nodejs server on port 3000
 RewriteRule /dbmiannotator$ http://localhost:3000/dbmiannotator [P]
@@ -130,7 +130,7 @@ Run server::
     $ nodemon server.js (run '$ npm install -g nodemon', if command is not available)
     $ service apache2 start
 
-access AnnotationPress through 'http://localhost/dbmiannotator'
+access AnnotationPress through ``'http://localhost/dbmiannotator'``
 
 -----------
 Directories
