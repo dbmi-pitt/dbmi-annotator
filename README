@@ -122,13 +122,14 @@ $ cp config/config.sample.js config/config.js
     RewriteRule /annotatorstore(.*) http://localhost:5000$1 [P]
 
 --------------------------
-Run node server:
+Run server:
 --------------------------
-
+::
 $ cd dbmi-annotator
-$ nodemon server.js
+$ nodemon server.js (run '$ npm install -g nodemon', if command is not available)
+$ service apache2 start
 
-access to 'http://localhost:3000/'
+access AnnotationPress through 'http://localhost/dbmiannotator'
 
 ############################################################
 Directories
