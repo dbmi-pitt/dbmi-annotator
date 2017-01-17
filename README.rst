@@ -1,49 +1,61 @@
-############################################################
+===============
+AnnotationPress
+===============
+
+--------
 Overview 
-############################################################
+--------
 AnnotationPress is designed to provide a user friendly tool that helps scientists annotate scientific claims, data, and evidence in HTML and PDF documents. The current version is configured to annotated drug-drug interactions in both full text journal articles and structured product labeling. This is a particularly challenging domain that required the development of several annotation workflows which we think will be useful for for other scientific domains. A key aspect of AnnotationPress is its use of annotation plug-ins which make the tool is easily adaptable to other annotation use cases. Another distinctive feature is that AnnotationPress implements the [Micropublication](https://jbiomedsem.biomedcentral.com/articles/10.1186/2041-1480-5-28) and [Open Annotation data](http://www.openannotation.org/spec/core/) standards. These standards specify how to relate annotations in target documents about data, methods, and materials to scientific claims.
 
 If you are new to AnnotationPress, please watch our [video](https://www.youtube.com/) that show two annotation plugins in action.
 
 AnnotationPress is an Apache licensed open source project available on [github](https://github.com/dbmi-pitt/dbmi-annotator). Please contact us if you are interested in contributing to its development, if you would like to request new features, or have any other questions.
 
-############################################################
+---------
 Licensing
-############################################################
+---------
 AnnotationPress is licensed under the Apache License, Version 2.0. See LICENSE for the full license text.
 
 
-############################################################
+-----------------------
 How to run - Production
-############################################################
+-----------------------
 
 (1) Install docker(v1.12.3), docker-compose (v1.8.1) and apache (v2.4) server
 
-    Apache2 server configuration:
+    Apache2 server configuration
+    
+    .. code-block::
 
-    ## AnnotationPress Docker configuration ###############################
+    # AnnotationPress Docker configuration ###############################
+    
     # proxy for docker exposed service at port 8085
+    
     ProxyPass /dbmiannotator http://localhost:8085/dbmiannotator
     RewriteRule /dbmiannotator(.*) http://localhost:8085/dbmiannotator$1 [P]
 
     # proxy for docker exposed service at port 8085 for annotator store
+    
     ProxyPass /annotatorstore http://localhost:8085/annotatorstore
     RewriteRule /annotatorstore(.*) http://localhost:8085/annotatorstore$1 [P]
 
     # stylesheet folder relocate at Document root(dailymed, PMC, wiley)
+    
     RewriteRule /dbmiannotator/dailymed(.*) http://localhost/DDI-labels/dailymed$1 [P]
     RewriteRule /dbmiannotator/PMC(.*)_files/(.*) http://localhost/PMC/PMC$1_files/$2 [P]
     RewriteRule /dbmiannotator/wiley(.*)_files/(.*) http://localhost/wiley/wiley$1_files/$2 [P]
 
-(2) Create local volume for postgres and elasticsearch data mount point
+
+
+(2) Create local volume for postgres and elasticsearch data mount point::
 
     $ docker volume create --name postgres-volume -d local
     $ docker volume create --name elasticsearch-volume -d local
     $ docker volume create --name elastic-snapshot-volume -d local
 
-(3) Run dbmi-annotator with all dependencies in docker container
+(3) Run dbmi-annotator with all dependencies in docker container::
 
-    git clone 
+    $ git clone 
     $ cd docker-dbmi-annotator/dbmi-annotator
     $ docker-compose up
 
@@ -71,74 +83,76 @@ Refers to /home/yin2/dbmi-annotator/helper/README
 For how to build docker images:
 https://github.com/dbmi-pitt/docker-dbmi-annotator/blob/master/README
 
-############################################################
+------------------------
 How to run - Development
-############################################################
+------------------------
 
---------------------------
 Dependences:
---------------------------
+^^^^^^^^^^^^
 
 1. Elasticsearch version 1.7 running on port 9200
 
 2. Annotator Store running on port 5000
 
-3. Postgres DB running on port 5432
-   create database dbmiannotator
-
-    SQL script that create dbmiannotator schema
+3. Postgres DB running on port 5432:
+   
+    create database dbmiannotator
+    
+    SQL script that create dbmiannotator schema:
     https://github.com/dbmi-pitt/dbmi-annotator/blob/master/db-schema/rdb-postgres-schema.sql
 
-    SQL script that initialize plugin settings
+    SQL script that initialize plugin settings:
     https://github.com/dbmi-pitt/dbmi-annotator/blob/master/db-schema/rdb-postgres-initial.sql
 
 4. Apache2 server running on port 80
 
---------------------------
 Installation:
---------------------------
+^^^^^^^^^^^^^
 
 1. nodejs packages
-$ npm install
+``$ npm install``
 
 2. compile browser side JS packages (rerun when made modifications on config/config.js)
-$ browserify app.js -o public/dbmiannotator/js/app.bundle.js
+``$ browserify app.js -o public/dbmiannotator/js/app.bundle.js``
 
---------------------------
+
 Configuration:
---------------------------
+^^^^^^^^^^^^^^
 
 1.Create config.js 
-$ cp config/config.sample.js config/config.js
+``$ cp config/config.sample.js config/config.js``
 
 2.Edit config.js based on system environment  
 
-3. Apache2 configurations:
+3.Apache2 configurations:
 
-    proxy for local nodejs server on port 3000
+.. code-block::
+
+    #proxy for local nodejs server on port 3000
     RewriteRule /dbmiannotator$ http://localhost:3000/dbmiannotator [P]
     RewriteRule /dbmiannotator/(.*) http://localhost:3000/dbmiannotator/$1 [P]
 
-    proxy for local annotator store on port 5000
+    #proxy for local annotator store on port 5000
     ProxyPass /annotatorstore http://localhost:5000/
     RewriteRule /annotatorstore(.*) http://localhost:5000$1 [P]
 
---------------------------
-Run node server:
---------------------------
 
-$ cd dbmi-annotator
-$ nodemon server.js
+Run server:
+^^^^^^^^^^
+.. code-block::
 
-access to 'http://localhost:3000/'
+    $ cd dbmi-annotator
+    $ nodemon server.js (run '$ npm install -g nodemon', if command is not available)
+    $ service apache2 start
 
-############################################################
+access AnnotationPress through ``'http://localhost/dbmiannotator'``
+
+-----------
 Directories
-############################################################
+-----------
 
--------------------------------------------------------------
-Nodejs based program - folder structures
--------------------------------------------------------------
+Node.js based program - folder structures
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 config/ - configurations
 models/ - represents data, implements business logic and handles storage
 controllers/ - defines your app routes and their logic
@@ -149,9 +163,9 @@ package.json - remembers all packages that your app depends on and their version
 
 reference: https://www.terlici.com/2014/08/25/best-practices-express-structure.html
 
--------------------------------------------------------------
-design/ 
--------------------------------------------------------------
+
+design
+^^^^^^
 (1) design/diagram-workspaces/
 keep source code of diagram
 
