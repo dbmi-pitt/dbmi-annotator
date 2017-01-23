@@ -71,3 +71,7 @@ done
 
 
 curl -XPOST 'localhost:9200/_cluster/reroute' -d '{ "commands" : [ {"allocate" : { "index" : "annotator", "shard" : 1, "node" : "Katherine Reynolds", "allow_primary" : true}}]}'
+
+
+# snapshot elasticsearch store
+0 22 * * * bash rsync /home/yin2/dbmi-annotator/backup-program/elastic-snapshot.sh localhost 9200
