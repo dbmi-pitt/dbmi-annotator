@@ -12,7 +12,7 @@
  # See the License for the specific language governing permissions and
  # limitations under the License.
 
-import sys, csv, json, re
+import sys, csv, json, re, os
 import psycopg2
 import uuid
 import datetime
@@ -21,16 +21,17 @@ from sets import Set
 
 reload(sys)  
 sys.setdefaultencoding('utf8')
+HOME = os.path.dirname(os.path.abspath(__file__))
 
-sys.path.insert(0, './model')
+sys.path.insert(0, HOME + '/model')
 from micropublication import Annotation, DataMaterialRow, DMItem, DataItem, MaterialDoseItem, MaterialParticipants
 
 ######################### VARIABLES ##########################
 ES_PORT = 9200
 DB_SCHEMA = 'mpevidence'
-MP_ANN_TEMPLATE = "template/mp-annotation-template.json"
-MP_DATA_TEMPLATE = "template/mp-data-template.json"
-HIGHLIGHT_TEMPLATE = "template/highlight-annotation-template.json"
+MP_ANN_TEMPLATE = HOME + "/template/mp-annotation-template.json"
+MP_DATA_TEMPLATE = HOME + "/template/mp-data-template.json"
+HIGHLIGHT_TEMPLATE = HOME + "/template/highlight-annotation-template.json"
 
 # list of data items
 mpDataL = ["auc", "cmax", "clearance", "halflife"]
@@ -45,7 +46,7 @@ if len(sys.argv) > 5:
 	ES_HOSTNAME = str(sys.argv[4])
 	AUTHOR = str(sys.argv[5])
 else:
-	print "Usage: loadDomeoAnnsToRDB.py <pg hostname> <pg username> <pg password> <es hostname> <annotation author>"
+	print "Usage: load-rdb-annotations.py <pg hostname> <pg username> <pg password> <es hostname> <annotation author>"
 	sys.exit(1)
 
 
