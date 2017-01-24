@@ -43,7 +43,7 @@ def getAnnotations():
 	cntDict = {}
 
 	es = Elasticsearch([{'host': ES_HOSTNAME, 'port': ES_PORT}]) 
-	res = es.search(index="annotator", doc_type="annotation", size=100, body={"query":{"match":{"annotationType":"MP"}}})
+	res = es.search(index="annotator", doc_type="annotation", size=1000, body={"query":{"match":{"annotationType":"MP"}}})
 
 	print("%d documents found" % res['hits']['total'])
 
@@ -60,6 +60,8 @@ def getDocumentWithNoAnnotations():
 	resL = []
 
 	resDict = getAnnotations()
+	print resDict
+	
 	docSet = getInputDoucuments()
 
 	for doc in docSet:
