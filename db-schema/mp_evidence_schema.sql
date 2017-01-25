@@ -19,7 +19,10 @@ has_target integer,
 creator text,
 date_created timestamp,
 date_updated timestamp,
-negation text
+negation text,
+rejected boolean,
+rejected_reason text,
+rejected_comment text
 );
 
 

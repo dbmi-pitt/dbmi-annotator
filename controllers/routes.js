@@ -14,6 +14,7 @@
 
 
 config = require('./../config/config.js');
+utilcsv = require('./../utils/objtocsv.js');
 var request = require("request");
 var pg = require('pg');
 
@@ -200,87 +201,107 @@ module.exports = function(app, passport) {
     // EXPORT TO CSV ==============================
     app.get('/dbmiannotator/exportcsv', isLoggedIn, function(req, res){
 	
-	    var url = config.protocal + "://" + config.apache2.host + ":" + config.apache2.port + "/annotatorstore/search?email=" + req.query.email + "&annotationType=" + config.profile.def;
+	    //var url = config.protocal + "://" + config.apache2.host + ":" + config.apache2.port + "/annotatorstore/search?email=" + req.query.email + "&annotationType=" + config.profile.def;
+        var url = config.protocal + "://" + config.apache2.host + ":" + config.apache2.port + "/annotatorstore/search?annotationType=" + config.profile.def;
 	    
-	    request({url: url, json: true, followAllRedirects: true, "rejectUnauthorized": false}, function(error,response,body){
-            
+	    request({url: url, json: true, followAllRedirects: true, "rejectUnauthorized": false}, function(error,response,body){            
 	        if (!error && (response.statusCode === 200 || response.statusCode ===302)) {
                 var jsonObjs = body.rows;
 
                 res.attachment('annotations-'+req.query.email+'.csv');
 		        res.setHeader('Content-Type', 'text/csv');
-                var csvTxt = '"document"\t"claim label"\t"claim text"\t"method"\t"relationship"\t"drug1"\t"drug2"\t"precipitant"\t"enzyme"\t"evRelationship"\t"participants"\t"participants text"\t"drug1 dose"\t"drug1 formulation"\t"drug1 duration"\t"drug1 regimens"\t"drug1 dose text"\t"drug2 dose"\t"drug2 formulation"\t"drug2 duration"\t"drug2 regimens"\t"drug2 dose text"\t"auc"\t"auc type"\t"auc direction"\t"auc text"\t"cmax"\t"cmax type"\t"cmax direction"\t"cmax text"\t"cl"\t"cl type"\t"cl direction"\t"cl text"\t"halflife"\t"halflife type"\t"halflife direction"\t"halflife text"\t"group randomization"\t"parallel group design"\t"id"\n';
+                resultsL = [];
 
                 for (var i = 0; i < jsonObjs.length; i++) {
-
                     jsonObj = jsonObjs[i];
                     claim = jsonObj.argues;
-                    dataL = claim.supportsBy;                   
+                    dataL = claim.supportsBy;            
 
-                    var claimRow = '"' + jsonObj.rawurl + '"\t"' + claim.label + '"\t"' + claim.hasTarget.hasSelector.exact + '"\t"' + claim.method + '"\t"' + claim.qualifiedBy.relationship + '"\t"' + claim.qualifiedBy.drug1 + '"\t"' + claim.qualifiedBy.drug2 + '"\t"' + (claim.qualifiedBy.precipitant || '') + '"\t"' + (claim.qualifiedBy.enzyme || '' ) + '"';
+                    // initiate dict for one row in csv with claim information
+                    var rowDict={"document":jsonObj.rawurl, "useremail":jsonObj.email, "claimlabel":claim.label, "claimtext":claim.hasTarget.hasSelector.exact, "method":claim.method, "relationship":claim.qualifiedBy.relationship, "drug1":claim.qualifiedBy.drug1, "drug2":claim.qualifiedBy.drug2, "precipitant":(claim.qualifiedBy.precipitant||''), "enzyme":(claim.qualifiedBy.enzyme||''), "rejected": "", "evRelationship":"", "participants":"", "participantstext":"", "drug1dose":"", "drug1formulation":"", "drug1duration":"", "drug1regimens":"", "drug1dosetext":"", "drug2dose":"", "phenotypetype": "", "phenotypevalue": "", "phenotypemetabolizer": "", "phenotypepopulation": "", "drug2formulation":"", "drug2duration":"", "drug2regimens":"", "drug2dosetext":"", "aucvalue":"", "auctype":"", "aucdirection":"", "auctext":"", "cmaxvalue":"", "cmaxtype":"", "cmaxdirection":"", "cmaxtext":"", "clearancevalue":"", "clearancetype":"", "clearancedirection":"", "clearancetext":"", "halflifevalue":"", "halflifetype":"", "halflifedirection":"", "halflifetext":"", "dipsquestion":"", "reviewer":"", "reviewerdate":"", "reviewertotal":"", "reviewerlackinfo":"", "grouprandomization":"", "parallelgroupdesign":"", "id": jsonObj.id};
 
+                    if (claim.rejected != null)
+                        rowDict["rejected"] = (claim.rejected || "");
 
-                    var dataRow = null;
-                    if (dataL.length > 0) { // clinical trial annotation
-                        for (var j = 0; j < dataL.length; j++) {
+                    // fill data and material to dict
+                    if (dataL.length > 0) { // if data is available
+                        for (var j = 0; j < dataL.length; j++) { // loop all data items
                             var data = dataL[j];
                             var method = data.supportsBy;
                             var material = method.supportsBy;
-                            dataRow = "";
-                            
-                            dataRow += '\t"' + (data.evRelationship || '') + '"';
-                            
-                            if (material.participants != null)
-                                dataRow += '\t"' + (material.participants.value || '') + '"\t"' + (getSpanFromField(material.participants) || '') + '"';
-                            else 
-                                dataRow += '\t\t';
-                            
-                            if (material.drug1Dose != null) 
-                                dataRow += '\t"' + (material.drug1Dose.value || '') + '"\t"' + (material.drug1Dose.formulation || '') + '"\t"'  + (material.drug1Dose.duration || '') + '"\t"' + (material.drug1Dose.regimens || '') + '"\t"' + (getSpanFromField(material.drug1Dose) || '') + '"';
-                            else 
-                                dataRow += '\t\t\t\t';
-                            
-                            if (material.drug2Dose != null) 
-                                dataRow += '\t"' + (material.drug2Dose.value || '') + '"\t"' + (material.drug2Dose.formulation || '') + '"\t"'  + (material.drug2Dose.duration || '') + '"\t"' + (material.drug2Dose.regimens || '') + '"\t"' + (getSpanFromField(material.drug2Dose) || '') + '"';
-                            else 
-                                dataRow += '\t\t\t\t';
-                            
+
+                            rowDict["evRelationship"] = (data.evRelationship || "");
+
+                            if (material.participants != null) {
+                                rowDict["participants"] = (material.participants.value || "")
+                                rowDict["participantstext"] = (getSpanFromField(material.participants) || "")
+                            }
+
                             dataFieldsL = ["auc","cmax","clearance","halflife"];
                             for (p = 0; p < dataFieldsL.length; p++) {
                                 field = dataFieldsL[p];
-                                if (data[field] != null)    
-                                    dataRow += '\t"' + (data[field].value || '') + '"\t"' + (data[field].type || '') + '"\t"' + (data[field].direction || '') + '"\t"' + (getSpanFromField(data[field]) || '') + '"'; 
-                                else 
-                                    dataRow += '\t\t\t\t';
-                            }                        
-                            
+                                if (data[field] != null) {
+                                    rowDict[field + 'value'] = (data[field].value || "")
+                                    rowDict[field + 'type'] = (data[field].type || "")
+                                    rowDict[field + 'direction'] = (data[field].direction || "")
+                                    rowDict[field + 'text'] = (getSpanFromField(data[field]) || "")
+                                }
+                            }
+
+                            if (data.dips != null) {
+                                dipsQsStr = "";
+                                qsL=["q1","q2","q3","q4","q5","q6","q7","q8","q9","q10"];
+                                for (q = 0; q < qsL.length; q++) {
+                                    if (q == qsL.length - 1)
+                                        dipsQsStr += data.dips[qsL[q]];
+                                    else
+                                        dipsQsStr += data.dips[qsL[q]] + "|";
+                                }
+                                rowDict["dipsquestion"] = dipsQsStr;
+                            }
+
+                            if (data.reviewer != null) {
+                                rowDict["reviewer"] = data.reviewer.reviewer || "";
+                                rowDict["reviewerdate"] = data.reviewer.date || "";
+                                rowDict["reviewertotal"] = data.reviewer.total || "";
+                                rowDict["reviewerlackinfo"] = data.reviewer.lackinfo || "";
+                            }
+
                             if (data.grouprandom != null)
-                                dataRow += '\t"' + (data.grouprandom || '') + '"';
-                            else
-                                dataRow += '\t';
+                                rowDict["grouprandom"] = (data.grouprandom || "");                            
                             
                             if (data.parallelgroup != null)
-                                dataRow += '\t"' + (data.parallelgroup || '') + '"';
-                            else
-                                dataRow += '\t';                            
+                                rowDict["parallelgroup"] = (data.parallelgroup || "");
 
-                            // for multiple data case
-                            dataRow += '\t"' + jsonObj.id + '"'
-                            dataRow = claimRow + dataRow + '\n';
-                            csvTxt += dataRow;
+                            if (material.drug1Dose != null) {
+                                rowDict["drug1dose"] = (material.drug1Dose.value || "")
+                                rowDict["drug1formulation"] = (material.drug1Dose.formulation || "")
+                                rowDict["drug1duration"] = (material.drug1Dose.duration || "")
+                                rowDict["drug1regimens"] = (material.drug1Dose.regimens || "")
+                            } 
+                            if (material.drug2Dose != null) {
+                                rowDict["drug2dose"] = (material.drug2Dose.value || "")
+                                rowDict["drug2formulation"] = (material.drug2Dose.formulation || "")
+                                rowDict["drug2duration"] = (material.drug2Dose.duration || "")
+                                rowDict["drug2regimens"] = (material.drug2Dose.regimens || "")
+                            }                                 
+                            if (material.phenotype != null) {
+                                rowDict["phenotypetype"] = material.phenotype.type || "";
+                                rowDict["phenotypevalue"] = material.phenotype.typeVal || "";
+                                rowDict["phenotypemetabolizer"] = material.phenotype.metabolizer || "";
+                                rowDict["phenotypepopulation"] = material.phenotype.population || "";
+                            }                      
+                            resultsL.push(rowDict);
                         }
-                    } else { // statement annotation
-                        dataRow = '\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t';
-                        dataRow += '\t"' + jsonObj.id + '"'
-                        dataRow = claimRow + dataRow + '\n';
-                        csvTxt += dataRow;
                     }
-
                 }
-                
+
+                console.log(resultsL.length);
+                csvTxt = utilcsv.toCsv(resultsL, '"', '\t');
+
 		        res.attachment('annotations-'+req.query.email+'.csv');
 		        res.setHeader('Content-Type', 'text/csv');
-		        res.end(csvTxt);                    
+		        res.end(csvTxt);                                              
 		        
 	        } else {
 		        //req.flash('exportMessage', 'exported failed, annotation fetch exception, please see logs or contact Yifan at yin2@pitt.edu!');
@@ -300,9 +321,6 @@ function getSpanFromField(field) {
         return "";
     }
 }
-
-
-
 
 // MIDDLE WARE FUNCTIONS ==============================
 

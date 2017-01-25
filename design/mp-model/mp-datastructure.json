@@ -9,6 +9,9 @@
  'argues' : { // mp claim
      'id': 'uuid',
      'type': 'mp:claim',
+     'rejected': {
+         'reason': '<rejected reason>|<comments>'
+     },
      'qualifiedBy': {
          'Drug1': '',
          'drug1ID' : '',
