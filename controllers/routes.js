@@ -225,26 +225,28 @@ module.exports = function(app, passport) {
 
                     // fill data and material to dict
                     if (dataL.length > 0) { // if data is available
+
                         for (var j = 0; j < dataL.length; j++) { // loop all data items
+                            copyDict = JSON.parse(JSON.stringify(rowDict));
                             var data = dataL[j];
                             var method = data.supportsBy;
                             var material = method.supportsBy;
 
-                            rowDict["evRelationship"] = (data.evRelationship || "");
+                            copyDict["evRelationship"] = (data.evRelationship || "");
 
                             if (material.participants != null) {
-                                rowDict["participants"] = (material.participants.value || "")
-                                rowDict["participantstext"] = (getSpanFromField(material.participants) || "")
+                                copyDict["participants"] = (material.participants.value || "")
+                                copyDict["participantstext"] = (getSpanFromField(material.participants) || "")
                             }
 
                             dataFieldsL = ["auc","cmax","clearance","halflife"];
                             for (p = 0; p < dataFieldsL.length; p++) {
                                 field = dataFieldsL[p];
                                 if (data[field] != null) {
-                                    rowDict[field + 'value'] = (data[field].value || "")
-                                    rowDict[field + 'type'] = (data[field].type || "")
-                                    rowDict[field + 'direction'] = (data[field].direction || "")
-                                    rowDict[field + 'text'] = (getSpanFromField(data[field]) || "")
+                                    copyDict[field + 'value'] = (data[field].value || "")
+                                    copyDict[field + 'type'] = (data[field].type || "")
+                                    copyDict[field + 'direction'] = (data[field].direction || "")
+                                    copyDict[field + 'text'] = (getSpanFromField(data[field]) || "")
                                 }
                             }
 
@@ -257,42 +259,44 @@ module.exports = function(app, passport) {
                                     else
                                         dipsQsStr += data.dips[qsL[q]] + "|";
                                 }
-                                rowDict["dipsquestion"] = dipsQsStr;
+                                copyDict["dipsquestion"] = dipsQsStr;
                             }
 
                             if (data.reviewer != null) {
-                                rowDict["reviewer"] = data.reviewer.reviewer || "";
-                                rowDict["reviewerdate"] = data.reviewer.date || "";
-                                rowDict["reviewertotal"] = data.reviewer.total || "";
-                                rowDict["reviewerlackinfo"] = data.reviewer.lackinfo || "";
+                                copyDict["reviewer"] = data.reviewer.reviewer || "";
+                                copyDict["reviewerdate"] = data.reviewer.date || "";
+                                copyDict["reviewertotal"] = data.reviewer.total || "";
+                                copyDict["reviewerlackinfo"] = data.reviewer.lackinfo || "";
                             }
 
                             if (data.grouprandom != null)
-                                rowDict["grouprandom"] = (data.grouprandom || "");                            
+                                copyDict["grouprandom"] = (data.grouprandom || "");                            
                             
                             if (data.parallelgroup != null)
-                                rowDict["parallelgroup"] = (data.parallelgroup || "");
+                                copyDict["parallelgroup"] = (data.parallelgroup || "");
 
                             if (material.drug1Dose != null) {
-                                rowDict["drug1dose"] = (material.drug1Dose.value || "")
-                                rowDict["drug1formulation"] = (material.drug1Dose.formulation || "")
-                                rowDict["drug1duration"] = (material.drug1Dose.duration || "")
-                                rowDict["drug1regimens"] = (material.drug1Dose.regimens || "")
+                                copyDict["drug1dose"] = (material.drug1Dose.value || "")
+                                copyDict["drug1formulation"] = (material.drug1Dose.formulation || "")
+                                copyDict["drug1duration"] = (material.drug1Dose.duration || "")
+                                copyDict["drug1regimens"] = (material.drug1Dose.regimens || "")
                             } 
                             if (material.drug2Dose != null) {
-                                rowDict["drug2dose"] = (material.drug2Dose.value || "")
-                                rowDict["drug2formulation"] = (material.drug2Dose.formulation || "")
-                                rowDict["drug2duration"] = (material.drug2Dose.duration || "")
-                                rowDict["drug2regimens"] = (material.drug2Dose.regimens || "")
+                                copyDict["drug2dose"] = (material.drug2Dose.value || "")
+                                copyDict["drug2formulation"] = (material.drug2Dose.formulation || "")
+                                copyDict["drug2duration"] = (material.drug2Dose.duration || "")
+                                copyDict["drug2regimens"] = (material.drug2Dose.regimens || "")
                             }                                 
                             if (material.phenotype != null) {
-                                rowDict["phenotypetype"] = material.phenotype.type || "";
-                                rowDict["phenotypevalue"] = material.phenotype.typeVal || "";
-                                rowDict["phenotypemetabolizer"] = material.phenotype.metabolizer || "";
-                                rowDict["phenotypepopulation"] = material.phenotype.population || "";
+                                copyDict["phenotypetype"] = material.phenotype.type || "";
+                                copyDict["phenotypevalue"] = material.phenotype.typeVal || "";
+                                copyDict["phenotypemetabolizer"] = material.phenotype.metabolizer || "";
+                                copyDict["phenotypepopulation"] = material.phenotype.population || "";
                             }                      
-                            resultsL.push(rowDict);
+                            resultsL.push(copyDict);
                         }
+                    } else {
+                        resultsL.push(rowDict);
                     }
                 }
 
