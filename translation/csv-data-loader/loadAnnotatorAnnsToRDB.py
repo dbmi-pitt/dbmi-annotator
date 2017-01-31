@@ -48,7 +48,10 @@ def connect_postgreSQL():
 
 # add column: predicate, subject, object, subjectDose, objectDose
 def preprocess(csvfile):
-	csv_columns = ['document','claim label','claim text','method','relationship','drug1','drug2','precipitant','enzyme','evRelationship','participants','participants text','drug1 dose','drug1 formulation','drug1 duration','drug1 regimens','drug1 dose text','drug2 dose','drug2 formulation','drug2 duration','drug2 regimens','drug2 dose text','auc','auc type','auc direction','auc text','cmax','cmax type','cmax direction','cmax text','cl','cl type','cl direction','cl text','halflife','halflife type','halflife direction','halflife text','group randomization','id','parallel group design','predicate','subject','object','subjectDose','objectDose']
+
+	csv_columns = ["document", "useremail", "claimlabel", "claimtext", "method", "relationship", "drug1", "drug2", "precipitant", "enzyme", "rejected", "evRelationship", "participants", "participantstext", "drug1dose", "drug1formulation", "drug1duration", "drug1regimens", "drug1dosetext", "drug2dose", "phenotypetype", "phenotypevalue", "phenotypemetabolizer", "phenotypepopulation", "drug2formulation", "drug2duration", "drug2regimens", "drug2dosetext", "aucvalue", "auctype", "aucdirection", "auctext", "cmaxvalue", "cmaxtype", "cmaxdirection", "cmaxtext", "clearancevalue", "clearancetype", "clearancedirection", "clearancetext", "halflifevalue", "halflifetype", "halflifedirection", "halflifetext", "dipsquestion", "reviewer", "reviewerdate", "reviewertotal", "reviewerlackinfo", "grouprandomization", "parallelgroupdesign", "predicate","subject","object","subjectDose","objectDose", "id"]
+
+	#csv_columns=['document','claimlabel','claimtext','method','relationship','drug1','drug2','precipitant','enzyme','evRelationship','participants','participantstext','drug1dose','drug1formulation','drug1duration','drug1regimens','drug1dosetext','drug2dose','drug2formulation','drug2duration','drug2regimens','drug2dosetext','auc','auctype','aucdirection','auctext','cmax','cmaxtype','cmaxdirection','cmaxtext','cl','cltype','cldirection','cltext','halflife','halflifetype','halflifedirection','halflifetext','grouprandomization','id','parallelgroupdesign','predicate','subject','object','subjectDose','objectDose']
 
 	writer = csv.DictWriter(open('data/preprocess-annotator.csv', 'w'), fieldnames=csv_columns)
 	writer.writeheader()
@@ -56,31 +59,32 @@ def preprocess(csvfile):
 	all = []
 	for row in reader:
 		#print(row)
-
+		
+		# translate drug1/drug2 to subject and object based on precipitant
 		row.update({'predicate': row['relationship']})
 		if row['precipitant'] == 'drug1':
-			row.update({'subject': row['drug1'], 'object': row['drug2'], 'subjectDose': row['drug1 dose'], 'objectDose': row['drug2 dose']})
+			row.update({'subject': row['drug1'], 'object': row['drug2'], 'subjectDose': row['drug1dose'], 'objectDose': row['drug2dose']})
 		elif row['precipitant'] == 'drug2':
-			row.update({'subject': row['drug2'], 'object': row['drug1'], 'subjectDose': row['drug2 dose'], 'objectDose': row['drug1 dose']})
+			row.update({'subject': row['drug2'], 'object': row['drug1'], 'subjectDose': row['drug2dose'], 'objectDose': row['drug1dose']})
 
-		# fix single quote in text
-		if "'" in row['claim text']: 
-			row['claim text'] = row['claim text'].replace("'", "''")
-		if "'" in row['participants text']:
-			row['participants text'] = row['participants text'].replace("'", "''")
-		if "'" in row['drug1 dose text']:
-			row['drug1 dose text'] = row['drug1 dose text'].replace("'", "''")
-		if "'" in row['drug2 dose text']:
-			row['drug2 dose text'] = row['drug2 dose text'].replace("'", "''")
+		# fix single quote intext
+		if "'" in row['claimtext']: 
+			row['claimtext'] = row['claimtext'].replace("'", "''")
+		if "'" in row['participantstext']:
+			row['participantstext'] = row['participantstext'].replace("'", "''")
+		if "'" in row['drug1dosetext']:
+			row['drug1 dosetext'] = row['drug1dosetext'].replace("'", "''")
+		if "'" in row['drug2dosetext']:
+			row['drug2 dosetext'] = row['drug2dosetext'].replace("'", "''")
 
-		if "'" in row['auc text']:
-			row['auc text'] = row['auc text'].replace("'", "''")
-		if "'" in row['cmax text']:
-			row['cmax text'] = row['cmax text'].replace("'", "''")
-		if "'" in row['cl text']:
-			row['cl text'] = row['cl text'].replace("'", "''")
-		if "'" in row['halflife text']:
-			row['halflife text'] = row['halflife text'].replace("'", "''")
+		if "'" in row['auctext']:
+			row['auctext'] = row['auctext'].replace("'", "''")
+		if "'" in row['cmaxtext']:
+			row['cmaxtext'] = row['cmaxtext'].replace("'", "''")
+		if "'" in row['clearancetext']:
+			row['clearancetext'] = row['clearancetext'].replace("'", "''")
+		if "'" in row['halflifetext']:
+			row['halflifetext'] = row['halflifetext'].replace("'", "''")
 		all.append(row)
 	writer.writerows(all)
 
@@ -532,7 +536,7 @@ def main():
 	if isClean == "1":
 		print("[INFO] begin clean before load ...")
 		clearall(conn)
-		#truncateall(conn) # don't need delete tables
+		#truncateall(conn) # delete all tables in DB mpevidence
 		conn.commit()
 		print("[INFO] clean data done ...")
 	
@@ -540,8 +544,6 @@ def main():
 	for csvfile in csvfiles:
 		preprocess(csvfile)
 		reader = csv.DictReader(utf_8_encoder(open('data/preprocess-annotator.csv', 'r')))
-
-		#creator = csvfile.split('-')[1]		
 		load_data_from_csv(conn, reader, CREATOR)
 	conn.close()
 	print("[INFO] load completed ...")
