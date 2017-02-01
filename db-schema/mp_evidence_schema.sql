@@ -19,10 +19,10 @@ has_target integer,
 creator text,
 date_created timestamp,
 date_updated timestamp,
-negation text,
-rejected boolean,
-rejected_reason text,
-rejected_comment text
+negation boolean,
+rejected_statement boolean,
+rejected_statement_reason text,
+rejected_statement_comment text
 );
 
 
@@ -54,6 +54,9 @@ mp_claim_id integer,
 mp_data_index integer,
 ev_supports boolean,
 date_created timestamp,
+rejected boolean,
+rejected_reason text,
+rejected_comment text,
 FOREIGN KEY (mp_claim_id) REFERENCES mp_claim_annotation (id)
 );
 
@@ -139,12 +142,14 @@ CREATE TABLE qualifier
 id INTEGER not null PRIMARY KEY,
 urn text,
 claim_body_id integer,
-qvalue text,
 subject boolean DEFAULT FALSE,
 predicate boolean DEFAULT FALSE,
 object boolean DEFAULT FALSE,
+qvalue text,
 concept_code text,
 vocabulary_id integer,
+qualifier_type_concept_code text,
+qualifier_type_vocabulary_id integer,
 FOREIGN KEY (claim_body_id) REFERENCES oa_claim_body(id)
 );
 
