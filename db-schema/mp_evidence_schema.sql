@@ -7,6 +7,11 @@
 --        LC_CTYPE = 'en_US.UTF-8'
 -- CONNECTION LIMIT = -1;
 
+
+DROP SCHEMA IF EXISTS ohdsi CASCADE;
+CREATE SCHEMA ohdsi;
+SET SCHEMA 'ohdsi';
+
 -- MP Claim ------------------------------------
 --TABLE: mp_claim_annotation
 DROP TABLE IF EXISTS mp_claim_annotation CASCADE;
@@ -61,7 +66,7 @@ FOREIGN KEY (mp_claim_id) REFERENCES mp_claim_annotation (id)
 );
 
 
---TABLE oa_data_body
+--TABLEoa_data_body
 DROP TABLE IF EXISTS oa_data_body CASCADE;
 CREATE TABLE oa_data_body
 (

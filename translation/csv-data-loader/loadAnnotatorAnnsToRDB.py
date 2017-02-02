@@ -50,42 +50,69 @@ def connect_postgreSQL():
 # add column: predicate, subject, object, subjectDose, objectDose
 def preprocess(csvfile):
 
-	csv_columns = ["document", "useremail", "claimlabel", "claimtext", "method", "relationship", "drug1", "drug2", "precipitant", "enzyme", "rejected", "evRelationship", "participants", "participantstext", "drug1dose", "drug1formulation", "drug1duration", "drug1regimens", "drug1dosetext", "drug2dose", "phenotypetype", "phenotypevalue", "phenotypemetabolizer", "phenotypepopulation", "drug2formulation", "drug2duration", "drug2regimens", "drug2dosetext", "aucvalue", "auctype", "aucdirection", "auctext", "cmaxvalue", "cmaxtype", "cmaxdirection", "cmaxtext", "clearancevalue", "clearancetype", "clearancedirection", "clearancetext", "halflifevalue", "halflifetype", "halflifedirection", "halflifetext", "dipsquestion", "reviewer", "reviewerdate", "reviewertotal", "reviewerlackinfo", "grouprandomization", "parallelgroupdesign", "predicate","subject","object","subjectDose","objectDose", "id"]
+	annsDict = {} ## keep document and count of annotations for validation
+ 
+	csv_columns = ["document", "useremail", "claimlabel", "claimtext", "method", "relationship", "drug1", "drug2", "precipitant", "enzyme", "rejected", "evRelationship", "participants", "participantstext", "drug1dose", "drug1formulation", "drug1duration", "drug1regimens", "drug1dosetext", "drug2dose", "phenotypetype", "phenotypevalue", "phenotypemetabolizer", "phenotypepopulation", "drug2formulation", "drug2duration", "drug2regimens", "drug2dosetext", "aucvalue", "auctype", "aucdirection", "auctext", "cmaxvalue", "cmaxtype", "cmaxdirection", "cmaxtext", "clearancevalue", "clearancetype", "clearancedirection", "clearancetext", "halflifevalue", "halflifetype", "halflifedirection", "halflifetext", "dipsquestion", "reviewer", "reviewerdate", "reviewertotal", "reviewerlackinfo", "grouprandomization", "parallelgroupdesign", "predicate","subject","object", "id"]
 
 	writer = csv.DictWriter(open('data/preprocess-annotator.csv', 'w'), fieldnames=csv_columns)
 	writer.writeheader()
 	reader = csv.DictReader(utf_8_encoder(open(csvfile, 'r')), delimiter="\t")
-	all = []
-	for row in reader:
+	rowsL = []
+	for row in reader:		
+		## clinicaltrial, statement and case report have required field precipitant
+		if row['method'] in ["Case Report", "DDI clinical trial", "Statement"]: 
+			if row['precipitant'] != "" and row['drug1'] != "" and row['drug2'] != "":
+				if row['precipitant'] == 'drug1':
+					row.update({'subject': 'drug1', 'object': 'drug2'})
+				elif row['precipitant'] == 'drug2':
+					row.update({'subject': 'drug2', 'object': 'drug1'})
+				rowsL.append(escapeRow(row))
+				addAnnsToCount(annsDict, row['document'])
+			else:
+				print "[ERROR] Precipitant or drug data missing, skip document (%s), claim (%s), method (%s)" % (row['document'], row['claimlabel'], row['method'])		
+	
+		## phenotype don't have 2nd drug, relationship is inhibits or substrate of
+		elif row['method'] == "Phenotype clinical study":
+			if row['relationship'] in ["inhibits", "substrate of"] and row['drug1'] != "" and row['enzyme'] != "":
+				row.update({'subject': 'drug1', 'object': 'enzyme'})
+				rowsL.append(escapeRow(row))
+				addAnnsToCount(annsDict, row['document'])
+			else:
+				print "[ERROR] Phenotype clinical study data invalid, skip document (%s), claim (%s), method (%s)" % (row['document'], row['claimlabel'], row['method'])	
 		
-		# translate drug1/drug2 to subject and object based on precipitant
-		row.update({'predicate': row['relationship']})
-		if row['precipitant'] == 'drug1':
-			row.update({'subject': row['drug1'], 'object': row['drug2'], 'subjectDose': row['drug1dose'], 'objectDose': row['drug2dose']})
-		elif row['precipitant'] == 'drug2':
-			row.update({'subject': row['drug2'], 'object': row['drug1'], 'subjectDose': row['drug2dose'], 'objectDose': row['drug1dose']})
+		else:
+			print "[ERROR] Method undefined, skip document (%s), claim (%s), method (%s)" % (row['document'], row['claimlabel'], row['method'])				
 
-		# fix single quote intext
-		if "'" in row['claimtext']: 
-			row['claimtext'] = row['claimtext'].replace("'", "''")
-		if "'" in row['participantstext']:
-			row['participantstext'] = row['participantstext'].replace("'", "''")
-		if "'" in row['drug1dosetext']:
-			row['drug1dosetext'] = row['drug1dosetext'].replace("'", "''")
-		if "'" in row['drug2dosetext']:
-			row['drug2dosetext'] = row['drug2dosetext'].replace("'", "''")
+	print "[INFO] total %s annotations are validated and pre-processed" % (len(rowsL))
+	writer.writerows(rowsL)
+	print annsDict
 
-		if "'" in row['auctext']:
-			row['auctext'] = row['auctext'].replace("'", "''")
-		if "'" in row['cmaxtext']:
-			row['cmaxtext'] = row['cmaxtext'].replace("'", "''")
-		if "'" in row['clearancetext']:
-			row['clearancetext'] = row['clearancetext'].replace("'", "''")
-		if "'" in row['halflifetext']:
-			row['halflifetext'] = row['halflifetext'].replace("'", "''")
-		all.append(row)
-	writer.writerows(all)
+def addAnnsToCount(annsDict, document):
+	if document in annsDict:
+		annsDict[document] += 1
+	else:
+		annsDict[document] = 1
 
+
+def escapeRow(row):
+	# fix single quote in text
+	if "'" in row['claimtext']: 
+		row['claimtext'] = row['claimtext'].replace("'", "''")
+	if "'" in row['participantstext']:
+		row['participantstext'] = row['participantstext'].replace("'", "''")
+	if "'" in row['drug1dosetext']:
+		row['drug1dosetext'] = row['drug1dosetext'].replace("'", "''")
+	if "'" in row['drug2dosetext']:
+		row['drug2dosetext'] = row['drug2dosetext'].replace("'", "''")
+	if "'" in row['auctext']:
+		row['auctext'] = row['auctext'].replace("'", "''")
+	if "'" in row['cmaxtext']:
+		row['cmaxtext'] = row['cmaxtext'].replace("'", "''")
+	if "'" in row['clearancetext']:
+		row['clearancetext'] = row['clearancetext'].replace("'", "''")
+	if "'" in row['halflifetext']:
+		row['halflifetext'] = row['halflifetext'].replace("'", "''")	
+	return row
 
 def utf_8_encoder(unicode_csv_data):
     for line in unicode_csv_data:
@@ -152,22 +179,23 @@ def generateHighlightSet(row, highlightD):
 # CLEAN SCHEMA ################################################################
 def truncateall(conn):
 	cur = conn.cursor()
-	cur.execute("DROP TABLE qualifier;")
-	cur.execute("DROP TABLE oa_claim_body;")
-	cur.execute("DROP TABLE oa_selector;")
-	cur.execute("DROP TABLE oa_target;")
-	cur.execute("DROP TABLE data_field;")
-	cur.execute("DROP TABLE oa_data_body;")
-	cur.execute("DROP TABLE mp_data_annotation;")
-	cur.execute("DROP TABLE material_field;")
-	cur.execute("DROP TABLE oa_material_body;")
-	cur.execute("DROP TABLE mp_material_annotation;")
-	cur.execute("DROP TABLE method;")
-	cur.execute("DROP TABLE claim_reference_relationship;")
-	cur.execute("DROP TABLE mp_reference;")
-	cur.execute("DROP TABLE mp_claim_annotation;")
-	cur.execute("DROP TABLE oa_highlight_body;")
-	cur.execute("DROP TABLE highlight_annotation;")
+	cur.execute("SET SCHEMA 'ohdsi';")
+	cur.execute("DROP TABLE IF EXISTS qualifier;")
+	cur.execute("DROP TABLE IF EXISTS oa_claim_body;")
+	cur.execute("DROP TABLE IF EXISTS oa_selector;")
+	cur.execute("DROP TABLE IF EXISTS oa_target;")
+	cur.execute("DROP TABLE IF EXISTS data_field;")
+	cur.execute("DROP TABLE IF EXISTS oa_data_body;")
+	cur.execute("DROP TABLE IF EXISTS mp_data_annotation;")
+	cur.execute("DROP TABLE IF EXISTS material_field;")
+	cur.execute("DROP TABLE IF EXISTS oa_material_body;")
+	cur.execute("DROP TABLE IF EXISTS mp_material_annotation;")
+	cur.execute("DROP TABLE IF EXISTS method;")
+	cur.execute("DROP TABLE IF EXISTS claim_reference_relationship;")
+	cur.execute("DROP TABLE IF EXISTS mp_reference;")
+	cur.execute("DROP TABLE IF EXISTS mp_claim_annotation;")
+	cur.execute("DROP TABLE IF EXISTS oa_highlight_body;")
+	cur.execute("DROP TABLE IF EXISTS highlight_annotation;")
 
 	cur.execute("DROP SEQUENCE mp_claim_annotation_id_seq;")
 	cur.execute("DROP SEQUENCE oa_selector_id_seq;")
@@ -189,7 +217,7 @@ def truncateall(conn):
 def clearall(conn):
 	cur = conn.cursor()
 	#cur.execute("ALTER TABLE mp_data_annotation DROP CONSTRAINT mp_data_annotation_mp_claim_id_fkey")
-
+	cur.execute("SET SCHEMA 'ohdsi';")
 	cur.execute("DELETE FROM qualifier;")
 	cur.execute("DELETE FROM oa_claim_body;")
 	cur.execute("DELETE FROM oa_selector;")
@@ -259,12 +287,18 @@ def load_oa_target(conn, source, selector_id):
 	return None
 
 # LOAD QUALIFIER ################################################################
-def load_qualifier(conn, subject, predicate, object, claim_body_id):
+def load_qualifier(conn, qtype, qvalue, concept_code, vocab_id, qtype_concept_code, qtype_vocab_id, claim_body_id):
 	cur = conn.cursor()
-	cur.execute("INSERT INTO qualifier (urn, claim_body_id, subject, predicate, object, concept_code, vocabulary_id, qvalue)" +
-				"VALUES ( '" + uuid.uuid4().hex + "', " + str(claim_body_id) + ", true, false, false, NULL, NULL, '" + subject + "')," +
-				"( '" + uuid.uuid4().hex + "', " + str(claim_body_id) + ", false, true, false, NULL, NULL, '" + predicate + "')," +
-				"( '" + uuid.uuid4().hex + "', " + str(claim_body_id) + ", false, false, true, NULL, NULL, '" + object + "');")
+
+	s_boo = False; p_boo = False; o_boo = False
+	if qtype == "subject":
+		s_boo = True
+	elif qtype == "predicate":
+		p_boo = True
+	elif qtype == "object":
+		o_boo = True
+
+	cur.execute("""INSERT INTO qualifier (urn, claim_body_id, subject, predicate, object, qvalue, concept_code, vocabulary_id, qualifier_type_concept_code, qualifier_type_vocabulary_id) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""", (uuid.uuid4().hex, claim_body_id, s_boo, p_boo, o_boo, qvalue, concept_code, vocab_id, qtype_concept_code, qtype_vocab_id))
 
 # LOAD MP MATERIAL ################################################################
 # load table "mp_material_annotation" and "oa_material_body" one row
@@ -444,12 +478,11 @@ def load_data_field(conn, row, data_body_id, data_type):
 # LOAD MP CLAIM ################################################################
 # load table "oa_claim_body" one row
 # return claim body id
-def load_oa_claim_body(conn, subject, predicate, object, exact):
+def load_oa_claim_body(conn, claimlabel, exact):
 	cur = conn.cursor()
 	urn = uuid.uuid4().hex
-	label = subject + "_" + predicate + "_" + object
 	
-	qry1 = "INSERT INTO oa_claim_body (urn, label, claim_text) VALUES ('%s', '%s', '%s');" % (urn, label, exact)
+	qry1 = "INSERT INTO oa_claim_body (urn, label, claim_text) VALUES ('%s', '%s', '%s');" % (urn, claimlabel, exact)
 	cur.execute(qry1)
 
 	qry2 = "SELECT * FROM oa_claim_body WHERE urn = '%s';" % (urn)
@@ -482,10 +515,9 @@ def insert_mp_claim_annotation(conn, curr_date, has_body, has_target, creator, a
 def load_mp_claim_annotation(conn, row, creator):
 	claimP = ""; claimE = row["claimtext"]; claimS = ""
 	curr_date = datetime.datetime.now()
-	source = row["document"]; 
-	subject = row["subject"]; predicate = row["predicate"]; object = row["object"]
+	source = row["document"]; claimlabel = row["claimlabel"]
 
-	# when method is statement, negation is evidence supports/refutes
+	## when method is statement, negation is evidence supports/refutes
 	negation = "No"
 	if row["method"] == "Statement":
 		if "refutes" in row["evRelationship"]: 
@@ -493,10 +525,23 @@ def load_mp_claim_annotation(conn, row, creator):
 
 	claim_selector_id = load_oa_selector(conn, claimP, claimE, claimS)
 	claim_target_id = load_oa_target(conn, source, claim_selector_id)
-	oa_claim_body_id = load_oa_claim_body(conn, subject, predicate, object, claimE)
-	load_qualifier(conn, subject, predicate, object, oa_claim_body_id)
+	oa_claim_body_id = load_oa_claim_body(conn, claimlabel, claimE)
 
-	# statement rejection 
+	## subject and object
+	if row["subject"] and row["object"]:
+		s_drug = row[row["subject"]]
+		o_drug = row[row["object"]]
+		load_qualifier(conn, "subject", s_drug, None, None, None, None, oa_claim_body_id)
+		load_qualifier(conn, "object", o_drug, None, None, None, None, oa_claim_body_id)
+
+	## extran enzyme not in either subject or object
+	if row["enzyme"] != "" and "enzyme" not in [row["subject"], row["object"]]:
+		e_drug = row["enzyme"] 
+		load_qualifier(conn, "enzyme", e_drug, None, None, None, None, claim_body_id)
+
+	load_qualifier(conn, "predicate", row["predicate"], None, None, None, None, oa_claim_body_id)
+
+	## statement rejection 
 	rejected = False; rejected_reason = None; rejected_comment = None
 	if row["rejected"] and row["rejected"] != "":
 		rejected = True
@@ -569,6 +614,7 @@ def main():
 		print("[INFO] begin clean before load ...")
 		clearall(conn)
 		#truncateall(conn) # delete all tables in DB mpevidence
+		#conn.commit()
 		#createdb(conn)
 		conn.commit()
 		print("[INFO] clean data done ...")
@@ -579,7 +625,7 @@ def main():
 		reader = csv.DictReader(utf_8_encoder(open('data/preprocess-annotator.csv', 'r')))
 		load_data_from_csv(conn, reader, CREATOR)
 	conn.close()
-	print("[INFO] load completed ...")
+	print("[INFO] annotation load completed!")
 
 
 if __name__ == '__main__':
