@@ -13,11 +13,13 @@
  # limitations under the License.
 
 import csv
-import psycopg2
+
 import uuid
 import datetime
 from sets import Set
 import sys  
+from validate import validateResults
+from dbOperations import *
 
 reload(sys)  
 sys.setdefaultencoding('utf8')
@@ -40,14 +42,10 @@ else:
 	print "Usage: loadAnnotatorAnnsToRDB.py <pg hostname> <pg port> <pg username> <pg password> <clean existing data (1: yes, 0: no)>"
 	sys.exit(1)
 
-# UTILS ##########################################################################
-def connect_postgreSQL():
+# PRE PROCESS ######################################################################
 
-	myConnection = psycopg2.connect(host=HOSTNAME, user=USERNAME, password=PASSWORD, dbname=DATABASE)	
-	print("Postgres connection created")	
-	return myConnection
-
-# add column: predicate, subject, object, subjectDose, objectDose
+## add column: subject, object
+# rtype: dict with document and count of anns information for validation 
 def preprocess(csvfile):
 
 	annsDict = {} ## keep document and count of annotations for validation
@@ -85,7 +83,7 @@ def preprocess(csvfile):
 
 	print "[INFO] total %s annotations are validated and pre-processed" % (len(rowsL))
 	writer.writerows(rowsL)
-	print annsDict
+	return annsDict
 
 def addAnnsToCount(annsDict, document):
 	if document in annsDict:
@@ -117,12 +115,6 @@ def escapeRow(row):
 def utf_8_encoder(unicode_csv_data):
     for line in unicode_csv_data:
         yield line.encode('utf-8')
-
-def show_table(conn, table):
-	cur = conn.cursor()
-	cur.execute("SELECT * FROM " + table)
-	for row in cur.fetchall():
-		print(row)
 
 
 # LOAD HIGHLIGHT ANNOTATION ########################################################
@@ -176,68 +168,6 @@ def generateHighlightSet(row, highlightD):
 	else:
 		highlightD[source] = Set([subjectDrug, objectDrug])
 
-# CLEAN SCHEMA ################################################################
-def truncateall(conn):
-	cur = conn.cursor()
-	cur.execute("SET SCHEMA 'ohdsi';")
-	cur.execute("DROP TABLE IF EXISTS qualifier;")
-	cur.execute("DROP TABLE IF EXISTS oa_claim_body;")
-	cur.execute("DROP TABLE IF EXISTS oa_selector;")
-	cur.execute("DROP TABLE IF EXISTS oa_target;")
-	cur.execute("DROP TABLE IF EXISTS data_field;")
-	cur.execute("DROP TABLE IF EXISTS oa_data_body;")
-	cur.execute("DROP TABLE IF EXISTS mp_data_annotation;")
-	cur.execute("DROP TABLE IF EXISTS material_field;")
-	cur.execute("DROP TABLE IF EXISTS oa_material_body;")
-	cur.execute("DROP TABLE IF EXISTS mp_material_annotation;")
-	cur.execute("DROP TABLE IF EXISTS method;")
-	cur.execute("DROP TABLE IF EXISTS claim_reference_relationship;")
-	cur.execute("DROP TABLE IF EXISTS mp_reference;")
-	cur.execute("DROP TABLE IF EXISTS mp_claim_annotation;")
-	cur.execute("DROP TABLE IF EXISTS oa_highlight_body;")
-	cur.execute("DROP TABLE IF EXISTS highlight_annotation;")
-
-	cur.execute("DROP SEQUENCE mp_claim_annotation_id_seq;")
-	cur.execute("DROP SEQUENCE oa_selector_id_seq;")
-	cur.execute("DROP SEQUENCE oa_target_id_seq;")
-	cur.execute("DROP SEQUENCE oa_claim_body_id_seq;")
-	cur.execute("DROP SEQUENCE qualifier_id_seq;")
-	cur.execute("DROP SEQUENCE mp_data_annotation_id_seq;")
-	cur.execute("DROP SEQUENCE oa_data_body_id_seq;")
-	cur.execute("DROP SEQUENCE data_field_id_seq;")
-	cur.execute("DROP SEQUENCE mp_material_annotation_id_seq;")
-	cur.execute("DROP SEQUENCE oa_material_body_id_seq;")
-	cur.execute("DROP SEQUENCE material_field_id_seq;")
-	cur.execute("DROP SEQUENCE method_id_seq;")
-	cur.execute("DROP SEQUENCE claim_reference_relationship_id_seq;")
-	cur.execute("DROP SEQUENCE mp_reference_id_seq;")
-	cur.execute("DROP SEQUENCE highlight_annotation_id_seq;")
-	cur.execute("DROP SEQUENCE oa_highlight_body_id_seq;")
-
-def clearall(conn):
-	cur = conn.cursor()
-	#cur.execute("ALTER TABLE mp_data_annotation DROP CONSTRAINT mp_data_annotation_mp_claim_id_fkey")
-	cur.execute("SET SCHEMA 'ohdsi';")
-	cur.execute("DELETE FROM qualifier;")
-	cur.execute("DELETE FROM oa_claim_body;")
-	cur.execute("DELETE FROM oa_selector;")
-	cur.execute("DELETE FROM oa_target;")
-	cur.execute("DELETE FROM data_field;")
-	cur.execute("DELETE FROM oa_data_body;")
-	cur.execute("DELETE FROM mp_data_annotation;")
-	cur.execute("DELETE FROM material_field;")
-	cur.execute("DELETE FROM oa_material_body;")
-	cur.execute("DELETE FROM mp_material_annotation;")
-	cur.execute("DELETE FROM method;")
-	cur.execute("DELETE FROM mp_claim_annotation;")
-	cur.execute("DELETE FROM oa_highlight_body;")
-	cur.execute("DELETE FROM highlight_annotation;")
-
-def createdb(conn):
-	with open(DB_SCHEMA) as dbscript:
-		sql = dbscript.read()
-		cur = conn.cursor()
-		cur.execute(sql)
 
 # LOAD METHOD ################################################################
 def load_method(conn, row, mp_claim_id, mp_data_index):
@@ -301,24 +231,30 @@ def load_qualifier(conn, qtype, qvalue, concept_code, vocab_id, qtype_concept_co
 	cur.execute("""INSERT INTO qualifier (urn, claim_body_id, subject, predicate, object, qvalue, concept_code, vocabulary_id, qualifier_type_concept_code, qualifier_type_vocabulary_id) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""", (uuid.uuid4().hex, claim_body_id, s_boo, p_boo, o_boo, qvalue, concept_code, vocab_id, qtype_concept_code, qtype_vocab_id))
 
 # LOAD MP MATERIAL ################################################################
+
+## dose_role: subject or object, drug_idx: drug1 or drug2
+def load_material_dose(conn, row, creator, dose_role, drug_idx, mp_claim_id, mp_data_index):
+	if (row[drug_idx + 'dose'] != ''):
+		exact = row[drug_idx + 'dosetext']
+		selector_id = load_oa_selector(conn, '', exact, '')
+		target_id = load_oa_target(conn, row["document"], selector_id)	
+		material_body_id = insert_material_annotation(conn, row, mp_claim_id, target_id, creator, dose_role + "_dose", mp_data_index)				
+		load_material_field(conn, row, material_body_id, drug_idx)	
+
+
 # load table "mp_material_annotation" and "oa_material_body" one row
 def load_mp_material_annotation(conn, row, mp_claim_id, creator, mp_data_index):
 	cur = conn.cursor()
 	source = row['document']
 
-	if (row['drug1dose'] != '') and (row['drug1dose'].lower() != 'unk'):
-		exact = row['drug1dosetext']
-		selector_id = load_oa_selector(conn, '', exact, '')
-		target_id = load_oa_target(conn, source, selector_id)	
-		material_body_id = insert_material_annotation(conn, row, mp_claim_id, target_id, creator, 'object_dose', mp_data_index)
-		load_material_field(conn, row, material_body_id, 'drug1')
-
-	if (row['drug2dose'] != '') and (row['drug2dose'].lower() != 'unk'):
-		exact = row['drug2dosetext']
-		selector_id = load_oa_selector(conn, '', exact, '')
-		target_id = load_oa_target(conn, source, selector_id)	
-		material_body_id = insert_material_annotation(conn, row, mp_claim_id, target_id, creator, 'subject_dose', mp_data_index)
-		load_material_field(conn, row, material_body_id, 'drug2')
+	if row["drug1dose"] != "" and row["subject"] == "drug1":
+		load_material_dose(conn, row, creator, "subject", "drug1", mp_claim_id, mp_data_index)
+	if row["drug1dose"] != "" and row["object"] == "drug1":	
+		load_material_dose(conn, row, creator, "object", "drug1", mp_claim_id, mp_data_index)
+	if row["drug2dose"] != "" and row["subject"] == "drug2":
+		load_material_dose(conn, row, creator, "subject", "drug2", mp_claim_id, mp_data_index)
+	if row["drug2dose"] != "" and row["object"] == "drug2":	
+		load_material_dose(conn, row, creator, "object", "drug2", mp_claim_id, mp_data_index)
 
 	if (row['participants'] != '') and (row['participants'].lower() != 'unk'):
 		exact = row['participantstext']
@@ -539,7 +475,7 @@ def load_mp_claim_annotation(conn, row, creator):
 		e_drug = row["enzyme"] 
 		load_qualifier(conn, "enzyme", e_drug, None, None, None, None, claim_body_id)
 
-	load_qualifier(conn, "predicate", row["predicate"], None, None, None, None, oa_claim_body_id)
+	load_qualifier(conn, "predicate", row["relationship"], None, None, None, None, oa_claim_body_id)
 
 	## statement rejection 
 	rejected = False; rejected_reason = None; rejected_comment = None
@@ -607,26 +543,33 @@ def load_data_from_csv(conn, reader, creator):
 
 def main():
 
-	print("[INFO] connect postgreSQL ...")
-	conn = connect_postgreSQL()
+	conn = connect_postgreSQL(HOSTNAME, USERNAME, PASSWORD, DATABASE)
 
 	if isClean == "1":
-		print("[INFO] begin clean before load ...")
 		clearall(conn)
-		#truncateall(conn) # delete all tables in DB mpevidence
-		#conn.commit()
-		#createdb(conn)
 		conn.commit()
-		print("[INFO] clean data done ...")
+		print "[INFO] Clean all tables done!"
+	elif isClean == "2":
+		truncateall(conn) # delete all tables in DB mpevidence
+		conn.commit()
+		createdb(conn, DB_SCHEMA)
+		conn.commit()
+		print "[INFO] Drop and recreate all tables done!"
 	
-	print("[INFO] begin load data ...")
+	print "[INFO] Begin load data ..."
 	for csvfile in csvfiles:
-		preprocess(csvfile)
+		annsDictCsv = preprocess(csvfile)
 		reader = csv.DictReader(utf_8_encoder(open('data/preprocess-annotator.csv', 'r')))
 		load_data_from_csv(conn, reader, CREATOR)
-	conn.close()
-	print("[INFO] annotation load completed!")
 
+	print "[INFO] annotation load completed!"
+	print "[INFO] Begin results validating..."
+
+	if validateResults(conn, annsDictCsv):
+		print "[INFO] all annotations are loaded successfully!"
+	else:
+		print "[WARN] annotations are loaded incompletely!"
+	conn.close()
 
 if __name__ == '__main__':
 	main()
