@@ -298,3 +298,19 @@ ALTER TABLE highlight_annotation alter id set default nextval('highlight_annotat
 CREATE SEQUENCE oa_highlight_body_id_seq;
 ALTER TABLE oa_highlight_body alter id set default nextval('oa_highlight_body_id_seq');
 
+DROP EXTENSION IF EXISTS tablefunc;
+CREATE EXTENSION tablefunc WITH SCHEMA ohdsi; 
+
+-- FUNCTIONS 
+-- handle qualifier role
+CREATE OR REPLACE FUNCTION ohdsi.qualifierRole(boolean, boolean, boolean) 
+RETURNS TEXT AS
+$BODY$
+BEGIN
+IF $1 THEN RETURN 'subject';
+ELSIF $2 THEN RETURN 'predicate';
+ELSIF $3 THEN RETURN 'object';
+ELSE RETURN 'enzyme';
+END IF;
+END;
+$BODY$ language plpgsql;

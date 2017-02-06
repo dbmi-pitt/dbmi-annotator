@@ -473,7 +473,7 @@ def load_mp_claim_annotation(conn, row, creator):
 	## extran enzyme not in either subject or object
 	if row["enzyme"] != "" and "enzyme" not in [row["subject"], row["object"]]:
 		e_drug = row["enzyme"] 
-		load_qualifier(conn, "enzyme", e_drug, None, None, None, None, claim_body_id)
+		load_qualifier(conn, "enzyme", e_drug, None, None, None, None, oa_claim_body_id)
 
 	load_qualifier(conn, "predicate", row["relationship"], None, None, None, None, oa_claim_body_id)
 

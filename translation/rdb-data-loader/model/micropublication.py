@@ -61,9 +61,21 @@ class DataItem(DMItem):
 		self.type = type
 	def addDirection(self, direction):
 		self.direction = direction
-	
 
-# Material dose item in material
+# Questions for dips score
+class DataDips():
+	def __init__(self, dipsQsDict):
+		self.dipsQsDict = dipsQsDict
+
+# Reviewer
+class DataReviewer():
+	def __init__(self, reviewer, date, total, lackinfo):
+		self.reviewer = reviewer	
+		self.date = date
+		self.total = total
+		self.lackinfo = lackinfo
+	
+# Material dose
 class MaterialDoseItem(DMItem):
 	def __init__(self, field):
 		self.field = field # options: objectdose or subjectdose
@@ -82,7 +94,7 @@ class MaterialDoseItem(DMItem):
 		elif name == "regimens":
 			self.regimens = value 
 
-# Material participant item in material
+# Material participants
 class MaterialParticipants(DMItem):
 	def __init__(self, value):
 		self.value = value
@@ -90,20 +102,41 @@ class MaterialParticipants(DMItem):
 	def setValue(self, value):
 		self.value = value
 
+# Material phenotype
+class MaterialPhenotypeItem():
+	def __init__(self, field):
+		self.ptype = None
+		self.value = None 
+		self.metabolizer = None
+		self.population = None
+
+	def setAttribute(self, ptype, value, metabolizer, population):
+		self.ptype = ptype
+		self.value = value
+		self.metabolizer = metabolizer
+		self.population = population
 
 # represents single row of data & material in annotation table
 class DataMaterialRow(object):
 
 	def __init__(self):
 		self.index = 1 # mp data index for claim, default 0 
-		self.dataMaterialRowD = {"auc": None, "cmax": None, "clearance": None, "halflife": None, "participants": None, "object_dose": None, "subject_dose": None, "evRelationship": None}
+		self.dataMaterialRowD = {"auc": None, "cmax": None, "clearance": None, "halflife": None, "dips": None, "reviewer": None, "participants": None, "object_dose": None, "subject_dose": None, "evRelationship": None, "phenotype": None}
 
-	def setEvRelationship(self, value): # evidence relationship supports/refutes
+	# phenotype get and set
+	def setPhenotype(self, obj): 
+		self.dataMaterialRowD["phenotype"] = obj
+	def getPhenotype():
+		return self.dataMaterialRowD["phenotype"]
+
+	# evidence relationship (supports/refutes) get and set
+	def setEvRelationship(self, value): 
 		self.dataMaterialRowD["evRelationship"] = value
 
 	def getEvRelationship(self):
 		return self.dataMaterialRowD["evRelationship"]
 
+	# Mp data item get and set
 	def setDataItem(self, obj): # obj: DataItem
 		if self.dataMaterialRowD[obj.field] != None:
 			#print "[Warning] Data item already has the field: " + obj.field
@@ -113,6 +146,26 @@ class DataMaterialRow(object):
 		else:
 			print "[Error] data item undefined: " + obj.field
 
+	# Mp data dips questions
+	def setDips(self, obj):
+		self.dataMaterialRowD["dips"] = obj
+	def getDips():
+		return self.dataMaterialRowD["dips"]
+
+	# Mp data reviewer information
+	def setReviewer(self, obj):
+		self.dataMaterialRowD["reviewer"] = obj
+	def getReviewer():
+		return self.dataMaterialRowD["reviewer"]
+
+	# Mp data ratio
+	def getDataItemInRow(self, field): # return DataItem
+		if field in ["auc", "cmax", "clearance", "halflife","dips","reviewer"]:
+			return self.dataMaterialRowD[field]
+		else:
+			print "[Error] get DataItem field error: " + field
+
+	# Mp material Dose get and set
 	def setMaterialDoseItem(self, obj): # obj: MaterialDoseItem
 		if self.dataMaterialRowD[obj.field] != None:
 			#print "[Warning] Data item already has the field: " + obj.field
@@ -122,31 +175,28 @@ class DataMaterialRow(object):
 		else:
 			print "[Error] material item undefined: " + obj.field
 
-	def setParticipants(self, obj): # obj: MatarialParticipants
-		if self.dataMaterialRowD["participants"] != None:
-			#print "[Warning] Data item already has the field: participants"
-			return
-		else:
-			self.dataMaterialRowD["participants"] = obj
-	
-	def getDataMaterialRow(self): # return one row of data & material items
-		return self.dataMaterialRowD
-
-	def getDataItemInRow(self, field): # return DataItem
-		if field in ["auc", "cmax", "clearance", "halflife"]:
-			return self.dataMaterialRowD[field]
-		else:
-			print "[Error] get DataItem field error: " + field
-
 	def getMaterialDoseInRow(self, field): # return MaterialDoseItem
 		if field in ["subject_dose","object_dose"]:
 			return self.dataMaterialRowD[field]
 		else:
 			print "[Error] get MaterialItem field error: " + field
 
-	def getParticipantsInRow(self): # return MatarialParticipants
-		return self.dataMaterialRowD["participants"]
+	# Mp material participants get and set
+	def setParticipants(self, obj): # obj: MatarialParticipants
+		if self.dataMaterialRowD["participants"] != None:
+			#print "[Warning] Data item already has the field: participants"
+			return
+		else:
+			self.dataMaterialRowD["participants"] = obj
 
+	def getParticipantsInRow(self): # return MatarialParticipants
+		return self.dataMaterialRowD["participants"]	
+
+	# get dict of all data & material items
+	def getDataMaterialRow(self): # return one row of data & material items
+		return self.dataMaterialRowD
+
+	# data & material index get and set
 	def getDmIndex(self):
 		return self.index
 		
@@ -165,15 +215,18 @@ class Annotation(object):
 
 		self.method = None  # user entered method
 		self.negation = None # assertion negation supports or refutes
+		self.rejected = None # 'reason': '<rejected reason>|<comments>'
 
 	def setOaSelector(self, prefix, exact, suffix):
 		self.prefix = prefix
 		self.exact = exact
 		self.suffix = suffix
 
+	# get all data and material rows
 	def getDataMaterials(self): # return list of DataMaterialRows
 		return self.mpDataMaterialD
 
+	# single data and material get and set
 	def getSpecificDataMaterial(self, idx): # return DataMaterialRow
 		if idx in self.mpDataMaterialD:
 			return self.mpDataMaterialD[idx]

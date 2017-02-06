@@ -137,8 +137,9 @@ JOIN mp_material_annotation mm ON mb.is_oa_body_of = mm.id
 WHERE mf.value != ''
 
 
--- FUNCTIONS
+-- FUNCTIONS 
 
+-- handle qualifier role
 CREATE OR REPLACE FUNCTION qualifierRole(boolean, boolean, boolean) 
 RETURNS TEXT AS
 $BODY$
@@ -146,7 +147,7 @@ BEGIN
 IF $1 THEN RETURN 'subject';
 ELSIF $2 THEN RETURN 'predicate';
 ELSIF $3 THEN RETURN 'object';
-ELSE RETURN 'error';
+ELSE RETURN 'enzyme';
 END IF;
 END;
 $BODY$ language plpgsql;
