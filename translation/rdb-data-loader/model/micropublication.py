@@ -126,7 +126,7 @@ class DataMaterialRow(object):
 	# phenotype get and set
 	def setPhenotype(self, obj): 
 		self.dataMaterialRowD["phenotype"] = obj
-	def getPhenotype():
+	def getPhenotype(self):
 		return self.dataMaterialRowD["phenotype"]
 
 	# evidence relationship (supports/refutes) get and set
@@ -149,13 +149,13 @@ class DataMaterialRow(object):
 	# Mp data dips questions
 	def setDips(self, obj):
 		self.dataMaterialRowD["dips"] = obj
-	def getDips():
+	def getDips(self):
 		return self.dataMaterialRowD["dips"]
 
 	# Mp data reviewer information
 	def setReviewer(self, obj):
 		self.dataMaterialRowD["reviewer"] = obj
-	def getReviewer():
+	def getReviewer(self):
 		return self.dataMaterialRowD["reviewer"]
 
 	# Mp data ratio

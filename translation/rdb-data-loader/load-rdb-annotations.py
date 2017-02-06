@@ -37,7 +37,7 @@ HIGHLIGHT_TEMPLATE = HOME + "/template/highlight-annotation-template.json"
 mpDataL = ["auc", "cmax", "clearance", "halflife"]
 
 # dict for method name translate
-methodM = {"clinical trial": "DDI clinical trial", "statement": "Statement"}
+methodM = {"clinical trial": "DDI clinical trial", "statement": "Statement", "Phenotype clinical study": "Phenotype clinical study", "Case Report": "Case Report"}
 
 if len(sys.argv) > 5:
 	PG_HOSTNAME = str(sys.argv[1])
@@ -54,9 +54,10 @@ else:
 
 # return oa selector in json
 def generateOASelector(prefix, exact, suffix):
+
 	oaSelector = "{\"hasSelector\": { \"@type\": \"TextQuoteSelector\", \"exact\": \""+unicode(exact or "", "utf-8")+"\", \"prefix\": \""+ unicode(prefix or "", "utf-8") + "\", \"suffix\": \"" + unicode(suffix or "", "utf-8") + "\"}}"
 
-	return json.loads(oaSelector)
+	return json.loads(oaSelector, strict=False)
 
 # load highlight annotations to documents
 def loadHighlightAnnotations(highlightD, email):
@@ -241,6 +242,8 @@ def main():
 	#printSample(mpAnnotations, 2)
 
 	highlightD = queryHighlightAnns(conn)
+
+	print highlightD
 	loadHighlightAnnotations(highlightD, AUTHOR)
 
 	conn.close()

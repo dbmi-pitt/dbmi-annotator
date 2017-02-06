@@ -161,7 +161,7 @@ def update_oa_highlight_body(conn, highlight_annotation_id, oa_highlight_body_id
 
 
 def generateHighlightSet(row, highlightD):
-	subjectDrug = row["subject"]; objectDrug = row["object"]; source = row["document"]
+	subjectDrug = row[row["subject"]]; objectDrug = row[row["object"]]; source = row["document"]
 	if source in highlightD:
 		highlightD[source].add(subjectDrug)
 		highlightD[source].add(objectDrug)
@@ -406,7 +406,7 @@ def load_data_field(conn, row, data_body_id, data_type):
 	if data_type == "reviewer":
 		cur.execute("INSERT INTO data_field (urn, data_body_id, data_field_type, value_as_string, value_as_number) VALUES ( '" + uuid.uuid4().hex + "', " + str(data_body_id) + ", 'reviewer', '" + row["reviewer"] + "', NULL), ( '" + uuid.uuid4().hex + "', " + str(data_body_id) + ", 'date', '" + row["reviewerdate"] + "', NULL), ( '" + uuid.uuid4().hex + "', " + str(data_body_id) + ", 'total', '" + row["reviewertotal"] + "', NULL), ( '" + uuid.uuid4().hex + "', " + str(data_body_id) + ", 'lackinfo', '" + row["reviewerlackinfo"] + "', NULL);")
 
-	if data_type == "dips":
+	if data_type == "dipsquestion" and "undefined" not in row["dipsquestion"]:
 		dipsQsL = row["dipsquestion"].split('|')
 		if dipsQsL and len(dipsQsL) == 10:
 			cur.execute("INSERT INTO data_field (urn, data_body_id, data_field_type, value_as_string, value_as_number) VALUES ( '" + uuid.uuid4().hex + "', " + str(data_body_id) + ", 'q1', '" + dipsQsL[0] + "', NULL), ( '" + uuid.uuid4().hex + "', " + str(data_body_id) + ", 'q2', '" + dipsQsL[1] + "', NULL), ( '" + uuid.uuid4().hex + "', " + str(data_body_id) + ", 'q3', '" + dipsQsL[2] + "', NULL), ( '" + uuid.uuid4().hex + "', " + str(data_body_id) + ", 'q4', '" + dipsQsL[3] + "', NULL), ( '" + uuid.uuid4().hex + "', " + str(data_body_id) + ", 'q5', '" + dipsQsL[4] + "', NULL), ( '" + uuid.uuid4().hex + "', " + str(data_body_id) + ", 'q6', '" + dipsQsL[5] + "', NULL), ( '" + uuid.uuid4().hex + "', " + str(data_body_id) + ", 'q7', '" + dipsQsL[6] + "', NULL), ( '" + uuid.uuid4().hex + "', " + str(data_body_id) + ", 'q8', '" + dipsQsL[7] + "', NULL), ( '" + uuid.uuid4().hex + "', " + str(data_body_id) + ", 'q9', '" + dipsQsL[8] + "', NULL), ( '" + uuid.uuid4().hex + "', " + str(data_body_id) + ", 'q10', '" + dipsQsL[9] + "', NULL);")
@@ -528,13 +528,17 @@ def load_data_from_csv(conn, reader, creator):
 		mp_claim_id = findClaimIdByAnnId(conn, annId)
 		if not mp_claim_id:
 			mp_claim_id = load_mp_claim_annotation(conn, row, creator)
+			## temp work with AnnotationPress 
+			load_method(conn, row, mp_claim_id, 0) 
 
 		mp_data_index = (findNumOfDataItems(conn, mp_claim_id) or 0) + 1 
 
 		# MP data
 		load_mp_data_annotation(conn, row, mp_claim_id, creator, mp_data_index)
 		load_mp_material_annotation(conn, row, mp_claim_id, creator, mp_data_index)
-		load_method(conn, row, mp_claim_id, mp_data_index)
+
+		## method should be 1:1 to data & material and m:1 with claim
+		#load_method(conn, row, mp_claim_id, mp_data_index)
 
 		generateHighlightSet(row, highlightD)  # add unique drugs to set
 		

@@ -13,6 +13,13 @@
  # limitations under the License.
 
 import psycopg2
+import sys, re, os
+from sets import Set
+
+HOME = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, HOME + '/model')
+
+from micropublication import Annotation, DataMaterialRow, DMItem, DataItem, MaterialDoseItem, MaterialParticipants
 
 # postgres connection
 def connectPostgres(hostname, username, password, database):
@@ -25,15 +32,14 @@ def connectPostgres(hostname, username, password, database):
 def queryMpClaim(conn):
 
 	qry = """
-	select distinct cann.id, t.has_source, cann.creator, cann.date_created, s.exact, s.prefix, s.suffix, cbody.label, qvalue, q.subject, q.predicate, q.object, cann.rejected_statement, cann.rejected_statement_reason, cann.rejected_statement_comment, met.entered_value, cann.negation 
-	from mp_claim_annotation cann, oa_claim_body cbody, oa_target t, oa_selector s, qualifier q, method met
-	where cann.has_body = cbody.id
-	and cann.has_target = t.id
-	and t.has_selector = s.id
-	and cbody.id = q.claim_body_id
-	and cann.id = met.mp_claim_id
-"""
-
+	set schema 'ohdsi';
+	select cann.id, t.has_source, cann.creator, cann.date_created, s.exact, s.prefix, s.suffix, cbody.label, qualifierrole(q.subject, q.predicate, q.object) as qtype, qvalue, cann.rejected_statement, cann.rejected_statement_reason, cann.rejected_statement_comment, met.entered_value, cann.negation 
+	from mp_claim_annotation cann join oa_claim_body cbody on cann.has_body = cbody.id
+	join qualifier q on cbody.id = q.claim_body_id
+	join method met on cann.id = met.mp_claim_id 
+	join oa_target t on cann.has_target = t.id
+	join oa_selector s on t.has_selector = s.id;  
+	"""
 	annotations = {} # key: id, value obj Annotation
 
 	cur = conn.cursor()
@@ -41,36 +47,45 @@ def queryMpClaim(conn):
 
 	for row in cur.fetchall():
 		id = row[0]
-		if id not in annotations:
+		if id not in annotations: ## Using existing annotation if it's available
 			annotation = Annotation()
 			annotations[id] = annotation
 		else:
 			annotation = annotations[id]
 
-		# claim qualifiers
-		if row[9] is True:
-			annotation.csubject = row[8]
-		elif row[10] is True:
-			annotation.cpredicate = row[8]
-		elif row[11] is True:
-			annotation.cobject = row[8]
+		## claim qualifiers
+		if row[8] == "subject":
+			annotation.csubject = row[9]
+		elif row[8] == "predicate":
+			annotation.cpredicate = row[9]
+		elif row[8] == "object":
+			annotation.cobject = row[9]
+		elif row[8] == "enzyme":
+			annotation.cenzyme = row[9]
 		else:
 			print "[ERROR] qualifier role unidentified qvalue: %s (claimid %s)" % (row[8], id) 
-		# claim source and label
+
+		## claim source and label
 		if annotation.source == None:
 			annotation.source = row[1]
 		if annotation.label == None:
 			annotation.label = row[7]
 
+		## claim text selector
 		if annotation.exact == None:
 			annotation.setOaSelector(row[5], row[4], row[6])
 
-		# user entered method
+		## user entered method
 		if annotation.method == None:
-			annotation.method = row[12]
-		# assertion negation 
-		if annotation.negation == None and row[13] != None:
-			annotation.negation = row[13]
+			annotation.method = row[13]
+
+		## assertion negation 
+		if annotation.negation == None and row[14] != None:
+			annotation.negation = row[14]
+
+		## rejected reason
+		if annotation.rejected == None and row[10] == True:
+			annotation.rejected = row[11] + "|" + row[12]			
 
 	return annotations
 
@@ -80,13 +95,13 @@ def queryMpClaim(conn):
 def queryMpData(conn, annotation, claimid):
 
 	qry = """	
-	select dann.type, df.data_field_type, df.value_as_string, df.value_as_number, s.exact, s.prefix, s.suffix, dann.mp_data_index, dann.ev_supports
-	from mp_data_annotation dann,oa_data_body dbody, data_field df, oa_target t, oa_selector s
+	select dann.type, df.data_field_type, df.value_as_string, df.value_as_number, s.exact, s.prefix, s.suffix, dann.mp_data_index, dann.ev_supports, dann.rejected, dann.rejected_reason, dann.rejected_comment
+	from mp_data_annotation dann 
+	join oa_data_body dbody on dann.has_body = dbody.id 
+	join data_field df on df.data_body_id = dbody.id 
+	join oa_target t on dann.has_target = t.id
+	join oa_selector s on t.has_selector = s.id
 	where dann.mp_claim_id = %s
-	and dann.has_body = dbody.id
-	and df.data_body_id = dbody.id
-	and dann.has_target = t.id
-	and t.has_selector = s.id
 	""" % (claimid)
 
 	cur = conn.cursor()
@@ -142,12 +157,11 @@ def queryMpMaterial(conn, annotation, claimid):
 
 	qry = """	
 	select mann.type, mf.material_field_type, mf.value_as_string, mf.value_as_number, s.exact, s.prefix, s.suffix, mann.mp_data_index, mann.ev_supports
-	from mp_material_annotation mann,oa_material_body mbody, material_field mf, oa_target t, oa_selector s
+	from mp_material_annotation mann join oa_material_body mbody on mann.has_body = mbody.id
+	join material_field mf on mf.material_body_id = mbody.id
+	join oa_target t on mann.has_target = t.id
+	join oa_selector s on t.has_selector = s.id
 	where mann.mp_claim_id = %s
-	and mann.has_body = mbody.id
-	and mf.material_body_id = mbody.id
-	and mann.has_target = t.id
-	and t.has_selector = s.id
 	""" % (claimid)
 
 	results = []
