@@ -24,7 +24,12 @@ sys.setdefaultencoding('utf8')
 ## validate query results and the results from csv
 ## rttype: boolean
 def validateResults(conn, csvD):
-	rdbD = queryDocAndDataCnt(conn)
+	rdbD = queryDocAndDataCnt(conn)	
+
+	# print csvD
+	# print "======================================="
+	# print rdbD
+
 	return compareTwoDicts(csvD, rdbD)
 
 ## query MP claim, rtype: dict with document url and counts of annotation
@@ -59,7 +64,13 @@ order by t.has_source, cann.urn """
 ## compare two dicts
 ## rtype: boolean (same: True, different: False)
 def compareTwoDicts(dict1, dict2):
+
+	if not dict1 or not dict2:
+		print "[ERROR] empty annotation set during validating"
+		return False
+
 	if len(dict1) != len(dict2):
+		print "[ERROR] the number of annotations from csv not the same as from postgresDB"
 		return False
 
 	for k,v in dict1.iteritems():

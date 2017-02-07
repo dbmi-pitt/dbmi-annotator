@@ -31,6 +31,7 @@ DATABASE = 'mpevidence'
 curr_date = datetime.datetime.now()
 DB_SCHEMA = "../../db-schema/mp_evidence_schema.sql"
 CREATOR = "DBMI ETL"
+annsDictCsv = {} ## keep document and count of annotations for validation after load
 
 if len(sys.argv) > 5:
 	HOSTNAME = str(sys.argv[1])
@@ -39,7 +40,7 @@ if len(sys.argv) > 5:
 	PASSWORD = str(sys.argv[4])
 	isClean = str(sys.argv[5])
 else:
-	print "Usage: loadAnnotatorAnnsToRDB.py <pg hostname> <pg port> <pg username> <pg password> <clean existing data (1: yes, 0: no)>"
+	print "Usage: loadAnnotatorAnnsToRDB.py <pg hostname> <pg port> <pg username> <pg password> <OPTIONS (1: clean all tables, 2 drop and recreate all tables, 0: keep existing data)>"
 	sys.exit(1)
 
 # PRE PROCESS ######################################################################
@@ -47,8 +48,6 @@ else:
 ## add column: subject, object
 # rtype: dict with document and count of anns information for validation 
 def preprocess(csvfile):
-
-	annsDict = {} ## keep document and count of annotations for validation
  
 	csv_columns = ["document", "useremail", "claimlabel", "claimtext", "method", "relationship", "drug1", "drug2", "precipitant", "enzyme", "rejected", "evRelationship", "participants", "participantstext", "drug1dose", "drug1formulation", "drug1duration", "drug1regimens", "drug1dosetext", "drug2dose", "phenotypetype", "phenotypevalue", "phenotypemetabolizer", "phenotypepopulation", "drug2formulation", "drug2duration", "drug2regimens", "drug2dosetext", "aucvalue", "auctype", "aucdirection", "auctext", "cmaxvalue", "cmaxtype", "cmaxdirection", "cmaxtext", "clearancevalue", "clearancetype", "clearancedirection", "clearancetext", "halflifevalue", "halflifetype", "halflifedirection", "halflifetext", "dipsquestion", "reviewer", "reviewerdate", "reviewertotal", "reviewerlackinfo", "grouprandomization", "parallelgroupdesign", "predicate","subject","object", "id"]
 
@@ -65,7 +64,7 @@ def preprocess(csvfile):
 				elif row['precipitant'] == 'drug2':
 					row.update({'subject': 'drug2', 'object': 'drug1'})
 				rowsL.append(escapeRow(row))
-				addAnnsToCount(annsDict, row['document'])
+				addAnnsToCount(annsDictCsv, row['document'])
 			else:
 				print "[ERROR] Precipitant or drug data missing, skip document (%s), claim (%s), method (%s)" % (row['document'], row['claimlabel'], row['method'])		
 	
@@ -74,7 +73,7 @@ def preprocess(csvfile):
 			if row['relationship'] in ["inhibits", "substrate of"] and row['drug1'] != "" and row['enzyme'] != "":
 				row.update({'subject': 'drug1', 'object': 'enzyme'})
 				rowsL.append(escapeRow(row))
-				addAnnsToCount(annsDict, row['document'])
+				addAnnsToCount(annsDictCsv, row['document'])
 			else:
 				print "[ERROR] Phenotype clinical study data invalid, skip document (%s), claim (%s), method (%s)" % (row['document'], row['claimlabel'], row['method'])	
 		
@@ -83,7 +82,6 @@ def preprocess(csvfile):
 
 	print "[INFO] total %s annotations are validated and pre-processed" % (len(rowsL))
 	writer.writerows(rowsL)
-	return annsDict
 
 def addAnnsToCount(annsDict, document):
 	if document in annsDict:
@@ -492,6 +490,7 @@ def load_mp_claim_annotation(conn, row, creator):
 
 def findClaimIdByAnnId(conn, annId):
 	cur = conn.cursor()
+	cur.execute("SET SCHEMA 'ohdsi';")
 	cur.execute("SELECT * FROM mp_claim_annotation WHERE urn = '" + annId + "';")
 
 	for row in cur.fetchall():
@@ -562,17 +561,18 @@ def main():
 	
 	print "[INFO] Begin load data ..."
 	for csvfile in csvfiles:
-		annsDictCsv = preprocess(csvfile)
+		preprocess(csvfile)
 		reader = csv.DictReader(utf_8_encoder(open('data/preprocess-annotator.csv', 'r')))
 		load_data_from_csv(conn, reader, CREATOR)
 
 	print "[INFO] annotation load completed!"
-	print "[INFO] Begin results validating..."
 
-	if validateResults(conn, annsDictCsv):
-		print "[INFO] all annotations are loaded successfully!"
-	else:
-		print "[WARN] annotations are loaded incompletely!"
+	if isClean in ["1","2"]:
+		print "[INFO] Begin results validating..."
+		if validateResults(conn, annsDictCsv):
+			print "[INFO] all annotations are loaded successfully!"
+		else:
+			print "[WARN] annotations are loaded incompletely!"
 	conn.close()
 
 if __name__ == '__main__':

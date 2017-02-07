@@ -18,6 +18,8 @@ import uuid
 import datetime
 from sets import Set
 import sys  
+from dbOperations import *
+from validate import validateResults
 
 reload(sys)  
 sys.setdefaultencoding('utf8')
@@ -27,6 +29,9 @@ sys.setdefaultencoding('utf8')
 csvfiles = ['data/pkddi-katrina-latest-08152016.csv', 'data/pkddi-amy-latest-08152016.csv']
 
 DATABASE = 'mpevidence'
+DB_SCHEMA = "../../db-schema/mp_evidence_schema.sql"
+
+annsDictCsv = {} ## keep document and count of annotations for validation after load
 
 if len(sys.argv) > 5:
 	HOSTNAME = str(sys.argv[1])
@@ -35,15 +40,8 @@ if len(sys.argv) > 5:
 	PASSWORD = str(sys.argv[4])
 	isClean = str(sys.argv[5])
 else:
-	print "Usage: loadDomeoAnnsToRDB.py <pg hostname> <pg port> <pg username> <pg password> <clean existing data (1: yes, 0: no)>"
+	print "Usage: loadDomeoAnnsToRDB.py <pg hostname> <pg port> <pg username> <pg password> <OPTIONS (1: clean all tables, 2 drop and recreate all tables, 0: keep existing data)>"
 	sys.exit(1)
-
-
-def connect_postgreSQL():
-
-	myConnection = psycopg2.connect(host=HOSTNAME, user=USERNAME, password=PASSWORD, dbname=DATABASE)	
-	print("Postgres connection created")
-	return myConnection
 
 
 def utf_8_encoder(unicode_csv_data):
@@ -104,73 +102,6 @@ def generateHighlightSet(row, highlightD):
 		highlightD[source].add(objectDrug)
 	else:
 		highlightD[source] = Set([subjectDrug, objectDrug])
-
-
-def truncateall(conn):
-	cur = conn.cursor()
-
-	cur.execute("DROP TABLE qualifier;")
-	cur.execute("DROP TABLE oa_claim_body;")
-	cur.execute("DROP TABLE oa_selector;")
-	cur.execute("DROP TABLE oa_target;")
-	cur.execute("DROP TABLE data_field;")
-	cur.execute("DROP TABLE oa_data_body;")
-	cur.execute("DROP TABLE mp_data_annotation;")
-	cur.execute("DROP TABLE material_field;")
-	cur.execute("DROP TABLE oa_material_body;")
-	cur.execute("DROP TABLE mp_material_annotation;")
-	cur.execute("DROP TABLE method;")
-	cur.execute("DROP TABLE claim_reference_relationship;")
-	cur.execute("DROP TABLE mp_reference;")
-	cur.execute("DROP TABLE mp_claim_annotation;")
-	cur.execute("DROP TABLE oa_highlight_body;")
-	cur.execute("DROP TABLE highlight_annotation;")
-
-	cur.execute("DROP SEQUENCE mp_claim_annotation_id_seq;")
-	cur.execute("DROP SEQUENCE oa_selector_id_seq;")
-	cur.execute("DROP SEQUENCE oa_target_id_seq;")
-	cur.execute("DROP SEQUENCE oa_claim_body_id_seq;")
-	cur.execute("DROP SEQUENCE qualifier_id_seq;")
-	cur.execute("DROP SEQUENCE mp_data_annotation_id_seq;")
-	cur.execute("DROP SEQUENCE oa_data_body_id_seq;")
-	cur.execute("DROP SEQUENCE data_field_id_seq;")
-	cur.execute("DROP SEQUENCE mp_material_annotation_id_seq;")
-	cur.execute("DROP SEQUENCE oa_material_body_id_seq;")
-	cur.execute("DROP SEQUENCE material_field_id_seq;")
-	cur.execute("DROP SEQUENCE method_id_seq;")
-	cur.execute("DROP SEQUENCE claim_reference_relationship_id_seq;")
-	cur.execute("DROP SEQUENCE mp_reference_id_seq;")
-	cur.execute("DROP SEQUENCE highlight_annotation_id_seq;")
-	cur.execute("DROP SEQUENCE oa_highlight_body_id_seq;")
-
-def clearall(conn):
-	cur = conn.cursor()
-	#cur.execute("ALTER TABLE mp_data_annotation DROP CONSTRAINT mp_data_annotation_mp_claim_id_fkey")
-
-	cur.execute("DELETE FROM qualifier;")
-	cur.execute("DELETE FROM oa_claim_body;")
-	cur.execute("DELETE FROM oa_selector;")
-	cur.execute("DELETE FROM oa_target;")
-	cur.execute("DELETE FROM data_field;")
-	cur.execute("DELETE FROM oa_data_body;")
-	cur.execute("DELETE FROM mp_data_annotation;")
-	cur.execute("DELETE FROM material_field;")
-	cur.execute("DELETE FROM oa_material_body;")
-	cur.execute("DELETE FROM mp_material_annotation;")
-	cur.execute("DELETE FROM method;")
-	cur.execute("DELETE FROM mp_claim_annotation;")
-
-	cur.execute("DELETE FROM oa_highlight_body;")
-	cur.execute("DELETE FROM highlight_annotation;")
-
-	#cur.execute("ALTER TABLE mp_data_annotation ADD CONSTRAINT mp_data_annotation_mp_claim_id_fkey FOREIGN KEY (mp_claim_id) REFERENCES mp_claim_annotation (id)")
-
-
-def show_table(conn, table):
-	cur = conn.cursor()
-	cur.execute("SELECT * FROM " + table)
-	for row in cur.fetchall():
-		print(row)
 
 
 # load table "method" one row
@@ -246,10 +177,12 @@ def update_oa_claim_body(conn, is_oa_body_of, oa_claim_body_id):
 # load table "qualifier" one row
 def load_qualifier(conn, row, claim_body_id):
 	cur = conn.cursor()
-	cur.execute("INSERT INTO qualifier (urn, claim_body_id, subject, predicate, object, concept_code, vocabulary_id, qvalue)" +
-				"VALUES ( '" + uuid.uuid4().hex + "', " + str(claim_body_id) + ", true, false, false, NULL, NULL, '" + row['subject'] + "')," +
-				"( '" + uuid.uuid4().hex + "', " + str(claim_body_id) + ", false, true, false, NULL, NULL, '" + row['predicate'] + "')," +
-				"( '" + uuid.uuid4().hex + "', " + str(claim_body_id) + ", false, false, true, NULL, NULL, '" + row['object'] + "');")
+
+	cur.execute("""INSERT INTO qualifier (urn, claim_body_id, subject, predicate, object, qvalue, concept_code, vocabulary_id, qualifier_type_concept_code, qualifier_type_vocabulary_id) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""", (uuid.uuid4().hex, claim_body_id, True, False, False, row['subject'], None, None, None, None))
+
+	cur.execute("""INSERT INTO qualifier (urn, claim_body_id, subject, predicate, object, qvalue, concept_code, vocabulary_id, qualifier_type_concept_code, qualifier_type_vocabulary_id) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""", (uuid.uuid4().hex, claim_body_id, False, True, False, row['predicate'], None, None, None, None))
+
+	cur.execute("""INSERT INTO qualifier (urn, claim_body_id, subject, predicate, object, qvalue, concept_code, vocabulary_id, qualifier_type_concept_code, qualifier_type_vocabulary_id) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""", (uuid.uuid4().hex, claim_body_id, False, False, True, row['object'], None, None, None, None))
 
 
 # load table "mp_claim_annotation" one row
@@ -401,13 +334,8 @@ def parse_date(csv_date):
 
 #   add column: predicate, subject, object, subjectDose, objectDose
 def preprocess(csvfile):
-	csv_columns = ['source', 'date', 'assertionType', 'evidenceType', 'prefix', 'exactText', 'suffix',
-				   'modality', 'statementType', 'comment', 'drug1Lab', 'drug1Type', 'drug1Role', 'dose1',
-				   'drug2Lab', 'drug2Type', 'drug2Role', 'dose2', 'objectRegimens', 'objectFormulation',
-				   'objectDuration', 'preciptRegimens', 'preciptFormulation', 'preciptDuration',
-				   'numOfParticipants', 'auc', 'aucType', 'aucDirection', 'clearance', 'clearanceType', 'clearanceDirection',
-				   'cmax', 'cmaxType', 'cmaxDirection', 'halflife', 'halflifeType', 'halflifeDirection', 'predicate',
-				   'subject', 'object', 'subjectDose', 'objectDose']
+
+	csv_columns = ['source', 'date', 'assertionType', 'evidenceType', 'prefix', 'exactText', 'suffix', 'modality', 'statementType', 'comment', 'drug1Lab', 'drug1Type', 'drug1Role', 'dose1', 'drug2Lab', 'drug2Type', 'drug2Role', 'dose2', 'objectRegimens', 'objectFormulation', 'objectDuration', 'preciptRegimens', 'preciptFormulation', 'preciptDuration', 'numOfParticipants', 'auc', 'aucType', 'aucDirection', 'clearance', 'clearanceType', 'clearanceDirection', 'cmax', 'cmaxType', 'cmaxDirection', 'halflife', 'halflifeType', 'halflifeDirection', 'predicate', 'subject', 'object', 'subjectDose', 'objectDose']
 	writer = csv.DictWriter(open('data/preprocess-domeo.csv', 'w'), fieldnames=csv_columns)
 	writer.writeheader()
 	reader = csv.DictReader(utf_8_encoder(open(csvfile, 'r')))
@@ -433,9 +361,17 @@ def preprocess(csvfile):
 			row['exactText'] = row['exactText'].replace("'", "''")
 		if "'" in row['suffix']:
 			row['suffix'] = row['suffix'].replace("'", "''")
+
 		all.append(row)
+		addAnnsToCount(annsDictCsv, row['source'])
+
 	writer.writerows(all)
 
+def addAnnsToCount(annsDict, document):
+	if document in annsDict:
+		annsDict[document] += 1
+	else:
+		annsDict[document] = 1
 
 def load_data_from_csv(conn, reader, creator):
 
@@ -473,25 +409,37 @@ def load_data_from_csv(conn, reader, creator):
 def main():
 
 	print("[INFO] connect postgreSQL ...")
-	conn = connect_postgreSQL()
+	conn = connect_postgreSQL(HOSTNAME, USERNAME, PASSWORD, DATABASE)
 
 	if isClean == "1":
-		print("[INFO] begin clean before load ...")
 		clearall(conn)
-		# truncateall(conn) # don't need delete tables
 		conn.commit()
-		print("[INFO] clean data done ...")
+		print "[INFO] Clean all tables done!"
+	elif isClean == "2":
+		truncateall(conn) # delete all tables in DB mpevidence
+		conn.commit()
+		createdb(conn, DB_SCHEMA)
+		conn.commit()
+		print "[INFO] Drop and recreate all tables done!"
 	
-	print("[INFO] begin load data ...")
+	print "[INFO] begin load data ..."
+
+
 	for csvfile in csvfiles:
 		preprocess(csvfile)
 		reader = csv.DictReader(utf_8_encoder(open('data/preprocess-domeo.csv', 'r')))
 		creator = csvfile.split('-')[1]
 		load_data_from_csv(conn, reader, creator)
 
-	conn.close()
-	print("[INFO] load completed ...")
+	print "[INFO] annotation load completed!"
 
+	if isClean in ["1","2"]:
+		print "[INFO] Begin results validating..."
+		if validateResults(conn, annsDictCsv):
+			print "[INFO] all annotations are loaded successfully!"
+		else:
+			print "[WARN] annotations are loaded incompletely!"
+	conn.close()
 
 if __name__ == '__main__':
 	main()

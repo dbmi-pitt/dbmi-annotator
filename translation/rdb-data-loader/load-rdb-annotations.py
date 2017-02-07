@@ -243,7 +243,7 @@ def main():
 
 	highlightD = queryHighlightAnns(conn)
 
-	print highlightD
+	#print highlightD
 	loadHighlightAnnotations(highlightD, AUTHOR)
 
 	conn.close()
