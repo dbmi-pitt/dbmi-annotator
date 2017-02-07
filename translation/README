@@ -30,7 +30,7 @@ Note: If csv comes from domeo, replace cl to clearance and t12 to halflife
 
 (3) execute ETL program loadDomeoAnnsToRDB.py 
 
-$ python loadDomeoAnnsToRDB.py <pghostname> <pgport> <pguser> <pgpassword> <clean existing data (1: yes, 0: no)>
+$ python loadDomeoAnnsToRDB.py <pg hostname> <pg port> <pg username> <pg password> <OPTIONS (1: clean all tables, 2 drop and recreate all tables, 0: keep existing data)>
 
 Development mode:
 ex. python loadDomeoAnnsToRDB.py localhost 5432 dbmiannotator dbmi2016 1
@@ -52,7 +52,7 @@ dbmi-annotator/translation/csv-data-loader/data/mp-annotation.tsv
 
 (2) execute ETL program loadAnnotatorAnnsToRDB.py 
 
-$ python loadAnnotatorAnnsToRDB.py <pghostname> <pgport> <pguser> <pgpassword> <clean existing data (1: yes, 0: no)>
+$ python loadAnnotatorAnnsToRDB.py <pg hostname> <pg port> <pg username> <pg password> <OPTIONS (1: clean all tables, 2 drop and recreate all tables, 0: keep existing data)>
 
 Development mode:
 ex. $ python loadAnnotatorAnnsToRDB.py localhost 5432 dbmiannotator dbmi2016 0
