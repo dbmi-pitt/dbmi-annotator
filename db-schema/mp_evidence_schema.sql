@@ -168,6 +168,8 @@ entered_value text,
 inferred_value text,
 mp_claim_id integer,
 mp_data_index integer,
+inferred_concept_code text,
+inferred_vocabulary_id integer,
 FOREIGN KEY (mp_claim_id) REFERENCES mp_claim_annotation(id)
 );
 
