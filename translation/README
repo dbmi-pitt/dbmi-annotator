@@ -108,6 +108,21 @@ Docker container:
 $ python load-rdb-annotations.py postgres dbmiannotator dbmi2016 elasticsearch test@gmail.com
 
 --------------------------------------------------------------------
+Apply OMOP standard vocabulary Version 5.1 to MP tables 
+--------------------------------------------------------------------
+
+(1) create concept tables and load data (refers to OHDSI OMOP CDM V5.1)
+
+http://www.ohdsi.org/web/wiki/doku.php?id=documentation:cdm:single-page
+
+(2) Queries for mapping (MeSH to concept_id and RxNorm to concept_id)
+
+SELECT c.concept_id as omopid, c.concept_name, c.vocabulary_id, cc.concept_class_name, c.concept_code
+FROM concept c JOIN concept_class cc on c.concept_class_id = cc.concept_class_id
+WHERE c.vocabulary_id = 'MeSH' OR c.vocabulary_id = 'RxNorm'
+LIMIT 100;
+
+--------------------------------------------------------------------
 delete specific set of annotations
 --------------------------------------------------------------------
 
