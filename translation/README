@@ -123,6 +123,35 @@ WHERE c.vocabulary_id = 'MeSH' OR c.vocabulary_id = 'RxNorm'
 LIMIT 100;
 
 --------------------------------------------------------------------
+Apply DIDEO ontology 
+--------------------------------------------------------------------
+
+(1) Load dideo.owl to OWL2TL to produce term lists in dideo ontology
+
+OWL2TL: https://owl2tl.com/
+DIDEO OWL: http://purl.obolibrary.org/obo/dideo.owl
+
+(2) Terms been used in Micropublication annotation
+
+potential drug drug interaction: http://purl.obolibrary.org/obo/DIDEO_00000000
+metabolism inhibition potential drug-drug interaction: http://purl.obolibrary.org/obo/DIDEO_00000017
+
+drug product: http://purl.obolibrary.org/obo/DRON_00000005
+active ingredient: http://purl.obolibrary.org/obo/DRON_00000005
+enzyme: http://purl.obolibrary.org/obo/OBI_0000427
+
+object drug role: http://purl.obolibrary.org/obo/DIDEO_00000012
+precipitant drug role: http://purl.obolibrary.org/obo/DIDEO_00000013
+
+auc ratio: http://purl.obolibrary.org/obo/DIDEO_00000093
+cmax ratio: http://purl.obolibrary.org/obo/DIDEO_00000099
+clearance: http://purl.obolibrary.org/obo/DIDEO_00000094 OR http://purl.obolibrary.org/obo/DIDEO_00000101
+halflife ratio: http://purl.obolibrary.org/obo/DIDEO_00000100
+
+phenotype: http://purl.obolibrary.org/obo/DIDEO_00000103
+
+
+--------------------------------------------------------------------
 delete specific set of annotations
 --------------------------------------------------------------------
 
