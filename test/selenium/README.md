@@ -15,6 +15,8 @@ Params to test against different browsers (-Dbrowser)
 
 **Usage**
 
+* `mvn -P local-dev -Dbrowser=firefox integration-test`
+
 * `mvn -P local-dev -Dbrowser=ie integration-test`
 
 * `mvn -P production-icode -Dbrowser=chrome integration-test`

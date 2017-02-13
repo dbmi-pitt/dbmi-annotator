@@ -86,7 +86,7 @@ public class Login extends TestBase{
 
         Actions action3 = new Actions(driver);
         //action3.dragAndDrop(claim1, claim2).build().perform();
-        action3.moveToElement(claim1).clickAndHold().moveToElement(claim2).release().build().perform();
+        //action3.moveToElement(claim1).clickAndHold().moveToElement(claim2).release().build().perform();
 
         //Action select = action3.clickAndHold(driver.findElement(By.id("drug1-in-p1"))).moveToElement(driver.findElement(By.id("drug2-in-p1"))).release(driver.findElement(By.id("drug2-in-p1"))).build();
         //select.perform();
