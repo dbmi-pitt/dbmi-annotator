@@ -230,16 +230,6 @@ def load_qualifier(conn, qtype, qvalue, concept_code, vocab_id, qtype_concept_co
 
 # LOAD MP MATERIAL ################################################################
 
-## dose_role: subject or object, drug_idx: drug1 or drug2
-def load_material_dose(conn, row, creator, dose_role, drug_idx, mp_claim_id, mp_data_index):
-	if (row[drug_idx + 'dose'] != ''):
-		exact = row[drug_idx + 'dosetext']
-		selector_id = load_oa_selector(conn, '', exact, '')
-		target_id = load_oa_target(conn, row["document"], selector_id)	
-		material_body_id = insert_material_annotation(conn, row, mp_claim_id, target_id, creator, dose_role + "_dose", mp_data_index)				
-		load_material_field(conn, row, material_body_id, drug_idx)	
-
-
 # load table "mp_material_annotation" and "oa_material_body" one row
 def load_mp_material_annotation(conn, row, mp_claim_id, creator, mp_data_index):
 	cur = conn.cursor()
@@ -253,7 +243,6 @@ def load_mp_material_annotation(conn, row, mp_claim_id, creator, mp_data_index):
 		load_material_dose(conn, row, creator, "subject", "drug2", mp_claim_id, mp_data_index)
 	if row["drug2dose"] != "" and row["object"] == "drug2":	
 		load_material_dose(conn, row, creator, "object", "drug2", mp_claim_id, mp_data_index)
-
 	if (row['participants'] != '') and (row['participants'].lower() != 'unk'):
 		exact = row['participantstext']
 		selector_id = load_oa_selector(conn, '', exact, '')
@@ -265,6 +254,14 @@ def load_mp_material_annotation(conn, row, mp_claim_id, creator, mp_data_index):
 		material_body_id = insert_material_annotation(conn, row, mp_claim_id, None, creator, 'phenotype', mp_data_index)		
 		load_material_field(conn, row, material_body_id, 'phenotype')
 		
+## dose_role: subject or object, drug_idx: drug1 or drug2
+def load_material_dose(conn, row, creator, dose_role, drug_idx, mp_claim_id, mp_data_index):
+	if (row[drug_idx + 'dose'] != ''):
+		exact = row[drug_idx + 'dosetext']
+		selector_id = load_oa_selector(conn, '', exact, '')
+		target_id = load_oa_target(conn, row["document"], selector_id)	
+		material_body_id = insert_material_annotation(conn, row, mp_claim_id, target_id, creator, dose_role + "_dose", mp_data_index)				
+		load_material_field(conn, row, material_body_id, drug_idx)	
 
 def insert_material_annotation(conn, row, mp_claim_id, has_target, creator, data_type, mp_data_index):
 	ev_supports = 'false'

@@ -133,8 +133,13 @@ DIDEO OWL: http://purl.obolibrary.org/obo/dideo.owl
 
 (2) Terms been used in Micropublication annotation
 
-potential drug drug interaction: http://purl.obolibrary.org/obo/DIDEO_00000000
-metabolism inhibition potential drug-drug interaction: http://purl.obolibrary.org/obo/DIDEO_00000017
+From property chain
+inhibits: http://purl.obolibrary.org/obo/DIDEO_00000090
+substrate_of: http://purl.obolibrary.org/obo/DIDEO_00000041
+
+From dideo.owl via OWL2TL
+
+interact_with: http://purl.obolibrary.org/obo/DIDEO_00000015
 
 drug product: http://purl.obolibrary.org/obo/DRON_00000005
 active ingredient: http://purl.obolibrary.org/obo/DRON_00000005
@@ -149,7 +154,6 @@ clearance: http://purl.obolibrary.org/obo/DIDEO_00000094 OR http://purl.obolibra
 halflife ratio: http://purl.obolibrary.org/obo/DIDEO_00000100
 
 phenotype: http://purl.obolibrary.org/obo/DIDEO_00000103
-
 
 --------------------------------------------------------------------
 delete specific set of annotations

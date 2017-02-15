@@ -280,12 +280,14 @@ module.exports = function(app, passport) {
                                 copyDict["drug1formulation"] = (material.drug1Dose.formulation || "")
                                 copyDict["drug1duration"] = (material.drug1Dose.duration || "")
                                 copyDict["drug1regimens"] = (material.drug1Dose.regimens || "")
+                                copyDict["drug1dosetext"] = (getSpanFromField(material.drug1Dose) || "")
                             } 
                             if (material.drug2Dose != null) {
                                 copyDict["drug2dose"] = (material.drug2Dose.value || "")
                                 copyDict["drug2formulation"] = (material.drug2Dose.formulation || "")
                                 copyDict["drug2duration"] = (material.drug2Dose.duration || "")
                                 copyDict["drug2regimens"] = (material.drug2Dose.regimens || "")
+                                copyDict["drug2dosetext"] = (getSpanFromField(material.drug2Dose) || "")
                             }                                 
                             if (material.phenotype != null) {
                                 copyDict["phenotypetype"] = material.phenotype.type || "";

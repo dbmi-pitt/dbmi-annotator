@@ -1,3 +1,13 @@
+-- Get material information based on claim label
+select mann.type, mf.material_field_type, mf.value_as_string, mf.value_as_number, s.exact, s.prefix, s.suffix, mann.mp_data_index, mann.ev_supports
+from mp_material_annotation mann join oa_material_body mbody on mann.has_body = mbody.id
+join material_field mf on mf.material_body_id = mbody.id
+join oa_target t on mann.has_target = t.id
+join oa_selector s on t.has_selector = s.id
+join mp_claim_annotation cann on mann.mp_claim_id = cann.id
+join oa_claim_body cbody on cann.id = cbody.id
+where cbody.label = 'clarithromycin_interact with_rivaroxaban'
+
 -- how many claims from amy: 336
 select count(*)
 from mp_claim_annotation cann, 
