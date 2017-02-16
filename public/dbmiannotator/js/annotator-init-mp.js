@@ -178,18 +178,23 @@ function initLiseners() {
         $('#commitDrug1').hide();
         //add input drug1 to dropdown list
         var input_drug1 = $('#Drug1-input').val();
-        $('#Drug1').append($('<option>', {
-            value: input_drug1 + "_0",
-            text: input_drug1
-        }));
-        $('#Drug1 > option').each(function () {
-            if (this.text === input_drug1) {
-                $(this).prop('selected', true);
-            } else {
-                $(this).prop('selected', false);
+        if (input_drug1 != "") { //sanity check
+            //sanity check - input duplicates
+            if ($('#Drug1 > option[value = '+input_drug1+'_0]') == null) {
+                $('#Drug1').append($('<option>', {
+                    value: input_drug1 + "_0",
+                    text: input_drug1
+                }));
             }
-        });
-        selectDrug();
+            $('#Drug1 > option').each(function () {
+                if (this.text === input_drug1) {
+                    $(this).prop('selected', true);
+                } else {
+                    $(this).prop('selected', false);
+                }
+            });
+            selectDrug();
+        }
     });
 
     $('#commitDrug2').click(function() {
@@ -199,18 +204,21 @@ function initLiseners() {
         $('#commitDrug2').hide();
         //add input drug2 to dropdown list
         var input_drug2 = $('#Drug2-input').val();
-        $('#Drug2').append($('<option>', {
-            value: input_drug2 + "_0",
-            text: input_drug2
-        }));
-        $('#Drug2 > option').each(function () {
-            if (this.text === input_drug2) {
-                $(this).prop('selected', true);
-            } else {
-                $(this).prop('selected', false);
-            }
-        });
-        selectDrug();
+        if (input_drug2 != "") { //sanity check - input is null
+
+            $('#Drug2').append($('<option>', {
+                value: input_drug2 + "_0",
+                text: input_drug2
+            }));
+            $('#Drug2 > option').each(function () {
+                if (this.text === input_drug2) {
+                    $(this).prop('selected', true);
+                } else {
+                    $(this).prop('selected', false);
+                }
+            });
+            selectDrug();
+        }
     });
     
     rejectEvidenceCheckBox("rejected-evidence");
