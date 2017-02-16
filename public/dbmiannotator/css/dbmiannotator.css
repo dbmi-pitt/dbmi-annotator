@@ -322,3 +322,10 @@ body.loading .modal {
     display: block;
 }
 
+#focusPharmacokinetic-label, #generate-evidence-type{
+  margin-left: 85px;
+}
+
+#evidence-type-label {
+  margin-left: 125px;
+}

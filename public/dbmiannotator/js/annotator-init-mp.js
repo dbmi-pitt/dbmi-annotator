@@ -180,13 +180,16 @@ function initLiseners() {
         var input_drug1 = $('#Drug1-input').val();
         if (input_drug1 != "") { //sanity check
             //sanity check - input duplicates
-            if ($('#Drug1 > option[value = '+input_drug1+'_0]') == null) {
+            var tempval = input_drug1 + "_0";
+            if ($('#Drug1 option[value = '+tempval+']').length == 0) {
                 $('#Drug1').append($('<option>', {
                     value: input_drug1 + "_0",
                     text: input_drug1
                 }));
             }
+
             $('#Drug1 > option').each(function () {
+                console.log(this.text);
                 if (this.text === input_drug1) {
                     $(this).prop('selected', true);
                 } else {
@@ -205,11 +208,14 @@ function initLiseners() {
         //add input drug2 to dropdown list
         var input_drug2 = $('#Drug2-input').val();
         if (input_drug2 != "") { //sanity check - input is null
-
-            $('#Drug2').append($('<option>', {
-                value: input_drug2 + "_0",
-                text: input_drug2
-            }));
+            //sanity check - input duplicates
+            var tempval = input_drug2 + "_0";
+            if ($('#Drug2 option[value = '+tempval+']').length == 0) {
+                $('#Drug2').append($('<option>', {
+                    value: input_drug2 + "_0",
+                    text: input_drug2
+                }));
+            }
             $('#Drug2 > option').each(function () {
                 if (this.text === input_drug2) {
                     $(this).prop('selected', true);
