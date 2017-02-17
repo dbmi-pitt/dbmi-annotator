@@ -18,9 +18,9 @@ import uuid
 import datetime
 from sets import Set
 import sys  
-from validate import validateResults
-from dbOperations import *
-from queryAnnsInElastico import *
+import validate as test
+import dbOperations as pg
+import queryAnnsInElastico as es
 
 reload(sys)  
 sys.setdefaultencoding('utf8')
@@ -564,22 +564,22 @@ def load_annotations_from_results(conn, results, creator):
 
 def load(qryCondition, isClean):
 
-	conn = connect_postgreSQL(PG_HOST, PG_USER, PG_PASSWORD, PG_DATABASE)
+	conn = pg.connect_postgreSQL(PG_HOST, PG_USER, PG_PASSWORD, PG_DATABASE)
 
 	if isClean == "1":
-		clearall(conn)
+		pg.clearall(conn)
 		conn.commit()
 		print "[INFO] Clean all tables done!"
 	elif isClean == "2":
-		truncateall(conn) # delete all tables in DB mpevidence
+		pg.truncateall(conn) # delete all tables in DB mpevidence
 		conn.commit()
-		createdb(conn, DB_SCHEMA)
+		pg.createdb(conn, DB_SCHEMA)
 		conn.commit()
 		print "[INFO] Drop and recreate all tables done!"
 	
 	print "[INFO] Begin load data ..."
 
-	results = query(ES_HOST, ES_PORT, qryCondition)
+	results = es.query(ES_HOST, ES_PORT, qryCondition)
 
 	annsL = preprocess(results)
 	load_annotations_from_results(conn, annsL, CREATOR)
@@ -588,7 +588,7 @@ def load(qryCondition, isClean):
 
 	if isClean in ["1","2"]:
 		print "[INFO] Begin results validating..."
-		if validateResults(conn, annsDictCsv):
+		if test.validateResults(conn, annsDictCsv):
 			print "[INFO] all annotations are loaded successfully!"
 		else:
 			print "[WARN] annotations are loaded incompletely!"
