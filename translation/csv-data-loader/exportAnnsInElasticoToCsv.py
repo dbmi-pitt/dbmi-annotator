@@ -29,7 +29,16 @@ ES_PORT = "9200"
 
 def run():
 
-	qryCondition = {'query': { 'term': {'annotationType': 'MP'}}}
+	#qryCondition = {'query': { 'term': {'annotationType': 'MP'}}
+	#qryCondition = {'query': { 'term': {'rawurl': 'http://localhost/DDI-labels/829a4f51-c882-4b64-81f3-abfb03a52ebe.html'}}}
+
+	qryCondition = {"query": {"bool": 
+		{"must": [
+			{"term": {"rawurl": "http://localhost/DDI-labels/829a4f51-c882-4b64-81f3-abfb03a52ebe.html"}},
+			{"term": {"annotationType": "MP"}}
+		]
+	 }}}
+
 	results = es.query(ES_HOST, ES_PORT, qryCondition)
 
 	## write to csv

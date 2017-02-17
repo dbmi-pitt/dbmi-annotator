@@ -111,6 +111,9 @@ def parseQueryResults(results):
 		annDict["useremail"] = ann["email"]
 
 		claim = ann["argues"]
+		print claim
+		print claim['label']
+
 		annDict["claimlabel"] = claim["label"]
 		annDict["claimtext"] = claim["hasTarget"]["hasSelector"]["exact"]
 		annDict["method"] = claim["method"]	
