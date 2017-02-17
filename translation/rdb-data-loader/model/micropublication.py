@@ -121,7 +121,18 @@ class DataMaterialRow(object):
 
 	def __init__(self):
 		self.index = 1 # mp data index for claim, default 0 
-		self.dataMaterialRowD = {"auc": None, "cmax": None, "clearance": None, "halflife": None, "dips": None, "reviewer": None, "participants": None, "object_dose": None, "subject_dose": None, "evRelationship": None, "phenotype": None}
+		self.dataMaterialRowD = {"auc": None, "cmax": None, "clearance": None, "halflife": None, "dips": None, "reviewer": None, "participants": None, "object_dose": None, "subject_dose": None, "evRelationship": None, "phenotype": None, "grouprandom": None, "parallelgroup": None}
+
+	# questions for method: group randomization and parellel group design
+	def setGroupRandom(self, value): 
+		self.dataMaterialRowD["grouprandom"] = value
+	def getGroupRandom(self):
+		return self.dataMaterialRowD["grouprandom"]
+
+	def setParallelGroup(self, value): 
+		self.dataMaterialRowD["parallelgroup"] = value
+	def getParallelGroup(self):
+		return self.dataMaterialRowD["parallelgroup"]
 
 	# phenotype get and set
 	def setPhenotype(self, obj): 
@@ -132,7 +143,6 @@ class DataMaterialRow(object):
 	# evidence relationship (supports/refutes) get and set
 	def setEvRelationship(self, value): 
 		self.dataMaterialRowD["evRelationship"] = value
-
 	def getEvRelationship(self):
 		return self.dataMaterialRowD["evRelationship"]
 

@@ -270,10 +270,10 @@ module.exports = function(app, passport) {
                             }
 
                             if (data.grouprandom != null)
-                                copyDict["grouprandom"] = (data.grouprandom || "");                            
+                                copyDict["grouprandomization"] = (data.grouprandom || "");                            
                             
                             if (data.parallelgroup != null)
-                                copyDict["parallelgroup"] = (data.parallelgroup || "");
+                                copyDict["parallelgroupdesign"] = (data.parallelgroup || "");
 
                             if (material.drug1Dose != null) {
                                 copyDict["drug1dose"] = (material.drug1Dose.value || "")

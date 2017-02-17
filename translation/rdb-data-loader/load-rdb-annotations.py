@@ -137,6 +137,9 @@ def loadMpAnnotation(annotation, email):
 				mpData[df]["hasTarget"] = dataSelector
 				mpData[df]["ranges"] = []
 
+		mpData["grouprandom"] = dmRow.getGroupRandom()
+		mpData["parallelgroup"] = dmRow.getParallelGroup()
+
 		# MP Data - dips questions
 		dipsQsL = dmRow.getDips()
 		if dipsQsL and isinstance(dipsQsL, list):
