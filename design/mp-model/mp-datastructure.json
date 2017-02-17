@@ -18,6 +18,9 @@
          'relationship': '',
          'drug2ID' : '',
          'Drug2': '',
+         'enzyme':'',
+         'drug1PC':'enantiomer|metabolite',
+         'drug2PC':'enantiomer|metabolite',
          'precipitant': 'drug1 or drug2'
      },
      'hasTarget' : {
