@@ -201,8 +201,8 @@ module.exports = function(app, passport) {
     // EXPORT TO CSV ==============================
     app.get('/dbmiannotator/exportcsv', isLoggedIn, function(req, res){
 	
-	    //var url = config.protocal + "://" + config.apache2.host + ":" + config.apache2.port + "/annotatorstore/search?email=" + req.query.email + "&annotationType=" + config.profile.def;
-        var url = config.protocal + "://" + config.apache2.host + ":" + config.apache2.port + "/annotatorstore/search?annotationType=" + config.profile.def;
+	    var url = config.protocal + "://" + config.apache2.host + ":" + config.apache2.port + "/annotatorstore/search?email=" + req.query.email + "&annotationType=" + config.profile.def;
+        //var url = config.protocal + "://" + config.apache2.host + ":" + config.apache2.port + "/annotatorstore/search?annotationType=" + config.profile.def;
 	    
 	    request({url: url, json: true, followAllRedirects: true, "rejectUnauthorized": false}, function(error,response,body){            
 	        if (!error && (response.statusCode === 200 || response.statusCode ===302)) {
