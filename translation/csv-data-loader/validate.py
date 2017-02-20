@@ -12,15 +12,22 @@
  # See the License for the specific language governing permissions and
  # limitations under the License.
 
-import csv
-import uuid
+import sys, csv, json, re, os, uuid
 import datetime
 from sets import Set
-import sys  
+
+from postgres import connection as pgconn
+from postgres import mpevidence as pgmp
+from postgres import query as pgqry
+
+from elastic import queryAnnsInElastico as es
+
+import loadAnnotatorAnnsToRDB as pgload
 
 reload(sys)  
 sys.setdefaultencoding('utf8')
 
+## VALIDATE TOTAL ANNOTATIONS TRANSLATE AND LOAD #############################
 ## validate query results and the results from csv
 ## rttype: boolean
 def validateResults(conn, csvD):
@@ -80,4 +87,76 @@ def compareTwoDicts(dict1, dict2):
 			print "[ERROR] document (%s) have MP data (%s) from dict1 but data (%s) from dict 2" % (k, v, dict2[k])
 			return False
 	return True
+	
+
+# load json template
+def loadTemplateInJson(path):
+	json_data=open(path)
+
+	data = json.load(json_data)
+	json_data.close()
+	return data
+
+	
+## VALIDATE INDIVIDUAL ANNOTATION TRANSLATE AND LOAD #############################
+def validateAnnotation(conn):
+	ES_HOST = "localhost"
+	ES_PORT = "9200"
+	DB_SCHEMA = "../../db-schema/mp_evidence_schema.sql"
+	CREATOR = "DBMI ETL"
+
+	URL = "http://localhost/PMC/PMC000000.html"
+	annotationUrn = "test-case-id-1"
+
+	## clean test samples
+	es.deleteById(ES_HOST, ES_PORT, annotationUrn)
+
+	## load test ann to elasticsearch
+	MP_ANN_1 = "./template/test-annotation-1.json"
+	annotation = loadTemplateInJson(MP_ANN_1)
+	es.createMpAnnotation(ES_HOST, ES_PORT, annotation, annotationUrn)
+
+	## query elasticsearch for annotation sample
+	results = es.queryAndParseById(ES_HOST, ES_PORT, annotationUrn)
+
+	## translate and load to postgres
+	annsL = pgload.preprocess(results)
+	pgload.load_annotations_from_results(conn, annsL, CREATOR)
+
+	## qry postgres for validating individual annotation
+	annotation = pgqry.queryMpAnnotationByUrn(conn, annotationUrn)
+	
+	print annotation.claimid
+	print annotation.urn
+
+	print annotation.exact
+	print annotation.label
+	print annotation.method
+
+	print annotation.csubject
+	print annotation.cpredicate
+	print annotation.cobject
+
+	mpDataMaterialD = annotation.getDataMaterials()
+
+	data1 = mpDataMaterialD[1]
+	auc = data1.getDataItemInRow("auc")
+	print auc.value
+
+
+def validate():
+
+	PG_HOST = "localhost"
+	PG_USER = "dbmiannotator"
+	PG_PASSWORD = "dbmi2016"
+	PG_DATABASE = "mpevidence"
+
+	conn = pgconn.connect_postgreSQL(PG_HOST, PG_USER, PG_PASSWORD, PG_DATABASE)
+	pgconn.setDbSchema(conn, "ohdsi")
+	validateAnnotation(conn)
+
+	conn.close()
+
+if __name__ == '__main__':
+	validate()
 

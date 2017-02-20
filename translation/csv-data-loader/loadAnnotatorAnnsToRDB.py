@@ -28,25 +28,9 @@ sys.setdefaultencoding('utf8')
 #1. pip install psycopg2
 #csvfiles = ['data/mp-annotation.tsv']
 
-curr_date = datetime.datetime.now()
-DB_SCHEMA = "../../db-schema/mp_evidence_schema.sql"
-CREATOR = "DBMI ETL"
+
 annsDictCsv = {} ## keep document and count of annotations for validation after load
-
-PG_DATABASE = 'mpevidence'
-
-if len(sys.argv) > 7:
-	ES_HOST = str(sys.argv[1])
-	ES_PORT = str(sys.argv[2])
-	PG_HOST = str(sys.argv[3])
-	PG_PORT = str(sys.argv[4])
-	PG_USER = str(sys.argv[5])
-	PG_PASSWORD = str(sys.argv[6])
-	isClean = str(sys.argv[7])
-else:
-	print "Usage: python loadAnnotatorAnnsToRDB.py <elastic host> <elastic port> <pg host> <pg port> <pg username> <pg password> <OPTIONS (1: clean all tables, 2 drop and recreate all tables, 0: keep existing data)>"
-	sys.exit(1)
-
+curr_date = datetime.datetime.now()
 
 def preprocess(resultsL):
 
@@ -295,10 +279,7 @@ def load_annotations_from_results(conn, results, creator):
 	conn.commit()
 
 
-def load(qryCondition, isClean):
-
-	conn = pgconn.connect_postgreSQL(PG_HOST, PG_USER, PG_PASSWORD, PG_DATABASE)
-	pgconn.setDbSchema(conn, "ohdsi")
+def load(conn, qryCondition, eshost, esport, dbschema, creator, isClean):
 
 	if isClean == "1":
 		pgmp.clearAll(conn)
@@ -307,16 +288,16 @@ def load(qryCondition, isClean):
 	elif isClean == "2":
 		pgmp.truncateAll(conn) # delete all tables in DB mpevidence
 		conn.commit()
-		pgconn.createdb(conn, DB_SCHEMA)
+		pgconn.createdb(conn, dbschema)
 		conn.commit()
 		print "[INFO] Drop and recreate all tables done!"
 	
 	print "[INFO] Begin load data ..."
 
-	results = es.query(ES_HOST, ES_PORT, qryCondition)
+	results = es.query(eshost, esport, qryCondition)
 
 	annsL = preprocess(results)
-	load_annotations_from_results(conn, annsL, CREATOR)
+	load_annotations_from_results(conn, annsL, creator)
 
 	print "[INFO] annotation load completed!"
 
@@ -326,21 +307,40 @@ def load(qryCondition, isClean):
 			print "[INFO] all annotations are loaded successfully!"
 		else:
 			print "[WARN] annotations are loaded incompletely!"
-	conn.close()
 
 
 def main():
 
+	DB_SCHEMA = "../../db-schema/mp_evidence_schema.sql"
+	CREATOR = "DBMI ETL"
+	
+	PG_DATABASE = 'mpevidence'
+	
+	if len(sys.argv) > 7:
+		ES_HOST = str(sys.argv[1])
+		ES_PORT = str(sys.argv[2])
+		PG_HOST = str(sys.argv[3])
+		PG_PORT = str(sys.argv[4])
+		PG_USER = str(sys.argv[5])
+		PG_PASSWORD = str(sys.argv[6])
+		isClean = str(sys.argv[7])
+	else:
+		print "Usage: python loadAnnotatorAnnsToRDB.py <elastic host> <elastic port> <pg host> <pg port> <pg username> <pg password> <OPTIONS (1: clean all tables, 2 drop and recreate all tables, 0: keep existing data)>"
+		sys.exit(1)
+
 	# qryCondition = {'query': { 'term': {'annotationType': 'MP'}}}
 	qryCondition = {"query": {"bool": 
 		{"must": [
-			{"term": {"rawurl": "http://localhost/DDI-labels/829a4f51-c882-4b64-81f3-abfb03a52ebe.html"}},
+			{"term": {"rawurl": "http://localhost/PMC/PMC3187007.html"}},
 			{"term": {"annotationType": "MP"}}
 		]
 	 }}}
 
-	load(qryCondition, isClean)
+	conn = pgconn.connect_postgreSQL(PG_HOST, PG_USER, PG_PASSWORD, PG_DATABASE)
+	pgconn.setDbSchema(conn, "ohdsi")
 
+	load(conn, qryCondition, ES_HOST, ES_PORT, DB_SCHEMA, CREATOR, isClean)
+	conn.close()
 
 if __name__ == '__main__':
 	main()

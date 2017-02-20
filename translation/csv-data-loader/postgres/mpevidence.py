@@ -17,10 +17,6 @@ import uuid, datetime
 
 curr_date = datetime.datetime.now()
 
-def setDbSchema(conn, name):
-	cur = conn.cursor()
-	cur.execute("SET SCHEMA '" + name + "';")
-
 
 # QUALIFIER ################################################################
 def insert_qualifier(conn, qtype, qvalue, concept_code, vocab_id, qtype_concept_code, qtype_vocab_id, claim_body_id):

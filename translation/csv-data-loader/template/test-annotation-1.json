@@ -1,0 +1,32 @@
+{"annotationType": "MP", "updated": "2016-09-19T18:33:51.179625+00:00", "created": "2016-09-19T18:33:51.179625+00:00", 
+"uri": "httplocalhostPMCPMC000000html", 
+"argues": {"supportsBy": [{
+"type": "mp:data",
+"evRelationship": "supports", 
+"auc": {"ranges": [], "hasTarget": {"hasSelector": {"prefix": "", "exact": "auc-text", "@type": "TextQuoteSelector", "suffix": ""}}, "type": "Fold", "direction": "Increase", "value": "7.88"}, 
+"cmax": {"ranges": [], "hasTarget": {"hasSelector": {"prefix": "", "exact": "cmax-text", "@type": "TextQuoteSelector", "suffix": ""}}, "type": "Fold", "direction": "Increase", "value": "10.6"}, 
+"clearance": {"ranges": [], "hasTarget": {"hasSelector": {"prefix": "", "exact": "clearance-text", "@type": "TextQuoteSelector", "suffix": ""}}, "type": "Percent", "direction": "Decrease", "value": "87.8"}, 
+"halflife": {"ranges": [], "hasTarget": {"hasSelector": {"prefix": "", "exact": "halflife-text", "@type": "TextQuoteSelector", "suffix": ""}}, "type": "Percent", "direction": "Decrease", "value": "28.5"}, 
+"dips": {}, 
+"reviewer": {}, 
+"grouprandom": "", 
+"supportsBy": 
+{"supportsBy": 
+{"type": "mp:material",
+"drug1Dose": {"value": "20", "ranges": [], "hasTarget": {"hasSelector": {"prefix": "", "exact": "drug1Dose-text", "@type": "TextQuoteSelector", "suffix": ""}}, "regimens": "Q8", "formulation": "Oral", "duration": "16"}, 
+"participants": {"ranges": [], "hasTarget": {"hasSelector": {"prefix": "", "exact": "participants-text", "@type": "TextQuoteSelector", "suffix": ""}}, "value": "21.00"}, 
+"phenotype": {}, 
+"drug2Dose": {"value": "20", "ranges": [], "hasTarget": {"hasSelector": 
+{"prefix": "", "exact": "drug2Dose-text", "@type": "TextQuoteSelector", "suffix": ""}}, "regimens": "SD", "formulation": "Oral", "duration": "1"}}, 
+"type": "mp:method"}, 
+"parallelgroup": ""}], 
+"negation": "False", 
+"rejected": {"reason": ""}, 
+"label": "telaprevir_interact with_atorvastatin", "ranges": [], "hasTarget": {"hasSelector": {"prefix": "", "exact": "claim-text", "@type": "TextQuoteSelector", "suffix": ""}}, 
+"qualifiedBy": {"drug2ID": "atorvastatin_1", "relationship": "interact with", "drug2": "atorvastatin", "drug1": "telaprevir", "drug1ID": "telaprevir_1", "enzyme": "", "precipitant": "drug1"}, "type": "mp:claim", "method": "DDI clinical trial"}, 
+"user": "alice", 
+"rawurl": "http://localhost/PMC/PMC000000.html", 
+"consumer": "mockconsumer", 
+"email": "test@gmail.com", 
+"permissions": {"read": ["group:__consumer__"]}
+}

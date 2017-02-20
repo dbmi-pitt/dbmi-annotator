@@ -4,34 +4,104 @@ import datetime
 from elasticsearch import Elasticsearch
 from sets import Set
 
-def query(es_host, es_port, query_condit):
+## create customized document based on template
+## rtype null
+def createMpAnnotation(host, port, annotation, annotationId):
+	es = Elasticsearch([{'host': host, 'port': port}]) 
+	es.index(index="annotator", doc_type="annotation", id=annotationId, body=json.dumps(annotation))
+
+## query documents by json format query condition
+## rtype json documents
+def queryByBody(host, port, doc):
+	es = Elasticsearch([{'host': host, 'port': port}])
+	res = es.search(index="annotator", size="5000", body=doc)	
+	print("Got %d Hits:" % res['hits']['total'])
+	return res
+
+
+def queryById(host, port, annotationId):
+	es = Elasticsearch([{'host': host, 'port': port}])
+	res = es.get(index="annotator", id = annotationId)	
+	return res
+
+## delete document by id
+## rtype null
+def deleteById(host, port, annotationId):
+	es = Elasticsearch([{'host': host, 'port': port}])
+	es.delete(index="annotator", doc_type="annotation", id=annotationId)
+
+
+def queryAndParseById(host, port, annotationId):
+	res = queryById(host, port, annotationId)
+	annsL = parseAnnotation(res)
+	return annsL
+
+def queryAndParseByBody(es_host, es_port, query_condit):
 	## query condition (refers to elasticsearch REST API)
 	doc = {'query': { 'term': {'annotationType': 'MP'}}}
 	if query_condit:
 		doc = query_condit
 
-	## query es store
-	res = queryElasticsearch(es_host, es_port, doc)	
-	print("Got %d Hits:" % res['hits']['total'])
-
-	## parse qry results
-	annsL = parseQueryResults(res['hits']['hits'])
+	res = queryByBody(es_host, es_port, doc)	
+	annsL = parseAnnotations(res['hits']['hits'])
 
 	return annsL
 
 
+def parseAnnotations(annotations):
 
-def queryElasticsearch(host, port, doc):
-
-	es = Elasticsearch([{'host': host, 'port': port}])
-	res = es.search(index="annotator", size="5000", body=doc)	
-	return res
-
-
-def getAnnDict():
-	return {"document": None, "useremail": None, "claimlabel": None, "claimtext": None, "method": None, "relationship": None, "drug1": None, "drug2": None, "precipitant": None, "enzyme": None, "rejected": None, "evRelationship":None, "participants":None, "participantstext":None, "drug1dose":None, "drug1formulation":None, "drug1duration":None, "drug1regimens":None, "drug1dosetext":None, "drug2dose":None, "phenotypetype": None, "phenotypevalue": None, "phenotypemetabolizer": None, "phenotypepopulation": None, "drug2formulation":None, "drug2duration":None, "drug2regimens":None, "drug2dosetext":None, "aucvalue":None, "auctype":None, "aucdirection":None, "auctext":None, "cmaxvalue":None, "cmaxtype":None, "cmaxdirection":None, "cmaxtext":None, "clearancevalue":None, "clearancetype":None, "clearancedirection":None, "clearancetext":None, "halflifevalue":None, "halflifetype":None, "halflifedirection":None, "halflifetext":None, "dipsquestion":None, "reviewer":None, "reviewerdate":None, "reviewertotal":None, "reviewerlackinfo":None, "grouprandomization":None, "parallelgroupdesign":None, "subject": None, "object": None, "id": None}
+	annsL = []
+	for annotation in annotations:
+		annsL.append(parseAnnotation(annotation))
+	return annsL
 
 
+def parseAnnotation(annotation):
+
+	print annotation
+	annsL = []
+	
+	ann = annotation["_source"]
+	annDict= getAnnDict()
+	annDict["id"] = annotation["_id"]
+	annDict["document"] = ann["rawurl"]
+	annDict["useremail"] = ann["email"]
+	
+	claim = ann["argues"]
+	print claim['label']
+	
+	annDict["claimlabel"] = claim["label"]
+	annDict["claimtext"] = claim["hasTarget"]["hasSelector"]["exact"]
+	annDict["method"] = claim["method"]	
+	
+	annDict["relationship"] = claim["qualifiedBy"]["relationship"]
+	annDict["drug1"] = claim["qualifiedBy"]["drug1"]
+	
+	if "drug2" in claim["qualifiedBy"]:
+		annDict["drug2"] = claim["qualifiedBy"]["drug2"]
+	
+	if "enzyme" in claim["qualifiedBy"]:
+		annDict["enzyme"] = claim["qualifiedBy"]["enzyme"]
+
+	if "precipitant" in claim["qualifiedBy"]:
+		annDict["precipitant"] = claim["qualifiedBy"]["precipitant"]
+
+	if "rejected" in claim and claim["rejected"]:			
+		annDict["rejected"] = claim["rejected"]["reason"] or ""
+
+	dataL = claim["supportsBy"]
+
+	## parse data & material
+	if len(dataL) > 0:
+		for data in dataL:
+
+			material = data["supportsBy"]["supportsBy"]
+			annDict = addDataMaterialToAnnDict(data, material, annDict)
+			annsL.append(annDict)
+	else:
+		annsL.append(annDict)
+
+	return annsL
 
 def addDataMaterialToAnnDict(data, material, annDict):
 	## parse data
@@ -97,55 +167,8 @@ def addDataMaterialToAnnDict(data, material, annDict):
 
 	return annDict
 
-def parseQueryResults(results):
-
-	annsL = []
-
-	for res in results:
-
-		ann = res["_source"]
-
-		annDict= getAnnDict()
-		annDict["id"] = res["_id"]
-		annDict["document"] = ann["rawurl"]
-		annDict["useremail"] = ann["email"]
-
-		claim = ann["argues"]
-		print claim
-		print claim['label']
-
-		annDict["claimlabel"] = claim["label"]
-		annDict["claimtext"] = claim["hasTarget"]["hasSelector"]["exact"]
-		annDict["method"] = claim["method"]	
-
-		annDict["relationship"] = claim["qualifiedBy"]["relationship"]
-		annDict["drug1"] = claim["qualifiedBy"]["drug1"]
-
-		if "drug2" in claim["qualifiedBy"]:
-			annDict["drug2"] = claim["qualifiedBy"]["drug2"]
-
-		if "enzyme" in claim["qualifiedBy"]:
-			annDict["enzyme"] = claim["qualifiedBy"]["enzyme"]
-
-		if "precipitant" in claim["qualifiedBy"]:
-			annDict["precipitant"] = claim["qualifiedBy"]["precipitant"]
-
-		if "rejected" in claim and claim["rejected"]:			
-			annDict["rejected"] = claim["rejected"]["reason"] or ""
-
-		dataL = claim["supportsBy"]
-
-		## parse data & material
-		if len(dataL) > 0:
-			for data in dataL:
-
-				material = data["supportsBy"]["supportsBy"]
-				annDict = addDataMaterialToAnnDict(data, material, annDict)
-				annsL.append(annDict)
-		else:
-			annsL.append(annDict)
-
-	return annsL
+def getAnnDict():
+	return {"document": None, "useremail": None, "claimlabel": None, "claimtext": None, "method": None, "relationship": None, "drug1": None, "drug2": None, "precipitant": None, "enzyme": None, "rejected": None, "evRelationship":None, "participants":None, "participantstext":None, "drug1dose":None, "drug1formulation":None, "drug1duration":None, "drug1regimens":None, "drug1dosetext":None, "drug2dose":None, "phenotypetype": None, "phenotypevalue": None, "phenotypemetabolizer": None, "phenotypepopulation": None, "drug2formulation":None, "drug2duration":None, "drug2regimens":None, "drug2dosetext":None, "aucvalue":None, "auctype":None, "aucdirection":None, "auctext":None, "cmaxvalue":None, "cmaxtype":None, "cmaxdirection":None, "cmaxtext":None, "clearancevalue":None, "clearancetype":None, "clearancedirection":None, "clearancetext":None, "halflifevalue":None, "halflifetype":None, "halflifedirection":None, "halflifetext":None, "dipsquestion":None, "reviewer":None, "reviewerdate":None, "reviewertotal":None, "reviewerlackinfo":None, "grouprandomization":None, "parallelgroupdesign":None, "subject": None, "object": None, "id": None}
 
 
 def getTextSpan(field):

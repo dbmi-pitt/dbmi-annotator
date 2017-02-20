@@ -13,38 +13,27 @@
  # limitations under the License.
 
 import psycopg2
-import sys, re, os
-from sets import Set
+import sys, uuid, datetime
 
-HOME = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, HOME + '/model')
+#sys.path.append('../model/')
+from model.micropublication import Annotation, DataMaterialRow, DMItem, DataItem, MaterialDoseItem, MaterialParticipants
 
-from micropublication import Annotation, DataMaterialRow, DMItem, DataItem, MaterialDoseItem, MaterialParticipants
-
-# postgres connection
-def connectPostgres(hostname, username, password, database):
-	conn = psycopg2.connect(host=hostname, user=username, password=password, dbname=database)
-	return conn
-
-######################### QUERY MP Annotation ##########################
-# query mp claim annotation by author name
-# return claim annotation with s, p, o, source and oa selector
-def queryMpClaim(conn):
+## query all claim annotation by document URL
+## return {{key: id-1, value: Ann-1"}, {key: id-2, value: Ann-2"}, ...}
+def queryMpClaimByUrl(conn, url):
+	annotations = {} # key: id, value obj Annotation
+	cur = conn.cursor()
 
 	qry = """
-	set schema 'ohdsi';
 	select cann.id, t.has_source, cann.creator, cann.date_created, s.exact, s.prefix, s.suffix, cbody.label, qualifierrole(q.subject, q.predicate, q.object) as qtype, qvalue, cann.rejected_statement, cann.rejected_statement_reason, cann.rejected_statement_comment, met.entered_value, cann.negation 
 	from mp_claim_annotation cann join oa_claim_body cbody on cann.has_body = cbody.id
 	join qualifier q on cbody.id = q.claim_body_id
 	join method met on cann.id = met.mp_claim_id 
 	join oa_target t on cann.has_target = t.id
-	join oa_selector s on t.has_selector = s.id;  
-	"""
-	annotations = {} # key: id, value obj Annotation
-
-	cur = conn.cursor()
+	join oa_selector s on t.has_selector = s.id
+	where t.has_source = '%s';   """ % (url)
 	cur.execute(qry)
-
+		
 	for row in cur.fetchall():
 		id = row[0]
 		if id not in annotations: ## Using existing annotation if it's available
@@ -89,6 +78,69 @@ def queryMpClaim(conn):
 
 	return annotations
 
+
+def queryMpClaimByUrn(conn, urn):
+	"""
+	query claim annotation by annotationId
+	return Annotation
+	"""
+	cur = conn.cursor()
+
+	qry = """
+	select cann.id, t.has_source, cann.creator, cann.date_created, s.exact, s.prefix, s.suffix, cbody.label, qualifierrole(q.subject, q.predicate, q.object) as qtype, qvalue, cann.rejected_statement, cann.rejected_statement_reason, cann.rejected_statement_comment, met.entered_value, cann.negation 
+	from mp_claim_annotation cann join oa_claim_body cbody on cann.has_body = cbody.id
+	join qualifier q on cbody.id = q.claim_body_id
+	join method met on cann.id = met.mp_claim_id 
+	join oa_target t on cann.has_target = t.id
+	join oa_selector s on t.has_selector = s.id
+	where cann.urn = '%s';   """ % (urn)
+	cur.execute(qry)
+		
+	results = cur.fetchall()
+	if results:		
+		result = results[0]
+
+		annotation = Annotation()		
+		annotation.claimid = result[0]
+		annotation.urn = urn
+		
+		## claim qualifiers
+		if result[8] == "subject":
+			annotation.csubject = result[9]
+		elif result[8] == "predicate":
+			annotation.cpredicate = result[9]
+		elif result[8] == "object":
+			annotation.cobject = result[9]
+		elif result[8] == "enzyme":
+			annotation.cenzyme = result[9]
+		else:
+			print "[ERROR] qualifier role unidentified qvalue: %s (claimid %s)" % (result[8], annotation.claimid) 
+
+		## claim source and label
+		if annotation.source == None:
+			annotation.source = result[1]
+		if annotation.label == None:
+			annotation.label = result[7]
+
+		## claim text selector
+		if annotation.exact == None:
+			annotation.setOaSelector(result[5], result[4], result[6])
+
+		## user entered method
+		if annotation.method == None:
+			annotation.method = result[13]
+
+		## assertion negation 
+		if annotation.negation == None and result[14] != None:
+			annotation.negation = result[14]
+
+		## rejected reason
+		if annotation.rejected == None and result[10] == True:
+			annotation.rejected = result[11] + "|" + result[12]		
+
+		return annotation
+	return None
+		
 
 # query data items for claim annotation
 # return list of annotation with data items attached
@@ -228,40 +280,13 @@ def queryMpMaterial(conn, annotation, claimid):
 
 	return annotation
 
+
 # query all mp annotations
 # return annotations with claim, data and material
-def queryMpAnnotation(conn):
-	mpAnnotations = []
-	claimAnnos = queryMpClaim(conn)
+def queryMpAnnotationByUrn(conn, annotationUrn):
+	claimAnn = queryMpClaimByUrn(conn, annotationUrn)
+	claimDataAnn = queryMpData(conn, claimAnn, claimAnn.claimid)
+	claimDataMatAnn = queryMpMaterial(conn, claimDataAnn, claimAnn.claimid)
 
-	for claimId,claimAnn in claimAnnos.items():
+	return claimDataMatAnn
 
-		claimDataAnno = queryMpData(conn, claimAnn, claimId)
-		claimDataMatAnno = queryMpMaterial(conn, claimDataAnno, claimId)
-
-		mpAnnotations.append(claimDataMatAnno)
-	return mpAnnotations
-
-######################### QUERY Highlight Annotaiton ##########################
-
-# query all highlight annotation
-# return dict for drug set in document   dict {"doc url": "drug set"} 
-def queryHighlightAnns(conn):
-	highlightD = {}
-
-	qry = """SELECT h.id, t.has_source, s.exact 
-	FROM highlight_annotation h, oa_target t, oa_selector s
-	WHERE h.has_target = t.id
-	AND t.has_selector = s.id;"""
-
-	cur = conn.cursor()
-	cur.execute(qry)
-
-	for row in cur.fetchall():
-		source = row[1]; drugname = row[2]
-		
-		if source in highlightD:		
-			highlightD[source].add(drugname)
-		else:
-			highlightD[source] = Set([drugname])
-	return highlightD
