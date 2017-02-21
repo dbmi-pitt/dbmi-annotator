@@ -154,6 +154,7 @@ def testMaterialDose(doseItem, dosetype, value, formulation, duration, regimens,
 		print "[ERROR] %s is incorrect" % (dosetype)
 
 def testParticipants(partItem, value, exact):
+	print "[INFO] begin validating participants..."
 	if isMatched("participants", value, partItem.value) and isMatched("participants", exact, partItem.exact):
 		print "[TEST] participants is validated"
 	else:
@@ -164,6 +165,13 @@ def testEvRelationship(value1, value2):
 		print "[TEST] evidence relationship is validated"
 	else:
 		print "[ERROR] evidence relationship is incorrect"		
+
+def testPhenotype(phenoItem, ptype, value, metabolizer, population):
+	print "[INFO] begin validating phenotype..."
+	if isMatched("phenotype", ptype, phenoItem.ptype) and isMatched("value", value, phenoItem.value) and isMatched("metabolizer", metabolizer, phenoItem.metabolizer) and isMatched("population", population, phenoItem.population):
+		print "[TEST] phenotype is validated"
+	else:
+		print "[ERROR] phenotype is incorrect"
 
 
 def isMatched(field, val1, val2):
@@ -192,7 +200,7 @@ def test_clinical_trial_1(conn, template):
 
 	## claim validation
 	print "[INFO] ================= Begin validating MP Claim ======================"
-	testClaim(annotation, "test-case-id-1", "telaprevir_interact with_atorvastatin", "atorvastatin", "interact with", "telaprevir", "claim-text", "DDI clinical trial", False, "rejected-reason|rejected-comment")
+	testClaim(annotation, "test-case-id-1", "telaprevir_inhibits_atorvastatin", "atorvastatin", "inhibits", "telaprevir", "claim-text", "DDI clinical trial", False, "rejected-reason|rejected-comment")
 
 	print "[INFO] ================= Begin validating MP data ======================="
 	## data 1 validation
@@ -233,6 +241,18 @@ def test_clinical_trial_1(conn, template):
 	objectdose2 = dmRow2.getMaterialDoseInRow("object_dose")
 	testMaterialDose(objectdose2, "object_dose", "201", "Oral", "120", "Q3", "drug1Dose-text-2")
 
+def test_phenotype_clinical_study_1(conn, template):
+	print "[INFO] =====begin test phenotype clinical study annotation 1 ============"
+
+	annotationUrn = "test-case-id-2"
+	annotation = createAnnForTesting(conn, template, annotationUrn)
+	mpDataMaterialD = annotation.getDataMaterials()
+
+	## claim validation
+	print "[INFO] ================= Begin validating MP Claim ======================"
+	testClaim(annotation, "test-case-id-2", "drugname1_substrate of_enzyme1", "enzyme1", "substrate of", "drugname1", "claim-text", "Phenotype clinical study", False, "rejected-reason|rejected-comment")
+
+
 
 def validate():
 
@@ -244,8 +264,13 @@ def validate():
 	conn = pgconn.connect_postgreSQL(PG_HOST, PG_USER, PG_PASSWORD, PG_DATABASE)
 	pgconn.setDbSchema(conn, "ohdsi")
 
+	## "DDI clinical trial", "Phenotype clinical study", "Case Report", "Statement"
+
 	MP_ANN_1 = "./template/test-annotation-1.json"
 	test_clinical_trial_1(conn, MP_ANN_1)
+
+	MP_ANN_2 = "./template/test-annotation-2.json"
+	test_phenotype_clinical_study_1(conn, MP_ANN_2)
 
 	conn.close()
 

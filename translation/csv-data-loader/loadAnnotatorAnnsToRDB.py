@@ -51,7 +51,11 @@ def preprocess(resultsL):
 		## phenotype don't have 2nd drug, relationship is inhibits or substrate of
 		elif ann['method'] == "Phenotype clinical study":
 			if ann['relationship'] in ["inhibits", "substrate of"] and ann['drug1'] and ann['enzyme']:
-				ann.update({'subject': 'drug1', 'object': 'enzyme'})
+				if ann['precipitant'] == 'drug1':
+					ann.update({'subject': 'drug1', 'object': 'enzyme'})
+				elif ann['precipitant'] == 'enzyme':
+					ann.update({'subject': 'enzyme', 'object': 'drug1'})
+
 				annsL.append(escapeRow(ann))
 				addAnnsToCount(annsDictCsv, ann['document'])
 			else:
@@ -219,6 +223,7 @@ def load_mp_claim_annotation(conn, row, creator):
 
 	## subject and object
 	if row["subject"] and row["object"]:
+
 		s_drug = row[row["subject"]]
 		o_drug = row[row["object"]]
 

@@ -3,10 +3,10 @@
 "argues": {
     "negation": "False", 
     "rejected": {"reason": "rejected-reason|rejected-comment"}, 
-    "label": "telaprevir_interact with_atorvastatin", 
+    "label": "telaprevir_inhibits_atorvastatin", 
     "ranges": [], 
     "hasTarget": {"hasSelector": {"prefix": "", "exact": "claim-text", "@type": "TextQuoteSelector", "suffix": ""}}, 
-    "qualifiedBy": {"drug2ID": "atorvastatin_1", "relationship": "interact with", "drug2": "atorvastatin", "drug1": "telaprevir", "drug1ID": "telaprevir_1", "enzyme": "", "precipitant": "drug2"},
+    "qualifiedBy": {"drug2ID": "atorvastatin_1", "relationship": "inhibits", "drug2": "atorvastatin", "drug1": "telaprevir", "drug1ID": "telaprevir_1", "enzyme": "cyp1a1", "precipitant": "drug2"},
     "type": "mp:claim", 
     "method": "DDI clinical trial",
     "supportsBy": 
