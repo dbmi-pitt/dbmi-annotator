@@ -261,13 +261,15 @@ def update_oa_highlight_body(conn, highlight_annotation_id, oa_highlight_body_id
 # MP METHOD ################################################################
 def insert_method(conn, row, mp_claim_id, mp_data_index):
 	cur = conn.cursor()
-	enteredVal = ""
-	if row['method'] == "DDI clinical trial":
-		enteredVal = "clinical trial"
-	elif row['method'] == "Statement":
-		enteredVal = "statement"
-	else:
-		enteredVal = row['method']
+	enteredVal = row['method']
+
+	# enteredVal = ""
+	# if row['method'] == "DDI clinical trial":
+	# 	enteredVal = "clinical trial"
+	# elif row['method'] == "Statement":
+	# 	enteredVal = "statement"
+	# else:
+	# 	enteredVal = row['method']
 
 	cur.execute("INSERT INTO method (entered_value, inferred_value, mp_claim_id, mp_data_index)" + "VALUES ( '" + enteredVal + "', '" + enteredVal + "', " + str(mp_claim_id) + ", "+str(mp_data_index)+");")
 
