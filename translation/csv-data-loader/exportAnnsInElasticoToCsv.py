@@ -18,7 +18,7 @@ import datetime
 from sets import Set
 import sys  
 import validate as test
-import queryAnnsInElastico as es
+from elastic import queryAnnsInElastico as es
 
 reload(sys)  
 sys.setdefaultencoding('utf8')
@@ -29,17 +29,18 @@ ES_PORT = "9200"
 
 def run():
 
-	#qryCondition = {'query': { 'term': {'annotationType': 'MP'}}
+	qryCondition = {'query': { 'term': {'annotationType': 'MP'}}}
+
 	#qryCondition = {'query': { 'term': {'rawurl': 'http://localhost/DDI-labels/829a4f51-c882-4b64-81f3-abfb03a52ebe.html'}}}
 
-	qryCondition = {"query": {"bool": 
-		{"must": [
-			{"term": {"rawurl": "http://localhost/DDI-labels/829a4f51-c882-4b64-81f3-abfb03a52ebe.html"}},
-			{"term": {"annotationType": "MP"}}
-		]
-	 }}}
+	# qryCondition = {"query": {"bool": 
+	# 	{"must": [
+	# 		{"term": {"rawurl": "http://localhost/DDI-labels/829a4f51-c882-4b64-81f3-abfb03a52ebe.html"}},
+	# 		{"term": {"annotationType": "MP"}}
+	# 	]
+	#  }}}
 
-	results = es.query(ES_HOST, ES_PORT, qryCondition)
+	results = es.queryAndParseByBody(ES_HOST, ES_PORT, qryCondition)
 
 	## write to csv
 	csv_columns = ["document", "useremail", "claimlabel", "claimtext", "method", "relationship", "drug1", "drug2", "precipitant", "enzyme", "rejected", "evRelationship", "participants", "participantstext", "drug1dose", "drug1formulation", "drug1duration", "drug1regimens", "drug1dosetext", "drug2dose", "phenotypetype", "phenotypevalue", "phenotypemetabolizer", "phenotypepopulation", "drug2formulation", "drug2duration", "drug2regimens", "drug2dosetext", "aucvalue", "auctype", "aucdirection", "auctext", "cmaxvalue", "cmaxtype", "cmaxdirection", "cmaxtext", "clearancevalue", "clearancetype", "clearancedirection", "clearancetext", "halflifevalue", "halflifetype", "halflifedirection", "halflifetext", "dipsquestion", "reviewer", "reviewerdate", "reviewertotal", "reviewerlackinfo", "grouprandomization", "parallelgroupdesign", "subject", "object", "id"]

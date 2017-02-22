@@ -1,6 +1,6 @@
 import sys, csv, json, re, os
 import uuid
-import datetime
+import datetime, copy
 from elasticsearch import Elasticsearch
 from sets import Set
 
@@ -17,7 +17,6 @@ def queryByBody(host, port, doc):
 	res = es.search(index="annotator", size="5000", body=doc)	
 	print("Got %d Hits:" % res['hits']['total'])
 	return res
-
 
 def queryById(host, port, annotationId):
 	es = Elasticsearch([{'host': host, 'port': port}])
@@ -52,42 +51,38 @@ def parseAnnotations(annotations):
 
 	annsL = []
 	for annotation in annotations:
-		annsL.append(parseAnnotation(annotation))
+		annsL.extend(parseAnnotation(annotation))
 	return annsL
 
 
 def parseAnnotation(annotation):
-
-	print annotation
 	annsL = []
 	
 	ann = annotation["_source"]
-	annDict= getAnnDict()
-	annDict["id"] = annotation["_id"]
-	annDict["document"] = ann["rawurl"]
-	annDict["useremail"] = ann["email"]
+	initDict= getAnnDict()
+	initDict["id"] = annotation["_id"]
+	initDict["document"] = ann["rawurl"]
+	initDict["useremail"] = ann["email"]
 	
 	claim = ann["argues"]
-	print claim['label']
+	initDict["claimlabel"] = claim["label"]
+	initDict["claimtext"] = claim["hasTarget"]["hasSelector"]["exact"]
+	initDict["method"] = claim["method"]	
 	
-	annDict["claimlabel"] = claim["label"]
-	annDict["claimtext"] = claim["hasTarget"]["hasSelector"]["exact"]
-	annDict["method"] = claim["method"]	
-	
-	annDict["relationship"] = claim["qualifiedBy"]["relationship"]
-	annDict["drug1"] = claim["qualifiedBy"]["drug1"]
+	initDict["relationship"] = claim["qualifiedBy"]["relationship"]
+	initDict["drug1"] = claim["qualifiedBy"]["drug1"]
 	
 	if "drug2" in claim["qualifiedBy"]:
-		annDict["drug2"] = claim["qualifiedBy"]["drug2"]
+		initDict["drug2"] = claim["qualifiedBy"]["drug2"]
 	
 	if "enzyme" in claim["qualifiedBy"]:
-		annDict["enzyme"] = claim["qualifiedBy"]["enzyme"]
+		initDict["enzyme"] = claim["qualifiedBy"]["enzyme"]
 
 	if "precipitant" in claim["qualifiedBy"]:
-		annDict["precipitant"] = claim["qualifiedBy"]["precipitant"]
+		initDict["precipitant"] = claim["qualifiedBy"]["precipitant"]
 
 	if "rejected" in claim and claim["rejected"]:			
-		annDict["rejected"] = claim["rejected"]["reason"] or ""
+		initDict["rejected"] = claim["rejected"]["reason"] or ""
 
 	dataL = claim["supportsBy"]
 
@@ -95,11 +90,13 @@ def parseAnnotation(annotation):
 	if len(dataL) > 0:
 		for data in dataL:
 
+			annDict = copy.deepcopy(initDict)
+
 			material = data["supportsBy"]["supportsBy"]
 			annDict = addDataMaterialToAnnDict(data, material, annDict)
 			annsL.append(annDict)
 	else:
-		annsL.append(annDict)
+		annsL.append(initDict)
 
 	return annsL
 

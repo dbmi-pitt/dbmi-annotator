@@ -16,7 +16,7 @@ import psycopg2
 import sys, uuid, datetime
 
 #sys.path.append('../model/')
-from model.micropublication import Annotation, DataMaterialRow, DMItem, DataItem, MaterialDoseItem, MaterialParticipants
+from model.micropublication import Annotation, DataMaterialRow, DMItem, DataItem, MaterialDoseItem, MaterialParticipants, MaterialPhenotypeItem
 
 ## query all claim annotation by document URL
 ## return {{key: id-1, value: Ann-1"}, {key: id-2, value: Ann-2"}, ...}
@@ -94,52 +94,50 @@ def queryMpClaimByUrn(conn, urn):
 	join oa_target t on cann.has_target = t.id
 	join oa_selector s on t.has_selector = s.id
 	where cann.urn = '%s';   """ % (urn)
-	cur.execute(qry)
-		
-	results = cur.fetchall()
-	if results:		
-		result = results[0]
+	cur.execute(qry)		
 
-		annotation = Annotation()		
-		annotation.claimid = result[0]
+	annotation = Annotation()
+	for row in cur.fetchall():
+
+		annotation.claimid = row[0]
 		annotation.urn = urn
 		
 		## claim qualifiers
-		if result[8] == "subject":
-			annotation.csubject = result[9]
-		elif result[8] == "predicate":
-			annotation.cpredicate = result[9]
-		elif result[8] == "object":
-			annotation.cobject = result[9]
-		elif result[8] == "enzyme":
-			annotation.cenzyme = result[9]
+		if row[8] == "subject":
+			annotation.csubject = row[9]
+		elif row[8] == "predicate":
+			annotation.cpredicate = row[9]
+		elif row[8] == "object":
+			annotation.cobject = row[9]
+		elif row[8] == "enzyme":
+			annotation.cenzyme = row[9]
 		else:
-			print "[ERROR] qualifier role unidentified qvalue: %s (claimid %s)" % (result[8], annotation.claimid) 
+			print "[ERROR] qualifier role unidentified qvalue: %s (claimid %s)" % (row[8], annotation.claimid) 
 
 		## claim source and label
 		if annotation.source == None:
-			annotation.source = result[1]
+			annotation.source = row[1]
 		if annotation.label == None:
-			annotation.label = result[7]
+			annotation.label = row[7]
 
 		## claim text selector
 		if annotation.exact == None:
-			annotation.setOaSelector(result[5], result[4], result[6])
+			annotation.setOaSelector(row[5], row[4], row[6])
 
 		## user entered method
 		if annotation.method == None:
-			annotation.method = result[13]
+			annotation.method = row[13]
 
 		## assertion negation 
-		if annotation.negation == None and result[14] != None:
-			annotation.negation = result[14]
+		if annotation.negation == None and row[14] != None:
+			annotation.negation = row[14]
 
 		## rejected reason
-		if annotation.rejected == None and result[10] == True:
-			annotation.rejected = result[11] + "|" + result[12]		
+		if annotation.rejected == None and row[10] == True:
+			annotation.rejected = row[11] + "|" + row[12]		
 
-		return annotation
-	return None
+	return annotation
+
 		
 
 # query data items for claim annotation
@@ -211,8 +209,8 @@ def queryMpMaterial(conn, annotation, claimid):
 	select mann.type, mf.material_field_type, mf.value_as_string, mf.value_as_number, s.exact, s.prefix, s.suffix, mann.mp_data_index, mann.ev_supports
 	from mp_material_annotation mann join oa_material_body mbody on mann.has_body = mbody.id
 	join material_field mf on mf.material_body_id = mbody.id
-	join oa_target t on mann.has_target = t.id
-	join oa_selector s on t.has_selector = s.id
+	left join oa_target t on mann.has_target = t.id
+	left join oa_selector s on t.has_selector = s.id
 	where mann.mp_claim_id = %s
 	""" % (claimid)
 
@@ -249,6 +247,11 @@ def queryMpMaterial(conn, annotation, claimid):
 				partItem.setSelector("", exact, "")
 				dmRow.setParticipants(partItem)
 
+			elif mType == "phenotype":
+				phenoItem = MaterialPhenotypeItem()
+				phenoItem.setAttribute(mfType, value)
+				dmRow.setPhenotype(phenoItem)
+
 			annotation.setSpecificDataMaterial(dmRow, index)
 
 		else: # current row of material & material exists 
@@ -277,6 +280,14 @@ def queryMpMaterial(conn, annotation, claimid):
 					partItem = MaterialParticipants(value)
 					dmRow.setParticipants(partItem)
 				partItem.setSelector("", exact, "")
+
+			elif mType == "phenotype":
+				if dmRow.getPhenotype():
+					phenoItem = dmRow.getPhenotype()
+				else:			
+					phenoItem = MaterialPhenotypeItem()
+				phenoItem.setAttribute(mfType, value)
+				dmRow.setPhenotype(phenoItem)
 
 	return annotation
 

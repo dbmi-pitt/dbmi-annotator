@@ -1,0 +1,39 @@
+{"annotationType": "MP", "updated": "2016-09-19T18:33:51.179625+00:00", "created": "2016-09-19T18:33:51.179625+00:00", 
+"uri": "httplocalhostPMCPMC000001html", 
+"argues": {
+    "negation": "False", 
+    "rejected": {"reason": "rejected-reason|rejected-comment"}, 
+    "label": "drugname1_substrate of_enzyme1", 
+    "ranges": [], 
+    "hasTarget": {"hasSelector": {"prefix": "", "exact": "claim-text", "@type": "TextQuoteSelector", "suffix": ""}}, 
+    "qualifiedBy": {"drug2ID": "", "relationship": "substrate of", "drug2": "", "drug1": "drugname1", "drug1ID": "drugname1_1", "enzyme": "enzyme1", "precipitant": "enzyme"},
+    "type": "mp:claim", 
+    "method": "Phenotype clinical study",
+    "supportsBy": 
+    [{"type": "mp:data",
+      "evRelationship": "refutes", 
+      "auc": {"ranges": [], "hasTarget": {"hasSelector": {"prefix": "", "exact": "auc-text-1", "@type": "TextQuoteSelector", "suffix": ""}}, "type": "Fold", "direction": "Increase", "value": "1.2"}, 
+      "cmax": {"ranges": [], "hasTarget": {"hasSelector": {"prefix": "", "exact": "cmax-text-1", "@type": "TextQuoteSelector", "suffix": ""}}, "type": "Percent", "direction": "Increase", "value": "1.6"}, 
+      "clearance": {"ranges": [], "hasTarget": {"hasSelector": {"prefix": "", "exact": "clearance-text-1", "@type": "TextQuoteSelector", "suffix": ""}}, "type": "Percent", "direction": "Increase", "value": "8.8"}, 
+      "halflife": {"ranges": [], "hasTarget": {"hasSelector": {"prefix": "", "exact": "halflife-text-1", "@type": "TextQuoteSelector", "suffix": ""}}, "type": "Percent", "direction": "Decrease", "value": "2.5"}, 
+      "dips": {}, 
+      "reviewer": {}, 
+      "grouprandom": "", 
+      "supportsBy": 
+      {"supportsBy": 
+       {"type": "mp:material",
+        "participants": {"ranges": [], "hasTarget": {"hasSelector": {"prefix": "", "exact": "participants-text-1", "@type": "TextQuoteSelector", "suffix": ""}}, "value": "1.00"}, 
+        "drug1Dose": {"value": "10", "ranges": [], "hasTarget": {"hasSelector": {"prefix": "", "exact": "drug1Dose-text-1", "@type": "TextQuoteSelector", "suffix": ""}}, "regimens": "Q6", "formulation": "IV", "duration": "23"}, 
+        "drug2Dose": {},
+        "phenotype": {"type": "Genotype", "typeVal": "BRAF", "metabolizer": "Poor Metabolizer", "population": "Asian"}
+       }, 
+       "type": "mp:method"}, 
+      "parallelgroup": ""}
+    ] 
+},
+ "user": "alice", 
+ "rawurl": "http://localhost/PMC/PMC000001.html", 
+ "consumer": "mockconsumer", 
+ "email": "test@gmail.com", 
+ "permissions": {"read": ["group:__consumer__"]}
+}

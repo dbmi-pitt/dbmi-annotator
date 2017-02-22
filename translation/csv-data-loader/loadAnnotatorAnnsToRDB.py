@@ -51,7 +51,11 @@ def preprocess(resultsL):
 		## phenotype don't have 2nd drug, relationship is inhibits or substrate of
 		elif ann['method'] == "Phenotype clinical study":
 			if ann['relationship'] in ["inhibits", "substrate of"] and ann['drug1'] and ann['enzyme']:
-				ann.update({'subject': 'drug1', 'object': 'enzyme'})
+				if ann['precipitant'] == 'drug1':
+					ann.update({'subject': 'drug1', 'object': 'enzyme'})
+				elif ann['precipitant'] == 'enzyme':
+					ann.update({'subject': 'enzyme', 'object': 'drug1'})
+
 				annsL.append(escapeRow(ann))
 				addAnnsToCount(annsDictCsv, ann['document'])
 			else:
@@ -219,8 +223,10 @@ def load_mp_claim_annotation(conn, row, creator):
 
 	## subject and object
 	if row["subject"] and row["object"]:
+
 		s_drug = row[row["subject"]]
 		o_drug = row[row["object"]]
+
 		pgmp.insert_qualifier(conn, "subject", s_drug, None, None, None, None, oa_claim_body_id)
 		pgmp.insert_qualifier(conn, "object", o_drug, None, None, None, None, oa_claim_body_id)
 
@@ -248,7 +254,7 @@ def load_mp_claim_annotation(conn, row, creator):
 
 
 # LOAD MAIN ################################################################
-# def load_data_from_csv(conn, reader, creator):
+# load annotaitons to postgres
 def load_annotations_from_results(conn, results, creator):
 
 	highlightD = {} # drug highlight set in documents {"doc url" : "drug set"}
@@ -259,10 +265,12 @@ def load_annotations_from_results(conn, results, creator):
 
 		# MP Claim - use claim id if exists
 		mp_claim_id = pgmp.findClaimIdByAnnId(conn, annId)
+
 		if not mp_claim_id:
 			mp_claim_id = load_mp_claim_annotation(conn, row, creator)
-			## temp work with AnnotationPress 
-			pgmp.insert_method(conn, row, mp_claim_id, 0) 
+
+		## temp work with AnnotationPress 
+		pgmp.insert_method(conn, row, mp_claim_id, 0) 
 
 		mp_data_index = (pgmp.findNumOfDataItems(conn, mp_claim_id) or 0) + 1 
 
@@ -294,7 +302,7 @@ def load(conn, qryCondition, eshost, esport, dbschema, creator, isClean):
 	
 	print "[INFO] Begin load data ..."
 
-	results = es.query(eshost, esport, qryCondition)
+	results = es.queryAndParseByBody(eshost, esport, qryCondition)
 
 	annsL = preprocess(results)
 	load_annotations_from_results(conn, annsL, creator)
