@@ -43,6 +43,8 @@ def preprocess(resultsL):
 					ann.update({'subject': 'drug1', 'object': 'drug2'})
 				elif ann['precipitant'] == 'drug2':
 					ann.update({'subject': 'drug2', 'object': 'drug1'})
+				else:
+					ann.update({'subject': 'drug1', 'object': 'drug2'})
 				annsL.append(escapeRow(ann))
 				addAnnsToCount(annsDictCsv, ann['document'])
 			else:
@@ -55,6 +57,8 @@ def preprocess(resultsL):
 					ann.update({'subject': 'drug1', 'object': 'enzyme'})
 				elif ann['precipitant'] == 'enzyme':
 					ann.update({'subject': 'enzyme', 'object': 'drug1'})
+				else:
+					ann.update({'subject': 'drug1', 'object': 'drug2'})
 
 				annsL.append(escapeRow(ann))
 				addAnnsToCount(annsDictCsv, ann['document'])
@@ -123,6 +127,9 @@ def load_highlight_annotation(conn, highlightD, creator):
 
 
 def generateHighlightSet(row, highlightD):
+
+	if not row["subject"] or not row["object"]:
+		print row
 
 	subjectDrug = row[row["subject"]]; objectDrug = row[row["object"]]; source = row["document"]
 	if source in highlightD:
@@ -336,13 +343,13 @@ def main():
 		print "Usage: python loadAnnotatorAnnsToRDB.py <elastic host> <elastic port> <pg host> <pg port> <pg username> <pg password> <OPTIONS (1: clean all tables, 2 drop and recreate all tables, 0: keep existing data)>"
 		sys.exit(1)
 
-	# qryCondition = {'query': { 'term': {'annotationType': 'MP'}}}
-	qryCondition = {"query": {"bool": 
-		{"must": [
-			{"term": {"rawurl": "http://localhost/PMC/PMC3187007.html"}},
-			{"term": {"annotationType": "MP"}}
-		]
-	 }}}
+	qryCondition = {'query': { 'term': {'annotationType': 'MP'}}}
+	# qryCondition = {"query": {"bool": 
+	# 	{"must": [
+	# 		{"term": {"rawurl": "http://localhost/PMC/PMC3187007.html"}},
+	# 		{"term": {"annotationType": "MP"}}
+	# 	]
+	#  }}}
 
 	conn = pgconn.connect_postgreSQL(PG_HOST, PG_USER, PG_PASSWORD, PG_DATABASE)
 	pgconn.setDbSchema(conn, "ohdsi")
