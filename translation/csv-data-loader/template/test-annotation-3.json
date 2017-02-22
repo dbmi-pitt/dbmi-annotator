@@ -2,11 +2,11 @@
 "uri": "httplocalhostPMCPMC000001html", 
 "argues": {
     "negation": "True", 
-    "rejected": {"reason": ""}, 
+    "rejected": {"reason": "test-reason|test-comment"}, 
     "label": "drugname1_interact with_drugname2", 
     "ranges": [], 
     "hasTarget": {"hasSelector": {"prefix": "", "exact": "claim-text", "@type": "TextQuoteSelector", "suffix": ""}}, 
-    "qualifiedBy": {"drug2ID": "drugname2_1", "relationship": "substrate of", "drug2": "drugname2", "drug1": "drugname1", "drug1ID": "drugname1_1", "enzyme": "", "precipitant": "drug1"},
+    "qualifiedBy": {"drug2ID": "drugname2_1", "relationship": "interact with", "drug2": "drugname2", "drug1": "drugname1", "drug1ID": "drugname1_1", "enzyme": "", "precipitant": "drug1"},
     "type": "mp:claim", 
     "method": "Case Report",
     "supportsBy": 
@@ -16,8 +16,8 @@
       "cmax": {}, 
       "clearance": {}, 
       "halflife": {}, 
-      "dips": {}, 
-      "reviewer": {}, 
+      "dips":{"q1":"Yes","q2":"Yes","q10":"No","q3":"No","q4":"No","q5":"NA","q6":"UNK/NA","q7":"UNK/NA","q8":"No","q9":"NA"},
+      "reviewer": {"date": "02/22/2017","total": -1,"lackInfo": false,"reviewer": "External"}, 
       "grouprandom": "", 
       "supportsBy": 
       {"supportsBy": 

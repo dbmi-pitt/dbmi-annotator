@@ -173,6 +173,24 @@ def testPhenotype(phenoItem, ptype, value, metabolizer, population):
 	else:
 		print "[ERROR] phenotype is incorrect"
 
+def testDataReviewer(reviewerItem, reviewer, date, total, lackinfo):
+	print "[INFO] begin validating data reviewer..."
+	if isMatched("reviewer", reviewer, reviewerItem.reviewer) and isMatched("date", date, reviewerItem.date) and isMatched("total", total, reviewerItem.total) and isMatched("lackinfo", lackinfo, reviewerItem.lackinfo):
+		print "[TEST] data reviewer is validated"
+	else:
+		print "[ERROR] data reviewer is incorrect"
+
+
+def testDataDipsQs(dipsItem, qsDict):
+	print "[INFO] begin validating dips questions..."
+	annDipsQsDict = dipsItem.getDipsDict()
+	if len(annDipsQsDict) == len(qsDict):
+		for k,v in qsDict.iteritems():
+			if not isMatched("dips " + k, v, annDipsQsDict[k]):
+				return
+		print "[TEST] dips questions are validated"
+	else:
+		print "[ERROR] incorrect number of dips questions"
 
 def isMatched(field, val1, val2):
 	if type(val1) != type(val2):
@@ -185,7 +203,6 @@ def isMatched(field, val1, val2):
 	
 	print "[ERROR] %s is incorrect: val1 (%s) and val2 (%s)" % (field, val1, val2)
 	return False	
-
 
 ## TESTING CASES #############################################################
 # Validate clinical trial annotation 
@@ -206,13 +223,13 @@ def test_clinical_trial_1(conn, template):
 	## data 1 validation
 	dmRow1 = mpDataMaterialD[1]
 	testEvRelationship(dmRow1.getEvRelationship(), "supports")
-	auc1 = dmRow1.getDataItemInRow("auc")
+	auc1 = dmRow1.getDataRatioItemInRow("auc")
 	testDataRatio(auc1, "AUC ratio", "7.88", "Fold", "Increase", "auc-text-1")
-	cmax1 = dmRow1.getDataItemInRow("cmax")
+	cmax1 = dmRow1.getDataRatioItemInRow("cmax")
 	testDataRatio(cmax1, "Cmax ratio", "10.6", "Fold", "Increase", "cmax-text-1")
-	clearance1 = dmRow1.getDataItemInRow("clearance")
+	clearance1 = dmRow1.getDataRatioItemInRow("clearance")
 	testDataRatio(clearance1, "Clearance ratio", "87.8", "Percent", "Decrease", "clearance-text-1")
-	halflife1 = dmRow1.getDataItemInRow("halflife")
+	halflife1 = dmRow1.getDataRatioItemInRow("halflife")
 	testDataRatio(halflife1, "Halflife ratio", "28.5", "Percent", "Decrease", "halflife-text-1")
 	## material 1 validation	
 	partMaterial1 = dmRow1.getParticipantsInRow()
@@ -225,13 +242,13 @@ def test_clinical_trial_1(conn, template):
 	## data 2 validation
 	dmRow2 = mpDataMaterialD[2]
 	testEvRelationship(dmRow2.getEvRelationship(), "refutes")
-	auc2 = dmRow2.getDataItemInRow("auc")
+	auc2 = dmRow2.getDataRatioItemInRow("auc")
 	testDataRatio(auc2, "AUC ratio", "17.88", "Percent", "Decrease", "auc-text-2")
-	cmax2 = dmRow2.getDataItemInRow("cmax")
+	cmax2 = dmRow2.getDataRatioItemInRow("cmax")
 	testDataRatio(cmax2, "Cmax ratio", "10.3", "Percent", "Decrease", "cmax-text-2")
-	clearance2 = dmRow2.getDataItemInRow("clearance")
+	clearance2 = dmRow2.getDataRatioItemInRow("clearance")
 	testDataRatio(clearance2, "Clearance ratio", "7.8", "Fold", "Increase", "clearance-text-2")
-	halflife2 = dmRow2.getDataItemInRow("halflife")
+	halflife2 = dmRow2.getDataRatioItemInRow("halflife")
 	testDataRatio(halflife2, "Halflife ratio", "2.5", "Fold", "Increase", "halflife-text-2")
 	## material 2 validation
 	partMaterial2 = dmRow2.getParticipantsInRow()
@@ -253,15 +270,16 @@ def test_phenotype_clinical_study_1(conn, template):
 	testClaim(annotation, "test-case-id-2", "drugname1_substrate of_enzyme1", "enzyme1", "substrate of", "drugname1", "claim-text", "Phenotype clinical study", False, "rejected-reason|rejected-comment")
 
 	## data 1 validation
+	print "[INFO] ================= Begin validating MP data ======================="
 	dmRow1 = mpDataMaterialD[1]
 	testEvRelationship(dmRow1.getEvRelationship(), "refutes")
-	auc1 = dmRow1.getDataItemInRow("auc")
+	auc1 = dmRow1.getDataRatioItemInRow("auc")
 	testDataRatio(auc1, "AUC ratio", "1.2", "Fold", "Increase", "auc-text-1")
-	cmax1 = dmRow1.getDataItemInRow("cmax")
+	cmax1 = dmRow1.getDataRatioItemInRow("cmax")
 	testDataRatio(cmax1, "Cmax ratio", "1.6", "Percent", "Increase", "cmax-text-1")
-	clearance1 = dmRow1.getDataItemInRow("clearance")
+	clearance1 = dmRow1.getDataRatioItemInRow("clearance")
 	testDataRatio(clearance1, "Clearance ratio", "8.8", "Percent", "Increase", "clearance-text-1")
-	halflife1 = dmRow1.getDataItemInRow("halflife")
+	halflife1 = dmRow1.getDataRatioItemInRow("halflife")
 	testDataRatio(halflife1, "Halflife ratio", "2.5", "Percent", "Decrease", "halflife-text-1")
 
 	## material 1 validation
@@ -276,7 +294,25 @@ def test_case_report_1(conn, template):
 	print "[INFO] =====begin test case report annotation 1 ============"
 
 	annotationUrn = "test-case-id-3"
-	#annotation = createAnnForTesting(conn, template, annotationUrn)
+	annotation = createAnnForTesting(conn, template, annotationUrn)
+
+	## claim validation
+	print "[INFO] ================= Begin validating MP Claim ======================"
+	testClaim(annotation, "test-case-id-3", "drugname1_interact with_drugname2", "drugname1", "interact with", "drugname2", "claim-text", "Case Report", False, "test-reason|test-comment")
+
+	print "[INFO] ================= Begin validating MP data ======================="
+	dmRow1 = annotation.getSpecificDataMaterial(1)
+	reviewerItem1 = dmRow1.getDataReviewer()
+	testDataReviewer(reviewerItem1, "External","02/22/2017", "-1", "False")
+	dipsItem1 = dmRow1.getDataDips()
+	testDataDipsQs(dipsItem1, {"q1":"Yes","q2":"Yes","q10":"No","q3":"No","q4":"No","q5":"NA","q6":"UNK/NA","q7":"UNK/NA","q8":"No","q9":"NA"})
+
+	partMaterial1 = dmRow1.getParticipantsInRow()
+	testParticipants(partMaterial1, "1.00", "participants-text-1")
+	subjectdose1 = dmRow1.getMaterialDoseInRow("subject_dose")
+	testMaterialDose(subjectdose1, "subject_dose", "13", "IV", "22", "Q6", "drug1Dose-text-1")
+	objectdose1 = dmRow1.getMaterialDoseInRow("object_dose")
+	testMaterialDose(objectdose1, "object_dose", "56", "IV", "65", "Q6", "drug2Dose-text-1")
 
 
 def validate():
@@ -291,11 +327,11 @@ def validate():
 
 	## "DDI clinical trial", "Phenotype clinical study", "Case Report", "Statement"
 
-	# MP_ANN_1 = "./template/test-annotation-1.json"
-	# test_clinical_trial_1(conn, MP_ANN_1)
+	MP_ANN_1 = "./template/test-annotation-1.json"
+	test_clinical_trial_1(conn, MP_ANN_1)
 
-	# MP_ANN_2 = "./template/test-annotation-2.json"
-	# test_phenotype_clinical_study_1(conn, MP_ANN_2)
+	MP_ANN_2 = "./template/test-annotation-2.json"
+	test_phenotype_clinical_study_1(conn, MP_ANN_2)
 
 	MP_ANN_3 = "./template/test-annotation-3.json"
 	test_case_report_1(conn, MP_ANN_3)
