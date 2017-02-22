@@ -252,6 +252,31 @@ def test_phenotype_clinical_study_1(conn, template):
 	print "[INFO] ================= Begin validating MP Claim ======================"
 	testClaim(annotation, "test-case-id-2", "drugname1_substrate of_enzyme1", "enzyme1", "substrate of", "drugname1", "claim-text", "Phenotype clinical study", False, "rejected-reason|rejected-comment")
 
+	## data 1 validation
+	dmRow1 = mpDataMaterialD[1]
+	testEvRelationship(dmRow1.getEvRelationship(), "refutes")
+	auc1 = dmRow1.getDataItemInRow("auc")
+	testDataRatio(auc1, "AUC ratio", "1.2", "Fold", "Increase", "auc-text-1")
+	cmax1 = dmRow1.getDataItemInRow("cmax")
+	testDataRatio(cmax1, "Cmax ratio", "1.6", "Percent", "Increase", "cmax-text-1")
+	clearance1 = dmRow1.getDataItemInRow("clearance")
+	testDataRatio(clearance1, "Clearance ratio", "8.8", "Percent", "Increase", "clearance-text-1")
+	halflife1 = dmRow1.getDataItemInRow("halflife")
+	testDataRatio(halflife1, "Halflife ratio", "2.5", "Percent", "Decrease", "halflife-text-1")
+
+	## material 1 validation
+	partMaterial1 = dmRow1.getParticipantsInRow()
+	testParticipants(partMaterial1, "1.00", "participants-text-1")
+	phenoItem = dmRow1.getPhenotype()
+	testPhenotype(phenoItem, "Genotype", "BRAF", "Poor Metabolizer", "Asian")
+	objectdose1 = dmRow1.getMaterialDoseInRow("object_dose")
+	testMaterialDose(objectdose1, "object_dose", "10", "IV", "23", "Q6", "drug1Dose-text-1")
+	
+def test_case_report_1(conn, template):
+	print "[INFO] =====begin test case report annotation 1 ============"
+
+	annotationUrn = "test-case-id-3"
+	#annotation = createAnnForTesting(conn, template, annotationUrn)
 
 
 def validate():
@@ -266,11 +291,14 @@ def validate():
 
 	## "DDI clinical trial", "Phenotype clinical study", "Case Report", "Statement"
 
-	MP_ANN_1 = "./template/test-annotation-1.json"
-	test_clinical_trial_1(conn, MP_ANN_1)
+	# MP_ANN_1 = "./template/test-annotation-1.json"
+	# test_clinical_trial_1(conn, MP_ANN_1)
 
-	MP_ANN_2 = "./template/test-annotation-2.json"
-	test_phenotype_clinical_study_1(conn, MP_ANN_2)
+	# MP_ANN_2 = "./template/test-annotation-2.json"
+	# test_phenotype_clinical_study_1(conn, MP_ANN_2)
+
+	MP_ANN_3 = "./template/test-annotation-3.json"
+	test_case_report_1(conn, MP_ANN_3)
 
 	conn.close()
 

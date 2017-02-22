@@ -51,7 +51,7 @@ def parseAnnotations(annotations):
 
 	annsL = []
 	for annotation in annotations:
-		annsL.append(parseAnnotation(annotation))
+		annsL.extend(parseAnnotation(annotation))
 	return annsL
 
 

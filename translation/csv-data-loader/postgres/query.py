@@ -16,7 +16,7 @@ import psycopg2
 import sys, uuid, datetime
 
 #sys.path.append('../model/')
-from model.micropublication import Annotation, DataMaterialRow, DMItem, DataItem, MaterialDoseItem, MaterialParticipants
+from model.micropublication import Annotation, DataMaterialRow, DMItem, DataItem, MaterialDoseItem, MaterialParticipants, MaterialPhenotypeItem
 
 ## query all claim annotation by document URL
 ## return {{key: id-1, value: Ann-1"}, {key: id-2, value: Ann-2"}, ...}
@@ -209,8 +209,8 @@ def queryMpMaterial(conn, annotation, claimid):
 	select mann.type, mf.material_field_type, mf.value_as_string, mf.value_as_number, s.exact, s.prefix, s.suffix, mann.mp_data_index, mann.ev_supports
 	from mp_material_annotation mann join oa_material_body mbody on mann.has_body = mbody.id
 	join material_field mf on mf.material_body_id = mbody.id
-	join oa_target t on mann.has_target = t.id
-	join oa_selector s on t.has_selector = s.id
+	left join oa_target t on mann.has_target = t.id
+	left join oa_selector s on t.has_selector = s.id
 	where mann.mp_claim_id = %s
 	""" % (claimid)
 
@@ -247,6 +247,11 @@ def queryMpMaterial(conn, annotation, claimid):
 				partItem.setSelector("", exact, "")
 				dmRow.setParticipants(partItem)
 
+			elif mType == "phenotype":
+				phenoItem = MaterialPhenotypeItem()
+				phenoItem.setAttribute(mfType, value)
+				dmRow.setPhenotype(phenoItem)
+
 			annotation.setSpecificDataMaterial(dmRow, index)
 
 		else: # current row of material & material exists 
@@ -275,6 +280,14 @@ def queryMpMaterial(conn, annotation, claimid):
 					partItem = MaterialParticipants(value)
 					dmRow.setParticipants(partItem)
 				partItem.setSelector("", exact, "")
+
+			elif mType == "phenotype":
+				if dmRow.getPhenotype():
+					phenoItem = dmRow.getPhenotype()
+				else:			
+					phenoItem = MaterialPhenotypeItem()
+				phenoItem.setAttribute(mfType, value)
+				dmRow.setPhenotype(phenoItem)
 
 	return annotation
 

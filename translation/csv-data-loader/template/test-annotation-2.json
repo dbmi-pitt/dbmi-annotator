@@ -11,18 +11,18 @@
     "method": "Phenotype clinical study",
     "supportsBy": 
     [{"type": "mp:data",
-      "evRelationship": "supports", 
-      "auc": {"ranges": [], "hasTarget": {"hasSelector": {"prefix": "", "exact": "auc-text-1", "@type": "TextQuoteSelector", "suffix": ""}}, "type": "Fold", "direction": "Increase", "value": "7.88"}, 
-      "cmax": {"ranges": [], "hasTarget": {"hasSelector": {"prefix": "", "exact": "cmax-text-1", "@type": "TextQuoteSelector", "suffix": ""}}, "type": "Fold", "direction": "Increase", "value": "10.6"}, 
-      "clearance": {"ranges": [], "hasTarget": {"hasSelector": {"prefix": "", "exact": "clearance-text-1", "@type": "TextQuoteSelector", "suffix": ""}}, "type": "Percent", "direction": "Decrease", "value": "87.8"}, 
-      "halflife": {"ranges": [], "hasTarget": {"hasSelector": {"prefix": "", "exact": "halflife-text-1", "@type": "TextQuoteSelector", "suffix": ""}}, "type": "Percent", "direction": "Decrease", "value": "28.5"}, 
+      "evRelationship": "refutes", 
+      "auc": {"ranges": [], "hasTarget": {"hasSelector": {"prefix": "", "exact": "auc-text-1", "@type": "TextQuoteSelector", "suffix": ""}}, "type": "Fold", "direction": "Increase", "value": "1.2"}, 
+      "cmax": {"ranges": [], "hasTarget": {"hasSelector": {"prefix": "", "exact": "cmax-text-1", "@type": "TextQuoteSelector", "suffix": ""}}, "type": "Percent", "direction": "Increase", "value": "1.6"}, 
+      "clearance": {"ranges": [], "hasTarget": {"hasSelector": {"prefix": "", "exact": "clearance-text-1", "@type": "TextQuoteSelector", "suffix": ""}}, "type": "Percent", "direction": "Increase", "value": "8.8"}, 
+      "halflife": {"ranges": [], "hasTarget": {"hasSelector": {"prefix": "", "exact": "halflife-text-1", "@type": "TextQuoteSelector", "suffix": ""}}, "type": "Percent", "direction": "Decrease", "value": "2.5"}, 
       "dips": {}, 
       "reviewer": {}, 
       "grouprandom": "", 
       "supportsBy": 
       {"supportsBy": 
        {"type": "mp:material",
-        "participants": {"ranges": [], "hasTarget": {"hasSelector": {"prefix": "", "exact": "participants-text-1", "@type": "TextQuoteSelector", "suffix": ""}}, "value": "21.00"}, 
+        "participants": {"ranges": [], "hasTarget": {"hasSelector": {"prefix": "", "exact": "participants-text-1", "@type": "TextQuoteSelector", "suffix": ""}}, "value": "1.00"}, 
         "drug1Dose": {"value": "10", "ranges": [], "hasTarget": {"hasSelector": {"prefix": "", "exact": "drug1Dose-text-1", "@type": "TextQuoteSelector", "suffix": ""}}, "regimens": "Q6", "formulation": "IV", "duration": "23"}, 
         "drug2Dose": {},
         "phenotype": {"type": "Genotype", "typeVal": "BRAF", "metabolizer": "Poor Metabolizer", "population": "Asian"}

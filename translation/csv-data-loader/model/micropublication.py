@@ -104,17 +104,21 @@ class MaterialParticipants(DMItem):
 
 # Material phenotype
 class MaterialPhenotypeItem():
-	def __init__(self, field):
+	def __init__(self):
 		self.ptype = None
 		self.value = None 
 		self.metabolizer = None
 		self.population = None
 
-	def setAttribute(self, ptype, value, metabolizer, population):
-		self.ptype = ptype
-		self.value = value
-		self.metabolizer = metabolizer
-		self.population = population
+	def setAttribute(self, name, value):
+		if name == "type":
+			self.ptype = value
+		elif name == "value":
+			self.value = value
+		elif name == "metabolizer":
+			self.metabolizer = value 
+		elif name == "population":
+			self.population = value 
 
 # represents single row of data & material in annotation table
 class DataMaterialRow(object):
