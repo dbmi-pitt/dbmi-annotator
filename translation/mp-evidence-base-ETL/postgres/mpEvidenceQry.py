@@ -12,7 +12,6 @@
  # See the License for the specific language governing permissions and
  # limitations under the License.
 
-import psycopg2
 import sys, uuid, datetime
 
 #sys.path.append('../model/')

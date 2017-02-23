@@ -11,7 +11,7 @@ INSERT INTO vocabulary (vocabulary_id, vocabulary_name, vocabulary_reference, vo
 
 -- TABLE CONCEPT
 
--- interact with
+-- interact_with
 INSERT INTO concept (concept_id, concept_name, domain_id, vocabulary_id, concept_class_id, standard_concept , concept_code, valid_start_date, valid_end_date, invalid_reason) VALUES (-9900001, 'metabolic potential drug-drug interaction', 'PDDI', 'DIDEO', 'DIKB', '', 'DIDEO_00000015', '2017-02-22', '2099-02-22', '');
 
 -- drug product and active ingredient

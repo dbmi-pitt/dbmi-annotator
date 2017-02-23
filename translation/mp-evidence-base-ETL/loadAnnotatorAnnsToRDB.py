@@ -19,19 +19,19 @@ import sys
 import validate as test
 
 from postgres import connection as pgconn
-from postgres import mpevidence as pgmp
+from postgres import mpEvidenceLoad as pgmp
+from postgres import omopConceptQry as pgcp
 from elastic import queryAnnsInElastico as es
 
 reload(sys)  
 sys.setdefaultencoding('utf8')
 
-#1. pip install psycopg2
-#csvfiles = ['data/mp-annotation.tsv']
-
-
 annsDictCsv = {} ## keep document and count of annotations for validation after load
 curr_date = datetime.datetime.now()
-dideoDict = {"interact_with": {"id": "-9900001", "code": "DIDEO_00000015"}}
+
+## dict for dideo omop concept id
+# temp use subject as precipitant
+dideoDict = {"interact_with":-9900001, "drug_product":-9900002, "enzyme":-9900003, "subject":-9900004, "object": -9900005, "auc": -9900006, "cmax": -9900007, "clearance": -9900008, "halflife": -9900009, "phenotype": -9900010, "genotype": -9900011}
 
 def preprocess(resultsL):
 
@@ -235,8 +235,13 @@ def load_mp_claim_annotation(conn, row, creator):
 		s_drug = row[row["subject"]]
 		o_drug = row[row["object"]]
 
-		pgmp.insert_qualifier(conn, "subject", s_drug, None, None, None, None, oa_claim_body_id)
-		pgmp.insert_qualifier(conn, "object", o_drug, None, None, None, None, oa_claim_body_id)
+		subject_concept_id = dideoDict["subject"]
+		subject_concept_code = pgcp.getConceptCodeByConceptId(conn, dideoDict["subject"])
+		object_concept_id = dideoDict["object"]
+		object_concept_code = pgcp.getConceptCodeByConceptId(conn, dideoDict["object"])
+
+		pgmp.insert_qualifier(conn, "subject", s_drug, None, None, subject_concept_code, subject_concept_id, oa_claim_body_id)
+		pgmp.insert_qualifier(conn, "object", o_drug, None, None, object_concept_code, object_concept_id, oa_claim_body_id)
 
 	## extran enzyme not in either subject or object
 	if row["enzyme"] and "enzyme" not in [row["subject"], row["object"]]:

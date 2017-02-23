@@ -17,8 +17,8 @@ import datetime
 from sets import Set
 
 from postgres import connection as pgconn
-from postgres import mpevidence as pgmp
-from postgres import query as pgqry
+from postgres import mpEvidenceLoad as pgmp
+from postgres import mpEvidenceQry as pgqry
 
 from elastic import queryAnnsInElastico as es
 
