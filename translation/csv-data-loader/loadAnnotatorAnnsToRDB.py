@@ -31,6 +31,7 @@ sys.setdefaultencoding('utf8')
 
 annsDictCsv = {} ## keep document and count of annotations for validation after load
 curr_date = datetime.datetime.now()
+dideoDict = {"interact_with": {"id": "-9900001", "code": "DIDEO_00000015"}}
 
 def preprocess(resultsL):
 
