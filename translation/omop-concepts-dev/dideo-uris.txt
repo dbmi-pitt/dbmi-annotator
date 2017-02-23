@@ -56,6 +56,7 @@ auc:
 URI: http://purl.obolibrary.org/obo/DIDEO_00000093 
 Term: area under the curve ratio
 Definition: 
+Alternative Term: AUC ratio
 
 cmax: 
 URI: http://purl.obolibrary.org/obo/DIDEO_00000099
@@ -87,6 +88,7 @@ Alternative Term: EV_CT_PK_Phenotype
 
 genotype
 URI: http://purl.obolibrary.org/obo/DIDEO_00000076
+Term: evidence information from genotyped pharmacokinetic trial
 Definition: An evidence information content entity that is about a clinical drug trial that focusses on pharmacokinetics and that has organisms as participants that participated in genotyping.
 Alternative Term: EV_CT_PK_Genotype
 
