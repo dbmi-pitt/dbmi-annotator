@@ -357,10 +357,12 @@ function createDataTable(annotation){
             material = data.supportsBy.supportsBy;
             row = "<tr style='height:20px;'>";
             // evidence relationship
-            if (data.evRelationship != null)
-                row += "<td onclick='editDataCellByEditor(\"evRelationship\",\""+dataNum+"\");'>" + data.evRelationship + "</td>";      
-            else 
+            if (data.evRelationship != null) {
+                var tempRel = data.evRelationship == "refutes" ? "challenges" : "supports";
+                row += "<td onclick='editDataCellByEditor(\"evRelationship\",\""+dataNum+"\");'>" + tempRel + "</td>";      
+            } else {
                 row += "<td onclick='addDataCellByEditor(\"evRelationship\",\""+dataNum+"\");'></td>";
+            }
 
             // show mp material
             if (material.participants.value != null)
