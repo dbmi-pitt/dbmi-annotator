@@ -14,15 +14,12 @@
 
 import sys, uuid, datetime
 
-def getConceptCodeByConceptId(conn, conceptId):
+def getConceptCodeByVocabId(conn, vocabId):
 	
 	cur = conn.cursor()
-
 	qry = """
-	select concept_code from public.concept where concept_id = %s
-	""" % conceptId
+	select concept_id, concept_code, concept_name from public.concept where vocabulary_id = %s
+	""" % vocabId
 	cur.execute(qry)
-	for row in cur.fetchall():
-		return row[0]
-	return None
+	return cur.fetchall()
 	

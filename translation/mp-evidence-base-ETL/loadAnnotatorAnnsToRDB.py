@@ -29,9 +29,18 @@ sys.setdefaultencoding('utf8')
 annsDictCsv = {} ## keep document and count of annotations for validation after load
 curr_date = datetime.datetime.now()
 
-## dict for dideo omop concept id
-# temp use subject as precipitant
-dideoDict = {"interact_with":-9900001, "drug_product":-9900002, "enzyme":-9900003, "subject":-9900004, "object": -9900005, "auc": -9900006, "cmax": -9900007, "clearance": -9900008, "halflife": -9900009, "phenotype": -9900010, "genotype": -9900011}
+
+def initDideoConceptsDict():
+
+	## dict for dideo omop concept id, temp use subject as precipitant
+	dideoDict = {"DIDEO_00000015": None, "DIDEO_00000005": None, "OBI_0000427": None, "DIDEO_00000013": None, "DIDEO_00000012": None, "DIDEO_00000093": None, "DIDEO_00000099": None, "DIDEO_00000101": None, "DIDEO_00000100": None, "DIDEO_00000103": None, "DIDEO_00000076": None}
+
+	results = subject_concept_code = pgcp.getConceptCodeByVocabId(conn, "DIDEO")
+	for res in results:
+		if res[0] and res[1] and res[1] in dideoDict:
+			dideoDict[res[1]] = res[0]
+	return dideoDict
+
 
 def preprocess(resultsL):
 
@@ -235,10 +244,12 @@ def load_mp_claim_annotation(conn, row, creator):
 		s_drug = row[row["subject"]]
 		o_drug = row[row["object"]]
 
-		subject_concept_id = dideoDict["subject"]
-		subject_concept_code = pgcp.getConceptCodeByConceptId(conn, dideoDict["subject"])
-		object_concept_id = dideoDict["object"]
-		object_concept_code = pgcp.getConceptCodeByConceptId(conn, dideoDict["object"])
+		# subject_concept_id = dideoDict["subject"]
+		# object_concept_id = dideoDict["object"]
+		subject_concept_code = None
+		subject_concept_id = None
+		object_concept_code = None
+		object_concept_id = None
 
 		pgmp.insert_qualifier(conn, "subject", s_drug, None, None, subject_concept_code, subject_concept_id, oa_claim_body_id)
 		pgmp.insert_qualifier(conn, "object", o_drug, None, None, object_concept_code, object_concept_id, oa_claim_body_id)
