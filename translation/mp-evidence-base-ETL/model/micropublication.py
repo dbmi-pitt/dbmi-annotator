@@ -39,7 +39,7 @@ class DMItem:
 # 		self.inferred_value = inferred_value
 
 # Data item in row of data 
-class DataItem(DMItem):
+class DataRatioItem(DMItem):
 
 	def __init__(self, field):
 		self.field = field
@@ -64,16 +64,38 @@ class DataItem(DMItem):
 
 # Questions for dips score
 class DataDips():
-	def __init__(self, dipsQsDict):
+	def __init__(self):
+		self.dipsQsDict = {}
+
+	def getDipsDict(self):
+		return self.dipsQsDict
+
+	def setDipsDict(self, dipsQsDict):
 		self.dipsQsDict = dipsQsDict
+
+	def setQuestion(self, qs, value):
+		self.dipsQsDict[qs] = value
+
+	def getAnswerByQs(self, qs):
+		return self.dipsQsDict[qs]
 
 # Reviewer
 class DataReviewer():
-	def __init__(self, reviewer, date, total, lackinfo):
-		self.reviewer = reviewer	
-		self.date = date
-		self.total = total
-		self.lackinfo = lackinfo
+	def __init__(self):
+		self.reviewer = None	
+		self.date = None
+		self.total = None
+		self.lackinfo = None
+
+	def setAttribute(self, name, value):
+		if name == "reviewer":
+			self.reviewer = value
+		elif name == "date":
+			self.date = value
+		elif name == "total":
+			self.total = value 
+		elif name == "lackinfo":
+			self.lackinfo = value 
 	
 # Material dose
 class MaterialDoseItem(DMItem):
@@ -125,7 +147,7 @@ class DataMaterialRow(object):
 
 	def __init__(self):
 		self.index = 1 # mp data index for claim, default 0 
-		self.dataMaterialRowD = {"auc": None, "cmax": None, "clearance": None, "halflife": None, "dips": None, "reviewer": None, "participants": None, "object_dose": None, "subject_dose": None, "evRelationship": None, "phenotype": None, "grouprandom": None, "parallelgroup": None}
+		self.dataMaterialRowD = {"auc": None, "cmax": None, "clearance": None, "halflife": None, "dipsquestion": None, "reviewer": None, "participants": None, "object_dose": None, "subject_dose": None, "evRelationship": None, "phenotype": None, "grouprandom": None, "parallelgroup": None}
 
 	# questions for method: group randomization and parellel group design
 	def setGroupRandom(self, value): 
@@ -151,7 +173,7 @@ class DataMaterialRow(object):
 		return self.dataMaterialRowD["evRelationship"]
 
 	# Mp data item get and set
-	def setDataItem(self, obj): # obj: DataItem
+	def setDataRatioItem(self, obj): # obj: DataRatioItem
 		if self.dataMaterialRowD[obj.field] != None:
 			#print "[Warning] Data item already has the field: " + obj.field
 			return
@@ -161,22 +183,22 @@ class DataMaterialRow(object):
 			print "[Error] data item undefined: " + obj.field
 
 	# Mp data ratio
-	def getDataItemInRow(self, field): # return DataItem
-		if field in ["auc", "cmax", "clearance", "halflife","dips","reviewer"]:
+	def getDataRatioItemInRow(self, field): # return DataRatioItem
+		if field in ["auc", "cmax", "clearance", "halflife"]:
 			return self.dataMaterialRowD[field]
 		else:
-			print "[Error] get DataItem field error: " + field
+			print "[Error] get DataRatioItem field error: " + field
 
 	# Mp data dips questions
-	def setDips(self, obj):
-		self.dataMaterialRowD["dips"] = obj
-	def getDips(self):
-		return self.dataMaterialRowD["dips"]
+	def setDataDips(self, obj):
+		self.dataMaterialRowD["dipsquestion"] = obj
+	def getDataDips(self):
+		return self.dataMaterialRowD["dipsquestion"]
 
 	# Mp data reviewer information
-	def setReviewer(self, obj):
+	def setDataReviewer(self, obj):
 		self.dataMaterialRowD["reviewer"] = obj
-	def getReviewer(self):
+	def getDataReviewer(self):
 		return self.dataMaterialRowD["reviewer"]
 
 

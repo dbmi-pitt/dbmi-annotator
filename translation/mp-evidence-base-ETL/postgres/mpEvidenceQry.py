@@ -12,11 +12,10 @@
  # See the License for the specific language governing permissions and
  # limitations under the License.
 
-import psycopg2
 import sys, uuid, datetime
 
 #sys.path.append('../model/')
-from model.micropublication import Annotation, DataMaterialRow, DMItem, DataItem, MaterialDoseItem, MaterialParticipants, MaterialPhenotypeItem
+from model.micropublication import Annotation, DataMaterialRow, DMItem, DataRatioItem, MaterialDoseItem, MaterialParticipants, MaterialPhenotypeItem, DataReviewer, DataDips
 
 ## query all claim annotation by document URL
 ## return {{key: id-1, value: Ann-1"}, {key: id-2, value: Ann-2"}, ...}
@@ -149,8 +148,8 @@ def queryMpData(conn, annotation, claimid):
 	from mp_data_annotation dann 
 	join oa_data_body dbody on dann.has_body = dbody.id 
 	join data_field df on df.data_body_id = dbody.id 
-	join oa_target t on dann.has_target = t.id
-	join oa_selector s on t.has_selector = s.id
+	left join oa_target t on dann.has_target = t.id
+	left join oa_selector s on t.has_selector = s.id
 	where dann.mp_claim_id = %s
 	""" % (claimid)
 
@@ -168,38 +167,42 @@ def queryMpData(conn, annotation, claimid):
 
 		if annotation.getSpecificDataMaterial(index) == None:
 			dmRow = DataMaterialRow() # create new row of data & material
-			dataItem = DataItem(dType)
-			dataItem.setAttribute(dfType, value) # add value
-			dataItem.setSelector("", exact, "")
+			annotation.setSpecificDataMaterial(dmRow, index)
+		else: # current row of data & material exists 
+			dmRow = annotation.getSpecificDataMaterial(index)
 
-			dmRow.setDataItem(dataItem)
+		if dType in ["auc", "cmax" , "clearance", "halflife"]:
+			if dmRow.getDataRatioItemInRow(dType): # DataRatioItem exists
+				dataRatioItem = dmRow.getDataRatioItemInRow(dType)
+			else: # create new dataRatioItem
+				dataRatioItem = DataRatioItem(dType)
+				dataRatioItem.setSelector("", exact, "")
+			dataRatioItem.setAttribute(dfType, value) # add value
+			dmRow.setDataRatioItem(dataRatioItem)
 
+		if dType == "reviewer":
+			if dmRow.getDataReviewer(): # DataReviewer exists
+				dataReviewer = dmRow.getDataReviewer()
+			else:
+				dataReviewer = DataReviewer()
+			dataReviewer.setAttribute(dfType, value)
+			dmRow.setDataReviewer(dataReviewer)
+
+		if dType == "dipsquestion": #DataDips exists
+			if dmRow.getDataDips(): 
+				dips = dmRow.getDataDips()
+			else:
+				dips = DataDips()
+			dips.setQuestion(dfType, value)
+			dmRow.setDataDips(dips)
+
+		if dmRow.getEvRelationship():
 			if evRelationship is True:				
 				dmRow.setEvRelationship("supports")
 			elif evRelationship is False:
 				dmRow.setEvRelationship("refutes")
 
-			annotation.setSpecificDataMaterial(dmRow, index)
-
-		else: # current row of data & material exists 
-			dmRow = annotation.getSpecificDataMaterial(index)
-
-			if dmRow.getDataItemInRow(dType) != None: # current DataItem exists
-				dataItem = dmRow.getDataItemInRow(dType)
-
-			else: # current DataItem not exists
-				dataItem = DataItem(dType) 
-				dmRow.setDataItem(dataItem)
-
-			dataItem.setAttribute(dfType, value)
-			dataItem.setSelector("", exact, "")
-
-			if dmRow.getEvRelationship() == None and evRelationship:
-				dmRow.setEvRelationship("supports")
-			elif dmRow.getEvRelationship() == None and not evRelationship:
-				dmRow.setEvRelationship("refutes")
 	return annotation
-
 
 # query material items for claim annotation
 # return list of MaterialItems

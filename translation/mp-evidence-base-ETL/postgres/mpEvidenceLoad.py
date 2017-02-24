@@ -219,11 +219,14 @@ def insert_data_field(conn, row, data_body_id, data_type):
 	if data_type == "reviewer":
 		cur.execute("INSERT INTO data_field (urn, data_body_id, data_field_type, value_as_string, value_as_number) VALUES ( '" + uuid.uuid4().hex + "', " + str(data_body_id) + ", 'reviewer', '" + (row["reviewer"] or "") + "', NULL), ( '" + uuid.uuid4().hex + "', " + str(data_body_id) + ", 'date', '" + (row["reviewerdate"] or "") + "', NULL), ( '" + uuid.uuid4().hex + "', " + str(data_body_id) + ", 'total', '" + (str(row["reviewertotal"]) or "") + "', NULL), ( '" + uuid.uuid4().hex + "', " + str(data_body_id) + ", 'lackinfo', '" + (str(row["reviewerlackinfo"]) or "") + "', NULL);")
 
-	if data_type == "dipsquestion" and "undefined" not in row["dipsquestion"]:
+	if data_type == "dipsquestion" and "|" in row["dipsquestion"]:
 		dipsQsL = row["dipsquestion"].split('|')
-
-		if dipsQsL and len(dipsQsL) == 10:
-			cur.execute("INSERT INTO data_field (urn, data_body_id, data_field_type, value_as_string, value_as_number) VALUES ( '" + uuid.uuid4().hex + "', " + str(data_body_id) + ", 'q1', '" + dipsQsL[0] + "', NULL), ( '" + uuid.uuid4().hex + "', " + str(data_body_id) + ", 'q2', '" + dipsQsL[1] + "', NULL), ( '" + uuid.uuid4().hex + "', " + str(data_body_id) + ", 'q3', '" + dipsQsL[2] + "', NULL), ( '" + uuid.uuid4().hex + "', " + str(data_body_id) + ", 'q4', '" + dipsQsL[3] + "', NULL), ( '" + uuid.uuid4().hex + "', " + str(data_body_id) + ", 'q5', '" + dipsQsL[4] + "', NULL), ( '" + uuid.uuid4().hex + "', " + str(data_body_id) + ", 'q6', '" + dipsQsL[5] + "', NULL), ( '" + uuid.uuid4().hex + "', " + str(data_body_id) + ", 'q7', '" + dipsQsL[6] + "', NULL), ( '" + uuid.uuid4().hex + "', " + str(data_body_id) + ", 'q8', '" + dipsQsL[7] + "', NULL), ( '" + uuid.uuid4().hex + "', " + str(data_body_id) + ", 'q9', '" + dipsQsL[8] + "', NULL), ( '" + uuid.uuid4().hex + "', " + str(data_body_id) + ", 'q10', '" + dipsQsL[9] + "', NULL);")
+		idx = 1
+		if dipsQsL:
+			for qs in dipsQsL:
+				if qs and qs != "":
+					cur.execute("INSERT INTO data_field (urn, data_body_id, data_field_type, value_as_string, value_as_number) VALUES (%s, %s, %s, %s, %s);",(uuid.uuid4().hex , str(data_body_id), 'q'+str(idx), qs, None))
+					idx += 1
 
 # HIGHLIGHT ANNOTATION ########################################################
 def insert_highlight_annotation(conn, type, has_body, has_target, creator, date_created, date_updated):

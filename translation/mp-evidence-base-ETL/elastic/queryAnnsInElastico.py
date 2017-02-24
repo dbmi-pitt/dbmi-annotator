@@ -126,10 +126,11 @@ def addDataMaterialToAnnDict(data, material, annDict):
 		annDict["dipsquestion"] = dipsQsStr
 
 	if "reviewer" in data and data["reviewer"]:
+
 		annDict["reviewer"] = data["reviewer"]["reviewer"] or ""
 		annDict["reviewerdate"] = data["reviewer"]["date"] or ""
 		annDict["reviewertotal"] = data["reviewer"]["total"] or ""
-		annDict["reviewerlackinfo"] = data["reviewer"]["lackInfo"] or ""
+		annDict["reviewerlackinfo"] = data["reviewer"]["lackInfo"]
 
 	if "grouprandom" in data and data["grouprandom"]:
 		annDict["grouprandomization"] = data["grouprandom"] or ""

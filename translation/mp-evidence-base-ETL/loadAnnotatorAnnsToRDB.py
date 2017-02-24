@@ -19,18 +19,28 @@ import sys
 import validate as test
 
 from postgres import connection as pgconn
-from postgres import mpevidence as pgmp
+from postgres import mpEvidenceLoad as pgmp
+from postgres import omopConceptQry as pgcp
 from elastic import queryAnnsInElastico as es
 
 reload(sys)  
 sys.setdefaultencoding('utf8')
 
-#1. pip install psycopg2
-#csvfiles = ['data/mp-annotation.tsv']
-
-
 annsDictCsv = {} ## keep document and count of annotations for validation after load
 curr_date = datetime.datetime.now()
+
+
+def initDideoConceptsDict():
+
+	## dict for dideo omop concept id, temp use subject as precipitant
+	dideoDict = {"DIDEO_00000015": None, "DIDEO_00000005": None, "OBI_0000427": None, "DIDEO_00000013": None, "DIDEO_00000012": None, "DIDEO_00000093": None, "DIDEO_00000099": None, "DIDEO_00000101": None, "DIDEO_00000100": None, "DIDEO_00000103": None, "DIDEO_00000076": None}
+
+	results = subject_concept_code = pgcp.getConceptCodeByVocabId(conn, "DIDEO")
+	for res in results:
+		if res[0] and res[1] and res[1] in dideoDict:
+			dideoDict[res[1]] = res[0]
+	return dideoDict
+
 
 def preprocess(resultsL):
 
@@ -43,6 +53,8 @@ def preprocess(resultsL):
 					ann.update({'subject': 'drug1', 'object': 'drug2'})
 				elif ann['precipitant'] == 'drug2':
 					ann.update({'subject': 'drug2', 'object': 'drug1'})
+				else:
+					ann.update({'subject': 'drug1', 'object': 'drug2'})
 				annsL.append(escapeRow(ann))
 				addAnnsToCount(annsDictCsv, ann['document'])
 			else:
@@ -55,6 +67,8 @@ def preprocess(resultsL):
 					ann.update({'subject': 'drug1', 'object': 'enzyme'})
 				elif ann['precipitant'] == 'enzyme':
 					ann.update({'subject': 'enzyme', 'object': 'drug1'})
+				else:
+					ann.update({'subject': 'drug1', 'object': 'drug2'})
 
 				annsL.append(escapeRow(ann))
 				addAnnsToCount(annsDictCsv, ann['document'])
@@ -123,6 +137,9 @@ def load_highlight_annotation(conn, highlightD, creator):
 
 
 def generateHighlightSet(row, highlightD):
+
+	if not row["subject"] or not row["object"]:
+		print row
 
 	subjectDrug = row[row["subject"]]; objectDrug = row[row["object"]]; source = row["document"]
 	if source in highlightD:
@@ -227,8 +244,15 @@ def load_mp_claim_annotation(conn, row, creator):
 		s_drug = row[row["subject"]]
 		o_drug = row[row["object"]]
 
-		pgmp.insert_qualifier(conn, "subject", s_drug, None, None, None, None, oa_claim_body_id)
-		pgmp.insert_qualifier(conn, "object", o_drug, None, None, None, None, oa_claim_body_id)
+		# subject_concept_id = dideoDict["subject"]
+		# object_concept_id = dideoDict["object"]
+		subject_concept_code = None
+		subject_concept_id = None
+		object_concept_code = None
+		object_concept_id = None
+
+		pgmp.insert_qualifier(conn, "subject", s_drug, None, None, subject_concept_code, subject_concept_id, oa_claim_body_id)
+		pgmp.insert_qualifier(conn, "object", o_drug, None, None, object_concept_code, object_concept_id, oa_claim_body_id)
 
 	## extran enzyme not in either subject or object
 	if row["enzyme"] and "enzyme" not in [row["subject"], row["object"]]:
@@ -336,13 +360,13 @@ def main():
 		print "Usage: python loadAnnotatorAnnsToRDB.py <elastic host> <elastic port> <pg host> <pg port> <pg username> <pg password> <OPTIONS (1: clean all tables, 2 drop and recreate all tables, 0: keep existing data)>"
 		sys.exit(1)
 
-	# qryCondition = {'query': { 'term': {'annotationType': 'MP'}}}
-	qryCondition = {"query": {"bool": 
-		{"must": [
-			{"term": {"rawurl": "http://localhost/PMC/PMC3187007.html"}},
-			{"term": {"annotationType": "MP"}}
-		]
-	 }}}
+	qryCondition = {'query': { 'term': {'annotationType': 'MP'}}}
+	# qryCondition = {"query": {"bool": 
+	# 	{"must": [
+	# 		{"term": {"rawurl": "http://localhost/PMC/PMC3187007.html"}},
+	# 		{"term": {"annotationType": "MP"}}
+	# 	]
+	#  }}}
 
 	conn = pgconn.connect_postgreSQL(PG_HOST, PG_USER, PG_PASSWORD, PG_DATABASE)
 	pgconn.setDbSchema(conn, "ohdsi")
