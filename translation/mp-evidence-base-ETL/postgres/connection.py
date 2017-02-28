@@ -1,6 +1,6 @@
 import psycopg2
 
-def connect_postgreSQL(hostname, username, password, database):
+def connect_postgres(hostname, username, password, database):
 	conn = psycopg2.connect(host=hostname, user=username, password=password, dbname=database)	
 	print("Postgres connection created")	
 	return conn

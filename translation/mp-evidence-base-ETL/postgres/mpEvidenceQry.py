@@ -13,13 +13,38 @@
  # limitations under the License.
 
 import sys, uuid, datetime
-
-#sys.path.append('../model/')
+from sets import Set
 from model.micropublication import Annotation, DataMaterialRow, DMItem, DataRatioItem, MaterialDoseItem, MaterialParticipants, MaterialPhenotypeItem, DataReviewer, DataDips
 
+######################### QUERY MP Annotation ##########################
+# query all mp annotations
+# return annotations with claim, data and material
+def queryAllMpAnnotation(conn):
+	mpAnnotations = []
+	claimAnns = queryAllMpClaim(conn)
+
+	for claimId,claimAnn in claimAnns.items():
+
+		claimDataAnno = queryMpData(conn, claimAnn, claimId)
+		claimDataMatAnno = queryMpMaterial(conn, claimDataAnno, claimId)
+
+		mpAnnotations.append(claimDataMatAnno)
+	return mpAnnotations
+
+
+# query all mp annotations
+# return annotations with claim, data and material
+def queryMpAnnotationByUrn(conn, annotationUrn):
+	claimAnn = queryMpClaimByUrn(conn, annotationUrn)
+	claimDataAnn = queryMpData(conn, claimAnn, claimAnn.claimid)
+	claimDataMatAnn = queryMpMaterial(conn, claimDataAnn, claimAnn.claimid)
+
+	return claimDataMatAnn
+
+######################### QUERY MP Claim ##########################
 ## query all claim annotation by document URL
 ## return {{key: id-1, value: Ann-1"}, {key: id-2, value: Ann-2"}, ...}
-def queryMpClaimByUrl(conn, url):
+def queryAllMpClaim(conn):
 	annotations = {} # key: id, value obj Annotation
 	cur = conn.cursor()
 
@@ -29,8 +54,8 @@ def queryMpClaimByUrl(conn, url):
 	join qualifier q on cbody.id = q.claim_body_id
 	join method met on cann.id = met.mp_claim_id 
 	join oa_target t on cann.has_target = t.id
-	join oa_selector s on t.has_selector = s.id
-	where t.has_source = '%s';   """ % (url)
+	join oa_selector s on t.has_selector = s.id;
+	"""
 	cur.execute(qry)
 		
 	for row in cur.fetchall():
@@ -78,7 +103,7 @@ def queryMpClaimByUrl(conn, url):
 	return annotations
 
 
-def queryMpClaimByUrn(conn, urn):
+def queryMpClaimUrn(conn, urn):
 	"""
 	query claim annotation by annotationId
 	return Annotation
@@ -138,7 +163,7 @@ def queryMpClaimByUrn(conn, urn):
 	return annotation
 
 		
-
+######################### QUERY MP Data ##########################
 # query data items for claim annotation
 # return list of annotation with data items attached
 def queryMpData(conn, annotation, claimid):
@@ -204,6 +229,7 @@ def queryMpData(conn, annotation, claimid):
 
 	return annotation
 
+######################### QUERY MP Material ##########################
 # query material items for claim annotation
 # return list of MaterialItems
 def queryMpMaterial(conn, annotation, claimid):
@@ -295,12 +321,25 @@ def queryMpMaterial(conn, annotation, claimid):
 	return annotation
 
 
-# query all mp annotations
-# return annotations with claim, data and material
-def queryMpAnnotationByUrn(conn, annotationUrn):
-	claimAnn = queryMpClaimByUrn(conn, annotationUrn)
-	claimDataAnn = queryMpData(conn, claimAnn, claimAnn.claimid)
-	claimDataMatAnn = queryMpMaterial(conn, claimDataAnn, claimAnn.claimid)
+######################### QUERY Highlight Annotaiton ##########################
+# query all highlight annotation
+# return dict for drug set in document   dict {"doc url": "drug set"} 
+def queryHighlightAnns(conn):
+	highlightD = {}
 
-	return claimDataMatAnn
+	qry = """SELECT h.id, t.has_source, s.exact 
+	FROM highlight_annotation h, oa_target t, oa_selector s
+	WHERE h.has_target = t.id
+	AND t.has_selector = s.id;"""
 
+	cur = conn.cursor()
+	cur.execute(qry)
+
+	for row in cur.fetchall():
+		source = row[1]; drugname = row[2]
+		
+		if source in highlightD:		
+			highlightD[source].add(drugname)
+		else:
+			highlightD[source] = Set([drugname])
+	return highlightD

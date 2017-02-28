@@ -75,10 +75,10 @@ python load-rdb-annotations.py <pg hostname> <pg username> <pg password> <es hos
 
 Development mode:
 ex. 
-$ python load-rdb-annotations.py localhost dbmiannotator dbmi2016 localhost test@gmail.com
+$ python translateRDB2Elastic.py localhost dbmiannotator dbmi2016 localhost test@gmail.com
 
 Docker container:
-$ python load-rdb-annotations.py postgres dbmiannotator dbmi2016 elasticsearch test@gmail.com
+$ python translateRDB2Elastic.py postgres dbmiannotator dbmi2016 elasticsearch test@gmail.com
 
 -----------------------------------------------------------------------
 Load domeo annotations from csv and load into postgres DB (deprecated)

@@ -322,7 +322,7 @@ def validate():
 	PG_PASSWORD = "dbmi2016"
 	PG_DATABASE = "mpevidence"
 
-	conn = pgconn.connect_postgreSQL(PG_HOST, PG_USER, PG_PASSWORD, PG_DATABASE)
+	conn = pgconn.connect_postgres(PG_HOST, PG_USER, PG_PASSWORD, PG_DATABASE)
 	pgconn.setDbSchema(conn, "ohdsi")
 
 	## "DDI clinical trial", "Phenotype clinical study", "Case Report", "Statement"

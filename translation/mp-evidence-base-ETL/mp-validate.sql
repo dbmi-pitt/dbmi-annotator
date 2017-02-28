@@ -1,12 +1,29 @@
--- Get material information based on claim label
+-- Get Mp claim information 
+select cann.id, t.has_source, cann.creator, cann.date_created, s.exact, cbody.label, qualifierrole(q.subject, q.predicate, q.object) as qtype, qvalue, cann.rejected_statement, cann.rejected_statement_reason, cann.rejected_statement_comment, met.entered_value, cann.negation 
+from mp_claim_annotation cann join oa_claim_body cbody on cann.has_body = cbody.id
+join qualifier q on cbody.id = q.claim_body_id
+join method met on cann.id = met.mp_claim_id 
+join oa_target t on cann.has_target = t.id
+join oa_selector s on t.has_selector = s.id;
+
+
+-- Get Mp data by claim id
+select dann.type, df.data_field_type, df.value_as_string, df.value_as_number, s.exact, s.prefix, s.suffix, dann.mp_data_index, dann.ev_supports, dann.rejected, dann.rejected_reason, dann.rejected_comment
+from mp_data_annotation dann 
+join oa_data_body dbody on dann.has_body = dbody.id 
+join data_field df on df.data_body_id = dbody.id 
+left join oa_target t on dann.has_target = t.id
+left join oa_selector s on t.has_selector = s.id
+where dann.mp_claim_id = %s
+
+
+-- Get MP Material information by claimId
 select mann.type, mf.material_field_type, mf.value_as_string, mf.value_as_number, s.exact, s.prefix, s.suffix, mann.mp_data_index, mann.ev_supports
 from mp_material_annotation mann join oa_material_body mbody on mann.has_body = mbody.id
 join material_field mf on mf.material_body_id = mbody.id
-join oa_target t on mann.has_target = t.id
-join oa_selector s on t.has_selector = s.id
-join mp_claim_annotation cann on mann.mp_claim_id = cann.id
-join oa_claim_body cbody on cann.id = cbody.id
-where cbody.label = 'clarithromycin_interact with_rivaroxaban'
+left join oa_target t on mann.has_target = t.id
+left join oa_selector s on t.has_selector = s.id
+where mann.mp_claim_id = %s 
 
 -- how many claims from amy: 336
 select count(*)

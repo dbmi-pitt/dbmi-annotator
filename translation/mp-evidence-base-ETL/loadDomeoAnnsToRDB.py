@@ -14,7 +14,7 @@
 
 import csv
 import psycopg2
-import uuid
+import uuid, os
 import datetime
 from sets import Set
 import sys  
@@ -27,8 +27,7 @@ sys.setdefaultencoding('utf8')
 
 #1. pip install psycopg2
 
-csvfiles = ['data/pkddi-katrina-latest-08152016.csv', 'data/pkddi-amy-latest-08152016.csv']
-
+SPLS_CSVS = ['data/pkddi-katrina-latest-08152016.csv', 'data/pkddi-amy-latest-08152016.csv']
 PG_DATABASE = 'mpevidence'
 DB_SCHEMA = "../../db-schema/mp_evidence_schema.sql"
 
@@ -228,14 +227,7 @@ def load_mp_data_annotation(conn, row, mp_claim_id, has_target, creator):
 
 def helper_load_data(conn, row, mp_claim_id, has_target, creator, data_type):
 
-	if ("supports" in row["evidenceType"] and "positive" in row["modality"]) or ("challenges" in row["evidenceType"] and "negative" in row["modality"]):
-		ev_supports = True
-	elif ("supports" in row["evidenceType"] and "negative" in row["modality"]) or ("challenges" in row["evidenceType"] and "positive" in row["modality"]):
-		ev_supports = False
-	else:
-		print "[ERROR] helper_load_material, evidence relationship error: evidenceType (%s), modality (%s)" % (row["evidenceType"], row["modality"])
-		sys.exit(1)
-
+	ev_supports = getEvRelationship(row["modality"], row["evidenceType"])
 	cur = conn.cursor()
 	urn = uuid.uuid4().hex
 	cur.execute("INSERT INTO mp_data_annotation (urn, type, has_target, creator, mp_claim_id, mp_data_index, ev_supports, date_created) VALUES (%s, %s, %s, %s, %s, %s, %s, %s);", (urn, data_type, str(has_target), creator, str(mp_claim_id), 1, ev_supports, parse_date(row['date'])))
@@ -286,13 +278,7 @@ def load_mp_material_annotation(conn, row, mp_claim_id, has_target, creator):
 
 def helper_load_material(conn, row, mp_claim_id, has_target, creator, data_type):
 
-	if ("supports" in row["evidenceType"] and "positive" in row["modality"]) or ("challenges" in row["evidenceType"] and "negative" in row["modality"]):
-		ev_supports = True
-	elif ("supports" in row["evidenceType"] and "negative" in row["modality"]) or ("challenges" in row["evidenceType"] and "positive" in row["modality"]):
-		ev_supports = False
-	else:
-		print "[ERROR] helper_load_material, evidence relationship error: evidenceType (%s), modality (%s)" % (row["evidenceType"], row["modality"])
-		sys.exit(1)
+	ev_supports = getEvRelationship(row["modality"], row["evidenceType"])
 
 	cur = conn.cursor()
 	urn = uuid.uuid4().hex
@@ -349,50 +335,57 @@ def parse_date(csv_date):
 
 
 #   add column: predicate, subject, object, subjectDose, objectDose
-def preprocess(csvfile):
+def preprocess(inputs, output):
 
+	if os.path.exists(output):
+		os.remove(output)		
+		
 	csv_columns = ['source', 'date', 'assertionType', 'evidenceType', 'prefix', 'exactText', 'suffix', 'modality', 'statementType', 'comment', 'drug1Lab', 'drug1Type', 'drug1Role', 'dose1', 'drug2Lab', 'drug2Type', 'drug2Role', 'dose2', 'objectRegimens', 'objectFormulation', 'objectDuration', 'preciptRegimens', 'preciptFormulation', 'preciptDuration', 'numOfParticipants', 'auc', 'aucType', 'aucDirection', 'clearance', 'clearanceType', 'clearanceDirection', 'cmax', 'cmaxType', 'cmaxDirection', 'halflife', 'halflifeType', 'halflifeDirection', 'predicate', 'precipt', 'object', 'preciptDose', 'objectDose']
-	writer = csv.DictWriter(open('data/preprocess-domeo.csv', 'w'), fieldnames=csv_columns)
+	writer = csv.DictWriter(open(output, 'a'), fieldnames=csv_columns)
 	writer.writeheader()
-	reader = csv.DictReader(utf_8_encoder(open(csvfile, 'r')))
-	all = []
-	for row in reader:
-		#print(row)
 
-		# update method
-		if isClinicalTrial(row):
-			row.update({'assertionType': 'clinical trial'})
-		else:
-			row.update({'assertionType': 'statement'})
+	allRows = []
 
-		# translate Domeo old form for dose (tablet -> Oral)
-		if row['objectFormulation'] == "tablet":
-			row['objectFormulation'] = "Oral"
-		if row['preciptFormulation'] == "tablet":
-			row['preciptFormulation'] = "Oral"
+	for csvfile in inputs:
+		reader = csv.DictReader(utf_8_encoder(open(csvfile, 'r')))
+		next(reader, None) # skip the header
+		for row in reader:			
+			row['source'] = row['source'].replace("dbmi-icode-01.dbmi.pitt.edu:80","localhost")
 
-		# all SPLs annotation's method is interact_with
-		row.update({'predicate': 'interact_with'})
+			# update method
+			if isClinicalTrial(row):
+				row.update({'assertionType': 'clinical trial'})
+			else:
+				row.update({'assertionType': 'statement'})
 
-		# make assertion in  subject (precipt) predicate object
-		if 'object' in row['drug1Role'] and 'precipitant' in row['drug2Role']:
-			row.update({'precipt': row['drug2Lab'], 'object': row['drug1Lab'], 'preciptDose': row['dose2'], 'objectDose': row['dose1']})
-		elif 'precipitant' in row['drug1Role'] and 'object' in row['drug2Role']:
-			row.update({'precipt': row['drug1Lab'], 'object': row['drug2Lab'], 'preciptDose': row['dose1'], 'objectDose': row['dose2']})
-		else:
-			print "[ERROR] drug role information not available: document (%s), drug1 (%s) - drug2(%s)" % (row['source'], row['drug1Lab'], row['drug2Lab'])
+			# translate Domeo old form for dose (tablet -> Oral)
+			if row['objectFormulation'] == "tablet":
+				row['objectFormulation'] = "Oral"
+			if row['preciptFormulation'] == "tablet":
+				row['preciptFormulation'] = "Oral"
 
-		if "'" in row['prefix']:
-			row['prefix'] = row['prefix'].replace("'", "''")
-		if "'" in row['exactText']:
-			row['exactText'] = row['exactText'].replace("'", "''")
-		if "'" in row['suffix']:
-			row['suffix'] = row['suffix'].replace("'", "''")
+			# all SPLs annotation's method is interact_with
+			row.update({'predicate': 'interact_with'})
 
-		all.append(row)
-		addAnnsToCount(annsDictCsv, row['source'])
+			# make assertion in  subject (precipt) predicate object
+			if 'object' in row['drug1Role'] and 'precipitant' in row['drug2Role']:
+				row.update({'precipt': row['drug2Lab'], 'object': row['drug1Lab'], 'preciptDose': row['dose2'], 'objectDose': row['dose1']})
+			elif 'precipitant' in row['drug1Role'] and 'object' in row['drug2Role']:
+				row.update({'precipt': row['drug1Lab'], 'object': row['drug2Lab'], 'preciptDose': row['dose1'], 'objectDose': row['dose2']})
+			else:
+				print "[ERROR] drug role information not available: document (%s), drug1 (%s) - drug2(%s)" % (row['source'], row['drug1Lab'], row['drug2Lab'])
 
-	writer.writerows(all)
+			if "'" in row['prefix']:
+				row['prefix'] = row['prefix'].replace("'", "''")
+			if "'" in row['exactText']:
+				row['exactText'] = row['exactText'].replace("'", "''")
+			if "'" in row['suffix']:
+				row['suffix'] = row['suffix'].replace("'", "''")
+
+			allRows.append(row)
+			addAnnsToCount(annsDictCsv, row['source'])
+
+	writer.writerows(allRows)
 
 def addAnnsToCount(annsDict, document):
 	if document in annsDict:
@@ -400,41 +393,64 @@ def addAnnsToCount(annsDict, document):
 	else:
 		annsDict[document] = 1
 
+def getEvRelationship(modality, evidenceType):
+	if ("supports" in evidenceType and "positive" in modality) or ("challenges" in evidenceType and "negative" in modality):
+		return True
+	elif ("supports" in evidenceType and "negative" in modality) or ("challenges" in evidenceType and "positive" in modality):
+		return False
+	else:
+		print "[ERROR] getEvRelationship modality (%s), evidenceType (%s)" % (modality, evidenceType)
+		sys.exit(0)
+
+def getNegationForStatement(modality, evidenceType):
+	if ("supports" in evidenceType and "positive" in modality) or ("challenges" in evidenceType and "negative" in modality):
+		return False
+	elif ("supports" in evidenceType and "negative" in modality) or ("challenges" in evidenceType and "positive" in modality):
+		return True
+	else:
+		print "[ERROR] getNegationForStatement (%s)" % (modality, evidenceType)
+		sys.exit(0)
+
+
 def load_data_from_csv(conn, reader, creator):
 
 	highlightD = {} # drug highlight set in documents {"doc url" : "drug set"}
 
 	for row in reader:
-
 		prefix = row["prefix"]; exact = row["exactText"]; suffix = row["suffix"]
 		source = row["source"]; date = row["date"]
 		subject = row["precipt"]; predicate = row["predicate"]; object = row["object"]
-		# when method is statement, negation is evidence supports/refutes
-		negation = "No" # translate negation from Domeo SPLs an
-		if row["assertionType"] == "drug-drug-interaction" and "negative" in row["modality"]:
-			negation = "Yes"			
 
+		# when method is statement, translate negation from Domeo SPLs annotation
+		if row["assertionType"] == "statement":
+			negation = getNegationForStatement(row["modality"], row["evidenceType"])	
+		# when method is clinicaltrial, evidence relationship supports/refutes
+		elif row["assertionType"] == "clinical trial":
+			negation = False		
+				
 		oa_selector_id = load_oa_selector(conn, prefix, exact, suffix)
 		oa_target_id = load_oa_target(conn, source, oa_selector_id)
 		oa_claim_body_id = load_oa_claim_body(conn, subject, predicate, object, exact)
 		load_qualifier(conn, row, oa_claim_body_id)
+
 		mp_claim_id = load_mp_claim_annotation(conn, date, oa_claim_body_id, oa_target_id, creator, negation)
 
 		update_oa_claim_body(conn, mp_claim_id, oa_claim_body_id)
 		load_mp_data_annotation(conn, row, mp_claim_id, oa_target_id, creator)
 		load_mp_material_annotation(conn, row, mp_claim_id, oa_target_id, creator)
 		load_method(conn, row, mp_claim_id)
-
 		generateHighlightSet(row, highlightD)   # add unique drugs to set
 		
 	load_highlight(conn, highlightD)  # load drug highlight annotation
-
 	conn.commit()
 
 def main():
-
 	print("[INFO] connect postgreSQL ...")
-	conn = pgconn.connect_postgreSQL(PG_HOST, PG_USER, PG_PASSWORD, PG_DATABASE)
+
+	creator = "pharmacist"
+	PREPROCESSED_CSV = 'data/preprocess-domeo.csv'
+
+	conn = pgconn.connect_postgres(PG_HOST, PG_USER, PG_PASSWORD, PG_DATABASE)
 	pgconn.setDbSchema(conn, "ohdsi")
 
 	if isClean == "1":
@@ -449,13 +465,10 @@ def main():
 		print "[INFO] Drop and recreate all tables done!"
 	
 	print "[INFO] begin load data ..."
+	preprocess(SPLS_CSVS, PREPROCESSED_CSV)
 
-
-	for csvfile in csvfiles:
-		preprocess(csvfile)
-		reader = csv.DictReader(utf_8_encoder(open('data/preprocess-domeo.csv', 'r')))
-		creator = csvfile.split('-')[1]
-		load_data_from_csv(conn, reader, creator)
+	reader = csv.DictReader(utf_8_encoder(open(PREPROCESSED_CSV, 'r')))
+	load_data_from_csv(conn, reader, creator)
 
 	print "[INFO] annotation load completed!"
 

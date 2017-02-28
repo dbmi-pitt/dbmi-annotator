@@ -368,7 +368,7 @@ def main():
 	# 	]
 	#  }}}
 
-	conn = pgconn.connect_postgreSQL(PG_HOST, PG_USER, PG_PASSWORD, PG_DATABASE)
+	conn = pgconn.connect_postgres(PG_HOST, PG_USER, PG_PASSWORD, PG_DATABASE)
 	pgconn.setDbSchema(conn, "ohdsi")
 
 	load(conn, qryCondition, ES_HOST, ES_PORT, DB_SCHEMA, CREATOR, isClean)
