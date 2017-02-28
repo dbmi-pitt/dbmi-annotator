@@ -112,7 +112,11 @@ def loadMpAnnotation(annotation, email):
 
 	# MP Claim
 	mpAnn["argues"]["method"] = methodM[annotation.method] # method name translate
-	mpAnn["argues"]["negation"] = annotation.negation
+
+	if annotation.negation == True:
+		mpAnn["argues"]["negation"] = "Yes"
+	elif annotation.negation == False:
+		mpAnn["argues"]["negation"] = "No"
 
 	mpAnn["argues"]["rejected"]["reason"] = annotation.rejected
 

@@ -113,7 +113,7 @@ def load_method(conn, row, mp_claim_id):
 
 # When dose 1 and dose2 available and one of in auc, cmax, clearance, halflife available then return True, else return False
 def isClinicalTrial(row):
-	if (row["dose1"] and row["dose1"].lower() != "unk") and (row["dose2"] and row["dose2"].lower() != "unk") and ((row["auc"] and row["auc"].lower() != "unk") or (row["cmax"] and row["cmax"].lower() != "unk") or (row["clearance"] and row["clearance"].lower() != "unk") or (row["halflife"] and row["halflife"].lower() != "unk")):
+	if ((row["dose1"] and row["dose1"].lower() != "unk") or (row["dose2"] and row["dose2"].lower() != "unk")) and ((row["auc"] and row["auc"].lower() != "unk") or (row["cmax"] and row["cmax"].lower() != "unk") or (row["clearance"] and row["clearance"].lower() != "unk") or (row["halflife"] and row["halflife"].lower() != "unk")):
 		return True
 	else:
 		return False
