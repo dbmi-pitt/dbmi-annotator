@@ -7,8 +7,8 @@ public/dbmiannotator/js/app.bundle.js
 public/dbmiannotator/js/annotator.min.js
 
 # temp file for ETL program
-translation/csv-data-loader/data/preprocess-domeo.csv
-translation/csv-data-loader/data/preprocess-annotator.csv
+translation/mp-evidence-base-ETL/data/preprocess-domeo.csv
+translation/mp-evidence-base-ETL/data/preprocess-annotator.csv
 
 # text editor cache file 
 *~
