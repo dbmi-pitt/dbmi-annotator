@@ -18,7 +18,8 @@ import uuid
 import datetime
 from sets import Set
 import sys  
-from dbOperations import *
+from postgres import connection as pgconn
+from postgres import mpEvidenceLoad as pgmp
 from validate import validateResults
 
 reload(sys)  
@@ -28,16 +29,16 @@ sys.setdefaultencoding('utf8')
 
 csvfiles = ['data/pkddi-katrina-latest-08152016.csv', 'data/pkddi-amy-latest-08152016.csv']
 
-DATABASE = 'mpevidence'
+PG_DATABASE = 'mpevidence'
 DB_SCHEMA = "../../db-schema/mp_evidence_schema.sql"
 
 annsDictCsv = {} ## keep document and count of annotations for validation after load
 
 if len(sys.argv) > 5:
-	HOSTNAME = str(sys.argv[1])
-	PORT = str(sys.argv[2])
-	USERNAME = str(sys.argv[3])
-	PASSWORD = str(sys.argv[4])
+	PG_HOST = str(sys.argv[1])
+	PG_PORT = str(sys.argv[2])
+	PG_USER = str(sys.argv[3])
+	PG_PASSWORD = str(sys.argv[4])
 	isClean = str(sys.argv[5])
 else:
 	print "Usage: loadDomeoAnnsToRDB.py <pg hostname> <pg port> <pg username> <pg password> <OPTIONS (1: clean all tables, 2 drop and recreate all tables, 0: keep existing data)>"
@@ -94,28 +95,30 @@ def update_oa_highlight_body(conn, highlight_annotation_id, oa_highlight_body_id
 
 
 def generateHighlightSet(row, highlightD):
-	subjectDrug = row["subject"]; objectDrug = row["object"]; source = row["source"].replace("dbmi-icode-01.dbmi.pitt.edu:80","localhost")
-	#print source + "| " + subjectDrug + " | " + objectDrug	
+	preciptDrug = row["precipt"]; objectDrug = row["object"]; source = row["source"].replace("dbmi-icode-01.dbmi.pitt.edu:80","localhost")
 
 	if source in highlightD:
-		highlightD[source].add(subjectDrug)
+		highlightD[source].add(preciptDrug)
 		highlightD[source].add(objectDrug)
 	else:
-		highlightD[source] = Set([subjectDrug, objectDrug])
+		highlightD[source] = Set([preciptDrug, objectDrug])
 
 
 # load table "method" one row
 def load_method(conn, row, mp_claim_id):
 	cur = conn.cursor()
 
-	enteredVal = ""
-	if row['assertionType'] == "DDI-clinical-trial":
-		enteredVal = "clinical trial"
-	elif row['assertionType'] == "drug-drug-interaction":
-		enteredVal = "statement"
+	enteredVal = row["assertionType"]
+		
+	cur.execute("INSERT INTO method (entered_value, inferred_value, mp_claim_id, mp_data_index) VALUES (%s, %s, %s, %s);", (enteredVal, None, str(mp_claim_id), 1))
 
-	cur.execute("INSERT INTO method (entered_value, inferred_value, mp_claim_id, mp_data_index)" + "VALUES ( '" + enteredVal + "', '" + enteredVal + "', " + str(mp_claim_id) + ", 1);")
-
+# When dose 1 and dose2 available and one of in auc, cmax, clearance, halflife available then return True, else return False
+def isClinicalTrial(row):
+	if (row["dose1"] and row["dose1"].lower() != "unk") and (row["dose2"] and row["dose2"].lower() != "unk") and ((row["auc"] and row["auc"].lower() != "unk") or (row["cmax"] and row["cmax"].lower() != "unk") or (row["clearance"] and row["clearance"].lower() != "unk") or (row["halflife"] and row["halflife"].lower() != "unk")):
+		return True
+	else:
+		return False
+	
 
 # load table "oa_selector" one row
 # input: conn, prefix, exact, suffix
@@ -154,10 +157,10 @@ def load_oa_target(conn, source, selector_id):
 
 # load table "oa_claim_body" one row
 # return claim body id
-def load_oa_claim_body(conn, subject, predicate, object, exact):
+def load_oa_claim_body(conn, precipt, predicate, object, exact):
 	cur = conn.cursor()
 	urn = uuid.uuid4().hex
-	label = subject + "_" + predicate + "_" + object
+	label = precipt + "_" + predicate + "_" + object
 	
 	qry1 = "INSERT INTO oa_claim_body (urn, label, claim_text) VALUES ('%s', '%s', '%s');" % (urn, label, exact)
 	cur.execute(qry1)
@@ -179,7 +182,7 @@ def update_oa_claim_body(conn, is_oa_body_of, oa_claim_body_id):
 def load_qualifier(conn, row, claim_body_id):
 	cur = conn.cursor()
 
-	cur.execute("""INSERT INTO qualifier (urn, claim_body_id, subject, predicate, object, qvalue, concept_code, vocabulary_id, qualifier_type_concept_code, qualifier_type_vocabulary_id) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""", (uuid.uuid4().hex, claim_body_id, True, False, False, row['subject'], None, None, None, None))
+	cur.execute("""INSERT INTO qualifier (urn, claim_body_id, subject, predicate, object, qvalue, concept_code, vocabulary_id, qualifier_type_concept_code, qualifier_type_vocabulary_id) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""", (uuid.uuid4().hex, claim_body_id, True, False, False, row['precipt'], None, None, None, None))
 
 	cur.execute("""INSERT INTO qualifier (urn, claim_body_id, subject, predicate, object, qvalue, concept_code, vocabulary_id, qualifier_type_concept_code, qualifier_type_vocabulary_id) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""", (uuid.uuid4().hex, claim_body_id, False, True, False, row['predicate'], None, None, None, None))
 
@@ -192,7 +195,7 @@ def load_mp_claim_annotation(conn, date, has_body, has_target, creator, negation
 	cur = conn.cursor()
 	urn = uuid.uuid4().hex
 
-	qry1 = "INSERT INTO mp_claim_annotation (urn, has_body, has_target, creator, date_created, date_updated, negation)" + "VALUES ('%s','%s','%s','%s','%s','%s','%s');" % (urn, str(has_body), str(has_target), creator, parse_date(date), parse_date(date), negation)
+	qry1 = "INSERT INTO mp_claim_annotation (urn, has_body, has_target, creator, date_created, date_updated, negation) VALUES ('%s','%s','%s','%s','%s','%s','%s');" % (urn, str(has_body), str(has_target), creator, parse_date(date), parse_date(date), negation)
 	cur.execute(qry1)
 
 	cur.execute("SELECT * FROM mp_claim_annotation WHERE urn = '" + urn + "';")
@@ -224,14 +227,19 @@ def load_mp_data_annotation(conn, row, mp_claim_id, has_target, creator):
 
 
 def helper_load_data(conn, row, mp_claim_id, has_target, creator, data_type):
-	ev_supports = 'false'
-	if 'supports' in row['evidenceType']:
-		ev_supports = 'true'
+
+	if ("supports" in row["evidenceType"] and "positive" in row["modality"]) or ("challenges" in row["evidenceType"] and "negative" in row["modality"]):
+		ev_supports = True
+	elif ("supports" in row["evidenceType"] and "negative" in row["modality"]) or ("challenges" in row["evidenceType"] and "positive" in row["modality"]):
+		ev_supports = False
+	else:
+		print "[ERROR] helper_load_material, evidence relationship error: evidenceType (%s), modality (%s)" % (row["evidenceType"], row["modality"])
+		sys.exit(1)
+
 	cur = conn.cursor()
 	urn = uuid.uuid4().hex
-	cur.execute("INSERT INTO mp_data_annotation (urn, type, has_target, creator, mp_claim_id, mp_data_index, ev_supports, date_created)" +
-				"VALUES ( '" + urn + "', '" + data_type + "', " + str(has_target) + ", '" + creator + "', " +
-				str(mp_claim_id) + ", 1, " + ev_supports + ", '" + parse_date(row['date']) + "');")
+	cur.execute("INSERT INTO mp_data_annotation (urn, type, has_target, creator, mp_claim_id, mp_data_index, ev_supports, date_created) VALUES (%s, %s, %s, %s, %s, %s, %s, %s);", (urn, data_type, str(has_target), creator, str(mp_claim_id), 1, ev_supports, parse_date(row['date'])))
+
 	cur.execute("SELECT * FROM mp_data_annotation WHERE urn = '" + urn + "';")
 	for result in cur.fetchall():
 		data_annotation_id = result[0]
@@ -253,38 +261,43 @@ def load_data_field(conn, row, data_body_id, data_type):
 	ttype = data_type + "Type"
 	direction = data_type + "Direction"
 
-	cur.execute("INSERT INTO data_field (urn, data_body_id, data_field_type, value_as_string, value_as_number)" +
-				"VALUES ( '" + uuid.uuid4().hex + "', " + str(data_body_id) + ", 'value', '" + row[value] + "', NULL)," +
-				"( '" + uuid.uuid4().hex + "', " + str(data_body_id) + ", 'type', '" + row[ttype] + "', NULL)," +
-				"( '" + uuid.uuid4().hex + "', " + str(data_body_id) + ", 'direction', '" + row[direction] + "', NULL);")
+	cur.execute("INSERT INTO data_field (urn, data_body_id, data_field_type, value_as_string, value_as_number) VALUES (%s, %s, %s, %s, %s);",(uuid.uuid4().hex, str(data_body_id), 'value', row[value], None))
+	cur.execute("INSERT INTO data_field (urn, data_body_id, data_field_type, value_as_string, value_as_number) VALUES (%s, %s, %s, %s, %s);",(uuid.uuid4().hex, str(data_body_id), 'type', row[ttype], None))
+	cur.execute("INSERT INTO data_field (urn, data_body_id, data_field_type, value_as_string, value_as_number) VALUES (%s, %s, %s, %s, %s);",(uuid.uuid4().hex, str(data_body_id), 'direction', row[direction], None))
 
 
 # load table "mp_material_annotation" and "oa_material_body" one row
+# precipt as subject
 def load_mp_material_annotation(conn, row, mp_claim_id, has_target, creator):
 	cur = conn.cursor()
 
-	if (row['objectDose'] != '') and (row['objectDose'].lower() != 'unk'):
-		material_body_id = helper_load_material(conn, row, mp_claim_id, has_target, creator, 'object_dose')
-		load_material_field(conn, row, material_body_id, 'object')
-
-	if (row['subjectDose'] != '') and (row['subjectDose'].lower() != 'unk'):
+	if (row['preciptDose'] != ''):
 		material_body_id = helper_load_material(conn, row, mp_claim_id, has_target, creator, 'subject_dose')
 		load_material_field(conn, row, material_body_id, 'precipt')
 
-	if (row['numOfParticipants'] != '') and (row['numOfParticipants'].lower() != 'unk'):
+	if (row['objectDose'] != ''):
+		material_body_id = helper_load_material(conn, row, mp_claim_id, has_target, creator, 'object_dose')
+		load_material_field(conn, row, material_body_id, 'object')
+
+	if (row['numOfParticipants'] != '' and row['numOfParticipants'].lower() != "unk"):
 		material_body_id = helper_load_material(conn, row, mp_claim_id, has_target, creator, 'participants')
 		load_material_field(conn, row, material_body_id, 'participants')
 
 
 def helper_load_material(conn, row, mp_claim_id, has_target, creator, data_type):
-	ev_supports = 'false'
-	if 'supports' in row['evidenceType']:
-		ev_supports = 'true'
+
+	if ("supports" in row["evidenceType"] and "positive" in row["modality"]) or ("challenges" in row["evidenceType"] and "negative" in row["modality"]):
+		ev_supports = True
+	elif ("supports" in row["evidenceType"] and "negative" in row["modality"]) or ("challenges" in row["evidenceType"] and "positive" in row["modality"]):
+		ev_supports = False
+	else:
+		print "[ERROR] helper_load_material, evidence relationship error: evidenceType (%s), modality (%s)" % (row["evidenceType"], row["modality"])
+		sys.exit(1)
+
 	cur = conn.cursor()
 	urn = uuid.uuid4().hex
-	cur.execute("INSERT INTO mp_material_annotation (urn, type, has_target, creator, mp_claim_id, mp_data_index, ev_supports, date_created)" +
-				"VALUES ( '" + urn + "', '" + data_type + "', " + str(has_target) + ", '" + creator + "', " +
-				str(mp_claim_id) + ", 1, " + ev_supports + ", '" + parse_date(row['date']) + "');")
+	cur.execute("INSERT INTO mp_material_annotation (urn, type, has_target, creator, mp_claim_id, mp_data_index, ev_supports, date_created) VALUES (%s, %s, %s, %s, %s, %s, %s, %s);", (urn, data_type, str(has_target), creator, str(mp_claim_id), 1, ev_supports, parse_date(row['date'])))
+
 	cur.execute("SELECT * FROM mp_material_annotation WHERE urn = '" + urn + "';")
 	for result in cur.fetchall():
 		material_annotation_id = result[0]
@@ -300,19 +313,19 @@ def helper_load_material(conn, row, mp_claim_id, has_target, creator, data_type)
 
 
 # load table "material_field" one row
+# material_type is participants, precipt and object
 def load_material_field(conn, row, material_body_id, material_type):
 	cur = conn.cursor()
 
 	if material_type == "participants":
-		cur.execute("INSERT INTO material_field (urn, material_body_id, material_field_type, value_as_string, value_as_number)" +
-					"VALUES ( '" + uuid.uuid4().hex + "', " + str(material_body_id) + ", 'participants', NULL, " + row['numOfParticipants'] + ");")
-	else:
+		cur.execute("INSERT INTO material_field (urn, material_body_id, material_field_type, value_as_string, value_as_number) VALUES (%s, %s, %s, %s, %s);", (uuid.uuid4().hex, str(material_body_id), 'participants', None, row['numOfParticipants']))
+
+	## load precipt dose and object dose
+	elif material_type in ["precipt","object"]:
 		value = material_type + "Dose"
 		regimens = material_type + "Regimens"
 		formulation = material_type + "Formulation"
 		duration = material_type + "Duration"
-		if material_type == "precipt":
-			value = "subjectDose"
 
 		cur.execute("INSERT INTO material_field (urn, material_body_id, material_field_type, value_as_string, value_as_number)" +
 					"VALUES ( '" + uuid.uuid4().hex + "', " + str(material_body_id) + ", 'value', '" + row[value] + "', NULL);")
@@ -326,6 +339,8 @@ def load_material_field(conn, row, material_body_id, material_type):
 		if (row[duration] != '') and (row[duration].lower() != 'unk'):
 			cur.execute("INSERT INTO material_field (urn, material_body_id, material_field_type, value_as_string, value_as_number)" +
 						"VALUES ( '" + uuid.uuid4().hex + "', " + str(material_body_id) + ", 'duration', '" + row[duration] + "', NULL);")
+	else:
+		print "[ERROR] load_material_field, material type (%s) undefined" % (material_type)
 
 
 def parse_date(csv_date):
@@ -336,7 +351,7 @@ def parse_date(csv_date):
 #   add column: predicate, subject, object, subjectDose, objectDose
 def preprocess(csvfile):
 
-	csv_columns = ['source', 'date', 'assertionType', 'evidenceType', 'prefix', 'exactText', 'suffix', 'modality', 'statementType', 'comment', 'drug1Lab', 'drug1Type', 'drug1Role', 'dose1', 'drug2Lab', 'drug2Type', 'drug2Role', 'dose2', 'objectRegimens', 'objectFormulation', 'objectDuration', 'preciptRegimens', 'preciptFormulation', 'preciptDuration', 'numOfParticipants', 'auc', 'aucType', 'aucDirection', 'clearance', 'clearanceType', 'clearanceDirection', 'cmax', 'cmaxType', 'cmaxDirection', 'halflife', 'halflifeType', 'halflifeDirection', 'predicate', 'subject', 'object', 'subjectDose', 'objectDose']
+	csv_columns = ['source', 'date', 'assertionType', 'evidenceType', 'prefix', 'exactText', 'suffix', 'modality', 'statementType', 'comment', 'drug1Lab', 'drug1Type', 'drug1Role', 'dose1', 'drug2Lab', 'drug2Type', 'drug2Role', 'dose2', 'objectRegimens', 'objectFormulation', 'objectDuration', 'preciptRegimens', 'preciptFormulation', 'preciptDuration', 'numOfParticipants', 'auc', 'aucType', 'aucDirection', 'clearance', 'clearanceType', 'clearanceDirection', 'cmax', 'cmaxType', 'cmaxDirection', 'halflife', 'halflifeType', 'halflifeDirection', 'predicate', 'precipt', 'object', 'preciptDose', 'objectDose']
 	writer = csv.DictWriter(open('data/preprocess-domeo.csv', 'w'), fieldnames=csv_columns)
 	writer.writeheader()
 	reader = csv.DictReader(utf_8_encoder(open(csvfile, 'r')))
@@ -344,17 +359,28 @@ def preprocess(csvfile):
 	for row in reader:
 		#print(row)
 
+		# update method
+		if isClinicalTrial(row):
+			row.update({'assertionType': 'clinical trial'})
+		else:
+			row.update({'assertionType': 'statement'})
+
 		# translate Domeo old form for dose (tablet -> Oral)
 		if row['objectFormulation'] == "tablet":
 			row['objectFormulation'] = "Oral"
 		if row['preciptFormulation'] == "tablet":
 			row['preciptFormulation'] = "Oral"
 
+		# all SPLs annotation's method is interact_with
 		row.update({'predicate': 'interact_with'})
-		if 'object' in row['drug1Role']:
-			row.update({'subject': row['drug2Lab'], 'object': row['drug1Lab'], 'subjectDose': row['dose2'], 'objectDose': row['dose1']})
+
+		# make assertion in  subject (precipt) predicate object
+		if 'object' in row['drug1Role'] and 'precipitant' in row['drug2Role']:
+			row.update({'precipt': row['drug2Lab'], 'object': row['drug1Lab'], 'preciptDose': row['dose2'], 'objectDose': row['dose1']})
+		elif 'precipitant' in row['drug1Role'] and 'object' in row['drug2Role']:
+			row.update({'precipt': row['drug1Lab'], 'object': row['drug2Lab'], 'preciptDose': row['dose1'], 'objectDose': row['dose2']})
 		else:
-			row.update({'subject': row['drug1Lab'], 'object': row['drug2Lab'], 'subjectDose': row['dose1'], 'objectDose': row['dose2']})
+			print "[ERROR] drug role information not available: document (%s), drug1 (%s) - drug2(%s)" % (row['source'], row['drug1Lab'], row['drug2Lab'])
 
 		if "'" in row['prefix']:
 			row['prefix'] = row['prefix'].replace("'", "''")
@@ -382,13 +408,11 @@ def load_data_from_csv(conn, reader, creator):
 
 		prefix = row["prefix"]; exact = row["exactText"]; suffix = row["suffix"]
 		source = row["source"]; date = row["date"]
-		subject = row["subject"]; predicate = row["predicate"]; object = row["object"]
+		subject = row["precipt"]; predicate = row["predicate"]; object = row["object"]
 		# when method is statement, negation is evidence supports/refutes
-
 		negation = "No" # translate negation from Domeo SPLs an
-		if row["assertionType"] == "drug-drug-interaction":
-			if "challenges" in row["evidenceType"]:
-				negation = "Yes"			
+		if row["assertionType"] == "drug-drug-interaction" and "negative" in row["modality"]:
+			negation = "Yes"			
 
 		oa_selector_id = load_oa_selector(conn, prefix, exact, suffix)
 		oa_target_id = load_oa_target(conn, source, oa_selector_id)
@@ -410,16 +434,17 @@ def load_data_from_csv(conn, reader, creator):
 def main():
 
 	print("[INFO] connect postgreSQL ...")
-	conn = connect_postgreSQL(HOSTNAME, USERNAME, PASSWORD, DATABASE)
+	conn = pgconn.connect_postgreSQL(PG_HOST, PG_USER, PG_PASSWORD, PG_DATABASE)
+	pgconn.setDbSchema(conn, "ohdsi")
 
 	if isClean == "1":
-		clearall(conn)
+		pgmp.clearAll(conn)
 		conn.commit()
 		print "[INFO] Clean all tables done!"
 	elif isClean == "2":
-		truncateall(conn) # delete all tables in DB mpevidence
+		pgmp.truncateAll(conn) # delete all tables in DB mpevidence
 		conn.commit()
-		createdb(conn, DB_SCHEMA)
+		pgconn.createdb(conn, DB_SCHEMA)
 		conn.commit()
 		print "[INFO] Drop and recreate all tables done!"
 	

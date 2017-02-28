@@ -31,7 +31,7 @@ curl -XGET 'localhost:9200/_cluster/health/annotator?level=shards'
 curl -XPUT 'localhost:9200/_cluster/settings' -d '{ "transient" : { "cluster.routing.allocation.enable" : "all"}}'
 
 # wait 50 secs for status of yellow or green
-curl -XGET 'http://localhost:9200/_cluster/health?wait_for_status=yellow&timeout=50s'
+curl -XGET 'http://localhost:9200/_cluster/health?wait_for_status=yellow&timeout=50s' 
 
 # enable allocation
 curl -XPUT 'localhost:9200/annotator/_settings' -d '{"index.routing.allocation.disable_allocation": false}'
