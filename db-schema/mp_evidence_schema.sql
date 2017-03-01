@@ -173,6 +173,22 @@ inferred_vocabulary_id integer,
 FOREIGN KEY (mp_claim_id) REFERENCES mp_claim_annotation(id)
 );
 
+-- Evidence type question -------------------------------------
+--TABLE evidence_question
+DROP TABLE IF EXISTS evidence_question CASCADE;
+CREATE TABLE evidence_question
+(
+id INTEGER not null PRIMARY KEY,
+method_id integer,
+question text,
+value_as_string text,
+value_as_number integer,
+value_as_boolean boolean,
+concept_code text,
+vocabulary_id integer,
+FOREIGN KEY (method_id) REFERENCES method(id)
+);
+
 -- Open annotation target & selector --------------
 --TABLE: oa_target
 DROP TABLE IF EXISTS oa_target CASCADE;
@@ -256,6 +272,9 @@ ALTER TABLE material_field alter id set default nextval('material_field_id_seq')
 
 CREATE SEQUENCE method_id_seq;
 ALTER TABLE method alter id set default nextval('method_id_seq');
+
+CREATE SEQUENCE evidence_question_id_seq;
+ALTER TABLE evidence_question alter id set default nextval('evidence_question_id_seq');
 
 CREATE SEQUENCE claim_reference_relationship_id_seq;
 ALTER TABLE claim_reference_relationship alter id set default nextval('claim_reference_relationship_id_seq');

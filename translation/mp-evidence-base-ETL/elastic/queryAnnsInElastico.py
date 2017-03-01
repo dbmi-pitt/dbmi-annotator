@@ -113,7 +113,6 @@ def addDataMaterialToAnnDict(data, material, annDict):
 			annDict[field+"text"] = getTextSpan(data[field])
 
 	if data["dips"]:
-
 		dipsQsStr = ""
 		qsL=["q1","q2","q3","q4","q5","q6","q7","q8","q9","q10"]
 		for q in qsL:
