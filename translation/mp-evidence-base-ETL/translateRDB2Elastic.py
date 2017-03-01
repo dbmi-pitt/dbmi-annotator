@@ -122,8 +122,8 @@ def loadMpAnnotation(annotation, email):
 
 	mpAnn["argues"]["qualifiedBy"]["drug1"] = subjectDrug
 	mpAnn["argues"]["qualifiedBy"]["drug2"] = objectDrug
-	mpAnn["argues"]["qualifiedBy"]["drug1ID"] = subjectDrug + "_1"
-	mpAnn["argues"]["qualifiedBy"]["drug2ID"] = objectDrug + "_1"
+	mpAnn["argues"]["qualifiedBy"]["drug1ID"] = subjectDrug + "_0"
+	mpAnn["argues"]["qualifiedBy"]["drug2ID"] = objectDrug + "_0"
 
 	mpAnn["argues"]["qualifiedBy"]["relationship"] = predicate.replace("interact_with","interact with")
 	mpAnn["argues"]["qualifiedBy"]["precipitant"] = "drug1" # for interact_with
