@@ -155,13 +155,13 @@ def insert_material_field(conn, row, material_body_id, material_type):
 
 		cur.execute("INSERT INTO material_field (urn, material_body_id, material_field_type, value_as_string, value_as_number) VALUES ( '" + uuid.uuid4().hex + "', " + str(material_body_id) + ", 'value', '" + row[value] + "', NULL);")
 
-		if row[regimens] and row[regimens].lower() != 'unk':
+		if row[regimens]:
 			cur.execute("INSERT INTO material_field (urn, material_body_id, material_field_type, value_as_string, value_as_number)" +
 						"VALUES ( '" + uuid.uuid4().hex + "', " + str(material_body_id) + ", 'regimens', '" + row[regimens] + "', NULL);")
-		if row[formulation] and (row[formulation].lower() != 'unk'):
+		if row[formulation]:
 			cur.execute("INSERT INTO material_field (urn, material_body_id, material_field_type, value_as_string, value_as_number)" +
 						"VALUES ( '" + uuid.uuid4().hex + "', " + str(material_body_id) + ", 'formulation', '" + row[formulation] + "', NULL);")
-		if row[duration] and (row[duration].lower() != 'unk'):
+		if row[duration]:
 			cur.execute("INSERT INTO material_field (urn, material_body_id, material_field_type, value_as_string, value_as_number)" +
 						"VALUES ( '" + uuid.uuid4().hex + "', " + str(material_body_id) + ", 'duration', '" + row[duration] + "', NULL);")
 
@@ -336,8 +336,8 @@ def truncateAll(conn):
 	cur.execute("DROP SEQUENCE IF EXISTS mp_material_annotation_id_seq;")
 	cur.execute("DROP SEQUENCE IF EXISTS oa_material_body_id_seq;")
 	cur.execute("DROP SEQUENCE IF EXISTS material_field_id_seq;")
-	cur.execute("DROP SEQUENCE IF EXISTS method_id_seq;")
 	cur.execute("DROP SEQUENCE IF EXISTS evidence_question_id_seq;")
+	cur.execute("DROP SEQUENCE IF EXISTS method_id_seq;")
 	cur.execute("DROP SEQUENCE IF EXISTS claim_reference_relationship_id_seq;")
 	cur.execute("DROP SEQUENCE IF EXISTS mp_reference_id_seq;")
 	cur.execute("DROP SEQUENCE IF EXISTS highlight_annotation_id_seq;")
@@ -356,8 +356,8 @@ def clearAll(conn):
 	cur.execute("DELETE FROM material_field;")
 	cur.execute("DELETE FROM oa_material_body;")
 	cur.execute("DELETE FROM mp_material_annotation;")
-	cur.execute("DELETE FROM method;")
 	cur.execute("DELETE FROM evidence_question;")
+	cur.execute("DELETE FROM method;")
 	cur.execute("DELETE FROM mp_claim_annotation;")
 	cur.execute("DELETE FROM oa_highlight_body;")
 	cur.execute("DELETE FROM highlight_annotation;")

@@ -113,11 +113,11 @@ def loadMpAnnotation(annotation, email):
 
 	# MP Claim
 	# method name translate
-	# if annotation.method in ["clinical trial", "statement"]:
-	# 	mpAnn["argues"]["method"] = methodM[annotation.method] 
-	# else:
-	# 	mpAnn["argues"]["method"] = annotation.method
-	mpAnn["argues"]["method"] = annotation.method
+	if annotation.method in methodL:
+		mpAnn["argues"]["method"] = annotation.method
+	else:
+		print "[ERRPR] loadMpAnnotation, method undefined (%s)" % annotation.method
+		sys.exit(0)
 
 	# Negation
 	if annotation.negation == True:
@@ -161,10 +161,13 @@ def loadMpAnnotation(annotation, email):
 			mpData["parallelgroup"] = dmRow.getParallelGroup()
 
 		# MP Data - dips questions
-		dipsQsL = dmRow.getDataDips()
-		if dipsQsL and isinstance(dipsQsL, list):
-			for i in xrange(0,len(dipsQsL)):
-				mpData["dips"]["q" + str(i+1)] = dipsQsL[i]
+		dataDips = dmRow.getDataDips()
+		if dataDips:
+			dipsQsD = dataDips.getDipsDict()
+			if dipsQsD and isinstance(dipsQsD, dict):
+				for qs in dipsQsD:
+					mpData["dips"][qs] = dipsQsD[qs]
+		print mpData["dips"]
 
 		# MP Data - reviewer		
 		reviewer = dmRow.getDataReviewer()
@@ -172,7 +175,7 @@ def loadMpAnnotation(annotation, email):
 			mpData["reviewer"]["reviewer"] = reviewer.reviewer
 			mpData["reviewer"]["date"] = reviewer.date
 			mpData["reviewer"]["total"] = reviewer.total
-			mpData["reviewer"]["lackinfo"] = reviewer.lackinfo
+			mpData["reviewer"]["lackInfo"] = reviewer.lackinfo
 
 		# MP Material
 		if dmRow.getParticipantsInRow():
@@ -261,8 +264,8 @@ def main():
 	mpAnnotations = pgqry.queryAllMpAnnotation(conn)	
 	
 	for mpAnn in mpAnnotations:
-		#if mpAnn.source in ["http://localhost/DDI-labels/829a4f51-c882-4b64-81f3-abfb03a52ebe.html"] :
-		loadMpAnnotation(mpAnn, AUTHOR)		
+		if mpAnn.source in ["http://localhost/elsevier/elsevier15935493.html"]:
+			loadMpAnnotation(mpAnn, AUTHOR)		
 
 	highlightD = pgqry.queryHighlightAnns(conn)
 

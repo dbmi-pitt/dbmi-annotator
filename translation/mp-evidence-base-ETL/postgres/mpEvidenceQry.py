@@ -229,10 +229,9 @@ def queryMpData(conn, annotation, claimid):
 			elif evRelationship is False:
 				dmRow.setEvRelationship("refutes")
 
-		evqs = row[14]
-		evqsVal = row[15]
+		evqs = row[14]; evqsVal = row[15] # add evidence type questions
 		if evqs and evqsVal:
-			if evqs == "groupRandom" and not dmRow.getGroupRandom():
+			if evqs == "grouprandom" and not dmRow.getGroupRandom():
 				dmRow.setGroupRandom(evqsVal)
 			elif evqs == "parallelgroup" and not dmRow.getParallelGroup():
 				dmRow.setParallelGroup(evqsVal)
