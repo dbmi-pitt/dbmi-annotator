@@ -264,8 +264,8 @@ def main():
 	mpAnnotations = pgqry.queryAllMpAnnotation(conn)	
 	
 	for mpAnn in mpAnnotations:
-		if mpAnn.source in ["http://localhost/elsevier/elsevier15935493.html"]:
-			loadMpAnnotation(mpAnn, AUTHOR)		
+		#if mpAnn.source in ["http://localhost/elsevier/elsevier15935493.html"]:
+		loadMpAnnotation(mpAnn, AUTHOR)		
 
 	highlightD = pgqry.queryHighlightAnns(conn)
 
