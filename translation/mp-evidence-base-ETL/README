@@ -55,7 +55,7 @@ Docker container:
 $ python loadDomeoAnnsToRDB.py postgres 5432 dbmiannotator dbmi2016 0
 
 ----------------------------------------------------------------------------------
-load annotations from postgres DB mpevidence to Elasticsearch store (Not ready)
+translate and load annotations from postgres DB mpevidence to Elasticsearch store
 ----------------------------------------------------------------------------------
 
 (1) Query Micropublication annotations from Relational database (Postgres) mpevidence 

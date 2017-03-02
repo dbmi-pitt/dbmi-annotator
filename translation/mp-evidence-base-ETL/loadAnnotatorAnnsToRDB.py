@@ -80,7 +80,7 @@ def preprocess(resultsL):
 	print "[INFO] total %s annotations are validated and pre-processed" % (len(annsL))
 
 	## write to csv
-	csv_columns = ["document", "useremail", "claimlabel", "claimtext", "method", "relationship", "drug1", "drug2", "precipitant", "enzyme", "rejected", "evRelationship", "participants", "participantstext", "drug1dose", "drug1formulation", "drug1duration", "drug1regimens", "drug1dosetext", "drug2dose", "phenotypetype", "phenotypevalue", "phenotypemetabolizer", "phenotypepopulation", "drug2formulation", "drug2duration", "drug2regimens", "drug2dosetext", "aucvalue", "auctype", "aucdirection", "auctext", "cmaxvalue", "cmaxtype", "cmaxdirection", "cmaxtext", "clearancevalue", "clearancetype", "clearancedirection", "clearancetext", "halflifevalue", "halflifetype", "halflifedirection", "halflifetext", "dipsquestion", "reviewer", "reviewerdate", "reviewertotal", "reviewerlackinfo", "grouprandomization", "parallelgroupdesign", "subject", "object", "id"]
+	csv_columns = ["document", "useremail", "claimlabel", "claimtext", "method", "relationship", "drug1", "drug2", "precipitant", "enzyme", "rejected", "evRelationship", "participants", "participantstext", "drug1dose", "drug1formulation", "drug1duration", "drug1regimens", "drug1dosetext", "drug2dose", "phenotypetype", "phenotypevalue", "phenotypemetabolizer", "phenotypepopulation", "drug2formulation", "drug2duration", "drug2regimens", "drug2dosetext", "aucvalue", "auctype", "aucdirection", "auctext", "cmaxvalue", "cmaxtype", "cmaxdirection", "cmaxtext", "clearancevalue", "clearancetype", "clearancedirection", "clearancetext", "halflifevalue", "halflifetype", "halflifedirection", "halflifetext", "dipsquestion", "reviewer", "reviewerdate", "reviewertotal", "reviewerlackinfo", "grouprandom", "parallelgroup", "subject", "object", "id"]
 
 	with open('data/preprocess-annotator.csv', 'wb') as f: 
 		w = csv.DictWriter(f, csv_columns)
@@ -171,6 +171,7 @@ def load_mp_material_annotation(conn, row, mp_claim_id, creator, mp_data_index):
 		material_body_id = pgmp.insert_material_annotation(conn, row, mp_claim_id, target_id, creator, 'participants', mp_data_index)
 		pgmp.insert_material_field(conn, row, material_body_id, 'participants')
 
+	## Phenotype clinical study
 	if row['phenotypetype']:
 		material_body_id = pgmp.insert_material_annotation(conn, row, mp_claim_id, None, creator, 'phenotype', mp_data_index)  
 		pgmp.insert_material_field(conn, row, material_body_id, 'phenotype')
@@ -178,7 +179,7 @@ def load_mp_material_annotation(conn, row, mp_claim_id, creator, mp_data_index):
 
 # LOAD MP DATA ################################################################
 # load table "mp_data_annotation" and "oa_data_body" one row
-def load_mp_data_annotation(conn, row, mp_claim_id, creator, mp_data_index):
+def load_mp_data_annotation(conn, row, mp_claim_id, creator, mp_data_index, method_id):
 	source = row['document']
 
 	# Clinical trial data items
@@ -210,7 +211,7 @@ def load_mp_data_annotation(conn, row, mp_claim_id, creator, mp_data_index):
 		data_body_id = pgmp.insert_mp_data_annotation(conn, row, mp_claim_id, target_id, creator, 'halflife', mp_data_index)
 		pgmp.insert_data_field(conn, row, data_body_id, 'halflife')
 
-	# Case report data items
+	## Case report data items
 	if row['reviewer'] and row['reviewerdate']:
 		data_body_id = pgmp.insert_mp_data_annotation(conn, row, mp_claim_id, None, creator, 'reviewer', mp_data_index)		
 		pgmp.insert_data_field(conn, row, data_body_id, 'reviewer')
@@ -219,6 +220,11 @@ def load_mp_data_annotation(conn, row, mp_claim_id, creator, mp_data_index):
 		data_body_id = pgmp.insert_mp_data_annotation(conn, row, mp_claim_id, None, creator, 'dipsquestion', mp_data_index)		
 		pgmp.insert_data_field(conn, row, data_body_id, 'dipsquestion')
 
+	## evidence type questions
+	if row["grouprandom"]:
+		pgmp.insert_evidence_question(conn, "grouprandom", row["grouprandom"], method_id)
+	if row["parallelgroup"]:
+		pgmp.insert_evidence_question(conn, "parallelgroup", row["parallelgroup"], method_id)
 
 # LOAD MP CLAIM ################################################################
 def load_mp_claim_annotation(conn, row, creator):
@@ -294,16 +300,16 @@ def load_annotations_from_results(conn, results, creator):
 			mp_claim_id = load_mp_claim_annotation(conn, row, creator)
 
 		## temp work with AnnotationPress 
-		pgmp.insert_method(conn, row, mp_claim_id, 0) 
+		#pgmp.insert_method(conn, row, mp_claim_id, 0) 
 
 		mp_data_index = (pgmp.findNumOfDataItems(conn, mp_claim_id) or 0) + 1 
 
-		# MP data
-		load_mp_data_annotation(conn, row, mp_claim_id, creator, mp_data_index)
-		load_mp_material_annotation(conn, row, mp_claim_id, creator, mp_data_index)
+		## method should be 1:1 to data & material and n:1 with claim
+		method_id = pgmp.insert_method(conn, row, mp_claim_id, mp_data_index)
 
-		## method should be 1:1 to data & material and m:1 with claim
-		#pgmp.insert_method(conn, row, mp_claim_id, mp_data_index)
+		# MP data
+		load_mp_data_annotation(conn, row, mp_claim_id, creator, mp_data_index, method_id)
+		load_mp_material_annotation(conn, row, mp_claim_id, creator, mp_data_index)
 
 		generateHighlightSet(row, highlightD)  # add unique drugs to set
 		

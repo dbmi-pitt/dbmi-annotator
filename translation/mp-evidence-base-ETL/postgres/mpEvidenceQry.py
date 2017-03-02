@@ -169,12 +169,14 @@ def queryMpClaimUrn(conn, urn):
 def queryMpData(conn, annotation, claimid):
 
 	qry = """	
-	select dann.type, df.data_field_type, df.value_as_string, df.value_as_number, s.exact, s.prefix, s.suffix, dann.mp_data_index, dann.ev_supports, dann.rejected, dann.rejected_reason, dann.rejected_comment
+	select dann.type, df.data_field_type, df.value_as_string, df.value_as_number, s.exact, s.prefix, s.suffix, dann.mp_data_index, dann.ev_supports, dann.rejected, dann.rejected_reason, dann.rejected_comment, met.entered_value, met.inferred_value, eq.question, eq.value_as_string
 	from mp_data_annotation dann 
 	join oa_data_body dbody on dann.has_body = dbody.id 
 	join data_field df on df.data_body_id = dbody.id 
 	left join oa_target t on dann.has_target = t.id
 	left join oa_selector s on t.has_selector = s.id
+	join method met on dann.mp_claim_id = met.mp_claim_id and met.mp_data_index = dann.mp_data_index
+	left join evidence_question eq on met.id = eq.method_id
 	where dann.mp_claim_id = %s
 	""" % (claimid)
 
@@ -213,7 +215,7 @@ def queryMpData(conn, annotation, claimid):
 			dataReviewer.setAttribute(dfType, value)
 			dmRow.setDataReviewer(dataReviewer)
 
-		if dType == "dipsquestion": #DataDips exists
+		if dType == "dipsquestion": # DataDips exists
 			if dmRow.getDataDips(): 
 				dips = dmRow.getDataDips()
 			else:
@@ -221,11 +223,19 @@ def queryMpData(conn, annotation, claimid):
 			dips.setQuestion(dfType, value)
 			dmRow.setDataDips(dips)
 
-		if dmRow.getEvRelationship():
+		if not dmRow.getEvRelationship(): # add evidence relationship to dmRow
 			if evRelationship is True:				
 				dmRow.setEvRelationship("supports")
 			elif evRelationship is False:
 				dmRow.setEvRelationship("refutes")
+
+		evqs = row[14]
+		evqsVal = row[15]
+		if evqs and evqsVal:
+			if evqs == "groupRandom" and not dmRow.getGroupRandom():
+				dmRow.setGroupRandom(evqsVal)
+			elif evqs == "parallelgroup" and not dmRow.getParallelGroup():
+				dmRow.setParallelGroup(evqsVal)
 
 	return annotation
 

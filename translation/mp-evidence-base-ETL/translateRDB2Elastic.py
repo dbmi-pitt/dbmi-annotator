@@ -43,7 +43,8 @@ HIGHLIGHT_TEMPLATE = HOME + "/template/highlight-annotation-template.json"
 mpDataL = ["auc", "cmax", "clearance", "halflife"]
 
 # dict for method name translate
-methodM = {"clinical trial": "DDI clinical trial", "statement": "Statement", "Phenotype clinical study": "Phenotype clinical study", "Case Report": "Case Report"}
+# methodM = {"clinical trial": "DDI clinical trial", "statement": "Statement"}
+methodL = ["DDI clinical trial", "Case Report", "Phenotype clinical study", "Statement"]
 
 if len(sys.argv) > 5:
 	PG_HOST = str(sys.argv[1])
@@ -111,8 +112,14 @@ def loadMpAnnotation(annotation, email):
 	print "[INFO] Load doc(%s), subject(%s), predicate(%s), object(%s) \n" % (rawurl, annotation.csubject, annotation.cpredicate, annotation.cobject)
 
 	# MP Claim
-	mpAnn["argues"]["method"] = methodM[annotation.method] # method name translate
+	# method name translate
+	# if annotation.method in ["clinical trial", "statement"]:
+	# 	mpAnn["argues"]["method"] = methodM[annotation.method] 
+	# else:
+	# 	mpAnn["argues"]["method"] = annotation.method
+	mpAnn["argues"]["method"] = annotation.method
 
+	# Negation
 	if annotation.negation == True:
 		mpAnn["argues"]["negation"] = "Yes"
 	elif annotation.negation == False:
@@ -147,8 +154,11 @@ def loadMpAnnotation(annotation, email):
 				mpData[df]["hasTarget"] = dataSelector
 				mpData[df]["ranges"] = []
 
-		mpData["grouprandom"] = dmRow.getGroupRandom()
-		mpData["parallelgroup"] = dmRow.getParallelGroup()
+		# evidence type questions
+		if dmRow.getGroupRandom():
+			mpData["grouprandom"] = dmRow.getGroupRandom()
+		if dmRow.getParallelGroup():
+			mpData["parallelgroup"] = dmRow.getParallelGroup()
 
 		# MP Data - dips questions
 		dipsQsL = dmRow.getDataDips()
@@ -194,10 +204,9 @@ def loadMpAnnotation(annotation, email):
 
 		if dmRow.getPhenotype():		
 			mpData["supportsBy"]["supportsBy"]["phenotype"]["type"] = dmRow.getPhenotype().ptype
-			mpData["supportsBy"]["supportsBy"]["phenovalue"]["value"] = dmRow.getPhenovalue().value
-			mpData["supportsBy"]["supportsBy"]["phenometabolizer"]["metabolizer"] = dmRow.getPhenometabolizer().metabolizer
-			mpData["supportsBy"]["supportsBy"]["phenotype"]["population"] = dmRow.getPhenotype().population
-			
+			mpData["supportsBy"]["supportsBy"]["phenotype"]["value"] = dmRow.getPhenotype().value
+			mpData["supportsBy"]["supportsBy"]["phenotype"]["metabolizer"] = dmRow.getPhenotype().metabolizer
+			mpData["supportsBy"]["supportsBy"]["phenotype"]["population"] = dmRow.getPhenotype().population			
 
 		mpData["evRelationship"] = dmRow.getEvRelationship()
 		mpAnn["argues"]["supportsBy"].append(mpData)  # append mp data to claim

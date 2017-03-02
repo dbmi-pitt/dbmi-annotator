@@ -354,9 +354,9 @@ def preprocess(inputs, output):
 
 			# update method
 			if isClinicalTrial(row):
-				row.update({'assertionType': 'clinical trial'})
+				row.update({'assertionType': 'DDI clinical trial'})
 			else:
-				row.update({'assertionType': 'statement'})
+				row.update({'assertionType': 'Statement'})
 
 			# translate Domeo old form for dose (tablet -> Oral)
 			if row['objectFormulation'] == "tablet":
@@ -422,10 +422,10 @@ def load_data_from_csv(conn, reader, creator):
 		subject = row["precipt"]; predicate = row["predicate"]; object = row["object"]
 
 		# when method is statement, translate negation from Domeo SPLs annotation
-		if row["assertionType"] == "statement":
+		if row["assertionType"] == "Statement":
 			negation = getNegationForStatement(row["modality"], row["evidenceType"])	
 		# when method is clinicaltrial, evidence relationship supports/refutes
-		elif row["assertionType"] == "clinical trial":
+		elif row["assertionType"] == "DDI clinical trial":
 			negation = False		
 				
 		oa_selector_id = load_oa_selector(conn, prefix, exact, suffix)

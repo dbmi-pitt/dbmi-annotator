@@ -266,20 +266,21 @@ def insert_method(conn, row, mp_claim_id, mp_data_index):
 	cur = conn.cursor()
 	enteredVal = row['method']
 
-	# enteredVal = ""
-	# if row['method'] == "DDI clinical trial":
-	# 	enteredVal = "clinical trial"
-	# elif row['method'] == "Statement":
-	# 	enteredVal = "statement"
-	# else:
-	# 	enteredVal = row['method']
+	cur.execute("INSERT INTO method (entered_value, inferred_value, mp_claim_id, mp_data_index) VALUES (%s, %s, %s, %s);", (enteredVal, enteredVal, str(mp_claim_id), str(mp_data_index)))
 
-	cur.execute("INSERT INTO method (entered_value, inferred_value, mp_claim_id, mp_data_index)" + "VALUES ( '" + enteredVal + "', '" + enteredVal + "', " + str(mp_claim_id) + ", "+str(mp_data_index)+");")
+	cur.execute("SELECT id from method WHERE mp_claim_id = %s and mp_data_index = %s", (str(mp_claim_id), str(mp_data_index)))
+
+	for row in cur.fetchall():
+		return row[0]
+	return None
+
+def insert_evidence_question(conn, question, value, method_id):
+	cur = conn.cursor()
+	cur.execute("INSERT INTO evidence_question (method_id, question, value_as_string) VALUES (%s, %s, %s);", (method_id, question, value))
 
 
 def findClaimIdByAnnId(conn, annId):
 	cur = conn.cursor()
-	cur.execute("SET SCHEMA 'ohdsi';")
 	cur.execute("SELECT * FROM mp_claim_annotation WHERE urn = '" + annId + "';")
 
 	for row in cur.fetchall():
@@ -316,9 +317,8 @@ def truncateAll(conn):
 	cur.execute("DROP TABLE IF EXISTS material_field;")
 	cur.execute("DROP TABLE IF EXISTS oa_material_body;")
 	cur.execute("DROP TABLE IF EXISTS mp_material_annotation;")
-	cur.execute("DROP TABLE IF EXISTS method;")
 	cur.execute("DROP TABLE IF EXISTS evidence_question;")
-	cur.execute("DROP TABLE IF EXISTS highlight_annotation;")
+	cur.execute("DROP TABLE IF EXISTS method;")
 	cur.execute("DROP TABLE IF EXISTS claim_reference_relationship;")
 	cur.execute("DROP TABLE IF EXISTS mp_reference;")
 	cur.execute("DROP TABLE IF EXISTS mp_claim_annotation;")
@@ -346,7 +346,6 @@ def truncateAll(conn):
 def clearAll(conn):
 	cur = conn.cursor()
 	#cur.execute("ALTER TABLE mp_data_annotation DROP CONSTRAINT mp_data_annotation_mp_claim_id_fkey")
-	cur.execute("SET SCHEMA 'ohdsi';")
 	cur.execute("DELETE FROM qualifier;")
 	cur.execute("DELETE FROM oa_claim_body;")
 	cur.execute("DELETE FROM oa_selector;")
