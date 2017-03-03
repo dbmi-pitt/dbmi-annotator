@@ -49,28 +49,28 @@ if method is "DDI clinical trial"
 
 	if relationship is "interact with"
 		if drug1 is precipitant
-			subject: drug1, predicate: inhibits, object: drug2
+			subject: drug1, predicate: interact with, object: drug2
 		else
-			subject: drug2, predicate: inhibits, object: drug1
+			subject: drug2, predicate: interact with, object: drug1
 
 	if relationship is "inhibits"
 		if drug1 is precipitant
-			subject: drug1, predicate: inhibits, object: drug2
-			enzyme: enzyme  	
+			subject: drug1, predicate: inhibits, object: enzyme1
+			drug2: qualifier 
 		else
-			subject: drug2, predicate: inhibits, object: drug1
-			enzyme: enzyme  
+			subject: drug2, predicate: inhibits, object: enzyme1
+			drug1: qualifier
 
 	if relationship is "substrate of"
 		if drug1 is precipitant
-			subject: drug1, predicate: inhibits, object: enzyme1
-			drug2: inhibitor  	
+			subject: drug1, predicate: substrate of, object: enzyme1
+			drug2: qualifier/precipitant  	
 		else
-			subject: drug2, predicate: inhibits, object: enzyme1
-			drug1: inhibitor  
+			subject: drug2, predicate: substrate of, object: enzyme1
+			drug1: qualifier/precipitant
 
 if method is "Phenotype clinical study"
-	subject: drug1, predicate: inhibits, object: enzyme1
+	subject: drug1, predicate: inhibits/substrate of, object: enzyme1
 
 
 if method is "Case Report"
