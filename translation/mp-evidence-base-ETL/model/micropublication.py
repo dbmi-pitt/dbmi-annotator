@@ -246,14 +246,19 @@ class Annotation(object):
 	def __init__(self):
 		self.claimid = None; self.urn = None
 		self.csubject = None; self.cpredicate = None; self.cobject = None
-		self.label = None
-		self.source = None
+		self.label = None; self.source = None
 		self.prefix = None; self.exact = None; self.suffix = None # oa selector
+
 		self.method = None  # user entered method
 		self.negation = None # assertion negation supports or refutes
 		self.rejected = None # 'reason': '<rejected reason>|<comments>'
 
-		self.mpDataMaterialD = {} # data and material dict		
+		self.csubject_enantiomer = False
+		self.csubject_metabolite = False
+		self.cobject_enantiomer = False
+		self.cobject_metabolite = False
+
+		self.mpDataMaterialD = {} # data and material dict	
 
 	def setOaSelector(self, prefix, exact, suffix):
 		self.prefix = prefix
@@ -276,3 +281,11 @@ class Annotation(object):
 			print "[Warning] Data row already been filled - index: " + str(index)
 		else:
 			self.mpDataMaterialD[index] = dmRow
+
+	def setSubjectPC(enantiomer, metabolite):
+		self.csubject_enantiomer = enantiomer
+		self.csubject_metabolite = metabolite
+
+	def setObjectPC(enantiomer, metabolite):
+		self.cobject_enantiomer = enantiomer
+		self.cobject_metabolite = metabolite

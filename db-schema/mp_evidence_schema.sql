@@ -155,6 +155,8 @@ concept_code text,
 vocabulary_id integer,
 qualifier_type_concept_code text,
 qualifier_type_vocabulary_id integer,
+enantiomer boolean DEFAULT False,
+metabolite boolean DEFAULT False,
 FOREIGN KEY (claim_body_id) REFERENCES oa_claim_body(id)
 );
 
