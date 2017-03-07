@@ -45,7 +45,7 @@ if method is "Statement"
 		if drug1 is "precipitant"
 			mpsubject: drug1, mpobject: drug2, precipitant: drug1, ddiobject: drug2
 		else 
-			mpsubject: drug2, mpobject: drug1, precipitant: drug1, ddiobject: drug1
+			mpsubject: drug2, mpobject: drug1, precipitant: drug2, ddiobject: drug1
 
 	elif relationship is "inhibits" or "substrate of"
 		mpsubject: drug1, mpobject: enzyme, precipitant: drug1, ddiobject: enzyme
