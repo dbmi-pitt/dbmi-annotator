@@ -90,6 +90,7 @@ data_body_id integer,
 data_field_type text,
 value_as_string text,
 value_as_number numeric(10,2),
+value_as_concept_id integer,
 FOREIGN KEY (data_body_id) REFERENCES oa_data_body(id)
 );
 
@@ -136,6 +137,7 @@ material_body_id integer,
 material_field_type text,
 value_as_string text,
 value_as_number numeric(10,2),
+value_as_concept_id integer,
 FOREIGN KEY (material_body_id) REFERENCES oa_material_body(id)
 );
 
@@ -155,6 +157,8 @@ concept_code text,
 vocabulary_id integer,
 qualifier_type_concept_code text,
 qualifier_type_vocabulary_id integer,
+qualifier_role_concept_code text,
+qualifier_role_vocabulary_id integer,
 enantiomer boolean DEFAULT False,
 metabolite boolean DEFAULT False,
 FOREIGN KEY (claim_body_id) REFERENCES oa_claim_body(id)
