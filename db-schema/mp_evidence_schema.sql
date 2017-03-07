@@ -333,7 +333,7 @@ BEGIN
 IF $1 THEN RETURN 'subject';
 ELSIF $2 THEN RETURN 'predicate';
 ELSIF $3 THEN RETURN 'object';
-ELSE RETURN 'enzyme';
+ELSE RETURN 'qualifier';
 END IF;
 END;
 $BODY$ language plpgsql;
