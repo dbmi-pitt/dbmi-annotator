@@ -15,13 +15,13 @@
 # Parent class of data or material item
 
 ## Qualifier
-def Qualifier(object):
-	def __init__(self):	
-		self.claim_body_id = None
-		self.qvalue = None
-		self.subject = None
-		self.predicate = None
-		self.object = None
+class Qualifier:
+
+	def __init__(self, qvalue, subject, predicate, object):	
+		self.qvalue = qvalue
+		self.subject = subject
+		self.predicate = predicate
+		self.object = object
 		self.concept_code = None
 		self.vocabulary_id = None
 		self.qualifier_type_concept_code = None
@@ -31,29 +31,41 @@ def Qualifier(object):
 		self.enantiomer = None
 		self.metabolite = None
 
+	def setTypeDrugProduct(self):
+		self.qualifier_type_concept_code = ""
+		self.qualifier_type_vocabulary_id = ""
+
+	def setTypeEnzyme(self):
+		self.qualifier_type_concept_code = ""
+		self.qualifier_type_vocabulary_id = ""
+
+	def setRolePrecipitant(self):
+		self.qualifier_role_concept_code = ""
+		self.qualifier_role_vocabulary_id = ""
+
+	def setRoleObject(self):
+		self.qualifier_role_concept_code = ""
+		self.qualifier_role_vocabulary_id = ""
+
+	def setRoleProbeSubstrate(self):
+		self.qualifier_role_concept_code = ""
+		self.qualifier_role_vocabulary_id = ""
+
+
 ## MP Annotation ##############################################################
 class Annotation(object):
 
-	def __init__(self, urn, source, method, csubject, cpredicate, cobject):
-
-		self.source = source; self.urn = urn; self.method = method
-		self.csubject = csubject; self.cpredicate = cpredicate; self.cobject = cobject		
-		self.claimid = None; self.label = None
+	def __init__(self, urn, source, creator, method, label):
+		self.source = source
+		self.urn = urn
+		self.creator = creator
+		self.method = method	
+		self.label = label
+		self.csubject = None
+		self.cpredicate = None
+		self.cobject = None
+		self.claimid = None
 		self.prefix = None; self.exact = None; self.suffix = None # oa selector
-		self.rejected_statement = None
-		self.rejected_statement_reason = None
-		self.rejected_statement_comment = None
-		self.date_created = None
-
-	def __init__(self, urn):
-		self.claimid = None; self.urn = urn
-		self.csubject = None; self.cpredicate = None; self.cobject = None		
-		self.label = None; self.source = None
-		self.prefix = None; self.exact = None; self.suffix = None # oa selector
-		self.method = None  
-		self.rejected_statement = None
-		self.rejected_statement_reason = None
-		self.rejected_statement_comment = None
 		self.date_created = None
 
 	def setOaSelector(self, prefix, exact, suffix):
@@ -63,8 +75,12 @@ class Annotation(object):
 
 ## MP Statement annotation
 class Statement(Annotation):
-	def __init__(self):
+	def __init__(self, csubject, cpredicate, cobject):
+
 		self.negation = None # assertion negation supports or refutes
+		self.rejected_statement = None
+		self.rejected_statement_reason = None
+		self.rejected_statement_comment = None
 
 ## DDI clinical trial annotation
 class ClinicalTrial(Annotation):
@@ -72,7 +88,17 @@ class ClinicalTrial(Annotation):
 	def __init__(self):
 		self.qualifer = None
 		self.mpDataMaterialD = {} # data and material dict {dmIdx: ClinicalTrialDMRow}
-	
+
+		self.rejected_statement = None
+		self.rejected_statement_reason = None
+		self.rejected_statement_comment = None
+
+	def setQualifiers(self, csubject, cpredicate, cobject, cqualifier):
+		self.csubject = csubject
+		self.cpredicate = cpredicate
+		self.cobject = cobject	
+		self.qualifer = cqualifier		
+
 	def getDataMaterials(self): # return list of DataMaterials
 		return self.mpDataMaterialD
 
@@ -85,11 +111,12 @@ class ClinicalTrial(Annotation):
 		else:
 			return None
 
-	def setSpecificDataMaterial(self, dmRow, index): # add DataMaterialRow
-		if index in self.mpDataMaterialD:
-			print "[Warning] Data row already been filled - index: " + str(index)
+	def setSpecificDataMaterial(self, dmRow, dmIdx): # add DataMaterialRow
+		if isinstance(dmRow, ClinicalTrialDMRow):
+			self.mpDataMaterialD[dmIdx] = dmRow
 		else:
-			self.mpDataMaterialD[index] = dmRow
+			print "[ERROR] ClinicalTrial - setSpecificDataMaterial dmRow undefined"
+
 
 ## Phenotype clinical study annotation
 class PhenotypeClinicalStudy(Annotation):
