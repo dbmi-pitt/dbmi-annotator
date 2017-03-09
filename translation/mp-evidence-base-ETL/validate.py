@@ -20,8 +20,7 @@ from postgres import connection as pgconn
 from postgres import mpEvidenceLoad as pgmp
 from postgres import mpEvidenceQry as pgqry
 
-from elastic import queryAnnsInElastico as es
-
+from elastic import queryMPAnnotation as es
 import loadAnnotatorAnnsToRDB as pgload
 
 reload(sys)  
@@ -126,9 +125,9 @@ def createAnnForTesting(conn, template, annUrn):
 
 
 ## TESTING FUNCTIONS ######################################################
-def testClaim(annotation, urn, label, csubject, cpredicate, cobject, exact, method, negation, rejected):
+def testClaim(annotation, urn, label, csubject, cpredicate, cobject, exact, method, negation, rejected, csubjectPC, cobjectPC, qualifierPC):
 	print "[INFO] begin validating claim qualifiers..."
-	if isMatched("subject", csubject, annotation.csubject) and isMatched("predicate", cpredicate, annotation.cpredicate) and isMatched("object", cobject, annotation.cobject):
+	if isMatched("subject", csubject, annotation.csubject) and isMatched("predicate", cpredicate, annotation.cpredicate) and isMatched("object", cobject, annotation.cobject) and isMatched("subject ParentCompound", csubjectPC, annotation.csubjectPC) and isMatched("object ParentCompound", cobjectPC, annotation.cobjectPC) and isMatched("qualifier ParentCompound", qualifierPC, annotation.qualifierPC):
 		print "[TEST] claim qualifiers is validated"
 	else:
 		print "[ERROR] claim qualifiers are not correct"
@@ -217,7 +216,7 @@ def test_clinical_trial_1(conn, template):
 
 	## claim validation
 	print "[INFO] ================= Begin validating MP Claim ======================"
-	testClaim(annotation, "test-case-id-1", "telaprevir_inhibits_atorvastatin", "atorvastatin", "inhibits", "telaprevir", "claim-text", "DDI clinical trial", False, "rejected-reason|rejected-comment")
+	testClaim(annotation, "test-case-id-1", "telaprevir_inhibits_atorvastatin", "atorvastatin", "inhibits", "telaprevir", "claim-text", "DDI clinical trial", False, "rejected-reason|rejected-comment", "enantiomer|", "|metabolite", "")
 
 	print "[INFO] ================= Begin validating MP data ======================="
 	## data 1 validation
@@ -236,6 +235,7 @@ def test_clinical_trial_1(conn, template):
 	testParticipants(partMaterial1, "21.00", "participants-text-1")
 	subjectdose1 = dmRow1.getMaterialDoseInRow("subject_dose")
 	testMaterialDose(subjectdose1, "subject_dose", "30", "Oral", "1", "SD", "drug2Dose-text-1")
+
 	objectdose1 = dmRow1.getMaterialDoseInRow("object_dose")
 	testMaterialDose(objectdose1, "object_dose", "20", "Oral", "16", "Q8", "drug1Dose-text-1")
 
@@ -330,11 +330,11 @@ def validate():
 	MP_ANN_1 = "./template/test-annotation-1.json"
 	test_clinical_trial_1(conn, MP_ANN_1)
 
-	MP_ANN_2 = "./template/test-annotation-2.json"
-	test_phenotype_clinical_study_1(conn, MP_ANN_2)
+	# MP_ANN_2 = "./template/test-annotation-2.json"
+	# test_phenotype_clinical_study_1(conn, MP_ANN_2)
 
-	MP_ANN_3 = "./template/test-annotation-3.json"
-	test_case_report_1(conn, MP_ANN_3)
+	# MP_ANN_3 = "./template/test-annotation-3.json"
+	# test_case_report_1(conn, MP_ANN_3)
 
 	conn.close()
 

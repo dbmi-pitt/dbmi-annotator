@@ -14,7 +14,7 @@
 
 import sys, uuid, datetime
 from sets import Set
-from model.Micropublication import *
+from model.micropublication import Annotation, DataMaterialRow, DMItem, DataRatioItem, MaterialDoseItem, MaterialParticipants, MaterialPhenotypeItem, DataReviewer, DataDips
 
 ######################### QUERY MP Annotation ##########################
 # query all mp annotations

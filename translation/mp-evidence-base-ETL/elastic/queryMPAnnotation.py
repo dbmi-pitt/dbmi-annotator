@@ -62,16 +62,13 @@ def parseToMPAnn(document):
 
 	return annotation
 
+#def createPhenotypeClinicalStudy(doc, doc_urn):
 
+## DDI CLINICAL TRIAL ##############################################################
 ## initial clinical trial annotation
-# param1: drug1 name
-# param2: drug2 name
-# param3: DDI relationship
-# param4: enzyme
-# param5: precipitant in DDI
-# param6: drug1 parent compound
-# param7: drug2 parent compound
-# return: ClinicalTrial
+# param1: annotation in Json from elasticsearch
+# param2: annotation Id
+# return: Clinical trial annotation
 def createClinicalTrial(doc, doc_urn):
 
 	claim = doc["argues"]; source = doc["rawurl"]; email = doc["email"]
@@ -79,15 +76,122 @@ def createClinicalTrial(doc, doc_urn):
 	exact = getSelectorTxt(claim, "exact"); prefix = getSelectorTxt(claim, "prefix"); suffix = getSelectorTxt(claim, "suffix")
 
 	qualifier = claim["qualifiedBy"]; 
+
+	## validation
+	if "precipitant" not in qualifier:
+		print "[ERROR] createClinicalTrial: qualifier error, skip source (%s), claim (%s)" % (source, label)
+		return None
+
 	drugname1 = qualifier["drug1"]; drugname2 = qualifier["drug2"]; enzyme = qualifier["enzyme"]; predicate = qualifier["relationship"]; precipitant = qualifier["precipitant"]
-	drug1PC = qualifier["drug1PC"]; drug2PC = qualifier["drug2PC"]
+
+	if "drug1PC" in qualifier:		
+		drug1PC = qualifier["drug1PC"]
+	else:
+		drug1PC = None
+	
+	if "drug2PC" in qualifier:
+		drug2PC = qualifier["drug2PC"]
+	else:
+		drug2PC = None
 
 	## data validation
 	if precipitant not in ["drug1","drug2"] or ((predicate == "interact with" and (not drugname1 or not drugname2 or enzyme)) or (predicate in ["inhibits", "substrate of"] and (not drugname1 or not drugname2 or not enzyme))): 
 		print "[WARN] DDI clinical trial: qualifier error, skip (%s) - (%s)" % (source, label)
 		return
 	
-	cpredicate = Qualifier(predicate, False, True, False)
+	## MP Claim
+	annotation = ClinicalTrial()
+	addQualifiersForCT(annotation, drugname1, drugname2, predicate, enzyme, precipitant, drug1PC, drug2PC)
+	annotation.setOaSelector(prefix, exact, suffix)
+
+	## MP Data
+	dataL = claim["supportsBy"]
+	if dataL and len(dataL) > 0:
+		for i in xrange(0, len(dataL)):
+			data = dataL[i]
+			dmRow = ClinicalTrialDMRow(i)
+
+			for ratioType in ["auc", "cmax", "clearance", "halflife"]:
+				if data[ratioType]:
+					ratioItem = createDataRatioItem(data[ratioType], ratioType)	
+					setattr(dmRow, ratioType, ratioItem)
+ 
+			material = data["supportsBy"]["supportsBy"]
+			if material:
+				if material["participants"]:
+					participants = createParticipantsItem(material["participants"])
+					dmRow.participants = participants
+
+				cprecipitant = annotation.getPrecipitantQualifier()
+				cobject = annotation.getObjectQualifier()
+				preciptDose = None; objectDose = None
+				if material["drug1Dose"]:
+					if drugname1 == cprecipitant.qvalue: ## drug1 is precipitant
+						preciptDose = createDoseItem(material["drug1Dose"], "precipitant", drugname1)				
+					elif drugname1 == cobject.qvalue: ## drug1 is object
+						objectDose = createDoseItem(material["drug1Dose"], "object", drugname1)
+				if material["drug2Dose"]:
+					if drugname2 == cprecipitant.qvalue: ## drug2 is precipitant
+						preciptDose = createDoseItem(material["drug2Dose"], "precipitant", drugname2)
+						dmRow.precipitant_dose = preciptDose					
+					elif drugname2 == cobject.qvalue: ## drug2 is object
+						objectDose = createDoseItem(material["drug2Dose"], "object", drugname2)
+
+				if preciptDose:
+					dmRow.precipitant_dose = preciptDose	
+				if objectDose:
+					dmRow.object_dose = objectDose
+
+			annotation.setSpecificDataMaterial(dmRow, i) # add new row of data and material			
+	return annotation
+
+def createDoseItem(item, doseType, drugname):
+
+	if doseType in ["precipitant", "object", "probesubstrate"] or not drugname:
+		dose = MaterialDoseItem(doseType)
+		value = item["value"]
+		formulation = item["formulation"]
+		duration = item["duration"]
+		regimens = item["regimens"]
+		exact = getSelectorTxt(item, "exact"); prefix = getSelectorTxt(item, "prefix"); suffix = getSelectorTxt(item, "suffix")
+		dose.setAttributes(drugname, value, formulation, duration, regimens)
+		dose.setSelector(prefix, exact, suffix)
+		return dose
+	else:
+		print "[ERROR] createDoseItem: (%s) doseType undefined %s" % (drugname, doseType)
+	return None
+
+def createParticipantsItem(item):
+	part = MaterialParticipants(item["value"])
+	exact = getSelectorTxt(item, "exact"); prefix = getSelectorTxt(item, "prefix"); suffix = getSelectorTxt(item, "suffix")
+	part.setSelector(prefix, exact, suffix)
+	return part
+
+def createDataRatioItem(item, ratioType):	
+
+	if ratioType in ["auc","cmax","clearance","halflife"]:
+		dataRatio = DataRatioItem(ratioType)
+		rVal = item["value"]
+		rType= item["type"]
+		rDirection = item["direction"]
+		exact = getSelectorTxt(item, "exact"); prefix = getSelectorTxt(item, "prefix"); suffix = getSelectorTxt(item, "suffix")
+		dataRatio.setAttributes(rVal, rType, rDirection)
+		dataRatio.setSelector(prefix, exact, suffix)
+		return dataRatio
+	else:
+		print "[ERROR] createDataRatioItem: ratioType undefined %s" % ratioType
+	return None
+	
+## add qualifiers to Clinical trial annotation
+# parma1: annotation obj
+# param2: drug1 name
+# param3: drug2 name
+# param4: DDI relationship
+# param5: enzyme
+# param6: precipitant in DDI
+# param7: drug1 parent compound
+# param8: drug2 parent compound
+def addQualifiersForCT(annotation, drugname1, drugname2, predicate, enzyme, precipitant, drug1PC, drug2PC):
 	csubject = None; cobject = None; cqualifier = None
 
 	if predicate == "interact with":
@@ -168,10 +272,9 @@ def createClinicalTrial(doc, doc_urn):
 			cqualifier.setTypeDrugProduct()
 			addParentCompound(cqualifier, drug2PC)	
 		
-	annotation = ClinicalTrial()
-	annotation.setOaSelector(prefix, exact, suffix)
+	cpredicate = Qualifier(predicate, False, True, False)
 	annotation.setQualifiers(csubject, cpredicate, cobject, cqualifier)
-	return annotation
+
 
 ## add parent compound to qualifier		
 # param1: Qualifier

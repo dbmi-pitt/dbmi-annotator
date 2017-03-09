@@ -5,6 +5,7 @@ def connect_postgres(hostname, username, password, database):
 	print("Postgres connection created")	
 	return conn
 
+
 def createdb(conn, db_schema):
 	with open(db_schema) as dbscript:
 		sql = dbscript.read()
