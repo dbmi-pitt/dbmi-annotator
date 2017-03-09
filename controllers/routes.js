@@ -66,10 +66,13 @@ module.exports = function(app, passport) {
 	    // fetch all DDI annotations for current user
 	    var url = config.protocal + "://" + config.apache2.host +":" + config.apache2.port + "/annotatorstore/search?email=" + req.user.email + "&annotationType=" + annotationType;
 
-	    
+        //loading csv file
+        var content = loadArticleList();
+
 		res.render('main.ejs', {
 		    user : req.user,
 		    annotations : [],
+            article: content,
 		    exportMessage : req.flash('exportMessage'),
 		    loadMessage : req.flash('loadMessage'),
 		    host : config.annotator.host
@@ -441,5 +444,29 @@ function isRegisterFormValid(req, res, next){
 	return next();
     } 
 
+}
+
+function loadArticleList(){
+    console.log("Load article list.");
+    var fs = require('fs');
+    var result = [];
+    var articleList = config.article;
+    /*fs.readFile('./article-list/dailymed-list.csv', 'utf8', function(err, contents) {
+        console.log(contents);
+    });*/
+
+    //synchronized read csv
+    for (var j = 0; j < articleList.length; j++) {
+        var contents = fs.readFileSync('./article-list/' + articleList[j] + '-list.csv', 'utf8');
+
+        var list = [];
+        var temp = contents.split('\n');
+        for (var i = 0; i < temp.length; i++) {
+            var arr = temp[i].split(',');
+            list.push({'article':arr[0], 'link':arr[1]});
+        }
+        result[articleList[j]] = list;
+    }
+    return result;
 }
 
