@@ -78,9 +78,6 @@ def load_annotations(conn, annotations):
 
 		## method should be 1:1 to data & material and n:1 with claim
 		#method_id = pgmp.insert_method(conn, row, mp_claim_id, mp_data_index)
-		## MP data
-		# load_mp_data_annotation(conn, row, mp_claim_id, creator, mp_data_index, method_id)
-		# load_mp_material_annotation(conn, row, mp_claim_id, creator, mp_data_index)
 
 		#generateHighlightSet(row, highlightD)  # add unique drugs to set
 		
@@ -94,16 +91,16 @@ def load_DDI_CT_annotation(conn, ann):
 	## insert mp_claim_annotation, oa_claim_body
 	claim_target_id = load_oa_target(conn, ann.source, ann.prefix, ann.exact, ann.suffix)
 	claim_body_id = pgmp.insert_claim_body(conn, ann.label, ann.exact)
-	mp_claim_id = pgmp.insert_claim_annotation(conn, ann, claim_body_id, claim_target_id, negation)
+	mp_claim_id = pgmp.insert_claim_annotation(conn, ann, claim_body_id, claim_target_id, False)
 	pgmp.update_claim_body(conn, mp_claim_id, claim_body_id)
 
 	## insert qualifiers
-	pgmp.insert_qualifier(conn, ann.csubject, oa_claim_body_id)
-	pgmp.insert_qualifier(conn, ann.cpredicate, oa_claim_body_id)
-	pgmp.insert_qualifier(conn, ann.cobject, oa_claim_body_id)
+	pgmp.insert_qualifier(conn, ann.csubject, claim_body_id)
+	pgmp.insert_qualifier(conn, ann.cpredicate, claim_body_id)
+	pgmp.insert_qualifier(conn, ann.cobject, claim_body_id)
 		
-	if ann.qualifier:
-		pgmp.insert_qualifier(conn, ann.cqualifier, oa_claim_body_id)
+	if ann.cqualifier:
+		pgmp.insert_qualifier(conn, ann.cqualifier, claim_body_id)
 	
 	## insert data
 	dmRows = ann.getDataMaterials()
@@ -119,17 +116,17 @@ def load_DDI_CT_annotation(conn, ann):
 def load_DDI_CT_DM(conn, dmRow, mp_claim_id, source, creator):
 	## insert data ratios
 	if dmRow.auc:
-		load_data_ratio(conn, dmRow.auc, mp_claim_id, source, creator, dmRow.dmIdx, ev_supports)
+		load_data_ratio(conn, dmRow.auc, mp_claim_id, source, creator, dmRow.dmIdx, dmRow.ev_supports)
 	if dmRow.cmax:
-		load_data_ratio(conn, dmRow.cmax, mp_claim_id, source, creator, dmRow.dmIdx, ev_supports)
+		load_data_ratio(conn, dmRow.cmax, mp_claim_id, source, creator, dmRow.dmIdx, dmRow.ev_supports)
 	if dmRow.clearance:
-		load_data_ratio(conn, dmRow.clearance, mp_claim_id, source, creator, dmRow.dmIdx, ev_supports)
+		load_data_ratio(conn, dmRow.clearance, mp_claim_id, source, creator, dmRow.dmIdx, dmRow.ev_supports)
 	if dmRow.halflife:
-		load_data_ratio(conn, dmRow.halflife, mp_claim_id, source, creator, dmRow.dmIdx, ev_supports)
+		load_data_ratio(conn, dmRow.halflife, mp_claim_id, source, creator, dmRow.dmIdx, dmRow.ev_supports)
 
 	## insert material participants
 	if dmRow.participants:
-		load_participants(conn, dmRow.participants, mp_claim_id, source, creator, dmRow.dmIdx, ev_supports)
+		load_participants(conn, dmRow.participants, mp_claim_id, source, creator, dmRow.dmIdx, dmRow.ev_supports)
 
 	## insert material dose
 	if dmRow.precipitant_dose:
@@ -140,7 +137,7 @@ def load_DDI_CT_DM(conn, dmRow, mp_claim_id, source, creator):
 
 # LOAD INDIVIDUAL DATA OR MATERIAL ###################################################
 def load_data_ratio(conn, dataRatio, mp_claim_id, source, creator, dmIdx, ev_supports):
-	target_id = pgmp.load_oa_target(conn, source, dataRatio.prefix, dataRatio.exact, dataRatio.suffix) 
+	target_id = load_oa_target(conn, source, dataRatio.prefix, dataRatio.exact, dataRatio.suffix) 
 	data_body_id = pgmp.insert_data_annotation(conn, mp_claim_id, target_id, creator, dataRatio.field, dmIdx, ev_supports)
 	pgmp.insert_data_field(conn, data_body_id, "value", dataRatio.value, None, None)
 	pgmp.insert_data_field(conn, data_body_id, "type", dataRatio.type, None, None)
@@ -148,8 +145,8 @@ def load_data_ratio(conn, dataRatio, mp_claim_id, source, creator, dmIdx, ev_sup
 
 
 def load_participants(conn, partItem, mp_claim_id, source, creator, dmIdx, ev_supports):
-	target_id = pgmp.load_oa_target(conn, source, partItem.prefix, partItem.exact, partItem.suffix) 
-	material_body_id = pgmp.insert_material_annotation(conn, mp_claim_id, target_id, creator, "participants", dmRow.dmIdx, dmRow.ev_supports)
+	target_id = load_oa_target(conn, source, partItem.prefix, partItem.exact, partItem.suffix) 
+	material_body_id = pgmp.insert_material_annotation(conn, mp_claim_id, target_id, creator, "participants", dmIdx, ev_supports)
 	pgmp.insert_material_field(conn, material_body_id, "value", partItem.value, None, None)
 
 

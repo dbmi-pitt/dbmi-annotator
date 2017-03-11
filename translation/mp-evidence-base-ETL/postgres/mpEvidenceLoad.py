@@ -19,7 +19,7 @@ curr_date = datetime.datetime.now()
 
 
 # QUALIFIER ################################################################
-def insert_qualifier(conn, qualifier, oa_claim_body_id):
+def insert_qualifier(conn, qualifier, claim_body_id):
 	cur = conn.cursor()
 
 	s = qualifier.subject; p = qualifier.predicate; o = qualifier.object
@@ -32,7 +32,7 @@ def insert_qualifier(conn, qualifier, oa_claim_body_id):
 	enantiomer = qualifier.enantiomer
 	metabolite = qualifier.metabolite
 
-	cur.execute("""INSERT INTO qualifier (urn, claim_body_id, subject, predicate, object, qvalue, concept_code, vocabulary_id, qualifier_type_concept_code, qualifier_type_vocabulary_id, qualifier_role_concept_code, qualifier_role_vocabulary_id, enantiomer, metabolite) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""", (uuid.uuid4().hex, claim_body_id, s, p, o, qvalue, cpt_code, vocab_id, type_cpt_code, type_vocab_id, role_cpt_code, role_vocab_id, enantiomer, metabolite))
+	cur.execute("INSERT INTO qualifier (urn, claim_body_id, subject, predicate, object, qvalue, concept_code, vocabulary_id, qualifier_type_concept_code, qualifier_type_vocabulary_id, qualifier_role_concept_code, qualifier_role_vocabulary_id, enantiomer, metabolite) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (uuid.uuid4().hex, claim_body_id, s, p, o, qvalue, cpt_code, vocab_id, type_cpt_code, type_vocab_id, role_cpt_code, role_vocab_id, enantiomer, metabolite))
 
 
 # OPEN ANNOTATION - TARGET AND SELECTOR #############################################
@@ -74,13 +74,12 @@ def insert_oa_target(conn, source, selector_id):
 # return claim annotation id
 def insert_claim_annotation(conn, annotation, oa_claim_body_id, claim_target_id, negation):
 	curr_date = datetime.datetime.now()
-	creator = creator; urn = annotation.urn
+	creator = annotation.creator; urn = annotation.urn
 	rejected = annotation.rejected_statement; rejected_reason = annotation.rejected_statement_reason; rejected_comment = annotation.rejected_statement_comment
 
-	qry1 = "INSERT INTO mp_claim_annotation (urn, has_body, has_target, creator, date_created, date_updated, negation, rejected_statement, rejected_statement_reason, rejected_statement_comment)" + "VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s');" % (urn, oa_claim_body_id, claim_target_id, creator, curr_date, curr_date, negation, rejected, rejected_reason, rejected_comment)
-
 	cur = conn.cursor()
-	cur.execute(qry1)
+	cur.execute("INSERT INTO mp_claim_annotation (urn, has_body, has_target, creator, date_created, date_updated, negation, rejected_statement, rejected_statement_reason, rejected_statement_comment) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s);", (urn, oa_claim_body_id, claim_target_id, creator, curr_date, curr_date, negation, rejected, rejected_reason, rejected_comment))
+
 	cur.execute("SELECT * FROM mp_claim_annotation WHERE urn = '" + urn + "';")
 
 	for row in cur.fetchall():
@@ -127,7 +126,7 @@ def insert_material_annotation(conn, mp_claim_id, target_id, creator, material_t
 
 def insert_material_body(conn, material_type, material_annotation_id):
 	urn = uuid.uuid4().hex
-
+	cur = conn.cursor()
 	cur.execute("INSERT INTO oa_material_body (urn, material_type, is_oa_body_of) VALUES (%s, %s, %s);", (urn, material_type, material_annotation_id))
 	cur.execute("SELECT * FROM oa_material_body WHERE urn = '" + urn + "';")
 	for result in cur.fetchall():
@@ -140,7 +139,7 @@ def insert_material_body(conn, material_type, material_annotation_id):
 def insert_material_field(conn, material_body_id, material_field_type, value_as_string, value_as_number, value_as_concept_id):
 
 	cur = conn.cursor()
-	cur.execute("INSERT INTO material_field (urn, material_body_id, material_field_type, value_as_string, value_as_number, value_as_concept_id) VALUES (%s, %s, %s, %s, %s);", (uuid.uuid4().hex, material_body_id, material_field_type, value_as_string, value_as_number, value_as_concept_id))
+	cur.execute("INSERT INTO material_field (urn, material_body_id, material_field_type, value_as_string, value_as_number, value_as_concept_id) VALUES (%s, %s, %s, %s, %s, %s);", (uuid.uuid4().hex, material_body_id, material_field_type, value_as_string, value_as_number, value_as_concept_id))
 
 
 # # MP DATA ########################################################
@@ -174,7 +173,7 @@ def insert_data_body(conn, data_type, data_annotation_id):
 def insert_data_field(conn, data_body_id, data_field_type, value_as_string, value_as_number, value_as_concept_id):
 
 	cur = conn.cursor()
-	cur.execute("""INSERT INTO data_field (urn, data_body_id, data_field_type, value_as_string, value_as_number) VALUES (%s, %s, %s, %s, %s)""", (uuid.uuid4().hex, data_body_id, data_field_type, value_as_string, value_as_number, value_as_concept_id))
+	cur.execute("""INSERT INTO data_field (urn, data_body_id, data_field_type, value_as_string, value_as_number, value_as_concept_id) VALUES (%s, %s, %s, %s, %s, %s)""", (uuid.uuid4().hex, data_body_id, data_field_type, value_as_string, value_as_number, value_as_concept_id))
 
 
 # 	if data_type == "dipsquestion" and "|" in row["dipsquestion"]:

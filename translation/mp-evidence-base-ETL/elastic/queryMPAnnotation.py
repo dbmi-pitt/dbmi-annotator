@@ -49,7 +49,8 @@ def parseToMPAnns(documents):
 	anns = []
 	for doc in documents:
 		ann = parseToMPAnn(doc)
-		anns.append(ann)
+		if ann:
+			anns.append(ann)
 	return anns
 
 def parseToMPAnn(document):
@@ -62,7 +63,22 @@ def parseToMPAnn(document):
 
 	return annotation
 
-#def createPhenotypeClinicalStudy(doc, doc_urn):
+def parseEvSupports(evRelationship):
+	if evRelationship == "supports":
+		return True
+	elif evRelationship in ["refutes", "challenges"]:
+		return False
+	return True
+
+def addAnnotationMetadata(annotation, urn, source, email, date_created, label):
+	if not urn or not source or not email:
+		print "[ERROR] Json annotation error, skip source (%s), claim (%s)" % (source, label)
+	annotation.urn = urn
+	annotation.source = source
+	annotation.creator = email
+	annotation.label = label
+	annotation.date_created = date_created
+	
 
 ## DDI CLINICAL TRIAL ##############################################################
 ## initial clinical trial annotation
@@ -77,9 +93,8 @@ def createClinicalTrial(doc, doc_urn):
 
 	qualifier = claim["qualifiedBy"]; 
 
-	## validation
 	if "precipitant" not in qualifier:
-		print "[ERROR] createClinicalTrial: qualifier error, skip source (%s), claim (%s)" % (source, label)
+		print "[ERROR] createClinicalTrial: percipitant undefined, skip source (%s), claim (%s)" % (source, label)
 		return None
 
 	drugname1 = qualifier["drug1"]; drugname2 = qualifier["drug2"]; enzyme = qualifier["enzyme"]; predicate = qualifier["relationship"]; precipitant = qualifier["precipitant"]
@@ -97,10 +112,11 @@ def createClinicalTrial(doc, doc_urn):
 	## data validation
 	if precipitant not in ["drug1","drug2"] or ((predicate == "interact with" and (not drugname1 or not drugname2 or enzyme)) or (predicate in ["inhibits", "substrate of"] and (not drugname1 or not drugname2 or not enzyme))): 
 		print "[WARN] DDI clinical trial: qualifier error, skip (%s) - (%s)" % (source, label)
-		return
+		return None
 	
 	## MP Claim
 	annotation = ClinicalTrial()
+	addAnnotationMetadata(annotation, doc_urn, source, email, doc["created"], label)
 	addQualifiersForCT(annotation, drugname1, drugname2, predicate, enzyme, precipitant, drug1PC, drug2PC)
 	annotation.setOaSelector(prefix, exact, suffix)
 
@@ -110,6 +126,7 @@ def createClinicalTrial(doc, doc_urn):
 		for i in xrange(0, len(dataL)):
 			data = dataL[i]
 			dmRow = ClinicalTrialDMRow(i)
+			dmRow.ev_supports = parseEvSupports(data["evRelationship"]) 
 
 			for ratioType in ["auc", "cmax", "clearance", "halflife"]:
 				if data[ratioType]:

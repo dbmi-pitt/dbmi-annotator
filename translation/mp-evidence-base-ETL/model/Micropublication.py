@@ -214,7 +214,7 @@ class CaseReport(Annotation):
 ## Data and Material as individual evidence (row of data & material in annotation table) ##############################################################################
 class DMRow(object):
 	def __init__(self):
-		self.ev_supports = None
+		self.ev_supports = None # True or False
 		self.dmIdx = None
 
 class ClinicalTrialDMRow(DMRow):
