@@ -15,7 +15,7 @@ def createMpAnnotation(host, port, annotation, annotationId):
 def queryByBody(host, port, doc):
 	es = Elasticsearch([{'host': host, 'port': port}])
 	res = es.search(index="annotator", size="5000", body=doc)	
-	print("Got %d Hits:" % res['hits']['total'])
+	# print("Got %d Hits:" % res['hits']['total'])
 	return res
 
 def queryById(host, port, annotationId):
@@ -70,8 +70,9 @@ def parseAnnotation(annotation):
 	initDict["method"] = claim["method"]	
 	
 	initDict["relationship"] = claim["qualifiedBy"]["relationship"]
+
+	## drug 1 (required) and drug 2
 	initDict["drug1"] = claim["qualifiedBy"]["drug1"]
-	
 	if "drug2" in claim["qualifiedBy"]:
 		initDict["drug2"] = claim["qualifiedBy"]["drug2"]
 	
@@ -80,6 +81,13 @@ def parseAnnotation(annotation):
 
 	if "precipitant" in claim["qualifiedBy"]:
 		initDict["precipitant"] = claim["qualifiedBy"]["precipitant"]
+
+	## parent coumpound
+	if "drug1PC" in claim["qualifiedBy"]:
+		initDict["drug1PC"] = claim["qualifiedBy"]["drug1PC"]
+
+	if "drug2PC" in claim["qualifiedBy"]:
+		initDict["drug2PC"] = claim["qualifiedBy"]["drug2PC"]
 
 	if "rejected" in claim and claim["rejected"]:			
 		initDict["rejected"] = claim["rejected"]["reason"] or ""
@@ -165,7 +173,7 @@ def addDataMaterialToAnnDict(data, material, annDict):
 	return annDict
 
 def getAnnDict():
-	return {"document": None, "useremail": None, "claimlabel": None, "claimtext": None, "method": None, "relationship": None, "drug1": None, "drug2": None, "precipitant": None, "enzyme": None, "rejected": None, "evRelationship":None, "participants":None, "participantstext":None, "drug1dose":None, "drug1formulation":None, "drug1duration":None, "drug1regimens":None, "drug1dosetext":None, "drug2dose":None, "phenotypetype": None, "phenotypevalue": None, "phenotypemetabolizer": None, "phenotypepopulation": None, "drug2formulation":None, "drug2duration":None, "drug2regimens":None, "drug2dosetext":None, "aucvalue":None, "auctype":None, "aucdirection":None, "auctext":None, "cmaxvalue":None, "cmaxtype":None, "cmaxdirection":None, "cmaxtext":None, "clearancevalue":None, "clearancetype":None, "clearancedirection":None, "clearancetext":None, "halflifevalue":None, "halflifetype":None, "halflifedirection":None, "halflifetext":None, "dipsquestion":None, "reviewer":None, "reviewerdate":None, "reviewertotal":None, "reviewerlackinfo":None, "grouprandom":None, "parallelgroup":None, "subject": None, "object": None, "id": None}
+	return {"document": None, "useremail": None, "claimlabel": None, "claimtext": None, "method": None, "relationship": None, "drug1": None, "drug2": None, "drug1PC": None, "drug2PC": None, "precipitant": None, "enzyme": None, "rejected": None, "evRelationship":None, "participants":None, "participantstext":None, "drug1dose":None, "drug1formulation":None, "drug1duration":None, "drug1regimens":None, "drug1dosetext":None, "drug2dose":None, "phenotypetype": None, "phenotypevalue": None, "phenotypemetabolizer": None, "phenotypepopulation": None, "drug2formulation":None, "drug2duration":None, "drug2regimens":None, "drug2dosetext":None, "aucvalue":None, "auctype":None, "aucdirection":None, "auctext":None, "cmaxvalue":None, "cmaxtype":None, "cmaxdirection":None, "cmaxtext":None, "clearancevalue":None, "clearancetype":None, "clearancedirection":None, "clearancetext":None, "halflifevalue":None, "halflifetype":None, "halflifedirection":None, "halflifetext":None, "dipsquestion":None, "reviewer":None, "reviewerdate":None, "reviewertotal":None, "reviewerlackinfo":None, "grouprandom":None, "parallelgroup":None, "ddiobject": None, "mpsubject": None, "mpobject": None, "id": None}
 
 
 def getTextSpan(field):

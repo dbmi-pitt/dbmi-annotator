@@ -21,74 +21,13 @@ import validate as test
 from postgres import connection as pgconn
 from postgres import mpEvidenceLoad as pgmp
 from postgres import omopConceptQry as pgcp
-from elastic import queryAnnsInElastico as es
+from elastic import queryMPAnnotation as es
+from model.Micropublication import *
 
 reload(sys)  
 sys.setdefaultencoding('utf8')
 
 annsDictCsv = {} ## keep document and count of annotations for validation after load
-curr_date = datetime.datetime.now()
-
-
-def initDideoConceptsDict():
-
-	## dict for dideo omop concept id, temp use subject as precipitant
-	dideoDict = {"DIDEO_00000015": None, "DIDEO_00000005": None, "OBI_0000427": None, "DIDEO_00000013": None, "DIDEO_00000012": None, "DIDEO_00000093": None, "DIDEO_00000099": None, "DIDEO_00000101": None, "DIDEO_00000100": None, "DIDEO_00000103": None, "DIDEO_00000076": None}
-
-	results = subject_concept_code = pgcp.getConceptCodeByVocabId(conn, "DIDEO")
-	for res in results:
-		if res[0] and res[1] and res[1] in dideoDict:
-			dideoDict[res[1]] = res[0]
-	return dideoDict
-
-
-def preprocess(resultsL):
-
-	annsL = []
-	for ann in resultsL:		
-		## clinicaltrial, statement and case report have required field precipitant
-		if ann['method'] in ["Case Report", "DDI clinical trial", "Statement"]: 
-			if ann['precipitant'] and ann['drug1'] and ann['drug2']:
-				if ann['precipitant'] == 'drug1':
-					ann.update({'subject': 'drug1', 'object': 'drug2'})
-				elif ann['precipitant'] == 'drug2':
-					ann.update({'subject': 'drug2', 'object': 'drug1'})
-				else:
-					ann.update({'subject': 'drug1', 'object': 'drug2'})
-				annsL.append(escapeRow(ann))
-				addAnnsToCount(annsDictCsv, ann['document'])
-			else:
-				print "[ERROR] Precipitant or drug data missing, skip document (%s), claim (%s), method (%s)" % (ann['document'], ann['claimlabel'], ann['method'])		
-	
-		## phenotype don't have 2nd drug, relationship is inhibits or substrate of
-		elif ann['method'] == "Phenotype clinical study":
-			if ann['relationship'] in ["inhibits", "substrate of"] and ann['drug1'] and ann['enzyme']:
-				if ann['precipitant'] == 'drug1':
-					ann.update({'subject': 'drug1', 'object': 'enzyme'})
-				elif ann['precipitant'] == 'enzyme':
-					ann.update({'subject': 'enzyme', 'object': 'drug1'})
-				else:
-					ann.update({'subject': 'drug1', 'object': 'drug2'})
-
-				annsL.append(escapeRow(ann))
-				addAnnsToCount(annsDictCsv, ann['document'])
-			else:
-				print "[ERROR] Phenotype clinical study data invalid, skip document (%s), claim (%s), method (%s)" % (ann['document'], ann['claimlabel'], ann['method'])  
-		else:
-			print "[ERROR] Method undefined, skip document (%s), claim (%s), method (%s)" % (ann['document'], ann['claimlabel'], ann['method'])				
-
-	print "[INFO] total %s annotations are validated and pre-processed" % (len(annsL))
-
-	## write to csv
-	csv_columns = ["document", "useremail", "claimlabel", "claimtext", "method", "relationship", "drug1", "drug2", "precipitant", "enzyme", "rejected", "evRelationship", "participants", "participantstext", "drug1dose", "drug1formulation", "drug1duration", "drug1regimens", "drug1dosetext", "drug2dose", "phenotypetype", "phenotypevalue", "phenotypemetabolizer", "phenotypepopulation", "drug2formulation", "drug2duration", "drug2regimens", "drug2dosetext", "aucvalue", "auctype", "aucdirection", "auctext", "cmaxvalue", "cmaxtype", "cmaxdirection", "cmaxtext", "clearancevalue", "clearancetype", "clearancedirection", "clearancetext", "halflifevalue", "halflifetype", "halflifedirection", "halflifetext", "dipsquestion", "reviewer", "reviewerdate", "reviewertotal", "reviewerlackinfo", "grouprandom", "parallelgroup", "subject", "object", "id"]
-
-	with open('data/preprocess-annotator.csv', 'wb') as f: 
-		w = csv.DictWriter(f, csv_columns)
-		w.writeheader()
-		w.writerows(annsL)
-
-	return annsL
-
 
 def addAnnsToCount(annsDict, document):
 	if document in annsDict:
@@ -96,27 +35,6 @@ def addAnnsToCount(annsDict, document):
 	else:
 		annsDict[document] = 1
 
-
-def escapeRow(row):
-
-	if row['claimtext']: 
-		row['claimtext'] = row['claimtext'].replace("'", "''")
-	if row['participantstext']:
-		row['participantstext'] = row['participantstext'].replace("'", "''")
-	if row['drug1dosetext']:
-		row['drug1dosetext'] = row['drug1dosetext'].replace("'", "''")
-	if row['drug2dosetext']:
-		row['drug2dosetext'] = row['drug2dosetext'].replace("'", "''")
-	if row['auctext']:
-		row['auctext'] = row['auctext'].replace("'", "''")
-	if row['cmaxtext']:
-		row['cmaxtext'] = row['cmaxtext'].replace("'", "''")
-	if row['clearancetext']:
-		row['clearancetext'] = row['clearancetext'].replace("'", "''")
-	if row['halflifetext']:
-		row['halflifetext'] = row['halflifetext'].replace("'", "''")	
-
-	return row
 
 def utf_8_encoder(unicode_csv_data):
     for line in unicode_csv_data:
@@ -135,7 +53,6 @@ def load_highlight_annotation(conn, highlightD, creator):
 			pgmp.update_oa_highlight_body(conn, highlight_annotation_id, oa_highlight_body_id)
 
 
-
 def generateHighlightSet(row, highlightD):
 
 	if not row["subject"] or not row["object"]:
@@ -149,172 +66,105 @@ def generateHighlightSet(row, highlightD):
 		highlightD[source] = Set([subjectDrug, objectDrug])
 
 
-
-# LOAD MP MATERIAL ################################################################
-# load table "mp_material_annotation" and "oa_material_body" one row
-def load_mp_material_annotation(conn, row, mp_claim_id, creator, mp_data_index):
-	cur = conn.cursor()
-	source = row['document']
-
-	if row["drug1dose"] and row["subject"] == "drug1":
-		pgmp.insert_material_dose(conn, row, creator, "subject", "drug1", mp_claim_id, mp_data_index)
-	if row["drug1dose"] and row["object"] == "drug1":	
-		pgmp.insert_material_dose(conn, row, creator, "object", "drug1", mp_claim_id, mp_data_index)
-	if row["drug2dose"] and row["subject"] == "drug2":
-		pgmp.insert_material_dose(conn, row, creator, "subject", "drug2", mp_claim_id, mp_data_index)
-	if row["drug2dose"] and row["object"] == "drug2":	
-		pgmp.insert_material_dose(conn, row, creator, "object", "drug2", mp_claim_id, mp_data_index)
-	if row['participants'] and row['participants'].lower() != 'unk':
-		exact = row['participantstext']
-		selector_id = pgmp.insert_oa_selector(conn, '', exact, '')
-		target_id = pgmp.insert_oa_target(conn, source, selector_id)	
-		material_body_id = pgmp.insert_material_annotation(conn, row, mp_claim_id, target_id, creator, 'participants', mp_data_index)
-		pgmp.insert_material_field(conn, row, material_body_id, 'participants')
-
-	## Phenotype clinical study
-	if row['phenotypetype']:
-		material_body_id = pgmp.insert_material_annotation(conn, row, mp_claim_id, None, creator, 'phenotype', mp_data_index)  
-		pgmp.insert_material_field(conn, row, material_body_id, 'phenotype')
-		
-
-# LOAD MP DATA ################################################################
-# load table "mp_data_annotation" and "oa_data_body" one row
-def load_mp_data_annotation(conn, row, mp_claim_id, creator, mp_data_index, method_id):
-	source = row['document']
-
-	# Clinical trial data items
-	if row['aucvalue']:
-		exact = row['auctext']
-		selector_id = pgmp.insert_oa_selector(conn, '', exact, '')
-		target_id = pgmp.insert_oa_target(conn, source, selector_id)		
-		data_body_id = pgmp.insert_mp_data_annotation(conn, row, mp_claim_id, target_id, creator, 'auc', mp_data_index)
-		pgmp.insert_data_field(conn, row, data_body_id, 'auc')
-
-	if row['cmaxvalue']:
-		exact = row['cmaxtext']
-		selector_id = pgmp.insert_oa_selector(conn, '', exact, '')
-		target_id = pgmp.insert_oa_target(conn, source, selector_id)
-		data_body_id = pgmp.insert_mp_data_annotation(conn, row, mp_claim_id, target_id, creator, 'cmax', mp_data_index)
-		pgmp.insert_data_field(conn, row, data_body_id, 'cmax')
-
-	if row['clearancevalue']:
-		exact = row['clearancetext']
-		selector_id = pgmp.insert_oa_selector(conn, '', exact, '')
-		target_id = pgmp.insert_oa_target(conn, source, selector_id)
-		data_body_id = pgmp.insert_mp_data_annotation(conn, row, mp_claim_id, target_id, creator, 'clearance', mp_data_index)
-		pgmp.insert_data_field(conn, row, data_body_id, 'clearance')
-
-	if row['halflifevalue']:
-		exact = row['halflifetext']
-		selector_id = pgmp.insert_oa_selector(conn, '', exact, '')
-		target_id = pgmp.insert_oa_target(conn, source, selector_id)
-		data_body_id = pgmp.insert_mp_data_annotation(conn, row, mp_claim_id, target_id, creator, 'halflife', mp_data_index)
-		pgmp.insert_data_field(conn, row, data_body_id, 'halflife')
-
-	## Case report data items
-	if row['reviewer'] and row['reviewerdate']:
-		data_body_id = pgmp.insert_mp_data_annotation(conn, row, mp_claim_id, None, creator, 'reviewer', mp_data_index)		
-		pgmp.insert_data_field(conn, row, data_body_id, 'reviewer')
-
-	if row['dipsquestion']:
-		data_body_id = pgmp.insert_mp_data_annotation(conn, row, mp_claim_id, None, creator, 'dipsquestion', mp_data_index)		
-		pgmp.insert_data_field(conn, row, data_body_id, 'dipsquestion')
-
-	## evidence type questions
-	if row["grouprandom"]:
-		pgmp.insert_evidence_question(conn, "grouprandom", row["grouprandom"], method_id)
-	if row["parallelgroup"]:
-		pgmp.insert_evidence_question(conn, "parallelgroup", row["parallelgroup"], method_id)
-
-# LOAD MP CLAIM ################################################################
-def load_mp_claim_annotation(conn, row, creator):
-	claimP = ""; claimE = row["claimtext"]; claimS = ""
-	curr_date = datetime.datetime.now()
-	source = row["document"]; claimlabel = row["claimlabel"]
-
-	## when method is statement, negation is evidence supports/refutes
-	negation = "No"
-	if row["method"] == "Statement":
-		if row["evRelationship"] and "refutes" in row["evRelationship"]: 
-			negation = False
-		else:
-			negation = True
-
-	claim_selector_id = pgmp.insert_oa_selector(conn, claimP, claimE, claimS)
-	claim_target_id = pgmp.insert_oa_target(conn, source, claim_selector_id)
-	oa_claim_body_id = pgmp.insert_oa_claim_body(conn, claimlabel, claimE)
-
-	## subject and object
-	if row["subject"] and row["object"]:
-
-		s_drug = row[row["subject"]]
-		o_drug = row[row["object"]]
-
-		# subject_concept_id = dideoDict["subject"]
-		# object_concept_id = dideoDict["object"]
-		subject_concept_code = None
-		subject_concept_id = None
-		object_concept_code = None
-		object_concept_id = None
-
-		pgmp.insert_qualifier(conn, "subject", s_drug, None, None, subject_concept_code, subject_concept_id, oa_claim_body_id)
-		pgmp.insert_qualifier(conn, "object", o_drug, None, None, object_concept_code, object_concept_id, oa_claim_body_id)
-
-	## extran enzyme not in either subject or object
-	if row["enzyme"] and "enzyme" not in [row["subject"], row["object"]]:
-		e_drug = row["enzyme"] 
-		pgmp.insert_qualifier(conn, "enzyme", e_drug, None, None, None, None, oa_claim_body_id)
-
-	pgmp.insert_qualifier(conn, "predicate", row["relationship"], None, None, None, None, oa_claim_body_id)
-
-	## statement rejection 
-	rejected = False; rejected_reason = None; rejected_comment = None
-	if row["rejected"] and row["rejected"] != "":
-		rejected = True
-		if '|' in row["rejected"]:
-			(rejected_reason, rejected_comment) = row["rejected"].split('|')
-		else:
-			(rejected_reason, rejected_comment) = [row["rejected"],""]
-	
-	mp_claim_id = pgmp.insert_mp_claim_annotation(conn, curr_date, oa_claim_body_id, claim_target_id, creator, row['id'], negation, rejected, rejected_reason, rejected_comment)
-	pgmp.update_oa_claim_body(conn, mp_claim_id, oa_claim_body_id)
-	conn.commit()
-
-	return mp_claim_id
-
-
-# LOAD MAIN ################################################################
 # load annotaitons to postgres
-def load_annotations_from_results(conn, results, creator):
+def load_annotations(conn, annotations):
 
 	highlightD = {} # drug highlight set in documents {"doc url" : "drug set"}
 	curr_date = datetime.datetime.now()
 
-	for row in results:
-		annId = row['id']
-
-		# MP Claim - use claim id if exists
-		mp_claim_id = pgmp.findClaimIdByAnnId(conn, annId)
-
-		if not mp_claim_id:
-			mp_claim_id = load_mp_claim_annotation(conn, row, creator)
-
-		## temp work with AnnotationPress 
-		#pgmp.insert_method(conn, row, mp_claim_id, 0) 
-
-		mp_data_index = (pgmp.findNumOfDataItems(conn, mp_claim_id) or 0) + 1 
+	for ann in annotations:
+		if isinstance(ann, ClinicalTrial):
+			load_DDI_CT_annotation(conn, ann)
 
 		## method should be 1:1 to data & material and n:1 with claim
-		method_id = pgmp.insert_method(conn, row, mp_claim_id, mp_data_index)
+		#method_id = pgmp.insert_method(conn, row, mp_claim_id, mp_data_index)
 
-		# MP data
-		load_mp_data_annotation(conn, row, mp_claim_id, creator, mp_data_index, method_id)
-		load_mp_material_annotation(conn, row, mp_claim_id, creator, mp_data_index)
-
-		generateHighlightSet(row, highlightD)  # add unique drugs to set
+		#generateHighlightSet(row, highlightD)  # add unique drugs to set
 		
-	load_highlight_annotation(conn, highlightD, creator)  # load drug highlight annotation
+	#load_highlight_annotation(conn, highlightD, creator)  # load drug highlight annotation
 	conn.commit()
+
+
+# LOAD MP Annotation ################################################################
+def load_DDI_CT_annotation(conn, ann):
+
+	## insert mp_claim_annotation, oa_claim_body
+	claim_target_id = load_oa_target(conn, ann.source, ann.prefix, ann.exact, ann.suffix)
+	claim_body_id = pgmp.insert_claim_body(conn, ann.label, ann.exact)
+	mp_claim_id = pgmp.insert_claim_annotation(conn, ann, claim_body_id, claim_target_id, False)
+	pgmp.update_claim_body(conn, mp_claim_id, claim_body_id)
+
+	## insert qualifiers
+	pgmp.insert_qualifier(conn, ann.csubject, claim_body_id)
+	pgmp.insert_qualifier(conn, ann.cpredicate, claim_body_id)
+	pgmp.insert_qualifier(conn, ann.cobject, claim_body_id)
+		
+	if ann.cqualifier:
+		pgmp.insert_qualifier(conn, ann.cqualifier, claim_body_id)
+	
+	## insert data
+	dmRows = ann.getDataMaterials()
+	if dmRows:
+		for dmIdx,dmRow in dmRows.items():
+			load_DDI_CT_DM(conn, dmRow, mp_claim_id, ann.source, ann.creator)
+
+	conn.commit()
+	return mp_claim_id
+
+
+# LOAD MP ROW OF DATA & MATERIAL  #####################################################
+def load_DDI_CT_DM(conn, dmRow, mp_claim_id, source, creator):
+	## insert data ratios
+	if dmRow.auc:
+		load_data_ratio(conn, dmRow.auc, mp_claim_id, source, creator, dmRow.dmIdx, dmRow.ev_supports)
+	if dmRow.cmax:
+		load_data_ratio(conn, dmRow.cmax, mp_claim_id, source, creator, dmRow.dmIdx, dmRow.ev_supports)
+	if dmRow.clearance:
+		load_data_ratio(conn, dmRow.clearance, mp_claim_id, source, creator, dmRow.dmIdx, dmRow.ev_supports)
+	if dmRow.halflife:
+		load_data_ratio(conn, dmRow.halflife, mp_claim_id, source, creator, dmRow.dmIdx, dmRow.ev_supports)
+
+	## insert material participants
+	if dmRow.participants:
+		load_participants(conn, dmRow.participants, mp_claim_id, source, creator, dmRow.dmIdx, dmRow.ev_supports)
+
+	## insert material dose
+	if dmRow.precipitant_dose:
+		load_material_dose(conn, dmRow.precipitant_dose, "precipitant_dose", mp_claim_id, source, creator, dmRow.dmIdx, dmRow.ev_supports)
+	if dmRow.object_dose:
+		load_material_dose(conn, dmRow.object_dose, "object_dose", mp_claim_id, source, creator, dmRow.dmIdx, dmRow.ev_supports)
+
+
+# LOAD INDIVIDUAL DATA OR MATERIAL ###################################################
+def load_data_ratio(conn, dataRatio, mp_claim_id, source, creator, dmIdx, ev_supports):
+	target_id = load_oa_target(conn, source, dataRatio.prefix, dataRatio.exact, dataRatio.suffix) 
+	data_body_id = pgmp.insert_data_annotation(conn, mp_claim_id, target_id, creator, dataRatio.field, dmIdx, ev_supports)
+	pgmp.insert_data_field(conn, data_body_id, "value", dataRatio.value, None, None)
+	pgmp.insert_data_field(conn, data_body_id, "type", dataRatio.type, None, None)
+	pgmp.insert_data_field(conn, data_body_id, "direction", dataRatio.direction, None, None)
+
+
+def load_participants(conn, partItem, mp_claim_id, source, creator, dmIdx, ev_supports):
+	target_id = load_oa_target(conn, source, partItem.prefix, partItem.exact, partItem.suffix) 
+	material_body_id = pgmp.insert_material_annotation(conn, mp_claim_id, target_id, creator, "participants", dmIdx, ev_supports)
+	pgmp.insert_material_field(conn, material_body_id, "value", partItem.value, None, None)
+
+
+def load_material_dose(conn, matDose, material_dose_type, mp_claim_id, source, creator, dmIdx, ev_supports):
+	target_id = load_oa_target(conn, source, matDose.prefix, matDose.exact, matDose.suffix)
+	material_body_id = pgmp.insert_material_annotation(conn, mp_claim_id, target_id, creator, material_dose_type, dmIdx, ev_supports)
+	pgmp.insert_material_field(conn, material_body_id, "value", matDose.value, None, None)
+	pgmp.insert_material_field(conn, material_body_id, "drugname", matDose.drugname, None, None)
+	pgmp.insert_material_field(conn, material_body_id, "duration", matDose.duration, None, None)
+	pgmp.insert_material_field(conn, material_body_id, "formulation", matDose.formulation, None, None)
+	pgmp.insert_material_field(conn, material_body_id, "regimens", matDose.regimens, None, None)
+
+
+def load_oa_target(conn, source, prefix, exact, suffix):
+	selector_id = pgmp.insert_oa_selector(conn, prefix, exact, suffix)
+	target_id = pgmp.insert_oa_target(conn, source, selector_id)		
+	return target_id
+
 
 
 def load(conn, qryCondition, eshost, esport, dbschema, creator, isClean):
@@ -329,23 +179,19 @@ def load(conn, qryCondition, eshost, esport, dbschema, creator, isClean):
 		pgconn.createdb(conn, dbschema)
 		conn.commit()
 		print "[INFO] Drop and recreate all tables done!"
-	
+
 	print "[INFO] Begin load data ..."
 
-	results = es.queryAndParseByBody(eshost, esport, qryCondition)
-
-	annsL = preprocess(results)
-	load_annotations_from_results(conn, annsL, creator)
-
+	annotations = es.getMPAnnsByBody(eshost, esport, qryCondition)
+	load_annotations(conn, annotations)
 	print "[INFO] annotation load completed!"
 
-	if isClean in ["1","2"]:
-		print "[INFO] Begin results validating..."
-		if test.validateResults(conn, annsDictCsv):
-			print "[INFO] all annotations are loaded successfully!"
-		else:
-			print "[WARN] annotations are loaded incompletely!"
-
+	# if isClean in ["1","2"]:
+	# 	print "[INFO] Begin results validating..."
+	# 	if test.validateResults(conn, annsDictCsv):
+	# 		print "[INFO] all annotations are loaded successfully!"
+	# 	else:
+	# 		print "[WARN] annotations are loaded incompletely!"
 
 def main():
 
@@ -384,3 +230,50 @@ if __name__ == '__main__':
 	main()
 
 
+
+	# ## when method is statement, negation is evidence supports/refutes
+	# negation = False
+	# ## statement rejection 
+	# rejected = False; rejected_reason = None; rejected_comment = None
+	# if ann.rejected and ann.rejected != "":
+	# 	rejected = True
+	# 	if '|' in ann.rejected:
+	# 		(rejected_reason, rejected_comment) = ann.rejected.split('|')
+	# 	else:
+	# 		(rejected_reason, rejected_comment) = [ann.rejected,""]
+
+# LOAD MAIN ################################################################
+
+
+# def initDideoConceptsDict():
+
+# 	## dict for {concept_code: omop_concept_id}
+# 	dideoDict = {"DIDEO_00000015": None, "DIDEO_00000005": None, "OBI_0000427": None, "DIDEO_00000013": None, "DIDEO_00000012": None, "DIDEO_00000093": None, "DIDEO_00000099": None, "DIDEO_00000101": None, "DIDEO_00000100": None, "DIDEO_00000103": None, "DIDEO_00000076": None}
+
+# 	results = subject_concept_code = pgcp.getConceptCodeByVocabId(conn, "DIDEO")
+# 	for res in results:
+# 		if res[0] and res[1] and res[1] in dideoDict:
+# 			dideoDict[res[1]] = res[0]
+# 	return dideoDict
+
+
+# def escapeRow(row):
+
+# 	if row['claimtext']: 
+# 		row['claimtext'] = row['claimtext'].replace("'", "''")
+# 	if row['participantstext']:
+# 		row['participantstext'] = row['participantstext'].replace("'", "''")
+# 	if row['drug1dosetext']:
+# 		row['drug1dosetext'] = row['drug1dosetext'].replace("'", "''")
+# 	if row['drug2dosetext']:
+# 		row['drug2dosetext'] = row['drug2dosetext'].replace("'", "''")
+# 	if row['auctext']:
+# 		row['auctext'] = row['auctext'].replace("'", "''")
+# 	if row['cmaxtext']:
+# 		row['cmaxtext'] = row['cmaxtext'].replace("'", "''")
+# 	if row['clearancetext']:
+# 		row['clearancetext'] = row['clearancetext'].replace("'", "''")
+# 	if row['halflifetext']:
+# 		row['halflifetext'] = row['halflifetext'].replace("'", "''")	
+
+# 	return row

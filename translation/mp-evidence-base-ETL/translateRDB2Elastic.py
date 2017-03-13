@@ -127,6 +127,8 @@ def loadMpAnnotation(annotation, email):
 
 	mpAnn["argues"]["rejected"]["reason"] = annotation.rejected
 
+	## subject and object can be enzyme, it isn't the right way to intrepret
+	## need concept code/id as further information to rebuild rules for translation
 	mpAnn["argues"]["qualifiedBy"]["drug1"] = subjectDrug
 	mpAnn["argues"]["qualifiedBy"]["drug2"] = objectDrug
 	mpAnn["argues"]["qualifiedBy"]["drug1ID"] = subjectDrug + "_0"

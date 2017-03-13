@@ -32,25 +32,49 @@ class Qualifier:
 		self.metabolite = None
 
 	def setTypeDrugProduct(self):
-		self.qualifier_type_concept_code = ""
-		self.qualifier_type_vocabulary_id = ""
+		self.qualifier_type_concept_code = "DIDEO_00000005"
+		self.qualifier_type_vocabulary_id = -9900002
+
+	def isDrugProduct(self):
+		if self.qualifier_type_concept_code == "DIDEO_00000005":
+			return True
+		return False
 
 	def setTypeEnzyme(self):
-		self.qualifier_type_concept_code = ""
-		self.qualifier_type_vocabulary_id = ""
+		self.qualifier_type_concept_code = "OBI_0000427"
+		self.qualifier_type_vocabulary_id = -9900003
+
+	def isEnzyme(self):
+		if self.qualifier_type_concept_code == "OBI_0000427":
+			return True
+		return False
 
 	def setRolePrecipitant(self):
-		self.qualifier_role_concept_code = ""
-		self.qualifier_role_vocabulary_id = ""
+		self.qualifier_role_concept_code = "DIDEO_00000013"
+		self.qualifier_role_vocabulary_id = -9900004
+
+	def isRolePrecipitant(self):
+		if self.qualifier_role_concept_code == "DIDEO_00000013":
+			return True
+		return False
 
 	def setRoleObject(self):
-		self.qualifier_role_concept_code = ""
-		self.qualifier_role_vocabulary_id = ""
+		self.qualifier_role_concept_code = "DIDEO_00000012"
+		self.qualifier_role_vocabulary_id = -9900005
+
+	def isRoleObject(self):
+		if self.qualifier_role_concept_code == "DIDEO_00000012":
+			return True
+		return False
 
 	def setRoleProbeSubstrate(self):
-		self.qualifier_role_concept_code = ""
-		self.qualifier_role_vocabulary_id = ""
+		self.qualifier_role_concept_code = "probe1"
+		self.qualifier_role_vocabulary_id = "probe2"
 
+	def isRoleProbeSubstrate(self):
+		if self.qualifier_role_concept_code == "probe1":
+			return True
+		return False
 
 ## MP Annotation ##############################################################
 class Annotation(object):
@@ -64,14 +88,35 @@ class Annotation(object):
 		self.csubject = None
 		self.cpredicate = None
 		self.cobject = None
+		self.cqualifier = None
 		self.claimid = None
 		self.prefix = None; self.exact = None; self.suffix = None # oa selector
 		self.date_created = None
-
+	
 	def setOaSelector(self, prefix, exact, suffix):
 		self.prefix = prefix
 		self.exact = exact
 		self.suffix = suffix
+
+	def getPrecipitantQualifier(self):
+		if self.csubject and self.csubject.isRolePrecipitant():
+			return self.csubject
+		elif self.cobject and self.cobject.isRolePrecipitant():
+			return self.cobject
+		elif cqualifier and self.cqualifier.isRolePrecipitant():
+			return self.cqualifier
+		else:
+			return None
+
+	def getObjectQualifier(self):
+		if self.csubject and self.csubject.isRoleObject():
+			return self.csubject
+		elif self.cobject and self.cobject.isRoleObject():
+			return self.cobject
+		elif self.cqualifier and self.cqualifier.isRoleObject():
+			return self.cqualifier
+		else:
+			return None
 
 ## MP Statement annotation
 class Statement(Annotation):
@@ -86,9 +131,7 @@ class Statement(Annotation):
 class ClinicalTrial(Annotation):
 
 	def __init__(self):
-		self.qualifer = None
 		self.mpDataMaterialD = {} # data and material dict {dmIdx: ClinicalTrialDMRow}
-
 		self.rejected_statement = None
 		self.rejected_statement_reason = None
 		self.rejected_statement_comment = None
@@ -97,7 +140,7 @@ class ClinicalTrial(Annotation):
 		self.csubject = csubject
 		self.cpredicate = cpredicate
 		self.cobject = cobject	
-		self.qualifer = cqualifier		
+		self.cqualifier = cqualifier		
 
 	def getDataMaterials(self): # return list of DataMaterials
 		return self.mpDataMaterialD
@@ -171,11 +214,12 @@ class CaseReport(Annotation):
 ## Data and Material as individual evidence (row of data & material in annotation table) ##############################################################################
 class DMRow(object):
 	def __init__(self):
-		self.ev_supports = None
+		self.ev_supports = None # True or False
 		self.dmIdx = None
 
 class ClinicalTrialDMRow(DMRow):
-	def __init__(self):
+	def __init__(self, dmIdx):
+		self.dmIdx = dmIdx
 		self.participants = None
 		self.precipitant_dose = None
 		self.object_dose = None
@@ -236,6 +280,13 @@ class MaterialDoseItem(DMItem):
 		self.formulation = None
 		self.regimens = None
 
+	def setAttributes(self, drugname, value, formulation, duration, regimens):
+		self.drugname = drugname
+		self.value = value
+		self.duration = duration
+		self.formulation = formulation
+		self.regimens = regimens	
+
 	def setAttribute(self, name, value):
 		if name == "drugname":
 			self.drugname = value
@@ -268,12 +319,17 @@ class DataRatioItem(DMItem):
 		elif name == "direction":
 			self.direction = value 
 
-	def addValue(self, value):
+	def setAttributes(self, value, type, direction):
 		self.value = value
-	def addType(self, type):
 		self.type = type
-	def addDirection(self, direction):
 		self.direction = direction
+
+	# def addValue(self, value):
+	# 	self.value = value
+	# def addType(self, type):
+	# 	self.type = type
+	# def addDirection(self, direction):
+	# 	self.direction = direction
 
 ## Phenotype clinical study:  Material phenotype
 class MaterialPhenotypeItem():
