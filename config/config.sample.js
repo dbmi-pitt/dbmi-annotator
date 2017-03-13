@@ -20,4 +20,10 @@ config.profile.def = 'MP';
 config.profile.pluginSetL = [];
 config.profile.userProfile = {};
 
+//article list
+//vlan
+config.article = ['dailymed','pmc','wiley','elsevier','springer','sage','taylor','wolters','future'];
+//public
+//config.article = ['dailymed','pmc';
+
 module.exports = config;
