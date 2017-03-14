@@ -78,6 +78,7 @@ def load_annotations(conn, annotations):
 
 		## method should be 1:1 to data & material and n:1 with claim
 		#method_id = pgmp.insert_method(conn, row, mp_claim_id, mp_data_index)
+
 		#generateHighlightSet(row, highlightD)  # add unique drugs to set
 		
 	#load_highlight_annotation(conn, highlightD, creator)  # load drug highlight annotation
