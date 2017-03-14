@@ -78,7 +78,6 @@ def load_annotations(conn, annotations):
 
 		## method should be 1:1 to data & material and n:1 with claim
 		#method_id = pgmp.insert_method(conn, row, mp_claim_id, mp_data_index)
-
 		#generateHighlightSet(row, highlightD)  # add unique drugs to set
 		
 	#load_highlight_annotation(conn, highlightD, creator)  # load drug highlight annotation
@@ -97,15 +96,17 @@ def load_DDI_CT_annotation(conn, ann):
 	## insert qualifiers
 	pgmp.insert_qualifier(conn, ann.csubject, claim_body_id)
 	pgmp.insert_qualifier(conn, ann.cpredicate, claim_body_id)
-	pgmp.insert_qualifier(conn, ann.cobject, claim_body_id)
-		
+	pgmp.insert_qualifier(conn, ann.cobject, claim_body_id)		
 	if ann.cqualifier:
 		pgmp.insert_qualifier(conn, ann.cqualifier, claim_body_id)
 	
-	## insert data
 	dmRows = ann.getDataMaterials()
 	if dmRows:
 		for dmIdx,dmRow in dmRows.items():
+			## insert method
+			pgmp.insert_method(conn, ann.method, ann.method, mp_claim_id, dmIdx)
+
+			## insert data and material
 			load_DDI_CT_DM(conn, dmRow, mp_claim_id, ann.source, ann.creator)
 
 	conn.commit()
@@ -164,7 +165,6 @@ def load_oa_target(conn, source, prefix, exact, suffix):
 	selector_id = pgmp.insert_oa_selector(conn, prefix, exact, suffix)
 	target_id = pgmp.insert_oa_target(conn, source, selector_id)		
 	return target_id
-
 
 
 def load(conn, qryCondition, eshost, esport, dbschema, creator, isClean):
@@ -230,31 +230,10 @@ if __name__ == '__main__':
 	main()
 
 
-
 	# ## when method is statement, negation is evidence supports/refutes
 	# negation = False
-	# ## statement rejection 
-	# rejected = False; rejected_reason = None; rejected_comment = None
-	# if ann.rejected and ann.rejected != "":
-	# 	rejected = True
-	# 	if '|' in ann.rejected:
-	# 		(rejected_reason, rejected_comment) = ann.rejected.split('|')
-	# 	else:
-	# 		(rejected_reason, rejected_comment) = [ann.rejected,""]
 
 # LOAD MAIN ################################################################
-
-
-# def initDideoConceptsDict():
-
-# 	## dict for {concept_code: omop_concept_id}
-# 	dideoDict = {"DIDEO_00000015": None, "DIDEO_00000005": None, "OBI_0000427": None, "DIDEO_00000013": None, "DIDEO_00000012": None, "DIDEO_00000093": None, "DIDEO_00000099": None, "DIDEO_00000101": None, "DIDEO_00000100": None, "DIDEO_00000103": None, "DIDEO_00000076": None}
-
-# 	results = subject_concept_code = pgcp.getConceptCodeByVocabId(conn, "DIDEO")
-# 	for res in results:
-# 		if res[0] and res[1] and res[1] in dideoDict:
-# 			dideoDict[res[1]] = res[0]
-# 	return dideoDict
 
 
 # def escapeRow(row):

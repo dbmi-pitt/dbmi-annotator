@@ -18,7 +18,6 @@ def createMpAnnotation(host, port, annotation, annotationId):
 def queryByBody(host, port, doc):
 	es = Elasticsearch([{'host': host, 'port': port}])
 	res = es.search(index="annotator", size="5000", body=doc)	
-	# print("Got %d Hits:" % res['hits']['total'])
 	return res
 
 def queryById(host, port, annotationId):
@@ -45,6 +44,11 @@ def getMPAnnsByBody(es_host, es_port, query_condit):
 
 	return annsL
 
+def getMPAnnById(es_host, es_port, annId):
+	res = queryById(es_host, es_port, annId)	
+	ann = parseToMPAnn(res)
+	return ann
+
 def parseToMPAnns(documents):
 	anns = []
 	for doc in documents:
@@ -70,14 +74,17 @@ def parseEvSupports(evRelationship):
 		return False
 	return True
 
-def addAnnotationMetadata(annotation, urn, source, email, date_created, label):
-	if not urn or not source or not email:
-		print "[ERROR] Json annotation error, skip source (%s), claim (%s)" % (source, label)
-	annotation.urn = urn
-	annotation.source = source
-	annotation.creator = email
-	annotation.label = label
-	annotation.date_created = date_created
+	
+def addRejected(annotation, claim):
+	# ## statement rejection 
+	rej_statement = False; rej_reason = None; rej_comment = None
+	if claim["rejected"]["reason"]:
+		rej_statement = True
+		if '|' in claim["rejected"]["reason"]:
+			(rej_reason, rej_comment) = claim["rejected"]["reason"].split('|')
+	annotation.rejected_statement = rej_statement
+	annotation.rejected_statement_reason = rej_reason
+	annotation.rejected_statement_comment = rej_comment
 	
 
 ## DDI CLINICAL TRIAL ##############################################################
@@ -88,7 +95,7 @@ def addAnnotationMetadata(annotation, urn, source, email, date_created, label):
 def createClinicalTrial(doc, doc_urn):
 
 	claim = doc["argues"]; source = doc["rawurl"]; email = doc["email"]
-	label = claim["label"]
+	label = claim["label"]; method = doc["argues"]["method"]; date = doc["created"]
 	exact = getSelectorTxt(claim, "exact"); prefix = getSelectorTxt(claim, "prefix"); suffix = getSelectorTxt(claim, "suffix")
 
 	qualifier = claim["qualifiedBy"]; 
@@ -112,13 +119,14 @@ def createClinicalTrial(doc, doc_urn):
 	## data validation
 	if precipitant not in ["drug1","drug2"] or ((predicate == "interact with" and (not drugname1 or not drugname2 or enzyme)) or (predicate in ["inhibits", "substrate of"] and (not drugname1 or not drugname2 or not enzyme))): 
 		print "[WARN] DDI clinical trial: qualifier error, skip (%s) - (%s)" % (source, label)
-		return None
-	
+		return None	
+
 	## MP Claim
-	annotation = ClinicalTrial()
-	addAnnotationMetadata(annotation, doc_urn, source, email, doc["created"], label)
+	annotation = createSubAnnotation(doc_urn, source, label, method, email, date)
 	addQualifiersForCT(annotation, drugname1, drugname2, predicate, enzyme, precipitant, drug1PC, drug2PC)
 	annotation.setOaSelector(prefix, exact, suffix)
+	addRejected(annotation, claim)
+	annotation.method = method ## MP Method
 
 	## MP Data
 	dataL = claim["supportsBy"]
@@ -159,7 +167,7 @@ def createClinicalTrial(doc, doc_urn):
 				if objectDose:
 					dmRow.object_dose = objectDose
 
-			annotation.setSpecificDataMaterial(dmRow, i) # add new row of data and material			
+			annotation.setSpecificDataMaterial(dmRow, i) # add new row of data and material		
 	return annotation
 
 def createDoseItem(item, doseType, drugname):
@@ -334,7 +342,7 @@ def isPC(pcStr):
 def test():
 	query_condit = {'query': { 'term': {'annotationType': 'MP'}}}
 	anns = getMPAnnsByBody("localhost", "9200", query_condit)
-	print anns
+	#print anns
 
 ######################### MAIN ###################################################
 

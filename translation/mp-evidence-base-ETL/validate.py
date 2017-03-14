@@ -22,6 +22,7 @@ from postgres import mpEvidenceQry as pgqry
 
 from elastic import queryMPAnnotation as es
 import loadAnnotatorAnnsToRDB as pgload
+from model.Micropublication import *
 
 reload(sys)  
 sys.setdefaultencoding('utf8')
@@ -98,59 +99,60 @@ def loadTemplateInJson(path):
 
 	
 ## VALIDATE INDIVIDUAL ANNOTATION TRANSLATE AND LOAD #############################
-def createAnnForTesting(conn, template, annUrn):
-	CREATOR = "ETL Tester"
-	
+def etlAnnForTesting(conn, template, annUrn):
 	## clean postgres
 	pgmp.clearAll(conn)
 	conn.commit()
 
-	## clean test samples in elasticsearch
-	# if exists, then delete
-	# es.deleteById("localhost", "9200", annUrn)
+	## clean test samples in elasticsearch, if exists, then delete
+	es.deleteById("localhost", "9200", annUrn)
 
 	## load test ann to elasticsearch
-	annotation = loadTemplateInJson(template)
-	es.createMpAnnotation("localhost", "9200", annotation, annUrn)
+	annTemp = loadTemplateInJson(template)
+	es.createMpAnnotation("localhost", "9200", annTemp, annUrn)
 
 	## query elasticsearch for annotation sample
-	results = es.queryAndParseById("localhost", "9200", annUrn)
-	## translate and load to postgres
-	annsL = pgload.preprocess(results)
-	pgload.load_annotations_from_results(conn, annsL, CREATOR)
+	annotation = es.getMPAnnById("localhost", "9200", annUrn)
+
+	if isinstance(annotation, ClinicalTrial): 
+		pgload.load_DDI_CT_annotation(conn, annotation)
 
 	## qry postgres for validating individual annotation
-	annotation = pgqry.queryMpAnnotationByUrn(conn, annUrn)
-	return annotation
+	annotations = pgqry.getMpAnnotations(conn)	
+	for ann in annotations:
+		if ann.urn == annUrn:
+			return ann
 
 
 ## TESTING FUNCTIONS ######################################################
-def testClaim(annotation, urn, label, csubject, cpredicate, cobject, exact, method, negation, rejected, csubjectPC, cobjectPC, qualifierPC):
-	print "[INFO] begin validating claim qualifiers..."
-	if isMatched("subject", csubject, annotation.csubject) and isMatched("predicate", cpredicate, annotation.cpredicate) and isMatched("object", cobject, annotation.cobject) and isMatched("subject ParentCompound", csubjectPC, annotation.csubjectPC) and isMatched("object ParentCompound", cobjectPC, annotation.cobjectPC) and isMatched("qualifier ParentCompound", qualifierPC, annotation.qualifierPC):
-		print "[TEST] claim qualifiers is validated"
-	else:
-		print "[ERROR] claim qualifiers are not correct"
+def testClaim(annotation, urn, label, exact, method, negation, rej_statement, rej_reason, rej_comment):
 
 	print "[INFO] begin validating claim..."
-	if isMatched("label", label, annotation.label) and isMatched("exact text", exact, annotation.exact) and isMatched("user entered method", method, annotation.method) and isMatched("negation", negation, annotation.negation) and isMatched("rejected", rejected, annotation.rejected):
+	if isMatched("urn", urn, annotation.urn) and isMatched("label", label, annotation.label) and isMatched("exact text", exact, annotation.exact) and isMatched("user entered method", method, annotation.method) and isMatched("negation", negation, annotation.negation) and isMatched("rejected", rej_statement, annotation.rejected_statement) and isMatched("rejected", rej_reason, annotation.rejected_statement_reason) and isMatched("rejected", rej_comment, annotation.rejected_statement_comment):
 		print "[TEST] claim is validated"		
 	else:
 		print "[ERROR] claim is not correct"
 
-def testDataRatio(dataItem, ratiotype, value, type, direction, exact):
-	print "[INFO] begin validating %s..." % ratiotype
-	if isMatched("value", value, dataItem.value) and isMatched("type", type,dataItem.type) and isMatched("direction", direction,dataItem.direction) and isMatched("exact text", exact, dataItem.exact):
-		print "[TEST] %s is validated" % (ratiotype)
+def testQualifier(qualifier, qvalue, subject, predicate, object, enantiomer, metabolite):
+	print "[INFO] begin validating claim qualifiers..."	
+	if isMatched("qualifier", qvalue, qualifier.qvalue) and isMatched("subject", subject, qualifier.subject) and isMatched("predicate", predicate, qualifier.predicate) and isMatched("object", object, qualifier.object) and isMatched("enantiomer", enantiomer, qualifier.enantiomer) and isMatched("metabolite", metabolite, qualifier.metabolite):
+		print "[TEST] claim qualifier is validated"
 	else:
-		print "[ERROR] %s is incorrect" % (ratiotype)
+		print "[ERROR] claim qualifier are not correct"
 
-def testMaterialDose(doseItem, dosetype, value, formulation, duration, regimens, exact):
-	print "[INFO] begin validating %s..." % dosetype
-	if isMatched("dose type", dosetype, doseItem.field) and isMatched("value", value, doseItem.value) and isMatched("duration", duration, doseItem.duration) and isMatched("formulation", formulation, doseItem.formulation) and isMatched("regimens", regimens, doseItem.regimens) and isMatched("exact text", exact, doseItem.exact):
-		print "[TEST] %s is validated" % (dosetype)
+def testDataRatio(ratioItem, field, value, type, direction, exact):
+	print "[INFO] begin validating %s..." % field
+	if isMatched("field", field, ratioItem.field) and isMatched("value", value, ratioItem.value) and isMatched("type", type, ratioItem.type) and isMatched("direction", direction, ratioItem.direction) and isMatched("exact text", exact, ratioItem.exact):
+		print "[TEST] %s is validated" % (field)
 	else:
-		print "[ERROR] %s is incorrect" % (dosetype)
+		print "[ERROR] %s is incorrect" % (field)
+
+def testMaterialDose(doseItem, field, drugname, value, formulation, duration, regimens, exact):
+	print "[INFO] begin validating %s..." % field
+	if isMatched("dose type", field, doseItem.field) and isMatched("drugname", drugname, doseItem.drugname) and isMatched("value", value, doseItem.value) and isMatched("duration", duration, doseItem.duration) and isMatched("formulation", formulation, doseItem.formulation) and isMatched("regimens", regimens, doseItem.regimens) and isMatched("exact text", exact, doseItem.exact):
+		print "[TEST] %s is validated" % (field)
+	else:
+		print "[ERROR] %s is incorrect" % (field)
 
 def testParticipants(partItem, value, exact):
 	print "[INFO] begin validating participants..."
@@ -159,8 +161,8 @@ def testParticipants(partItem, value, exact):
 	else:
 		print "[ERROR] participants is incorrect"
 
-def testEvRelationship(value1, value2):
-	if isMatched("evidence relationship", value1, value2):
+def testEvRelationship(dmRow, value):
+	if isMatched("evidence relationship", value, dmRow.ev_supports):
 		print "[TEST] evidence relationship is validated"
 	else:
 		print "[ERROR] evidence relationship is incorrect"		
@@ -210,53 +212,43 @@ def isMatched(field, val1, val2):
 def test_clinical_trial_1(conn, template):
 	print "[INFO] =====begin test clinical trial annotation 1 ======================"
 
-	annotationUrn = "test-case-id-1"
-	annotation = createAnnForTesting(conn, template, annotationUrn)
-	mpDataMaterialD = annotation.getDataMaterials()
+	annUrn = "test-case-id-1"
+	annotation = etlAnnForTesting(conn, template, annUrn)
+	if isinstance(annotation, ClinicalTrial):
+		mpDataMaterialD = annotation.getDataMaterials()
 
-	## claim validation
-	print "[INFO] ================= Begin validating MP Claim ======================"
-	testClaim(annotation, "test-case-id-1", "telaprevir_inhibits_atorvastatin", "atorvastatin", "inhibits", "telaprevir", "claim-text", "DDI clinical trial", False, "rejected-reason|rejected-comment", "enantiomer|", "|metabolite", "")
+		## claim validation
+		print "[INFO] ================= Begin validating MP Claim ======================"
+		testClaim(annotation, "test-case-id-1", "telaprevir_inhibits_atorvastatin", "claim-text", "DDI clinical trial", False, True, "rejected-reason", "rejected-comment")
+		## qualifiers
+		testQualifier(annotation.csubject, "atorvastatin", True, False, False, False, True)
+		testQualifier(annotation.cpredicate, "inhibits", False, True, False, None, None)
+		testQualifier(annotation.cobject, "cyp1a1", False, False, True, None, None)
+		testQualifier(annotation.cqualifier, "telaprevir", False, False, False, True, False)
+		print "[INFO] ================= Begin validating MP data ======================="
+		## data 1 validation
+		dmRow1 = mpDataMaterialD[0]
+		testEvRelationship(dmRow1, True)
+		testDataRatio(dmRow1.auc, "auc", "7.88", "Fold", "Increase", "auc-text-1")
+		testDataRatio(dmRow1.cmax, "cmax", "10.6", "Fold", "Increase", "cmax-text-1")
+		testDataRatio(dmRow1.clearance, "clearance", "87.8", "Percent", "Decrease", "clearance-text-1")
+		testDataRatio(dmRow1.halflife, "halflife", "28.5", "Percent", "Decrease", "halflife-text-1")
+		## material 1 validation	
+		testParticipants(dmRow1.participants, "21.00", "participants-text-1")
+		testMaterialDose(dmRow1.precipitant_dose, "precipitant_dose", "atorvastatin", "30", "Oral", "1", "SD", "drug2Dose-text-1")
+		testMaterialDose(dmRow1.object_dose, "object_dose", "telaprevir", "20", "Oral", "16", "Q8", "drug1Dose-text-1")
 
-	print "[INFO] ================= Begin validating MP data ======================="
-	## data 1 validation
-	dmRow1 = mpDataMaterialD[1]
-	testEvRelationship(dmRow1.getEvRelationship(), "supports")
-	auc1 = dmRow1.getDataRatioItemInRow("auc")
-	testDataRatio(auc1, "AUC ratio", "7.88", "Fold", "Increase", "auc-text-1")
-	cmax1 = dmRow1.getDataRatioItemInRow("cmax")
-	testDataRatio(cmax1, "Cmax ratio", "10.6", "Fold", "Increase", "cmax-text-1")
-	clearance1 = dmRow1.getDataRatioItemInRow("clearance")
-	testDataRatio(clearance1, "Clearance ratio", "87.8", "Percent", "Decrease", "clearance-text-1")
-	halflife1 = dmRow1.getDataRatioItemInRow("halflife")
-	testDataRatio(halflife1, "Halflife ratio", "28.5", "Percent", "Decrease", "halflife-text-1")
-	## material 1 validation	
-	partMaterial1 = dmRow1.getParticipantsInRow()
-	testParticipants(partMaterial1, "21.00", "participants-text-1")
-	subjectdose1 = dmRow1.getMaterialDoseInRow("subject_dose")
-	testMaterialDose(subjectdose1, "subject_dose", "30", "Oral", "1", "SD", "drug2Dose-text-1")
-
-	objectdose1 = dmRow1.getMaterialDoseInRow("object_dose")
-	testMaterialDose(objectdose1, "object_dose", "20", "Oral", "16", "Q8", "drug1Dose-text-1")
-
-	## data 2 validation
-	dmRow2 = mpDataMaterialD[2]
-	testEvRelationship(dmRow2.getEvRelationship(), "refutes")
-	auc2 = dmRow2.getDataRatioItemInRow("auc")
-	testDataRatio(auc2, "AUC ratio", "17.88", "Percent", "Decrease", "auc-text-2")
-	cmax2 = dmRow2.getDataRatioItemInRow("cmax")
-	testDataRatio(cmax2, "Cmax ratio", "10.3", "Percent", "Decrease", "cmax-text-2")
-	clearance2 = dmRow2.getDataRatioItemInRow("clearance")
-	testDataRatio(clearance2, "Clearance ratio", "7.8", "Fold", "Increase", "clearance-text-2")
-	halflife2 = dmRow2.getDataRatioItemInRow("halflife")
-	testDataRatio(halflife2, "Halflife ratio", "2.5", "Fold", "Increase", "halflife-text-2")
-	## material 2 validation
-	partMaterial2 = dmRow2.getParticipantsInRow()
-	testParticipants(partMaterial2, "210.00", "participants-text-2")
-	subjectdose2 = dmRow2.getMaterialDoseInRow("subject_dose")
-	testMaterialDose(subjectdose2, "subject_dose", "302", "Oral", "10", "BID", "drug2Dose-text-2")
-	objectdose2 = dmRow2.getMaterialDoseInRow("object_dose")
-	testMaterialDose(objectdose2, "object_dose", "201", "Oral", "120", "Q3", "drug1Dose-text-2")
+		## data 2 validation
+		dmRow2 = mpDataMaterialD[1]
+		testEvRelationship(dmRow2, False)
+		testDataRatio(dmRow2.auc, "auc", "17.88", "Percent", "Decrease", "auc-text-2")
+		testDataRatio(dmRow2.cmax, "cmax", "10.3", "Percent", "Decrease", "cmax-text-2")
+		testDataRatio(dmRow2.clearance, "clearance", "7.8", "Fold", "Increase", "clearance-text-2")
+		testDataRatio(dmRow2.halflife, "halflife", "2.5", "Fold", "Increase", "halflife-text-2")
+		## material 2 validation
+		testParticipants(dmRow2.participants, "210", "participants-text-2")
+		testMaterialDose(dmRow2.precipitant_dose, "precipitant_dose", "atorvastatin", "302", "Oral", "10", "BID", "drug2Dose-text-2")
+		testMaterialDose(dmRow2.object_dose, "object_dose", "telaprevir", "201", "Oral", "120", "Q3", "drug1Dose-text-2")
 
 def test_phenotype_clinical_study_1(conn, template):
 	print "[INFO] =====begin test phenotype clinical study annotation 1 ============"
@@ -273,13 +265,13 @@ def test_phenotype_clinical_study_1(conn, template):
 	print "[INFO] ================= Begin validating MP data ======================="
 	dmRow1 = mpDataMaterialD[1]
 	testEvRelationship(dmRow1.getEvRelationship(), "refutes")
-	auc1 = dmRow1.getDataRatioItemInRow("auc")
+	auc1 = dmRow1.auc
 	testDataRatio(auc1, "AUC ratio", "1.2", "Fold", "Increase", "auc-text-1")
-	cmax1 = dmRow1.getDataRatioItemInRow("cmax")
+	cmax1 = dmRow1.cmax
 	testDataRatio(cmax1, "Cmax ratio", "1.6", "Percent", "Increase", "cmax-text-1")
-	clearance1 = dmRow1.getDataRatioItemInRow("clearance")
+	clearance1 = dmRow1.clearance
 	testDataRatio(clearance1, "Clearance ratio", "8.8", "Percent", "Increase", "clearance-text-1")
-	halflife1 = dmRow1.getDataRatioItemInRow("halflife")
+	halflife1 = dmRow1.halflife
 	testDataRatio(halflife1, "Halflife ratio", "2.5", "Percent", "Decrease", "halflife-text-1")
 
 	## material 1 validation
@@ -294,7 +286,7 @@ def test_case_report_1(conn, template):
 	print "[INFO] =====begin test case report annotation 1 ============"
 
 	annotationUrn = "test-case-id-3"
-	annotation = createAnnForTesting(conn, template, annotationUrn)
+	annotation = etlAnnForTesting(conn, template, annotationUrn)
 
 	## claim validation
 	print "[INFO] ================= Begin validating MP Claim ======================"

@@ -79,11 +79,12 @@ class Qualifier:
 ## MP Annotation ##############################################################
 class Annotation(object):
 
-	def __init__(self, urn, source, creator, method, label):
+	def __init__(self, urn, source, label, method, creator, date):
 		self.source = source
 		self.urn = urn
 		self.creator = creator
 		self.method = method	
+		self.date_created = date
 		self.label = label
 		self.csubject = None
 		self.cpredicate = None
@@ -92,6 +93,9 @@ class Annotation(object):
 		self.claimid = None
 		self.prefix = None; self.exact = None; self.suffix = None # oa selector
 		self.date_created = None
+		self.rejected_statement = None
+		self.rejected_statement_reason = None
+		self.rejected_statement_comment = None
 	
 	def setOaSelector(self, prefix, exact, suffix):
 		self.prefix = prefix
@@ -118,23 +122,25 @@ class Annotation(object):
 		else:
 			return None
 
+	def setRejected(self, rej_statement, rej_reason, rej_comment):
+		self.rejected_statement = rej_statement
+		self.rejected_statement_reason = rej_reason
+		self.rejected_statement_comment = rej_comment
+
+
 ## MP Statement annotation
 class Statement(Annotation):
 	def __init__(self, csubject, cpredicate, cobject):
-
+		Annotation.__init__(self, urn, source, label, method, creator, date)
 		self.negation = None # assertion negation supports or refutes
-		self.rejected_statement = None
-		self.rejected_statement_reason = None
-		self.rejected_statement_comment = None
+
 
 ## DDI clinical trial annotation
 class ClinicalTrial(Annotation):
 
-	def __init__(self):
-		self.mpDataMaterialD = {} # data and material dict {dmIdx: ClinicalTrialDMRow}
-		self.rejected_statement = None
-		self.rejected_statement_reason = None
-		self.rejected_statement_comment = None
+	def __init__(self, urn, source, label, method, creator, date):
+		Annotation.__init__(self, urn, source, label, method, creator, date)
+		self.mpDataMaterialD = {} # data & material dict {dmIdx: ClinicalTrialDMRow}
 
 	def setQualifiers(self, csubject, cpredicate, cobject, cqualifier):
 		self.csubject = csubject
@@ -164,7 +170,8 @@ class ClinicalTrial(Annotation):
 ## Phenotype clinical study annotation
 class PhenotypeClinicalStudy(Annotation):
 
-	def __init__(self):
+	def __init__(self, urn, source, label, method, creator, date):
+		Annotation.__init__(self, urn, source, label, method, creator, date)
 		self.mpDataMaterialD = {} # data and material dict {dmIdx: PhenotypeDMRow}	
 
 	def getDataMaterials(self): # return list of DataMaterials
@@ -187,8 +194,9 @@ class PhenotypeClinicalStudy(Annotation):
 
 ## Case Report annotation
 class CaseReport(Annotation):
-
-	def __init__(self, ):
+ 
+	def __init__(self, urn, source, label, method, creator, date):
+		Annotation.__init__(self, urn, source, label, method, creator, date)
 		self.mpDataMaterialD = {} # data and material dict {dmIdx: CaseReportDMRow}	
 
 	# get all data and material rows
@@ -213,13 +221,13 @@ class CaseReport(Annotation):
 
 ## Data and Material as individual evidence (row of data & material in annotation table) ##############################################################################
 class DMRow(object):
-	def __init__(self):
+	def __init__(self, dmIdx):
+		self.dmIdx = dmIdx
 		self.ev_supports = None # True or False
-		self.dmIdx = None
 
 class ClinicalTrialDMRow(DMRow):
 	def __init__(self, dmIdx):
-		self.dmIdx = dmIdx
+		DMRow.__init__(self, dmIdx)
 		self.participants = None
 		self.precipitant_dose = None
 		self.object_dose = None
@@ -231,7 +239,8 @@ class ClinicalTrialDMRow(DMRow):
 		self.grouprandom = None
 
 class PhenotypeDMRow(DMRow):
-	def __init__(self):
+	def __init__(self, dmIdx):
+		DMRow.__init__(self, dmIdx)
 		self.participants = None
 		self.probesubstrate_dose = None
 		self.phenotype = None
@@ -243,7 +252,8 @@ class PhenotypeDMRow(DMRow):
 		self.grouprandom = None
 
 class CaseReportDMRow(DMRow):
-	def __init__(self):
+	def __init__(self, dmIdx):
+		DMRow.__init__(self, dmIdx)
 		self.revewer = None
 		self.precipitant_dose = None
 		self.object_dose = None
@@ -273,6 +283,7 @@ class MaterialParticipants(DMItem):
 ## DDI Clinical trial, Case Report: Material dose
 class MaterialDoseItem(DMItem):
 	def __init__(self, field):
+		DMItem.__init__(self)
 		self.field = field # precipitant_dose, object_dose, probesubstrate_dose
 		self.drugname = None
 		self.value = None 
@@ -306,6 +317,7 @@ class MaterialDoseItem(DMItem):
 class DataRatioItem(DMItem):
 
 	def __init__(self, field):
+		DMItem.__init__(self)
 		self.field = field
 		self.value = None
 		self.type = None
@@ -334,6 +346,7 @@ class DataRatioItem(DMItem):
 ## Phenotype clinical study:  Material phenotype
 class MaterialPhenotypeItem():
 	def __init__(self):
+		DMItem.__init__(self)
 		self.ptype = None
 		self.value = None 
 		self.metabolizer = None
@@ -390,3 +403,14 @@ class DataReviewer():
 # 	def __init__(self, entered_value, inferred_value):
 # 		self.entered_value = entered_value
 # 		self.inferred_value = inferred_value
+
+def createSubAnnotation(urn, source, label, method, email, date):
+	if method == "DDI clinical trial":
+		return ClinicalTrial(urn, source, label, method, email, date)
+	elif method == "Phenotype clinical study":
+		return PhenotypeClinicalStudy(urn, source, label, method, email, date)
+	elif method == "Case Report":
+		return PhenotypeClinicalStudy(urn, source, label, method, email, date)
+	elif method == "Statement":
+		return Statement(urn, source, label, method, email, date)
+	return None

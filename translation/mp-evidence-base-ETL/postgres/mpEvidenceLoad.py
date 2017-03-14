@@ -219,13 +219,11 @@ def update_oa_highlight_body(conn, highlight_annotation_id, oa_highlight_body_id
 
 
 # MP METHOD ################################################################
-def insert_method(conn, row, mp_claim_id, mp_data_index):
+def insert_method(conn, enteredVal, inferredVal, mp_claim_id, mp_data_index):
 	cur = conn.cursor()
-	enteredVal = row['method']
+	cur.execute("INSERT INTO method (entered_value, inferred_value, mp_claim_id, mp_data_index) VALUES (%s, %s, %s, %s);", (enteredVal, inferredVal, mp_claim_id, mp_data_index))
 
-	cur.execute("INSERT INTO method (entered_value, inferred_value, mp_claim_id, mp_data_index) VALUES (%s, %s, %s, %s);", (enteredVal, enteredVal, str(mp_claim_id), str(mp_data_index)))
-
-	cur.execute("SELECT id from method WHERE mp_claim_id = %s and mp_data_index = %s", (str(mp_claim_id), str(mp_data_index)))
+	cur.execute("SELECT id from method WHERE mp_claim_id = %s and mp_data_index = %s", (mp_claim_id, mp_data_index))
 
 	for row in cur.fetchall():
 		return row[0]
