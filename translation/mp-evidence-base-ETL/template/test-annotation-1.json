@@ -19,16 +19,16 @@
       "dips": {}, 
       "reviewer": {}, 
       "grouprandom": "", 
-      "supportsBy": 
-      {"supportsBy": 
-       {"type": "mp:material",
-        "participants": {"ranges": [], "hasTarget": {"hasSelector": {"prefix": "", "exact": "participants-text-1", "@type": "TextQuoteSelector", "suffix": ""}}, "value": "21.00"}, 
-        "drug1Dose": {"value": "20", "ranges": [], "hasTarget": {"hasSelector": {"prefix": "", "exact": "drug1Dose-text-1", "@type": "TextQuoteSelector", "suffix": ""}}, "regimens": "Q8", "formulation": "Oral", "duration": "16"}, 
-        "drug2Dose": {"value": "30", "ranges": [], "hasTarget": {"hasSelector": {"prefix": "", "exact": "drug2Dose-text-1", "@type": "TextQuoteSelector", "suffix": ""}}, "regimens": "SD", "formulation": "Oral", "duration": "1"},
-        "phenotype": {}
-       }, 
-       "type": "mp:method"}, 
-      "parallelgroup": ""},
+      "parallelgroup": "",
+      "supportsBy": {"type": "mp:method",
+                     "supportsBy": {"type": "mp:material",
+                                    "participants": {"ranges": [], "hasTarget": {"hasSelector": {"prefix": "", "exact": "participants-text-1", "@type": "TextQuoteSelector", "suffix": ""}}, "value": "21.00"}, 
+                                    "drug1Dose": {"value": "20", "ranges": [], "hasTarget": {"hasSelector": {"prefix": "", "exact": "drug1Dose-text-1", "@type": "TextQuoteSelector", "suffix": ""}}, "regimens": "Q8", "formulation": "Oral", "duration": "16"}, 
+                                    "drug2Dose": {"value": "30", "ranges": [], "hasTarget": {"hasSelector": {"prefix": "", "exact": "drug2Dose-text-1", "@type": "TextQuoteSelector", "suffix": ""}}, "regimens": "SD", "formulation": "Oral", "duration": "1"},
+                                    "phenotype": {}
+                                   } 
+                    }
+     },
      {"type": "mp:data",
       "evRelationship": "refutes", 
       "auc": {"ranges": [], "hasTarget": {"hasSelector": {"prefix": "", "exact": "auc-text-2", "@type": "TextQuoteSelector", "suffix": ""}}, "type": "Percent", "direction": "Decrease", "value": "17.88"}, 
@@ -38,16 +38,17 @@
       "dips": {}, 
       "reviewer": {}, 
       "grouprandom": "", 
-      "supportsBy": 
-      {"supportsBy": 
-       {"type": "mp:material",
-        "participants": {"ranges": [], "hasTarget": {"hasSelector": {"prefix": "", "exact": "participants-text-2", "@type": "TextQuoteSelector", "suffix": ""}}, "value": "210"}, 
-        "phenotype": {}, 
-        "drug1Dose": {"value": "201", "ranges": [], "hasTarget": {"hasSelector": {"prefix": "", "exact": "drug1Dose-text-2", "@type": "TextQuoteSelector", "suffix": ""}}, "regimens": "Q3", "formulation": "Oral", "duration": "120"}, 
-        "drug2Dose": {"value": "302", "ranges": [], "hasTarget": {"hasSelector": {"prefix": "", "exact": "drug2Dose-text-2", "@type": "TextQuoteSelector", "suffix": ""}}, "regimens": "BID", "formulation": "Oral", "duration": "10"}}, 
-       "type": "mp:method"}, 
-      "parallelgroup": ""}
-    ] 
+      "parallelgroup": "",
+      "supportsBy": {"type": "mp:method",
+                     "supportsBy": {"type": "mp:material",
+                                    "participants": {"ranges": [], "hasTarget": {"hasSelector": {"prefix": "", "exact": "participants-text-2", "@type": "TextQuoteSelector", "suffix": ""}}, "value": "210"}, 
+                                    "phenotype": {}, 
+                                    "drug1Dose": {"value": "201", "ranges": [], "hasTarget": {"hasSelector": {"prefix": "", "exact": "drug1Dose-text-2", "@type": "TextQuoteSelector", "suffix": ""}}, "regimens": "Q3", "formulation": "Oral", "duration": "120"}, 
+                                    "drug2Dose": {"value": "302", "ranges": [], "hasTarget": {"hasSelector": {"prefix": "", "exact": "drug2Dose-text-2", "@type": "TextQuoteSelector", "suffix": ""}}, "regimens": "BID", "formulation": "Oral", "duration": "10"}
+                                   }
+                    }
+     }
+    ]
 },
  "user": "alice", 
  "rawurl": "http://localhost/PMC/PMC000000.html", 

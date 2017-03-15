@@ -51,14 +51,25 @@ else:
 	sys.exit(1)
 
 
+def loadMpAnnotations(annotations, email):
+	for ann in annotations:
+		loadMpAnnotation(ann, email)	
+
+
+def loadMpAnnotation(annotation, email):
+	if isinstance(annotation, ClinicalTrial):
+		mpAnn = createDDIClinicalTrialAnn(annotation, email)
+		es = Elasticsearch([{'host': ES_HOSTNAME, 'port': ES_PORT}]) # by default we connect to localhost:9200  
+		es.index(index="annotator", doc_type="annotation", id=annotation.urn, body=json.dumps(mpAnn))
+
 ######################### LOAD Annotations by method ################################
-def loadDDIClinicalTrialAnn(ann, email):
+def createDDIClinicalTrialAnn(ann, email):
 
 	mpAnn = loadTemplateInJson(MP_ANN_TEMPLATE) # load Annotation template
-	addAnnotationMetaData(ann, mpAnn) # add annotation metadata
+	addAnnotationMetaData(ann, mpAnn, email) # add annotation metadata
 
 	## Claim
-	csubject = ann.csubject; cpredicate = ann.cpredicate; cobject = cobject; cqualifier = ann.qualifier
+	csubject = ann.csubject; cpredicate = ann.cpredicate; cobject = ann.cobject; cqualifier = ann.cqualifier
 	mpAnn["argues"]["hasTarget"] = generateOASelector(ann.prefix, ann.exact, ann.suffix)
 	mpAnn["argues"]["label"] = ann.label
 	mpAnn["argues"]["method"] =  ann.method # add method
@@ -69,44 +80,46 @@ def loadDDIClinicalTrialAnn(ann, email):
 	mpAnn["argues"]["qualifiedBy"]["relationship"] = relationship
 
 	## Qualifiers
-	if ann.method == "DDI clinical trial": 
-		d1Qualifier = ann.getPrecipitantQualifier()
-		d2Qualifier = ann.getObjectQualifier()
-		mpAnn["argues"]["qualifiedBy"]["drug1"] = d1Qualifier.qvalue
-		mpAnn["argues"]["qualifiedBy"]["drug1ID"] = d1Qualifier.qvalue + "_0"
-		mpAnn["argues"]["qualifiedBy"]["drug2"] = d2Qualifier.qvalue
-		mpAnn["argues"]["qualifiedBy"]["drug2ID"] = d2Qualifier.qvalue + "_0"
-		mpAnn["argues"]["qualifiedBy"]["precipitant"] = "drug1"
+	d1Qualifier = ann.getPrecipitantQualifier()
+	d2Qualifier = ann.getObjectQualifier()
+	mpAnn["argues"]["qualifiedBy"]["drug1"] = d1Qualifier.qvalue
+	mpAnn["argues"]["qualifiedBy"]["drug1ID"] = d1Qualifier.qvalue + "_0"
+	mpAnn["argues"]["qualifiedBy"]["drug2"] = d2Qualifier.qvalue
+	mpAnn["argues"]["qualifiedBy"]["drug2ID"] = d2Qualifier.qvalue + "_0"
+	mpAnn["argues"]["qualifiedBy"]["precipitant"] = "drug1"
 
-		if relationship in ["inhibits", "substrate of"]:
-			eQualifier = ann.getEnzyme()
-			mpAnn["argues"]["qualifiedBy"]["enzyme"] = eQualifier.qvalue
+	if relationship in ["inhibits", "substrate of"]:
+		eQualifier = ann.getEnzyme()
+		mpAnn["argues"]["qualifiedBy"]["enzyme"] = eQualifier.qvalue
 
-		# MP Data & Material
-		dmRows = annotation.getDataMaterials()	
-		for dmIdx,dmRow in dmRows.items(): # walk though all data items for claim
-			mpData = loadTemplateInJson(MP_DATA_TEMPLATE) # load data & material template
-			mpData["evRelationship"] = parseEvSupports(dmRow.ev_supports) # ev relation
-			addAllDataRatios(dmRow, mpData) # add data ratio
-			addEvQuestions(dmRow, mpData) # add evidence type questions
+	# MP Data & Material
+	dmRows = ann.getDataMaterials()	
+	for dmIdx,dmRow in dmRows.items(): # walk though all data items for claim
+		mpData = loadTemplateInJson(MP_DATA_TEMPLATE) # load data & material template
+		mpData["evRelationship"] = parseEvSupports(dmRow.ev_supports) # ev relation
+		addAllDataRatios(dmRow, mpData) # add data ratio
+		addEvQuestions(dmRow, mpData) # add evidence type questions
 
-			if dmRow.participants: # add participants
-				addParticipants(dmRow.participants, mpData)			
-			if dmRow.precipitant_dose: # add drug1dose
-				if dmRow.precipitant_dose.drugname == d1Qualifier.qvalue:
-					addMaterialDose(dmRow.precipitant_dose, 1, mpData)
-			if dmRow.object_dose: # add drug2dose
-				if dmRow.object_dose.drugname == d2Qualifier.qvalue:
-					addMaterialDose(dmRow.object_dose, 2, mpData)
-			mpAnn["argues"]["supportsBy"].append(mpData)  # append data to annotation
-
+		if dmRow.participants: # add participants
+			addParticipants(dmRow.participants, mpData)			
+		if dmRow.precipitant_dose: # add drug1dose
+			if dmRow.precipitant_dose.drugname == d1Qualifier.qvalue:
+				addMaterialDose(dmRow.precipitant_dose, 1, mpData)
+		if dmRow.object_dose: # add drug2dose
+			if dmRow.object_dose.drugname == d2Qualifier.qvalue:
+				addMaterialDose(dmRow.object_dose, 2, mpData)
+		mpAnn["argues"]["supportsBy"].append(mpData)  # append data to annotation
+	return mpAnn
 		
 ## Translate and add MP Data or Material Item to JSON template ######################
-def addAnnotationMetaData(ann, mpAnn):
+def addAnnotationMetaData(ann, mpAnn, email):
 	rawurl = ann.source; uri = re.sub(r"[\/\\\-\:\.]", "", rawurl)	
 	mpAnn["created"] = "2017-01-12T18:33:51.179625+00:00" # Metadata
 	mpAnn["updated"] = "2017-01-12T18:33:51.179625+00:00"
-	mpAnn["email"] = email
+	if email:	
+		mpAnn["email"] = email
+	else:
+		mpAnn["email"] = ann.creator
 	mpAnn["rawurl"] = rawurl; mpAnn["uri"] = uri
 
 
@@ -163,13 +176,13 @@ def parseNegation(negation):
 	if negation == True:
 		return "Yes"
 	elif negation == False:
-		return = "No"
+		return "No"
 	else:
 		return None
 
 
 def parseEVRejected(ann):
-	if ann.rejected and ann.rejected_statement_reason or ann.rejected_statement_comment:
+	if ann.rejected_statement and ann.rejected_statement_reason or ann.rejected_statement_comment:
 		return ann.rejected_statement_reason + "|" + ann.rejected_statement_comment
 	else:
 		return None
@@ -183,8 +196,7 @@ def parseEvSupports(ev_supports):
 
 
 # load mp annotation to specific account by email
-def loadMpAnnotation(annotation, email):		
-	
+#def loadMpAnnotation(annotation, email):			
 	# # MP Data & Material
 	# dmRows = annotation.getDataMaterials()	
 	# for index,dmRow in dmRows.items(): # walk though all data items for claim
@@ -214,9 +226,7 @@ def loadMpAnnotation(annotation, email):
 	# 		mpData["supportsBy"]["supportsBy"]["phenotype"]["value"] = dmRow.getPhenotype().value
 	# 		mpData["supportsBy"]["supportsBy"]["phenotype"]["metabolizer"] = dmRow.getPhenotype().metabolizer
 	# 		mpData["supportsBy"]["supportsBy"]["phenotype"]["population"] = dmRow.getPhenotype().population		
-			
-	es = Elasticsearch([{'host': ES_HOSTNAME, 'port': ES_PORT}]) # by default we connect to localhost:9200  
-	es.index(index="annotator", doc_type="annotation", id=uuid.uuid4(), body=json.dumps(mpAnn))
+
 
 # return oa selector in json
 def generateOASelector(prefix, exact, suffix):
@@ -257,52 +267,26 @@ def loadHighlightAnnotation(rawurl, content, email):
 	es.index(index="annotator", doc_type="annotation", id=uuid.uuid4(), body=json.dumps(annotation))
 
 
-
-######################### CONFIG ##########################
-# load json template
+# load json template from file
 def loadTemplateInJson(path):
 	json_data=open(path)
 	data = json.load(json_data)
 	json_data.close()
 	return data
 
-######################### TESTING ##########################
-# print out sample annotation for validation
-def printSample(mpannotations, idx):
-	mpAnnotation = mpannotations[idx]
-	dmRows = mpAnnotation.getDataMaterials()
 
-	print "label(%s), subject(%s), predicate(%s), object(%s) " % (mpAnnotation.label, mpAnnotation.csubject, mpAnnotation.cpredicate, mpAnnotation.cobject)
-
-	for index,dm in dmRows.items():	
-
-		for df in mpDataL:
-			if dm.getDataItemInRow(df):
-				print "%s: %s" % (df, dm.getDataItemInRow(df).value)
-		if dm.getMaterialDoseInRow("precipitant_dose"):
-			print "precipitant_dose: %s" % (dm.getMaterialDoseInRow("precipitant_dose").value) 
-		if dm.getMaterialDoseInRow("object_dose"):
-			print "object_dose: %s" % (dm.getMaterialDoseInRow("object_dose").value)
-
-
-
-######################### MAIN ##########################
-
+######################### MAIN ######################################################
 def main():
 
 	conn = pgconn.connect_postgres(PG_HOST, PG_USER, PG_PASSWORD, PG_DATABASE)
 	pgconn.setDbSchema(conn, "ohdsi")
 
-	mpAnnotations = pgqry.queryAllMpAnnotation(conn)	
-	
-	for mpAnn in mpAnnotations:
-		#if mpAnn.source in ["http://localhost/elsevier/elsevier15935493.html"]:
-		loadMpAnnotation(mpAnn, AUTHOR)		
+	annotations = pgqry.getMpAnnotations(conn)	
+	loadMpAnnotations(annotations, AUTHOR)
 
-	highlightD = pgqry.queryHighlightAnns(conn)
-
+	#highlightD = pgqry.queryHighlightAnns(conn)
 	#print highlightD
-	loadHighlightAnnotations(highlightD, AUTHOR)
+	#loadHighlightAnnotations(highlightD, AUTHOR)
 
 	conn.close()
 	print "[INFO] elasticsearch load completed"

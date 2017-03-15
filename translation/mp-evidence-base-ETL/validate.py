@@ -107,7 +107,7 @@ def etlAnnForTesting(conn, template, annUrn):
 	conn.commit()
 
 	## clean test samples in elasticsearch, if exists, then delete
-	esop.deleteById("localhost", "9200", annUrn)
+	#esop.deleteById("localhost", "9200", annUrn)
 
 	## load test ann to elasticsearch
 	annTemp = loadTemplateInJson(template)
