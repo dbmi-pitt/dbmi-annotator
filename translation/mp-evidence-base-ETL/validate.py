@@ -19,9 +19,11 @@ from sets import Set
 from postgres import connection as pgconn
 from postgres import mpEvidenceLoad as pgmp
 from postgres import mpEvidenceQry as pgqry
-
-from elastic import queryMPAnnotation as es
 import loadAnnotatorAnnsToRDB as pgload
+
+from elastic import queryMPAnnotation as esmp
+from elastic import operations as esop
+
 from model.Micropublication import *
 
 reload(sys)  
@@ -105,14 +107,14 @@ def etlAnnForTesting(conn, template, annUrn):
 	conn.commit()
 
 	## clean test samples in elasticsearch, if exists, then delete
-	es.deleteById("localhost", "9200", annUrn)
+	esop.deleteById("localhost", "9200", annUrn)
 
 	## load test ann to elasticsearch
 	annTemp = loadTemplateInJson(template)
-	es.createMpAnnotation("localhost", "9200", annTemp, annUrn)
+	esop.createMpAnnotation("localhost", "9200", annTemp, annUrn)
 
 	## query elasticsearch for annotation sample
-	annotation = es.getMPAnnById("localhost", "9200", annUrn)
+	annotation = esmp.getMPAnnById("localhost", "9200", annUrn)
 
 	if isinstance(annotation, ClinicalTrial): 
 		pgload.load_DDI_CT_annotation(conn, annotation)

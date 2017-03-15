@@ -3,34 +3,9 @@ import uuid
 import datetime, copy
 from elasticsearch import Elasticsearch
 from sets import Set
-#from model.micropublication import Annotation, DataMaterialRow, DMItem, DataRatioItem, MaterialDoseItem, MaterialParticipants, MaterialPhenotypeItem, DataReviewer, DataDips
 sys.path.append("../")
+from elastic import operations as esop
 from model.Micropublication import *
-
-## create customized document based on template
-## rtype null
-def createMpAnnotation(host, port, annotation, annotationId):
-	es = Elasticsearch([{'host': host, 'port': port}]) 
-	es.index(index="annotator", doc_type="annotation", id=annotationId, body=json.dumps(annotation))
-
-## query documents by json format query condition
-## rtype json documents
-def queryByBody(host, port, doc):
-	es = Elasticsearch([{'host': host, 'port': port}])
-	res = es.search(index="annotator", size="5000", body=doc)	
-	return res
-
-def queryById(host, port, annotationId):
-	es = Elasticsearch([{'host': host, 'port': port}])
-	res = es.get(index="annotator", id = annotationId)	
-	return res
-
-## delete document by id
-## rtype null
-def deleteById(host, port, annotationId):
-	es = Elasticsearch([{'host': host, 'port': port}])
-	es.delete(index="annotator", doc_type="annotation", id=annotationId)
-
 
 def getMPAnnsByBody(es_host, es_port, query_condit):
 	## query condition (refers to elasticsearch REST API)
@@ -38,14 +13,14 @@ def getMPAnnsByBody(es_host, es_port, query_condit):
 	if query_condit:
 		body = query_condit
 
-	res = queryByBody(es_host, es_port, body)	
+	res = esop.queryByBody(es_host, es_port, body)	
 	docs = res['hits']['hits']
 	annsL = parseToMPAnns(docs)
 
 	return annsL
 
 def getMPAnnById(es_host, es_port, annId):
-	res = queryById(es_host, es_port, annId)	
+	res = esop.queryById(es_host, es_port, annId)	
 	ann = parseToMPAnn(res)
 	return ann
 
@@ -56,35 +31,6 @@ def parseToMPAnns(documents):
 		if ann:
 			anns.append(ann)
 	return anns
-
-def parseToMPAnn(document):
-	doc = document["_source"]; doc_urn = document["_id"]
-	method = doc["argues"]["method"];
-	annotation = None
-
-	if method == "DDI clinical trial":
-		annotation = createClinicalTrial(doc, doc_urn)
-
-	return annotation
-
-def parseEvSupports(evRelationship):
-	if evRelationship == "supports":
-		return True
-	elif evRelationship in ["refutes", "challenges"]:
-		return False
-	return True
-
-	
-def addRejected(annotation, claim):
-	# ## statement rejection 
-	rej_statement = False; rej_reason = None; rej_comment = None
-	if claim["rejected"]["reason"]:
-		rej_statement = True
-		if '|' in claim["rejected"]["reason"]:
-			(rej_reason, rej_comment) = claim["rejected"]["reason"].split('|')
-	annotation.rejected_statement = rej_statement
-	annotation.rejected_statement_reason = rej_reason
-	annotation.rejected_statement_comment = rej_comment
 	
 
 ## DDI CLINICAL TRIAL ##############################################################
@@ -170,42 +116,6 @@ def createClinicalTrial(doc, doc_urn):
 			annotation.setSpecificDataMaterial(dmRow, i) # add new row of data and material		
 	return annotation
 
-def createDoseItem(item, doseType, drugname):
-
-	if doseType in ["precipitant", "object", "probesubstrate"] or not drugname:
-		dose = MaterialDoseItem(doseType)
-		value = item["value"]
-		formulation = item["formulation"]
-		duration = item["duration"]
-		regimens = item["regimens"]
-		exact = getSelectorTxt(item, "exact"); prefix = getSelectorTxt(item, "prefix"); suffix = getSelectorTxt(item, "suffix")
-		dose.setAttributes(drugname, value, formulation, duration, regimens)
-		dose.setSelector(prefix, exact, suffix)
-		return dose
-	else:
-		print "[ERROR] createDoseItem: (%s) doseType undefined %s" % (drugname, doseType)
-	return None
-
-def createParticipantsItem(item):
-	part = MaterialParticipants(item["value"])
-	exact = getSelectorTxt(item, "exact"); prefix = getSelectorTxt(item, "prefix"); suffix = getSelectorTxt(item, "suffix")
-	part.setSelector(prefix, exact, suffix)
-	return part
-
-def createDataRatioItem(item, ratioType):	
-
-	if ratioType in ["auc","cmax","clearance","halflife"]:
-		dataRatio = DataRatioItem(ratioType)
-		rVal = item["value"]
-		rType= item["type"]
-		rDirection = item["direction"]
-		exact = getSelectorTxt(item, "exact"); prefix = getSelectorTxt(item, "prefix"); suffix = getSelectorTxt(item, "suffix")
-		dataRatio.setAttributes(rVal, rType, rDirection)
-		dataRatio.setSelector(prefix, exact, suffix)
-		return dataRatio
-	else:
-		print "[ERROR] createDataRatioItem: ratioType undefined %s" % ratioType
-	return None
 	
 ## add qualifiers to Clinical trial annotation
 # parma1: annotation obj
@@ -301,6 +211,44 @@ def addQualifiersForCT(annotation, drugname1, drugname2, predicate, enzyme, prec
 	annotation.setQualifiers(csubject, cpredicate, cobject, cqualifier)
 
 
+def createDoseItem(item, doseType, drugname):
+
+	if doseType in ["precipitant", "object", "probesubstrate"] or not drugname:
+		dose = MaterialDoseItem(doseType)
+		value = item["value"]
+		formulation = item["formulation"]
+		duration = item["duration"]
+		regimens = item["regimens"]
+		exact = getSelectorTxt(item, "exact"); prefix = getSelectorTxt(item, "prefix"); suffix = getSelectorTxt(item, "suffix")
+		dose.setAttributes(drugname, value, formulation, duration, regimens)
+		dose.setSelector(prefix, exact, suffix)
+		return dose
+	else:
+		print "[ERROR] createDoseItem: (%s) doseType undefined %s" % (drugname, doseType)
+	return None
+
+def createParticipantsItem(item):
+	part = MaterialParticipants(item["value"])
+	exact = getSelectorTxt(item, "exact"); prefix = getSelectorTxt(item, "prefix"); suffix = getSelectorTxt(item, "suffix")
+	part.setSelector(prefix, exact, suffix)
+	return part
+
+def createDataRatioItem(item, ratioType):	
+
+	if ratioType in ["auc","cmax","clearance","halflife"]:
+		dataRatio = DataRatioItem(ratioType)
+		rVal = item["value"]
+		rType= item["type"]
+		rDirection = item["direction"]
+		exact = getSelectorTxt(item, "exact"); prefix = getSelectorTxt(item, "prefix"); suffix = getSelectorTxt(item, "suffix")
+		dataRatio.setAttributes(rVal, rType, rDirection)
+		dataRatio.setSelector(prefix, exact, suffix)
+		return dataRatio
+	else:
+		print "[ERROR] createDataRatioItem: ratioType undefined %s" % ratioType
+	return None
+
+
 ## add parent compound to qualifier		
 # param1: Qualifier
 # param2: drugPC string from AnnotationPress "enantiomer|metabolite"
@@ -310,6 +258,36 @@ def addParentCompound(qualifier, drugPC):
 		[enantiomer, metabolite] = [isPC(pcL[0]), isPC(pcL[1])]
 		qualifier.enantiomer = enantiomer
 		qualifier.metabolite = metabolite
+
+
+def parseToMPAnn(document):
+	doc = document["_source"]; doc_urn = document["_id"]
+	method = doc["argues"]["method"];
+	annotation = None
+
+	if method == "DDI clinical trial":
+		annotation = createClinicalTrial(doc, doc_urn)
+
+	return annotation
+
+def parseEvSupports(evRelationship):
+	if evRelationship == "supports":
+		return True
+	elif evRelationship in ["refutes", "challenges"]:
+		return False
+	return True
+
+	
+def addRejected(annotation, claim):
+	# ## statement rejection 
+	rej_statement = False; rej_reason = None; rej_comment = None
+	if claim["rejected"]["reason"]:
+		rej_statement = True
+		if '|' in claim["rejected"]["reason"]:
+			(rej_reason, rej_comment) = claim["rejected"]["reason"].split('|')
+	annotation.rejected_statement = rej_statement
+	annotation.rejected_statement_reason = rej_reason
+	annotation.rejected_statement_comment = rej_comment
 
 ## get text span based OA target, selector
 # param1: object with attri hasTarget

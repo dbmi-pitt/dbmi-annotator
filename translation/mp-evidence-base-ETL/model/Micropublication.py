@@ -122,6 +122,12 @@ class Annotation(object):
 		else:
 			return None
 
+	def getEnzyme(self):
+		if self.cobject and self.cobject.isEnzyme():
+			return self.cobject
+		elif self.cqualifier and self.cqualifier.isEnzyme():
+			return self.cqualifier
+
 	def setRejected(self, rej_statement, rej_reason, rej_comment):
 		self.rejected_statement = rej_statement
 		self.rejected_statement_reason = rej_reason
