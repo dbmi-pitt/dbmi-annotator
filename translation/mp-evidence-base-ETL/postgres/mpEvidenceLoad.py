@@ -69,7 +69,7 @@ def insert_oa_target(conn, source, selector_id):
 		return row[0]
 	return None
 
-# MP CLAIM ########################################################
+# MP CLAIM ##########################################################################
 # insert to table "mp_claim_annotation" 
 # return claim annotation id
 def insert_claim_annotation(conn, annotation, oa_claim_body_id, claim_target_id, negation):
@@ -108,7 +108,7 @@ def update_claim_body(conn, is_oa_body_of, oa_claim_body_id):
 				" WHERE id = " + str(oa_claim_body_id) + ";")
 
 
-# MP MATERIAL ########################################################
+# MP MATERIAL #######################################################################
 def insert_material_annotation(conn, mp_claim_id, target_id, creator, material_type, mp_data_index, ev_supports):
 	cur = conn.cursor()
 	curr_date = datetime.datetime.now(); urn = uuid.uuid4().hex
@@ -142,7 +142,7 @@ def insert_material_field(conn, material_body_id, material_field_type, value_as_
 	cur.execute("INSERT INTO material_field (urn, material_body_id, material_field_type, value_as_string, value_as_number, value_as_concept_id) VALUES (%s, %s, %s, %s, %s, %s);", (uuid.uuid4().hex, material_body_id, material_field_type, value_as_string, value_as_number, value_as_concept_id))
 
 
-# # MP DATA ########################################################
+# # MP DATA #########################################################################
 def insert_data_annotation(conn, mp_claim_id, has_target, creator, data_type, mp_data_index, ev_supports):
 
 	cur = conn.cursor(); urn = str(uuid.uuid4().hex)

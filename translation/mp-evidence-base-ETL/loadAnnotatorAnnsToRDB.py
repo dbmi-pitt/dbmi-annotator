@@ -73,20 +73,25 @@ def load_annotations(conn, annotations):
 	curr_date = datetime.datetime.now()
 
 	for ann in annotations:
-		if isinstance(ann, ClinicalTrial):
-			load_DDI_CT_annotation(conn, ann)
-
-		## method should be 1:1 to data & material and n:1 with claim
-		#method_id = pgmp.insert_method(conn, row, mp_claim_id, mp_data_index)
-
-		#generateHighlightSet(row, highlightD)  # add unique drugs to set
-		
+		load_annotation(conn, annotation)
+		#generateHighlightSet(row, highlightD)  # add unique drugs to set		
 	#load_highlight_annotation(conn, highlightD, creator)  # load drug highlight annotation
 	conn.commit()
 
 
-# LOAD MP Annotation ################################################################
-def load_DDI_CT_annotation(conn, ann):
+def load_annotation(conn, annotation):
+	if isinstance(annotation, ClinicalTrial):
+		load_ClinicalTrial_annotation(conn, annotation)
+	elif isinstance(annotation, Statement):
+		load_Statement_annotation(conn, annotation)
+	elif isinstance(annotation, PhenotypeClinicalStudy):
+		load_PhenClinicalStudy_annotation(conn, annotation)
+	elif isinstance(annotation, CaseReport):
+		load_CaseReport_annotation(conn, annotation)
+
+
+# LOAD Clinical Trial Annotation ####################################################
+def load_ClinicalTrial_annotation(conn, ann):
 
 	## insert mp_claim_annotation, oa_claim_body
 	claim_target_id = load_oa_target(conn, ann.source, ann.prefix, ann.exact, ann.suffix)
@@ -104,19 +109,14 @@ def load_DDI_CT_annotation(conn, ann):
 	dmRows = ann.getDataMaterials()
 	if dmRows:
 		for dmIdx,dmRow in dmRows.items():
-			## insert method
-			pgmp.insert_method(conn, ann.method, ann.method, mp_claim_id, dmIdx)
-
-			## insert data and material
-			load_DDI_CT_DM(conn, dmRow, mp_claim_id, ann.source, ann.creator)
-
+			pgmp.insert_method(conn, ann.method, ann.method, mp_claim_id, dmIdx) # insert method
+			load_ClinicalTrial_DM(conn, dmRow, mp_claim_id, ann.source, ann.creator) # insert data and material
 	conn.commit()
 	return mp_claim_id
 
 
-# LOAD MP ROW OF DATA & MATERIAL  #####################################################
-def load_DDI_CT_DM(conn, dmRow, mp_claim_id, source, creator):
-	## insert data ratios
+def load_ClinicalTrial_DM(conn, dmRow, mp_claim_id, source, creator):
+	## insert data
 	if dmRow.auc:
 		load_data_ratio(conn, dmRow.auc, mp_claim_id, source, creator, dmRow.dmIdx, dmRow.ev_supports)
 	if dmRow.cmax:
@@ -126,15 +126,114 @@ def load_DDI_CT_DM(conn, dmRow, mp_claim_id, source, creator):
 	if dmRow.halflife:
 		load_data_ratio(conn, dmRow.halflife, mp_claim_id, source, creator, dmRow.dmIdx, dmRow.ev_supports)
 
-	## insert material participants
+	## insert material
 	if dmRow.participants:
 		load_participants(conn, dmRow.participants, mp_claim_id, source, creator, dmRow.dmIdx, dmRow.ev_supports)
-
-	## insert material dose
 	if dmRow.precipitant_dose:
 		load_material_dose(conn, dmRow.precipitant_dose, "precipitant_dose", mp_claim_id, source, creator, dmRow.dmIdx, dmRow.ev_supports)
 	if dmRow.object_dose:
 		load_material_dose(conn, dmRow.object_dose, "object_dose", mp_claim_id, source, creator, dmRow.dmIdx, dmRow.ev_supports)
+
+
+# LOAD Phenotype Clinical Study Annotation ##########################################
+def load_PhenClinicalStudy_annotation(conn, ann):
+
+	## insert mp_claim_annotation, oa_claim_body
+	claim_target_id = load_oa_target(conn, ann.source, ann.prefix, ann.exact, ann.suffix)
+	claim_body_id = pgmp.insert_claim_body(conn, ann.label, ann.exact)
+	mp_claim_id = pgmp.insert_claim_annotation(conn, ann, claim_body_id, claim_target_id, False)
+	pgmp.update_claim_body(conn, mp_claim_id, claim_body_id)
+
+	## insert qualifiers
+	pgmp.insert_qualifier(conn, ann.csubject, claim_body_id)
+	pgmp.insert_qualifier(conn, ann.cpredicate, claim_body_id)
+	pgmp.insert_qualifier(conn, ann.cobject, claim_body_id)		
+	
+	dmRows = ann.getDataMaterials()
+	if dmRows:
+		for dmIdx,dmRow in dmRows.items():
+			pgmp.insert_method(conn, ann.method, ann.method, mp_claim_id, dmIdx) # load method
+			load_PhenClinicalStudy_DM(conn, dmRow, mp_claim_id, ann.source, ann.creator) # load data & material
+	conn.commit()
+	return mp_claim_id
+
+
+def load_PhenClinicalStudy_DM(conn, dmRow, mp_claim_id, source, creator):
+	## insert data
+	if dmRow.auc:
+		load_data_ratio(conn, dmRow.auc, mp_claim_id, source, creator, dmRow.dmIdx, dmRow.ev_supports)
+	if dmRow.cmax:
+		load_data_ratio(conn, dmRow.cmax, mp_claim_id, source, creator, dmRow.dmIdx, dmRow.ev_supports)
+	if dmRow.clearance:
+		load_data_ratio(conn, dmRow.clearance, mp_claim_id, source, creator, dmRow.dmIdx, dmRow.ev_supports)
+	if dmRow.halflife:
+		load_data_ratio(conn, dmRow.halflife, mp_claim_id, source, creator, dmRow.dmIdx, dmRow.ev_supports)
+
+	## insert material
+	if dmRow.participants:
+		load_participants(conn, dmRow.participants, mp_claim_id, source, creator, dmRow.dmIdx, dmRow.ev_supports)
+	if dmRow.probesubstrate_dose:
+		load_material_dose(conn, dmRow.probesubstrate_dose, "probesubstrate_dose", mp_claim_id, source, creator, dmRow.dmIdx, dmRow.ev_supports)
+	if dmRow.phenotype:
+		load_material_phenotype(conn, dmRow.phenotype, mp_claim_id, source, creator, dmRow.dmIdx, dmRow.ev_supports)
+
+
+# LOAD Case Report Annotation ####################################################
+def load_CaseReport_annotation(conn, ann):
+
+	## insert mp_claim_annotation, oa_claim_body
+	claim_target_id = load_oa_target(conn, ann.source, ann.prefix, ann.exact, ann.suffix)
+	claim_body_id = pgmp.insert_claim_body(conn, ann.label, ann.exact)
+	mp_claim_id = pgmp.insert_claim_annotation(conn, ann, claim_body_id, claim_target_id, False)
+	pgmp.update_claim_body(conn, mp_claim_id, claim_body_id)
+
+	## insert qualifiers
+	pgmp.insert_qualifier(conn, ann.csubject, claim_body_id)
+	pgmp.insert_qualifier(conn, ann.cpredicate, claim_body_id)
+	pgmp.insert_qualifier(conn, ann.cobject, claim_body_id)		
+	
+	dmRows = ann.getDataMaterials()
+	if dmRows:
+		for dmIdx,dmRow in dmRows.items():
+			pgmp.insert_method(conn, ann.method, ann.method, mp_claim_id, dmIdx) # load method
+			load_CaseReport_DM(conn, dmRow, mp_claim_id, ann.source, ann.creator) # insert data & material
+	conn.commit()
+	return mp_claim_id
+
+
+def load_CaseReport_DM(conn, dmRow, mp_claim_id, source, creator):
+
+	## insert data
+	if dmRow.reviewer:
+		load_data_reviewer(conn, dmRow.reviewer, mp_claim_id, source, creator, dmRow.dmIdx, dmRow.ev_supports)
+	if dmRow.dipsquestion:
+		load_data_dipsquestion(conn, dmRow.dipsquestion, mp_claim_id, source, creator, dmRow.dmIdx, dmRow.ev_supports)
+
+	## insert material
+	if dmRow.precipitant_dose:
+		load_material_dose(conn, dmRow.precipitant_dose, "precipitant_dose", mp_claim_id, source, creator, dmRow.dmIdx, dmRow.ev_supports)
+	if dmRow.object_dose:
+		load_material_dose(conn, dmRow.object_dose, "object_dose", mp_claim_id, source, creator, dmRow.dmIdx, dmRow.ev_supports)
+
+
+# LOAD Statement Annotation #########################################################
+def load_Statement_annotation(conn, ann):
+
+	## insert mp_claim_annotation, oa_claim_body
+	claim_target_id = load_oa_target(conn, ann.source, ann.prefix, ann.exact, ann.suffix)
+	claim_body_id = pgmp.insert_claim_body(conn, ann.label, ann.exact)
+	mp_claim_id = pgmp.insert_claim_annotation(conn, ann, claim_body_id, claim_target_id, False)
+	pgmp.update_claim_body(conn, mp_claim_id, claim_body_id)
+
+	## insert qualifiers
+	pgmp.insert_qualifier(conn, ann.csubject, claim_body_id)
+	pgmp.insert_qualifier(conn, ann.cpredicate, claim_body_id)
+	pgmp.insert_qualifier(conn, ann.cobject, claim_body_id)		
+	if ann.cqualifier:
+		pgmp.insert_qualifier(conn, ann.cqualifier, claim_body_id)
+	
+	conn.commit()
+	return mp_claim_id
 
 
 # LOAD INDIVIDUAL DATA OR MATERIAL ###################################################
@@ -144,6 +243,21 @@ def load_data_ratio(conn, dataRatio, mp_claim_id, source, creator, dmIdx, ev_sup
 	pgmp.insert_data_field(conn, data_body_id, "value", dataRatio.value, None, None)
 	pgmp.insert_data_field(conn, data_body_id, "type", dataRatio.type, None, None)
 	pgmp.insert_data_field(conn, data_body_id, "direction", dataRatio.direction, None, None)
+
+
+def load_data_reviewer(conn, revItem, mp_claim_id, source, creator, dmIdx, ev_supports):
+	data_body_id = pgmp.insert_data_annotation(conn, mp_claim_id, None, creator, "reviewer", dmIdx, ev_supports)	
+	pgmp.insert_data_field(conn, data_body_id, "reviewer", revItem.reviewer, None, None)
+	pgmp.insert_data_field(conn, data_body_id, "date", revItem.date, None, None)
+	pgmp.insert_data_field(conn, data_body_id, "total", revItem.total, None, None)
+	pgmp.insert_data_field(conn, data_body_id, "lackinfo", revItem.lackinfo, None, None)
+
+
+def load_data_dipsquestion(conn, dipsItem, mp_claim_id, source, creator, dmIdx, ev_supports):
+	dipsD = dipsItem.getDipsDict()
+	data_body_id = pgmp.insert_data_annotation(conn, mp_claim_id, None, creator, "dipsquestion", dmIdx, ev_supports)
+	for qs, val in dipsD.iteritems():
+		pgmp.insert_data_field(conn, data_body_id, qs, val, None, None)
 
 
 def load_participants(conn, partItem, mp_claim_id, source, creator, dmIdx, ev_supports):
@@ -162,12 +276,22 @@ def load_material_dose(conn, matDose, material_dose_type, mp_claim_id, source, c
 	pgmp.insert_material_field(conn, material_body_id, "regimens", matDose.regimens, None, None)
 
 
+def load_material_phenotype(conn, phenoItem, mp_claim_id, source, creator, dmIdx, ev_supports):
+	target_id = load_oa_target(conn, source, phenoItem.prefix, phenoItem.exact, phenoItem.suffix) 
+	material_body_id = pgmp.insert_material_annotation(conn, mp_claim_id, target_id, creator, "phenotype", dmIdx, ev_supports)
+	pgmp.insert_material_field(conn, material_body_id, "type", phenoItem.ptype, None, None)
+	pgmp.insert_material_field(conn, material_body_id, "value", phenoItem.value, None, None)
+	pgmp.insert_material_field(conn, material_body_id, "metabolizer", phenoItem.metabolizer, None, None)
+	pgmp.insert_material_field(conn, material_body_id, "population", phenoItem.population, None, None)
+
+
 def load_oa_target(conn, source, prefix, exact, suffix):
 	selector_id = pgmp.insert_oa_selector(conn, prefix, exact, suffix)
 	target_id = pgmp.insert_oa_target(conn, source, selector_id)		
 	return target_id
 
 
+## MAIN #############################################################################
 def load(conn, qryCondition, eshost, esport, dbschema, creator, isClean):
 
 	if isClean == "1":
@@ -197,9 +321,7 @@ def load(conn, qryCondition, eshost, esport, dbschema, creator, isClean):
 def main():
 
 	DB_SCHEMA = "../../db-schema/mp_evidence_schema.sql"
-	CREATOR = "DBMI ETL"
-	
-	PG_DATABASE = 'mpevidence'
+	CREATOR = "DBMI ETL"; PG_DATABASE = 'mpevidence'
 	
 	if len(sys.argv) > 7:
 		ES_HOST = str(sys.argv[1])
@@ -229,12 +351,6 @@ def main():
 
 if __name__ == '__main__':
 	main()
-
-
-	# ## when method is statement, negation is evidence supports/refutes
-	# negation = False
-
-# LOAD MAIN ################################################################
 
 
 # def escapeRow(row):

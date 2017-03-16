@@ -41,6 +41,7 @@ def validateResults(conn, csvD):
 
 	return compareTwoDicts(csvD, rdbD)
 
+
 ## query MP claim, rtype: dict with document url and counts of annotation
 def queryDocAndDataCnt(conn):
 	claimDict = {}
@@ -69,6 +70,7 @@ order by t.has_source, cann.urn """
 			claimDict[document] = cnt
 
 	return claimDict
+
 
 ## compare two dicts
 ## rtype: boolean (same: True, different: False)
@@ -109,17 +111,17 @@ def etlAnnForTesting(conn, template, annUrn):
 	## clean test samples in elasticsearch, if exists, then delete
 	#esop.deleteById("localhost", "9200", annUrn)
 
-	## load test ann to elasticsearch
+	## load annotation to elasticsearch
 	annTemp = loadTemplateInJson(template)
 	esop.createMpAnnotation("localhost", "9200", annTemp, annUrn)
 
-	## query elasticsearch for annotation sample
+	## query elasticsearch for the annotation
 	annotation = esmp.getMPAnnById("localhost", "9200", annUrn)
 
-	if isinstance(annotation, ClinicalTrial): 
-		pgload.load_DDI_CT_annotation(conn, annotation)
+	## load annotation to postgres DB
+	pgload.load_annotation(conn, annotation)
 
-	## qry postgres for validating individual annotation
+	## qry postgres for the annotation
 	annotations = pgqry.getMpAnnotations(conn)	
 	for ann in annotations:
 		if ann.urn == annUrn:
@@ -135,12 +137,14 @@ def testClaim(annotation, urn, label, exact, method, negation, rej_statement, re
 	else:
 		print "[ERROR] claim is not correct"
 
+
 def testQualifier(qualifier, qvalue, subject, predicate, object, enantiomer, metabolite):
 	print "[INFO] begin validating claim qualifiers..."	
 	if isMatched("qualifier", qvalue, qualifier.qvalue) and isMatched("subject", subject, qualifier.subject) and isMatched("predicate", predicate, qualifier.predicate) and isMatched("object", object, qualifier.object) and isMatched("enantiomer", enantiomer, qualifier.enantiomer) and isMatched("metabolite", metabolite, qualifier.metabolite):
 		print "[TEST] claim qualifier is validated"
 	else:
 		print "[ERROR] claim qualifier are not correct"
+
 
 def testDataRatio(ratioItem, field, value, type, direction, exact):
 	print "[INFO] begin validating %s..." % field
@@ -149,12 +153,14 @@ def testDataRatio(ratioItem, field, value, type, direction, exact):
 	else:
 		print "[ERROR] %s is incorrect" % (field)
 
+
 def testMaterialDose(doseItem, field, drugname, value, formulation, duration, regimens, exact):
 	print "[INFO] begin validating %s..." % field
 	if isMatched("dose type", field, doseItem.field) and isMatched("drugname", drugname, doseItem.drugname) and isMatched("value", value, doseItem.value) and isMatched("duration", duration, doseItem.duration) and isMatched("formulation", formulation, doseItem.formulation) and isMatched("regimens", regimens, doseItem.regimens) and isMatched("exact text", exact, doseItem.exact):
 		print "[TEST] %s is validated" % (field)
 	else:
 		print "[ERROR] %s is incorrect" % (field)
+
 
 def testParticipants(partItem, value, exact):
 	print "[INFO] begin validating participants..."
@@ -163,11 +169,13 @@ def testParticipants(partItem, value, exact):
 	else:
 		print "[ERROR] participants is incorrect"
 
+
 def testEvRelationship(dmRow, value):
 	if isMatched("evidence relationship", value, dmRow.ev_supports):
 		print "[TEST] evidence relationship is validated"
 	else:
 		print "[ERROR] evidence relationship is incorrect"		
+
 
 def testPhenotype(phenoItem, ptype, value, metabolizer, population):
 	print "[INFO] begin validating phenotype..."
@@ -175,6 +183,7 @@ def testPhenotype(phenoItem, ptype, value, metabolizer, population):
 		print "[TEST] phenotype is validated"
 	else:
 		print "[ERROR] phenotype is incorrect"
+
 
 def testDataReviewer(reviewerItem, reviewer, date, total, lackinfo):
 	print "[INFO] begin validating data reviewer..."
@@ -195,6 +204,7 @@ def testDataDipsQs(dipsItem, qsDict):
 	else:
 		print "[ERROR] incorrect number of dips questions"
 
+
 def isMatched(field, val1, val2):
 	if type(val1) != type(val2):
 		print "[ERROR] %s have an incorrect data type" % field
@@ -207,10 +217,10 @@ def isMatched(field, val1, val2):
 	print "[ERROR] %s is incorrect: val1 (%s) and val2 (%s)" % (field, val1, val2)
 	return False	
 
+
 ## TESTING CASES #############################################################
 # Validate clinical trial annotation 
 # Two data & material items
-
 def test_clinical_trial_1(conn, template):
 	print "[INFO] =====begin test clinical trial annotation 1 ======================"
 
@@ -252,11 +262,12 @@ def test_clinical_trial_1(conn, template):
 		testMaterialDose(dmRow2.precipitant_dose, "precipitant_dose", "atorvastatin", "302", "Oral", "10", "BID", "drug2Dose-text-2")
 		testMaterialDose(dmRow2.object_dose, "object_dose", "telaprevir", "201", "Oral", "120", "Q3", "drug1Dose-text-2")
 
+
 def test_phenotype_clinical_study_1(conn, template):
 	print "[INFO] =====begin test phenotype clinical study annotation 1 ============"
 
 	annotationUrn = "test-case-id-2"
-	annotation = createAnnForTesting(conn, template, annotationUrn)
+	annotation = etlAnnForTesting(conn, template, annotationUrn)
 	mpDataMaterialD = annotation.getDataMaterials()
 
 	## claim validation
@@ -265,25 +276,19 @@ def test_phenotype_clinical_study_1(conn, template):
 
 	## data 1 validation
 	print "[INFO] ================= Begin validating MP data ======================="
-	dmRow1 = mpDataMaterialD[1]
-	testEvRelationship(dmRow1.getEvRelationship(), "refutes")
-	auc1 = dmRow1.auc
-	testDataRatio(auc1, "AUC ratio", "1.2", "Fold", "Increase", "auc-text-1")
-	cmax1 = dmRow1.cmax
-	testDataRatio(cmax1, "Cmax ratio", "1.6", "Percent", "Increase", "cmax-text-1")
-	clearance1 = dmRow1.clearance
-	testDataRatio(clearance1, "Clearance ratio", "8.8", "Percent", "Increase", "clearance-text-1")
-	halflife1 = dmRow1.halflife
-	testDataRatio(halflife1, "Halflife ratio", "2.5", "Percent", "Decrease", "halflife-text-1")
+	dmRow1 = mpDataMaterialD[0]
+	testEvRelationship(dmRow1, False)
+	testDataRatio(dmRow1.auc, "auc", "1.2", "Fold", "Increase", "auc-text-1")
+	testDataRatio(fmRow1.cmax, "cmax", "1.6", "Percent", "Increase", "cmax-text-1")
+	testDataRatio(dmRow1.clearance, "clearance", "8.8", "Percent", "Increase", "clearance-text-1")
+	testDataRatio(dmRow1.halflife, "halflife", "2.5", "Percent", "Decrease", "halflife-text-1")
 
 	## material 1 validation
-	partMaterial1 = dmRow1.getParticipantsInRow()
-	testParticipants(partMaterial1, "1.00", "participants-text-1")
-	phenoItem = dmRow1.getPhenotype()
-	testPhenotype(phenoItem, "Genotype", "BRAF", "Poor Metabolizer", "Asian")
-	objectdose1 = dmRow1.getMaterialDoseInRow("object_dose")
-	testMaterialDose(objectdose1, "object_dose", "10", "IV", "23", "Q6", "drug1Dose-text-1")
+	testParticipants(dmRow1.participants, "1.00", "participants-text-1")
+	testPhenotype(dmRow1.getPhenotype(), "Genotype", "BRAF", "Poor Metabolizer", "Asian")
+	testMaterialDose(dmRow1.probesubstrate_dose, "Probesubstrate_dose", "10", "IV", "23", "Q6", "drug1Dose-text-1")
 	
+
 def test_case_report_1(conn, template):
 	print "[INFO] =====begin test case report annotation 1 ============"
 
@@ -296,20 +301,15 @@ def test_case_report_1(conn, template):
 
 	print "[INFO] ================= Begin validating MP data ======================="
 	dmRow1 = annotation.getSpecificDataMaterial(1)
-	reviewerItem1 = dmRow1.getDataReviewer()
-	testDataReviewer(reviewerItem1, "External","02/22/2017", "-1", "False")
-	dipsItem1 = dmRow1.getDataDips()
-	testDataDipsQs(dipsItem1, {"q1":"Yes","q2":"Yes","q10":"No","q3":"No","q4":"No","q5":"NA","q6":"UNK/NA","q7":"UNK/NA","q8":"No","q9":"NA"})
+	testDataReviewer(dmRow1.reviewer, "External","02/22/2017", "-1", "False")
+	testDataDipsQs(dmRow1.dipsquestion, {"q1":"Yes","q2":"Yes","q10":"No","q3":"No","q4":"No","q5":"NA","q6":"UNK/NA","q7":"UNK/NA","q8":"No","q9":"NA"})
 
-	partMaterial1 = dmRow1.getParticipantsInRow()
-	testParticipants(partMaterial1, "1.00", "participants-text-1")
-	subjectdose1 = dmRow1.getMaterialDoseInRow("subject_dose")
-	testMaterialDose(subjectdose1, "subject_dose", "13", "IV", "22", "Q6", "drug1Dose-text-1")
-	objectdose1 = dmRow1.getMaterialDoseInRow("object_dose")
-	testMaterialDose(objectdose1, "object_dose", "56", "IV", "65", "Q6", "drug2Dose-text-1")
+	testParticipants(dmRow1.participants, "1.00", "participants-text-1")
+	testMaterialDose(dmRow1.precipitant_dose, "precipitant_dose", "13", "IV", "22", "Q6", "drug1Dose-text-1")
+	testMaterialDose(dmRow1.object_dose, "object_dose", "56", "IV", "65", "Q6", "drug2Dose-text-1")
 
 
-def validate():
+def test():
 
 	PG_HOST = "localhost"
 	PG_USER = "dbmiannotator"
@@ -319,13 +319,11 @@ def validate():
 	conn = pgconn.connect_postgres(PG_HOST, PG_USER, PG_PASSWORD, PG_DATABASE)
 	pgconn.setDbSchema(conn, "ohdsi")
 
-	## "DDI clinical trial", "Phenotype clinical study", "Case Report", "Statement"
+	# MP_ANN_1 = "./template/test-annotation-1.json"
+	# test_clinical_trial_1(conn, MP_ANN_1)
 
-	MP_ANN_1 = "./template/test-annotation-1.json"
-	test_clinical_trial_1(conn, MP_ANN_1)
-
-	# MP_ANN_2 = "./template/test-annotation-2.json"
-	# test_phenotype_clinical_study_1(conn, MP_ANN_2)
+	MP_ANN_2 = "./template/test-annotation-2.json"
+	test_phenotype_clinical_study_1(conn, MP_ANN_2)
 
 	# MP_ANN_3 = "./template/test-annotation-3.json"
 	# test_case_report_1(conn, MP_ANN_3)
@@ -335,5 +333,5 @@ def validate():
 
 ## MAIN ######################################################
 if __name__ == '__main__':
-	validate()
+	test()
 

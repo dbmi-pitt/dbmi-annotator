@@ -68,11 +68,11 @@ class Qualifier:
 		return False
 
 	def setRoleProbeSubstrate(self):
-		self.qualifier_role_concept_code = "probe1"
-		self.qualifier_role_vocabulary_id = "probe2"
+		self.qualifier_role_concept_code = "DIDEO_probesubstrate"
+		self.qualifier_role_vocabulary_id = "OMOP_probesubstrate"
 
 	def isRoleProbeSubstrate(self):
-		if self.qualifier_role_concept_code == "probe1":
+		if self.qualifier_role_concept_code == "DIDEO_probesubstrate":
 			return True
 		return False
 
@@ -140,6 +140,11 @@ class Statement(Annotation):
 		Annotation.__init__(self, urn, source, label, method, creator, date)
 		self.negation = None # assertion negation supports or refutes
 
+	def setQualifiers(self, csubject, cpredicate, cobject):
+		self.csubject = csubject
+		self.cpredicate = cpredicate
+		self.cobject = cobject	
+
 
 ## DDI clinical trial annotation
 class ClinicalTrial(Annotation):
@@ -178,7 +183,12 @@ class PhenotypeClinicalStudy(Annotation):
 
 	def __init__(self, urn, source, label, method, creator, date):
 		Annotation.__init__(self, urn, source, label, method, creator, date)
-		self.mpDataMaterialD = {} # data and material dict {dmIdx: PhenotypeDMRow}	
+		self.mpDataMaterialD = {} # data and material dict {dmIdx: PhenotypeDMRow}
+
+	def setQualifiers(self, csubject, cpredicate, cobject):
+		self.csubject = csubject
+		self.cpredicate = cpredicate
+		self.cobject = cobject	
 
 	def getDataMaterials(self): # return list of DataMaterials
 		return self.mpDataMaterialD
@@ -203,7 +213,12 @@ class CaseReport(Annotation):
  
 	def __init__(self, urn, source, label, method, creator, date):
 		Annotation.__init__(self, urn, source, label, method, creator, date)
-		self.mpDataMaterialD = {} # data and material dict {dmIdx: CaseReportDMRow}	
+		self.mpDataMaterialD = {} # data and material dict {dmIdx: CaseReportDMRow}
+
+	def setQualifiers(self, csubject, cpredicate, cobject):
+		self.csubject = csubject
+		self.cpredicate = cpredicate
+		self.cobject = cobject		
 
 	# get all data and material rows
 	def getDataMaterials(self): # return list of DataMaterials
@@ -260,10 +275,11 @@ class PhenotypeDMRow(DMRow):
 class CaseReportDMRow(DMRow):
 	def __init__(self, dmIdx):
 		DMRow.__init__(self, dmIdx)
-		self.revewer = None
 		self.precipitant_dose = None
 		self.object_dose = None
+		self.revewer = None
 		self.dipsquestion = None
+
 
 ## Specific data or material item as component of evidence #######################
 class DMItem(object):
@@ -278,6 +294,67 @@ class DMItem(object):
 		self.suffix = suffix				
 
 
+# DDI Clinical trial, Phenotype clinial study: auc/cmax/clearance/halflife ratio
+class DataRatioItem(DMItem):
+
+	def __init__(self, field):
+		DMItem.__init__(self)
+		self.field = field
+		self.value = None
+		self.type = None
+		self.direction = None
+
+	def setAttribute(self, name, value):
+		if name == "value":
+			self.value = value
+		elif name == "type":
+			self.type = value
+		elif name == "direction":
+			self.direction = value 
+
+	def setAttributes(self, value, type, direction):
+		self.value = value
+		self.type = type
+		self.direction = direction
+
+
+## Case Report: Questions for dips score
+class DataDips():
+	def __init__(self):
+		self.dipsQsDict = {}
+
+	def getDipsDict(self):
+		return self.dipsQsDict
+
+	def setDipsDict(self, dipsQsDict):
+		self.dipsQsDict = dipsQsDict
+
+	def setQuestion(self, qs, value):
+		self.dipsQsDict[qs] = value
+
+	def getAnswerByQs(self, qs):
+		return self.dipsQsDict[qs]
+
+
+## Case Report: Reviewer
+class DataReviewer():
+	def __init__(self):
+		self.reviewer = None	
+		self.date = None
+		self.total = None
+		self.lackinfo = None
+
+	def setAttribute(self, name, value):
+		if name == "reviewer":
+			self.reviewer = value
+		elif name == "date":
+			self.date = value
+		elif name == "total":
+			self.total = value 
+		elif name == "lackinfo":
+			self.lackinfo = value 
+
+
 # DDI Clinical trial, Phenotype clinial study: participants
 class MaterialParticipants(DMItem):
 	def __init__(self, value):
@@ -285,6 +362,7 @@ class MaterialParticipants(DMItem):
 
 	def setValue(self, value):
 		self.value = value
+
 
 ## DDI Clinical trial, Case Report: Material dose
 class MaterialDoseItem(DMItem):
@@ -319,38 +397,8 @@ class MaterialDoseItem(DMItem):
 			print "[ERROR] MaterialDoseItem: undefined attribute name!"
 
 
-# DDI Clinical trial, Phenotype clinial study: auc/cmax/clearance/halflife ratio
-class DataRatioItem(DMItem):
-
-	def __init__(self, field):
-		DMItem.__init__(self)
-		self.field = field
-		self.value = None
-		self.type = None
-		self.direction = None
-
-	def setAttribute(self, name, value):
-		if name == "value":
-			self.value = value
-		elif name == "type":
-			self.type = value
-		elif name == "direction":
-			self.direction = value 
-
-	def setAttributes(self, value, type, direction):
-		self.value = value
-		self.type = type
-		self.direction = direction
-
-	# def addValue(self, value):
-	# 	self.value = value
-	# def addType(self, type):
-	# 	self.type = type
-	# def addDirection(self, direction):
-	# 	self.direction = direction
-
 ## Phenotype clinical study:  Material phenotype
-class MaterialPhenotypeItem():
+class MaterialPhenotypeItem(DMItem):
 	def __init__(self):
 		DMItem.__init__(self)
 		self.ptype = None
@@ -367,48 +415,14 @@ class MaterialPhenotypeItem():
 			self.metabolizer = value 
 		elif name == "population":
 			self.population = value 
-
-## Case Report: Questions for dips score
-class DataDips():
-	def __init__(self):
-		self.dipsQsDict = {}
-
-	def getDipsDict(self):
-		return self.dipsQsDict
-
-	def setDipsDict(self, dipsQsDict):
-		self.dipsQsDict = dipsQsDict
-
-	def setQuestion(self, qs, value):
-		self.dipsQsDict[qs] = value
-
-	def getAnswerByQs(self, qs):
-		return self.dipsQsDict[qs]
-
-## Case Report: Reviewer
-class DataReviewer():
-	def __init__(self):
-		self.reviewer = None	
-		self.date = None
-		self.total = None
-		self.lackinfo = None
-
-	def setAttribute(self, name, value):
-		if name == "reviewer":
-			self.reviewer = value
-		elif name == "date":
-			self.date = value
-		elif name == "total":
-			self.total = value 
-		elif name == "lackinfo":
-			self.lackinfo = value 
 	
 
 # # Method that supports data & material
-# class Method():
-# 	def __init__(self, entered_value, inferred_value):
-# 		self.entered_value = entered_value
-# 		self.inferred_value = inferred_value
+class Method():
+	def __init__(self, entered_value, inferred_value):
+		self.entered_value = entered_value
+		self.inferred_value = inferred_value
+
 
 def createSubAnnotation(urn, source, label, method, email, date):
 	if method == "DDI clinical trial":

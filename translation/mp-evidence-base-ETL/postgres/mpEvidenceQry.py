@@ -19,7 +19,7 @@ from model.Micropublication import *
 reload(sys)  
 sys.setdefaultencoding('utf8')
 
-######################### QUERY MP Annotation ##########################
+######################### QUERY MP Annotation #######################################
 ## get MP annotations from RDB
 # (1) get annotation with claim, (2) append qualifiers based on claimId, (3) add data# (4) add material
 # return list of Annotations  
@@ -69,7 +69,7 @@ def getMpAnnotationByUrn(conn, urn):
 	return annsD.values()
 
 
-######################### QUERY MP Claim ##########################
+######################### QUERY MP Claim ############################################
 ## query all claim annotation
 # param1: psql connection
 # return annotations {claimId: Annotation}
@@ -154,7 +154,7 @@ def getQualifiersForClaimByUrn(conn, urn):
 		qList.append(qualifier)
 	return {claimId: qList}
 
-######################### QUERY MP Data #############################
+######################### QUERY MP Data #############################################
 ## query all data items for claim
 # param1: psql connection
 # param2: claim id
@@ -174,18 +174,28 @@ def queryMpDataByClaimId(conn, claimId):
 ## query data items for claim annotation
 # return list of annotation with data items attached
 def addMpDataForAnn(conn, annotation, claimId):
-	dataRes = queryMpDataByClaimId(conn, claimId)
+	if not isinstance(annotation, Statement):
+		dataResults = queryMpDataByClaimId(conn, claimId)
 
-	if isinstance(annotation, ClinicalTrial):
-		for row in dataRes:
+		if isinstance(annotation, ClinicalTrial):
+			addClinicalTrialData(annotation, dataResults)
+		if isinstance(annotation, PhenotypeClinicalStudy):
+			addPhenotypeClinicalStudyData(annotation, dataResults)
+		if isinstance(annotation, CaseReport):
+			addCaseReportData(annotation, dataResults)
+
+
+def addClinicalTrialData(annotation, dataResults):
+		for row in dataResults:
 			dType = row[0] # data type
 			dfType = row[1] # data field 
-			exact = row[5]; prefix = row[6]; suffix = row[7]; value = str(row[2] or row[3]) # value as string or number
+			exact = row[5]; prefix = row[6]; suffix = row[7]; value = str(row[2] or row[3]) # value
 			dmIdx = row[8] # data index
 			ev_supports = row[9] # EV supports or 		
 
 			if annotation.getSpecificDataMaterial(dmIdx) == None: # create new row for data & material
 				dmRow = ClinicalTrialDMRow(dmIdx) 
+				addEvRelationship(dmRow, ev_supports)
 				annotation.setSpecificDataMaterial(dmRow, dmIdx)
 			else: # use existing data & material row 
 				dmRow = annotation.getSpecificDataMaterial(dmIdx)
@@ -193,12 +203,54 @@ def addMpDataForAnn(conn, annotation, claimId):
 			if dType in ["auc", "cmax" , "clearance", "halflife"]: # add data ratio
 				addDataRatioField(dmRow, dType, dfType, value, prefix, exact, suffix)
 
-			addEvRelationship(dmRow, ev_supports)
+			question = row[12]; answer = row[13] # add evidence type questions
+			addEvidenceTypeQs(dmRow, question, answer)
+
+
+def addPhenotypeClinicalStudyData(annotation, dataResults):
+		for row in dataResults:
+			dType = row[0] # data type
+			dfType = row[1] # data field 
+			exact = row[5]; prefix = row[6]; suffix = row[7]; value = str(row[2] or row[3]) # value
+			dmIdx = row[8] # data index
+			ev_supports = row[9] # EV supports or 		
+
+			if annotation.getSpecificDataMaterial(dmIdx) == None: # create new row for data & material
+				dmRow = PhenotypeDMRow(dmIdx) 
+				addEvRelationship(dmRow, ev_supports)
+				annotation.setSpecificDataMaterial(dmRow, dmIdx)
+			else: # use existing data & material row 
+				dmRow = annotation.getSpecificDataMaterial(dmIdx)
+
+			if dType in ["auc", "cmax" , "clearance", "halflife"]: # add data ratio
+				addDataRatioField(dmRow, dType, dfType, value, prefix, exact, suffix)
 
 			question = row[12]; answer = row[13] # add evidence type questions
 			addEvidenceTypeQs(dmRow, question, answer)
- 
-	return annotation
+
+
+def addCaseReportData(annotation, dataResults):
+		for row in dataResults:
+			dType = row[0] # data type
+			dfType = row[1] # data field 
+			exact = row[5]; prefix = row[6]; suffix = row[7]; value = str(row[2] or row[3]) # value
+			dmIdx = row[8] # data index
+			ev_supports = row[9] # EV supports or 		
+
+			if annotation.getSpecificDataMaterial(dmIdx) == None: # create new row for data & material
+				dmRow = CaseReportDMRow(dmIdx) 
+				addEvRelationship(dmRow, ev_supports)
+				annotation.setSpecificDataMaterial(dmRow, dmIdx)
+			else: # use existing data & material row 
+				dmRow = annotation.getSpecificDataMaterial(dmIdx)
+
+			if dType == "reviewer":
+				addDataReviewerField(dmRow, dType, dfType, value)
+			elif dType == "dips":
+				addDataDipsField(dmRow, dType, dfType, value)
+
+			question = row[12]; answer = row[13] # add evidence type questions
+			addEvidenceTypeQs(dmRow, question, answer)
 
 
 def addDataRatioField(dmRow, dType, dfType, value, prefix, exact, suffix):
@@ -209,6 +261,26 @@ def addDataRatioField(dmRow, dType, dfType, value, prefix, exact, suffix):
 		item.setSelector(prefix, exact, suffix)
 		setattr(dmRow, dType, item)
 	item.setAttribute(dfType, value) # add new attri
+
+
+def addDataReviewerField(dmRow, dType, dfType, value):
+	if getattr(dmRow, dType): 
+		item = getattr(dmRow, dType)	
+	else:
+		item = DataReviewer()
+		setattr(dmRow, dType, item)
+	item.setAttribute(dfType, value) # add new attri
+
+
+def addDataDipsField(dmRow, dType, dfType, value):
+	if getattr(dmRow, dType):
+		item = getattr(dmRow, dType)	
+	else:
+		item = DataDips()
+		setattr(dmRow, "dipsquestion", item)
+	dipsDict = item.getDipsDict()
+	dipsDict[dfType] = value
+	item.setDipsDict(dipsDict) # add new attri
 
 
 def addEvidenceTypeQs(dmRow, question, answer):
@@ -223,7 +295,8 @@ def addEvRelationship(dmRow, ev_supports):
 	if dmRow.ev_supports == None and ev_supports != None: # add evidence relationship
 		dmRow.ev_supports = ev_supports
 
-######################### QUERY MP Material ##########################
+
+######################### QUERY MP Material #########################################
 ## query material items for claim annotation
 # param1: psql connection
 # param2: claim id
@@ -245,30 +318,91 @@ def queryMpMaterialByClaimId(conn, claimId):
 	
 
 def addMpMaterialForAnn(conn, annotation, claimId):
-	materials = queryMpMaterialByClaimId(conn, claimId)
+	matResults = queryMpMaterialByClaimId(conn, claimId)
 
-	if isinstance(annotation, ClinicalTrial):
-		for row in materials:
+	if not isinstance(annotation, Statement):
+		if isinstance(annotation, ClinicalTrial):
+			addClinicalTrialMaterial(annotation, matResults)
+		if isinstance(annotation, PhenotypeClinicalStudy):
+			addPhenotypeClinicalStudyMaterial(annotation, matResults)
+		if isinstance(annotation, CaseReport):
+			addCaseReportMaterial(annotation, matResults)
 
-			mType = row[0]  # material type
-			mfType = row[1] # material field 
-			prefix = row[4]; exact = row[5]; suffix = row[6]; value = str(row[2] or row[3])
-			dmIdx = row[7] # data & material index
-			ev_supports = row[8] # EV supports or refutes
 
-			if not annotation.getSpecificDataMaterial(dmIdx):
-				dmRow = DataMaterialRow(dmIdx) # create new row of data & material
-				addEvRelationship(dmRow, ev_supports) # add evidence relationship
-				annotation.setSpecificDataMaterial(dmRow, index)
-			else:
-				dmRow = annotation.getSpecificDataMaterial(dmIdx)
+def addClinicalTrialMaterial(annotation, matResults):
 
-			if mType in ["precipitant_dose","object_dose"]: # add material dose
-				addMaterialDoseField(dmRow, mType, mfType, value, prefix, exact, suffix)
-			elif mType == "participants":
-				addParticipants(dmRow, value, prefix, exact, suffix)
+	for row in matResults:
 
-	return annotation
+		mType = row[0]  # material type
+		mfType = row[1] # material field 
+		prefix = row[4]; exact = row[5]; suffix = row[6]; value = str(row[2] or row[3])
+		dmIdx = row[7] # data & material index
+		ev_supports = row[8] # EV supports or refutes
+
+		if not annotation.getSpecificDataMaterial(dmIdx):
+			dmRow = DataMaterialRow(dmIdx) # create new row of data & material
+			addEvRelationship(dmRow, ev_supports) # add evidence relationship
+			annotation.setSpecificDataMaterial(dmRow, index)
+		else:
+			dmRow = annotation.getSpecificDataMaterial(dmIdx)
+
+		if mType in ["precipitant_dose","object_dose"]: # add material dose
+			addMaterialDoseField(dmRow, mType, mfType, value, prefix, exact, suffix)
+		elif mType == "participants":
+			addParticipants(dmRow, value, prefix, exact, suffix)
+
+
+def addPhenotypeClinicalStudyMaterial(annotation, matResults):
+
+	for row in matResults:
+		mType = row[0]  # material type
+		mfType = row[1] # material field 
+		prefix = row[4]; exact = row[5]; suffix = row[6]; value = str(row[2] or row[3])
+		dmIdx = row[7] # data & material index
+		ev_supports = row[8] # EV supports or refutes
+
+		if not annotation.getSpecificDataMaterial(dmIdx):
+			dmRow = DataMaterialRow(dmIdx) # create new row of data & material
+			addEvRelationship(dmRow, ev_supports) # add evidence relationship
+			annotation.setSpecificDataMaterial(dmRow, index)
+		else:
+			dmRow = annotation.getSpecificDataMaterial(dmIdx)
+
+		if mType == "probesubstrate_dose": # add material dose
+			addMaterialDoseField(dmRow, mType, mfType, value, prefix, exact, suffix)
+		elif mType == "phenotype":
+			addPhenotypeField(dmRow, mfType, value, prefix, exact, suffix)
+
+
+def addCaseReportlMaterial(annotation, matResults):
+
+	for row in matResults:
+
+		mType = row[0]  # material type
+		mfType = row[1] # material field 
+		prefix = row[4]; exact = row[5]; suffix = row[6]; value = str(row[2] or row[3])
+		dmIdx = row[7] # data & material index
+		ev_supports = row[8] # EV supports or refutes
+
+		if not annotation.getSpecificDataMaterial(dmIdx):
+			dmRow = DataMaterialRow(dmIdx) # create new row of data & material
+			addEvRelationship(dmRow, ev_supports) # add evidence relationship
+			annotation.setSpecificDataMaterial(dmRow, index)
+		else:
+			dmRow = annotation.getSpecificDataMaterial(dmIdx)
+
+		if mType in ["precipitant_dose","object_dose"]: # add material dose
+			addMaterialDoseField(dmRow, mType, mfType, value, prefix, exact, suffix)
+
+
+def addPhenotypeField(dmRow, mfType, value, prefix, exact, suffix):
+	if dmRow.phenotype:
+		item = dmRow.phenotype
+	else:
+		item = MaterialPhenotypeItem()
+		item.setSelector(prefix, exact, suffix)
+		dmRow.phenotype = item
+	item.setAttribute(mfType, value)
 
 
 def addMaterialDoseField(dmRow, mType, mfType, value, prefix, exact, suffix):
@@ -288,7 +422,7 @@ def addParticipants(dmRow, value, prefix, exact, suffix):
 		dmRow.participants = partItem
 
 
-######################### QUERY Highlight Annotaiton ##########################
+######################### QUERY Highlight Annotaiton ################################
 # query all highlight annotation
 # return dict for drug set in document   dict {"doc url": "drug set"} 
 def queryHighlightAnns(conn):
