@@ -171,6 +171,42 @@ function initLiseners() {
         $('#commitDrug2').show();
     });
 
+    $('#edit-object-metabolite').click(function() {
+        $('#object-metabolite').hide();
+        $('#object-metabolite-input').show();
+        $('#edit-object-metabolite').hide();
+        $('#commit-object-metabolite').show();
+    });
+
+    $('#commit-object-metabolite').click(function() {
+        $('#object-metabolite').show();
+        $('#object-metabolite-input').hide();
+        $('#edit-object-metabolite').show();
+        $('#commit-object-metabolite').hide();
+        //add input drug1 to dropdown list
+        var input_object = $('#object-metabolite-input').val();
+        if (input_object != "") { //sanity check
+            //sanity check - input duplicates
+            var tempval = input_object;
+            //add option
+            if ($('#object-metabolite option[value = '+tempval+']').length == 0) {
+                $('#object-metabolite').append($('<option>', {
+                    value: tempval,
+                    text: tempval
+                }));
+            }
+            //select option
+            $('#object-metabolite > option').each(function () {
+                console.log(this.text);
+                if (this.text === tempval) {
+                    $(this).prop('selected', true);
+                } else {
+                    $(this).prop('selected', false);
+                }
+            });
+        }
+    });
+
     $('#commitDrug1').click(function() {
         $('#Drug1').show();
         $('#Drug1-input').hide();
