@@ -468,8 +468,8 @@ def createDataRatioItem(item, ratioType):
 
 def createPhenotypeItem(item):
 	phItem = MaterialPhenotypeItem()
-	exact = getSelectorTxt(item, "exact"); prefix = getSelectorTxt(item, "prefix"); suffix = getSelectorTxt(item, "suffix")
-	phItem.setSelector(prefix, exact, suffix)
+	#exact = getSelectorTxt(item, "exact"); prefix = getSelectorTxt(item, "prefix"); suffix = getSelectorTxt(item, "suffix")
+	#phItem.setSelector(prefix, exact, suffix)
 	phItem.ptype = item["type"]
 	phItem.value = item["typeVal"]
 	phItem.metabolizer = item["metabolizer"]
@@ -571,6 +571,8 @@ def getSelectorTxt(field, spanType):
 	if spanType not in ["prefix", "exact", "suffix"]:
 		print "[ERROR] getSelectorTxt spanType undefined %s" % spanType
 		return None
+	print field
+	print spanType
 
 	if field["hasTarget"]:
 		if field["hasTarget"]["hasSelector"]:
