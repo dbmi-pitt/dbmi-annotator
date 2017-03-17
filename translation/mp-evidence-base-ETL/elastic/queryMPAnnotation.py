@@ -56,7 +56,7 @@ def createStatement(doc, doc_urn):
 	claim = doc["argues"]; source = doc["rawurl"]; email = doc["email"]
 	label = claim["label"]; method = doc["argues"]["method"]; date = doc["created"]
 	exact = getSelectorTxt(claim, "exact"); prefix = getSelectorTxt(claim, "prefix"); suffix = getSelectorTxt(claim, "suffix")
-	qualifier = claim["qualifiedBy"]; 
+	qualifier = claim["qualifiedBy"]; negation = claim["negation"]
 	drugname1 = qualifier["drug1"]; drugname2 = qualifier["drug2"]; enzyme = qualifier["enzyme"]; predicate = qualifier["relationship"]; precipitant = qualifier["precipitant"]
 
 	if not validateStatement(precipitant, drugname1, drugname2, enzyme, predicate, source, label):
@@ -67,6 +67,7 @@ def createStatement(doc, doc_urn):
 	addQualifiersForST(annotation, drugname1, drugname2, predicate, enzyme, precipitant, parseDrugPC("drug1PC", qualifier), parseDrugPC("drug2PC", qualifier))
 	annotation.setOaSelector(prefix, exact, suffix)
 	addRejected(annotation, claim)
+	annotation.negation = negation # negate this statement
 
 	return annotation
 
@@ -147,7 +148,7 @@ def createClinicalTrial(doc, doc_urn):
 			data = dataL[i]
 			dmRow = ClinicalTrialDMRow(i)
 			dmRow.ev_supports = parseEvSupports(data["evRelationship"]) 
-
+			addEVTypeQuestions(dmRow, data) # add evidence type question 
 			for ratioType in ["auc", "cmax", "clearance", "halflife"]:
 				if data[ratioType]:
 					ratioItem = createDataRatioItem(data[ratioType], ratioType)	
@@ -170,7 +171,6 @@ def createClinicalTrial(doc, doc_urn):
 						dmRow.precipitant_dose = createDoseItem(material["drug2Dose"], "precipitant", drugname2)
 					elif drugname2 == cobject.qvalue: ## drug2 is object
 						dmRow.object_dose = createDoseItem(material["drug2Dose"], "object", drugname2)
-
 			annotation.setSpecificDataMaterial(dmRow, i) # add new row of data and material		
 	return annotation
 
@@ -298,7 +298,7 @@ def createPhenotypeClinicalStudy(doc, doc_urn):
 			data = dataL[i]
 			dmRow = PhenotypeDMRow(i)
 			dmRow.ev_supports = parseEvSupports(data["evRelationship"]) 
-
+			addEVTypeQuestions(dmRow, data) # add evidence type question 
 			for ratioType in ["auc", "cmax", "clearance", "halflife"]:
 				if data[ratioType]:
 					ratioItem = createDataRatioItem(data[ratioType], ratioType)	
@@ -351,7 +351,7 @@ def createCaseReport(doc, doc_urn):
 	qualifier = claim["qualifiedBy"]; precipitant = qualifier["precipitant"]
 	drugname1 = qualifier["drug1"]; drugname2 = qualifier["drug2"]; predicate = qualifier["relationship"];
 
-	if not validateCaseReport(drugname1, drugname2, predicate, source, label):
+	if not validateCaseReport(precipitant, drugname1, drugname2, predicate, source, label):
 		return None
 
 	## MP Claim
@@ -367,7 +367,7 @@ def createCaseReport(doc, doc_urn):
 			data = dataL[i]
 			dmRow = CaseReportDMRow(i)
 			dmRow.ev_supports = parseEvSupports(data["evRelationship"]) 
-			
+			addEVTypeQuestions(dmRow, data) # add evidence type question 
 			if data["dips"]:
 				dmRow.dipsquestion = createDipsItem(data["dips"])
 			if data["reviewer"]:
@@ -399,7 +399,7 @@ def createCaseReport(doc, doc_urn):
 # param5: precipitant role in DDI
 # param6: drug1 parent compound
 # param7: drug2 parent compound
-def addQualifiersForCR(annotation, drugname1, predicate, drugname2, precipitant, drug1PC, drug2PC, qualifier):
+def addQualifiersForCR(annotation, drugname1, predicate, drugname2, precipitant, drug1PC, drug2PC):
 	if precipitant == "drug1":
 		csubject = Qualifier(drugname1, True, False, False) # drug1 as mpsubject/precipitant
 		csubject.setRolePrecipitant()
@@ -468,8 +468,8 @@ def createDataRatioItem(item, ratioType):
 
 def createPhenotypeItem(item):
 	phItem = MaterialPhenotypeItem()
-	#exact = getSelectorTxt(item, "exact"); prefix = getSelectorTxt(item, "prefix"); suffix = getSelectorTxt(item, "suffix")
-	#phItem.setSelector(prefix, exact, suffix)
+	exact = getSelectorTxt(item, "exact"); prefix = getSelectorTxt(item, "prefix"); suffix = getSelectorTxt(item, "suffix")
+	phItem.setSelector(prefix, exact, suffix)
 	phItem.ptype = item["type"]
 	phItem.value = item["typeVal"]
 	phItem.metabolizer = item["metabolizer"]
@@ -482,7 +482,7 @@ def createReviewer(dataRev):
 	revItem.reviewer = dataRev["reviewer"]
 	revItem.date = dataRev["date"]
 	revItem.total = dataRev["total"]
-	revItem.lackinfo = dataRev["lackinfo"]
+	revItem.lackinfo = dataRev["lackInfo"]
 	return revItem
 
 
@@ -504,6 +504,19 @@ def addParentCompound(qualifier, drugPC):
 		[enantiomer, metabolite] = [isPC(pcL[0]), isPC(pcL[1])]
 		qualifier.enantiomer = enantiomer
 		qualifier.metabolite = metabolite
+	else:
+		qualifier.enantiomer = False
+		qualifier.metabolite = False
+
+
+## convert parent compound from string in AnnotationPress to boolean for Annotation
+# param1: "enantiomer|metabolite"
+# return: boolean for "enantiomer", "metabolite"
+def isPC(pcStr):
+	if pcStr in ["enantiomer", "metabolite"]:
+		return True
+	else:
+		return False
 
 	
 def addRejected(annotation, claim):
@@ -516,6 +529,19 @@ def addRejected(annotation, claim):
 	annotation.rejected_statement = rej_statement
 	annotation.rejected_statement_reason = rej_reason
 	annotation.rejected_statement_comment = rej_comment
+
+
+def addEVTypeQuestions(dmRow, data):
+	if data["grouprandom"]:
+		if data["grouprandom"] == "yes":
+			dmRow.grouprandom = "yes"
+		elif data["grouprandom"] == "no":
+			dmRow.grouprandom = "no"			
+	if data["parallelgroup"]:
+		if data["parallelgroup"] == "yes":
+			dmRow.parallelgroup = "yes"
+		elif data["parallelgroup"] == "no":
+			dmRow.parallelgroup = "no"
 
 	
 ## Validates ##########################################################################
@@ -547,6 +573,17 @@ def validatePhenotypeClinicalStudy(drugname1, enzyme, predicate, source, label):
 		return False
 	return True
 
+def validateCaseReport(precipitant, drugname1, drugname2, predicate, source, label):
+	## validate precipitant
+	if not precipitant or precipitant not in ["drug1", "drug2"]:
+		print "[ERROR] createCaseReport: percipitant undefined, skip source (%s), claim (%s)" % (source, label)
+		return False
+	## data validation
+	if (predicate != "interact with" or (not drugname1 or not drugname2)):
+		print "[WARN] Case Report: qualifier error, skip (%s) - (%s)" % (source, label)
+		return False
+	return True
+
 ## Utils ############################################################################
 def parseEvSupports(evRelationship):
 	if evRelationship == "supports":
@@ -571,8 +608,6 @@ def getSelectorTxt(field, spanType):
 	if spanType not in ["prefix", "exact", "suffix"]:
 		print "[ERROR] getSelectorTxt spanType undefined %s" % spanType
 		return None
-	print field
-	print spanType
 
 	if field["hasTarget"]:
 		if field["hasTarget"]["hasSelector"]:
@@ -583,15 +618,6 @@ def getSelectorTxt(field, spanType):
 			else:
 				return field["hasTarget"]["hasSelector"]["suffix"]
 	return None
-
-## convert parent compound from string in AnnotationPress to boolean for Annotation
-# param1: "enantiomer|metabolite"
-# return: boolean for "enantiomer", "metabolite"
-def isPC(pcStr):
-	if pcStr in ["enantiomer", "metabolite"]:
-		return True
-	else:
-		return False
 
 
 def test():

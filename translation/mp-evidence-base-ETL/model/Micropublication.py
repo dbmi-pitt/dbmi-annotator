@@ -69,10 +69,10 @@ class Qualifier:
 
 	def setRoleProbeSubstrate(self):
 		self.qualifier_role_concept_code = "DIDEO_probesubstrate"
-		self.qualifier_role_vocabulary_id = "OMOP_probesubstrate"
+		self.qualifier_role_vocabulary_id = -99000012
 
 	def isRoleProbeSubstrate(self):
-		if self.qualifier_role_concept_code == "DIDEO_probesubstrate":
+		if self.qualifier_role_concept_code == -99000012:
 			return True
 		return False
 
@@ -136,9 +136,9 @@ class Annotation(object):
 
 ## MP Statement annotation
 class Statement(Annotation):
-	def __init__(self, csubject, cpredicate, cobject):
+	def __init__(self, urn, source, label, method, creator, date):
 		Annotation.__init__(self, urn, source, label, method, creator, date)
-		self.negation = None # assertion negation supports or refutes
+		self.negation = None # Negate this claim (Statement)
 
 	def setQualifiers(self, csubject, cpredicate, cobject):
 		self.csubject = csubject
@@ -277,7 +277,7 @@ class CaseReportDMRow(DMRow):
 		DMRow.__init__(self, dmIdx)
 		self.precipitant_dose = None
 		self.object_dose = None
-		self.revewer = None
+		self.reviewer = None
 		self.dipsquestion = None
 
 
@@ -430,7 +430,7 @@ def createSubAnnotation(urn, source, label, method, email, date):
 	elif method == "Phenotype clinical study":
 		return PhenotypeClinicalStudy(urn, source, label, method, email, date)
 	elif method == "Case Report":
-		return PhenotypeClinicalStudy(urn, source, label, method, email, date)
+		return CaseReport(urn, source, label, method, email, date)
 	elif method == "Statement":
 		return Statement(urn, source, label, method, email, date)
 	return None

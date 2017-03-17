@@ -109,10 +109,19 @@ def load_ClinicalTrial_annotation(conn, ann):
 	dmRows = ann.getDataMaterials()
 	if dmRows:
 		for dmIdx,dmRow in dmRows.items():
-			pgmp.insert_method(conn, ann.method, ann.method, mp_claim_id, dmIdx) # insert method
+			load_method_DM(conn, ann.method, ann.method, dmRow, dmIdx, mp_claim_id) # insert method
 			load_ClinicalTrial_DM(conn, dmRow, mp_claim_id, ann.source, ann.creator) # insert data and material
 	conn.commit()
 	return mp_claim_id
+
+
+def load_method_DM(conn, entered_method, inferred_method, dmRow, dmIdx, mp_claim_id):
+	method_id = pgmp.insert_method(conn, entered_method, inferred_method, mp_claim_id, dmIdx)	
+	if dmRow:
+		if dmRow.parallelgroup:
+			pgmp.insert_evidence_question(conn, "parallelgroup", dmRow.parallelgroup, method_id)
+		if dmRow.grouprandom:
+			pgmp.insert_evidence_question(conn, "grouprandom", dmRow.grouprandom, method_id)
 
 
 def load_ClinicalTrial_DM(conn, dmRow, mp_claim_id, source, creator):
@@ -152,7 +161,7 @@ def load_PhenClinicalStudy_annotation(conn, ann):
 	dmRows = ann.getDataMaterials()
 	if dmRows:
 		for dmIdx,dmRow in dmRows.items():
-			pgmp.insert_method(conn, ann.method, ann.method, mp_claim_id, dmIdx) # load method
+			load_method_DM(conn, ann.method, ann.method, dmRow, dmIdx, mp_claim_id) # insert method
 			load_PhenClinicalStudy_DM(conn, dmRow, mp_claim_id, ann.source, ann.creator) # load data & material
 	conn.commit()
 	return mp_claim_id
@@ -222,7 +231,7 @@ def load_Statement_annotation(conn, ann):
 	## insert mp_claim_annotation, oa_claim_body
 	claim_target_id = load_oa_target(conn, ann.source, ann.prefix, ann.exact, ann.suffix)
 	claim_body_id = pgmp.insert_claim_body(conn, ann.label, ann.exact)
-	mp_claim_id = pgmp.insert_claim_annotation(conn, ann, claim_body_id, claim_target_id, False)
+	mp_claim_id = pgmp.insert_claim_annotation(conn, ann, claim_body_id, claim_target_id, ann.negation)
 	pgmp.update_claim_body(conn, mp_claim_id, claim_body_id)
 
 	## insert qualifiers
@@ -231,6 +240,8 @@ def load_Statement_annotation(conn, ann):
 	pgmp.insert_qualifier(conn, ann.cobject, claim_body_id)		
 	if ann.cqualifier:
 		pgmp.insert_qualifier(conn, ann.cqualifier, claim_body_id)
+
+	load_method_DM(conn, ann.method, ann.method, None, 0, mp_claim_id) # insert method
 	
 	conn.commit()
 	return mp_claim_id

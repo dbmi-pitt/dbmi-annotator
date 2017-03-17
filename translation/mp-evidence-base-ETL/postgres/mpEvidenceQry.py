@@ -246,7 +246,7 @@ def addCaseReportData(annotation, dataResults):
 
 			if dType == "reviewer":
 				addDataReviewerField(dmRow, dType, dfType, value)
-			elif dType == "dips":
+			elif dType == "dipsquestion":
 				addDataDipsField(dmRow, dType, dfType, value)
 
 			question = row[12]; answer = row[13] # add evidence type questions
@@ -368,13 +368,15 @@ def addPhenotypeClinicalStudyMaterial(annotation, matResults):
 		else:
 			dmRow = annotation.getSpecificDataMaterial(dmIdx)
 
-		if mType == "probesubstrate_dose": # add material dose
+		if mType == "participants": 
+			addParticipants(dmRow, value, prefix, exact, suffix)
+		elif mType == "probesubstrate_dose": 
 			addMaterialDoseField(dmRow, mType, mfType, value, prefix, exact, suffix)
 		elif mType == "phenotype":
 			addPhenotypeField(dmRow, mfType, value, prefix, exact, suffix)
 
 
-def addCaseReportlMaterial(annotation, matResults):
+def addCaseReportMaterial(annotation, matResults):
 
 	for row in matResults:
 

@@ -104,9 +104,6 @@ def loadTemplateInJson(path):
 	
 ## VALIDATE INDIVIDUAL ANNOTATION TRANSLATE AND LOAD #############################
 def etlAnnForTesting(conn, template, annUrn):
-	## clean postgres
-	pgmp.clearAll(conn)
-	conn.commit()
 
 	## clean test samples in elasticsearch, if exists, then delete
 	#esop.deleteById("localhost", "9200", annUrn)
@@ -164,7 +161,7 @@ def testMaterialDose(doseItem, field, drugname, value, formulation, duration, re
 
 def testParticipants(partItem, value, exact):
 	print "[INFO] begin validating participants..."
-	if isMatched("participants", value, partItem.value) and isMatched("participants", exact, partItem.exact):
+	if isMatched("participants", value, partItem.value) and isMatched("exact", exact, partItem.exact):
 		print "[TEST] participants is validated"
 	else:
 		print "[ERROR] participants is incorrect"
@@ -177,9 +174,9 @@ def testEvRelationship(dmRow, value):
 		print "[ERROR] evidence relationship is incorrect"		
 
 
-def testPhenotype(phenoItem, ptype, value, metabolizer, population):
+def testPhenotype(phenoItem, ptype, value, metabolizer, population, exact):
 	print "[INFO] begin validating phenotype..."
-	if isMatched("phenotype", ptype, phenoItem.ptype) and isMatched("value", value, phenoItem.value) and isMatched("metabolizer", metabolizer, phenoItem.metabolizer) and isMatched("population", population, phenoItem.population):
+	if isMatched("phenotype", ptype, phenoItem.ptype) and isMatched("value", value, phenoItem.value) and isMatched("metabolizer", metabolizer, phenoItem.metabolizer) and isMatched("population", population, phenoItem.population) and isMatched("exact", exact, phenoItem.exact):
 		print "[TEST] phenotype is validated"
 	else:
 		print "[ERROR] phenotype is incorrect"
@@ -205,15 +202,21 @@ def testDataDipsQs(dipsItem, qsDict):
 		print "[ERROR] incorrect number of dips questions"
 
 
+def testEvTypeQuestion(dmRow, grouprandom, parallelgroup):
+	print "[INFO] begin validating evidence type questions..."
+	if isMatched("grouprandom", grouprandom, dmRow.grouprandom) and isMatched("parallelgroup", parallelgroup, dmRow.parallelgroup):
+		print "[TEST] evidence type related questions are validated"
+	else:
+		print "[ERROR] evidence type related questions are incorrect"
+		
+
 def isMatched(field, val1, val2):
 	if type(val1) != type(val2):
 		print "[ERROR] %s have an incorrect data type" % field
 		return False
-
 	if val1 == val2:
 		#print "[TEST] %s is validated" % field
 		return True
-	
 	print "[ERROR] %s is incorrect: val1 (%s) and val2 (%s)" % (field, val1, val2)
 	return False	
 
@@ -222,16 +225,14 @@ def isMatched(field, val1, val2):
 # Validate clinical trial annotation 
 # Two data & material items
 def test_clinical_trial_1(conn, template):
-	print "[INFO] =====begin test clinical trial annotation 1 ======================"
+	print "[INFO] ===== begin test clinical trial annotation 1 ======================"
 
-	annUrn = "test-case-id-1"
+	annUrn = "test-clinicaltrial-id-1"
 	annotation = etlAnnForTesting(conn, template, annUrn)
 	if isinstance(annotation, ClinicalTrial):
-		mpDataMaterialD = annotation.getDataMaterials()
-
 		## claim validation
 		print "[INFO] ================= Begin validating MP Claim ======================"
-		testClaim(annotation, "test-case-id-1", "telaprevir_inhibits_atorvastatin", "claim-text", "DDI clinical trial", False, True, "rejected-reason", "rejected-comment")
+		testClaim(annotation, "test-clinicaltrial-id-1", "telaprevir_inhibits_atorvastatin", "claim-text", "DDI clinical trial", False, True, "rejected-reason", "rejected-comment")
 		## qualifiers
 		testQualifier(annotation.csubject, "atorvastatin", True, False, False, False, True)
 		testQualifier(annotation.cpredicate, "inhibits", False, True, False, None, None)
@@ -239,8 +240,9 @@ def test_clinical_trial_1(conn, template):
 		testQualifier(annotation.cqualifier, "telaprevir", False, False, False, True, False)
 		print "[INFO] ================= Begin validating MP data ======================="
 		## data 1 validation
-		dmRow1 = mpDataMaterialD[0]
+		dmRow1 = annotation.getSpecificDataMaterial(0)
 		testEvRelationship(dmRow1, True)
+		testEvTypeQuestion(dmRow1, "yes", "no")
 		testDataRatio(dmRow1.auc, "auc", "7.88", "Fold", "Increase", "auc-text-1")
 		testDataRatio(dmRow1.cmax, "cmax", "10.6", "Fold", "Increase", "cmax-text-1")
 		testDataRatio(dmRow1.clearance, "clearance", "87.8", "Percent", "Decrease", "clearance-text-1")
@@ -251,8 +253,9 @@ def test_clinical_trial_1(conn, template):
 		testMaterialDose(dmRow1.object_dose, "object_dose", "telaprevir", "20", "Oral", "16", "Q8", "drug1Dose-text-1")
 
 		## data 2 validation
-		dmRow2 = mpDataMaterialD[1]
+		dmRow2 = annotation.getSpecificDataMaterial(1)
 		testEvRelationship(dmRow2, False)
+		testEvTypeQuestion(dmRow2, "no", "yes")
 		testDataRatio(dmRow2.auc, "auc", "17.88", "Percent", "Decrease", "auc-text-2")
 		testDataRatio(dmRow2.cmax, "cmax", "10.3", "Percent", "Decrease", "cmax-text-2")
 		testDataRatio(dmRow2.clearance, "clearance", "7.8", "Fold", "Increase", "clearance-text-2")
@@ -266,49 +269,73 @@ def test_clinical_trial_1(conn, template):
 def test_phenotype_clinical_study_1(conn, template):
 	print "[INFO] =====begin test phenotype clinical study annotation 1 ============"
 
-	annotationUrn = "test-case-id-2"
+	annotationUrn = "test-phenotypeclinicalstudy-id-1"
 	annotation = etlAnnForTesting(conn, template, annotationUrn)
-	mpDataMaterialD = annotation.getDataMaterials()
 
 	## claim validation
 	print "[INFO] ================= Begin validating MP Claim ======================"
-	testClaim(annotation, "test-case-id-2", "drugname1_substrate of_enzyme1", "enzyme1", "substrate of", "drugname1", "claim-text", "Phenotype clinical study", False, "rejected-reason|rejected-comment")
+	testClaim(annotation, "test-phenotypeclinicalstudy-id-1", "drugname1_substrate of_enzyme1", "claim-text", "Phenotype clinical study", False, True, "rejected-reason", "rejected-comment")
+
+	## qualifiers
+	testQualifier(annotation.csubject, "drugname1", True, False, False, True, True)
+	testQualifier(annotation.cpredicate, "substrate of", False, True, False, None, None)
+	testQualifier(annotation.cobject, "enzyme1", False, False, True, None, None)
 
 	## data 1 validation
 	print "[INFO] ================= Begin validating MP data ======================="
-	dmRow1 = mpDataMaterialD[0]
+	dmRow1 = annotation.getSpecificDataMaterial(0)
 	testEvRelationship(dmRow1, False)
+	testEvTypeQuestion(dmRow1, "yes", None)
 	testDataRatio(dmRow1.auc, "auc", "1.2", "Fold", "Increase", "auc-text-1")
-	testDataRatio(fmRow1.cmax, "cmax", "1.6", "Percent", "Increase", "cmax-text-1")
+	testDataRatio(dmRow1.cmax, "cmax", "1.6", "Percent", "Increase", "cmax-text-1")
 	testDataRatio(dmRow1.clearance, "clearance", "8.8", "Percent", "Increase", "clearance-text-1")
 	testDataRatio(dmRow1.halflife, "halflife", "2.5", "Percent", "Decrease", "halflife-text-1")
 
 	## material 1 validation
 	testParticipants(dmRow1.participants, "1.00", "participants-text-1")
-	testPhenotype(dmRow1.getPhenotype(), "Genotype", "BRAF", "Poor Metabolizer", "Asian")
-	testMaterialDose(dmRow1.probesubstrate_dose, "Probesubstrate_dose", "10", "IV", "23", "Q6", "drug1Dose-text-1")
+	testPhenotype(dmRow1.phenotype, "Genotype", "BRAF", "Poor Metabolizer", "Asian", "phenotype-text-1")
+	testMaterialDose(dmRow1.probesubstrate_dose, "probesubstrate_dose", "drugname1", "10", "IV", "23", "Q6", "drug1Dose-text-1")
 	
 
 def test_case_report_1(conn, template):
-	print "[INFO] =====begin test case report annotation 1 ============"
+	print "[INFO] =====begin test case report annotation 1 =========================="
 
-	annotationUrn = "test-case-id-3"
+	annotationUrn = "test-casereport-id-1"
 	annotation = etlAnnForTesting(conn, template, annotationUrn)
 
 	## claim validation
 	print "[INFO] ================= Begin validating MP Claim ======================"
-	testClaim(annotation, "test-case-id-3", "drugname1_interact with_drugname2", "drugname1", "interact with", "drugname2", "claim-text", "Case Report", False, "test-reason|test-comment")
+	testClaim(annotation, "test-casereport-id-1", "drugname1_interact with_drugname2", "claim-text", "Case Report", False, True, "test-reason", "test-comment")
+
+	## qualifiers
+	testQualifier(annotation.csubject, "drugname1", True, False, False, False, False)
+	testQualifier(annotation.cpredicate, "interact with", False, True, False, None, None)
+	testQualifier(annotation.cobject, "drugname2", False, False, True, False, False)
 
 	print "[INFO] ================= Begin validating MP data ======================="
-	dmRow1 = annotation.getSpecificDataMaterial(1)
-	testDataReviewer(dmRow1.reviewer, "External","02/22/2017", "-1", "False")
+	dmRow1 = annotation.getSpecificDataMaterial(0)
+	testDataReviewer(dmRow1.reviewer, "External","02/22/2017", "-1", "false")
 	testDataDipsQs(dmRow1.dipsquestion, {"q1":"Yes","q2":"Yes","q10":"No","q3":"No","q4":"No","q5":"NA","q6":"UNK/NA","q7":"UNK/NA","q8":"No","q9":"NA"})
-
-	testParticipants(dmRow1.participants, "1.00", "participants-text-1")
-	testMaterialDose(dmRow1.precipitant_dose, "precipitant_dose", "13", "IV", "22", "Q6", "drug1Dose-text-1")
-	testMaterialDose(dmRow1.object_dose, "object_dose", "56", "IV", "65", "Q6", "drug2Dose-text-1")
+	testMaterialDose(dmRow1.precipitant_dose, "precipitant_dose", "drugname1", "13", "IV", "22", "Q6", "drug1Dose-text-1")
+	testMaterialDose(dmRow1.object_dose, "object_dose", "drugname2", "56", "IV", "65", "Q6", "drug2Dose-text-1")
 
 
+# Validate statement annotation 
+def test_statement_1(conn, template):
+	print "[INFO] ===== begin test statement annotation 1 ======================"
+
+	annUrn = "test-statement-id-1"
+	annotation = etlAnnForTesting(conn, template, annUrn)
+	if isinstance(annotation, Statement):
+		## claim validation
+		print "[INFO] ================= Begin validating MP Statement ===================="
+		testClaim(annotation, "test-statement-id-1", "drugn1_inhibits_enzyme1", "claim-text", "Statement", True, True, "rejected-reason", "")
+		## qualifiers
+		testQualifier(annotation.csubject, "drugn1", True, False, False, True, True)
+		testQualifier(annotation.cpredicate, "inhibits", False, True, False, None, None)
+		testQualifier(annotation.cobject, "enzyme1", False, False, True, None, None)
+
+## MAIN  ############################################################################
 def test():
 
 	PG_HOST = "localhost"
@@ -319,14 +346,20 @@ def test():
 	conn = pgconn.connect_postgres(PG_HOST, PG_USER, PG_PASSWORD, PG_DATABASE)
 	pgconn.setDbSchema(conn, "ohdsi")
 
-	# MP_ANN_1 = "./template/test-annotation-1.json"
-	# test_clinical_trial_1(conn, MP_ANN_1)
+	## clean postgres
+	pgmp.clearAll(conn); conn.commit()
 
-	MP_ANN_2 = "./template/test-annotation-2.json"
+	MP_ANN_1 = "./template/test-clinicaltrial-1.json"
+	test_clinical_trial_1(conn, MP_ANN_1)
+
+	MP_ANN_2 = "./template/test-phenotypeclinicalstudy-1.json"
 	test_phenotype_clinical_study_1(conn, MP_ANN_2)
 
-	# MP_ANN_3 = "./template/test-annotation-3.json"
-	# test_case_report_1(conn, MP_ANN_3)
+	MP_ANN_3 = "./template/test-casereport-1.json"
+	test_case_report_1(conn, MP_ANN_3)
+
+	MP_ANN_4 = "./template/test-statement-1.json"
+	test_statement_1(conn, MP_ANN_4)
 
 	conn.close()
 

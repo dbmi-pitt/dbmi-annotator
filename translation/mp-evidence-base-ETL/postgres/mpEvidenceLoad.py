@@ -176,15 +176,6 @@ def insert_data_field(conn, data_body_id, data_field_type, value_as_string, valu
 	cur.execute("""INSERT INTO data_field (urn, data_body_id, data_field_type, value_as_string, value_as_number, value_as_concept_id) VALUES (%s, %s, %s, %s, %s, %s)""", (uuid.uuid4().hex, data_body_id, data_field_type, value_as_string, value_as_number, value_as_concept_id))
 
 
-# 	if data_type == "dipsquestion" and "|" in row["dipsquestion"]:
-# 		dipsQsL = row["dipsquestion"].split('|')
-# 		idx = 1
-# 		if dipsQsL:
-# 			for qs in dipsQsL:
-# 				if qs and qs != "":
-# 					cur.execute("INSERT INTO data_field (urn, data_body_id, data_field_type, value_as_string, value_as_number) VALUES (%s, %s, %s, %s, %s);",(uuid.uuid4().hex , str(data_body_id), 'q'+str(idx), qs, None))
-# 					idx += 1
-
 # # HIGHLIGHT ANNOTATION ########################################################
 # def insert_highlight_annotation(conn, type, has_body, has_target, creator, date_created, date_updated):
 # 	urn = uuid.uuid4().hex
@@ -198,6 +189,7 @@ def insert_data_field(conn, data_body_id, data_field_type, value_as_string, valu
 # 	for row in cur.fetchall():
 # 		return row[0]
 # 	return None
+
 
 def insert_oa_highlight_body(conn, drug, url):
 	urn = uuid.uuid4().hex
