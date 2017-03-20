@@ -127,13 +127,13 @@ def addQualifiersForST(annotation, drugname1, drugname2, predicate, enzyme, prec
 def createClinicalTrial(doc, doc_urn):
 
 	claim = doc["argues"]; source = doc["rawurl"]; email = doc["email"]
+	if not validateClinicalTrial(claim, source):
+		return None
+
 	label = claim["label"]; method = doc["argues"]["method"]; date = doc["created"]
 	exact = getSelectorTxt(claim, "exact"); prefix = getSelectorTxt(claim, "prefix"); suffix = getSelectorTxt(claim, "suffix")
 	qualifier = claim["qualifiedBy"]; 
 	drugname1 = qualifier["drug1"]; drugname2 = qualifier["drug2"]; enzyme = qualifier["enzyme"]; predicate = qualifier["relationship"]; precipitant = qualifier["precipitant"]
-
-	if not validateClinicalTrial(precipitant, drugname1, drugname2, enzyme, predicate, source, label):
-		return None
 
 	## MP Claim
 	annotation = createSubAnnotation(doc_urn, source, label, method, email, date)
@@ -347,12 +347,13 @@ def createCaseReport(doc, doc_urn):
 
 	claim = doc["argues"]; source = doc["rawurl"]; email = doc["email"]
 	label = claim["label"]; method = doc["argues"]["method"]; date = doc["created"]
+	if not validateCaseReport(claim, source):
+		return None
+
 	exact = getSelectorTxt(claim, "exact"); prefix = getSelectorTxt(claim, "prefix"); suffix = getSelectorTxt(claim, "suffix")
 	qualifier = claim["qualifiedBy"]; precipitant = qualifier["precipitant"]
 	drugname1 = qualifier["drug1"]; drugname2 = qualifier["drug2"]; predicate = qualifier["relationship"];
 
-	if not validateCaseReport(precipitant, drugname1, drugname2, predicate, source, label):
-		return None
 
 	## MP Claim
 	annotation = createSubAnnotation(doc_urn, source, label, method, email, date)
@@ -366,8 +367,6 @@ def createCaseReport(doc, doc_urn):
 		for i in xrange(0, len(dataL)):
 			data = dataL[i]
 			dmRow = CaseReportDMRow(i)
-			dmRow.ev_supports = parseEvSupports(data["evRelationship"]) 
-			addEVTypeQuestions(dmRow, data) # add evidence type question 
 			if data["dips"]:
 				dmRow.dipsquestion = createDipsItem(data["dips"])
 			if data["reviewer"]:
@@ -472,7 +471,8 @@ def createPhenotypeItem(item):
 	phItem.setSelector(prefix, exact, suffix)
 	phItem.ptype = item["type"]
 	phItem.value = item["typeVal"]
-	phItem.metabolizer = item["metabolizer"]
+	if "metabolizer" in item:
+		phItem.metabolizer = item["metabolizer"]
 	phItem.population = item["population"]
 	return phItem
 
@@ -522,22 +522,23 @@ def isPC(pcStr):
 def addRejected(annotation, claim):
 	# ## statement rejection 
 	rej_statement = False; rej_reason = None; rej_comment = None
-	if claim["rejected"]["reason"]:
-		rej_statement = True
-		if '|' in claim["rejected"]["reason"]:
-			(rej_reason, rej_comment) = claim["rejected"]["reason"].split('|')
+	if "rejected" in claim:
+		if claim["rejected"]["reason"]:
+			rej_statement = True
+			if '|' in claim["rejected"]["reason"]:
+				(rej_reason, rej_comment) = claim["rejected"]["reason"].split('|')
 	annotation.rejected_statement = rej_statement
 	annotation.rejected_statement_reason = rej_reason
 	annotation.rejected_statement_comment = rej_comment
 
 
 def addEVTypeQuestions(dmRow, data):
-	if data["grouprandom"]:
+	if "grouprandom" in data and data["grouprandom"]:
 		if data["grouprandom"] == "yes":
 			dmRow.grouprandom = "yes"
 		elif data["grouprandom"] == "no":
 			dmRow.grouprandom = "no"			
-	if data["parallelgroup"]:
+	if "parallelgroup" in data and data["parallelgroup"]:
 		if data["parallelgroup"] == "yes":
 			dmRow.parallelgroup = "yes"
 		elif data["parallelgroup"] == "no":
@@ -553,13 +554,15 @@ def validateStatement(precipitant, drugname1, drugname2, enzyme, predicate, sour
 	return True
 
 
-def validateClinicalTrial(precipitant, drugname1, drugname2, enzyme, predicate, source, label):
+def validateClinicalTrial(claim, source):
+	label = claim["label"]; qualifier = claim["qualifiedBy"]; predicate = qualifier["relationship"]
+
 	## validate precipitant
-	if not precipitant or precipitant not in ["drug1", "drug2"]:
+	if "precipitant" not in qualifier or qualifier["precipitant"] not in ["drug1", "drug2"]:
 		print "[ERROR] createClinicalTrial: percipitant undefined, skip source (%s), claim (%s)" % (source, label)
 		return False
 	## data validation
-	if ((predicate == "interact with" and (not drugname1 or not drugname2 or enzyme)) or (predicate in ["inhibits", "substrate of"] and (not drugname1 or not drugname2 or not enzyme))): 
+	if ((predicate == "interact with" and (not qualifier["drug1"] or not qualifier["drug2"] or qualifier["enzyme"])) or (predicate in ["inhibits", "substrate of"] and (not qualifier["drug1"] or not qualifier["drug2"] or not qualifier["enzyme"]))): 
 		print "[WARN] DDI clinical trial: qualifier error, skip (%s) - (%s)" % (source, label)
 		return False
 	return True
@@ -573,16 +576,19 @@ def validatePhenotypeClinicalStudy(drugname1, enzyme, predicate, source, label):
 		return False
 	return True
 
-def validateCaseReport(precipitant, drugname1, drugname2, predicate, source, label):
+def validateCaseReport(claim, source):
+	label = claim["label"]; qualifier = claim["qualifiedBy"]
+
 	## validate precipitant
-	if not precipitant or precipitant not in ["drug1", "drug2"]:
+	if ("precipitant" not in qualifier or not qualifier["precipitant"]) or qualifier["precipitant"] not in ["drug1", "drug2"]:
 		print "[ERROR] createCaseReport: percipitant undefined, skip source (%s), claim (%s)" % (source, label)
 		return False
 	## data validation
-	if (predicate != "interact with" or (not drugname1 or not drugname2)):
+	if ("relationship" not in qualifier or qualifier["relationship"] != "interact with" or (not qualifier["drug1"] or not qualifier["drug2"])):
 		print "[WARN] Case Report: qualifier error, skip (%s) - (%s)" % (source, label)
 		return False
 	return True
+
 
 ## Utils ############################################################################
 def parseEvSupports(evRelationship):

@@ -42,8 +42,7 @@ def insert_qualifier(conn, qualifier, claim_body_id):
 def insert_oa_selector(conn, prefix, exact, suffix):
 	cur = conn.cursor()
 	urn = uuid.uuid4().hex
-
-	qry1 = "INSERT INTO oa_selector (urn, selector_type, exact, prefix, suffix) VALUES ('%s', '%s', '%s', '%s', '%s');" % (urn, "oa_selector", exact, prefix, suffix)
+	qry1 = """INSERT INTO oa_selector (urn, selector_type, exact, prefix, suffix) VALUES ('%s', '%s', '%s', '%s', '%s');""" % (urn, "oa_selector", exact.replace("'", "''"), prefix.replace("'", "''"), suffix.replace("'", "''"))
 	cur.execute(qry1)
 
 	qry2 = "SELECT * FROM oa_selector WHERE urn = '%s';" % (urn)
@@ -93,7 +92,7 @@ def insert_claim_body(conn, claimlabel, exact):
 	cur = conn.cursor()
 	urn = uuid.uuid4().hex
 	
-	qry1 = "INSERT INTO oa_claim_body (urn, label, claim_text) VALUES ('%s', '%s', '%s');" % (urn, claimlabel, exact)
+	qry1 = "INSERT INTO oa_claim_body (urn, label, claim_text) VALUES ('%s', '%s', '%s');" % (urn, claimlabel, exact.replace("'","''"))
 	cur.execute(qry1)
 
 	qry2 = "SELECT * FROM oa_claim_body WHERE urn = '%s';" % (urn)

@@ -446,3 +446,5 @@ def queryHighlightAnns(conn):
 		else:
 			highlightD[source] = Set([drugname])
 	return highlightD
+
+#def queryQualifiers()

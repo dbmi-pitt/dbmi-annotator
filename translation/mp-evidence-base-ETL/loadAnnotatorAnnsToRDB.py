@@ -29,43 +29,6 @@ sys.setdefaultencoding('utf8')
 
 annsDictCsv = {} ## keep document and count of annotations for validation after load
 
-def addAnnsToCount(annsDict, document):
-	if document in annsDict:
-		annsDict[document] += 1
-	else:
-		annsDict[document] = 1
-
-
-def utf_8_encoder(unicode_csv_data):
-    for line in unicode_csv_data:
-        yield line.encode('utf-8')
-
-
-# LOAD HIGHLIGHT ANNOTATION ########################################################
-def load_highlight_annotation(conn, highlightD, creator):
-
-	for url, drugS in highlightD.iteritems():
-		for drug in drugS:
-			selector_id = pgmp.insert_oa_selector(conn, "", drug, "")
-			target_id = pgmp.insert_oa_target(conn, url, selector_id)
-			oa_highlight_body_id = pgmp.insert_oa_highlight_body(conn, drug, url)
-			highlight_annotation_id = pgmp.insert_highlight_annotation(conn, type, oa_highlight_body_id, target_id, creator, curr_date, curr_date)
-			pgmp.update_oa_highlight_body(conn, highlight_annotation_id, oa_highlight_body_id)
-
-
-def generateHighlightSet(row, highlightD):
-
-	if not row["subject"] or not row["object"]:
-		print row
-
-	subjectDrug = row[row["subject"]]; objectDrug = row[row["object"]]; source = row["document"]
-	if source in highlightD:
-		highlightD[source].add(subjectDrug)
-		highlightD[source].add(objectDrug)
-	else:
-		highlightD[source] = Set([subjectDrug, objectDrug])
-
-
 # load annotaitons to postgres
 def load_annotations(conn, annotations):
 
@@ -73,7 +36,7 @@ def load_annotations(conn, annotations):
 	curr_date = datetime.datetime.now()
 
 	for ann in annotations:
-		load_annotation(conn, annotation)
+		load_annotation(conn, ann)
 		#generateHighlightSet(row, highlightD)  # add unique drugs to set		
 	#load_highlight_annotation(conn, highlightD, creator)  # load drug highlight annotation
 	conn.commit()
@@ -88,6 +51,43 @@ def load_annotation(conn, annotation):
 		load_PhenClinicalStudy_annotation(conn, annotation)
 	elif isinstance(annotation, CaseReport):
 		load_CaseReport_annotation(conn, annotation)
+
+
+# LOAD HIGHLIGHT ANNOTATION ########################################################
+def load_highlight_annotation(conn, highlightD, creator):
+
+	for url, drugS in highlightD.iteritems():
+		for drug in drugS:
+			selector_id = pgmp.insert_oa_selector(conn, "", drug, "")
+			target_id = pgmp.insert_oa_target(conn, url, selector_id)
+			oa_highlight_body_id = pgmp.insert_oa_highlight_body(conn, drug, url)
+			highlight_annotation_id = pgmp.insert_highlight_annotation(conn, type, oa_highlight_body_id, target_id, creator, curr_date, curr_date)
+			pgmp.update_oa_highlight_body(conn, highlight_annotation_id, oa_highlight_body_id)
+
+
+# def generateHighlightSet(row, highlightD):
+
+# 	if not row["subject"] or not row["object"]:
+# 		print row
+
+# 	subjectDrug = row[row["subject"]]; objectDrug = row[row["object"]]; source = row["document"]
+# 	if source in highlightD:
+# 		highlightD[source].add(subjectDrug)
+# 		highlightD[source].add(objectDrug)
+# 	else:
+# 		highlightD[source] = Set([subjectDrug, objectDrug])
+
+
+def addAnnsToCount(annsDict, document):
+	if document in annsDict:
+		annsDict[document] += 1
+	else:
+		annsDict[document] = 1
+
+
+def utf_8_encoder(unicode_csv_data):
+    for line in unicode_csv_data:
+        yield line.encode('utf-8')
 
 
 # LOAD Clinical Trial Annotation ####################################################
@@ -363,24 +363,3 @@ def main():
 if __name__ == '__main__':
 	main()
 
-
-# def escapeRow(row):
-
-# 	if row['claimtext']: 
-# 		row['claimtext'] = row['claimtext'].replace("'", "''")
-# 	if row['participantstext']:
-# 		row['participantstext'] = row['participantstext'].replace("'", "''")
-# 	if row['drug1dosetext']:
-# 		row['drug1dosetext'] = row['drug1dosetext'].replace("'", "''")
-# 	if row['drug2dosetext']:
-# 		row['drug2dosetext'] = row['drug2dosetext'].replace("'", "''")
-# 	if row['auctext']:
-# 		row['auctext'] = row['auctext'].replace("'", "''")
-# 	if row['cmaxtext']:
-# 		row['cmaxtext'] = row['cmaxtext'].replace("'", "''")
-# 	if row['clearancetext']:
-# 		row['clearancetext'] = row['clearancetext'].replace("'", "''")
-# 	if row['halflifetext']:
-# 		row['halflifetext'] = row['halflifetext'].replace("'", "''")	
-
-# 	return row
