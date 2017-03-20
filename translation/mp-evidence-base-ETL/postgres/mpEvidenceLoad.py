@@ -145,7 +145,7 @@ def insert_material_field(conn, material_body_id, material_field_type, value_as_
 def insert_data_annotation(conn, mp_claim_id, has_target, creator, data_type, mp_data_index, ev_supports):
 
 	cur = conn.cursor(); urn = str(uuid.uuid4().hex)
-	cur.execute("""INSERT INTO mp_data_annotation (urn, type, has_target, creator, mp_claim_id, mp_data_index, ev_supports, date_created, rejected, rejected_reason, rejected_comment) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s);""",(urn ,data_type, has_target, creator, mp_claim_id, mp_data_index, ev_supports, curr_date, None, None, None))
+	cur.execute("""INSERT INTO mp_data_annotation (urn, type, has_target, creator, mp_claim_id, mp_data_index, ev_supports, date_created) VALUES (%s,%s,%s,%s,%s,%s,%s,%s);""",(urn ,data_type, has_target, creator, mp_claim_id, mp_data_index, ev_supports, curr_date))
 
 	cur.execute("SELECT * FROM mp_data_annotation WHERE urn = '" + urn + "';")
 	for result in cur.fetchall():
@@ -176,24 +176,21 @@ def insert_data_field(conn, data_body_id, data_field_type, value_as_string, valu
 
 
 # # HIGHLIGHT ANNOTATION ########################################################
-# def insert_highlight_annotation(conn, type, has_body, has_target, creator, date_created, date_updated):
-# 	urn = uuid.uuid4().hex
-# 	cur = conn.cursor()
+def insert_highlight_annotation(conn, has_body, has_target, creator, date_created, date_updated):
+	urn = uuid.uuid4().hex
+	cur = conn.cursor()
+	cur.execute("INSERT INTO highlight_annotation (urn, type, has_body, has_target, creator, date_created, date_updated, article_highlight) VALUES (%s, %s, %s, %s, %s, %s, %s, %s);", (urn, "DrugMention", str(has_body), str(has_target), creator, date_created, date_updated, True));
 
-# 	qry2 = "INSERT INTO highlight_annotation (urn, type, has_body, has_target, creator, date_created, date_updated) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s');" % (urn, "all", str(has_body), str(has_target), creator, date_created, date_updated);
-# 	cur.execute(qry2);
-
-# 	qry2 = "SELECT * FROM highlight_annotation WHERE urn = '%s';" % (urn)
-# 	cur.execute(qry2)
-# 	for row in cur.fetchall():
-# 		return row[0]
-# 	return None
+	qry2 = "SELECT * FROM highlight_annotation WHERE urn = '%s';" % (urn)
+	cur.execute(qry2)
+	for row in cur.fetchall():
+		return row[0]
+	return None
 
 
 def insert_oa_highlight_body(conn, drug, url):
 	urn = uuid.uuid4().hex
 	cur = conn.cursor()
-
 	qry1 = "INSERT INTO oa_highlight_body (urn, drugname, uri) VALUES ('%s', '%s', '%s');" % (urn, drug, url);
 	cur.execute(qry1);
 	

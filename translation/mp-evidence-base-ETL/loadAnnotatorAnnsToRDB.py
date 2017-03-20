@@ -30,19 +30,19 @@ sys.setdefaultencoding('utf8')
 annsDictCsv = {} ## keep document and count of annotations for validation after load
 
 # load annotaitons to postgres
-def load_annotations(conn, annotations):
+def load_annotations(conn, annotations, creator):
 
 	highlightD = {} # drug highlight set in documents {"doc url" : "drug set"}
 	curr_date = datetime.datetime.now()
 
 	for ann in annotations:
-		load_annotation(conn, ann)
-		#generateHighlightSet(row, highlightD)  # add unique drugs to set		
-	#load_highlight_annotation(conn, highlightD, creator)  # load drug highlight annotation
+		load_annotation(conn, ann, creator)
+		generateHighlightSet(ann, highlightD)  # add unique drugs to set		
+	load_highlight_annotations(conn, highlightD, creator)  # load drug highlight annotation
 	conn.commit()
 
 
-def load_annotation(conn, annotation):
+def load_annotation(conn, annotation, creator):
 	if isinstance(annotation, ClinicalTrial):
 		load_ClinicalTrial_annotation(conn, annotation)
 	elif isinstance(annotation, Statement):
@@ -54,28 +54,43 @@ def load_annotation(conn, annotation):
 
 
 # LOAD HIGHLIGHT ANNOTATION ########################################################
-def load_highlight_annotation(conn, highlightD, creator):
-
+def load_highlight_annotations(conn, highlightD, creator):
+	curr_date = datetime.datetime.now()
 	for url, drugS in highlightD.iteritems():
 		for drug in drugS:
 			selector_id = pgmp.insert_oa_selector(conn, "", drug, "")
 			target_id = pgmp.insert_oa_target(conn, url, selector_id)
 			oa_highlight_body_id = pgmp.insert_oa_highlight_body(conn, drug, url)
-			highlight_annotation_id = pgmp.insert_highlight_annotation(conn, type, oa_highlight_body_id, target_id, creator, curr_date, curr_date)
+			highlight_annotation_id = pgmp.insert_highlight_annotation(conn, oa_highlight_body_id, target_id, creator, curr_date, curr_date)
 			pgmp.update_oa_highlight_body(conn, highlight_annotation_id, oa_highlight_body_id)
 
 
-# def generateHighlightSet(row, highlightD):
+## add unique qualifiers by article to highlight dict for load
+# param1: Annotation  
+# param2: dict for highlight_annotaiton article_highlight as True
+def generateHighlightSet(annotation, highlightD):
+	source = annotation.source; sDrug = None; oDrug = None; qDrug = None
 
-# 	if not row["subject"] or not row["object"]:
-# 		print row
+	sQualifier = annotation.csubject
+	if sQualifier.isDrugProduct():
+		sDrug = sQualifier.qvalue
+	oQualifier = annotation.cobject
+	if oQualifier.isDrugProduct():
+		oDrug = oQualifier.qvalue		
+	if annotation.cqualifier:
+		qQualifier = annotation.cqualifier
+		if qQualifier.isDrugProduct():
+			qDrug = qQualifier.qvalue
 
-# 	subjectDrug = row[row["subject"]]; objectDrug = row[row["object"]]; source = row["document"]
-# 	if source in highlightD:
-# 		highlightD[source].add(subjectDrug)
-# 		highlightD[source].add(objectDrug)
-# 	else:
-# 		highlightD[source] = Set([subjectDrug, objectDrug])
+	if source not in highlightD:
+		highlightD[source] = Set([])
+
+	if sDrug:
+		highlightD[source].add(sDrug)
+	if oDrug:
+		highlightD[source].add(oDrug) 
+	if qDrug:
+		highlightD[source].add(qDrug)
 
 
 def addAnnsToCount(annsDict, document):
@@ -319,7 +334,7 @@ def load(conn, qryCondition, eshost, esport, dbschema, creator, isClean):
 	print "[INFO] Begin load data ..."
 
 	annotations = es.getMPAnnsByBody(eshost, esport, qryCondition)
-	load_annotations(conn, annotations)
+	load_annotations(conn, annotations, creator)
 	print "[INFO] annotation load completed!"
 
 	# if isClean in ["1","2"]:
@@ -332,7 +347,7 @@ def load(conn, qryCondition, eshost, esport, dbschema, creator, isClean):
 def main():
 
 	DB_SCHEMA = "../../db-schema/mp_evidence_schema.sql"
-	CREATOR = "DBMI ETL"; PG_DATABASE = 'mpevidence'
+	CREATOR = "dbmi.etl@gmail.com"; PG_DATABASE = 'mpevidence'
 	
 	if len(sys.argv) > 7:
 		ES_HOST = str(sys.argv[1])

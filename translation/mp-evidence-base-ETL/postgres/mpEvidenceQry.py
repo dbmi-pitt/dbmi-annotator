@@ -340,9 +340,9 @@ def addClinicalTrialMaterial(annotation, matResults):
 		ev_supports = row[8] # EV supports or refutes
 
 		if not annotation.getSpecificDataMaterial(dmIdx):
-			dmRow = DataMaterialRow(dmIdx) # create new row of data & material
+			dmRow = ClinicalTrialDMRow(dmIdx) # create new row of data & material
 			addEvRelationship(dmRow, ev_supports) # add evidence relationship
-			annotation.setSpecificDataMaterial(dmRow, index)
+			annotation.setSpecificDataMaterial(dmRow, dmIdx)
 		else:
 			dmRow = annotation.getSpecificDataMaterial(dmIdx)
 
@@ -362,9 +362,9 @@ def addPhenotypeClinicalStudyMaterial(annotation, matResults):
 		ev_supports = row[8] # EV supports or refutes
 
 		if not annotation.getSpecificDataMaterial(dmIdx):
-			dmRow = DataMaterialRow(dmIdx) # create new row of data & material
+			dmRow = PhenotypeDMRow(dmIdx) # create new row of data & material
 			addEvRelationship(dmRow, ev_supports) # add evidence relationship
-			annotation.setSpecificDataMaterial(dmRow, index)
+			annotation.setSpecificDataMaterial(dmRow, dmIdx)
 		else:
 			dmRow = annotation.getSpecificDataMaterial(dmIdx)
 
@@ -379,7 +379,6 @@ def addPhenotypeClinicalStudyMaterial(annotation, matResults):
 def addCaseReportMaterial(annotation, matResults):
 
 	for row in matResults:
-
 		mType = row[0]  # material type
 		mfType = row[1] # material field 
 		prefix = row[4]; exact = row[5]; suffix = row[6]; value = str(row[2] or row[3])
@@ -387,9 +386,9 @@ def addCaseReportMaterial(annotation, matResults):
 		ev_supports = row[8] # EV supports or refutes
 
 		if not annotation.getSpecificDataMaterial(dmIdx):
-			dmRow = DataMaterialRow(dmIdx) # create new row of data & material
+			dmRow = CaseReportDMRow(dmIdx) # create new row of data & material
 			addEvRelationship(dmRow, ev_supports) # add evidence relationship
-			annotation.setSpecificDataMaterial(dmRow, index)
+			annotation.setSpecificDataMaterial(dmRow, dmIdx)
 		else:
 			dmRow = annotation.getSpecificDataMaterial(dmIdx)
 
@@ -429,14 +428,8 @@ def addParticipants(dmRow, value, prefix, exact, suffix):
 # return dict for drug set in document   dict {"doc url": "drug set"} 
 def queryHighlightAnns(conn):
 	highlightD = {}
-
-	qry = """SELECT h.id, t.has_source, s.exact 
-	FROM highlight_annotation h, oa_target t, oa_selector s
-	WHERE h.has_target = t.id
-	AND t.has_selector = s.id;"""
-
 	cur = conn.cursor()
-	cur.execute(qry)
+	cur.execute("""SELECT h.id, t.has_source, s.exact FROM highlight_annotation h, oa_target t, oa_selector s WHERE h.has_target = t.id AND t.has_selector = s.id AND h.article_highlight = True;""")
 
 	for row in cur.fetchall():
 		source = row[1]; drugname = row[2]
@@ -447,4 +440,3 @@ def queryHighlightAnns(conn):
 			highlightD[source] = Set([drugname])
 	return highlightD
 
-#def queryQualifiers()

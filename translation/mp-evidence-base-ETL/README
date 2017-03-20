@@ -65,10 +65,10 @@ python load-rdb-annotations.py <pg hostname> <pg username> <pg password> <es hos
 
 Development mode:
 ex. 
-$ python translateRDB2Elastic.py localhost dbmiannotator dbmi2016 localhost test@gmail.com
+$ python translateRDB2Elastic.py localhost dbmiannotator dbmi2016 localhost dbmi.etl@gmail.com
 
 Docker container:
-$ python translateRDB2Elastic.py postgres dbmiannotator dbmi2016 elasticsearch test@gmail.com
+$ python translateRDB2Elastic.py postgres dbmiannotator dbmi2016 elasticsearch dbmi.etl@gmail.com
 
 --------------------------------------------------------------------
 query and export annotations from elasticsearch to csv

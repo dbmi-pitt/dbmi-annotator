@@ -417,11 +417,24 @@ class MaterialPhenotypeItem(DMItem):
 			self.population = value 
 	
 
-# # Method that supports data & material
+## Method that supports data & material
 class Method():
 	def __init__(self, entered_value, inferred_value):
 		self.entered_value = entered_value
 		self.inferred_value = inferred_value
+
+
+# ## Highlight annotation
+# class Highlight():
+# 	def __init__(self, prefix, exact, suffix, source):
+# 		self.prefix = prefix
+# 		self.exact = exact
+# 		self.suffix = suffix
+# 		self.source = source
+# 		self.mp_claim_id = None
+
+# 	def addMpClaimId(self, mp_claim_id):
+# 		self.mp_claim_id = mp_claim_id
 
 
 def createSubAnnotation(urn, source, label, method, email, date):

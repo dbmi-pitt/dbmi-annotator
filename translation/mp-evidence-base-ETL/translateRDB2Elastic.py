@@ -195,39 +195,6 @@ def parseEvSupports(ev_supports):
 		return "refutes"
 
 
-# load mp annotation to specific account by email
-#def loadMpAnnotation(annotation, email):			
-	# # MP Data & Material
-	# dmRows = annotation.getDataMaterials()	
-	# for index,dmRow in dmRows.items(): # walk though all data items for claim
-		
-	# 	mpData = loadTemplateInJson(MP_DATA_TEMPLATE) # data template
-		
-	# 	# MP Data - dips questions
-	# 	dataDips = dmRow.getDataDips()
-	# 	if dataDips:
-	# 		dipsQsD = dataDips.getDipsDict()
-	# 		if dipsQsD and isinstance(dipsQsD, dict):
-	# 			for qs in dipsQsD:
-	# 				mpData["dips"][qs] = dipsQsD[qs]
-	# 	print mpData["dips"]
-
-	# 	# MP Data - reviewer		
-	# 	reviewer = dmRow.getDataReviewer()
-	# 	if reviewer:
-	# 		mpData["reviewer"]["reviewer"] = reviewer.reviewer
-	# 		mpData["reviewer"]["date"] = reviewer.date
-	# 		mpData["reviewer"]["total"] = reviewer.total
-	# 		mpData["reviewer"]["lackInfo"] = reviewer.lackinfo
-
-	# 	# MP Material
-	# 	if dmRow.getPhenotype():		
-	# 		mpData["supportsBy"]["supportsBy"]["phenotype"]["type"] = dmRow.getPhenotype().ptype
-	# 		mpData["supportsBy"]["supportsBy"]["phenotype"]["value"] = dmRow.getPhenotype().value
-	# 		mpData["supportsBy"]["supportsBy"]["phenotype"]["metabolizer"] = dmRow.getPhenotype().metabolizer
-	# 		mpData["supportsBy"]["supportsBy"]["phenotype"]["population"] = dmRow.getPhenotype().population		
-
-
 # return oa selector in json
 def generateOASelector(prefix, exact, suffix):
 
@@ -251,7 +218,6 @@ def loadHighlightAnnotation(rawurl, content, email):
 	#	return
 
 	annotation = loadTemplateInJson(HIGHLIGHT_TEMPLATE)
-
 	oaSelector = generateOASelector("", content, "")
 	annotation["argues"]["hasTarget"] = oaSelector
 
@@ -284,9 +250,8 @@ def main():
 	annotations = pgqry.getMpAnnotations(conn)	
 	loadMpAnnotations(annotations, AUTHOR)
 
-	#highlightD = pgqry.queryHighlightAnns(conn)
-	#print highlightD
-	#loadHighlightAnnotations(highlightD, AUTHOR)
+	highlightD = pgqry.queryHighlightAnns(conn)
+	loadHighlightAnnotations(highlightD, AUTHOR)
 
 	conn.close()
 	print "[INFO] elasticsearch load completed"

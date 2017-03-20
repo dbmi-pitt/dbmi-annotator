@@ -59,9 +59,6 @@ mp_claim_id integer,
 mp_data_index integer,
 ev_supports boolean,
 date_created timestamp,
-rejected boolean,
-rejected_reason text,
-rejected_comment text,
 FOREIGN KEY (mp_claim_id) REFERENCES mp_claim_annotation (id)
 );
 
@@ -301,7 +298,9 @@ has_body integer,
 has_target integer,
 creator text,
 date_created timestamp,
-date_updated timestamp
+date_updated timestamp,
+article_highlight boolean,
+mp_claim_id integer
 );
 
 

@@ -116,7 +116,7 @@ def etlAnnForTesting(conn, template, annUrn):
 	annotation = esmp.getMPAnnById("localhost", "9200", annUrn)
 
 	## load annotation to postgres DB
-	pgload.load_annotation(conn, annotation)
+	pgload.load_annotation(conn, annotation, "dbmi.etl@gmail.com")
 
 	## qry postgres for the annotation
 	annotations = pgqry.getMpAnnotations(conn)	
