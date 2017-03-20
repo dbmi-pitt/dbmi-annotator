@@ -196,7 +196,7 @@ def createCaseReportAnn(ann, email, mpAnn):
 	return mpAnn
 
 
-def createStatement(annotation, email, mpAnn):
+def createStatement(ann, email, mpAnn):
 	addAnnotationMetaData(ann, mpAnn, email) # add annotation metadata
 
 	## Claim
@@ -210,6 +210,8 @@ def createStatement(annotation, email, mpAnn):
 	## Qualifiers
 	d1Qualifier = ann.getPrecipitantQualifier()
 	d2Qualifier = ann.getObjectQualifier()
+	print d1Qualifier
+	print d2Qualifier
 	mpAnn["argues"]["qualifiedBy"]["drug1"] = d1Qualifier.qvalue
 	mpAnn["argues"]["qualifiedBy"]["drug1ID"] = d1Qualifier.qvalue + "_0"
 	mpAnn["argues"]["qualifiedBy"]["precipitant"] = "drug1"

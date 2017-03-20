@@ -126,7 +126,7 @@ def load_oa_selector(conn, prefix, exact, suffix):
 	cur = conn.cursor()
 	urn = uuid.uuid4().hex
 
-        cur.execute("SET SCHEMA 'ohdsi';")
+	cur.execute("SET SCHEMA 'ohdsi';")
 	qry1 = "INSERT INTO oa_selector (urn, selector_type, exact, prefix, suffix) VALUES ('%s', '%s', '%s', '%s', '%s');" % (urn, "oa_selector", exact, prefix, suffix)
 	cur.execute(qry1)
 

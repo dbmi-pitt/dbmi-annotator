@@ -107,7 +107,7 @@ class Annotation(object):
 			return self.csubject
 		elif self.cobject and self.cobject.isRolePrecipitant():
 			return self.cobject
-		elif cqualifier and self.cqualifier.isRolePrecipitant():
+		elif self.cqualifier and self.cqualifier.isRolePrecipitant():
 			return self.cqualifier
 		else:
 			return None
