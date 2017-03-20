@@ -14,6 +14,7 @@ def getMPAnnsByBody(es_host, es_port, query_condit):
 	if query_condit:
 		body = query_condit
 	res = esop.queryByBody(es_host, es_port, body)	
+	print "Elasticsearch get MP annotations (%s)" % res['hits']['total']
 	return parseToMPAnns(res['hits']['hits'])
 
 
@@ -30,6 +31,7 @@ def parseToMPAnns(documents):
 		if ann:
 			anns.append(ann)
 	return anns
+
 
 def parseToMPAnn(document):
 	doc = document["_source"]; doc_urn = document["_id"]
@@ -71,6 +73,7 @@ def createStatement(doc, doc_urn):
 
 	return annotation
 
+
 ## add qualifiers to Statement annotation
 # parma1: annotation obj
 # param2: drug1 name
@@ -81,7 +84,7 @@ def createStatement(doc, doc_urn):
 # param7: drug1 parent compound
 # param8: drug2 parent compound
 def addQualifiersForST(annotation, drugname1, drugname2, predicate, enzyme, precipitant, drug1PC, drug2PC):
-	csubject = None; cobject = None; cqualifier = None
+	csubject = None; cobject = None
 
 	if predicate == "interact with":
 		if precipitant == "drug1":

@@ -57,19 +57,26 @@ def loadMpAnnotations(annotations, email):
 
 
 def loadMpAnnotation(annotation, email):
+	mpTemp = loadTemplateInJson(MP_ANN_TEMPLATE) # load Annotation template
+
 	if isinstance(annotation, ClinicalTrial):
-		mpAnn = createDDIClinicalTrialAnn(annotation, email)
-		es = Elasticsearch([{'host': ES_HOSTNAME, 'port': ES_PORT}]) # by default we connect to localhost:9200  
-		es.index(index="annotator", doc_type="annotation", id=annotation.urn, body=json.dumps(mpAnn))
+		mpAnn = createDDIClinicalTrialAnn(annotation, email, mpTemp)	
+	elif isinstance(annotation, PhenotypeClinicalStudy):
+		mpAnn = createPhenotypeClinicalStudyAnn(annotation, email, mpTemp)
+	elif isinstance(annotation, CaseReport):
+		mpAnn = createCaseReportAnn(annotation, email, mpTemp)
+	elif isinstance(annotation, Statement):
+		mpAnn = createStatement(annotation, email, mpTemp)
+	
+	es = Elasticsearch([{'host': ES_HOSTNAME, 'port': ES_PORT}])
+	es.index(index="annotator", doc_type="annotation", id=annotation.urn, body=json.dumps(mpAnn))
+
 
 ######################### LOAD Annotations by method ################################
-def createDDIClinicalTrialAnn(ann, email):
-
-	mpAnn = loadTemplateInJson(MP_ANN_TEMPLATE) # load Annotation template
+def createDDIClinicalTrialAnn(ann, email, mpAnn):
 	addAnnotationMetaData(ann, mpAnn, email) # add annotation metadata
 
 	## Claim
-	csubject = ann.csubject; cpredicate = ann.cpredicate; cobject = ann.cobject; cqualifier = ann.cqualifier
 	mpAnn["argues"]["hasTarget"] = generateOASelector(ann.prefix, ann.exact, ann.suffix)
 	mpAnn["argues"]["label"] = ann.label
 	mpAnn["argues"]["method"] =  ann.method # add method
@@ -110,6 +117,111 @@ def createDDIClinicalTrialAnn(ann, email):
 				addMaterialDose(dmRow.object_dose, 2, mpData)
 		mpAnn["argues"]["supportsBy"].append(mpData)  # append data to annotation
 	return mpAnn
+
+
+def createPhenotypeClinicalStudyAnn(ann, email, mpAnn):
+	addAnnotationMetaData(ann, mpAnn, email) # add annotation metadata
+
+	## Claim
+	csubject = ann.csubject; cpredicate = ann.cpredicate; cobject = ann.cobject
+	mpAnn["argues"]["hasTarget"] = generateOASelector(ann.prefix, ann.exact, ann.suffix)
+	mpAnn["argues"]["label"] = ann.label; mpAnn["argues"]["method"] =  ann.method # add method
+	mpAnn["argues"]["negation"] = parseNegation(ann.negation) # add negation 
+	mpAnn["argues"]["rejected"]["reason"] = parseEVRejected(ann) # EV rejected
+	mpAnn["argues"]["qualifiedBy"]["relationship"] = ann.cpredicate.qvalue #predicate
+
+	## Qualifiers
+	mpAnn["argues"]["qualifiedBy"]["drug1"] = csubject.qvalue
+	mpAnn["argues"]["qualifiedBy"]["drug1ID"] = csubject.qvalue + "_0"
+	mpAnn["argues"]["qualifiedBy"]["enzyme"] = cobject.qvalue
+
+	## MP Data & Material
+	dmRows = ann.getDataMaterials()	
+	for dmIdx,dmRow in dmRows.items(): # walk though all data items for claim
+		mpData = loadTemplateInJson(MP_DATA_TEMPLATE) # load data & material template
+		mpData["evRelationship"] = parseEvSupports(dmRow.ev_supports) # ev relation
+		addAllDataRatios(dmRow, mpData) # add data ratio
+		addEvQuestions(dmRow, mpData) # add evidence type questions
+
+		if dmRow.participants: # add participants
+			addParticipants(dmRow.participants, mpData)			
+		if dmRow.probesubstrate_dose: # drug 1 dose is probesubstrate dose
+			if dmRow.probesubstrate_dose.drugname == csubject.qvalue:
+				addMaterialDose(dmRow.probesubstrate_dose, 1, mpData) # drug1 dose
+		if dmRow.phenotype:
+			addMaterialPhenotype(dmRow.phenotype, mpData)
+
+		mpAnn["argues"]["supportsBy"].append(mpData)  # append data to annotation
+	return mpAnn
+
+
+def createCaseReportAnn(ann, email, mpAnn):
+	addAnnotationMetaData(ann, mpAnn, email) # add annotation metadata
+
+	## Claim
+	mpAnn["argues"]["hasTarget"] = generateOASelector(ann.prefix, ann.exact, ann.suffix)
+	mpAnn["argues"]["label"] = ann.label
+	mpAnn["argues"]["method"] =  ann.method # add method
+	mpAnn["argues"]["negation"] = parseNegation(ann.negation) # add negation 
+	mpAnn["argues"]["rejected"]["reason"] = parseEVRejected(ann) # EV rejected
+
+	relationship = ann.cpredicate.qvalue # claim predicate
+	mpAnn["argues"]["qualifiedBy"]["relationship"] = relationship
+
+	## Qualifiers
+	d1Qualifier = ann.getPrecipitantQualifier()
+	d2Qualifier = ann.getObjectQualifier()
+	mpAnn["argues"]["qualifiedBy"]["drug1"] = d1Qualifier.qvalue
+	mpAnn["argues"]["qualifiedBy"]["drug1ID"] = d1Qualifier.qvalue + "_0"
+	mpAnn["argues"]["qualifiedBy"]["drug2"] = d2Qualifier.qvalue
+	mpAnn["argues"]["qualifiedBy"]["drug2ID"] = d2Qualifier.qvalue + "_0"
+	mpAnn["argues"]["qualifiedBy"]["precipitant"] = "drug1"
+
+	## MP Data & Material
+	dmRows = ann.getDataMaterials()	
+	for dmIdx,dmRow in dmRows.items(): # walk though all data items for claim
+		mpData = loadTemplateInJson(MP_DATA_TEMPLATE) # load data & material template
+		if dmRow.reviewer: # add reviewer
+			addDataReviewer(dmRow.reviewer, mpData)
+		if dmRow.dipsquestion:
+			addDataDips(dmRow.dipsquestion, mpData)
+	
+		if dmRow.precipitant_dose: # add drug1dose
+			if dmRow.precipitant_dose.drugname == d1Qualifier.qvalue:
+				addMaterialDose(dmRow.precipitant_dose, 1, mpData)
+		if dmRow.object_dose: # add drug2dose
+			if dmRow.object_dose.drugname == d2Qualifier.qvalue:
+				addMaterialDose(dmRow.object_dose, 2, mpData)
+		mpAnn["argues"]["supportsBy"].append(mpData)  # append data to annotation
+	return mpAnn
+
+
+def createStatement(annotation, email, mpAnn):
+	addAnnotationMetaData(ann, mpAnn, email) # add annotation metadata
+
+	## Claim
+	mpAnn["argues"]["hasTarget"] = generateOASelector(ann.prefix, ann.exact, ann.suffix)
+	mpAnn["argues"]["label"] = ann.label
+	mpAnn["argues"]["method"] =  ann.method # add method
+	mpAnn["argues"]["negation"] = parseNegation(ann.negation) # add negation 
+	mpAnn["argues"]["rejected"]["reason"] = parseEVRejected(ann) # EV rejected
+	mpAnn["argues"]["qualifiedBy"]["relationship"] = ann.cpredicate.qvalue
+
+	## Qualifiers
+	d1Qualifier = ann.getPrecipitantQualifier()
+	d2Qualifier = ann.getObjectQualifier()
+	mpAnn["argues"]["qualifiedBy"]["drug1"] = d1Qualifier.qvalue
+	mpAnn["argues"]["qualifiedBy"]["drug1ID"] = d1Qualifier.qvalue + "_0"
+	mpAnn["argues"]["qualifiedBy"]["precipitant"] = "drug1"
+
+	if d2Qualifier.isDrugProduct():
+		mpAnn["argues"]["qualifiedBy"]["drug2"] = d2Qualifier.qvalue
+		mpAnn["argues"]["qualifiedBy"]["drug2ID"] = d2Qualifier.qvalue + "_0"
+	elif d2Qualifier.isEnzyme():
+		mpAnn["argues"]["qualifiedBy"]["enzyme"] = d2Qualifier.qvalue		
+
+	return mpAnn
+
 		
 ## Translate and add MP Data or Material Item to JSON template ######################
 def addAnnotationMetaData(ann, mpAnn, email):
@@ -137,9 +249,23 @@ def addAllDataRatios(dmRow, mpData):
 def addDataRatio(drItem, mpData):
 	dataType = drItem.field
 	mpData[dataType]["hasTarget"] = generateOASelector(drItem.prefix, drItem.exact, drItem.suffix)
+	mpData[dataType]["ranges"] = []
 	mpData[dataType]["value"] = getattr(drItem, "value")
 	mpData[dataType]["type"] = getattr(drItem, "type")
 	mpData[dataType]["direction"] = getattr(drItem, "direction")
+
+
+def	addDataReviewer(revItem, mpData):
+	mpData["reviewer"]["reviewer"] = revItem.reviewer
+	mpData["reviewer"]["date"] = revItem.date
+	mpData["reviewer"]["total"] = revItem.total
+	mpData["reviewer"]["lackInfo"] = revItem.lackinfo
+
+
+def addDataDips(dipsItem, mpData):
+	dipsDict = dipsItem.getDipsDict()
+	for qs, answer in dipsDict.iteritems():
+		mpData["dips"][qs] = answer
 
 
 def addEvQuestions(dmRow, mpData):
@@ -170,6 +296,15 @@ def addMaterialDose(dsItem, drugIdx, mpData):
 	else:
 		print "[ERROR] translateRDB2Elastic: addMaterialDose exception!"
 
+
+def addMaterialPhenotype(phenoItem, mpData):
+	mpData["supportsBy"]["supportsBy"]["phenotype"]["hasTarget"] = generateOASelector(phenoItem.prefix, phenoItem.exact, phenoItem.suffix)
+	mpData["supportsBy"]["supportsBy"]["phenotype"]["ranges"] = []
+	mpData["supportsBy"]["supportsBy"]["phenotype"]["type"] = phenoItem.ptype
+	mpData["supportsBy"]["supportsBy"]["phenotype"]["typeVal"] = phenoItem.value
+	mpData["supportsBy"]["supportsBy"]["phenotype"]["metabolizer"] = phenoItem.metabolizer
+	mpData["supportsBy"]["supportsBy"]["phenotype"]["population"] = phenoItem.population
+		
 	
 ## Parse MP Model to JSON attributes for annotation in Elasticsearch ############### 
 def parseNegation(negation):
@@ -248,10 +383,16 @@ def main():
 	pgconn.setDbSchema(conn, "ohdsi")
 
 	annotations = pgqry.getMpAnnotations(conn)	
+	print len(annotations)
 	loadMpAnnotations(annotations, AUTHOR)
 
 	highlightD = pgqry.queryHighlightAnns(conn)
 	loadHighlightAnnotations(highlightD, AUTHOR)
+
+	cnt = 0
+	for k, v in highlightD.iteritems():
+		cnt += len(v)
+	print cnt
 
 	conn.close()
 	print "[INFO] elasticsearch load completed"

@@ -126,17 +126,9 @@ def load_ClinicalTrial_annotation(conn, ann):
 		for dmIdx,dmRow in dmRows.items():
 			load_method_DM(conn, ann.method, ann.method, dmRow, dmIdx, mp_claim_id) # insert method
 			load_ClinicalTrial_DM(conn, dmRow, mp_claim_id, ann.source, ann.creator) # insert data and material
-	conn.commit()
+	else:
+		load_method_DM(conn, ann.method, ann.method, None, None, mp_claim_id) # insert method
 	return mp_claim_id
-
-
-def load_method_DM(conn, entered_method, inferred_method, dmRow, dmIdx, mp_claim_id):
-	method_id = pgmp.insert_method(conn, entered_method, inferred_method, mp_claim_id, dmIdx)	
-	if dmRow:
-		if dmRow.parallelgroup:
-			pgmp.insert_evidence_question(conn, "parallelgroup", dmRow.parallelgroup, method_id)
-		if dmRow.grouprandom:
-			pgmp.insert_evidence_question(conn, "grouprandom", dmRow.grouprandom, method_id)
 
 
 def load_ClinicalTrial_DM(conn, dmRow, mp_claim_id, source, creator):
@@ -178,7 +170,9 @@ def load_PhenClinicalStudy_annotation(conn, ann):
 		for dmIdx,dmRow in dmRows.items():
 			load_method_DM(conn, ann.method, ann.method, dmRow, dmIdx, mp_claim_id) # insert method
 			load_PhenClinicalStudy_DM(conn, dmRow, mp_claim_id, ann.source, ann.creator) # load data & material
-	conn.commit()
+	else:
+		load_method_DM(conn, ann.method, ann.method, None, None, mp_claim_id) # insert method		
+
 	return mp_claim_id
 
 
@@ -221,7 +215,8 @@ def load_CaseReport_annotation(conn, ann):
 		for dmIdx,dmRow in dmRows.items():
 			pgmp.insert_method(conn, ann.method, ann.method, mp_claim_id, dmIdx) # load method
 			load_CaseReport_DM(conn, dmRow, mp_claim_id, ann.source, ann.creator) # insert data & material
-	conn.commit()
+	else:
+		pgmp.insert_method(conn, ann.method, ann.method, mp_claim_id, None) # load method
 	return mp_claim_id
 
 
@@ -260,6 +255,16 @@ def load_Statement_annotation(conn, ann):
 	
 	conn.commit()
 	return mp_claim_id
+
+
+# LOAD Method AND EV type related questions ##########################################
+def load_method_DM(conn, entered_method, inferred_method, dmRow, dmIdx, mp_claim_id):
+	method_id = pgmp.insert_method(conn, entered_method, inferred_method, mp_claim_id, dmIdx)	
+	if dmRow:
+		if dmRow.parallelgroup:
+			pgmp.insert_evidence_question(conn, "parallelgroup", dmRow.parallelgroup, method_id)
+		if dmRow.grouprandom:
+			pgmp.insert_evidence_question(conn, "grouprandom", dmRow.grouprandom, method_id)
 
 
 # LOAD INDIVIDUAL DATA OR MATERIAL ###################################################
@@ -331,10 +336,11 @@ def load(conn, qryCondition, eshost, esport, dbschema, creator, isClean):
 		conn.commit()
 		print "[INFO] Drop and recreate all tables done!"
 
-	print "[INFO] Begin load data ..."
-
 	annotations = es.getMPAnnsByBody(eshost, esport, qryCondition)
+
+	print "[INFO] Begin translate and load mp annotations (%s)" % len(annotations)
 	load_annotations(conn, annotations, creator)
+
 	print "[INFO] annotation load completed!"
 
 	# if isClean in ["1","2"]:
