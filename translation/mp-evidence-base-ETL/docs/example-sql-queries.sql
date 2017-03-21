@@ -1,9 +1,9 @@
 -- Get Mp claim information 
-select cann.id, t.has_source, cann.creator, cann.date_created, s.exact, cbody.label, qualifierrole(q.subject, q.predicate, q.object) as qtype, qvalue, cann.rejected_statement, cann.rejected_statement_reason, cann.rejected_statement_comment, met.entered_value, cann.negation 
-from mp_claim_annotation cann join oa_claim_body cbody on cann.has_body = cbody.id
-join qualifier q on cbody.id = q.claim_body_id
-join method met on cann.id = met.mp_claim_id 
-join oa_target t on cann.has_target = t.id
+set schema 'ohdsi';
+select distinct cann.id, cann.urn, t.has_source, cbody.label, met.entered_value, cann.creator, cann.date_created, s.prefix, s.exact, s.suffix, cann.rejected_statement, cann.rejected_statement_reason, cann.rejected_statement_comment, cann.negation from mp_claim_annotation cann 
+join oa_claim_body cbody on cann.has_body = cbody.id 
+left join method met on cann.id = met.mp_claim_id 
+join oa_target t on cann.has_target = t.id 
 join oa_selector s on t.has_selector = s.id;
 
 
@@ -14,7 +14,7 @@ join oa_data_body dbody on dann.has_body = dbody.id
 join data_field df on df.data_body_id = dbody.id 
 left join oa_target t on dann.has_target = t.id
 left join oa_selector s on t.has_selector = s.id
-where dann.mp_claim_id = %s
+where dann.mp_claim_id = '1';
 
 
 -- Get MP Material information by claimId
@@ -23,7 +23,8 @@ from mp_material_annotation mann join oa_material_body mbody on mann.has_body = 
 join material_field mf on mf.material_body_id = mbody.id
 left join oa_target t on mann.has_target = t.id
 left join oa_selector s on t.has_selector = s.id
-where mann.mp_claim_id = %s 
+where mann.mp_claim_id = '1';
+
 
 -- how many claims from amy: 336
 select count(*)
@@ -33,6 +34,7 @@ where cann.has_target = t.id
 and t.has_selector = s.id
 and creator = 'amy'
 
+
 -- how many distinct labels that amy annotated: 34
 select count(distinct t.has_source)
 from mp_claim_annotation cann, 
@@ -41,84 +43,17 @@ where cann.has_target = t.id
 and t.has_selector = s.id
 and creator = 'amy'
 
--- how many claims from amy: 448
-select count(*)
-from mp_claim_annotation cann, 
-oa_target t, oa_selector s
-where cann.has_target = t.id
-and t.has_selector = s.id
-and creator = 'katrina'
-
--- how many distinct labels that katrina annotated: 32
-select count(distinct t.has_source)
-from mp_claim_annotation cann, 
-oa_target t, oa_selector s
-where cann.has_target = t.id
-and t.has_selector = s.id
-and creator = 'katrina'
-
--- dose formulation and regimens options
--- Oral, IV, transdermal
-SELECT distinct m.value_as_string 
-FROM material_field m
-WHERE m.material_field_type = 'formulation'
-
--- Q8, QID, BID, QD, TID, SD, Daily, Q12 
-SELECT distinct m.value_as_string 
-FROM material_field m
-WHERE m.material_field_type = 'regimens'
-
--- data type and direction options
--- UNK, Percent, Fold
-SELECT distinct d.value_as_string 
-FROM data_field d
-WHERE d.data_field_type = 'type'
-
--- UNK, Increase, Decrease
-SELECT distinct d.value_as_string 
-FROM data_field d
-WHERE d.data_field_type = 'direction'
+-- query dideo concept codes
+select * from public.concept c where c.vocabulary_id = 'DIDEO' and c.domain_id = 'PDDI' and c.concept_class_id = 'DIKB'; 
 
 
--- validate context 
-select cann.id, cann.has_target, dann.has_target, mann.has_target
-from mp_claim_annotation cann, mp_data_annotation dann, mp_material_annotation mann
-where cann.id = dann.mp_claim_id and cann.id = mann.mp_claim_id;
+-- query all qualifiers with source and context information
+select distinct q.qvalue as drug, t.has_source as source, s.exact as sentence
+from qualifier q join mp_claim_annotation cann on q.claim_body_id = cann.has_body
+left join oa_target t on cann.has_target = t.id
+left join oa_selector s on t.has_selector = s.id
+where q.subject = True or q.object = True
 
--- validate claim
-select cann.id, t.has_source, cann.creator, cann.date_created, cann.has_target, s.exact
-from mp_claim_annotation cann, mp_data_annotation dann, mp_material_annotation mann, 
-oa_target t, oa_selector s
-where cann.id = dann.mp_claim_id 
-and cann.id = mann.mp_claim_id
-and cann.has_target = t.id
-and t.has_selector = s.id;
-
--- query mp claim
-select cann.id, t.has_source, cann.creator, cann.date_created, s.exact, s.prefix, s.suffix, cbody.label, qvalue, q.subject, q.predicate, q.object 
-from mp_claim_annotation cann, oa_claim_body cbody, oa_target t, oa_selector s, qualifier q
-where cann.has_body = cbody.id
-and cann.has_target = t.id
-and t.has_selector = s.id
-and cbody.id = q.claim_body_id
-
--- query mp data
-select dann.type, df.data_field_type, df.value_as_string, df.value_as_number, s.exact, s.prefix, s.suffix, mp_data_index
-from mp_data_annotation dann,oa_data_body dbody, data_field df, oa_target t, oa_selector s
-where dann.mp_claim_id = 6
-and dann.has_body = dbody.id
-and df.data_body_id = dbody.id
-and dann.has_target = t.id
-and t.has_selector = s.id
-
--- query mp material
-select mann.type, mf.material_field_type, mf.value_as_string, mf.value_as_number, s.exact, s.prefix, s.suffix, mp_data_index
-from mp_material_annotation mann,oa_material_body mbody, material_field mf, oa_target t, oa_selector s
-where mann.mp_claim_id = 6
-and mann.has_body = mbody.id
-and mf.material_body_id = mbody.id
-and mann.has_target = t.id
-and t.has_selector = s.id
 
 -- query highlight annotation
 SELECT h.id, t.has_source, s.exact
