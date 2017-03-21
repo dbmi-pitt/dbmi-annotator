@@ -13,7 +13,7 @@
  # limitations under the License.
 
 import csv
-import uuid, datetime
+import datetime
 from sets import Set
 import sys  
 import validate as test

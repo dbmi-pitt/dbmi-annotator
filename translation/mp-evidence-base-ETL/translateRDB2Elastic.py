@@ -210,8 +210,6 @@ def createStatement(ann, email, mpAnn):
 	## Qualifiers
 	d1Qualifier = ann.getPrecipitantQualifier()
 	d2Qualifier = ann.getObjectQualifier()
-	print d1Qualifier
-	print d2Qualifier
 	mpAnn["argues"]["qualifiedBy"]["drug1"] = d1Qualifier.qvalue
 	mpAnn["argues"]["qualifiedBy"]["drug1ID"] = d1Qualifier.qvalue + "_0"
 	mpAnn["argues"]["qualifiedBy"]["precipitant"] = "drug1"
@@ -377,27 +375,28 @@ def loadTemplateInJson(path):
 	json_data.close()
 	return data
 
+def getDictValueCnts(highlightD):
+	cnt = 0
+	for k, v in highlightD.iteritems():
+		cnt += len(v)
+	return cnt
 
 ######################### MAIN ######################################################
 def main():
 
 	conn = pgconn.connect_postgres(PG_HOST, PG_USER, PG_PASSWORD, PG_DATABASE)
 	pgconn.setDbSchema(conn, "ohdsi")
-
 	annotations = pgqry.getMpAnnotations(conn)	
-	print len(annotations)
+
+	print "[INFO] MP annotations (%s) from Postgres are ready to load into Elasticsearch" % len(annotations)
 	loadMpAnnotations(annotations, AUTHOR)
 
 	highlightD = pgqry.queryHighlightAnns(conn)
+	print "[INFO] DrugMention annotations (%s) from Postgres are ready to load into Elasticsearch" % getDictValueCnts(highlightD)
+
 	loadHighlightAnnotations(highlightD, AUTHOR)
-
-	cnt = 0
-	for k, v in highlightD.iteritems():
-		cnt += len(v)
-	print cnt
-
+	print "[INFO] Elasticsearch load completed"
 	conn.close()
-	print "[INFO] elasticsearch load completed"
 
 if __name__ == '__main__':
 	main()

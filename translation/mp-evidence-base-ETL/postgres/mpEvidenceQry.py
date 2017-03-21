@@ -332,7 +332,6 @@ def addMpMaterialForAnn(conn, annotation, claimId):
 def addClinicalTrialMaterial(annotation, matResults):
 
 	for row in matResults:
-
 		mType = row[0]  # material type
 		mfType = row[1] # material field 
 		prefix = row[4]; exact = row[5]; suffix = row[6]; value = str(row[2] or row[3])

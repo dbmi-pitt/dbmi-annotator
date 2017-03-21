@@ -1,5 +1,4 @@
 import sys, csv, json, re, os
-import uuid
 import datetime, copy
 from elasticsearch import Elasticsearch
 from sets import Set

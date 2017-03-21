@@ -32,6 +32,9 @@ PG_DATABASE = 'mpevidence'
 DB_SCHEMA = "../../db-schema/mp_evidence_schema.sql"
 
 annsDictCsv = {} ## keep document and count of annotations for validation after load
+## DIDEO URIs and OMOP concept Ids 
+dideoD = {"drug-product": "DIDEO_00000005", "precipitant": "DIDEO_00000013", "object": "DIDEO_00000012"}
+conceptD = {"drug-product": -9900002, "precipitant": -9900004, "object": -9900005}
 
 if len(sys.argv) > 5:
 	PG_HOST = str(sys.argv[1])
@@ -66,8 +69,7 @@ def load_highlight_annotation(conn, type, has_body, has_target, creator, date_cr
 	urn = uuid.uuid4().hex
 	cur = conn.cursor()
 
-	qry2 = "INSERT INTO highlight_annotation (urn, type, has_body, has_target, creator, date_created, date_updated) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s');" % (urn, "all", str(has_body), str(has_target), creator, date_created, date_updated);
-	cur.execute(qry2);
+	cur.execute("INSERT INTO highlight_annotation (urn, type, has_body, has_target, creator, date_created, date_updated, article_highlight, mp_claim_id) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s);", (urn, "all", str(has_body), str(has_target), creator, date_created, date_updated, True, None));
 
 	qry2 = "SELECT * FROM highlight_annotation WHERE urn = '%s';" % (urn)
 	cur.execute(qry2)
@@ -181,11 +183,11 @@ def update_oa_claim_body(conn, is_oa_body_of, oa_claim_body_id):
 def load_qualifier(conn, row, claim_body_id):
 	cur = conn.cursor()
 
-	cur.execute("""INSERT INTO qualifier (urn, claim_body_id, subject, predicate, object, qvalue, concept_code, vocabulary_id, qualifier_type_concept_code, qualifier_type_vocabulary_id) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""", (uuid.uuid4().hex, claim_body_id, True, False, False, row['precipt'], None, None, None, None))
+	cur.execute("""INSERT INTO qualifier (urn, claim_body_id, subject, predicate, object, qvalue, concept_code, vocabulary_id, qualifier_type_concept_code, qualifier_type_vocabulary_id, qualifier_role_concept_code, qualifier_role_vocabulary_id, enantiomer, metabolite) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""", (uuid.uuid4().hex, claim_body_id, True, False, False, row['precipt'], None, None, dideoD["drug-product"], conceptD["drug-product"], dideoD["precipitant"], conceptD["precipitant"], False, False))
 
-	cur.execute("""INSERT INTO qualifier (urn, claim_body_id, subject, predicate, object, qvalue, concept_code, vocabulary_id, qualifier_type_concept_code, qualifier_type_vocabulary_id) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""", (uuid.uuid4().hex, claim_body_id, False, True, False, row['predicate'], None, None, None, None))
+	cur.execute("""INSERT INTO qualifier (urn, claim_body_id, subject, predicate, object, qvalue, concept_code, vocabulary_id, qualifier_type_concept_code, qualifier_type_vocabulary_id, qualifier_role_concept_code, qualifier_role_vocabulary_id, enantiomer, metabolite) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""", (uuid.uuid4().hex, claim_body_id, False, True, False, row['predicate'], None, None, None, None, None, None, None, None))
 
-	cur.execute("""INSERT INTO qualifier (urn, claim_body_id, subject, predicate, object, qvalue, concept_code, vocabulary_id, qualifier_type_concept_code, qualifier_type_vocabulary_id) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""", (uuid.uuid4().hex, claim_body_id, False, False, True, row['object'], None, None, None, None))
+	cur.execute("""INSERT INTO qualifier (urn, claim_body_id, subject, predicate, object, qvalue, concept_code, vocabulary_id, qualifier_type_concept_code, qualifier_type_vocabulary_id, qualifier_role_concept_code, qualifier_role_vocabulary_id, enantiomer, metabolite) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""", (uuid.uuid4().hex, claim_body_id, False, False, True, row['object'], None, None, dideoD["drug-product"], conceptD["drug-product"], dideoD["object"], conceptD["object"], False, False))
 
 
 # load table "mp_claim_annotation" one row
@@ -264,16 +266,16 @@ def load_mp_material_annotation(conn, row, mp_claim_id, has_target, creator):
 	cur = conn.cursor()
 
 	if (row['preciptDose'] != ''):
-		material_body_id = helper_load_material(conn, row, mp_claim_id, has_target, creator, 'subject_dose')
-		load_material_field(conn, row, material_body_id, 'precipt')
+		material_body_id = helper_load_material(conn, row, mp_claim_id, has_target, creator, 'precipitant_dose')
+		load_material_field(conn, row, material_body_id, 'precipitant_dose', 'precipt')
 
 	if (row['objectDose'] != ''):
 		material_body_id = helper_load_material(conn, row, mp_claim_id, has_target, creator, 'object_dose')
-		load_material_field(conn, row, material_body_id, 'object')
+		load_material_field(conn, row, material_body_id, 'object_dose', 'object')
 
 	if (row['numOfParticipants'] != '' and row['numOfParticipants'].lower() != "unk"):
 		material_body_id = helper_load_material(conn, row, mp_claim_id, has_target, creator, 'participants')
-		load_material_field(conn, row, material_body_id, 'participants')
+		load_material_field(conn, row, material_body_id, 'participants', 'participants')
 
 
 def helper_load_material(conn, row, mp_claim_id, has_target, creator, data_type):
@@ -300,33 +302,32 @@ def helper_load_material(conn, row, mp_claim_id, has_target, creator, data_type)
 
 # load table "material_field" one row
 # material_type is participants, precipt and object
-def load_material_field(conn, row, material_body_id, material_type):
+def load_material_field(conn, row, material_body_id, material_type, material_header):
 	cur = conn.cursor()
 
 	if material_type == "participants":
 		cur.execute("INSERT INTO material_field (urn, material_body_id, material_field_type, value_as_string, value_as_number) VALUES (%s, %s, %s, %s, %s);", (uuid.uuid4().hex, str(material_body_id), 'participants', None, row['numOfParticipants']))
 
 	## load precipt dose and object dose
-	elif material_type in ["precipt","object"]:
-		value = material_type + "Dose"
-		regimens = material_type + "Regimens"
-		formulation = material_type + "Formulation"
-		duration = material_type + "Duration"
+	elif material_type in ["precipitant_dose","object_dose"] and material_header in ["precipt", "object"]:
+		value = material_header + "Dose"
+		regimens = material_header + "Regimens"
+		formulation = material_header + "Formulation"
+		duration = material_header + "Duration"
 
-		cur.execute("INSERT INTO material_field (urn, material_body_id, material_field_type, value_as_string, value_as_number)" +
-					"VALUES ( '" + uuid.uuid4().hex + "', " + str(material_body_id) + ", 'value', '" + row[value] + "', NULL);")
+		cur.execute("INSERT INTO material_field (urn, material_body_id, material_field_type, value_as_string, value_as_number) VALUES (%s, %s, %s, %s, %s);", (uuid.uuid4().hex, str(material_body_id), 'drugname', row[material_header], None))
+		cur.execute("INSERT INTO material_field (urn, material_body_id, material_field_type, value_as_string, value_as_number) VALUES (%s, %s, %s, %s, %s);", (uuid.uuid4().hex, str(material_body_id), 'value', row[value], None))
 
 		if (row[regimens] != ''):
-			cur.execute("INSERT INTO material_field (urn, material_body_id, material_field_type, value_as_string, value_as_number)" +
-						"VALUES ( '" + uuid.uuid4().hex + "', " + str(material_body_id) + ", 'regimens', '" + row[regimens] + "', NULL);")
+			cur.execute("INSERT INTO material_field (urn, material_body_id, material_field_type, value_as_string, value_as_number) VALUES (%s, %s, %s, %s, %s);", (uuid.uuid4().hex, str(material_body_id), 'regimens', row[regimens], None))
+
 		if (row[formulation] != ''):
-			cur.execute("INSERT INTO material_field (urn, material_body_id, material_field_type, value_as_string, value_as_number)" +
-						"VALUES ( '" + uuid.uuid4().hex + "', " + str(material_body_id) + ", 'formulation', '" + row[formulation] + "', NULL);")
+			cur.execute("INSERT INTO material_field (urn, material_body_id, material_field_type, value_as_string, value_as_number) VALUES (%s, %s, %s, %s, %s);", (uuid.uuid4().hex, str(material_body_id), 'formulation', row[formulation], None))
+
 		if (row[duration] != ''):
-			cur.execute("INSERT INTO material_field (urn, material_body_id, material_field_type, value_as_string, value_as_number)" +
-						"VALUES ( '" + uuid.uuid4().hex + "', " + str(material_body_id) + ", 'duration', '" + row[duration] + "', NULL);")
+			cur.execute("INSERT INTO material_field (urn, material_body_id, material_field_type, value_as_string, value_as_number) VALUES (%s, %s, %s, %s, %s);", (uuid.uuid4().hex, str(material_body_id), 'duration', row[duration], None))
 	else:
-		print "[ERROR] load_material_field, material type (%s) undefined" % (material_type)
+		print "[ERROR] load_material_field, material type (%s) or material_header (%s) undefined" % (material_type, material_header)
 
 
 def parse_date(csv_date):
