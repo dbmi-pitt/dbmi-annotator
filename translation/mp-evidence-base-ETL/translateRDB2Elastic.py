@@ -226,8 +226,8 @@ def createStatement(ann, email, mpAnn):
 ## Translate and add MP Data or Material Item to JSON template ######################
 def addAnnotationMetaData(ann, mpAnn, email):
 	rawurl = ann.source; uri = re.sub(r"[\/\\\-\:\.]", "", rawurl)	
-	mpAnn["created"] = "2017-01-12T18:33:51.179625+00:00" # Metadata
-	mpAnn["updated"] = "2017-01-12T18:33:51.179625+00:00"
+	mpAnn["created"] = "2017-03-21T18:33:51.179625+00:00" # Metadata
+	mpAnn["updated"] = "2017-03-21T18:33:51.179625+00:00"
 	if email:	
 		mpAnn["email"] = email
 	else:
