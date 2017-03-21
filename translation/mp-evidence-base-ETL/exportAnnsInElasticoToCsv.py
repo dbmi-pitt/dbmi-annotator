@@ -18,7 +18,7 @@ import datetime
 from sets import Set
 import sys  
 import validate as test
-from elastic import queryAnnsInElastico as es
+from elastic import queryDictAnnotation as es
 
 reload(sys)  
 sys.setdefaultencoding('utf8')
@@ -40,11 +40,11 @@ def run():
 	# 	]
 	#  }}}
 
-	results = es.queryAndParseByBody(ES_HOST, ES_PORT, qryCondition)
-	print "[INFO] exported %s annotations from elasticsearch" % (len(results))
-
+	results = es.queryDictAnnsByBody(ES_HOST, ES_PORT, qryCondition)
+	print "[INFO] exported %s annotations from elasticsearch" % (len(results))	
+		
 	## write to csv
-	csv_columns = ["document", "useremail", "claimlabel", "claimtext", "method", "relationship", "drug1", "drug2", "precipitant", "enzyme", "rejected", "evRelationship", "participants", "participantstext", "drug1dose", "drug1formulation", "drug1duration", "drug1regimens", "drug1dosetext", "drug2dose", "phenotypetype", "phenotypevalue", "phenotypemetabolizer", "phenotypepopulation", "drug2formulation", "drug2duration", "drug2regimens", "drug2dosetext", "aucvalue", "auctype", "aucdirection", "auctext", "cmaxvalue", "cmaxtype", "cmaxdirection", "cmaxtext", "clearancevalue", "clearancetype", "clearancedirection", "clearancetext", "halflifevalue", "halflifetype", "halflifedirection", "halflifetext", "dipsquestion", "reviewer", "reviewerdate", "reviewertotal", "reviewerlackinfo", "grouprandom", "parallelgroup", "subject", "object", "id"]
+	csv_columns = ["document", "useremail", "claimlabel", "claimtext", "method", "relationship", "drug1", "drug2", "drug1PC", "drug2PC", "precipitant", "enzyme", "rejected", "evRelationship", "participants", "participantstext", "drug1dose", "drug1formulation", "drug1duration", "drug1regimens", "drug1dosetext", "drug2dose", "phenotypetype", "phenotypevalue", "phenotypemetabolizer", "phenotypepopulation", "drug2formulation", "drug2duration", "drug2regimens", "drug2dosetext", "aucvalue", "auctype", "aucdirection", "auctext", "cmaxvalue", "cmaxtype", "cmaxdirection", "cmaxtext", "clearancevalue", "clearancetype", "clearancedirection", "clearancetext", "halflifevalue", "halflifetype", "halflifedirection", "halflifetext", "dipsquestion", "reviewer", "reviewerdate", "reviewertotal", "reviewerlackinfo", "grouprandom", "parallelgroup", "id"]
 
 	with open('data/exported-mp-annotations.csv', 'wb') as f: 
 		w = csv.DictWriter(f, csv_columns)
