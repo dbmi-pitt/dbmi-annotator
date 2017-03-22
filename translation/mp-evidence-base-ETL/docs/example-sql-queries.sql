@@ -1,5 +1,6 @@
+SET SCHEMA 'ohdsi';
+
 -- Get Mp claim information 
-set schema 'ohdsi';
 select distinct cann.id, cann.urn, t.has_source, cbody.label, met.entered_value, cann.creator, cann.date_created, s.prefix, s.exact, s.suffix, cann.rejected_statement, cann.rejected_statement_reason, cann.rejected_statement_comment, cann.negation from mp_claim_annotation cann 
 join oa_claim_body cbody on cann.has_body = cbody.id 
 left join method met on cann.id = met.mp_claim_id 
@@ -125,7 +126,6 @@ AND cb.id = q.claim_body_id ORDER BY 1,2')
 AS mc(id INTEGER, predicate TEXT, object TEXT,  subject TEXT) 
 
 ------------------------ CREATE VIEWS -----------------------------------
-
 -- Claim - subject - predicate - object - pivot material_field table
 CREATE VIEW claim_qualifier_view AS SELECT *
 FROM crosstab('select mc.id, qualifierrole(q.subject, q.predicate, q.object) as qtype, qvalue
@@ -137,17 +137,6 @@ AND cb.id = q.claim_body_id ORDER BY 1,2')
 AS mc(id INTEGER, object TEXT, predicate TEXT, subject TEXT) 
 
 
--- Get fold increase data with claim id
-CREATE VIEW auc_fold_view AS SELECT * FROM
-(SELECT md.mp_claim_id, md.creator, md.ev_supports, md.type as datatype, df.type as dftype, df.value, df.direction
-FROM crosstab('SELECT df.data_body_id, df.data_field_type, df.value_as_string FROM data_field df ORDER BY 1,2')
-AS df(data_body_id INTEGER, direction TEXT, type TEXT, value TEXT)
-JOIN oa_data_body db ON df.data_body_id = db.id
-JOIN mp_data_annotation md ON db.id = md.has_body
-WHERE df.type = 'Fold'
-AND db.data_type = 'auc') AS fi;
-
-
 -- Get object dose and precipitant dose information with claim id
 CREATE VIEW material_dose_view AS SELECT * FROM
 (SELECT mm.mp_claim_id, mb.material_type, mf.duration, mf.formulation, mf.regimens, mf.value
@@ -156,3 +145,87 @@ AS mf(material_body_id INTEGER, duration TEXT, formulation TEXT, regimens TEXT, 
 JOIN oa_material_body mb ON mf.material_body_id = mb.id
 JOIN mp_material_annotation mm ON mb.is_oa_body_of = mm.id
 WHERE mf.value != '') AS md
+
+
+
+-- precipitant and object dose with auc fold
+WITH auc_fold AS (
+SELECT d.mp_claim_id, d.creator, d.ev_supports, d.type as datatype, df.type as dftype, df.value, df.direction
+FROM crosstab('SELECT df.data_body_id, df.data_field_type, df.value_as_string FROM data_field df ORDER BY 1,2')
+AS df(data_body_id INTEGER, direction TEXT, type TEXT, value TEXT)
+JOIN oa_data_body db ON df.data_body_id = db.id
+JOIN mp_data_annotation d ON db.id = d.has_body
+WHERE df.type = 'Fold'
+AND mp_claim_id = '783'
+AND d.creator = 'annotat2@gmail.com'
+AND db.data_type = 'auc'),
+p_dose AS (
+SELECT m.mp_claim_id, mb.material_type, mf.drugname, mf.duration, mf.formulation, mf.regimens, mf.value
+FROM crosstab('SELECT mf.material_body_id, mf.material_field_type, mf.value_as_string FROM material_field mf ORDER BY 1,2')
+AS mf(material_body_id INTEGER, drugname TEXT, duration TEXT, formulation TEXT, regimens TEXT, value TEXT)
+JOIN oa_material_body mb ON mf.material_body_id = mb.id
+JOIN mp_material_annotation m ON mb.is_oa_body_of = m.id
+WHERE m.type = 'precipitant_dose'
+AND m.mp_claim_id = '783'
+AND mf.value != ''),
+o_dose AS (
+SELECT m.mp_claim_id, mb.material_type, mf.drugname, mf.duration, mf.formulation, mf.regimens, mf.value
+FROM crosstab('SELECT mf.material_body_id, mf.material_field_type, mf.value_as_string FROM material_field mf ORDER BY 1,2')
+AS mf(material_body_id INTEGER, drugname TEXT, duration TEXT, formulation TEXT, regimens TEXT, value TEXT)
+JOIN oa_material_body mb ON mf.material_body_id = mb.id
+JOIN mp_material_annotation m ON mb.is_oa_body_of = m.id
+WHERE mf.value != ''
+AND m.type = 'object_dose'
+AND m.mp_claim_id = '783')
+SELECT * from p_dose 
+join auc_fold on p_dose.mp_claim_id = auc_fold.mp_claim_id
+join o_dose on o_dose.mp_claim_id = auc_fold.mp_claim_id;
+
+
+-- AUC fold RDF creation (DDI clinical trial, interact)
+-- https://docs.google.com/viewer?a=v&pid=sites&srcid=ZGVmYXVsdGRvbWFpbnxkZGlrcmFuZGlyfGd4OjIzYTc2YjA4NjRkNTAzZDQ
+SET SCHEMA 'ohdsi';
+
+CREATE EXTENSION "uuid-ossp";
+
+CREATE VIEW ct_iw_auc_fold_view AS SELECT 
+method, precipitant, precipitant_code, object, object_code, ratio, ratio_type, value, direction, uuid_generate_v4() as auc_urn, uuid_generate_v4() as fold_urn, uuid_generate_v4() as description_urn, uuid_generate_v4() as bearer_pt_urn, uuid_generate_v4() AS bearer_obj_urn, uuid_generate_v4() as pt_urn, uuid_generate_v4() as obj_urn, uuid_generate_v4() as method_urn
+FROM (
+WITH auc_fold AS (
+SELECT d.mp_claim_id, d.mp_data_index, d.type as datatype, df.type as dftype, df.value, df.direction
+FROM crosstab('SELECT df.data_body_id, df.data_field_type, df.value_as_string FROM data_field df ORDER BY 1,2')
+AS df(data_body_id INTEGER, direction TEXT, type TEXT, value TEXT)
+JOIN oa_data_body db ON df.data_body_id = db.id
+JOIN mp_data_annotation d ON db.id = d.has_body
+WHERE df.type = 'Fold'
+AND mp_claim_id = '783'
+AND d.creator = 'annotat2@gmail.com'
+AND db.data_type = 'auc'),
+method AS (
+SELECT mp_claim_id, mp_data_index, m.entered_value as method from method m
+WHERE m.mp_claim_id = '783'),
+p AS (
+SELECT ca.id, q.qvalue, q.qualifier_role_concept_code, cb.label
+FROM mp_claim_annotation ca 
+JOIN oa_claim_body cb on cb.is_oa_body_of = ca.id
+JOIN qualifier q on q.claim_body_id = cb.id
+WHERE q.subject = True
+AND cb.label LIKE '%interact with%'
+AND ca.id = '783'),
+o AS (
+SELECT ca.id, q.qvalue, q.qualifier_role_concept_code, cb.label
+FROM mp_claim_annotation ca 
+JOIN oa_claim_body cb on cb.is_oa_body_of = ca.id
+JOIN qualifier q on q.claim_body_id = cb.id
+WHERE q.object = True
+AND cb.label LIKE '%interact with%'
+AND ca.id = '783')
+SELECT method.method, p.qvalue as precipitant, p.qualifier_role_concept_code as precipitant_code, o.qvalue as object, 
+o.qualifier_role_concept_code as object_code, auc_fold.datatype as ratio, auc_fold.dftype as ratio_type, auc_fold.value, auc_fold.direction 
+from auc_fold
+JOIN method ON method.mp_claim_id = auc_fold.mp_claim_id
+JOIN p ON p.id = auc_fold.mp_claim_id
+JOIN o ON o.id = auc_fold.mp_claim_id
+WHERE auc_fold.mp_data_index = method.mp_data_index
+) AS CT_IW_AUC_FOLD
+

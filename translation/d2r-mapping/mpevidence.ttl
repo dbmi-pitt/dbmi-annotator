@@ -38,46 +38,21 @@ map:mpMethodTranslate a d2rq:TranslationTable;
     d2rq:translation [ d2rq:databaseValue "DDI clinical trial"; d2rq:rdfValue obo:DIDEO_00000071; ];
 .
 
-# View - claim_qualifier_view 
-map:claim_qualifier_view a d2rq:ClassMap;
+# View - clinical trial, interact with, auc fold 
+map:ct_iw_auc_fold_view a d2rq:ClassMap;
 	d2rq:dataStorage map:database;
-    d2rq:uriPattern "claim_qualifier_view/@@claim_qualifier_view.id@@";
-    #d2rq:uriSqlExpression "CONCAT('http://dikb.org/mpevidence/mp_claim_id:', claim_qualifier_view.id)";
-	d2rq:class vocab:claim_qualifier_view;
-	d2rq:classDefinitionLabel "claim_qualifier_view";
-    .
-
-map:claim_qualifier_view_id a d2rq:PropertyBridge;
-	d2rq:belongsToClassMap map:claim_qualifier_view;
-	d2rq:property vocab:claim_qualifier_view_id;
-	d2rq:propertyDefinitionLabel "claim_qualifier_view_id";
-	d2rq:column "claim_qualifier_view.id";
-	d2rq:datatype xsd:integer;
+    d2rq:uriPattern "http://auc-fold/@@UUID@@";
+	d2rq:class vocab:ct_iw_auc_fold_view;
+	d2rq:classDefinitionLabel "clinical trial, interact with, auc fold";
     .
 
 map:claim_qualifier_view_subject a d2rq:PropertyBridge;
-	d2rq:belongsToClassMap map:claim_qualifier_view;
-	d2rq:property vocab:claim_qualifier_view_subject;
-	d2rq:propertyDefinitionLabel "claim_qualifier_view_subject";
-	d2rq:column "claim_qualifier_view.subject";
+	d2rq:belongsToClassMap map:ct_iw_auc_fold_view;
+	d2rq:property rdf:type;
+	d2rq:column "ct_iw_auc_fold_view.precipitant_code";
 	d2rq:datatype xsd:String;
     .
 
-map:claim_qualifier_view_predicate a d2rq:PropertyBridge;
-	d2rq:belongsToClassMap map:claim_qualifier_view;
-	d2rq:property vocab:claim_qualifier_view_predicate;
-	d2rq:propertyDefinitionLabel "claim_qualifier_view_predicate";
-	d2rq:column "claim_qualifier_view.predicate";
-	d2rq:datatype xsd:String;
-    .
-
-map:claim_qualifier_view_object a d2rq:PropertyBridge;
-	d2rq:belongsToClassMap map:claim_qualifier_view;
-	d2rq:property vocab:claim_qualifier_view_object;
-	d2rq:propertyDefinitionLabel "claim_qualifier_view_object";
-	d2rq:column "claim_qualifier_view.object";
-	d2rq:datatype xsd:String;
-    .
 
 # # Table material_field
 # map:material_field a d2rq:ClassMap;
