@@ -21,7 +21,6 @@ map:database a d2rq:Database;
 	.
 
 ########################## DIDEO ONTOLOGY MAPPING TABLES ########################### 
-
 ## Class DDI description
 map:DDI a d2rq:ClassMap;
 	d2rq:dataStorage map:database;
@@ -29,7 +28,19 @@ map:DDI a d2rq:ClassMap;
     d2rq:class obo:DIDEO_00000001; ## drug-drug interaction description
     .
 
-map:ddi_has_part a d2rq:PropertyBridge;
+map:ddi_label a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:DDI;
+	d2rq:property rdfs:label;
+    d2rq:pattern "@@ohdsi.ct_iw_auc_fold.precipitant@@-@@ohdsi.ct_iw_auc_fold.object@@ interaction description"@en;
+    .
+
+map:ddi_has_part_1 a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:DDI;
+	d2rq:property obo:BFO_0000051; ## has part
+    d2rq:uriPattern "http://dikb.org/auc/@@ohdsi.ct_iw_auc_fold.auc_urn@@";
+    .
+
+map:ddi_has_part_2 a d2rq:PropertyBridge;
 	d2rq:belongsToClassMap map:DDI;
 	d2rq:property obo:BFO_0000051; ## has part
     d2rq:uriPattern "http://dikb.org/auc/@@ohdsi.ct_iw_auc_fold.auc_urn@@";
@@ -42,7 +53,13 @@ map:AUC a d2rq:ClassMap;
     d2rq:class obo:DIDEO_00000050; ## information about increase of pk area
     .
 
-map:auc_fold_type a d2rq:PropertyBridge;
+map:auc_label a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:AUC;
+	d2rq:property rdfs:label;
+    d2rq:pattern "@@ohdsi.ct_iw_auc_fold.precipitant@@-@@ohdsi.ct_iw_auc_fold.object@@ drug package @@ohdsi.ct_iw_auc_fold.ratio@@ @@ohdsi.ct_iw_auc_fold.direction@@ information"@en;
+    .
+
+map:auc_type a d2rq:PropertyBridge;
 	d2rq:belongsToClassMap map:AUC;
 	d2rq:property rdf:type;
     d2rq:constantValue "drug package AUC information"@en;
@@ -79,3 +96,47 @@ map:has_specified_value a d2rq:PropertyBridge;
 	d2rq:property obo:OBI_0001937; ## has specified value
     d2rq:column "ohdsi.ct_iw_auc_fold.value"
     .
+
+## Class Bearer of precipitant drug role
+map:BearerPrecipitantRole a d2rq:ClassMap;
+    d2rq:uriPattern "http://dikb.org/bearer-precipitant/@@ohdsi.ct_iw_auc_fold.bearer_pt_urn@@";
+    d2rq:classDefinitionLabel "bearer of precipitant drug role"@en;
+    d2rq:dataStorage map:database;
+    .
+
+map:precipitant_bearer_of a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:BearerPrecipitantRole;
+	d2rq:property obo:RO_0000053; ## bearer of 
+    d2rq:column "ohdsi.ct_iw_auc_fold.pt_urn";
+    .
+
+## Class Precipitant drug role
+map:PrecipitantRole a d2rq:ClassMap;
+    d2rq:uriPattern "http://dikb.org/bearer-precipitant/@@ohdsi.ct_iw_auc_fold.pt_urn@@";
+    d2rq:class obo:DIDEO_00000013; ## precipitant role
+    d2rq:classDefinitionLabel "precipitant drug role"@en;
+    d2rq:dataStorage map:database;
+    .
+
+## Class Bearer of object drug role
+map:BearerObjectRole a d2rq:ClassMap;
+    d2rq:uriPattern "http://dikb.org/bearer-object/@@ohdsi.ct_iw_auc_fold.bearer_obj_urn@@";
+    d2rq:classDefinitionLabel "bearer of object drug role"@en;
+    d2rq:dataStorage map:database;
+    .
+
+map:object_bearer_of a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:BearerObjectRole;
+	d2rq:property obo:RO_0000053; ## bearer of
+    d2rq:column "ohdsi.ct_iw_auc_fold.obj_urn";
+    .
+
+## Class Object drug role
+map:ObjectRole a d2rq:ClassMap;
+    d2rq:uriPattern "http://dikb.org/bearer-object/@@ohdsi.ct_iw_auc_fold.bearer_obj_urn@@";
+    d2rq:class obo:DIDEO_00000012; ## object role
+    d2rq:classDefinitionLabel "object drug role"@en;
+    d2rq:dataStorage map:database;
+    .
+
+
