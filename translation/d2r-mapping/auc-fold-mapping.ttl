@@ -22,53 +22,60 @@ map:database a d2rq:Database;
 
 ########################## DIDEO ONTOLOGY MAPPING TABLES ########################### 
 
-## Class clinical trial, interact with, auc fold 
-map:CT_AUC_Fold a d2rq:ClassMap;
+## Class DDI description
+map:DDI a d2rq:ClassMap;
 	d2rq:dataStorage map:database;
-    d2rq:uriPattern "http://dikb.org/auc/@@ohdsi.ct_iw_auc_fold.auc_urn@@";
-    d2rq:class obo:DIDEO_00000050;
+    d2rq:uriPattern "http://dikb.org/ddi/@@ohdsi.ct_iw_auc_fold.description_urn@@";
+    d2rq:class obo:DIDEO_00000001; ## drug-drug interaction description
     .
 
-map:auc_fold_type_1 a d2rq:PropertyBridge;
-	d2rq:belongsToClassMap map:CT_AUC_Fold;
+map:ddi_has_part a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:DDI;
+	d2rq:property obo:BFO_0000051; ## has part
+    d2rq:uriPattern "http://dikb.org/auc/@@ohdsi.ct_iw_auc_fold.auc_urn@@";
+    .
+
+## Class AUC information 
+map:AUC a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+    d2rq:uriPattern "http://dikb.org/auc/@@ohdsi.ct_iw_auc_fold.auc_urn@@";
+    d2rq:class obo:DIDEO_00000050; ## information about increase of pk area
+    .
+
+map:auc_fold_type a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:AUC;
 	d2rq:property rdf:type;
     d2rq:constantValue "drug package AUC information"@en;
     .
 
-# map:auc_fold_type_2 a d2rq:PropertyBridge;
-# 	d2rq:belongsToClassMap map:CT_AUC_Fold;
-# 	d2rq:property rdf:type;
-#     d2rq:uriPattern "obo:DIDEO_00000050";
-#     .
-
 map:method a d2rq:PropertyBridge;
-	d2rq:belongsToClassMap map:CT_AUC_Fold;
-	d2rq:property rdf:is_specified_output_of;
+	d2rq:belongsToClassMap map:AUC;
+	d2rq:property obo:OBI_0000312; ## is specified output of
     d2rq:uriSqlExpression "CONCAT('http://dikb.org/method/', ohdsi.ct_iw_auc_fold.method_urn)"; 
+    .
+
+map:auc_fold a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:AUC;
+	d2rq:property obo:OBI_0001937; ## has specified value
+    d2rq:uriSqlExpression "CONCAT('http://dikb.org/fold/', ohdsi.ct_iw_auc_fold.fold_urn)"; 
     .
 
 ## Class Fold 
 map:Fold a d2rq:ClassMap;
     d2rq:uriPattern "http://dikb.org/fold/@@ohdsi.ct_iw_auc_fold.fold_urn@@";
-    d2rq:class obo:OBI_0001933;
+    d2rq:class obo:OBI_0001933; ## value specification
     d2rq:classDefinitionLabel "data ratio fold"@en;
     d2rq:dataStorage map:database;
     .
 
-map:fold_specified_value_of a d2rq:PropertyBridge;
-	d2rq:belongsToClassMap map:Fold;
-	d2rq:property rdf:specified_value_of;
-    d2rq:uriSqlExpression "CONCAT('http://dikb.org/auc/', ohdsi.ct_iw_auc_fold.auc_urn)"; 
-    .
-
 map:fold_has_part a d2rq:PropertyBridge;
 	d2rq:belongsToClassMap map:Fold;
-	d2rq:property rdf:has_part;
+	d2rq:property obo:BFO_0000051; ## has part
     d2rq:column "ohdsi.ct_iw_auc_fold.ratio_type"
     .
 
 map:has_specified_value a d2rq:PropertyBridge;
 	d2rq:belongsToClassMap map:Fold;
-	d2rq:property rdf:has_specified_value;
+	d2rq:property obo:OBI_0001937; ## has specified value
     d2rq:column "ohdsi.ct_iw_auc_fold.value"
     .

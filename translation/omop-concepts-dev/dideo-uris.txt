@@ -92,3 +92,9 @@ Term: evidence information from genotyped pharmacokinetic trial
 Definition: An evidence information content entity that is about a clinical drug trial that focusses on pharmacokinetics and that has organisms as participants that participated in genotyping.
 Alternative Term: EV_CT_PK_Genotype
 
+-----------------------------------------------------------------------------------
+Terms in ontology:
+has specified value: http://purl.obolibrary.org/obo/OBI_0001937
+has part: http://purl.obolibrary.org/obo/BFO_0000051
+is about: http://purl.obolibrary.org/obo/IAO_0000136
+bearer of: http://purl.obolibrary.org/obo/RO_0000053​
