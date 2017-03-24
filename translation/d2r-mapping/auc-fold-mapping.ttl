@@ -36,14 +36,20 @@ map:ddi_label a d2rq:PropertyBridge;
 
 map:ddi_has_part_1 a d2rq:PropertyBridge;
 	d2rq:belongsToClassMap map:DDI;
-	d2rq:property obo:BFO_0000051; ## has part
+	d2rq:property obo:BFO_0000051; ## has part: auc increase information
     d2rq:uriPattern "http://dikb.org/auc/@@ohdsi.ct_iw_auc_fold.auc_urn@@";
     .
 
-map:ddi_has_part_2 a d2rq:PropertyBridge;
+map:ddi_is_about_precipitant a d2rq:PropertyBridge;
 	d2rq:belongsToClassMap map:DDI;
-	d2rq:property obo:BFO_0000051; ## has part
-    d2rq:uriPattern "http://dikb.org/auc/@@ohdsi.ct_iw_auc_fold.auc_urn@@";
+	d2rq:property obo:IAO_0000136; ## is about: bearer of precipitant drug role
+    d2rq:uriPattern "http://dikb.org/bearer-precipitant/@@ohdsi.ct_iw_auc_fold.bearer_pt_urn@@";
+    .
+
+map:ddi_is_about_object a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:DDI;
+	d2rq:property obo:IAO_0000136; ## is about: bearer of object drug role
+    d2rq:uriPattern "http://dikb.org/bearer-object/@@ohdsi.ct_iw_auc_fold.bearer_obj_urn@@";
     .
 
 ## Class AUC information 
@@ -106,15 +112,15 @@ map:BearerPrecipitantRole a d2rq:ClassMap;
 
 map:precipitant_bearer_of a d2rq:PropertyBridge;
 	d2rq:belongsToClassMap map:BearerPrecipitantRole;
-	d2rq:property obo:RO_0000053; ## bearer of 
-    d2rq:column "ohdsi.ct_iw_auc_fold.pt_urn";
+	d2rq:property obo:RO_0000053; ## bearer of: precipitant drug role 
+    d2rq:uriSqlExpression "CONCAT('http://dikb.org/precipitant-drug-role/', ohdsi.ct_iw_auc_fold.pt_urn)"; 
     .
 
 ## Class Precipitant drug role
 map:PrecipitantRole a d2rq:ClassMap;
-    d2rq:uriPattern "http://dikb.org/bearer-precipitant/@@ohdsi.ct_iw_auc_fold.pt_urn@@";
+    d2rq:uriPattern "http://dikb.org/precipitant-drug-role/@@ohdsi.ct_iw_auc_fold.pt_urn@@";
     d2rq:class obo:DIDEO_00000013; ## precipitant role
-    d2rq:classDefinitionLabel "precipitant drug role"@en;
+    #d2rq:classDefinitionLabel "precipitant drug role"@en;
     d2rq:dataStorage map:database;
     .
 
@@ -127,15 +133,15 @@ map:BearerObjectRole a d2rq:ClassMap;
 
 map:object_bearer_of a d2rq:PropertyBridge;
 	d2rq:belongsToClassMap map:BearerObjectRole;
-	d2rq:property obo:RO_0000053; ## bearer of
-    d2rq:column "ohdsi.ct_iw_auc_fold.obj_urn";
+	d2rq:property obo:RO_0000053; ## bearer of: object drug role
+    d2rq:uriSqlExpression "CONCAT('http://dikb.org/object-drug-role/', ohdsi.ct_iw_auc_fold.obj_urn)";
     .
 
 ## Class Object drug role
 map:ObjectRole a d2rq:ClassMap;
-    d2rq:uriPattern "http://dikb.org/bearer-object/@@ohdsi.ct_iw_auc_fold.bearer_obj_urn@@";
+    d2rq:uriPattern "http://dikb.org/object-drug-role/@@ohdsi.ct_iw_auc_fold.obj_urn@@";
     d2rq:class obo:DIDEO_00000012; ## object role
-    d2rq:classDefinitionLabel "object drug role"@en;
+    #d2rq:classDefinitionLabel "object drug role"@en;
     d2rq:dataStorage map:database;
     .
 
