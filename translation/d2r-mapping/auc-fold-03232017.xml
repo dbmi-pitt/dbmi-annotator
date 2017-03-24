@@ -1,0 +1,80 @@
+<?xml version="1.0"?>
+<rdf:RDF
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:obo="http://purl.obolibrary.org/obo/"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:vocab="file:///home/yin2/d2rq-0.8.1/vocab/"
+    xmlns:map="file:///home/yin2/d2rq-0.8.1/auc-fold.xml#"
+    xmlns:d2r="http://sites.wiwiss.fu-berlin.de/suhl/bizer/d2r-server/config.rdf#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:meta="http://www4.wiwiss.fu-berlin.de/bizer/d2r-server/metadata#"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+    xmlns:db="file:///home/yin2/d2rq-0.8.1/auc-fold.xml"
+  xml:base="file:///home/yin2/d2rq-0.8.1/auc-fold.xml#" > 
+  <rdf:Description rdf:about="http://purl.obolibrary.org/obo/DIDEO_00000013">
+    <rdfs:label xml:lang="en">precipitant drug role</rdfs:label>
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://purl.obolibrary.org/obo/RO_0000053">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/ddi/1873083a-c6ab-4400-9922-5fadd9a055da">
+    <obo:BFO_0000051 rdf:resource="http://dikb.org/auc/eae331cb-9f2c-4c7c-8786-6d1bb2813dd0"/>
+    <obo:BFO_0000051 rdf:resource="http://dikb.org/auc/eae331cb-9f2c-4c7c-8786-6d1bb2813dd0"/>
+    <rdfs:label>Nelfinavir-simvastatin interaction description</rdfs:label>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000001"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://purl.obolibrary.org/obo/DIDEO_00000012">
+    <rdfs:label xml:lang="en">object drug role</rdfs:label>
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://purl.obolibrary.org/obo/DIDEO_00000001">
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://purl.obolibrary.org/obo/BFO_0000051">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://purl.obolibrary.org/obo/OBI_0001933">
+    <rdfs:label xml:lang="en">data ratio fold</rdfs:label>
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://purl.obolibrary.org/obo/DIDEO_00000050">
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/auc/eae331cb-9f2c-4c7c-8786-6d1bb2813dd0">
+    <rdf:type xml:lang="en">drug package AUC information</rdf:type>
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/2c2b9a31-a326-481b-8e66-ae024208a57a"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/fold/d0044f29-a02a-4390-82a2-6d6f45a17dbc"/>
+    <rdfs:label>Nelfinavir-simvastatin drug package auc Increase information</rdfs:label>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://purl.obolibrary.org/obo/OBI_0000312">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/bearer-precipitant/65c623f3-6593-4f28-83bd-018b9edb7d3a">
+    <obo:RO_0000053>65c623f3-6593-4f28-83bd-018b9edb7d3a</obo:RO_0000053>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000013"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.w3.org/2000/01/rdf-schema#label">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/bearer-object/96ca62f9-6a6b-41cc-a6d2-56104af70659">
+    <obo:RO_0000053>cd45bc2b-d756-40cb-b264-1622bc7177d8</obo:RO_0000053>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000012"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/fold/d0044f29-a02a-4390-82a2-6d6f45a17dbc">
+    <obo:BFO_0000051>Fold</obo:BFO_0000051>
+    <obo:OBI_0001937>6.05</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://purl.obolibrary.org/obo/OBI_0001937">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/bearer-precipitant/eeb0c1c9-3e51-4b07-9b68-955a13577b06">
+    <obo:RO_0000053>65c623f3-6593-4f28-83bd-018b9edb7d3a</obo:RO_0000053>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000013"/>
+  </rdf:Description>
+</rdf:RDF>
