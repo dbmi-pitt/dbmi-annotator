@@ -27,7 +27,7 @@ sys.setdefaultencoding('utf8')
 
 #1. pip install psycopg2
 
-SPLS_CSVS = ['data/pkddi-katrina-latest-03232017.csv', 'data/pkddi-amy-latest-03232017.csv']
+SPLS_CSVS = ['data/pkddi-katrina-latest-03302017.csv', 'data/pkddi-amy-latest-03302017.csv']
 PG_DATABASE = 'mpevidence'
 DB_SCHEMA = "../../db-schema/mp_evidence_schema.sql"
 
