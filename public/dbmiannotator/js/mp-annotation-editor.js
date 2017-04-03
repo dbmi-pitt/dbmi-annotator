@@ -117,6 +117,9 @@ function changeCausedbyMethod() {
         $("#Drug1-label").html("Drug1: ");
         $("#Drug2-label").parent().show();
         $("#Drug2").parent().show();
+        //$('input[name=precipitant]').prop('checked', false);
+        $('input[type=radio][name=precipitant]').parent().show();
+        $('.precipitantLabel').parent().show();
         //$("#Drug2")[0].selectedIndex = 0;
         console.log($("#Drug2 option:selected").text());
     }
@@ -176,28 +179,52 @@ function showEnzyme() {
 
     if($("#relationship option:selected").text() == "inhibits"||$("#relationship option:selected").text()=="substrate of") {
         if ($("#method option:selected").text() == "Phenotype clinical study" || $("#method option:selected").text() == "Statement") {
+            //hide drug2
             $("#Drug1-label").html("Drug: ");
             $("#Drug2-label").parent().hide();
             $("#Drug2").parent().hide();
+            //hide metabolite
+            $("#drug2enantiomerLabel").parent().hide();
+            $("#drug2enantiomer").parent().hide();
+            $("#drug2metaboliteLabel").parent().hide();
+            $("#drug2metabolite").parent().hide();
+            //hide precipitant
+            $('input[name=precipitant]').prop('checked', false);
+            $('input[type=radio][name=precipitant]').parent().hide();
+            $('.precipitantLabel').parent().hide();
         } else {
+            //show drug2
             $("#Drug1-label").html("Drug1: ");
             $("#Drug2-label").parent().show();
             $("#Drug2").parent().show();
+            //show metabolite
+            $("#drug2enantiomerLabel").parent().show();
+            $("#drug2enantiomer").parent().show();
+            $("#drug2metaboliteLabel").parent().show();
+            $("#drug2metabolite").parent().show();
+            //show precipitant
+            $('input[type=radio][name=precipitant]').parent().show();
+            $('.precipitantLabel').parent().show();
         }
+        //show enzyme
         $("#enzyme")[0].selectedIndex = 0;
         $("#enzymesection1").show();
         $("#enzyme").show();
-
-        $('input[name=precipitant]').prop('checked', false);
-        $('input[type=radio][name=precipitant]').parent().hide();
-        $('.precipitantLabel').parent().hide();
     }
     if($("#relationship option:selected").text()=="interact with") {
+        //show drug2
         $("#Drug1-label").html("Drug1: ");
         $("#Drug2-label").parent().show();
         $("#Drug2").parent().show();
+        //show metabolite
+        $("#drug2enantiomerLabel").parent().show();
+        $("#drug2enantiomer").parent().show();
+        $("#drug2metaboliteLabel").parent().show();
+        $("#drug2metabolite").parent().show();
+        //show enzyme
         $("#enzymesection1").hide();
         $("#enzyme").hide();
+        //show precipitant
         $('input[type=radio][name=precipitant]').parent().show();
         $('.precipitantLabel').parent().show();
     }

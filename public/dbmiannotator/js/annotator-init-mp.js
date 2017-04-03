@@ -156,6 +156,76 @@ function initLiseners() {
     $('#dips-reviewer').change(function() {
         reviewerChange();
     });
+
+    $('#editDrug1').click(function() {
+        $('#Drug1').hide();
+        $('#Drug1-input').show();
+        $('#editDrug1').hide();
+        $('#commitDrug1').show();
+    });
+
+    $('#editDrug2').click(function() {
+        $('#Drug2').hide();
+        $('#Drug2-input').show();
+        $('#editDrug2').hide();
+        $('#commitDrug2').show();
+    });
+
+    $('#commitDrug1').click(function() {
+        $('#Drug1').show();
+        $('#Drug1-input').hide();
+        $('#editDrug1').show();
+        $('#commitDrug1').hide();
+        //add input drug1 to dropdown list
+        var input_drug1 = $('#Drug1-input').val();
+        if (input_drug1 != "") { //sanity check
+            //sanity check - input duplicates
+            var tempval = input_drug1 + "_0";
+            if ($('#Drug1 option[value = '+tempval+']').length == 0) {
+                $('#Drug1').append($('<option>', {
+                    value: input_drug1 + "_0",
+                    text: input_drug1
+                }));
+            }
+
+            $('#Drug1 > option').each(function () {
+                console.log(this.text);
+                if (this.text === input_drug1) {
+                    $(this).prop('selected', true);
+                } else {
+                    $(this).prop('selected', false);
+                }
+            });
+            selectDrug();
+        }
+    });
+
+    $('#commitDrug2').click(function() {
+        $('#Drug2').show();
+        $('#Drug2-input').hide();
+        $('#editDrug2').show();
+        $('#commitDrug2').hide();
+        //add input drug2 to dropdown list
+        var input_drug2 = $('#Drug2-input').val();
+        if (input_drug2 != "") { //sanity check - input is null
+            //sanity check - input duplicates
+            var tempval = input_drug2 + "_0";
+            if ($('#Drug2 option[value = '+tempval+']').length == 0) {
+                $('#Drug2').append($('<option>', {
+                    value: input_drug2 + "_0",
+                    text: input_drug2
+                }));
+            }
+            $('#Drug2 > option').each(function () {
+                if (this.text === input_drug2) {
+                    $(this).prop('selected', true);
+                } else {
+                    $(this).prop('selected', false);
+                }
+            });
+            selectDrug();
+        }
+    });
     
     rejectEvidenceCheckBox("rejected-evidence");
             
@@ -212,12 +282,10 @@ function selectDrug() {
     //deselect drug
     var quotecontent = $("#quotearea").html();
     var element = $(quotecontent);//convert string to JQuery element
-
     element.find(".highlightdrug").each(function(index) {
         var text = $(this).text();//get span content
         $(this).replaceWith(text);//replace all span with just content
     });
-
     quotecontent = "<p>" + element.html() + "</p>";//get back new string
 
     //select drug
@@ -225,20 +293,28 @@ function selectDrug() {
     drug2Index = drug2 == "" ? drug1Index : findIndex(quotecontent, drug2, drug2Index);
     var drug1End = drug1Index + drug1.length;
     var drug2End = drug2Index + drug2.length;
-    if ((drug1Index <= drug2Index && drug1End >= drug2Index) || (drug2Index <= drug1Index && drug2End >= drug1Index)) {
-        var end = Math.max(drug1End, drug2End);
-        var start = Math.min(drug1Index, drug2Index);
-        quotecontent = quotecontent.substring(0, start) + "<span class=\"highlightdrug\">" + quotecontent.substring(start, end) + "</span>" + quotecontent.substring(end, quotecontent.length);
-    } else {
-        if (drug1Index <= drug2Index) {
-            quotecontent = quotecontent.substring(0, drug1Index) + "<span class=\"highlightdrug\">" + drug1 + "</span>" +
-                            quotecontent.substring(drug1End, drug2Index) + "<span class=\"highlightdrug\">" + drug2 + "</span>" +
-                            quotecontent.substring(drug2End, quotecontent.length);
+    if (drug1Index != -1 && drug2Index != -1) {
+        if ((drug1Index <= drug2Index && drug1End >= drug2Index) || (drug2Index <= drug1Index && drug2End >= drug1Index)) {
+            var end = Math.max(drug1End, drug2End);
+            var start = Math.min(drug1Index, drug2Index);
+            quotecontent = quotecontent.substring(0, start) + "<span class=\"highlightdrug\">" + quotecontent.substring(start, end) + "</span>" + quotecontent.substring(end, quotecontent.length);
         } else {
-            quotecontent = quotecontent.substring(0, drug2Index) + "<span class=\"highlightdrug\">" + drug2 + "</span>" +
-                            quotecontent.substring(drug2End, drug1Index) + "<span class=\"highlightdrug\">" + drug1 + "</span>" +
-                            quotecontent.substring(drug1End, quotecontent.length);
+            if (drug1Index <= drug2Index) {
+                quotecontent = quotecontent.substring(0, drug1Index) + "<span class=\"highlightdrug\">" + drug1 + "</span>" +
+                                quotecontent.substring(drug1End, drug2Index) + "<span class=\"highlightdrug\">" + drug2 + "</span>" +
+                                quotecontent.substring(drug2End, quotecontent.length);
+            } else {
+                quotecontent = quotecontent.substring(0, drug2Index) + "<span class=\"highlightdrug\">" + drug2 + "</span>" +
+                                quotecontent.substring(drug2End, drug1Index) + "<span class=\"highlightdrug\">" + drug1 + "</span>" +
+                                quotecontent.substring(drug1End, quotecontent.length);
+            }
         }
+    } else if (drug1Index != -1) {
+        quotecontent = quotecontent.substring(0, drug1Index) + "<span class=\"highlightdrug\">" + drug1 + "</span>" +
+                                quotecontent.substring(drug1End, quotecontent.length);
+    } else if (drug2Index != -1) {
+        quotecontent = quotecontent.substring(0, drug2Index) + "<span class=\"highlightdrug\">" + drug2 + "</span>" +
+                                quotecontent.substring(drug2End, quotecontent.length);
     }
     $("#quotearea").html(quotecontent);
 }

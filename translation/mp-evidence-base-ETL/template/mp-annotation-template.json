@@ -1,0 +1,30 @@
+{"argues": {
+    "hasTarget": {},
+    "ranges": [],
+    "rejected": {},
+    "qualifiedBy": {
+        "drug1": "",
+        "drug2": "",
+        "drug1ID": "",
+        "drug2ID": "",
+        "enzyme": "",
+        "relationship": "",
+        "precipitant": ""},
+    "method": "",
+    "label": "",
+    "supportsBy": [],
+    "type": "mp:claim"},
+ "email": "",
+ "created": "",
+ "updated": "",
+ "annotationType": "MP",
+ "permissions": {
+     "read": [
+         "group:__consumer__"
+     ]
+ },
+ "consumer": "mockconsumer",
+ "rawurl": "",
+ "user": "alice",
+ "uri": ""
+}

@@ -22,9 +22,17 @@
 
       <style> body        { padding-top:80px; word-wrap:break-word; } </style>
       <script src="js/jquery-1.11.1.min.js"></script>
+      <script src="js/jquery-ui.js"></script>
+      <script src="js/require.js"></script>
       <script src="js/bootstrap.min.js" crossorigin="anonymous"></script>
+      <link rel="stylesheet" href="css/jquery-ui.css" />
       <link rel="stylesheet" href="css/bootstrap.min.css"> <!-- load bootstrap css -->
       <link rel="stylesheet" href="css/font-awesome.min.css"> <!-- load fontawesome -->
+      <script>
+		  $( function() {
+		    $( "#tabs" ).tabs();
+		  } );
+	  </script>
     </head>
     
     <article>
@@ -73,7 +81,7 @@
 		  
             <h3><span class="fa fa-user"></span>&nbsp;Profile (Overview annotation tasks) </h3>
 
-	    <table class="table table-striped" >
+	    <div class="table table-striped" >
 
 		    
     <%  if (annotations.total == -1) {   %>
@@ -113,147 +121,56 @@
 
 					      <% }
 				  } else { %>
-
-	    
-					      <strong>Sample document links </strong><br><br>
-
-					   <strong>Local PMC articles:</strong>
-					   <table id="pmc-tb" class="table table-sm" style="font-size:14px">
-					   	<thead>
-					   	<tr>
-					   		<th width="30%">Drug</th><th>Link</th>
-					   	</tr>
-					   	</thead>
-					   	<tbody>
-                          <tr><td>Ambrisentan, Warfarin</td><td><a href="displayWebPage?sourceURL=http://localhost/PMC/PMC2686069.html&email=test@gmail.com">http://localhost/PMC/PMC2686069.html</a></td></tr>
-                          <tr><td>Amiodarone</td><td><a href="displayWebPage?sourceURL=http://localhost/PMC/PMC3900249.html&email=test@gmail.com">http://localhost/PMC/PMC3900249.html</a></td></tr>
-                          <tr><td>Clarithromycin</td><td><a href="displayWebPage?sourceURL=http://localhost/PMC/PMC3703233.html&email=test@gmail.com">http://localhost/PMC/PMC3703233.html</a></td></tr>
-                          <tr><td>Ketoconazole</td><td><a href="displayWebPage?sourceURL=http://localhost/PMC/PMC1884190.html&email=test@gmail.com">http://localhost/PMC/PMC1884190.html</a></td></tr>
-                          <tr><td>Nelfinavir, Simvastatin, Atorvastatin</td><td><a href="displayWebPage?sourceURL=http://localhost/PMC/PMC90851.html&email=test@gmail.com">http://localhost/PMC/PMC90851.html</a></td></tr>
-                          <tr><td>Rivaroxaban, ketoconazole, Ritonavir, Clarithromycin, Erythromycin, Fluconazole, </td><td><a href="displayWebPage?sourceURL=http://localhost/PMC/PMC3769672.html&email=test@gmail.com">http://localhost/PMC/PMC3769672.html</a></td></tr>
-                          <tr><td>Rosuvastatin, Atorvastatin</td><td><a href="displayWebPage?sourceURL=http://localhost/PMC/PMC3922121.html&email=test@gmail.com">http://localhost/PMC/PMC3922121.html</a></td></tr>
-                          <tr><td>Telaprevir</td><td><a href="displayWebPage?sourceURL=http://localhost/PMC/PMC3187007.html&email=test@gmail.com">http://localhost/PMC/PMC3187007.html</a></td></tr>
-                          <tr><td>Tipranavir, Ritonavir, Atorvastatin, Rosuvastatin</td><td><a href="displayWebPage?sourceURL=http://localhost/PMC/PMC2764168.html&email=test@gmail.com">http://localhost/PMC/PMC2764168.html</a></td></tr>
-                          <tr><td>Warfarin</td><td><a href="displayWebPage?sourceURL=http://localhost/PMC/PMC3091944.html&email=test@gmail.com">http://localhost/PMC/PMC3091944.html</a></td></tr>
-
-					   	</tbody>
-					   </table>
-					   
-					   <br>
-					   <strong>Local dailymed html labels: </strong>
-					   <table id="dailymed-tb" class="table table-sm" style="font-size:14px">
-					   	<thead>
-					   	<tr>
-					   		<th width="30%">Drug</th><th>Link</th>
-					   	</tr>
-					   	</thead>
-					   	<tbody>
-					   <% 
-					   		var dailyArt = [
-{drug: 'Amitriptyline', link: 'http://localhost/DDI-labels/ea35caf8-c8c8-481a-97a2-25f68cbc240b.html'},
-{drug: 'Amoxapine', link: 'http://localhost/DDI-labels/a16297df-3158-48db-85e5-5cd506885556.html'},
-{drug: 'Apixaban', link: 'http://localhost/DDI-labels/e9481622-7cc6-418a-acb6-c5450daae9b0.html'},
-{drug: 'Aripiprazole', link: 'http://localhost/DDI-labels/ee49f3b1-1650-47ff-9fb1-ea53fe0b92b6.html'},
-{drug: 'Asenapine', link: 'http://localhost/DDI-labels/5429f134-839f-4ffc-9944-55f51238def8.html'},
-{drug: 'Atorvastatin', link: 'http://localhost/DDI-labels/c6e131fe-e7df-4876-83f7-9156fc4e8228.html'},
-{drug: 'Bupropion', link: 'http://localhost/DDI-labels/a435da9d-f6e8-4ddc-897d-8cd2bf777b21.html'},
-{drug: 'Chlorpromazine', link: 'http://localhost/DDI-labels/e86adbc4-a03e-4f43-a88c-b9015d18ff9f.html'},
-{drug: 'Citalopram', link: 'http://localhost/DDI-labels/4259d9b1-de34-43a4-85a8-41dd214e9177.html'},
-{drug: 'Clomipramine', link: 'http://localhost/DDI-labels/1809bcb4-5fcc-45ca-986a-4fa5edcd4b5e.html'},
-{drug: 'Clozapine', link: 'http://localhost/DDI-labels/5f0c6f5f-b906-4c8f-8580-3939a476a1c1.html'},
-{drug: 'Dabigatran', link: 'http://localhost/DDI-labels/ba74e3cd-b06f-4145-b284-5fd6b84ff3c9.html'},
-{drug: 'Desipramine', link: 'http://localhost/DDI-labels/3e593725-3fc9-458e-907d-19d51d5a7f9c.html'},
-{drug: 'Desvenlafaxine', link: 'http://localhost/DDI-labels/a9ff32c4-3bcf-4e51-ae8c-81ff0191ec35.html'},
-{drug: 'Doxepin', link: 'http://localhost/DDI-labels/c66a11c1-3093-45ef-b348-3b196c05ba0c.html'},
-{drug: 'Duloxetine', link: 'http://localhost/DDI-labels/829a4f51-c882-4b64-81f3-abfb03a52ebe.html'},
-{drug: 'Escitalopram', link: 'http://localhost/DDI-labels/13bb8267-1cab-43e5-acae-55a4d957630a.html'},
-{drug: 'Estazolam', link: 'http://localhost/DDI-labels/50914a46-eab6-4c83-97cf-6ab0234c8126.html'},
-{drug: 'Eszopiclone', link: 'http://localhost/DDI-labels/39a5dae2-49f7-4662-9eac-aa7b4c7807a4.html'},
-{drug: 'Fluoxetine', link: 'http://localhost/DDI-labels/5f356c1b-96bd-4ef1-960c-91cf4905e6b1.html'},
-{drug: 'Fluphenazine', link: 'http://localhost/DDI-labels/b580471f-44a1-4da0-96ad-2f537eabec3e.html'},
-{drug: 'Flurazepam', link: 'http://localhost/DDI-labels/2f2db2f5-49d3-4d47-a08a-628df49d2120.html'},
-{drug: 'Fluvastatin', link: 'http://localhost/DDI-labels/aad8b373-0aec-4efb-8e61-3d8114b31127.html'},
-{drug: 'Fluvoxamine', link: 'http://localhost/DDI-labels/53664f8d-3a93-9f2b-daee-380707e4062c.html'},
-{drug: 'Haloperidol', link: 'http://localhost/DDI-labels/7d1a9689-23c8-44ef-a474-8c607e13d794.html'},
-{drug: 'Iloperidone', link: 'http://localhost/DDI-labels/43452bf8-76e7-47a9-a5d8-41fe84d061f0.html'},
-{drug: 'Imipramine', link: 'http://localhost/DDI-labels/75bf3473-2d70-4d41-93cd-afa1015e45bb.html'},
-{drug: 'Isocarboxazid', link: 'http://localhost/DDI-labels/ac387aa0-3f04-4865-a913-db6ed6f4fdc5.html'},
-{drug: 'Levomilnacipran', link: 'http://localhost/DDI-labels/f371258d-91b3-4b6a-ac99-434a1964c3af.html'},
-{drug: 'Lovastatin', link: 'http://localhost/DDI-labels/520428f1-2cd5-447f-8782-c8505ce65b72.html'},
-{drug: 'Loxapine', link: 'http://localhost/DDI-labels/b074f950-246a-41f0-aedf-32f38998a4b1.html'},
-{drug: 'Lurasidone', link: 'http://localhost/DDI-labels/afad3051-9df2-4c54-9684-e8262a133af8.html'},
-{drug: 'Maprotiline', link: 'http://localhost/DDI-labels/c3ca69e6-1ea0-4c2c-abcb-7264b2e79a87.html'},
-{drug: 'Minacipran', link: 'http://localhost/DDI-labels/16a4a314-f97e-4e91-95e9-576a3773d284.html'},
-{drug: 'Mirtazapine', link: 'http://localhost/DDI-labels/010f9162-9f7f-4b6d-a6e4-4f832f26f38e.html'},
-{drug: 'Nefazodone', link: 'http://localhost/DDI-labels/51ff7db5-aaf9-4c3c-86e6-958ebf16b60f.html'},
-{drug: 'Nortriptyline', link: 'http://localhost/DDI-labels/e17dc299-f52d-414d-ab6e-e809bd6f8acb.html'},
-{drug: 'Olanzapine', link: 'http://localhost/DDI-labels/d5051fbc-846b-4946-82df-341fb1216341.html'},
-{drug: 'Paliperidone', link: 'http://localhost/DDI-labels/7b8e5b26-b9e4-4704-921b-3c3c0d159916.html'},
-{drug: 'Paroxetine', link: 'http://localhost/DDI-labels/326e8ab0-6886-4749-9544-885b37070051.html'},
-{drug: 'Perphenazine', link: 'http://localhost/DDI-labels/d78e9639-6fab-4a78-8b29-6991a18ae6c6.html'},
-{drug: 'Phenelzine', link: 'http://localhost/DDI-labels/513a41d0-37d4-4355-8a6d-a2c643bce6fa.html'},
-{drug: 'Pitavastatin', link: 'http://localhost/DDI-labels/44dcbf97-99ec-427c-ba50-207e0069d6d2.html'},
-{drug: 'Pravastatin', link: 'http://localhost/DDI-labels/ad386ed4-a284-4da5-b79a-3c0f4165057a.html'},
-{drug: 'Prochlorperazine', link: 'http://localhost/DDI-labels/a971ea18-40cf-4a01-b696-180ccc3fddb5.html'},
-{drug: 'Protriptyline', link: 'http://localhost/DDI-labels/b8881a81-75d7-43e8-825f-37c352c146dc.html'},
-{drug: 'Quazepam', link: 'http://localhost/DDI-labels/309f8ac3-a3fd-4313-96aa-7f21fa9cd646.html'},
-{drug: 'Quetiapine', link: 'http://localhost/DDI-labels/4e1e5249-1cb7-4cc2-ad5a-cdeeee2f494f.html'},
-{drug: 'Risperidone', link: 'http://localhost/DDI-labels/49c4105b-e518-481c-a248-6684135f5bc1.html'},
-{drug: 'Rivaroxaban', link: 'http://localhost/DDI-labels/10db92f9-2300-4a80-836b-673e1ae91610.html'},
-{drug: 'Rosuvastatin', link: 'http://localhost/DDI-labels/1fd0ba23-962e-427f-8b9d-2cf8f64d0f95.html'},
-{drug: 'Selegiline (patch)', link: 'http://localhost/DDI-labels/b891bd9f-fdb8-4862-89c5-ecdd700398a3.html'},
-{drug: 'Sertraline', link: 'http://localhost/DDI-labels/c25f968b-7037-4f60-9a02-2189769b0cbf.html'},
-{drug: 'Simvastatin', link: 'http://localhost/DDI-labels/fdbfe194-b845-42c5-bb87-a48118bc72e7.html'},
-{drug: 'Temazepam', link: 'http://localhost/DDI-labels/a4ee3907-45d4-41b9-af8a-39a9966cd533.html'},
-{drug: 'Thioridazine', link: 'http://localhost/DDI-labels/9c4bedb4-2d59-4fcd-aad7-fce988cd96d8.html'},
-{drug: 'Thiothixene', link: 'http://localhost/DDI-labels/827cf470-485d-4925-85f2-8933a6dea830.html'},
-{drug: 'Tranylcypromine', link: 'http://localhost/DDI-labels/2e7350bd-ab32-4619-a3f9-12fdf56fc5e2.html'},
-{drug: 'Triazolam', link: 'http://localhost/DDI-labels/a0da0dba-a56d-486b-a45b-e8a7cdfbeac6.html'},
-{drug: 'Trifluoperazine', link: 'http://localhost/DDI-labels/1a5a93be-7bc3-4714-9308-2fbfb8260e23.html'},
-{drug: 'Trimipramine', link: 'http://localhost/DDI-labels/0177d783-773c-41bf-9db9-eb7e5c64474a.html'},
-{drug: 'Venlafaxine', link: 'http://localhost/DDI-labels/4c401522-0108-49cb-8a41-fb5ad4dd0fb1.html'},
-{drug: 'Vortioxetine', link: 'http://localhost/DDI-labels/4b0700c9-b417-4c3a-b36f-de461e125bd3.html'},
-{drug: 'Warfarin', link: 'http://localhost/DDI-labels/d2f6d2d0-1b32-4caf-9fce-6b798c94204b.html'},
-{drug: 'Zaleplon', link: 'http://localhost/DDI-labels/2f44db39-e1d9-451e-ba31-e4b10366a430.html'},
-{drug: 'Ziprasidone', link: 'http://localhost/DDI-labels/036db1f2-52b3-42a0-acf9-817b7ba8c724.html'},
-{drug: 'Zolpidem', link: 'http://localhost/DDI-labels/d76d5540-7bae-4719-8166-f2a9106338df.html'},
-					   		];
-					   %>
-					   <%for(var i=0; i<dailyArt.length; i++) { %>
-					        <tr>
-					        	<td><%= dailyArt[i].drug %></td>
-					            <td><a href='displayWebPage?sourceURL=<%= dailyArt[i].link %>&email=<%=user.email%>'>
-					                <%= dailyArt[i].link %>
-					            </a></td>
-					        </tr>
+	                      
+					      <strong>Local document links </strong><br><br>
+					    <div id="tabs">
+						  <ul>
+						  	<%var articleMap = []; articleMap['dailymed'] = 'DailyMed'; articleMap['pmc'] = 'PMC'; articleMap['wiley'] = 'Wiley'; articleMap['elsevier'] = 'Elsevier';%>
+						  	<%articleMap['springer'] = 'Springer'; articleMap['sage'] = 'Sage'; articleMap['taylor'] = 'Taylor & Francis'; articleMap['wolters'] = 'Wolters Kluwer'; articleMap['future'] = 'FutureMedicine';%>
+						  	<%for(var i=0; i<config.article.length; i++) { %>
+						        <li><a href="#tabs-<%=i+1%>"><%= articleMap[config.article[i]] %></a></li>
+						   	<% } %>
+						  </ul>
+						    <%for(var i=0; i<config.article.length; i++) { %>
+						    <div id="tabs-<%=i+1%>">
+						    
+					   			<%var artLinks = article[config.article[i]];%>
+					   			<table id="<%=config.article[i]%>-tb" class="table table-sm" style="font-size:14px">
+					   			<thead>
+					   				<tr>
+					   					<th width="5%">#</th><th width="30%">Drug</th><th>Link</th>
+					   				</tr>
+					   			</thead>
+					   			<tbody>
+					   			<%for(var j=0; j<artLinks.length; j++) { %>
+ 						        <tr>
+						        	<td><%= j+1 %></td>
+ 						        	<td><%= artLinks[j].article %></td>
+ 						            <td><a href='displayWebPage?sourceURL=<%= artLinks[j].link %>&email=<%=user.email%>'>
+ 						                <%= artLinks[j].link %>
+ 						            </a></td>
+ 						        </tr>
+ 						   		<% } %>
+						   		</tbody>
+						    </table>
+						    </div>
+						   	<% } %>
+						</div>					   
 					   <% } %>
-					   </tbody>
-					   </table>     
-					   
-
-					   <!-- <p>Local wiley html labels: <br> -->
-					   <!--   <a href="displayWebPage?sourceURL=http://localhost/wiley/wiley19236630.html&email=<%=user.email%>" >http://localhost/wiley/wiley19236630.html</a> <br> -->
-					   
-					   <% } %>
-	    </table>
+	    </div>
 	    <br><br>
-
 	    
-
+	    <form action="/dbmiannotator/exportcsv" method="get">
+	      <strong>Download my annotations in tsv: </strong>
+	      <input type="text" id="email" name="email" value="<%= user.email %>" style="display: none;" />
+	      <button id="exportButton" class="btn btn-success">Download</button>
+	    </form>
 	    
 	  </div>
 	  
 	</div>
-
-
-
-
-
-	
       </div>	
     </article>
 
-
-    
   </body>
 </html>

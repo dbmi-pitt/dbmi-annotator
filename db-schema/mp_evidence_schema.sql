@@ -7,6 +7,11 @@
 --        LC_CTYPE = 'en_US.UTF-8'
 -- CONNECTION LIMIT = -1;
 
+
+DROP SCHEMA IF EXISTS ohdsi CASCADE;
+CREATE SCHEMA ohdsi;
+SET SCHEMA 'ohdsi';
+
 -- MP Claim ------------------------------------
 --TABLE: mp_claim_annotation
 DROP TABLE IF EXISTS mp_claim_annotation CASCADE;
@@ -19,7 +24,10 @@ has_target integer,
 creator text,
 date_created timestamp,
 date_updated timestamp,
-negation text
+negation boolean,
+rejected_statement boolean,
+rejected_statement_reason text,
+rejected_statement_comment text
 );
 
 
@@ -55,7 +63,7 @@ FOREIGN KEY (mp_claim_id) REFERENCES mp_claim_annotation (id)
 );
 
 
---TABLE oa_data_body
+--TABLEoa_data_body
 DROP TABLE IF EXISTS oa_data_body CASCADE;
 CREATE TABLE oa_data_body
 (
@@ -79,6 +87,7 @@ data_body_id integer,
 data_field_type text,
 value_as_string text,
 value_as_number numeric(10,2),
+value_as_concept_id integer,
 FOREIGN KEY (data_body_id) REFERENCES oa_data_body(id)
 );
 
@@ -125,6 +134,7 @@ material_body_id integer,
 material_field_type text,
 value_as_string text,
 value_as_number numeric(10,2),
+value_as_concept_id integer,
 FOREIGN KEY (material_body_id) REFERENCES oa_material_body(id)
 );
 
@@ -136,12 +146,18 @@ CREATE TABLE qualifier
 id INTEGER not null PRIMARY KEY,
 urn text,
 claim_body_id integer,
-qvalue text,
 subject boolean DEFAULT FALSE,
 predicate boolean DEFAULT FALSE,
 object boolean DEFAULT FALSE,
+qvalue text,
 concept_code text,
 vocabulary_id integer,
+qualifier_type_concept_code text,
+qualifier_type_vocabulary_id integer,
+qualifier_role_concept_code text,
+qualifier_role_vocabulary_id integer,
+enantiomer boolean DEFAULT False,
+metabolite boolean DEFAULT False,
 FOREIGN KEY (claim_body_id) REFERENCES oa_claim_body(id)
 );
 
@@ -155,7 +171,25 @@ entered_value text,
 inferred_value text,
 mp_claim_id integer,
 mp_data_index integer,
+inferred_concept_code text,
+inferred_vocabulary_id integer,
 FOREIGN KEY (mp_claim_id) REFERENCES mp_claim_annotation(id)
+);
+
+-- Evidence type question -------------------------------------
+--TABLE evidence_question
+DROP TABLE IF EXISTS evidence_question CASCADE;
+CREATE TABLE evidence_question
+(
+id INTEGER not null PRIMARY KEY,
+method_id integer,
+question text,
+value_as_string text,
+value_as_number integer,
+value_as_boolean boolean,
+concept_code text,
+vocabulary_id integer,
+FOREIGN KEY (method_id) REFERENCES method(id)
 );
 
 -- Open annotation target & selector --------------
@@ -242,6 +276,9 @@ ALTER TABLE material_field alter id set default nextval('material_field_id_seq')
 CREATE SEQUENCE method_id_seq;
 ALTER TABLE method alter id set default nextval('method_id_seq');
 
+CREATE SEQUENCE evidence_question_id_seq;
+ALTER TABLE evidence_question alter id set default nextval('evidence_question_id_seq');
+
 CREATE SEQUENCE claim_reference_relationship_id_seq;
 ALTER TABLE claim_reference_relationship alter id set default nextval('claim_reference_relationship_id_seq');
 
@@ -261,7 +298,9 @@ has_body integer,
 has_target integer,
 creator text,
 date_created timestamp,
-date_updated timestamp
+date_updated timestamp,
+article_highlight boolean,
+mp_claim_id integer
 );
 
 
@@ -285,3 +324,19 @@ ALTER TABLE highlight_annotation alter id set default nextval('highlight_annotat
 CREATE SEQUENCE oa_highlight_body_id_seq;
 ALTER TABLE oa_highlight_body alter id set default nextval('oa_highlight_body_id_seq');
 
+DROP EXTENSION IF EXISTS tablefunc;
+CREATE EXTENSION tablefunc WITH SCHEMA ohdsi; 
+
+-- FUNCTIONS 
+-- handle qualifier role
+CREATE OR REPLACE FUNCTION ohdsi.qualifierRole(boolean, boolean, boolean) 
+RETURNS TEXT AS
+$BODY$
+BEGIN
+IF $1 THEN RETURN 'subject';
+ELSIF $2 THEN RETURN 'predicate';
+ELSIF $3 THEN RETURN 'object';
+ELSE RETURN 'qualifier';
+END IF;
+END;
+$BODY$ language plpgsql;

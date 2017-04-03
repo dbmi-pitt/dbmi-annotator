@@ -1,0 +1,19 @@
+{"annotationType": "MP", "updated": "2016-09-19T18:33:51.179625+00:00", "created": "2016-09-19T18:33:51.179625+00:00", 
+"uri": "httplocalhostPMCPMC000000html", 
+"argues": {
+    "negation": "True", 
+    "rejected": {"reason": "rejected-reason|"}, 
+    "label": "drugn1_inhibits_enzyme1", 
+    "ranges": [], 
+    "hasTarget": {"hasSelector": {"prefix": "claim-prefix", "exact": "claim-text", "@type": "TextQuoteSelector", "suffix": "claim-suffix"}}, 
+    "qualifiedBy": {"drug2ID": "", "relationship": "inhibits", "drug2": "", "drug1": "drugn1", "drug1ID": "drugn1_1", "enzyme": "enzyme1", "precipitant": "", "drug1PC": "enantiomer|metabolite", "drug2PC": ""},
+    "type": "mp:claim", 
+    "method": "Statement",
+    "supportsBy": []
+},
+ "user": "alice", 
+ "rawurl": "http://localhost/PMC/PMC000000.html", 
+ "consumer": "mockconsumer", 
+ "email": "test@gmail.com", 
+ "permissions": {"read": ["group:__consumer__"]}
+}

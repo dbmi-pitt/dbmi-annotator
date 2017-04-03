@@ -14,6 +14,7 @@
 
 
 config = require('./../config/config.js');
+utilcsv = require('./../utils/objtocsv.js');
 var request = require("request");
 var pg = require('pg');
 
@@ -42,9 +43,9 @@ module.exports = function(app, passport) {
 
     // SIGNUP ==============================
     app.get('/dbmiannotator/register', function(req, res) {
-        // res.render('register.ejs', { message: req.flash('signupMessage') });
+        res.render('register.ejs', { message: req.flash('signupMessage') });
         // disable register for public release
-        res.render('index.ejs', { message: req.flash('signupMessage') });
+        // res.render('index.ejs', { message: req.flash('signupMessage') });
     });
 
     app.post('/dbmiannotator/register', isRegisterFormValid, passport.authenticate('local-signup', {
@@ -65,10 +66,13 @@ module.exports = function(app, passport) {
 	    // fetch all DDI annotations for current user
 	    var url = config.protocal + "://" + config.apache2.host +":" + config.apache2.port + "/annotatorstore/search?email=" + req.user.email + "&annotationType=" + annotationType;
 
-	    
+        //loading csv file
+        var content = loadArticleList();
+
 		res.render('main.ejs', {
 		    user : req.user,
 		    annotations : [],
+            article: content,
 		    exportMessage : req.flash('exportMessage'),
 		    loadMessage : req.flash('loadMessage'),
 		    host : config.annotator.host
@@ -201,86 +205,112 @@ module.exports = function(app, passport) {
     app.get('/dbmiannotator/exportcsv', isLoggedIn, function(req, res){
 	
 	    var url = config.protocal + "://" + config.apache2.host + ":" + config.apache2.port + "/annotatorstore/search?email=" + req.query.email + "&annotationType=" + config.profile.def;
+        //var url = config.protocal + "://" + config.apache2.host + ":" + config.apache2.port + "/annotatorstore/search?annotationType=" + config.profile.def;
 	    
-	    request({url: url, json: true, followAllRedirects: true, "rejectUnauthorized": false}, function(error,response,body){
-            
+	    request({url: url, json: true, followAllRedirects: true, "rejectUnauthorized": false}, function(error,response,body){            
 	        if (!error && (response.statusCode === 200 || response.statusCode ===302)) {
                 var jsonObjs = body.rows;
 
                 res.attachment('annotations-'+req.query.email+'.csv');
 		        res.setHeader('Content-Type', 'text/csv');
-                var csvTxt = '"document"\t"claim label"\t"claim text"\t"method"\t"relationship"\t"drug1"\t"drug2"\t"precipitant"\t"enzyme"\t"evRelationship"\t"participants"\t"participants text"\t"drug1 dose"\t"drug1 formulation"\t"drug1 duration"\t"drug1 regimens"\t"drug1 dose text"\t"drug2 dose"\t"drug2 formulation"\t"drug2 duration"\t"drug2 regimens"\t"drug2 dose text"\t"auc"\t"auc type"\t"auc direction"\t"auc text"\t"cmax"\t"cmax type"\t"cmax direction"\t"cmax text"\t"cl"\t"cl type"\t"cl direction"\t"cl text"\t"halflife"\t"halflife type"\t"halflife direction"\t"halflife text"\t"group randomization"\t"parallel group design"\t"id"\n';
+                resultsL = [];
 
                 for (var i = 0; i < jsonObjs.length; i++) {
-
                     jsonObj = jsonObjs[i];
                     claim = jsonObj.argues;
-                    dataL = claim.supportsBy;                   
+                    dataL = claim.supportsBy;            
 
-                    var claimRow = '"' + jsonObj.rawurl + '"\t"' + claim.label + '"\t"' + claim.hasTarget.hasSelector.exact + '"\t"' + claim.method + '"\t"' + claim.qualifiedBy.relationship + '"\t"' + claim.qualifiedBy.drug1 + '"\t"' + claim.qualifiedBy.drug2 + '"\t"' + (claim.qualifiedBy.precipitant || '') + '"\t"' + (claim.qualifiedBy.enzyme || '' ) + '"';
+                    // initiate dict for one row in csv with claim information
+                    var rowDict={"document":jsonObj.rawurl, "useremail":jsonObj.email, "claimlabel":claim.label, "claimtext":claim.hasTarget.hasSelector.exact, "method":claim.method, "relationship":claim.qualifiedBy.relationship, "drug1":claim.qualifiedBy.drug1, "drug2":claim.qualifiedBy.drug2, "precipitant":(claim.qualifiedBy.precipitant||''), "enzyme":(claim.qualifiedBy.enzyme||''), "rejected": "", "evRelationship":"", "participants":"", "participantstext":"", "drug1dose":"", "drug1formulation":"", "drug1duration":"", "drug1regimens":"", "drug1dosetext":"", "drug2dose":"", "phenotypetype": "", "phenotypevalue": "", "phenotypemetabolizer": "", "phenotypepopulation": "", "drug2formulation":"", "drug2duration":"", "drug2regimens":"", "drug2dosetext":"", "aucvalue":"", "auctype":"", "aucdirection":"", "auctext":"", "cmaxvalue":"", "cmaxtype":"", "cmaxdirection":"", "cmaxtext":"", "clearancevalue":"", "clearancetype":"", "clearancedirection":"", "clearancetext":"", "halflifevalue":"", "halflifetype":"", "halflifedirection":"", "halflifetext":"", "dipsquestion":"", "reviewer":"", "reviewerdate":"", "reviewertotal":"", "reviewerlackinfo":"", "grouprandomization":"", "parallelgroupdesign":"", "id": jsonObj.id};
 
+                    if (claim.rejected != null)
+                        rowDict["rejected"] = (claim.rejected || "");
 
-                    var dataRow = null;
-                    if (dataL.length > 0) { // clinical trial annotation
-                        for (var j = 0; j < dataL.length; j++) {
+                    // fill data and material to dict
+                    if (dataL.length > 0) { // if data is available
+
+                        for (var j = 0; j < dataL.length; j++) { // loop all data items
+                            copyDict = JSON.parse(JSON.stringify(rowDict));
                             var data = dataL[j];
                             var method = data.supportsBy;
                             var material = method.supportsBy;
-                            dataRow = "";
-                            
-                            dataRow += '\t"' + (data.evRelationship || '') + '"';
-                            
-                            if (material.participants != null)
-                                dataRow += '\t"' + (material.participants.value || '') + '"\t"' + (getSpanFromField(material.participants) || '') + '"';
-                            else 
-                                dataRow += '\t\t';
-                            
-                            if (material.drug1Dose != null) 
-                                dataRow += '\t"' + (material.drug1Dose.value || '') + '"\t"' + (material.drug1Dose.formulation || '') + '"\t"'  + (material.drug1Dose.duration || '') + '"\t"' + (material.drug1Dose.regimens || '') + '"\t"' + (getSpanFromField(material.drug1Dose) || '') + '"';
-                            else 
-                                dataRow += '\t\t\t\t';
-                            
-                            if (material.drug2Dose != null) 
-                                dataRow += '\t"' + (material.drug2Dose.value || '') + '"\t"' + (material.drug2Dose.formulation || '') + '"\t"'  + (material.drug2Dose.duration || '') + '"\t"' + (material.drug2Dose.regimens || '') + '"\t"' + (getSpanFromField(material.drug2Dose) || '') + '"';
-                            else 
-                                dataRow += '\t\t\t\t';
-                            
+
+                            copyDict["evRelationship"] = (data.evRelationship || "");
+
+                            if (material.participants != null) {
+                                copyDict["participants"] = (material.participants.value || "")
+                                copyDict["participantstext"] = (getSpanFromField(material.participants) || "")
+                            }
+
                             dataFieldsL = ["auc","cmax","clearance","halflife"];
                             for (p = 0; p < dataFieldsL.length; p++) {
                                 field = dataFieldsL[p];
-                                if (data[field] != null)    
-                                    dataRow += '\t"' + (data[field].value || '') + '"\t"' + (data[field].type || '') + '"\t"' + (data[field].direction || '') + '"\t"' + (getSpanFromField(data[field]) || '') + '"'; 
-                                else 
-                                    dataRow += '\t\t\t\t';
-                            }                        
-                            
+                                if (data[field] != null) {
+                                    copyDict[field + 'value'] = (data[field].value || "")
+                                    copyDict[field + 'type'] = (data[field].type || "")
+                                    copyDict[field + 'direction'] = (data[field].direction || "")
+                                    copyDict[field + 'text'] = (getSpanFromField(data[field]) || "")
+                                }
+                            }
+
+                            if (data.dips != null) {
+                                dipsQsStr = "";
+                                qsL=["q1","q2","q3","q4","q5","q6","q7","q8","q9","q10"];
+                                for (q = 0; q < qsL.length; q++) {
+                                    if (q == qsL.length - 1)
+                                        dipsQsStr += data.dips[qsL[q]];
+                                    else
+                                        dipsQsStr += data.dips[qsL[q]] + "|";
+                                }
+                                copyDict["dipsquestion"] = dipsQsStr;
+                            }
+
+                            if (data.reviewer != null) {
+                                copyDict["reviewer"] = data.reviewer.reviewer || "";
+                                copyDict["reviewerdate"] = data.reviewer.date || "";
+                                copyDict["reviewertotal"] = data.reviewer.total || "";
+                                copyDict["reviewerlackinfo"] = data.reviewer.lackinfo || "";
+                            }
+
                             if (data.grouprandom != null)
-                                dataRow += '\t"' + (data.grouprandom || '') + '"';
-                            else
-                                dataRow += '\t';
+                                copyDict["grouprandomization"] = (data.grouprandom || "");                            
                             
                             if (data.parallelgroup != null)
-                                dataRow += '\t"' + (data.parallelgroup || '') + '"';
-                            else
-                                dataRow += '\t';                            
+                                copyDict["parallelgroupdesign"] = (data.parallelgroup || "");
 
-                            // for multiple data case
-                            dataRow += '\t"' + jsonObj.id + '"'
-                            dataRow = claimRow + dataRow + '\n';
-                            csvTxt += dataRow;
+                            if (material.drug1Dose != null) {
+                                copyDict["drug1dose"] = (material.drug1Dose.value || "")
+                                copyDict["drug1formulation"] = (material.drug1Dose.formulation || "")
+                                copyDict["drug1duration"] = (material.drug1Dose.duration || "")
+                                copyDict["drug1regimens"] = (material.drug1Dose.regimens || "")
+                                copyDict["drug1dosetext"] = (getSpanFromField(material.drug1Dose) || "")
+                            } 
+                            if (material.drug2Dose != null) {
+                                copyDict["drug2dose"] = (material.drug2Dose.value || "")
+                                copyDict["drug2formulation"] = (material.drug2Dose.formulation || "")
+                                copyDict["drug2duration"] = (material.drug2Dose.duration || "")
+                                copyDict["drug2regimens"] = (material.drug2Dose.regimens || "")
+                                copyDict["drug2dosetext"] = (getSpanFromField(material.drug2Dose) || "")
+                            }                                 
+                            if (material.phenotype != null) {
+                                copyDict["phenotypetype"] = material.phenotype.type || "";
+                                copyDict["phenotypevalue"] = material.phenotype.typeVal || "";
+                                copyDict["phenotypemetabolizer"] = material.phenotype.metabolizer || "";
+                                copyDict["phenotypepopulation"] = material.phenotype.population || "";
+                            }                      
+                            resultsL.push(copyDict);
                         }
-                    } else { // statement annotation
-                        dataRow = '\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t';
-                        dataRow += '\t"' + jsonObj.id + '"'
-                        dataRow = claimRow + dataRow + '\n';
-                        csvTxt += dataRow;
+                    } else {
+                        resultsL.push(rowDict);
                     }
-
                 }
-                
+
+                console.log(resultsL.length);
+                csvTxt = utilcsv.toCsv(resultsL, '"', '\t');
+
 		        res.attachment('annotations-'+req.query.email+'.csv');
 		        res.setHeader('Content-Type', 'text/csv');
-		        res.end(csvTxt);                    
+		        res.end(csvTxt);                                              
 		        
 	        } else {
 		        //req.flash('exportMessage', 'exported failed, annotation fetch exception, please see logs or contact Yifan at yin2@pitt.edu!');
@@ -300,9 +330,6 @@ function getSpanFromField(field) {
         return "";
     }
 }
-
-
-
 
 // MIDDLE WARE FUNCTIONS ==============================
 
@@ -417,5 +444,29 @@ function isRegisterFormValid(req, res, next){
 	return next();
     } 
 
+}
+
+function loadArticleList(){
+    console.log("Load article list.");
+    var fs = require('fs');
+    var result = [];
+    var articleList = config.article;
+    /*fs.readFile('./article-list/dailymed-list.csv', 'utf8', function(err, contents) {
+        console.log(contents);
+    });*/
+
+    //synchronized read csv
+    for (var j = 0; j < articleList.length; j++) {
+        var contents = fs.readFileSync('./article-list/' + articleList[j] + '-list.csv', 'utf8');
+
+        var list = [];
+        var temp = contents.split('\n');
+        for (var i = 0; i < temp.length; i++) {
+            var arr = temp[i].split(',');
+            list.push({'article':arr[0], 'link':arr[1]});
+        }
+        result[articleList[j]] = list;
+    }
+    return result;
 }
 

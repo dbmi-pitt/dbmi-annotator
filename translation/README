@@ -1,72 +1,58 @@
---------------------------------------------------------------------
-Create database mpevidence: running DDL
---------------------------------------------------------------------
-
-(1) Install postgres DB if it's development mode. Create database "mpevidence". Pg username "dbmiannotator" and password "dbmi2016" as default 
-
-(2) Execute RDB schema creation script in Postgres DB:
-<path to>/dbmi-annotator/db-schema/mp_evidence_schema.sql
+Translation program
 
 --------------------------------------------------------------------
-Preparetion
+Folder: mp-evidence-base-ETL
 --------------------------------------------------------------------
 
-(1) Install python postgres connector 
-pip install psycopg2
+Including following programs. Please see mp-evidence-base-ETL/README for details
+
+(1) translate MP annotations from elasticsearch and load into postgres DB
+
+(2) translate Domeo SPLs annotations from csv and load into postgres DB
+
+(3) load annotations from postgres DB mpevidence to Elasticsearch store (Not ready)
+
+(4) testing ETL program for validating translating and loading processes
+
+(5) query and export annotations from elasticsearch to csv
 
 --------------------------------------------------------------------
-Load domeo annotations from csv and load into postgres DB
+Folder: omop-concepts-dev
 --------------------------------------------------------------------
 
-(1) Ensure csv annotation set from extracted from Domeo is available at:
- 
-dbmi-annotator/translation/csv-data-loader/data/pkddi-<username>-latest-<date>.csv
+Apply ontologies in data translation
 
-(2) Configure data for loadDomeoAnnsToRDB.py
+(1) Apply DIDEO ontology 
 
-csvfiles = ['data/pkddi-katrina-latest-08152016.csv', 'data/pkddi-amy-latest-08152016.csv']
+#1 Load dideo.owl to OWL2TL to produce term lists in dideo ontology
 
-Note: If csv comes from domeo, replace cl to clearance and t12 to halflife
+OWL2TL: https://owl2tl.com/
+DIDEO OWL: http://purl.obolibrary.org/obo/dideo.owl
 
-(3) execute ETL program loadDomeoAnnsToRDB.py 
+#2 Terms been used in Micropublication annotation
 
-$ python loadDomeoAnnsToRDB.py <pghostname> <pgport> <pguser> <pgpassword> <clean existing data (1: yes, 0: no)>
+Refers to: omop-concepts-dev/dideo-uris.txt
 
-Development mode:
-ex. python loadDomeoAnnsToRDB.py localhost 5432 dbmiannotator dbmi2016 1
+Script for inserting dideo concepts: omop-concepts-dev/dideo-concepts-insert.sql
 
-Docker container:
-$ python loadDomeoAnnsToRDB.py postgres 5432 dbmiannotator dbmi2016 1
+(2) Apply OMOP standard vocabulary Version 5.1 to MP tables 
 
-1. optional: clean all data in table
-2. preprocess csv, generate preprocess-domeo.csv
-3. load data into schema mpevidence
+#1 create concept tables and load data (refers to OHDSI OMOP CDM V5.1)
 
---------------------------------------------------------------------
-Load dbmi-annotator annotations from csv and load into postgres DB
---------------------------------------------------------------------
+http://www.ohdsi.org/web/wiki/doku.php?id=documentation:cdm:single-page
 
-(1) Ensure csv annotation set exported from dbmi-annotator is available at:
- 
-dbmi-annotator/translation/csv-data-loader/data/mp-annotation.tsv
+#2 Queries for mapping (MeSH to concept_id and RxNorm to concept_id)
 
-(2) execute ETL program loadAnnotatorAnnsToRDB.py 
-
-$ python loadAnnotatorAnnsToRDB.py <pghostname> <pgport> <pguser> <pgpassword> <clean existing data (1: yes, 0: no)>
-
-Development mode:
-ex. $ python loadAnnotatorAnnsToRDB.py localhost 5432 dbmiannotator dbmi2016 0
-
-Docker container:
-$ python loadAnnotatorAnnsToRDB.py postgres 5432 dbmiannotator dbmi2016 0
-
-1. optional: clean all data in table
-2. preprocess csv, generate preprocess-annotator.csv
-3. load data into postgres database schema mpevidence
+SELECT c.concept_id as omopid, c.concept_name, c.vocabulary_id, cc.concept_class_name, c.concept_code
+FROM concept c JOIN concept_class cc on c.concept_class_id = cc.concept_class_id
+WHERE c.vocabulary_id = 'MeSH' OR c.vocabulary_id = 'RxNorm'
+LIMIT 100;
 
 --------------------------------------------------------------------
-D2R server mapping
+Folder: d2r-mapping
 --------------------------------------------------------------------
+
+(1) D2R server mapping
 
 D2R server reference: 
 http://d2rq.org/getting-started
@@ -78,9 +64,7 @@ $ ./d2r-server --port 2020 <path to csv-data-loader/d2r-mapping/mpevidence.ttl>
 
 Open browser at "http://localhost:2020"
 
---------------------------------------------------------------------
-D2R server RDF dump (graph mpevidence.rdf)
---------------------------------------------------------------------
+(2) D2R server RDF dump (graph mpevidence.rdf)
 
 Gernerate RDF graph based on d2r mapping configuration 
 Reference: http://d2rq.org/dump-rdf
@@ -90,32 +74,17 @@ Reference: http://d2rq.org/dump-rdf
 Count instances of claim in RDF graph for validation
 grep -r "rdf:Description rdf:about=\"http://dikb.org/mpevidence/mp_claim_annotation" mpevidence.rdf 
 
-
 --------------------------------------------------------------------
-Load annotations from postgres DB mpevidence to Elasticsearch store
---------------------------------------------------------------------
-
-(1) Query Micropublication annotations from Relational database (Postgres) mpevidence 
-(2) Translate annotation to JSON format and load into Elastico document store
-
-python load-rdb-annotations.py <pg hostname> <pg username> <pg password> <es hostname> <annotation author>
-
-Development mode:
-ex. 
-$ python load-rdb-annotations.py localhost dbmiannotator dbmi2016 localhost test@gmail.com
-
-Docker container:
-$ python load-rdb-annotations.py postgres dbmiannotator dbmi2016 elasticsearch test@gmail.com
-
---------------------------------------------------------------------
-delete specific set of annotations
+Elasticsearch admin
 --------------------------------------------------------------------
 
-(1) delete by specified query condition
+(1) delete specific set of annotations
+
+#1 delete by specified query condition
 curl -XDELETE 'http://localhost:9200/annotator/annotation/_query?q=<field>:<value>'
 
-(2) free store size after deletion 
+#2 free store size after deletion 
 curl -XPOST 'http://localhost:9200/_optimize?only_expunge_deletes=true'
 
-(3) delete the whole index
+#3 delete the whole index
 curl -XDELETE 'http://localhost:9200/annotator/'

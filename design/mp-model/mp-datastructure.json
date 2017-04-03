@@ -9,12 +9,18 @@
  'argues' : { // mp claim
      'id': 'uuid',
      'type': 'mp:claim',
+     'rejected': {
+         'reason': '<rejected reason>|<comments>'
+     },
      'qualifiedBy': {
          'Drug1': '',
          'drug1ID' : '',
          'relationship': '',
          'drug2ID' : '',
          'Drug2': '',
+         'enzyme':'',
+         'drug1PC':'enantiomer|metabolite',
+         'drug2PC':'enantiomer|metabolite',
          'precipitant': 'drug1 or drug2'
      },
      'hasTarget' : {
@@ -30,47 +36,45 @@
          'start': 'string',
          'end': 'string',
          'startOffset': 'integer',
-         'endOffset': 'integer',
+         'endOffset': 'integer'
      },
      'negation': 'string',  // assertion supports or refutes
-     // put user entered method name here
-     'method' : 'string',
-     // mp:data (one or more mp:data supports claim)
-     'supportsBy': 
+     'method' : 'string',  // user entered method name
+     'supportsBy':   // mp:data (one or more mp:data supports claim)
      [
          {
              'id': 'uuid',
              'type': 'mp:data',
              // mp:method (method supports data)
              'supportsBy': { 
-                 'id': 'uuid'
+                 'id': 'uuid',
                  'type': 'mp:method',
-                 'value': 'string' // inferred specific evidence type
-
-                 // mp:material (material supports method)
-                 'supportsBy': {
+                 'value': 'string', // inferred specific evidence type
+                 'supportsBy': { // mp:material (material supports method)
                     'id': 'uuid',
                      'type': 'mp:material',                    
-                    'drug1Dose': {
-                        'hasTarget': '',
-                        'ranges': ''
-                        'value': '',
-                        'formulation' : 'options: UNK, Oral, IV, transdermal',
-                        'duration' : 'days',
-                        'regimens' : 'options: UNK, SD, QD, BID, TID, QID, Q12, Q8, Q6, Daily'
-                    },                   
+                     'drug1Dose': {
+                         'hasTarget': '',
+                         'ranges': '',
+                         'value': '',
+                         'formulation' : 'options: UNK, Oral, IV, transdermal',
+                         'duration' : 'days',
+                         'regimens' : 'options: UNK, SD, QD, BID, TID, QID, Q12, Q8, Q6, Daily'
+                     },                   
                      'drug2Dose': {'the same as drug1Dose'},
                      'participants': {
                          'value': 'numeric',
                          'hasTarget': '',
                          'ranges': ''                        
                     },
-                    'phenotype': {
-                        'type':'option: Genotype, Drug Phenotype',
-                        'typeVal':'',
-                        'metabolizer':'',
-                        'population':''
-                    }                    
+                     'phenotype': { // for phenotype clinical study
+                         'hasTarget': '',
+                         'ranges': '',
+                         'type':'option: Genotype, Drug Phenotype',
+                         'typeVal':'',
+                         'metabolizer':'',
+                         'population':''
+                     }                    
                  }
              },            
              // evidence relationship - supports/refutes
@@ -106,7 +110,7 @@
                  'hasTarget' : '',
                  'ranges' : ''
              }
-             'dips': {
+             'dips': { // for case report
                  'q1':'',
                  'q2':'',
                  'q3':'',
@@ -118,11 +122,11 @@
                  'q9':'',
                  'q10':''
              }
-             'reviewer': {
+             'reviewer': { // for case report
                  'date': 'MM/YYYY, DD/MM/YYYY',
                  'reviewer': 'option: Author, External',
                  'total': '',
-                 'lackInfo': true, false
+                 'lackInfo': 'true or false'
              }
          }
      ]    
