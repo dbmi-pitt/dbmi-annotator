@@ -3,6 +3,7 @@
 SET SCHEMA 'ohdsi';
 
 CREATE EXTENSION "uuid-ossp";
+CREATE EXTENSION tablefunc;
 
 -- MP Claim and qualifier table: rdf_mp_claim_qualifier --------------------------------
 CREATE TABLE rdf_mp_claim_qualifier AS 
