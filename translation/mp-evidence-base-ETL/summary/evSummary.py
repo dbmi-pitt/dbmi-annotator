@@ -63,7 +63,7 @@ def printArticleAnnotatedSummary(conn):
 def main():
 	PG_HOST = "localhost"
 	PG_USER = "dbmiannotator"
-	PG_PASSWORD = "dbmi2016"
+	PG_PASSWORD = ""
 	PG_DATABASE = "mpevidence"
 
 	conn = pgconn.connect_postgres(PG_HOST, PG_USER, PG_PASSWORD, PG_DATABASE)
