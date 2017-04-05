@@ -31,6 +31,10 @@ class Qualifier:
 		self.enantiomer = None
 		self.metabolite = None
 
+	def setQualifierConcept(self, concept_code, vocab_id):
+		self.concept_code = concept_code
+		self.vocabulary_id = vocab_id
+
 	def setTypeDrugProduct(self):
 		self.qualifier_type_concept_code = "DIDEO_00000005"
 		self.qualifier_type_vocabulary_id = -9900002
