@@ -63,7 +63,7 @@ Optional: pre-load annotations from csv to DB mpevidence
 
     $ python loadDomeoAnnsToRDB.py <pghostname> <pgport> <pguser> <pgpassword> <clean existing data (1: yes, 0: no)>
 
-    ex. $ python loadDomeoAnnsToRDB.py postgres 5432 dbmiannotator dbmi2016 1
+    ex. $ python loadDomeoAnnsToRDB.py postgres 5432 dbmiannotator <password> 1
 
     1. optional: clean all data in table
     2. preprocess csv, generate preprocess-domeo.csv
@@ -75,7 +75,7 @@ Optional: pre-load annotations from postgres DB mpevidence to elasticsearch
     $ cd translation/rdb-data-loader
     $ python load-rdb-annotations.py <pg hostname> <pg username> <pg password> <es hostname> <annotation author>
 
-    ex. python load-rdb-annotations.py postgres dbmiannotator dbmi2016 elasticsearch test@gmail.com
+    ex. python load-rdb-annotations.py postgres dbmiannotator <password> elasticsearch test@gmail.com
 
 Optional: create new user when register is disabled
 Refers to /home/yin2/dbmi-annotator/helper/README

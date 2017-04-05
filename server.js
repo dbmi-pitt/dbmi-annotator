@@ -59,9 +59,9 @@ app.use(express.static('public'));
 app.set('view engine', 'ejs'); 
 
 // required for passport
-app.use(session({ secret: 'dbmi2016'}));
+app.use(session({ secret: 'dbmi2020'}));
 
-//app.use(session({ secret: 'dbmi2016', cookie: {expires: new Date(Date.now() + 3600000)}})); // session secret
+//app.use(session({ secret: 'dbmi2020', cookie: {expires: new Date(Date.now() + 3600000)}})); // session secret
 // maxAge: new Date(Date.now() + 3600000) cause session expire one hr after server start 
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions

@@ -3,7 +3,7 @@ When register is disabled, run the script to create new user
 Usage: create-new-user.py <pg hostname> <pg username> <pg password> <user email> <password>
 
 Example (development mode):
-$ python create-new-user.py localhost dbmiannotator dbmi2016 123@gmail.com 123123
+$ python create-new-user.py localhost postgres <password> test@gmail.com testtest
 
 Example (production mode - in docker container):
 
