@@ -27,7 +27,8 @@ from model.Micropublication import *
 reload(sys)  
 sys.setdefaultencoding('utf8')
 
-annsDictCsv = {} ## keep document and count of annotations for validation after load
+annsDictCsv = {} # keep document and count of annotations for validation after load
+drugMapD = {} # concept as {"concept name": Concept}
 
 # load annotaitons to postgres
 def load_annotations(conn, annotations, creator):

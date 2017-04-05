@@ -3,6 +3,7 @@
 SET SCHEMA 'ohdsi';
 
 CREATE EXTENSION "uuid-ossp";
+CREATE EXTENSION tablefunc;
 
 CREATE TABLE ct_iw_auc_fold AS SELECT 
 method, precipitant, precipitant_code, object, object_code, ratio, ratio_type, value, direction, uuid_generate_v4() as auc_urn, uuid_generate_v4() as fold_urn, uuid_generate_v4() as description_urn, uuid_generate_v4() as bearer_pt_urn, uuid_generate_v4() AS bearer_obj_urn, uuid_generate_v4() as pt_urn, uuid_generate_v4() as obj_urn, uuid_generate_v4() as method_urn
