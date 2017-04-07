@@ -20,129 +20,189 @@ map:database a d2rq:Database;
     d2rq:jdbcDSN "jdbc:postgresql://localhost/mpevidence?autoReconnect=true&user=<username>&password=<password>";   
 	.
 
-########################## DIDEO ONTOLOGY MAPPING TABLES ########################### 
-## Class DDI description
+## Class DDI description ############################################################
 map:DDI a d2rq:ClassMap;
 	d2rq:dataStorage map:database;
-    d2rq:uriPattern "http://dikb.org/ddi/@@ohdsi.ct_iw_auc_fold.description_urn@@";
+    d2rq:uriPattern "http://dikb.org/ddi/@@ohdsi.rdf_mp_claim_qualifier.asrt_description_urn@@";
     d2rq:class obo:DIDEO_00000001; ## drug-drug interaction description
     .
 
-map:ddi_label a d2rq:PropertyBridge;
+## Assertion label
+map:ddi_label a d2rq:PropertyBridge; 
 	d2rq:belongsToClassMap map:DDI;
 	d2rq:property rdfs:label;
-    d2rq:pattern "@@ohdsi.ct_iw_auc_fold.precipitant@@-@@ohdsi.ct_iw_auc_fold.object@@ interaction description"@en;
+    d2rq:pattern "@@ohdsi.rdf_mp_claim_qualifier.precipitant@@-@@rdf_mp_claim_qualifier.object@@ interaction description"@en;
     .
 
-map:ddi_has_part_1 a d2rq:PropertyBridge;
+## has part: data ratio item 
+map:ddi_has_part a d2rq:PropertyBridge; 
 	d2rq:belongsToClassMap map:DDI;
-	d2rq:property obo:BFO_0000051; ## has part: auc increase information
-    d2rq:uriPattern "http://dikb.org/auc/@@ohdsi.ct_iw_auc_fold.auc_urn@@";
+	d2rq:property obo:BFO_0000051; 
+    d2rq:join "rdf_mp_claim_qualifier.mp_claim_id <= rdf_mp_data.mp_claim_id";
+    d2rq:join "rdf_mp_claim_qualifier.mp_data_index <= rdf_mp_data.mp_data_index";
+    d2rq:uriPattern "http://dikb.org/data-ratio/@@ohdsi.rdf_mp_data.data_item_urn@@";
     .
 
+## is about: bearer of precipitant drug role
 map:ddi_is_about_precipitant a d2rq:PropertyBridge;
 	d2rq:belongsToClassMap map:DDI;
-	d2rq:property obo:IAO_0000136; ## is about: bearer of precipitant drug role
-    d2rq:uriPattern "http://dikb.org/bearer-precipitant/@@ohdsi.ct_iw_auc_fold.bearer_pt_urn@@";
+	d2rq:property obo:IAO_0000136; 
+    d2rq:uriPattern "http://dikb.org/bearer-precipitant/@@rdf_mp_claim_qualifier.bearer_pt_urn@@";
     .
 
+## is about: bearer of object drug role
 map:ddi_is_about_object a d2rq:PropertyBridge;
 	d2rq:belongsToClassMap map:DDI;
-	d2rq:property obo:IAO_0000136; ## is about: bearer of object drug role
-    d2rq:uriPattern "http://dikb.org/bearer-object/@@ohdsi.ct_iw_auc_fold.bearer_obj_urn@@";
+	d2rq:property obo:IAO_0000136; 
+    d2rq:uriPattern "http://dikb.org/bearer-object/@@ohdsi.rdf_mp_claim_qualifier.bearer_obj_urn@@";
     .
 
-## Class AUC information 
-map:AUC a d2rq:ClassMap;
-	d2rq:dataStorage map:database;
-    d2rq:uriPattern "http://dikb.org/auc/@@ohdsi.ct_iw_auc_fold.auc_urn@@";
-    d2rq:class obo:DIDEO_00000050; ## information about increase of pk area
-    .
-
-map:auc_label a d2rq:PropertyBridge;
-	d2rq:belongsToClassMap map:AUC;
-	d2rq:property rdfs:label;
-    d2rq:pattern "@@ohdsi.ct_iw_auc_fold.precipitant@@-@@ohdsi.ct_iw_auc_fold.object@@ drug package @@ohdsi.ct_iw_auc_fold.ratio@@ @@ohdsi.ct_iw_auc_fold.direction@@ information"@en;
-    .
-
-map:auc_type a d2rq:PropertyBridge;
-	d2rq:belongsToClassMap map:AUC;
-	d2rq:property rdf:type;
-    d2rq:constantValue "drug package AUC information"@en;
-    .
-
-map:method a d2rq:PropertyBridge;
-	d2rq:belongsToClassMap map:AUC;
-	d2rq:property obo:OBI_0000312; ## is specified output of
-    d2rq:uriSqlExpression "CONCAT('http://dikb.org/method/', ohdsi.ct_iw_auc_fold.method_urn)"; 
-    .
-
-map:auc_fold a d2rq:PropertyBridge;
-	d2rq:belongsToClassMap map:AUC;
-	d2rq:property obo:OBI_0001937; ## has specified value
-    d2rq:uriSqlExpression "CONCAT('http://dikb.org/fold/', ohdsi.ct_iw_auc_fold.fold_urn)"; 
-    .
-
-## Class Fold 
-map:Fold a d2rq:ClassMap;
-    d2rq:uriPattern "http://dikb.org/fold/@@ohdsi.ct_iw_auc_fold.fold_urn@@";
-    d2rq:class obo:OBI_0001933; ## value specification
-    d2rq:classDefinitionLabel "data ratio fold"@en;
-    d2rq:dataStorage map:database;
-    .
-
-map:fold_has_part a d2rq:PropertyBridge;
-	d2rq:belongsToClassMap map:Fold;
-	d2rq:property obo:BFO_0000051; ## has part
-    d2rq:column "ohdsi.ct_iw_auc_fold.ratio_type"
-    .
-
-map:has_specified_value a d2rq:PropertyBridge;
-	d2rq:belongsToClassMap map:Fold;
-	d2rq:property obo:OBI_0001937; ## has specified value
-    d2rq:column "ohdsi.ct_iw_auc_fold.value"
-    .
-
-## Class Bearer of precipitant drug role
+## Class Bearer of precipitant drug role ############################################
 map:BearerPrecipitantRole a d2rq:ClassMap;
-    d2rq:uriPattern "http://dikb.org/bearer-precipitant/@@ohdsi.ct_iw_auc_fold.bearer_pt_urn@@";
+    d2rq:uriPattern "http://dikb.org/bearer-precipitant/@@ohdsi.rdf_mp_claim_qualifier.bearer_pt_urn@@";
     d2rq:classDefinitionLabel "bearer of precipitant drug role"@en;
     d2rq:dataStorage map:database;
     .
 
+## bearer of: precipitant drug role 
 map:precipitant_bearer_of a d2rq:PropertyBridge;
 	d2rq:belongsToClassMap map:BearerPrecipitantRole;
-	d2rq:property obo:RO_0000053; ## bearer of: precipitant drug role 
-    d2rq:uriSqlExpression "CONCAT('http://dikb.org/precipitant-drug-role/', ohdsi.ct_iw_auc_fold.pt_urn)"; 
+	d2rq:property obo:RO_0000053; 
+    d2rq:uriSqlExpression "CONCAT('http://dikb.org/precipitant-drug-role/', ohdsi.rdf_mp_claim_qualifier.pt_urn)"; 
     .
 
-## Class Precipitant drug role
+## Class Precipitant drug role 
 map:PrecipitantRole a d2rq:ClassMap;
-    d2rq:uriPattern "http://dikb.org/precipitant-drug-role/@@ohdsi.ct_iw_auc_fold.pt_urn@@";
+    d2rq:uriPattern "http://dikb.org/precipitant-drug-role/@@ohdsi.rdf_mp_claim_qualifier.pt_urn@@";
     d2rq:class obo:DIDEO_00000013; ## precipitant role
     #d2rq:classDefinitionLabel "precipitant drug role"@en;
     d2rq:dataStorage map:database;
     .
 
-## Class Bearer of object drug role
+## Class Precipitant scattered molecular aggregate ##################################
+map:PrecipitantScatteredMolecularAggregate a d2rq:ClassMap;
+    d2rq:uriPattern "http://dikb.org/p-scattered-molecular-aggregate/@@ohdsi.rdf_mp_claim_qualifier.p_scattered_molecular_aggregate_urn@@";
+    d2rq:class obo:OBI_0000576; ## scattered molecular aggregate 
+    d2rq:dataStorage map:database;
+    .
+
+## ScatteredMolecularAggregate has_granular_part: precipitant item
+map:scattered_has_granular_part a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PrecipitantScatteredMolecularAggregate;
+	d2rq:property obo:RO_0000053; 
+    d2rq:uriSqlExpression "CONCAT('http://dikb.org/precipitant/', ohdsi.rdf_mp_claim_qualifier.p_item_urn)"; 
+    .
+
+## Class Precipitant  
+map:PrecipitantItem a d2rq:ClassMap;
+    d2rq:uriPattern "http://dikb.org/precipitant/@@ohdsi.rdf_mp_claim_qualifier.p_item_urn@@";
+    d2rq:dataStorage map:database;
+    .
+
+## precipitant URI
+map:precipitant_item_rdf_type a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PrecipitantItem;
+	d2rq:property rdf:type;
+    d2rq:uriSqlExpression "ohdsi.rdf_mp_claim_qualifier.p_concept_code"; 
+    .
+
+## PrecipitantScatteredMolecularAggregate bearer_of: PrecipitantActiveIngredient
+map:precipiant_scattered_bearer_of a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PrecipitantScatteredMolecularAggregate;
+	d2rq:property obo:RO_0000053; 
+    d2rq:uriSqlExpression "CONCAT('http://dikb.org/precipitant-active-ingredient/', ohdsi.rdf_mp_claim_qualifier.p_active_ingredient_urn)"; 
+    .
+
+## Class Precipitant Active Ingredient  
+map:PrecipitantActiveIngredient a d2rq:ClassMap;
+    d2rq:uriPattern "http://dikb.org/precipitant-active-ingredient/@@ohdsi.rdf_mp_claim_qualifier.p_active_ingredient_urn@@";
+    d2rq:class obo:DRON_00000028; ## active ingredient 
+    d2rq:dataStorage map:database;
+    .
+
+
+
+## Class Bearer of object drug role #################################################
 map:BearerObjectRole a d2rq:ClassMap;
-    d2rq:uriPattern "http://dikb.org/bearer-object/@@ohdsi.ct_iw_auc_fold.bearer_obj_urn@@";
+    d2rq:uriPattern "http://dikb.org/bearer-object/@@ohdsi.rdf_mp_claim_qualifier.bearer_obj_urn@@";
     d2rq:classDefinitionLabel "bearer of object drug role"@en;
     d2rq:dataStorage map:database;
     .
 
+## bearer of: object drug role
 map:object_bearer_of a d2rq:PropertyBridge;
 	d2rq:belongsToClassMap map:BearerObjectRole;
-	d2rq:property obo:RO_0000053; ## bearer of: object drug role
-    d2rq:uriSqlExpression "CONCAT('http://dikb.org/object-drug-role/', ohdsi.ct_iw_auc_fold.obj_urn)";
+	d2rq:property obo:RO_0000053; 
+    d2rq:uriSqlExpression "CONCAT('http://dikb.org/object-drug-role/', ohdsi.rdf_mp_claim_qualifier.obj_urn)";
     .
 
 ## Class Object drug role
 map:ObjectRole a d2rq:ClassMap;
-    d2rq:uriPattern "http://dikb.org/object-drug-role/@@ohdsi.ct_iw_auc_fold.obj_urn@@";
+    d2rq:uriPattern "http://dikb.org/object-drug-role/@@ohdsi.rdf_mp_claim_qualifier.obj_urn@@";
     d2rq:class obo:DIDEO_00000012; ## object role
     #d2rq:classDefinitionLabel "object drug role"@en;
     d2rq:dataStorage map:database;
     .
+
+
+## Class Data Ratio Item - AUC ######################################################
+map:DataRatio a d2rq:ClassMap;
+	d2rq:dataStorage map:database;
+    d2rq:uriPattern "http://dikb.org/data-ratio/@@ohdsi.rdf_mp_data.data_item_urn@@";
+    d2rq:class obo:DIDEO_00000050; ## information about increase of pk area
+    .
+
+## data ratio label
+map:data_ratio_label a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:DataRatio;
+	d2rq:property rdfs:label;
+    d2rq:join "rdf_mp_claim_qualifier.mp_claim_id <= rdf_mp_data.mp_claim_id";
+    d2rq:join "rdf_mp_claim_qualifier.mp_data_index <= rdf_mp_data.mp_data_index";
+    d2rq:pattern "@@ohdsi.rdf_mp_claim_qualifier.precipitant@@-@@ohdsi.rdf_mp_claim_qualifier.object@@ drug package @@ohdsi.rdf_mp_data.ratio@@ @@ohdsi.rdf_mp_data.direction@@ information"@en;
+    .
+
+## data ratio rdf:type
+map:data_ratio_rdf_type a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:DataRatio;
+	d2rq:property rdf:type;
+    d2rq:constantValue "drug package DataRatio information"@en;
+    .
+
+## is specified output of Method
+map:method a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:DataRatio;
+	d2rq:property obo:OBI_0000312; 
+    d2rq:uriSqlExpression "CONCAT('http://dikb.org/method/', ohdsi.rdf_mp_claim_qualifier.method_urn)"; 
+    .
+
+map:data_ratio_type a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:DataRatio;
+	d2rq:property obo:OBI_0001937; ## has specified value
+    d2rq:uriSqlExpression "CONCAT('http://dikb.org/data-ratio-type/', ohdsi.rdf_mp_data.data_type_urn)"; 
+    .
+
+
+## Class Data Type - Fold ###########################################################
+map:DataRatioType a d2rq:ClassMap;
+    d2rq:uriPattern "http://dikb.org/data-ratio-type/@@ohdsi.rdf_mp_data.data_type_urn@@";
+    d2rq:class obo:OBI_0001933; ## value specification
+    d2rq:dataStorage map:database;
+    # d2rq:classDefinitionLabel "data ratio fold"@en;
+    .
+
+## has part
+map:fold_has_part a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:DataRatioType;
+	d2rq:property obo:BFO_0000051; 
+    d2rq:column "ohdsi.rdf_mp_data.ratio_type"
+    .
+
+## has specified value
+map:has_specified_value a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:DataRatioType;
+	d2rq:property obo:OBI_0001937; 
+    d2rq:column "ohdsi.rdf_mp_data.value"
+    .
+
 
 
