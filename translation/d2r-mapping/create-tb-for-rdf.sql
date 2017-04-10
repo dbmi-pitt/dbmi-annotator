@@ -8,9 +8,9 @@ CREATE EXTENSION tablefunc;
 CREATE TABLE rdf_mp_claim_qualifier AS 
 SELECT 
 mp_claim_id, mp_data_index, method, precipitant, p_concept_code, p_role_concept_code, object, o_concept_code, o_role_concept_code, uuid_generate_v4() as asrt_description_urn, 
-uuid_generate_v4() as bearer_pt_urn, uuid_generate_v4() AS bearer_obj_urn, uuid_generate_v4() as pt_urn, uuid_generate_v4() as obj_urn, uuid_generate_v4() as method_urn, 
-uuid_generate_v4() as p_scattered_molecular_aggregate_urn, uuid_generate_v4() as p_active_ingredient_urn, uuid_generate_v4() as p_item_urn, uuid_generate_v4() as p_mass_urn, uuid_generate_v4() as p_milligram_urn, 
-uuid_generate_v4() as o_scattered_molecular_aggregate_urn, uuid_generate_v4() as o_active_ingredient_urn, uuid_generate_v4() as o_item_urn, uuid_generate_v4() as o_mass_urn, uuid_generate_v4() as o_milligram_urn
+uuid_generate_v4() as p_bearer_role_urn, uuid_generate_v4() as o_bearer_role_urn, uuid_generate_v4() as p_drug_role_urn, uuid_generate_v4() as o_drug_role_urn, uuid_generate_v4() as method_urn, 
+uuid_generate_v4() as p_scattered_molecular_aggregate_urn, uuid_generate_v4() as p_active_ingredient_urn, uuid_generate_v4() as p_drug_urn, uuid_generate_v4() as p_mass_urn, uuid_generate_v4() as p_milligram_urn, 
+uuid_generate_v4() as o_scattered_molecular_aggregate_urn, uuid_generate_v4() as o_active_ingredient_urn, uuid_generate_v4() as o_drug_urn, uuid_generate_v4() as o_mass_urn, uuid_generate_v4() as o_milligram_urn
 FROM (
 WITH method AS (
 SELECT mp_claim_id, mp_data_index, m.entered_value as method from method m

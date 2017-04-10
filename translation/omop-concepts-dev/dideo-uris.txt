@@ -95,6 +95,17 @@ Alternative Term: EV_CT_PK_Genotype
 -----------------------------------------------------------------------------------
 Terms in ontology:
 has specified value: http://purl.obolibrary.org/obo/OBI_0001937
+
 has part: http://purl.obolibrary.org/obo/BFO_0000051
+
 is about: http://purl.obolibrary.org/obo/IAO_0000136
+
 bearer of: http://purl.obolibrary.org/obo/RO_0000053​
+
+has measurement unit label: http://purl.obolibrary.org/obo/IAO_0000039
+the label should be ‘has measurement unit label 
+
+has proper part -> has part
+http://purl.obolibrary.org/obo/BFO_0000051
+
+has member http://purl.obolibrary.org/obo/RO_0002351). The decision to use that for DIDEO was made and is valid.
