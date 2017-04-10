@@ -24,7 +24,7 @@ map:database a d2rq:Database;
 #####################################################################################
 map:Assertion a d2rq:ClassMap;
 	d2rq:dataStorage map:database;
-    d2rq:uriPattern "http://dikb.org/ddi/@@ohdsi.ct_iw_auc_fold.description_urn@@";
+    d2rq:uriPattern "http://dikb.org/ddi/@@ohdsi.rdf_mp_claim_qualifier.asrt_description_urn@@";
     d2rq:class obo:DIDEO_00000001; ## drug-drug interaction description
     .
 
@@ -44,12 +44,14 @@ map:ddi_has_part a d2rq:PropertyBridge;
     d2rq:uriPattern "http://dikb.org/data-ratio/@@ohdsi.rdf_mp_data.data_item_urn@@";
     .
 
+## is about: bearer of precipitant drug role
 map:ddi_is_about_precipitant a d2rq:PropertyBridge;
 	d2rq:belongsToClassMap map:Assertion;
 	d2rq:property obo:IAO_0000136; 
     d2rq:uriPattern "http://dikb.org/bearer-precipitant/@@ohdsi.rdf_mp_claim_qualifier.p_bearer_role_urn@@";
     .
 
+## is about: bearer of object drug role
 map:ddi_is_about_object a d2rq:PropertyBridge;
 	d2rq:belongsToClassMap map:Assertion;
 	d2rq:property obo:IAO_0000136; 
@@ -87,10 +89,11 @@ map:PrecipitantRole a d2rq:ClassMap;
     d2rq:dataStorage map:database;
     .
 
-map:method a d2rq:PropertyBridge;
-	d2rq:belongsToClassMap map:AUC;
-	d2rq:property obo:OBI_0000312; ## is specified output of
-    d2rq:uriSqlExpression "CONCAT('http://dikb.org/method/', ohdsi.ct_iw_auc_fold.method_urn)"; 
+## Class Precipitant scattered molecular aggregate ##################################
+map:PrecipitantScatteredMolecularAggregate a d2rq:ClassMap;
+    d2rq:uriPattern "http://dikb.org/p-scattered-molecular-aggregate/@@ohdsi.rdf_mp_claim_qualifier.p_scattered_molecular_aggregate_urn@@";
+    d2rq:class obo:OBI_0000576; ## scattered molecular aggregate 
+    d2rq:dataStorage map:database;
     .
 
 ## has_member: precipitant drug
@@ -127,10 +130,10 @@ map:precipiant_scattered_bearer_of_active_ingredient a d2rq:PropertyBridge;
     d2rq:uriSqlExpression "CONCAT('http://dikb.org/precipitant-active-ingredient/', ohdsi.rdf_mp_claim_qualifier.p_active_ingredient_urn)"; 
     .
 
-## Class Bearer of precipitant drug role
-map:BearerPrecipitantRole a d2rq:ClassMap;
-    d2rq:uriPattern "http://dikb.org/bearer-precipitant/@@ohdsi.ct_iw_auc_fold.bearer_pt_urn@@";
-    d2rq:classDefinitionLabel "bearer of precipitant drug role"@en;
+## Class Precipitant Active Ingredient  
+map:PrecipitantActiveIngredient a d2rq:ClassMap;
+    d2rq:uriPattern "http://dikb.org/precipitant-active-ingredient/@@ohdsi.rdf_mp_claim_qualifier.p_active_ingredient_urn@@";
+    d2rq:class obo:DRON_00000028; ## active ingredient 
     d2rq:dataStorage map:database;
     .
     
@@ -344,4 +347,3 @@ map:has_specified_value a d2rq:PropertyBridge;
 	d2rq:property obo:OBI_0001937; 
     d2rq:column "ohdsi.rdf_mp_data.value"
     .
-
