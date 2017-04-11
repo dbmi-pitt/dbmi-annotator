@@ -25,10 +25,10 @@ execute ETL program loadAnnotatorAnnsToRDB.py
 $ python loadAnnotatorAnnsToRDB.py <elastic host> <elastic port> <pg host> <pg port> <pg username> <pg password> <OPTIONS (1: clean all tables, 2 drop and recreate all tables, 0: keep existing data)>
 
 Development mode:
-ex. $ python loadAnnotatorAnnsToRDB.py localhost 9200 localhost 5432 dbmiannotator dbmi2016 1
+ex. $ python loadAnnotatorAnnsToRDB.py localhost 9200 localhost 5432 dbmiannotator <password> 1
 
 Docker container:
-$ python loadAnnotatorAnnsToRDB.py elasticsearch 9200 postgres 5432 dbmiannotator dbmi2016 0
+$ python loadAnnotatorAnnsToRDB.py elasticsearch 9200 postgres 5432 dbmiannotator <password> 0
 
 -----------------------------------------------------------------------
 translate Domeo SPLs annotations from csv and load into postgres DB
@@ -49,10 +49,10 @@ Note: If csv comes from domeo, replace cl to clearance and t12 to halflife
 $ python loadDomeoAnnsToRDB.py <pg hostname> <pg port> <pg username> <pg password> <OPTIONS (1: clean all tables, 2 drop and recreate all tables, 0: keep existing data)>
 
 Development mode:
-ex. python loadDomeoAnnsToRDB.py localhost 5432 dbmiannotator dbmi2016 0
+ex. python loadDomeoAnnsToRDB.py localhost 5432 dbmiannotator <password> 0
 
 Docker container:
-$ python loadDomeoAnnsToRDB.py postgres 5432 dbmiannotator dbmi2016 0
+$ python loadDomeoAnnsToRDB.py postgres 5432 dbmiannotator <password> 0
 
 ----------------------------------------------------------------------------------
 translate and load annotations from postgres DB mpevidence to Elasticsearch store
@@ -65,10 +65,10 @@ python load-rdb-annotations.py <pg hostname> <pg username> <pg password> <es hos
 
 Development mode:
 ex. 
-$ python translateRDB2Elastic.py localhost dbmiannotator dbmi2016 localhost dbmi.etl@gmail.com
+$ python translateRDB2Elastic.py localhost dbmiannotator <password> localhost dbmi.etl@gmail.com
 
 Docker container:
-$ python translateRDB2Elastic.py postgres dbmiannotator dbmi2016 elasticsearch dbmi.etl@gmail.com
+$ python translateRDB2Elastic.py postgres dbmiannotator <password> elasticsearch dbmi.etl@gmail.com
 
 --------------------------------------------------------------------
 query and export annotations from elasticsearch to csv

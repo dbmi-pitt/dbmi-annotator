@@ -1,5 +1,4 @@
--- AUC fold RDF creation (DDI clinical trial, interact)
--- https://docs.google.com/viewer?a=v&pid=sites&srcid=ZGVmYXVsdGRvbWFpbnxkZGlrcmFuZGlyfGd4OjIzYTc2YjA4NjRkNTAzZDQ
+
 SET SCHEMA 'ohdsi';
 
 CREATE EXTENSION "uuid-ossp";

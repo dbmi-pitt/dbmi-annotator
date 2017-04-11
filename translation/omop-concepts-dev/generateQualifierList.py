@@ -3,7 +3,7 @@ import psycopg2
 
 PG_HOST = "localhost"
 PG_USER = "dbmiannotator"
-PG_PASSWORD = "dbmi2016"
+PG_PASSWORD = ""
 PG_DATABASE = "mpevidence"
 
 def run (hostname, username, password, database):

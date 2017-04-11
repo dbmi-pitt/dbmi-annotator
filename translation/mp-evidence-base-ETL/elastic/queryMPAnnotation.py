@@ -1,10 +1,16 @@
 import sys, csv, json, re, os
+sys.path.append(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir))
 import datetime, copy
 from elasticsearch import Elasticsearch
 from sets import Set
-sys.path.append("../")
 from elastic import operations as esop
 from model.Micropublication import *
+from model.Concept import *
+from mapping import tools 
+
+drugMapD = {} # concept as {"concept name": Concept}
+DRUG_MAPPING = "mapping/drug-list-mapped.csv"
+drugMapD = tools.getDrugMappingDict(DRUG_MAPPING)
 
 ## Query and Parse annotations in Elasticsearch #####################################
 def getMPAnnsByBody(es_host, es_port, query_condit):
@@ -24,6 +30,7 @@ def getMPAnnById(es_host, es_port, annId):
 
 
 def parseToMPAnns(documents):
+
 	anns = []
 	for doc in documents:
 		ann = parseToMPAnn(doc)
@@ -33,6 +40,8 @@ def parseToMPAnns(documents):
 
 
 def parseToMPAnn(document):
+
+
 	doc = document["_source"]; doc_urn = document["_id"]
 	method = doc["argues"]["method"]; annotation = None
 
@@ -72,6 +81,10 @@ def createStatement(doc, doc_urn):
 
 	return annotation
 
+def addQualifierConcept(qualifier):
+	if qualifier.qvalue in drugMapD:
+		concept = drugMapD[qualifier.qvalue]
+		qualifier.setQualifierConcept(concept.concept_code, concept.vocabulary_id)
 
 ## add qualifiers to Statement annotation
 # parma1: annotation obj
@@ -91,7 +104,7 @@ def addQualifiersForST(annotation, drugname1, drugname2, predicate, enzyme, prec
 			csubject.setRolePrecipitant()
 			csubject.setTypeDrugProduct()
 			addParentCompound(csubject, drug1PC)
-			
+
 			cobject = Qualifier(drugname2, False, False, True) # drug2 as mpobject/ddiobject
 			cobject.setRoleObject()
 			cobject.setTypeDrugProduct()
@@ -116,6 +129,9 @@ def addQualifiersForST(annotation, drugname1, drugname2, predicate, enzyme, prec
 		cobject = Qualifier(enzyme, False, False, True) # enzyme as mpobject
 		cobject.setTypeEnzyme()
 		cobject.setRoleObject()
+
+	addQualifierConcept(csubject)
+	addQualifierConcept(cobject)
 		
 	cpredicate = Qualifier(predicate, False, True, False)
 	annotation.setQualifiers(csubject, cpredicate, cobject)
@@ -267,6 +283,11 @@ def addQualifiersForCT(annotation, drugname1, drugname2, predicate, enzyme, prec
 			cqualifier.setTypeDrugProduct()
 			addParentCompound(cqualifier, drug2PC)	
 		
+	addQualifierConcept(csubject)
+	addQualifierConcept(cobject)
+	if cqualifier:
+		addQualifierConcept(cqualifier)
+
 	cpredicate = Qualifier(predicate, False, True, False)
 	annotation.setQualifiers(csubject, cpredicate, cobject, cqualifier)
 
@@ -336,6 +357,9 @@ def addQualifiersForPH(annotation, drugname1, predicate, enzyme, drug1PC):
 	cobject.setTypeEnzyme()
 	cobject.setRoleObject()
 					
+	addQualifierConcept(csubject)
+	addQualifierConcept(cobject)
+
 	cpredicate = Qualifier(predicate, False, True, False)
 	annotation.setQualifiers(csubject, cpredicate, cobject)
 
@@ -355,7 +379,6 @@ def createCaseReport(doc, doc_urn):
 	exact = getSelectorTxt(claim, "exact"); prefix = getSelectorTxt(claim, "prefix"); suffix = getSelectorTxt(claim, "suffix")
 	qualifier = claim["qualifiedBy"]; precipitant = qualifier["precipitant"]
 	drugname1 = qualifier["drug1"]; drugname2 = qualifier["drug2"]; predicate = qualifier["relationship"];
-
 
 	## MP Claim
 	annotation = createSubAnnotation(doc_urn, source, label, method, email, date)
@@ -421,6 +444,9 @@ def addQualifiersForCR(annotation, drugname1, predicate, drugname2, precipitant,
 		cobject.setRoleObject()
 		cobject.setTypeDrugProduct()
 		addParentCompound(cobject, drug1PC)					
+
+	addQualifierConcept(csubject)
+	addQualifierConcept(cobject)
 
 	cpredicate = Qualifier(predicate, False, True, False)
 	annotation.setQualifiers(csubject, cpredicate, cobject)
@@ -641,3 +667,5 @@ def main():
 
 if __name__ == '__main__':
 	main()
+	#DRUG_MAPPING = "./../mapping/drug-list-mapped.csv"
+	#tools.printMapping(DRUG_MAPPING)

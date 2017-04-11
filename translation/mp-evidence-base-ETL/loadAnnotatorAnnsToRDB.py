@@ -28,7 +28,6 @@ reload(sys)
 sys.setdefaultencoding('utf8')
 
 annsDictCsv = {} # keep document and count of annotations for validation after load
-drugMapD = {} # concept as {"concept name": Concept}
 
 # load annotaitons to postgres
 def load_annotations(conn, annotations, creator):
@@ -99,11 +98,6 @@ def addAnnsToCount(annsDict, document):
 		annsDict[document] += 1
 	else:
 		annsDict[document] = 1
-
-
-def utf_8_encoder(unicode_csv_data):
-    for line in unicode_csv_data:
-        yield line.encode('utf-8')
 
 
 # LOAD Clinical Trial Annotation ####################################################
@@ -384,4 +378,5 @@ def main():
 
 if __name__ == '__main__':
 	main()
+
 
