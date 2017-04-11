@@ -33,6 +33,7 @@ function claimEditorLoad() {
     $("#mp-data-form-cellSystem").hide();
     $("#mp-data-form-rateWith").hide();
     $("#mp-data-form-rateWithout").hide();
+    $("#mp-data-form-measurement").hide();
 }
 
 function reviewerChange() {

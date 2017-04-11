@@ -374,7 +374,7 @@ function createExperimentTable(annotation){
     } else {
         experimentTable = "<table style='color:red;'";
     }
-    experimentTable += " id='mp-data-tb'><tr><td>Cell System</td><td>Object Drug</td><td>Object Metabolite</td>";
+    experimentTable += " id='mp-data-tb'><tr><td>Ev Relationship</td><td>Cell System</td><td>Object Drug</td><td>Object Metabolite</td><td>Measurement</td>";
     if (annotation.argues.qualifiedBy.relationship == "inhibits") {
         experimentTable += "<td>Metabolite rate with precipitant</td><td>Metabolite rate without precipitant</td></tr>";
     } else {
@@ -397,6 +397,14 @@ function createExperimentTable(annotation){
             method = data.supportsBy;
             row = "<tr style='height:20px;'>";
 
+            //Ev relationship
+            if (data.evRelationship != null) {
+                var tempRel = data.evRelationship == "refutes" ? "challenges" : "supports";
+                row += "<td onclick='editDataCellByEditor(\"evRelationship\",\""+dataNum+"\");'>" + tempRel + "</td>";      
+            } else {
+                row += "<td onclick='addDataCellByEditor(\"evRelationship\",\""+dataNum+"\");'></td>";
+            }
+
             // show cell system
             if (data.cellSystem != null && data.cellSystem.value != null)
                 row += "<td onclick='editDataCellByEditor(\"cellSystem\",\""+dataNum+"\");'>" + data.cellSystem.value + "</td>";      
@@ -405,6 +413,12 @@ function createExperimentTable(annotation){
 
             //object drug + object metabolite
             row += "<td>" + objectDrug + "</td><td>" + objectMetabolite + "</td>";
+
+            //measurement
+            if (data.measurement != null && data.measurement.value != null)
+                row += "<td onclick='editDataCellByEditor(\"measurement\",\""+dataNum+"\");'>" + data.measurement.value + "</td>";      
+            else 
+                row += "<td onclick='addDataCellByEditor(\"measurement\",\""+dataNum+"\");'></td>";
 
             //metabolite rate with
             if (data.metaboliteRateWith!= null && data.metaboliteRateWith.value != null)
@@ -422,7 +436,7 @@ function createExperimentTable(annotation){
             experimentTable += row;
         }
     } else {  // add empty row
-        experimentTable += "<tr><td onclick='addDataCellByEditor(\"cellSystem\", 0);'></td><td>" + objectDrug + "</td><td>" + objectMetabolite + "</td><td onclick='addDataCellByEditor(\"rateWith\", 0);'></td><td onclick='addDataCellByEditor(\"rateWithout\", 0);'></td></tr>";
+        experimentTable += "<tr><td onclick='addDataCellByEditor(\"evRelationship\",0);'></td><td onclick='addDataCellByEditor(\"cellSystem\", 0);'></td><td>" + objectDrug + "</td><td>" + objectMetabolite + "</td><td onclick='addDataCellByEditor(\"measurement\", 0);'></td><td onclick='addDataCellByEditor(\"rateWith\", 0);'></td><td onclick='addDataCellByEditor(\"rateWithout\", 0);'></td></tr>";
     }
     experimentTable += "</table>";
     return experimentTable;
