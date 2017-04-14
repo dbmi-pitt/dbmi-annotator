@@ -344,7 +344,7 @@ function addDataCellByEditor(field, dataNum, isNewData) {
                     // add data if not avaliable  
                     if (annotation.argues.supportsBy.length == 0 || isNewData){ 
 
-                        var data = {type : "mp:data", evRelationship: "", auc : {}, cmax : {}, clearance : {}, halflife : {}, reviewer: {}, dips: {}, supportsBy : {type : "mp:method", supportsBy : {type : "mp:material", participants : {}, drug1Dose : {}, drug2Dose : {}, phenotype: {}}}, grouprandom: "", parallelgroup: ""};
+                        var data = {type : "mp:data", evRelationship: "", auc : {}, cmax : {}, clearance : {}, halflife : {}, reviewer: {}, dips: {}, cellSystem: {}, metaboliteRateWith: {}, metaboliteRateWithout: {}, measurement: {}, supportsBy : {type : "mp:method", supportsBy : {type : "mp:material", participants : {}, drug1Dose : {}, drug2Dose : {}, phenotype: {}}}, grouprandom: "", parallelgroup: ""};
                         annotation.argues.supportsBy.push(data); 
                     } 
                     
@@ -434,7 +434,7 @@ function editDataCellByEditor(field, dataNum) {
                 material = data.supportsBy.supportsBy;
                 
                 if ((field == "participants" && material.participants.value != null) || (field == "dose1" && material.drug1Dose.value != null) || (field == "dose2" && material.drug2Dose.value != null) || ((field == "auc" || field == "cmax" || field == "clearance" || field == "halflife") && (data[field].value != null)) || 
-                    field == "rateWithout" || field == "rateWith" || field == "cellSystem")
+                    field == "rateWithout" || field == "rateWith" || field == "cellSystem" || field == "cl" || field == "vmax" || field == "km" || field == "ki" || field == "inhibition")
                     $("#annotator-delete").show();
                 
                 // call AnnotatorJs editor for update    
