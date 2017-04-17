@@ -33,7 +33,11 @@ function claimEditorLoad() {
     $("#mp-data-form-cellSystem").hide();
     $("#mp-data-form-rateWith").hide();
     $("#mp-data-form-rateWithout").hide();
-    $("#mp-data-form-measurement").hide();
+    $("#mp-data-form-cl").hide();
+    $("#mp-data-form-vmax").hide();
+    $("#mp-data-form-km").hide();
+    $("#mp-data-form-ki").hide();
+    $("#mp-data-form-inhibition").hide();
 }
 
 function reviewerChange() {

@@ -270,6 +270,11 @@ function initLiseners() {
     unchangedCheckBoxDialog("cmax");
     unchangedCheckBoxDialog("clearance");
     unchangedCheckBoxDialog("halflife");
+    unchangedCheckBoxDialog("cl");
+    unchangedCheckBoxDialog("vmax");
+    unchangedCheckBoxDialog("km");
+    unchangedCheckBoxDialog("ki");
+    unchangedCheckBoxDialog("inhibition");
     
     // jquery for checking form editing status
     $(":input").change(function(){
@@ -381,53 +386,100 @@ function rejectEvidenceCheckBox(field) {
 // dialog for confirm truncation when user check unchanged checkbox  
 // fields allowed: auc, cmax, clearance, halflife
 function unchangedCheckBoxDialog(field) {
-    if (field !== "auc" && field!== "cmax" && field!== "clearance" && field !== "halflife") { return; }
+    //auc, cmax, clearance, halflife
+    if (field == "auc" || field == "cmax" || field == "clearance" || field == "halflife") {
 
-    $('#' + field + '-unchanged-checkbox').change(function() {
-        
-        if ($(this).is(":checked")) {            
-            if ($('#'+field).val() != null && $('#'+field).val().trim() != "") {
-                // show unchanged warn dialog
-                var unchangedDialog = document.getElementById('unchanged-warn-dialog');
-                unchangedDialog.style.display = "block";
-                // When the user clicks anywhere outside of the dialog, close it
-                window.onclick = function(event) {
-                    if (event.target == unchangedDialog) {
-                        unchangedDialog.style.display = "none";
+        $('#' + field + '-unchanged-checkbox').change(function() {
+            
+            if ($(this).is(":checked")) {            
+                if ($('#'+field).val() != null && $('#'+field).val().trim() != "") {
+                    // show unchanged warn dialog
+                    var unchangedDialog = document.getElementById('unchanged-warn-dialog');
+                    unchangedDialog.style.display = "block";
+                    // When the user clicks anywhere outside of the dialog, close it
+                    window.onclick = function(event) {
+                        if (event.target == unchangedDialog) {
+                            unchangedDialog.style.display = "none";
+                        }
                     }
-                }
-                
-                var okBtn = document.getElementById("unchanged-dialog-ok-btn");
-                var cancelBtn = document.getElementById("unchanged-dialog-cancel-btn");
-                okBtn.onclick = function() {
-                    unchangedDialog.style.display = "none";
-                    $('#'+field).val('');
+                    
+                    var okBtn = document.getElementById("unchanged-dialog-ok-btn");
+                    var cancelBtn = document.getElementById("unchanged-dialog-cancel-btn");
+                    okBtn.onclick = function() {
+                        unchangedDialog.style.display = "none";
+                        $('#'+field).val('');
+                        $('#'+field+'Type')[0].selectedIndex = -1;
+                        $('#'+field+'Direction')[0].selectedIndex = -1;
+                        
+                        $('#'+field).attr('disabled', true);
+                        $('#'+field+'Type').attr('disabled', true);
+                        $('#'+field+'Direction').attr('disabled', true);   
+                    }
+                    cancelBtn.onclick = function() {
+                        unchangedDialog.style.display = "none"; 
+                        $('#'+field+'-unchanged-checkbox').attr('checked',false);
+                    }
+                } else {                
                     $('#'+field+'Type')[0].selectedIndex = -1;
                     $('#'+field+'Direction')[0].selectedIndex = -1;
                     
                     $('#'+field).attr('disabled', true);
                     $('#'+field+'Type').attr('disabled', true);
-                    $('#'+field+'Direction').attr('disabled', true);   
-                }
-                cancelBtn.onclick = function() {
-                    unchangedDialog.style.display = "none"; 
-                    $('#'+field+'-unchanged-checkbox').attr('checked',false);
-                }
-            } else {                
-                $('#'+field+'Type')[0].selectedIndex = -1;
-                $('#'+field+'Direction')[0].selectedIndex = -1;
-                
-                $('#'+field).attr('disabled', true);
-                $('#'+field+'Type').attr('disabled', true);
-                $('#'+field+'Direction').attr('disabled', true);                   
-            }            
-        } else {
-            // TODO: grey out fields
-            $('#'+field).attr('disabled', false);
-            $('#'+field+'Type').attr('disabled', false);
-            $('#'+field+'Direction').attr('disabled', false);   
-        }
-    });
+                    $('#'+field+'Direction').attr('disabled', true);                   
+                }            
+            } else {
+                // TODO: grey out fields
+                $('#'+field).attr('disabled', false);
+                $('#'+field+'Type').attr('disabled', false);
+                $('#'+field+'Direction').attr('disabled', false);   
+            }
+        });
+    }
+
+    //experiment measurement: cl, vmax, km, ki, inhibition
+    if (field == "cl" || field == "vmax" || field == "km" || field == "ki" || field == "inhibition") {
+
+        $('#' + field + '-unchanged-checkbox').change(function() {
+            
+            if ($(this).is(":checked")) {
+                if ($('#'+field+'Value').val() != null && $('#'+field+'Value').val().trim() != "") {
+                    // show unchanged warn dialog
+                    var unchangedDialog = document.getElementById('unchanged-warn-dialog');
+                    unchangedDialog.style.display = "block";
+                    // When the user clicks anywhere outside of the dialog, close it
+                    window.onclick = function(event) {
+                        if (event.target == unchangedDialog) {
+                            unchangedDialog.style.display = "none";
+                        }
+                    }
+                    
+                    var okBtn = document.getElementById("unchanged-dialog-ok-btn");
+                    var cancelBtn = document.getElementById("unchanged-dialog-cancel-btn");
+                    okBtn.onclick = function() {
+                        unchangedDialog.style.display = "none";
+                        $('#'+field+'Value').val('');
+                        $('#'+field+'Unit')[0].selectedIndex = -1;
+                        
+                        $('#' + field + 'Unit').attr('disabled', true);
+                        $('#' + field + 'Value').attr('disabled', true);  
+                    }
+                    cancelBtn.onclick = function() {
+                        unchangedDialog.style.display = "none"; 
+                        $('#'+field+'-unchanged-checkbox').attr('checked',false);
+                    }
+                } else {                
+                    $('#'+field+'Unit')[0].selectedIndex = -1;
+                    
+                    $('#' + field + 'Unit').attr('disabled', true);
+                    $('#' + field + 'Value').attr('disabled', true);                 
+                }            
+            } else {
+                // TODO: grey out fields
+                $('#' + field + 'Unit').attr('disabled', false);
+                $('#' + field +'Value').attr('disabled', false);
+            }
+        });
+    }
 }
 
 // pop up dialog for importable existing annotation sets  
