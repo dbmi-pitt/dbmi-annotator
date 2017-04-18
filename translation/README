@@ -52,35 +52,7 @@ LIMIT 100;
 Folder: d2r-mapping
 --------------------------------------------------------------------
 
-(1) D2R server mapping
-
-D2R server reference: 
-http://d2rq.org/getting-started
-http://d2rq.org/d2r-server#command-line
-
-Run:
-$ cd <path to d2rq directory>
-$ ./d2r-server --port 2020 <path to csv-data-loader/d2r-mapping/mpevidence.ttl>
-
-Open browser at "http://localhost:2020"
-
-(2) D2R server RDF dump (graph mpevidence.rdf)
-
-Gernerate RDF graph based on d2r mapping configuration 
-Reference: http://d2rq.org/dump-rdf
-
-./dump-rdf -f RDF/XML -o mpevidence.rdf --verbose <path to csv-data-loader/d2r-mapping/mpevidence.ttl>
-
-Count instances of claim in RDF graph for validation
-grep -r "rdf:Description rdf:about=\"http://dikb.org/mpevidence/mp_claim_annotation" mpevidence.rdf 
-
-(3) OWL merging
-
-the tool for OWLs merge: https://github.com/ontodev/robot
-commands: https://github.com/ontodev/robot/blob/master/examples/README.md
-
-example:
-$ robot merge -v --input <file-1>.owl --input <file-2>.owl --output <output-file>.owl
+Using d2r server maps SQL database to RDF, please see details in d2r-mapping/README
 
 --------------------------------------------------------------------
 Elasticsearch admin
