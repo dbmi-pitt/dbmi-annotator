@@ -74,6 +74,14 @@ Reference: http://d2rq.org/dump-rdf
 Count instances of claim in RDF graph for validation
 grep -r "rdf:Description rdf:about=\"http://dikb.org/mpevidence/mp_claim_annotation" mpevidence.rdf 
 
+(3) OWL merging
+
+the tool for OWLs merge: https://github.com/ontodev/robot
+commands: https://github.com/ontodev/robot/blob/master/examples/README.md
+
+example:
+$ robot merge -v --input <file-1>.owl --input <file-2>.owl --output <output-file>.owl
+
 --------------------------------------------------------------------
 Elasticsearch admin
 --------------------------------------------------------------------
