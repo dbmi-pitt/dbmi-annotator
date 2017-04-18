@@ -11,11 +11,11 @@
 @prefix obo: <http://purl.obolibrary.org/obo/> .
 
 <> a d2r:Server;
-      rdfs:label "D2R Server for mpevidence";
+      rdfs:label "D2R Server for Micropublication evidence";
       .
 
 map:database a d2rq:Database;
-	d2rq:jdbcDriver "org.postgresql.Driver";
+    d2rq:jdbcDriver "org.postgresql.Driver";
     # d2rq:jdbcDSN "jdbc:postgresql://localhost/mpevidence?autoReconnect=true&user=<username>&password=<password>";   
     d2rq:jdbcDSN "jdbc:postgresql://localhost/mpevidence?autoReconnect=true&user=dbmiannotator&password=dbmi2016";
 	.
@@ -23,15 +23,15 @@ map:database a d2rq:Database;
 # Class Assertion description 
 #####################################################################################
 map:Assertion a d2rq:ClassMap;
-	d2rq:dataStorage map:database;
+    d2rq:dataStorage map:database;
     d2rq:uriPattern "http://dikb.org/assertion/@@ohdsi.rdf_mp_claim_qualifier.asrt_description_urn@@";
     d2rq:class obo:DIDEO_00000001; ## drug-drug interaction description
     .
 
 ## Assertion label
 map:assertion_label a d2rq:PropertyBridge; 
-	d2rq:belongsToClassMap map:Assertion;
-	d2rq:property rdfs:label;
+    d2rq:belongsToClassMap map:Assertion;
+    d2rq:property rdfs:label;
     d2rq:pattern "@@ohdsi.rdf_mp_claim_qualifier.precipitant@@-@@ohdsi.rdf_mp_claim_qualifier.object@@ interaction description"@en;
     .
 
@@ -105,15 +105,15 @@ map:precipitant_scattered_has_member a d2rq:PropertyBridge;
 
 ## bearer_of: PrecipitantActiveIngredient
 map:precipitant_scattered_bearer_of_active_ingredient a d2rq:PropertyBridge;
-	d2rq:belongsToClassMap map:PrecipitantScatteredMolecularAggregate;
-	d2rq:property obo:RO_0000053; 
+    d2rq:belongsToClassMap map:PrecipitantScatteredMolecularAggregate;
+    d2rq:property obo:RO_0000053; 
     d2rq:uriSqlExpression "CONCAT('http://dikb.org/precipitant-active-ingredient/', ohdsi.rdf_mp_claim_qualifier.p_active_ingredient_urn)"; 
     .
 
 ## bearer of: precipitant mass
 map:precipitant_scattered_beaer_of a d2rq:PropertyBridge;
-	d2rq:belongsToClassMap map:PrecipitantScatteredMolecularAggregate;
-	d2rq:property obo:RO_0000053; 
+    d2rq:belongsToClassMap map:PrecipitantScatteredMolecularAggregate;
+    d2rq:property obo:RO_0000053; 
     d2rq:uriSqlExpression "CONCAT('http://dikb.org/precipitant-mass/', ohdsi.rdf_mp_claim_qualifier.p_mass_urn)"; 
     .
 
@@ -147,10 +147,12 @@ map:PrecipitantMass a d2rq:ClassMap;
 
 ## Precipitant Mass has_specified_value
 map:precipitant_mass_has_specified_value a d2rq:PropertyBridge;
-	d2rq:belongsToClassMap map:PrecipitantMass;
-	d2rq:property obo:OBI_0001937; 
-    d2rq:pattern "200";
-    # d2rq:uriSqlExpression "ohdsi.rdf_mp_claim_qualifier.<precipitant dose>"; 
+    d2rq:belongsToClassMap map:PrecipitantMass;
+    d2rq:property obo:OBI_0001937; 
+    d2rq:column "ohdsi.rdf_mp_material.value";
+    d2rq:join "ohdsi.rdf_mp_claim_qualifier.mp_claim_id <= ohdsi.rdf_mp_material.mp_claim_id";
+    d2rq:join "ohdsi.rdf_mp_claim_qualifier.mp_data_index <= ohdsi.rdf_mp_material.mp_data_index";
+    d2rq:condition  "ohdsi.rdf_mp_material.material_type = 'precipitant_dose'";
     .
 
 ## Precipitant Mass has_measurement_unit
@@ -253,10 +255,12 @@ map:ObjectMass a d2rq:ClassMap;
 
 ## has_specified_value
 map:object_has_specified_value a d2rq:PropertyBridge;
-	d2rq:belongsToClassMap map:ObjectMass;
-	d2rq:property obo:OBI_0001937; 
-    d2rq:pattern "1";
-    # d2rq:uriSqlExpression "ohdsi.rdf_mp_claim_qualifier.<object dose>"; 
+    d2rq:belongsToClassMap map:ObjectMass;
+    d2rq:property obo:OBI_0001937; 
+    d2rq:column "ohdsi.rdf_mp_material.value";
+    d2rq:join "ohdsi.rdf_mp_claim_qualifier.mp_claim_id <= ohdsi.rdf_mp_material.mp_claim_id";
+    d2rq:join "ohdsi.rdf_mp_claim_qualifier.mp_data_index <= ohdsi.rdf_mp_material.mp_data_index";
+    d2rq:condition "ohdsi.rdf_mp_material.material_type = 'object_dose'";
     .
 
 ## has_measurement_unit Object Milligram
