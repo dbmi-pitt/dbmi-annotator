@@ -120,7 +120,7 @@
 					    <div id="tabs">
 						  <ul>
 						  	<%var articleMap = []; articleMap['dailymed'] = 'DailyMed'; articleMap['pmc'] = 'PMC'; articleMap['wiley'] = 'Wiley'; articleMap['elsevier'] = 'Elsevier';%>
-						  	<%articleMap['springer'] = 'Springer'; articleMap['sage'] = 'Sage'; articleMap['taylor'] = 'Taylor & Francis'; articleMap['wolters'] = 'Wolters Kluwer'; articleMap['future'] = 'FutureMedicine';%>
+						  	<%articleMap['springer'] = 'Springer'; articleMap['sage'] = 'Sage'; articleMap['taylor'] = 'Taylor & Francis'; articleMap['wolters'] = 'Wolters Kluwer'; articleMap['future'] = 'FutureMedicine';articleMap['test-experiment'] = 'Test-Experiment';%>
 						  	<%for(var i=0; i<config.article.length; i++) { %>
 						        <li><a href="#tabs-<%=i+1%>"><%= articleMap[config.article[i]] %></a></li>
 						   	<% } %>
