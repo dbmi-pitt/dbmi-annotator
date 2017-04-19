@@ -82,7 +82,7 @@ def createStatement(doc, doc_urn):
 	return annotation
 
 def addQualifierConcept(qualifier):
-	if qualifier.qvalue in drugMapD:
+	if qualifier and qualifier.qvalue in drugMapD:
 		concept = drugMapD[qualifier.qvalue]
 		qualifier.setQualifierConcept(concept.concept_code, concept.vocabulary_id)
 
