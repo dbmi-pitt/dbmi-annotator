@@ -189,7 +189,7 @@ function initLiseners() {
             //sanity check - input duplicates
             var tempval = input_object;
             //add option
-            if ($('#object-metabolite option[value = '+tempval+']').length == 0) {
+            if ($('#object-metabolite option[value = \"'+tempval+'\"]').length == 0) {
                 $('#object-metabolite').append($('<option>', {
                     value: tempval,
                     text: tempval
@@ -217,7 +217,7 @@ function initLiseners() {
         if (input_drug1 != "") { //sanity check
             //sanity check - input duplicates
             var tempval = input_drug1 + "_0";
-            if ($('#Drug1 option[value = '+tempval+']').length == 0) {
+            if ($('#Drug1 option[value = \"'+tempval+'\"]').length == 0) {
                 $('#Drug1').append($('<option>', {
                     value: input_drug1 + "_0",
                     text: input_drug1
@@ -246,7 +246,7 @@ function initLiseners() {
         if (input_drug2 != "") { //sanity check - input is null
             //sanity check - input duplicates
             var tempval = input_drug2 + "_0";
-            if ($('#Drug2 option[value = '+tempval+']').length == 0) {
+            if ($('#Drug2 option[value = \"'+tempval+'\"]').length == 0) {
                 $('#Drug2').append($('<option>', {
                     value: input_drug2 + "_0",
                     text: input_drug2

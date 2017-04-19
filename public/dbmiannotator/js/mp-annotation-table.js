@@ -225,7 +225,17 @@ function addNewExperimentRow() {
         totalDataNum += 1;
         dataNumLast = totalDataNum - 1;
         var experimentRow;
-        experimentRow = "<tr style='height:20px;'><td onclick='addDataCellByEditor(\"evRelationship\",0);'></td><td onclick='addDataCellByEditor(\"cellSystem\",\""+dataNumLast+"\", true);'></td><td>" + objectDrug + "</td><td>" + objectMetabolite + "</td><td onclick='addDataCellByEditor(\"cl\", 0);'><td onclick='addDataCellByEditor(\"vmax\", 0);'><td onclick='addDataCellByEditor(\"km\", 0);'><td onclick='addDataCellByEditor(\"ki\", 0);'><td onclick='addDataCellByEditor(\"inhibition\", 0);'></td>";
+        experimentRow = "<tr style='height:20px;'><td onclick='addDataCellByEditor(\"evRelationship\",0);'></td><td onclick='addDataCellByEditor(\"cellSystem\",\""+dataNumLast+"\", true);'></td>";
+        //object drug + object metabolite
+        if (objectDrug != "N/A") {
+            experimentRow += "<td>" + objectDrug + "</td>";
+        }
+
+        if (objectMetabolite != "N/A") {
+            experimentRow += "<td>" + objectMetabolite + "</td>";
+        }
+
+        experimentRow += "<td onclick='addDataCellByEditor(\"cl\", 0);'><td onclick='addDataCellByEditor(\"vmax\", 0);'><td onclick='addDataCellByEditor(\"km\", 0);'><td onclick='addDataCellByEditor(\"ki\", 0);'><td onclick='addDataCellByEditor(\"inhibition\", 0);'></td>";
         if (!protein.includes(enzyme) || objectDrug != 'N/A') {
             experimentRow += "<td onclick='addDataCellByEditor(\"rateWith\",\""+dataNumLast+"\", true);'></td><td onclick='addDataCellByEditor(\"rateWithout\",\""+dataNumLast+"\", true);'></td>";
         } else {
@@ -403,22 +413,22 @@ function createExperimentTable(annotation){
     if (relation == "inhibits") {
         if (protein.includes(enzyme)) { //protein
             if (objectDrug == 'N/A') {
-                experimentTable += "<td>Protein mediated efflux</td>";
+                experimentTable += "<td id = 'withRate-label'>Protein mediated efflux</td>";
             } else {
-                experimentTable += "<td>Protein mediated efflux with precipitant</td><td>Protein mediated efflux without precipitant</td>";
+                experimentTable += "<td id = 'withRate-label'>Protein mediated efflux with precipitant</td><td id = 'withoutRate-label'>Protein mediated efflux without precipitant</td>";
             }
         } else { //enzyme
-            experimentTable += "<td>Metabolite rate with precipitant</td><td>Metabolite rate without precipitant</td>";
+            experimentTable += "<td id = 'withRate-label'>Metabolite rate with precipitant</td><td id = 'withoutRate-label'>Metabolite rate without precipitant</td>";
         }
     } else {
         if (protein.includes(enzyme)) { //protein
             if (objectDrug == 'N/A') {
-                experimentTable += "<td>Protein mediated efflux</td>";
+                experimentTable += "<td id = 'withRate-label'>Protein mediated efflux</td>";
             } else {
-                experimentTable += "<td>Protein mediated efflux with inhibition</td><td>Protein mediated efflux without inhibition</td>";
+                experimentTable += "<td id = 'withRate-label'>Protein mediated efflux with inhibition</td><td id = 'withoutRate-label'>Protein mediated efflux without inhibition</td>";
             }
         } else { //enzyme
-            experimentTable += "<td>Metabolite rate with inhibition</td><td>Metabolite rate without inhibition</td>";
+            experimentTable += "<td id = 'withRate-label'>Metabolite rate with inhibition</td><td id = 'withoutRate-label'>Metabolite rate without inhibition</td>";
         }
     }
     experimentTable += "<td>Evidence Type</td></tr>";
@@ -491,7 +501,16 @@ function createExperimentTable(annotation){
             experimentTable += row;
         }
     } else {  // add empty row
-        experimentTable += "<tr><td onclick='addDataCellByEditor(\"evRelationship\",0);'></td><td onclick='addDataCellByEditor(\"cellSystem\", 0);'></td><td>" + objectDrug + "</td><td>" + objectMetabolite + "</td><td onclick='addDataCellByEditor(\"cl\", 0);'><td onclick='addDataCellByEditor(\"vmax\", 0);'><td onclick='addDataCellByEditor(\"km\", 0);'><td onclick='addDataCellByEditor(\"ki\", 0);'><td onclick='addDataCellByEditor(\"inhibition\", 0);'></td><td onclick='addDataCellByEditor(\"rateWith\", 0);'></td><td onclick='addDataCellByEditor(\"rateWithout\", 0);'></td><td onclick='addDataCellByEditor(\"studytype\",0);'></td></tr>";
+        experimentTable += "<tr style='height:20px;'><td onclick='addDataCellByEditor(\"evRelationship\",0);'></td><td onclick='addDataCellByEditor(\"cellSystem\", 0);'></td>";
+        //object drug + object metabolite
+            if (objectDrug != "N/A") {
+                experimentTable += "<td>" + objectDrug + "</td>";
+            }
+
+            if (objectMetabolite != "N/A") {
+                experimentTable += "<td>" + objectMetabolite + "</td>";
+            }
+        experimentTable += "<td onclick='addDataCellByEditor(\"cl\", 0);'><td onclick='addDataCellByEditor(\"vmax\", 0);'><td onclick='addDataCellByEditor(\"km\", 0);'><td onclick='addDataCellByEditor(\"ki\", 0);'><td onclick='addDataCellByEditor(\"inhibition\", 0);'></td><td onclick='addDataCellByEditor(\"rateWith\", 0);'></td><td onclick='addDataCellByEditor(\"rateWithout\", 0);'></td><td onclick='addDataCellByEditor(\"studytype\",0);'></td></tr>";
     }
     experimentTable += "</table>";
     return experimentTable;
