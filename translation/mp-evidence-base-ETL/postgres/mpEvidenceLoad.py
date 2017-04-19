@@ -20,19 +20,20 @@ curr_date = datetime.datetime.now()
 
 # QUALIFIER ################################################################
 def insert_qualifier(conn, qualifier, claim_body_id):
-	cur = conn.cursor()
+        if qualifier:
+	        cur = conn.cursor()
 
-	s = qualifier.subject; p = qualifier.predicate; o = qualifier.object
-	qvalue = qualifier.qvalue
-	cpt_code = qualifier.concept_code; vocab_id = qualifier.vocabulary_id
-	type_cpt_code = qualifier.qualifier_type_concept_code
-	type_vocab_id = qualifier.qualifier_type_vocabulary_id
-	role_cpt_code = qualifier.qualifier_role_concept_code
-	role_vocab_id = qualifier.qualifier_role_vocabulary_id
-	enantiomer = qualifier.enantiomer
-	metabolite = qualifier.metabolite
+	        s = qualifier.subject; p = qualifier.predicate; o = qualifier.object
+	        qvalue = qualifier.qvalue
+	        cpt_code = qualifier.concept_code; vocab_id = qualifier.vocabulary_id
+	        type_cpt_code = qualifier.qualifier_type_concept_code
+	        type_vocab_id = qualifier.qualifier_type_vocabulary_id
+	        role_cpt_code = qualifier.qualifier_role_concept_code
+	        role_vocab_id = qualifier.qualifier_role_vocabulary_id
+	        enantiomer = qualifier.enantiomer
+	        metabolite = qualifier.metabolite
 
-	cur.execute("INSERT INTO qualifier (urn, claim_body_id, subject, predicate, object, qvalue, concept_code, vocabulary_id, qualifier_type_concept_code, qualifier_type_vocabulary_id, qualifier_role_concept_code, qualifier_role_vocabulary_id, enantiomer, metabolite) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (uuid.uuid4().hex, claim_body_id, s, p, o, qvalue, cpt_code, vocab_id, type_cpt_code, type_vocab_id, role_cpt_code, role_vocab_id, enantiomer, metabolite))
+	        cur.execute("INSERT INTO qualifier (urn, claim_body_id, subject, predicate, object, qvalue, concept_code, vocabulary_id, qualifier_type_concept_code, qualifier_type_vocabulary_id, qualifier_role_concept_code, qualifier_role_vocabulary_id, enantiomer, metabolite) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (uuid.uuid4().hex, claim_body_id, s, p, o, qvalue, cpt_code, vocab_id, type_cpt_code, type_vocab_id, role_cpt_code, role_vocab_id, enantiomer, metabolite))
 
 
 # OPEN ANNOTATION - TARGET AND SELECTOR #############################################

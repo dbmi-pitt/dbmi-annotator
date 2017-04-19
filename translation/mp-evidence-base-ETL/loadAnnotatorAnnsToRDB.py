@@ -72,10 +72,10 @@ def generateHighlightSet(annotation, highlightD):
 	source = annotation.source; sDrug = None; oDrug = None; qDrug = None
 
 	sQualifier = annotation.csubject
-	if sQualifier.isDrugProduct():
+	if sQualifier and sQualifier.isDrugProduct():
 		sDrug = sQualifier.qvalue
 	oQualifier = annotation.cobject
-	if oQualifier.isDrugProduct():
+	if oQualifier and oQualifier.isDrugProduct():
 		oDrug = oQualifier.qvalue		
 	if annotation.cqualifier:
 		qQualifier = annotation.cqualifier
@@ -332,7 +332,7 @@ def load(conn, qryCondition, eshost, esport, dbschema, creator, isClean):
 		print "[INFO] Drop and recreate all tables done!"
 
 	annotations = es.getMPAnnsByBody(eshost, esport, qryCondition)
-
+        
 	print "[INFO] Begin translate and load mp annotations (%s)" % len(annotations)
 	load_annotations(conn, annotations, creator)
 
@@ -349,6 +349,7 @@ def main():
 
 	DB_SCHEMA = "../../db-schema/mp_evidence_schema.sql"
 	CREATOR = "dbmi.etl@gmail.com"; PG_DATABASE = 'mpevidence'
+        # CREATOR = "dbmi.etl@gmail.com"; PG_DATABASE = 'dikb'
 	
 	if len(sys.argv) > 7:
 		ES_HOST = str(sys.argv[1])
