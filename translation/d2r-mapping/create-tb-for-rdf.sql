@@ -23,14 +23,14 @@ FROM mp_claim_annotation ca
 JOIN oa_claim_body cb on cb.is_oa_body_of = ca.id
 JOIN qualifier q on q.claim_body_id = cb.id
 WHERE q.subject = True
-AND cb.label LIKE '%interact with%'),
+AND cb.label LIKE '%interact%with%'),
 o AS (
 SELECT ca.id, q.qvalue, q.concept_code, q.vocabulary_id, q.qualifier_role_concept_code, cb.label
 FROM mp_claim_annotation ca 
 JOIN oa_claim_body cb on cb.is_oa_body_of = ca.id
 JOIN qualifier q on q.claim_body_id = cb.id
 WHERE q.object = True
-AND cb.label LIKE '%interact with%')
+AND cb.label LIKE '%interact%with%')
 SELECT method.mp_claim_id, method.mp_data_index, method.method, p.qvalue as precipitant, p.concept_code as p_concept_code, p.qualifier_role_concept_code as p_role_concept_code, o.qvalue as object, 
 o.concept_code as o_concept_code, o.qualifier_role_concept_code as o_role_concept_code
 from method
