@@ -393,6 +393,7 @@ function editDataCellByEditor(field, dataNum) {
         }
     } else if (currAnnotation.argues.method == "Experiment"){
         $("#mp-experiment-nav").show();
+        $("#annotator-save").show();
     } else {
         $("#mp-data-nav").show();
         $("#mp-dips-nav").hide();
