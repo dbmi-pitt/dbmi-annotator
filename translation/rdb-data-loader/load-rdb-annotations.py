@@ -1,245 +1,79 @@
-import sys, csv, json, re
-import psycopg2
+ # Copyright 2016-2017 University of Pittsburgh
+
+ # Licensed under the Apache License, Version 2.0 (the "License");
+ # you may not use this file except in compliance with the License.
+ # You may obtain a copy of the License at
+
+ #     http:www.apache.org/licenses/LICENSE-2.0
+
+ # Unless required by applicable law or agreed to in writing, software
+ # distributed under the License is distributed on an "AS IS" BASIS,
+ # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ # See the License for the specific language governing permissions and
+ # limitations under the License.
+
+import sys, csv, json, re, os
 import uuid
 import datetime
 from elasticsearch import Elasticsearch
 from sets import Set
+from dbOperations import *
+HOME = os.path.dirname(os.path.abspath(__file__))
+
+sys.path.insert(0, HOME + '/model')
+from micropublication import Annotation, DataMaterialRow, DMItem, DataItem, MaterialDoseItem, MaterialParticipants
 
 reload(sys)  
 sys.setdefaultencoding('utf8')
 
-sys.path.insert(0, './model')
-from micropublication import Annotation, DataMaterialRow, DMItem, DataItem, MaterialDoseItem, MatarialParticipants
-
 ######################### VARIABLES ##########################
-HOSTNAME = 'localhost'
+ES_PORT = 9200
 DB_SCHEMA = 'mpevidence'
-DB_CONFIG = "config/DB-config.txt"
-MP_ANN_TEMPLATE = "template/mp-annotation-template.json"
-MP_DATA_TEMPLATE = "template/mp-data-template.json"
-HIGHLIGHT_TEMPLATE = "template/highlight-annotation-template.json"
-ES_PORT = 9250
+MP_ANN_TEMPLATE = HOME + "/template/mp-annotation-template.json"
+MP_DATA_TEMPLATE = HOME + "/template/mp-data-template.json"
+HIGHLIGHT_TEMPLATE = HOME + "/template/highlight-annotation-template.json"
 
+# list of data items
 mpDataL = ["auc", "cmax", "clearance", "halflife"]
 
-######################### QUERY MP Annotation ##########################
-# query mp claim annotation by author name
-# return claim annotation with s, p, o, source and oa selector
-def queryMpClaim(conn):
-	qry = """select cann.id, t.has_source, cann.creator, cann.date_created, s.exact, s.prefix, s.suffix, cbody.label, qvalue, q.subject, q.predicate, q.object 
-	from mp_claim_annotation cann, oa_claim_body cbody, oa_target t, oa_selector s, qualifier q
-	where cann.has_body = cbody.id
-	and cann.has_target = t.id
-	and t.has_selector = s.id
-	and cbody.id = q.claim_body_id"""
+# dict for method name translate
+methodM = {"clinical trial": "DDI clinical trial", "statement": "Statement", "Phenotype clinical study": "Phenotype clinical study", "Case Report": "Case Report"}
 
-	annotations = {} # key: id, value obj Annotation
+if len(sys.argv) > 5:
+	PG_HOSTNAME = str(sys.argv[1])
+	PG_USERNAME = str(sys.argv[2])
+	PG_PASSWORD = str(sys.argv[3])
+	ES_HOSTNAME = str(sys.argv[4])
+	AUTHOR = str(sys.argv[5])
+else:
+	print "Usage: load-rdb-annotations.py <pg hostname> <pg username> <pg password> <es hostname> <annotation author>"
+	sys.exit(1)
 
-	cur = conn.cursor()
-	cur.execute(qry)
-
-	for row in cur.fetchall():
-		id = row[0]
-		if id not in annotations:
-			annotation = Annotation()
-			annotations[id] = annotation
-		else:
-			annotation = annotations[id]
-
-		# claim qualifiers
-		if row[9] is True:
-			annotation.csubject = row[8]
-		elif row[10] is True:
-			annotation.cpredicate = row[8]
-		elif row[11] is True:
-			annotation.cobject = row[8]
-		else:
-			print "[ERROR] qualifier role unidentified qvalue: %s (claimid %s)" % (row[8], id) 
-		# claim source and label
-		if annotation.source == None:
-			annotation.source = row[1]
-		if annotation.label == None:
-			annotation.label = row[7]
-
-		if annotation.exact == None:
-			annotation.setOaSelector(row[5], row[4], row[6])
-
-	return annotations
-
-
-# query data items for claim annotation
-# return list of DataItems
-def queryMpData(conn, annotation, claimid):
-
-	qry = """	
-	select dann.type, df.data_field_type, df.value_as_string, df.value_as_number, s.exact, s.prefix, s.suffix, mp_data_index
-	from mp_data_annotation dann,oa_data_body dbody, data_field df, oa_target t, oa_selector s
-	where dann.mp_claim_id = %s
-	and dann.has_body = dbody.id
-	and df.data_body_id = dbody.id
-	and dann.has_target = t.id
-	and t.has_selector = s.id
-	""" % (claimid)
-
-	cur = conn.cursor()
-	cur.execute(qry)
-		
-	for row in cur.fetchall():
-
-		dType = row[0]  # data type
-		dfType = row[1] # data field 
-
-		value = row[2] or row[3] # value as string or number
-		index = row[7] # data index
-		dmRow = None
-
-		if annotation.getSpecificDataMaterial(index) == None:
-			dmRow = DataMaterialRow() # create new row of data & material
-			dataItem = DataItem(dType)
-			dataItem.setAttribute(dfType, value)
-			dmRow.setDataItem(dataItem)
-
-			#print "before: " + str(dmRow.getDataItemInRow("auc").value)
-			annotation.setSpecificDataMaterial(dmRow, index)
-
-		else: # current row of data & material exists 
-			dmRow = annotation.getSpecificDataMaterial(index)
-
-			if dmRow.getDataItemInRow(dType) != None: # current DataItem exists
-				dataItem = dmRow.getDataItemInRow(dType)
-				dataItem.setAttribute(dfType, value)
-			else: # current DataItem not exists
-				dataItem = DataItem(dType) 
-				dataItem.setAttribute(dfType, value)
-				dmRow.setDataItem(dataItem)
-
-	return annotation
-
-
-# query material items for claim annotation
-# return list of MaterialItems
-def queryMpMaterial(conn, annotation, claimid):
-
-	qry = """	
-	select mann.type, mf.material_field_type, mf.value_as_string, mf.value_as_number, s.exact, s.prefix, s.suffix, mp_data_index
-	from mp_material_annotation mann,oa_material_body mbody, material_field mf, oa_target t, oa_selector s
-	where mann.mp_claim_id = %s
-	and mann.has_body = mbody.id
-	and mf.material_body_id = mbody.id
-	and mann.has_target = t.id
-	and t.has_selector = s.id
-	""" % (claimid)
-
-	results = []
-
-	cur = conn.cursor()
-	cur.execute(qry)
-
-	for row in cur.fetchall():
-
-		mType = row[0]  # material type
-		mfType = row[1] # material field 
-
-		value = row[2] or row[3] # value as string or number
-		index = row[7] # data & material index
-
-		if annotation.getSpecificDataMaterial(index) == None:
-			dmRow = DataMaterialRow() # create new row of data & material
-
-			if mType in ["object_dose","subject_dose"]: # dose
-				doseItem = MaterialDoseItem(mType)
-				doseItem.setAttribute(mfType, value)
-				dmRow.setMaterialDoseItem(doseItem)
-
-			elif mType == "participants":
-				partItem = MaterialParticipants(value)
-				dmRow.setParticipants(partItem)
-
-			annotation.setSpecificDataMaterial(dmRow, index)
-
-		else: # current row of material & material exists 
-			dmRow = annotation.getSpecificDataMaterial(index)
-			if mType in ["object_dose","subject_dose"]:
-				if dmRow.getMaterialDoseInRow(mType): # current MaterialItem exists
-					doseItem = dmRow.getMaterialDoseInRow(mType)
-					doseItem.setAttribute(mfType, value)
-				else: # current MaterialItem not exists
-					doseItem = MaterialDoseItem(mType) 
-					doseItem.setAttribute(mfType, value)
-				dmRow.setMaterialDoseItem(doseItem)
-			elif mType is "participants":
-				if dmRow.getParticipantsInRow(): # participants exists
-					partItem = dmRow.getParticipantsInRow()
-					partItem.setValue(value)
-				else:
-					partItem = MatarialParticipants(value)
-					dmRow.setParticipants(partItem)
-
-	return annotation
-
-# query all mp annotations
-# return annotations with claim, data and material
-def queryMpAnnotation(conn):
-	mpAnnotations = []
-	claimAnnos = queryMpClaim(conn)
-
-	cnt = 0
-
-	for claimId,claimAnn in claimAnnos.items():
-		# if cnt > 6:
-		# 	break
-		# cnt += 1
-
-		claimDataAnno = queryMpData(conn, claimAnn, claimId)
-		claimDataMatAnno = queryMpData(conn, claimDataAnno, claimId)
-
-		mpAnnotations.append(claimDataMatAnno)
-
-	return mpAnnotations
-
-######################### QUERY Highlight Annotaiton ##########################
-
-# query all highlight annotation
-# return dict for drug set in document   dict {"doc url": "drug set"} 
-def queryHighlightAnns(conn):
-	highlightD = {}
-
-	qry = """SELECT h.id, t.has_source, s.exact 
-	FROM highlight_annotation h, oa_target t, oa_selector s
-	WHERE h.has_target = t.id
-	AND t.has_selector = s.id;"""
-
-	cur = conn.cursor()
-	cur.execute(qry)
-
-	for row in cur.fetchall():
-		source = row[1]; drugname = row[2]
-		
-		if source in highlightD:		
-			highlightD[source].add(drugname)
-		else:
-			highlightD[source] = Set([drugname])
-	return highlightD
 
 ######################### LOAD ##########################
 
 # return oa selector in json
 def generateOASelector(prefix, exact, suffix):
+
 	oaSelector = "{\"hasSelector\": { \"@type\": \"TextQuoteSelector\", \"exact\": \""+unicode(exact or "", "utf-8")+"\", \"prefix\": \""+ unicode(prefix or "", "utf-8") + "\", \"suffix\": \"" + unicode(suffix or "", "utf-8") + "\"}}"
 
-	return json.loads(oaSelector)
+	return json.loads(oaSelector, strict=False)
 
 # load highlight annotations to documents
 def loadHighlightAnnotations(highlightD, email):
 
 	for url in highlightD:
-		if len(highlightD[url]) > 0 and "e9481622-7cc6-418a-acb6-c5450daae9b0" in url:
+		if len(highlightD[url]) > 0:
 			for name in highlightD[url]:
 				loadHighlightAnnotation(url, name, email)
 
 
 # load highlight annotation to specific account by email
 def loadHighlightAnnotation(rawurl, content, email):
+
+	#if "036db1f2-52b3-42a0-acf9-817b7ba8c724" not in rawurl:
+	#	return
+
 	annotation = loadTemplateInJson(HIGHLIGHT_TEMPLATE)
 
 	oaSelector = generateOASelector("", content, "")
@@ -253,13 +87,11 @@ def loadHighlightAnnotation(rawurl, content, email):
 	annotation["created"] = "2016-09-19T18:33:51.179625+00:00" 
 	annotation["updated"] = "2016-09-19T18:33:51.179625+00:00"
 
-	es = Elasticsearch(port=ES_PORT) # by default we connect to localhost:9200	
+	es = Elasticsearch(hosts = [{'host': ES_HOSTNAME, 'port': ES_PORT}]) # by default we connect to localhost:9200	
 	es.index(index="annotator", doc_type="annotation", id=uuid.uuid4(), body=json.dumps(annotation))
 
 # load mp annotation to specific account by email
 def loadMpAnnotation(annotation, email):		
-
-	print "[INFO] label(%s), subject(%s), predicate(%s), object(%s) \n" % (annotation.label, annotation.csubject, annotation.cpredicate, annotation.cobject)
 
 	subjectDrug = annotation.csubject; predicate = annotation.cpredicate; objectDrug = annotation.cobject
 	prefix = annotation.prefix; exact = annotation.exact; suffix = annotation.suffix
@@ -268,9 +100,16 @@ def loadMpAnnotation(annotation, email):
 	label = annotation.label.replace("interact_with","interact with")
 
 	mpAnn = loadTemplateInJson(MP_ANN_TEMPLATE)
-	oaSelector = generateOASelector(prefix, exact, suffix)
+	claimSelector = generateOASelector(prefix, exact, suffix)
+
+	#print "[INFO] Load doc(%s), subject(%s), predicate(%s), object(%s) \n" % (rawurl, annotation.csubject, annotation.cpredicate, annotation.cobject)
 
 	# MP Claim
+	mpAnn["argues"]["method"] = methodM[annotation.method] # method name translate
+	mpAnn["argues"]["negation"] = annotation.negation
+
+	mpAnn["argues"]["rejected"]["reason"] = annotation.rejected
+
 	mpAnn["argues"]["qualifiedBy"]["drug1"] = subjectDrug
 	mpAnn["argues"]["qualifiedBy"]["drug2"] = objectDrug
 	mpAnn["argues"]["qualifiedBy"]["drug1ID"] = subjectDrug + "_1"
@@ -278,37 +117,79 @@ def loadMpAnnotation(annotation, email):
 
 	mpAnn["argues"]["qualifiedBy"]["relationship"] = predicate.replace("interact_with","interact with")
 	mpAnn["argues"]["qualifiedBy"]["precipitant"] = "drug1" # for interact_with
-	mpAnn["argues"]["hasTarget"] = oaSelector
+	mpAnn["argues"]["hasTarget"] = claimSelector
 	
 	# MP Data & Material
 	dmRows = annotation.getDataMaterials()	
-	if dmRows:
-		firstRow = dmRows[1] # only one data & material row
+
+	for index,dmRow in dmRows.items(): # walk though all data items for claim
 		
 		mpData = loadTemplateInJson(MP_DATA_TEMPLATE) # data template
 		
-		# MP Data
+		# MP Data - auc, cmax, clearance, halflife
 		for df in mpDataL: 
-		 	if firstRow.getDataItemInRow(df):
-				mpData[df]["value"] = str(firstRow.getDataItemInRow(df).value)
-				mpData[df]["type"] = str(firstRow.getDataItemInRow(df).type)
-				mpData[df]["direction"] = str(firstRow.getDataItemInRow(df).direction)
-				mpData[df]["hasTarget"] = oaSelector
+		 	if dmRow.getDataItemInRow(df):
+				mpData[df]["value"] = str(dmRow.getDataItemInRow(df).value)
+				mpData[df]["type"] = str(dmRow.getDataItemInRow(df).type)
+				mpData[df]["direction"] = str(dmRow.getDataItemInRow(df).direction)
+				dataExact = dmRow.getDataItemInRow(df).exact
+				dataSelector = generateOASelector("", dataExact, "")
+				mpData[df]["hasTarget"] = dataSelector
+				mpData[df]["ranges"] = []
+
+		mpData["grouprandom"] = dmRow.getGroupRandom()
+		mpData["parallelgroup"] = dmRow.getParallelGroup()
+
+		# MP Data - dips questions
+		dipsQsL = dmRow.getDips()
+		if dipsQsL and isinstance(dipsQsL, list):
+			for i in xrange(0,len(dipsQsL)):
+				mpData["dips"]["q" + str(i+1)] = dipsQsL[i]
+
+		# MP Data - reviewer		
+		reviewer = dmRow.getReviewer()
+		if reviewer:
+			mpData["reviewer"]["reviewer"] = reviewer.reviewer
+			mpData["reviewer"]["date"] = reviewer.date
+			mpData["reviewer"]["total"] = reviewer.total
+			mpData["reviewer"]["lackinfo"] = reviewer.lackinfo
+
 		# MP Material
-		if firstRow.getMaterialDoseInRow("subject_dose"):
-			mpData["supportsBy"]["supportsBy"]["drug1Dose"]["value"] = firstRow.getMaterialDoseInRow("subject_dose").value
-			mpData["supportsBy"]["supportsBy"]["drug1Dose"]["duration"] = firstRow.getMaterialDoseInRow("subject_dose").duration
-			mpData["supportsBy"]["supportsBy"]["drug1Dose"]["formulation"] = firstRow.getMaterialDoseInRow("subject_dose").formulation
-			mpData["supportsBy"]["supportsBy"]["drug1Dose"]["regimens"] = firstRow.getMaterialDoseInRow("subject_dose").regimens
-			mpData["supportsBy"]["supportsBy"]["drug1Dose"]["hasTarget"] = oaSelector
+		if dmRow.getParticipantsInRow():
+			partExact = dmRow.getParticipantsInRow().exact
+			partSelector = generateOASelector("", partExact, "")
+			mpData["supportsBy"]["supportsBy"]["participants"]["value"] = dmRow.getParticipantsInRow().value
+			mpData["supportsBy"]["supportsBy"]["participants"]["hasTarget"] = partSelector
+			mpData["supportsBy"]["supportsBy"]["participants"]["ranges"] = []
 
-		if firstRow.getMaterialDoseInRow("object_dose"):
-			mpData["supportsBy"]["supportsBy"]["drug2Dose"]["value"] = firstRow.getMaterialDoseInRow("object_dose").value
-			mpData["supportsBy"]["supportsBy"]["drug2Dose"]["duration"] = firstRow.getMaterialDoseInRow("object_dose").duration
-			mpData["supportsBy"]["supportsBy"]["drug2Dose"]["formulation"] = firstRow.getMaterialDoseInRow("object_dose").formulation
-			mpData["supportsBy"]["supportsBy"]["drug2Dose"]["regimens"] = firstRow.getMaterialDoseInRow("object_dose").regimens
-			mpData["supportsBy"]["supportsBy"]["drug2Dose"]["hasTarget"] = oaSelector
+		if dmRow.getMaterialDoseInRow("subject_dose"):
+			subDoseExact = dmRow.getMaterialDoseInRow("subject_dose").exact
+			subDoseSelector = generateOASelector("", subDoseExact, "")
+			mpData["supportsBy"]["supportsBy"]["drug1Dose"]["value"] = dmRow.getMaterialDoseInRow("subject_dose").value
+			mpData["supportsBy"]["supportsBy"]["drug1Dose"]["duration"] = dmRow.getMaterialDoseInRow("subject_dose").duration
+			mpData["supportsBy"]["supportsBy"]["drug1Dose"]["formulation"] = dmRow.getMaterialDoseInRow("subject_dose").formulation
+			mpData["supportsBy"]["supportsBy"]["drug1Dose"]["regimens"] = dmRow.getMaterialDoseInRow("subject_dose").regimens
+			mpData["supportsBy"]["supportsBy"]["drug1Dose"]["hasTarget"] = subDoseSelector
+			mpData["supportsBy"]["supportsBy"]["drug1Dose"]["ranges"] = []
 
+		if dmRow.getMaterialDoseInRow("object_dose"):
+			objDoseExact = dmRow.getMaterialDoseInRow("object_dose").exact
+			objDoseSelector = generateOASelector("", objDoseExact, "")
+			mpData["supportsBy"]["supportsBy"]["drug2Dose"]["value"] = dmRow.getMaterialDoseInRow("object_dose").value
+			mpData["supportsBy"]["supportsBy"]["drug2Dose"]["duration"] = dmRow.getMaterialDoseInRow("object_dose").duration
+			mpData["supportsBy"]["supportsBy"]["drug2Dose"]["formulation"] = dmRow.getMaterialDoseInRow("object_dose").formulation
+			mpData["supportsBy"]["supportsBy"]["drug2Dose"]["regimens"] = dmRow.getMaterialDoseInRow("object_dose").regimens
+			mpData["supportsBy"]["supportsBy"]["drug2Dose"]["hasTarget"] = objDoseSelector
+			mpData["supportsBy"]["supportsBy"]["drug2Dose"]["ranges"] = []
+
+		if dmRow.getPhenotype():		
+			mpData["supportsBy"]["supportsBy"]["phenotype"]["type"] = dmRow.getPhenotype().ptype
+			mpData["supportsBy"]["supportsBy"]["phenovalue"]["value"] = dmRow.getPhenovalue().value
+			mpData["supportsBy"]["supportsBy"]["phenometabolizer"]["metabolizer"] = dmRow.getPhenometabolizer().metabolizer
+			mpData["supportsBy"]["supportsBy"]["phenotype"]["population"] = dmRow.getPhenotype().population
+			
+
+		mpData["evRelationship"] = dmRow.getEvRelationship()
 		mpAnn["argues"]["supportsBy"].append(mpData)  # append mp data to claim
 
 	mpAnn["created"] = "2016-09-19T18:33:51.179625+00:00" # Metadata
@@ -319,8 +200,7 @@ def loadMpAnnotation(annotation, email):
 	mpAnn["rawurl"] = rawurl # Document source url
 	mpAnn["uri"] = uri
 
-	#print mpAnn	
-	es = Elasticsearch(port=ES_PORT) # by default we connect to localhost:9200  
+	es = Elasticsearch([{'host': ES_HOSTNAME, 'port': ES_PORT}]) # by default we connect to localhost:9200  
 	es.index(index="annotator", doc_type="annotation", id=uuid.uuid4(), body=json.dumps(mpAnn))
 
 ######################### CONFIG ##########################
@@ -332,49 +212,6 @@ def loadTemplateInJson(path):
 	json_data.close()
 	return data
 
-# postgres connection
-def connectPostgres():
-
-	dbconfig = file = open(DB_CONFIG)
-	if dbconfig:
-		for line in dbconfig:
-			if "USERNAME" in line:
-				DB_USER = line[(line.find("USERNAME=")+len("USERNAME=")):line.find(";")]
-			elif "PASSWORD" in line:
-				DB_PWD = line[(line.find("PASSWORD=")+len("PASSWORD=")):line.find(";")]
-		conn = psycopg2.connect(host=HOSTNAME, user=DB_USER, password=DB_PWD, dbname=DB_SCHEMA)
-		print("Postgres connection created")
-	else:
-		print "Postgres configuration file is not found: " + dbconfig
-
-	return conn
-
-######################### MAIN ##########################
-
-def main():
-	author = "yin2@gmail.com"
-
-	conn = connectPostgres()
-	mpAnnotations = queryMpAnnotation(conn)	
-	
-	for mpAnn in mpAnnotations:
-		if mpAnn.source == "http://dbmi-icode-01.dbmi.pitt.edu:80/DDI-labels/e9481622-7cc6-418a-acb6-c5450daae9b0.html":
-			loadMpAnnotation(mpAnn, author)		
-	#printSample(mpAnnotations, 6)
-
-	highlightD = queryHighlightAnns(conn)
-
-	#print highlightD.keys()
-	#print len(highlightD)
-
-	loadHighlightAnnotations(highlightD, author)
-
-	conn.close()
-
-
-if __name__ == '__main__':
-	main()
-
 ######################### TESTING ##########################
 # print out sample annotation for validation
 def printSample(mpannotations, idx):
@@ -382,8 +219,6 @@ def printSample(mpannotations, idx):
 	dmRows = mpAnnotation.getDataMaterials()
 
 	print "label(%s), subject(%s), predicate(%s), object(%s) " % (mpAnnotation.label, mpAnnotation.csubject, mpAnnotation.cpredicate, mpAnnotation.cobject)
-	#print "source: " + mpAnnotation.source
-	#print "exact: " + mpAnnotation.exact	
 
 	for index,dm in dmRows.items():	
 
@@ -394,4 +229,30 @@ def printSample(mpannotations, idx):
 			print "subject_dose: %s" % (dm.getMaterialDoseInRow("subject_dose").value) 
 		if dm.getMaterialDoseInRow("object_dose"):
 			print "object_dose: %s" % (dm.getMaterialDoseInRow("object_dose").value)
+
+
+
+######################### MAIN ##########################
+
+def main():
+
+	conn = connectPostgres(PG_HOSTNAME, PG_USERNAME, PG_PASSWORD, DB_SCHEMA)
+	mpAnnotations = queryMpAnnotation(conn)	
+	
+	for mpAnn in mpAnnotations:
+		#if "036db1f2-52b3-42a0-acf9-817b7ba8c724" in mpAnn.source:
+		loadMpAnnotation(mpAnn, AUTHOR)		
+	#printSample(mpAnnotations, 2)
+
+	highlightD = queryHighlightAnns(conn)
+
+	#print highlightD
+	loadHighlightAnnotations(highlightD, AUTHOR)
+
+	conn.close()
+	print "[INFO] elasticsearch load completed"
+
+if __name__ == '__main__':
+	main()
+
 		

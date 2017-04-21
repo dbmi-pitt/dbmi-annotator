@@ -27,7 +27,6 @@
     "json2csv": "^3.1.0",
     "method-override": "~1.0.0",
     "morgan": "~1.0.0",
-    "node-curl": "^0.3.3",
     "node-uuid": "^1.4.7",
     "parse5": "^2.1.5",
     "passport": "~0.1.17",

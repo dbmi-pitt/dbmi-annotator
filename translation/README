@@ -1,0 +1,90 @@
+Translation program
+
+--------------------------------------------------------------------
+Folder: mp-evidence-base-ETL
+--------------------------------------------------------------------
+
+Including following programs. Please see mp-evidence-base-ETL/README for details
+
+(1) translate MP annotations from elasticsearch and load into postgres DB
+
+(2) translate Domeo SPLs annotations from csv and load into postgres DB
+
+(3) load annotations from postgres DB mpevidence to Elasticsearch store (Not ready)
+
+(4) testing ETL program for validating translating and loading processes
+
+(5) query and export annotations from elasticsearch to csv
+
+--------------------------------------------------------------------
+Folder: omop-concepts-dev
+--------------------------------------------------------------------
+
+Apply ontologies in data translation
+
+(1) Apply DIDEO ontology 
+
+#1 Load dideo.owl to OWL2TL to produce term lists in dideo ontology
+
+OWL2TL: https://owl2tl.com/
+DIDEO OWL: http://purl.obolibrary.org/obo/dideo.owl
+
+#2 Terms been used in Micropublication annotation
+
+Refers to: omop-concepts-dev/dideo-uris.txt
+
+Script for inserting dideo concepts: omop-concepts-dev/dideo-concepts-insert.sql
+
+(2) Apply OMOP standard vocabulary Version 5.1 to MP tables 
+
+#1 create concept tables and load data (refers to OHDSI OMOP CDM V5.1)
+
+http://www.ohdsi.org/web/wiki/doku.php?id=documentation:cdm:single-page
+
+#2 Queries for mapping (MeSH to concept_id and RxNorm to concept_id)
+
+SELECT c.concept_id as omopid, c.concept_name, c.vocabulary_id, cc.concept_class_name, c.concept_code
+FROM concept c JOIN concept_class cc on c.concept_class_id = cc.concept_class_id
+WHERE c.vocabulary_id = 'MeSH' OR c.vocabulary_id = 'RxNorm'
+LIMIT 100;
+
+--------------------------------------------------------------------
+Folder: d2r-mapping
+--------------------------------------------------------------------
+
+(1) D2R server mapping
+
+D2R server reference: 
+http://d2rq.org/getting-started
+http://d2rq.org/d2r-server#command-line
+
+Run:
+$ cd <path to d2rq directory>
+$ ./d2r-server --port 2020 <path to csv-data-loader/d2r-mapping/mpevidence.ttl>
+
+Open browser at "http://localhost:2020"
+
+(2) D2R server RDF dump (graph mpevidence.rdf)
+
+Gernerate RDF graph based on d2r mapping configuration 
+Reference: http://d2rq.org/dump-rdf
+
+./dump-rdf -f RDF/XML -o mpevidence.rdf --verbose <path to csv-data-loader/d2r-mapping/mpevidence.ttl>
+
+Count instances of claim in RDF graph for validation
+grep -r "rdf:Description rdf:about=\"http://dikb.org/mpevidence/mp_claim_annotation" mpevidence.rdf 
+
+--------------------------------------------------------------------
+Elasticsearch admin
+--------------------------------------------------------------------
+
+(1) delete specific set of annotations
+
+#1 delete by specified query condition
+curl -XDELETE 'http://localhost:9200/annotator/annotation/_query?q=<field>:<value>'
+
+#2 free store size after deletion 
+curl -XPOST 'http://localhost:9200/_optimize?only_expunge_deletes=true'
+
+#3 delete the whole index
+curl -XDELETE 'http://localhost:9200/annotator/'

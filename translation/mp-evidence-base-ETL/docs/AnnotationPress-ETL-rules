@@ -1,0 +1,97 @@
+------------------------------------------------------------------------------
+Domeo SPLs annotation
+------------------------------------------------------------------------------
+
+(1) Method: "DDI clinical trial" or "Statement"
+if (drug1 dose || drug2 dose available) && (auc || cmax || clearance || halflife)
+	method is "DDI clinical trial"
+else
+	method is "Statement"
+
+(2) Negation and evRelationship
+if method is "Statement"
+	if (modality is positive && evidenceType is challenges) || (modality is negative && evidenceType is supports)
+		negation is true (Negate this claim)
+	else
+		negation is false
+
+if method is "DDI clinical trial"
+	negation is false
+	if (modality is positive && evidenceType is supports) || (modality is negative && evidenceType is challenges)
+		evRelationship is true
+	else
+		evRelationship is false
+
+(3) Subject, Object relationship
+drug1 interact with drug2
+if drug 1 is precipitant:
+	subject: drug1, predicate: interact with, object: drug2
+else 
+	subject: drug2, predicate: interact with, object: drug1
+
+------------------------------------------------------------------------------
+AnnotationPress annotation
+------------------------------------------------------------------------------
+
+(1) Subject, Object relationship
+
+role in Elasticsearch: drug1, drug2, precipitant, enzyme
+role in mpevidence DB: precipitant, ddiobject, mpsubject, mpobject
+
+# predicate: interact with/inhibits/substrate of
+if method is "Statement"
+
+	if relationship is "interact with"
+		if drug1 is "precipitant"
+			mpsubject: drug1, mpobject: drug2, precipitant: drug1, ddiobject: drug2
+		else 
+			mpsubject: drug2, mpobject: drug1, precipitant: drug2, ddiobject: drug1
+
+	elif relationship is "inhibits" or "substrate of"
+		mpsubject: drug1, mpobject: enzyme, precipitant: drug1, ddiobject: enzyme
+
+# predicate: interact with/inhibits/substrate of
+if method is "DDI clinical trial"
+
+	if relationship is "interact with"
+		if drug1 is precipitant
+			mpsubject: drug1, mpobject: drug2, precipitant: drug1, ddiobject: drug2
+		else
+			mpsubject: drug2, mpobject: drug1, precipitant: drug2, ddiobject: drug1
+
+	if relationship is "inhibits"
+		if drug1 is precipitant
+			mpsubject: drug1, mpobject: enzyme, precipitant: drug1, ddiobject: drug2
+		else
+			mpsubject: drug2, mpobject: enzyme, precipitant: drug2, ddiobject: drug1
+
+	if relationship is "substrate of"
+		if drug1 is precipitant
+			mpsubject: drug2, mpobject: enzyme, precipitant: drug1, ddiobject: drug2
+		else
+			mpsubject: drug1, mpobject: enzyme, precipitant: drug2, ddiobject: drug1
+
+# predicate: inhibits/substrate of, probe substrate for drug1 dose
+if method is "Phenotype clinical study"
+	mpsubject: drug1, mpobject: enzyme, probesubstrate: drug1, ddiobject: enzyme
+
+# predicate: interact with
+if method is "Case Report"
+	if drug1 is "precipitant"
+		mpsubject: drug1, mpobject: drug2, precipitant: drug1, ddiobject: drug2
+	else 
+		mpsubject: drug2,  mpobject: drug1, precipitant: drug2, ddiobject: drug1
+
+if method is "Experiments"
+    if predicate is "inhibits"
+        if drug1 is "precipitant"
+            mpsubject: drug1, mpobject: enzyme, precipitant: drug1, ddiobject: drug2
+        else
+            mpsubject: drug2, mpobject: enzyme, precipitant: drug2, ddiobject: drug1
+
+    if predicate is "substrate of"
+        if drug1 is "precipitant"
+            mpsubject: drug2, mpobject: enzyme, precipitant: drug1, ddiobject: drug2
+        else
+            mpsubject: drug1, mpobject: enzyme, precipitant: drug2, ddiobject: drug1
+

@@ -1,12 +1,23 @@
 # config file
 config/config.js
+config/production.conf
 
 # browserify compiled js bundle 
 public/dbmiannotator/js/app.bundle.js
 public/dbmiannotator/js/annotator.min.js
 
+# temp file for ETL program
+translation/mp-evidence-base-ETL/data/preprocess-domeo.csv
+translation/mp-evidence-base-ETL/data/preprocess-annotator.csv
+translation/mp-evidence-base-ETL/data/exported-mp-annotations.csv
+
+# NER preload tool
+pre-annot-tool/local-test-htmls
+pre-annot-tool/text-parser/outputs
+
 # text editor cache file 
 *~
+*#
 
 # articles
 public/pdf2html

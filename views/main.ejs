@@ -1,16 +1,39 @@
+ <!-- 
+ Copyright 2016-2017 University of Pittsburgh
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+     http:www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+
 <html>
   <body>
 
-    <style> body        { padding-top:80px; word-wrap:break-word; } </style>
-    <script src="js/jquery-1.11.1.min.js"></script>
-    <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script> -->
+    <head>
+      <title>AnnotationPress</title>
 
-    <script src="js/bootstrap.min.js" crossorigin="anonymous"></script>
-
-    <!-- <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">  -->
-    <!-- <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"> -->
-    <link rel="stylesheet" href="css/bootstrap.min.css"> <!-- load bootstrap css -->
-    <link rel="stylesheet" href="css/font-awesome.min.css"> <!-- load fontawesome -->
+      <style> body        { padding-top:80px; word-wrap:break-word; } </style>
+      <script src="js/jquery-1.11.1.min.js"></script>
+      <script src="js/jquery-ui.js"></script>
+      <script src="js/require.js"></script>
+      <script src="js/bootstrap.min.js" crossorigin="anonymous"></script>
+      <link rel="stylesheet" href="css/jquery-ui.css" />
+      <link rel="stylesheet" href="css/bootstrap.min.css"> <!-- load bootstrap css -->
+      <link rel="stylesheet" href="css/font-awesome.min.css"> <!-- load fontawesome -->
+      <script>
+		  $( function() {
+		    $( "#tabs" ).tabs();
+		  } );
+	  </script>
+    </head>
     
     <article>
 
@@ -18,7 +41,7 @@
 	
         <div class="col-sm-8">
 	  <div class="page-header text-center">
-	    <h1><span class="fa fa-anchor"></span> DBMI Annotator </h1>
+	    <h1>AnnotatonPress </h1>
 	  </div>
 	  
 	  <div class="well">
@@ -50,13 +73,13 @@
 		  
             <h3><span class="fa fa-user"></span>&nbsp;Profile (Overview annotation tasks) </h3>
 
-	    <table class="table table-striped" >
+	    <div class="table table-striped" >
 
 		    
-    <%  if (annotations.total > 0){   %>
+    <%  if (annotations.total == -1) {   %>
 	      <tr>
 		<td>Document source URL </td>
-		<td>Number of Annotations </td>
+           		<td>Number of Annotations </td>
 	      </tr>
 
 	      <%
@@ -93,38 +116,52 @@
 				  } else { %>
 
 	    
-					      <strong>No annotations been made, below are sample document urls </strong><br><br>
+					    <strong>Local document links </strong><br><br>
 
-					   <p>Local PMC articles: <br>
-					     <a href="displayWebPage?sourceURL=http://localhost/dbmiannotator/PMC1490169.html&email=<%=user.email%>">http://localhost/dbmiannotator/PMC1490169.html</a> <br>
-					     <a href="displayWebPage?sourceURL=http://localhost/dbmiannotator/PMC3477350.html&email=<%=user.email%>">http://localhost/dbmiannotator/PMC3477350.html</a> <br>
-					     <a href="displayWebPage?sourceURL=http://localhost/dbmiannotator/PMC2686069.html&email=<%=user.email%>">http://localhost/dbmiannotator/PMC2686069.html</a> 
-					   </p>
+					    <div id="tabs">
+						  <ul>
+						  	<%var articleMap = []; articleMap['dailymed'] = 'DailyMed'; articleMap['pmc'] = 'PMC'; articleMap['wiley'] = 'Wiley'; articleMap['elsevier'] = 'Elsevier';%>
+						  	<%articleMap['springer'] = 'Springer'; articleMap['sage'] = 'Sage'; articleMap['taylor'] = 'Taylor & Francis'; articleMap['wolters'] = 'Wolters Kluwer'; articleMap['future'] = 'FutureMedicine';articleMap['test-experiment'] = 'Test-Experiment';%>
+						  	<%for(var i=0; i<config.article.length; i++) { %>
+						        <li><a href="#tabs-<%=i+1%>"><%= articleMap[config.article[i]] %></a></li>
+						   	<% } %>
+						  </ul>
+						    <%for(var i=0; i<config.article.length; i++) { %>
+						    <div id="tabs-<%=i+1%>">
+						    
+					   			<%var artLinks = article[config.article[i]];%>
+					   			<table id="<%=config.article[i]%>-tb" class="table table-sm" style="font-size:14px">
+					   			<thead>
+					   				<tr>
+					   					<th width="5%">#</th><th width="30%">Drug</th><th>Link</th>
+					   				</tr>
+					   			</thead>
+					   			<tbody>
+					   			<%for(var j=0; j<artLinks.length; j++) { %>
+ 						        <tr>
+						        	<td><%= j+1 %></td>
+ 						        	<td><%= artLinks[j].article %></td>
+ 						            <td><a href='displayWebPage?sourceURL=<%= artLinks[j].link %>&email=<%=user.email%>'>
+ 						                <%= artLinks[j].link %>
+ 						            </a></td>
+ 						        </tr>
+ 						   		<% } %>
+						   		</tbody>
+						    </table>
+						    </div>
+						   	<% } %>
+						</div>
 
-
-					   <p>External PMC articles: <br>
-					     <a href="displayWebPage?sourceURL=http://www.ncbi.nlm.nih.gov/pmc/articles/PMC1865122&email=<%=user.email%>" >http://www.ncbi.nlm.nih.gov/pmc/articles/PMC1865122</a> <br>
-					     <a href="displayWebPage?sourceURL=http://www.ncbi.nlm.nih.gov/pmc/articles/PMC2015049&email=<%=user.email%>" >http://www.ncbi.nlm.nih.gov/pmc/articles/PMC2015049</a> <br>
-	                     <a href="displayWebPage?sourceURL=http://www.ncbi.nlm.nih.gov/pmc/articles/PMC1873980&email=<%=user.email%>" >http://www.ncbi.nlm.nih.gov/pmc/articles/PMC1873980</a>	     
-					   </p>
-					      
-					   <p>Local dailymed html labels: <br>
-					     <a href="displayWebPage?sourceURL=http://<%-host %>/DDI-labels/2f7d4d67-10c1-4bf4-a7f2-c185fbad64ba.html&email=<%=user.email%>" >http://<%-host %>/DDI-labels/2f7d4d67-10c1-4bf4-a7f2-c185fbad64ba.html</a> <br>
-					     <a href="displayWebPage?sourceURL=http://<%-host %>/DDI-labels/5550433b-8c9c-4378-058f-6bb724c4f18c.html&email=<%=user.email%>" >http://<%-host %>/DDI-labels/5550433b-8c9c-4378-058f-6bb724c4f18c.html</a>	     
-					   </p>
-
-					   <p>
-					   Local pdf documents: <br>http://<%-host %>/DDI-pdfs/Backman_2005_16084850.pdf <br>http://<%-host %>/DDI-pdfs/Frelinger_2012_07351097.pdf 
-					   </p>
+					   
 					   <% } %>
-	    </table>
+	    </div>
 	    <br><br>
 
 	    
 	    <!-- annotation download  -->
 
 	    <form action="/dbmiannotator/exportcsv" method="get">
-	      <strong>Download my annotations in csv: </strong>
+	      <strong>Download my annotations in tsv: </strong>
 	      <input type="text" id="email" name="email" value="<%= user.email %>" style="display: none;" />
 	      <button id="exportButton" class="btn btn-success">Download</button>
 	    </form>

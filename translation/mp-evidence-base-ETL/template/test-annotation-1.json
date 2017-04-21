@@ -1,0 +1,57 @@
+{"annotationType": "MP", "updated": "2016-09-19T18:33:51.179625+00:00", "created": "2016-09-19T18:33:51.179625+00:00", 
+"uri": "httplocalhostPMCPMC000000html", 
+"argues": {
+    "negation": "False", 
+    "rejected": {"reason": "rejected-reason|rejected-comment"}, 
+    "label": "telaprevir_inhibits_atorvastatin", 
+    "ranges": [], 
+    "hasTarget": {"hasSelector": {"prefix": "", "exact": "claim-text", "@type": "TextQuoteSelector", "suffix": ""}}, 
+    "qualifiedBy": {"drug2ID": "atorvastatin_1", "relationship": "inhibits", "drug2": "atorvastatin", "drug1": "telaprevir", "drug1ID": "telaprevir_1", "enzyme": "cyp1a1", "precipitant": "drug2", "drug1PC": "enantiomer|", "drug2PC": "|metabolite"},
+    "type": "mp:claim", 
+    "method": "DDI clinical trial",
+    "supportsBy": 
+    [{"type": "mp:data",
+      "evRelationship": "supports", 
+      "auc": {"ranges": [], "hasTarget": {"hasSelector": {"prefix": "", "exact": "auc-text-1", "@type": "TextQuoteSelector", "suffix": ""}}, "type": "Fold", "direction": "Increase", "value": "7.88"}, 
+      "cmax": {"ranges": [], "hasTarget": {"hasSelector": {"prefix": "", "exact": "cmax-text-1", "@type": "TextQuoteSelector", "suffix": ""}}, "type": "Fold", "direction": "Increase", "value": "10.6"}, 
+      "clearance": {"ranges": [], "hasTarget": {"hasSelector": {"prefix": "", "exact": "clearance-text-1", "@type": "TextQuoteSelector", "suffix": ""}}, "type": "Percent", "direction": "Decrease", "value": "87.8"}, 
+      "halflife": {"ranges": [], "hasTarget": {"hasSelector": {"prefix": "", "exact": "halflife-text-1", "@type": "TextQuoteSelector", "suffix": ""}}, "type": "Percent", "direction": "Decrease", "value": "28.5"}, 
+      "dips": {}, 
+      "reviewer": {}, 
+      "grouprandom": "", 
+      "supportsBy": 
+      {"supportsBy": 
+       {"type": "mp:material",
+        "participants": {"ranges": [], "hasTarget": {"hasSelector": {"prefix": "", "exact": "participants-text-1", "@type": "TextQuoteSelector", "suffix": ""}}, "value": "21.00"}, 
+        "drug1Dose": {"value": "20", "ranges": [], "hasTarget": {"hasSelector": {"prefix": "", "exact": "drug1Dose-text-1", "@type": "TextQuoteSelector", "suffix": ""}}, "regimens": "Q8", "formulation": "Oral", "duration": "16"}, 
+        "drug2Dose": {"value": "30", "ranges": [], "hasTarget": {"hasSelector": {"prefix": "", "exact": "drug2Dose-text-1", "@type": "TextQuoteSelector", "suffix": ""}}, "regimens": "SD", "formulation": "Oral", "duration": "1"},
+        "phenotype": {}
+       }, 
+       "type": "mp:method"}, 
+      "parallelgroup": ""},
+     {"type": "mp:data",
+      "evRelationship": "refutes", 
+      "auc": {"ranges": [], "hasTarget": {"hasSelector": {"prefix": "", "exact": "auc-text-2", "@type": "TextQuoteSelector", "suffix": ""}}, "type": "Percent", "direction": "Decrease", "value": "17.88"}, 
+      "cmax": {"ranges": [], "hasTarget": {"hasSelector": {"prefix": "", "exact": "cmax-text-2", "@type": "TextQuoteSelector", "suffix": ""}}, "type": "Percent", "direction": "Decrease", "value": "10.3"}, 
+      "clearance": {"ranges": [], "hasTarget": {"hasSelector": {"prefix": "", "exact": "clearance-text-2", "@type": "TextQuoteSelector", "suffix": ""}}, "type": "Fold", "direction": "Increase", "value": "7.8"}, 
+      "halflife": {"ranges": [], "hasTarget": {"hasSelector": {"prefix": "", "exact": "halflife-text-2", "@type": "TextQuoteSelector", "suffix": ""}}, "type": "Fold", "direction": "Increase", "value": "2.5"}, 
+      "dips": {}, 
+      "reviewer": {}, 
+      "grouprandom": "", 
+      "supportsBy": 
+      {"supportsBy": 
+       {"type": "mp:material",
+        "participants": {"ranges": [], "hasTarget": {"hasSelector": {"prefix": "", "exact": "participants-text-2", "@type": "TextQuoteSelector", "suffix": ""}}, "value": "210"}, 
+        "phenotype": {}, 
+        "drug1Dose": {"value": "201", "ranges": [], "hasTarget": {"hasSelector": {"prefix": "", "exact": "drug1Dose-text-2", "@type": "TextQuoteSelector", "suffix": ""}}, "regimens": "Q3", "formulation": "Oral", "duration": "120"}, 
+        "drug2Dose": {"value": "302", "ranges": [], "hasTarget": {"hasSelector": {"prefix": "", "exact": "drug2Dose-text-2", "@type": "TextQuoteSelector", "suffix": ""}}, "regimens": "BID", "formulation": "Oral", "duration": "10"}}, 
+       "type": "mp:method"}, 
+      "parallelgroup": ""}
+    ] 
+},
+ "user": "alice", 
+ "rawurl": "http://localhost/PMC/PMC000000.html", 
+ "consumer": "mockconsumer", 
+ "email": "test@gmail.com", 
+ "permissions": {"read": ["group:__consumer__"]}
+}

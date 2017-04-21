@@ -3,18 +3,24 @@
  'uri' : 'httplocalhostDDIlabelstesthtml',
  'rawuri' : 'http://localhost/DDI-labels/test.html',
  'email' : 'xx@gmail.com',
- 'updated' : '2016-05-03T17:39:44.986668+00:00',
- 'created' : '2016-05-03T17:39:44.986668+00:00',
- 
+ 'updated' : '',
+ 'created' : '',
+
  'argues' : { // mp claim
      'id': 'uuid',
      'type': 'mp:claim',
+     'rejected': {
+         'reason': '<rejected reason>|<comments>'
+     },
      'qualifiedBy': {
          'Drug1': '',
          'drug1ID' : '',
-         'relationship': 'inhibits',
+         'relationship': '',
          'drug2ID' : '',
          'Drug2': '',
+         'enzyme':'',
+         'drug1PC':'enantiomer|metabolite',
+         'drug2PC':'enantiomer|metabolite',
          'precipitant': 'drug1 or drug2'
      },
      'hasTarget' : {
@@ -32,8 +38,9 @@
          'startOffset': 'integer',
          'endOffset': 'integer',
      },
-     // put method name here
-     'method' : '',
+     'negation': 'string',  // assertion supports or refutes
+     // put user entered method name here
+     'method' : 'string',
      // mp:data (one or more mp:data supports claim)
      'supportsBy': 
      [
@@ -44,6 +51,8 @@
              'supportsBy': { 
                  'id': 'uuid'
                  'type': 'mp:method',
+                 'value': 'string' // inferred specific evidence type
+
                  // mp:material (material supports method)
                  'supportsBy': {
                     'id': 'uuid',
@@ -61,6 +70,12 @@
                          'value': 'numeric',
                          'hasTarget': '',
                          'ranges': ''                        
+                    },
+                    'phenotype': {
+                        'type':'option: Genotype, Drug Phenotype',
+                        'typeVal':'',
+                        'metabolizer':'',
+                        'population':''
                     }                    
                  }
              },            
@@ -97,7 +112,24 @@
                  'hasTarget' : '',
                  'ranges' : ''
              }
-        
+             'dips': {
+                 'q1':'',
+                 'q2':'',
+                 'q3':'',
+                 'q4':'',
+                 'q5':'',
+                 'q6':'',
+                 'q7':'',
+                 'q8':'',
+                 'q9':'',
+                 'q10':''
+             }
+             'reviewer': {
+                 'date': 'MM/YYYY, DD/MM/YYYY',
+                 'reviewer': 'option: Author, External',
+                 'total': '',
+                 'lackInfo': true, false
+             }
          }
      ]    
  }
