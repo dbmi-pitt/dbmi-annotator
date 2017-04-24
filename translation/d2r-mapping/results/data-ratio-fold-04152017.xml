@@ -1,0 +1,1521 @@
+<?xml version="1.0"?>
+<rdf:RDF
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:obo="http://purl.obolibrary.org/obo/"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:vocab="file:///home/yin2/d2rq-0.8.1/vocab/"
+    xmlns:j.0="http://purl.bioontology.org/ontology/RXNORM/134527"
+    xmlns:j.1="http://purl.bioontology.org/ontology/RXNORM/36567"
+    xmlns:d2r="http://sites.wiwiss.fu-berlin.de/suhl/bizer/d2r-server/config.rdf#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:db="file:///home/yin2/d2rq-0.8.1/mpevidence.xml"
+    xmlns:map="file:///home/yin2/d2rq-0.8.1/mpevidence.xml#"
+    xmlns:meta="http://www4.wiwiss.fu-berlin.de/bizer/d2r-server/metadata#"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+  xml:base="file:///home/yin2/d2rq-0.8.1/mpevidence.xml#" > 
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/74d1947c-869b-4074-b0d5-4a4694ecfa0f">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/5e1d95d8-5fbd-4524-b035-2b5a6a8ee2fb"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/2b4c34b3-295a-4683-9dcb-9745b6532596">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/ac54d7f0-e0a1-4408-98dd-ecae50bee8d8"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/f399818b-031b-465f-9661-37e879b7c82e">
+    <obo:BFO_0000051>Percent</obo:BFO_0000051>
+    <obo:OBI_0001937>3059</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/05968b35-95f4-4c54-b9c4-9b945f5a7280">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/59402978-4180-4b76-9738-d8920690fa15"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/b2e7b3d7-e93f-4811-bfb0-86df41493a48">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/f6cb5a5e-a0f6-4ebe-a96d-56bf40ed92c7"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/b0a6b00e-0722-462d-bf61-c16e7538e615">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/a29d2f7d-afca-46fb-b920-73dd77ac855d"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/33744c97-576d-4ffd-a639-9beab58f15aa">
+    <obo:BFO_0000051></obo:BFO_0000051>
+    <obo:OBI_0001937>unchanged</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/a71d5ab5-54d9-4422-a458-8c077532cef9">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/443612c7-7108-4550-a167-f1bc820ca961"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/0959593a-345f-4314-a043-3b7816eb9050">
+    <obo:BFO_0000051>Fold</obo:BFO_0000051>
+    <obo:OBI_0001937>7.88</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/07bff92d-fa19-42cb-85df-97a60691cb25">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/d4fc0ce5-a258-4b7a-b0de-3eb7075f5e93"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/6e7218b8-430d-4aa8-935f-9916a375fbb8">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/3cf12c66-bc51-4644-9b8e-6386af8d95f1"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/42ff310a-6070-43bd-aa8e-463a5666c9d1">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/b0e5272a-50d8-4483-8a61-ed6d607b07fc"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/d8e72b76-6ee0-48da-a862-b83afdbbbf1c">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/4bb08e54-0ab3-4c4e-ae98-118fcfe3ce36"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/903f1498-016a-4b51-a336-de9efbb0b32c">
+    <obo:BFO_0000051>Fold</obo:BFO_0000051>
+    <obo:OBI_0001937>1.37</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://purl.obolibrary.org/obo/UO_0000022">
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/31343147-8bb8-4f71-b61b-b0071dd766bf">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/23dcfdb2-97cb-44f8-b1f8-7c21f697d69a"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/666606db-4352-4189-9973-0a9e668e59f1">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/c8d47ab7-33d2-4aa1-a3b8-01a3f1f1fb01"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/6d473da1-b219-4fe4-8993-bd8507cdc9be">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/80b9da67-bef4-4ff9-ae6b-b483541153e4"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/5cbc98ea-ce3c-40fa-afc2-f9ebfb8e62e6">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/1c5ece3d-71f8-4389-926f-bd9ccd5932a5"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/154a3d3f-5a80-4e87-af61-2faa9ff3fa8b">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/e657fe12-171f-4ef8-9d56-a8d279fdbb1a"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/cf2e7684-18a9-4717-9bc2-f1c91b313c3f">
+    <obo:BFO_0000051>UNK</obo:BFO_0000051>
+    <obo:OBI_0001937>0.55</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/27bf2ab2-00e4-4dfe-b168-8cc51c083386">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/9b859a78-fa16-4307-9045-fc22ae133f1d"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/0b0ba12f-8d18-46a1-98f8-aaabc5c73625">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/f7588855-165e-46f7-8974-512fdb24a6ed"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/485772d4-70f3-480e-a7a6-c6626d42ec3e">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/95a2bbc4-848c-43a1-8ab5-103ac595a256"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/p-scattered-molecular-aggregate/364d02a6-bd67-47c3-8b6f-22924e6a216e">
+    <obo:RO_0000053 rdf:resource="http://dikb.org/precipitant-mass/6d7fc3bd-3fcb-49b2-aea8-7ec2aa3624cb"/>
+    <obo:RO_0000053 rdf:resource="http://dikb.org/precipitant-active-ingredient/9ed45046-dc49-41df-ba73-38866f493734"/>
+    <obo:RO_0002351 rdf:resource="http://dikb.org/precipitant-drug/d73ecc22-6791-434f-a6c2-eba48035f3de"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0000576"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/ed16ae8f-c4d4-4c4a-9f13-9bb0bd648c00">
+    <obo:BFO_0000051>Percent</obo:BFO_0000051>
+    <obo:OBI_0001937>573.5</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/4a4cdb16-8a5b-4991-b49a-b3a15afc218d">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/f2e0eabe-a460-4eae-97a8-35ce86a45893"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/51382f24-5cd9-4493-be8a-1f27613880ea">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/3cf82821-9467-4eed-a903-301b425abffd"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/1114c71e-ed31-4b57-b2c9-71da260afd64">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/26282dfa-831e-4b55-ac56-2617f962e5a4"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/4eccdfee-9f03-49a9-a6e3-3296a1467ab7">
+    <obo:BFO_0000051>Fold</obo:BFO_0000051>
+    <obo:OBI_0001937>89.9</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/f2e0eabe-a460-4eae-97a8-35ce86a45893">
+    <obo:BFO_0000051>Fold</obo:BFO_0000051>
+    <obo:OBI_0001937>2.3</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/4ecad265-1ce7-4bd2-ad54-00e7023afbd5">
+    <obo:BFO_0000051></obo:BFO_0000051>
+    <obo:OBI_0001937>unchanged</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/ec8a057d-9688-4adf-9435-ec4b5b688e9d">
+    <obo:BFO_0000051></obo:BFO_0000051>
+    <obo:OBI_0001937>unchanged</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/1e8ef5d2-e539-4701-a47c-a435e0cd7126">
+    <obo:BFO_0000051>Fold</obo:BFO_0000051>
+    <obo:OBI_0001937>6.17</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/a62205e6-dedf-4929-b782-be7ec2d59832">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/78bbbf63-ab39-47da-87c8-5f4bd97a18f4"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/9795f51f-6554-4806-aa73-feffe111f36c">
+    <obo:BFO_0000051>Percent</obo:BFO_0000051>
+    <obo:OBI_0001937>140</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/2fb8eb6c-1a30-471f-9bd0-bd55ee9d1fe9">
+    <obo:BFO_0000051></obo:BFO_0000051>
+    <obo:OBI_0001937>unchanged</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/object-active-ingredient/af20c2de-4bf9-420a-8e08-dbfcbf12d14e">
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DRON_00000028"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/3cf82821-9467-4eed-a903-301b425abffd">
+    <obo:BFO_0000051></obo:BFO_0000051>
+    <obo:OBI_0001937>unchanged</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/3cf12c66-bc51-4644-9b8e-6386af8d95f1">
+    <obo:BFO_0000051></obo:BFO_0000051>
+    <obo:OBI_0001937>unchanged</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/b2310670-282a-49a5-800d-989b6aa916e4">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/d5a07d39-6ecd-4758-8813-f73e7f7158ef"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/479c6c92-fd3b-452b-8a4b-e01d7ac1b4c2">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/d3f8a66f-8af3-4a38-a0ca-491483e300a7"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/58d3d526-152f-4d3d-b229-77183ce4fca7">
+    <obo:BFO_0000051></obo:BFO_0000051>
+    <obo:OBI_0001937>unchanged</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://purl.obolibrary.org/obo/DIDEO_00000013">
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/6d409647-2000-41e8-a220-ca4dbfbf12e5">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/10478487-38c0-445f-b6c7-0a85c624f266"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://purl.obolibrary.org/obo/DIDEO_00000001">
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/e4bb58c1-2984-44b7-8623-a1565af6ca8e">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/4ecad265-1ce7-4bd2-ad54-00e7023afbd5"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/b0e5272a-50d8-4483-8a61-ed6d607b07fc">
+    <obo:BFO_0000051>Fold</obo:BFO_0000051>
+    <obo:OBI_0001937>0.39</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/a1deb625-3dc8-4569-ad44-97184b1cdc2e">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/31228cd2-9705-410c-b736-99c77cb6e638"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/1c5ece3d-71f8-4389-926f-bd9ccd5932a5">
+    <obo:BFO_0000051>Percent</obo:BFO_0000051>
+    <obo:OBI_0001937>42.8</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/76ddd62b-7958-473c-b27d-bddc865bf02b">
+    <obo:BFO_0000051>Fold</obo:BFO_0000051>
+    <obo:OBI_0001937>0.40</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/412c4bc0-5718-461c-80c9-9c1018d26750">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/379c7b6d-548c-48c0-9ca7-3d25b174d78d"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/ce6300fd-4655-49fc-ba23-e3bbb6835976">
+    <obo:BFO_0000051>UNK</obo:BFO_0000051>
+    <obo:OBI_0001937>1.53</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/precipitant-drug-role/fd4f148c-589e-49bb-8b7e-2a8709a73087">
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000013"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/56149587-906a-48ae-b395-9c0ff7d1e232">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/80a20152-863e-427c-be87-ca25ffa7ab07"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/f7588855-165e-46f7-8974-512fdb24a6ed">
+    <obo:BFO_0000051>Fold</obo:BFO_0000051>
+    <obo:OBI_0001937>1.7</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/cef1427f-551f-41ed-bbeb-470137658ef6">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/856428f6-95e2-4cce-92e8-30ff6e1fca85"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/a09e8bca-781a-4a54-b0e4-7a02425d0437">
+    <obo:BFO_0000051></obo:BFO_0000051>
+    <obo:OBI_0001937>unchanged</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/dfe26b33-ac8c-42ad-a54a-5c48d2e90260">
+    <obo:BFO_0000051>Percent</obo:BFO_0000051>
+    <obo:OBI_0001937>819.2</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/f18a3ac6-d608-43f8-9090-5c13e5bef349">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/ec54399a-82bb-44b7-bf84-81cbd439e1a3"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/d4fc0ce5-a258-4b7a-b0de-3eb7075f5e93">
+    <obo:BFO_0000051></obo:BFO_0000051>
+    <obo:OBI_0001937>unchanged</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/f09735bd-aa22-4ee1-bbfb-84f9ad1474d3">
+    <obo:BFO_0000051>Fold</obo:BFO_0000051>
+    <obo:OBI_0001937>2.53</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/cdb9f6f3-0849-4a00-b4c5-6dc86467b9a4">
+    <obo:BFO_0000051>Percent</obo:BFO_0000051>
+    <obo:OBI_0001937>32</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/0cda66d0-f774-415f-98ae-7517f6424b23">
+    <obo:BFO_0000051>UNK</obo:BFO_0000051>
+    <obo:OBI_0001937>106.3</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/98841e5b-9690-4108-afa2-c1972541bd38">
+    <obo:BFO_0000051></obo:BFO_0000051>
+    <obo:OBI_0001937>unchanged</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/da51b73c-4877-41b8-8cfc-f04b0b8b6668">
+    <obo:BFO_0000051>UNK</obo:BFO_0000051>
+    <obo:OBI_0001937>102.3</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://purl.obolibrary.org/obo/DIDEO_00000012">
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/object-drug/5dedf5bc-762c-44c6-8ce5-4576a814f3be">
+    <rdf:type rdf:resource="http://purl.bioontology.org/ontology/RXNORM/36567"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/10478487-38c0-445f-b6c7-0a85c624f266">
+    <obo:BFO_0000051>Fold</obo:BFO_0000051>
+    <obo:OBI_0001937>1.27</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/01060a6d-3186-4362-a99c-c27796a5825c">
+    <obo:BFO_0000051>UNK</obo:BFO_0000051>
+    <obo:OBI_0001937>99.9</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/eb9968f1-827d-42b9-99a3-3281f9f321b2">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/d28a0e5d-da39-4534-90e3-06a03fd87561"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/583f77d0-d126-4210-badc-cb6c53af8869">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/1edec71c-ef47-40af-89de-b34ab86e0a99"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/dd67e8da-0446-4483-b145-b7fe4f7da90e">
+    <obo:BFO_0000051></obo:BFO_0000051>
+    <obo:OBI_0001937>unchanged</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/7f1de65a-c1d3-4495-9cef-2e7734a71d3f">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/4737ad0f-8477-4c1f-ae03-c007298a2c14"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/dac9018c-9b4d-45d4-b98c-43346cea5bca">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/2725c0ee-676f-418d-8dbe-e161755cc659"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/52309991-c5f0-46a0-8b2c-6dd6d73cd303">
+    <obo:BFO_0000051></obo:BFO_0000051>
+    <obo:OBI_0001937>unchanged</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/8c6a2c94-1cec-4257-8593-67e0368bb949">
+    <obo:BFO_0000051>Percent</obo:BFO_0000051>
+    <obo:OBI_0001937>36</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/71754ea6-e6fb-4a32-8fad-23aee1a4d0cf">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/ed16ae8f-c4d4-4c4a-9f13-9bb0bd648c00"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/31228cd2-9705-410c-b736-99c77cb6e638">
+    <obo:BFO_0000051>UNK</obo:BFO_0000051>
+    <obo:OBI_0001937>134.6</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/f3de597b-2ee8-4fec-a269-e6b0cb4f1cbe">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/fb8298be-7e5e-4dfb-8cd1-4b70ede76acc"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/e3dbede3-b309-4eb6-9b81-f65ec0221106">
+    <obo:BFO_0000051>Fold</obo:BFO_0000051>
+    <obo:OBI_0001937>1.74</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://purl.obolibrary.org/obo/BFO_0000051">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/0a378297-546c-44bd-bdbd-e3e16d9d8c30">
+    <obo:BFO_0000051></obo:BFO_0000051>
+    <obo:OBI_0001937>unchanged</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://purl.obolibrary.org/obo/RO_0002351">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/1fc82926-5df5-460a-a6b5-75aae4b77f64">
+    <obo:BFO_0000051>Fold</obo:BFO_0000051>
+    <obo:OBI_0001937>2.29</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/edb186c2-c787-4844-8247-2de10f3ba93f">
+    <obo:BFO_0000051></obo:BFO_0000051>
+    <obo:OBI_0001937>unchanged</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/e96e2fbe-d7db-43cd-b035-84ec563e3225">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/145004aa-7ace-4ed9-b809-ab9c10efb3db"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/1ad81e6f-304d-4126-8932-4edcfbd17f37">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/d372727d-bdf9-472d-89b3-fd3936445e81"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/2c0726d6-c718-4328-a911-d8bfe2e36eaf">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/0dae7459-85cc-4fce-a93d-0c581821b058"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/bearer-object/f1f17c56-5c2d-4f2d-9e92-df774fadaa57">
+    <obo:BFO_0000051 rdf:resource="http://dikb.org/o-scattered-molecular-aggregate/10abc863-407a-4086-8376-c53a22631064"/>
+    <obo:RO_0000053 rdf:resource="http://dikb.org/object-drug-role/99b4f002-c9c1-4fb3-ab47-14a5c9ef1847"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/25c44c45-e7ef-4cb8-b19e-d601f619b1c3">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/1ab27ef9-6e58-467e-b468-b91350da989c"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/80b9da67-bef4-4ff9-ae6b-b483541153e4">
+    <obo:BFO_0000051>Percent</obo:BFO_0000051>
+    <obo:OBI_0001937>34</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/8e029da5-a6e4-4fad-becd-8f3958af78eb">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/b0a7a077-a2c0-437b-a3dc-0686448e9fbc"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/1942b1ac-1351-4e41-9098-bc5f3814ad32">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/128c57e1-c05b-4f9d-ab25-5da63398c6ff"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/97a71bb5-6c09-44d5-be5d-6e07d759cbfe">
+    <obo:BFO_0000051>UNK</obo:BFO_0000051>
+    <obo:OBI_0001937>1.54</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/47e1243d-99be-444d-b887-8d7cc350d777">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/9795f51f-6554-4806-aa73-feffe111f36c"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/75440ff8-2bda-4678-acee-0129365cd1b6">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/a09e8bca-781a-4a54-b0e4-7a02425d0437"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/bearer-precipitant/b53f794b-8dca-4283-a54f-93a9d056c19f">
+    <obo:BFO_0000051 rdf:resource="http://dikb.org/p-scattered-molecular-aggregate/364d02a6-bd67-47c3-8b6f-22924e6a216e"/>
+    <obo:RO_0000053 rdf:resource="http://dikb.org/precipitant-drug-role/fd4f148c-589e-49bb-8b7e-2a8709a73087"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://purl.obolibrary.org/obo/DIDEO_00000050">
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/393791dc-a2ef-4cf3-9700-4a5c682b5477">
+    <obo:BFO_0000051>Percent</obo:BFO_0000051>
+    <obo:OBI_0001937>44.2</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/d8a3538a-e44d-4e11-a4a8-e2fac0628b83">
+    <obo:BFO_0000051>Percent</obo:BFO_0000051>
+    <obo:OBI_0001937>213</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/30882d0e-40ce-428a-9ed5-e98186cdc2a4">
+    <obo:BFO_0000051>UNK</obo:BFO_0000051>
+    <obo:OBI_0001937>4.23</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/edb44286-22f2-4f02-a3d3-57302ee68f10">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/edb186c2-c787-4844-8247-2de10f3ba93f"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/6443976a-3208-40da-96d8-a90f7c276e1e">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/a34aad25-f92a-4cba-99b8-355c522a3e9d"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/fc494ee5-028e-4993-a6fc-d4e13a15e745">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/ac0b29b3-d598-4044-8585-d7f22933d29e"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/26d7b7e9-0213-408c-a858-f884492f1356">
+    <obo:BFO_0000051>Fold</obo:BFO_0000051>
+    <obo:OBI_0001937>0.7</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/29492877-3a23-4788-a2e5-88ffa4841dd2">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/cd6a3411-d6ea-405b-ae2d-7cfe1f2df901"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/de9b40c8-e46b-4b17-9b45-d9a70d3fc09b">
+    <obo:BFO_0000051></obo:BFO_0000051>
+    <obo:OBI_0001937>unchanged</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/a7929691-034a-4b05-a65a-873bb7308c5c">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/ba340420-6dd3-49cb-a638-96923e9bd2ab"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/156ac3f3-0ae0-4ce2-b0a8-49f767e79e69">
+    <obo:BFO_0000051>None</obo:BFO_0000051>
+    <obo:OBI_0001937>unchanged</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/59402978-4180-4b76-9738-d8920690fa15">
+    <obo:BFO_0000051>Percent</obo:BFO_0000051>
+    <obo:OBI_0001937>99.6</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/4f01855e-1445-433a-80d1-d334a31d14bf">
+    <obo:BFO_0000051>UNK</obo:BFO_0000051>
+    <obo:OBI_0001937>4.23</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://www.w3.org/2000/01/rdf-schema#label">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/379c7b6d-548c-48c0-9ca7-3d25b174d78d">
+    <obo:BFO_0000051></obo:BFO_0000051>
+    <obo:OBI_0001937>unchanged</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/f72f6199-e652-4700-88f5-6ccf41f6bd9b">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/43f393d2-6dfb-4ac2-b862-f120375cd7e1"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/1e30084b-61a0-4d7a-8715-ed8073852f1e">
+    <obo:BFO_0000051>UNK</obo:BFO_0000051>
+    <obo:OBI_0001937>1.1</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/9a4487f2-0050-447b-865f-8fc083be83bb">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/903f1498-016a-4b51-a336-de9efbb0b32c"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://purl.obolibrary.org/obo/RO_0000053">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/32556e22-e4ee-4f6d-9a60-51b8acc7489f">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/ec8a057d-9688-4adf-9435-ec4b5b688e9d"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/a29d2f7d-afca-46fb-b920-73dd77ac855d">
+    <obo:BFO_0000051>UNK</obo:BFO_0000051>
+    <obo:OBI_0001937>98.6</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/d3cd1196-0de2-4bbe-8ec9-0a222ce37506">
+    <obo:BFO_0000051>None</obo:BFO_0000051>
+    <obo:OBI_0001937>unchanged</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/a25b987c-3de1-4e94-8205-eab437c75c7b">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/2b812085-6b11-416e-8e3f-f4c58d85f03c"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/f6104443-42d6-4f9c-a47b-3da8a7daa24d">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/5d4d5cc8-5151-4871-9679-2cb9f04e4811"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/80a20152-863e-427c-be87-ca25ffa7ab07">
+    <obo:BFO_0000051>UNK</obo:BFO_0000051>
+    <obo:OBI_0001937>1.42</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/c1a698af-f8b5-4be5-87c7-beef673e35e8">
+    <obo:BFO_0000051></obo:BFO_0000051>
+    <obo:OBI_0001937>unchanged</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/896c3923-7b6a-4038-bc4e-40753cc7291e">
+    <obo:BFO_0000051>Fold</obo:BFO_0000051>
+    <obo:OBI_0001937>2.79</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/object-drug-role/99b4f002-c9c1-4fb3-ab47-14a5c9ef1847">
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000012"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/ec42d192-d123-49fc-ae0c-49d1b1a9a848">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/bcacce6a-965a-4e56-be0f-e8c2762b88fe"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/5d4d5cc8-5151-4871-9679-2cb9f04e4811">
+    <obo:BFO_0000051>UNK</obo:BFO_0000051>
+    <obo:OBI_0001937>1.38</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/535f15f5-4817-41d6-9c70-9657440569b9">
+    <obo:BFO_0000051>Percent</obo:BFO_0000051>
+    <obo:OBI_0001937>38.8</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/cfc9ccf6-db8c-464d-977b-be3193bcd393">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/ac3b1cec-5f03-4521-94b2-7a575c6d3873"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/0dc7b225-cc54-4aa0-baff-9f19494f8070">
+    <obo:BFO_0000051></obo:BFO_0000051>
+    <obo:OBI_0001937>unchanged</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/78bbbf63-ab39-47da-87c8-5f4bd97a18f4">
+    <obo:BFO_0000051></obo:BFO_0000051>
+    <obo:OBI_0001937>unchanged</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/da847c14-0fda-4820-b8e2-fe365387cbf8">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/0ee72199-9944-47ae-bc32-1650a430a331"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/913aef91-a760-4e0e-aee5-1eb7ca0d6d86">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/52309991-c5f0-46a0-8b2c-6dd6d73cd303"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/object-milligram/64825ac0-6daa-44d7-89cb-fbbceb579161">
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/UO_0000022"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/ac0b29b3-d598-4044-8585-d7f22933d29e">
+    <obo:BFO_0000051>Percent</obo:BFO_0000051>
+    <obo:OBI_0001937>124</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4">
+    <rdfs:label>Nelfinavir-simvastatin DDI clinical trial</rdfs:label>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/TEMP_METHOD_CODE"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/d758b2e7-d70b-40c4-b06e-e16171787f20">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/78099919-df7f-471d-b80c-05d49501261c"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/128c57e1-c05b-4f9d-ab25-5da63398c6ff">
+    <obo:BFO_0000051>UNK</obo:BFO_0000051>
+    <obo:OBI_0001937>1.72</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/26282dfa-831e-4b55-ac56-2617f962e5a4">
+    <obo:BFO_0000051>Percent</obo:BFO_0000051>
+    <obo:OBI_0001937>71.1</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/871ed1fa-f498-4e63-881c-402bf29b2ced">
+    <obo:BFO_0000051>Percent</obo:BFO_0000051>
+    <obo:OBI_0001937>15.7</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/2bf7cf9a-809e-47f4-9fd9-c13cb98b2808">
+    <obo:BFO_0000051>Fold</obo:BFO_0000051>
+    <obo:OBI_0001937>2.23</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/1bda68c3-9f26-4617-bc75-ef615ac18e51">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/0959593a-345f-4314-a043-3b7816eb9050"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/350b90a1-5674-4fab-807f-d7b5af0439c4">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/156ac3f3-0ae0-4ce2-b0a8-49f767e79e69"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/f9f3d361-378d-456c-b868-657ec22e92eb">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/7b10cb1f-0599-404c-8c96-c029b6720440"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/3104702b-07c7-480c-b513-174e924a24de">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/790b3b25-034b-4982-b40e-25075a259978"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/e657fe12-171f-4ef8-9d56-a8d279fdbb1a">
+    <obo:BFO_0000051>Percent</obo:BFO_0000051>
+    <obo:OBI_0001937>50</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/a34aad25-f92a-4cba-99b8-355c522a3e9d">
+    <obo:BFO_0000051>UNK</obo:BFO_0000051>
+    <obo:OBI_0001937>0.65</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/e89b0c0a-3fa7-4895-b404-66be59a352b4">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/da51b73c-4877-41b8-8cfc-f04b0b8b6668"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/1a5dae58-22b4-4aed-90e9-4851796ed281">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/c65074fa-b997-469d-b934-c59ec262ba7a"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/04138555-62ca-4397-8389-cb5ea6681e2c">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/9d915507-419b-4247-9266-21e91cae1a9e"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/2182ba18-bb98-47dd-90ff-7b31dc543cac">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/482d629a-c6f1-4c28-a7c1-88c2830cd1fd"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/ae53bd9a-7aa2-4b70-984e-2f064edd8428">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/f09735bd-aa22-4ee1-bbfb-84f9ad1474d3"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/ccbea2c0-f2dd-43ef-906e-12343c9af4ec">
+    <obo:BFO_0000051>UNK</obo:BFO_0000051>
+    <obo:OBI_0001937>1.55</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/5a66e519-c852-4a9c-8e17-1d24217b3be4">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/48d92f2f-604a-48b8-8060-1f23de8809cb"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/3b732fc5-7d83-4438-999e-fb15730f2b08">
+    <obo:BFO_0000051></obo:BFO_0000051>
+    <obo:OBI_0001937>unchanged</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/27b87a1b-2c6c-41a5-b855-c20eb3cdeab7">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/4f909d74-26bf-4bf4-a3eb-703fe037ddc8"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/precipitant-active-ingredient/9ed45046-dc49-41df-ba73-38866f493734">
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DRON_00000028"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/45d39359-1fab-4bc0-9b64-4d3baa5e76f5">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/d1b271fe-9aa4-4dd9-a4ab-89aadbe54ab6"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/3c3114e2-5dfd-4f63-9cfb-1fbf5726651e">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/399d69cf-af72-4cd5-9fb4-34cb13082fd2"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/9d15933a-acb6-44b3-aff4-a4eb9fbdf46d">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/ecc6586d-2ab4-4132-8cbe-2cd1725558ff"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/97ddfc73-6536-4506-8186-c6d842fa36f4">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/30882d0e-40ce-428a-9ed5-e98186cdc2a4"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/308678b1-a97b-4c76-a431-af66dd99b512">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/4e0b166e-1d58-486e-85cb-f86fc6d7ba8b"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/790b3b25-034b-4982-b40e-25075a259978">
+    <obo:BFO_0000051></obo:BFO_0000051>
+    <obo:OBI_0001937>unchanged</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/d1c78422-21dd-4798-930a-2c2ea6bb9a26">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/f399818b-031b-465f-9661-37e879b7c82e"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/a27c2a01-6af3-4a8d-8431-84ec9161e9eb">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/7f80a10e-e940-4d6b-8c12-d88cc1c7d191"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/6c2d8ffd-923a-495c-a579-8b0a2b742c9d">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/cdb9f6f3-0849-4a00-b4c5-6dc86467b9a4"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/598b0c3e-eb50-4030-9076-8f3ab97f3464">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/cf2e7684-18a9-4717-9bc2-f1c91b313c3f"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/486937fb-265d-4475-8f09-d23623dd7c3f">
+    <obo:BFO_0000051>Fold</obo:BFO_0000051>
+    <obo:OBI_0001937>0.75</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/73cb5c96-6adc-4166-88bd-40e490dcb76e">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/98841e5b-9690-4108-afa2-c1972541bd38"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/d1b799d4-afed-43a1-abc6-247bcfde6772">
+    <obo:BFO_0000051>Fold</obo:BFO_0000051>
+    <obo:OBI_0001937>6.05</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/13bab5c5-2bfd-4166-9c29-64fba25154a5">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/7344af98-6102-431c-b440-5377716a5ae6"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/9d134aca-e975-43ad-9362-72a24f3ef78f">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/26d7b7e9-0213-408c-a858-f884492f1356"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/d9152817-3b75-436d-a68d-5610d049cc73">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/dd67e8da-0446-4483-b145-b7fe4f7da90e"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/55650898-2e95-46cf-b75b-223e722f70d8">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/486937fb-265d-4475-8f09-d23623dd7c3f"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://purl.obolibrary.org/obo/PATO_0000125">
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/f66ef17a-610b-46b9-b38b-b337e75b1af7">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/896c3923-7b6a-4038-bc4e-40753cc7291e"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/f6546b95-ffe4-443e-97f7-712dbd14bf95">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/43f6dce6-bda9-4d72-a402-c9b837dfec71"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://purl.obolibrary.org/obo/OBI_0000312">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/aac868ec-b057-452b-bbf7-9b9e40b7167f">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/0cda66d0-f774-415f-98ae-7517f6424b23"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/ffb99706-84d4-4953-b1f2-55ca602d61a1">
+    <obo:BFO_0000051>Fold</obo:BFO_0000051>
+    <obo:OBI_0001937>4.7</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/5a8d3a4d-fca9-4cb0-9beb-2448b1bd1d7d">
+    <obo:BFO_0000051>Percent</obo:BFO_0000051>
+    <obo:OBI_0001937>87.8</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/precipitant-milligram/42ce8964-4147-4604-a177-d06e9d748d3d">
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/UO_0000022"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/assertion/fc673662-ca40-4d86-a881-c752ccf3bc33">
+    <obo:BFO_0000051 rdf:resource="http://dikb.org/data-ratio/1a5c0496-5e90-4609-a12c-f84b1c7e29b3"/>
+    <obo:BFO_0000051 rdf:resource="http://dikb.org/data-ratio/1fca345e-5d82-415c-be9b-cfa892eda7bd"/>
+    <obo:IAO_0000136 rdf:resource="http://dikb.org/bearer-object/f1f17c56-5c2d-4f2d-9e92-df774fadaa57"/>
+    <obo:IAO_0000136 rdf:resource="http://dikb.org/bearer-precipitant/b53f794b-8dca-4283-a54f-93a9d056c19f"/>
+    <rdfs:label>Nelfinavir-simvastatin interaction description</rdfs:label>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000001"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/48d92f2f-604a-48b8-8060-1f23de8809cb">
+    <obo:BFO_0000051></obo:BFO_0000051>
+    <obo:OBI_0001937>unchanged</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/9064f4a6-4949-4ff8-99d9-1120fea9ff32">
+    <obo:BFO_0000051>Fold</obo:BFO_0000051>
+    <obo:OBI_0001937>2.4</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/c8d47ab7-33d2-4aa1-a3b8-01a3f1f1fb01">
+    <obo:BFO_0000051>Fold</obo:BFO_0000051>
+    <obo:OBI_0001937>1.5</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/4737ad0f-8477-4c1f-ae03-c007298a2c14">
+    <obo:BFO_0000051>Fold</obo:BFO_0000051>
+    <obo:OBI_0001937>2.27</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/856428f6-95e2-4cce-92e8-30ff6e1fca85">
+    <obo:BFO_0000051></obo:BFO_0000051>
+    <obo:OBI_0001937>unchanged</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/54177d31-8cfe-4f6b-9745-f76918ac3d0c">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/9517f6b5-a006-45f8-83a5-c396a648c03a"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/238c9dce-b0ad-41bc-a166-b77b0eae42e9">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/9064f4a6-4949-4ff8-99d9-1120fea9ff32"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/548db22d-f710-4a26-b1fb-58a6c23b024d">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/4eccdfee-9f03-49a9-a6e3-3296a1467ab7"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/7344af98-6102-431c-b440-5377716a5ae6">
+    <obo:BFO_0000051>UNK</obo:BFO_0000051>
+    <obo:OBI_0001937>95.8</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/95a2bbc4-848c-43a1-8ab5-103ac595a256">
+    <obo:BFO_0000051>UNK</obo:BFO_0000051>
+    <obo:OBI_0001937>1.82</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/1b86fb9a-5ab6-4f86-bb64-e930eb26d613">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/ffb99706-84d4-4953-b1f2-55ca602d61a1"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/e34c5d02-cade-42cb-9ac6-90675cde1a9a">
+    <obo:BFO_0000051>Fold</obo:BFO_0000051>
+    <obo:OBI_0001937>0.71</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/11f040cb-c245-4c0c-bbcb-196910d5e17d">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/4f01855e-1445-433a-80d1-d334a31d14bf"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/b0a7a077-a2c0-437b-a3dc-0686448e9fbc">
+    <obo:BFO_0000051>Percent</obo:BFO_0000051>
+    <obo:OBI_0001937>65.1</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/6435cae3-1450-465f-97bf-19f6db2f45f8">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/ccbea2c0-f2dd-43ef-906e-12343c9af4ec"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/fe42f465-111d-4038-81e1-c962978481ed">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/5a8d3a4d-fca9-4cb0-9beb-2448b1bd1d7d"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/f6cb5a5e-a0f6-4ebe-a96d-56bf40ed92c7">
+    <obo:BFO_0000051>Fold</obo:BFO_0000051>
+    <obo:OBI_0001937>2.1</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/0dae7459-85cc-4fce-a93d-0c581821b058">
+    <obo:BFO_0000051>Percent</obo:BFO_0000051>
+    <obo:OBI_0001937>23</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/9517f6b5-a006-45f8-83a5-c396a648c03a">
+    <obo:BFO_0000051></obo:BFO_0000051>
+    <obo:OBI_0001937>unchanged</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/083ca7b5-5875-401f-b91b-d3b83680b039">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/393791dc-a2ef-4cf3-9700-4a5c682b5477"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/2dbaabc9-caa8-42d1-a7c3-7aa2e8fe05ae">
+    <obo:BFO_0000051>Fold</obo:BFO_0000051>
+    <obo:OBI_0001937>1.46</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/45843757-efde-4938-a1b6-947b819219b7">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/c1a698af-f8b5-4be5-87c7-beef673e35e8"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/14d8d735-1862-44c9-9b94-14478e405fbb">
+    <obo:BFO_0000051>Percent</obo:BFO_0000051>
+    <obo:OBI_0001937>102</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/1ab27ef9-6e58-467e-b468-b91350da989c">
+    <obo:BFO_0000051>Fold</obo:BFO_0000051>
+    <obo:OBI_0001937>8.61</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/precipitant-mass/6d7fc3bd-3fcb-49b2-aea8-7ec2aa3624cb">
+    <obo:IAO_0000039 rdf:resource="http://dikb.org/precipitant-milligram/42ce8964-4147-4604-a177-d06e9d748d3d"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/PATO_0000125"/>
+    <obo:OBI_0001937>1250</obo:OBI_0001937>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/3945945f-1e96-4d3f-9049-5dbfb0c6f10f">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/32442bfd-1b6d-4a0c-84fa-b83ed993c3a2"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/object-mass/7c2d8d8d-ad38-4dd2-90ec-05df61e57b12">
+    <obo:IAO_0000039 rdf:resource="http://dikb.org/object-milligram/7c2d8d8d-ad38-4dd2-90ec-05df61e57b12"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/PATO_0000125"/>
+    <obo:OBI_0001937>20</obo:OBI_0001937>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/32442bfd-1b6d-4a0c-84fa-b83ed993c3a2">
+    <obo:BFO_0000051></obo:BFO_0000051>
+    <obo:OBI_0001937>unchanged</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/e9d3f8f8-0a10-4984-9e78-bc5f2304bb6e">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/871ed1fa-f498-4e63-881c-402bf29b2ced"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/87b4d2b5-f3b1-4b65-ac65-d52e84cdb0e5">
+    <obo:BFO_0000051>UNK</obo:BFO_0000051>
+    <obo:OBI_0001937>129.9</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://purl.obolibrary.org/obo/DRON_00000028">
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/3ae0c598-91bd-4d1a-b3e4-b97c89268a36">
+    <obo:BFO_0000051></obo:BFO_0000051>
+    <obo:OBI_0001937>unchanged</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/4bb08e54-0ab3-4c4e-ae98-118fcfe3ce36">
+    <obo:BFO_0000051>UNK</obo:BFO_0000051>
+    <obo:OBI_0001937>1.34</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/43f6dce6-bda9-4d72-a402-c9b837dfec71">
+    <obo:BFO_0000051></obo:BFO_0000051>
+    <obo:OBI_0001937>unchanged</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/2dbafe16-42a9-4354-8e02-37675fa957a0">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/01060a6d-3186-4362-a99c-c27796a5825c"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/69936101-dcf9-4308-a4fe-2c7590325ff0">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/e34c5d02-cade-42cb-9ac6-90675cde1a9a"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/300ee108-f077-4319-a32c-6aec9039f282">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/2da60884-e0a9-4d2c-a0cf-963e88e4d853"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/5e1d95d8-5fbd-4524-b035-2b5a6a8ee2fb">
+    <obo:BFO_0000051>Fold</obo:BFO_0000051>
+    <obo:OBI_0001937>2.22</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/8e696b50-215e-49d8-aafe-644ac7d5b288">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/a9195043-6ca6-464e-a432-aa9af8229d1a"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/1edec71c-ef47-40af-89de-b34ab86e0a99">
+    <obo:BFO_0000051>Percent</obo:BFO_0000051>
+    <obo:OBI_0001937>117</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/482d629a-c6f1-4c28-a7c1-88c2830cd1fd">
+    <obo:BFO_0000051>Percent</obo:BFO_0000051>
+    <obo:OBI_0001937>600</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/d28a0e5d-da39-4534-90e3-06a03fd87561">
+    <obo:BFO_0000051>Fold</obo:BFO_0000051>
+    <obo:OBI_0001937>4.13</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/0b6fcf72-9112-4f88-8f5f-1040a647d7de">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/1c8c9586-42fc-4cb4-8c9f-122b5707480e"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/9d915507-419b-4247-9266-21e91cae1a9e">
+    <obo:BFO_0000051></obo:BFO_0000051>
+    <obo:OBI_0001937>unchanged</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/8400e414-3524-4aeb-aefc-12147210f87b">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/5d8a888f-b87c-4e2f-b556-23f8845f7796"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/443612c7-7108-4550-a167-f1bc820ca961">
+    <obo:BFO_0000051>Percent</obo:BFO_0000051>
+    <obo:OBI_0001937>81</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/a9195043-6ca6-464e-a432-aa9af8229d1a">
+    <obo:BFO_0000051></obo:BFO_0000051>
+    <obo:OBI_0001937>unchanged</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/4f909d74-26bf-4bf4-a3eb-703fe037ddc8">
+    <obo:BFO_0000051></obo:BFO_0000051>
+    <obo:OBI_0001937>unchanged</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/f0bcff32-deb3-407e-ba3c-4a356382de5c">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/ce6300fd-4655-49fc-ba23-e3bbb6835976"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/0c01cc40-b0d8-476c-96e9-f06f37a7fb16">
+    <obo:BFO_0000051></obo:BFO_0000051>
+    <obo:OBI_0001937>unchanged</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/27e126b9-8bb6-49ea-9a2d-890575858fe4">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/8c6a2c94-1cec-4257-8593-67e0368bb949"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/cb7d132b-7ea3-458a-912b-fc59ec3ef844">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/2fb8eb6c-1a30-471f-9bd0-bd55ee9d1fe9"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/8c4fff53-5159-46ef-95ba-d743e1190c41">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/1e30084b-61a0-4d7a-8715-ed8073852f1e"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/d3f8a66f-8af3-4a38-a0ca-491483e300a7">
+    <obo:BFO_0000051>Percent</obo:BFO_0000051>
+    <obo:OBI_0001937>74.4</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/7b10cb1f-0599-404c-8c96-c029b6720440">
+    <obo:BFO_0000051>Percent</obo:BFO_0000051>
+    <obo:OBI_0001937>56</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/4ed5cd5b-be63-4264-b5e6-debcece1217c">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/e3dbede3-b309-4eb6-9b81-f65ec0221106"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://purl.obolibrary.org/obo/IAO_0000136">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://purl.obolibrary.org/obo/IAO_0000039">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/o-scattered-molecular-aggregate/10abc863-407a-4086-8376-c53a22631064">
+    <obo:RO_0002351 rdf:resource="http://dikb.org/object-drug/5dedf5bc-762c-44c6-8ce5-4576a814f3be"/>
+    <obo:RO_0000053 rdf:resource="http://dikb.org/object-active-ingredient/af20c2de-4bf9-420a-8e08-dbfcbf12d14e"/>
+    <obo:RO_0000053 rdf:resource="http://dikb.org/object-mass/7c2d8d8d-ad38-4dd2-90ec-05df61e57b12"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0000576"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/8d5ca3a8-c75e-447e-abd7-85ed7db41987">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/58d3d526-152f-4d3d-b229-77183ce4fca7"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/ac54d7f0-e0a1-4408-98dd-ecae50bee8d8">
+    <obo:BFO_0000051></obo:BFO_0000051>
+    <obo:OBI_0001937>unchanged</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://purl.obolibrary.org/obo/OBI_0001933">
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/43f393d2-6dfb-4ac2-b862-f120375cd7e1">
+    <obo:BFO_0000051>Fold</obo:BFO_0000051>
+    <obo:OBI_0001937>3.08</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/cd575bcf-dacf-4959-b4a5-21aab82754e9">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/87b4d2b5-f3b1-4b65-ac65-d52e84cdb0e5"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/4e0b166e-1d58-486e-85cb-f86fc6d7ba8b">
+    <obo:BFO_0000051>Percent</obo:BFO_0000051>
+    <obo:OBI_0001937>28.5</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/7f80a10e-e940-4d6b-8c12-d88cc1c7d191">
+    <obo:BFO_0000051>UNK</obo:BFO_0000051>
+    <obo:OBI_0001937>103.2</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/145004aa-7ace-4ed9-b809-ab9c10efb3db">
+    <obo:BFO_0000051>None</obo:BFO_0000051>
+    <obo:OBI_0001937>unchanged</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/99373348-1ceb-4967-a4b7-7115fb64a586">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/3e60687d-3bd0-4d02-9054-d6e1dd36274d"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/0ee72199-9944-47ae-bc32-1650a430a331">
+    <obo:BFO_0000051>UNK</obo:BFO_0000051>
+    <obo:OBI_0001937>1.28</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/1a5c0496-5e90-4609-a12c-f84b1c7e29b3">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <rdfs:label>Nelfinavir-simvastatin drug package auc Increase information</rdfs:label>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/d1b799d4-afed-43a1-abc6-247bcfde6772"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/96689d46-c99e-401f-a4ad-266af987340c">
+    <obo:BFO_0000051>None</obo:BFO_0000051>
+    <obo:OBI_0001937>unchanged</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/5d8a888f-b87c-4e2f-b556-23f8845f7796">
+    <obo:BFO_0000051>Fold</obo:BFO_0000051>
+    <obo:OBI_0001937>9.36</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/78099919-df7f-471d-b80c-05d49501261c">
+    <obo:BFO_0000051></obo:BFO_0000051>
+    <obo:OBI_0001937>unchanged</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://purl.obolibrary.org/obo/TEMP_METHOD_CODE">
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/399d69cf-af72-4cd5-9fb4-34cb13082fd2">
+    <obo:BFO_0000051>Percent</obo:BFO_0000051>
+    <obo:OBI_0001937>23</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/e2a5d360-9588-4f19-96b2-fd92ccb1d261">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/2dbaabc9-caa8-42d1-a7c3-7aa2e8fe05ae"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/f91e43cc-7b00-4be3-aacf-3ae60ddfbd36">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/f94e557d-c376-480d-86b6-ff9ec60271ca"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/c2b2d76c-8ca8-434b-926c-949dedfc5760">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/a283690c-e1df-48dc-bc28-d5882feb9fc5"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/6bf47c93-fb6a-4e39-9b1e-7531ecb2646c">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/76ddd62b-7958-473c-b27d-bddc865bf02b"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/23dcfdb2-97cb-44f8-b1f8-7c21f697d69a">
+    <obo:BFO_0000051></obo:BFO_0000051>
+    <obo:OBI_0001937>unchanged</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/cbe91c6e-c190-4db6-86eb-24e33af48a79">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/191cc3b3-0c77-4aac-86c3-c94a56cbb9a5"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/5c6ad9f7-495e-493a-aa40-453b160be12e">
+    <obo:BFO_0000051>Fold</obo:BFO_0000051>
+    <obo:OBI_0001937>3-4</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/precipitant-drug/d73ecc22-6791-434f-a6c2-eba48035f3de">
+    <rdf:type rdf:resource="http://purl.bioontology.org/ontology/RXNORM/134527"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/c65074fa-b997-469d-b934-c59ec262ba7a">
+    <obo:BFO_0000051>Percent</obo:BFO_0000051>
+    <obo:OBI_0001937>21</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/90d13aa0-6756-4cb4-b074-4354581197d7">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/dfe26b33-ac8c-42ad-a54a-5c48d2e90260"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/ac3b1cec-5f03-4521-94b2-7a575c6d3873">
+    <obo:BFO_0000051></obo:BFO_0000051>
+    <obo:OBI_0001937>unchanged</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/c61507b0-1dac-4251-b031-7265b70bd514">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/0c01cc40-b0d8-476c-96e9-f06f37a7fb16"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/ecc6586d-2ab4-4132-8cbe-2cd1725558ff">
+    <obo:BFO_0000051>Fold</obo:BFO_0000051>
+    <obo:OBI_0001937>1.8</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/d372727d-bdf9-472d-89b3-fd3936445e81">
+    <obo:BFO_0000051>Fold</obo:BFO_0000051>
+    <obo:OBI_0001937>0.73</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/d1b271fe-9aa4-4dd9-a4ab-89aadbe54ab6">
+    <obo:BFO_0000051>Percent</obo:BFO_0000051>
+    <obo:OBI_0001937>81.4</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/ec54399a-82bb-44b7-bf84-81cbd439e1a3">
+    <obo:BFO_0000051></obo:BFO_0000051>
+    <obo:OBI_0001937>unchanged</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/3e60687d-3bd0-4d02-9054-d6e1dd36274d">
+    <obo:BFO_0000051>Percent</obo:BFO_0000051>
+    <obo:OBI_0001937>135</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/6315936a-9069-4886-9117-6566fd0eccc7">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/de9b40c8-e46b-4b17-9b45-d9a70d3fc09b"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/1c8c9586-42fc-4cb4-8c9f-122b5707480e">
+    <obo:BFO_0000051>Percent</obo:BFO_0000051>
+    <obo:OBI_0001937>22.5</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/0e2528a8-cfb7-41a0-a6be-e3b3b84a0718">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/3b732fc5-7d83-4438-999e-fb15730f2b08"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/2726f87d-70d4-4f79-a425-c1b85a1c5967">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/d3cd1196-0de2-4bbe-8ec9-0a222ce37506"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/2725c0ee-676f-418d-8dbe-e161755cc659">
+    <obo:BFO_0000051>UNK</obo:BFO_0000051>
+    <obo:OBI_0001937>1.4</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/191cc3b3-0c77-4aac-86c3-c94a56cbb9a5">
+    <obo:BFO_0000051>UNK</obo:BFO_0000051>
+    <obo:OBI_0001937>6.73</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://purl.obolibrary.org/obo/OBI_0001937">
+    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/e0a9fe22-fd28-4c72-b0b0-972317f04019">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/14d8d735-1862-44c9-9b94-14478e405fbb"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/2da60884-e0a9-4d2c-a0cf-963e88e4d853">
+    <obo:BFO_0000051>Percent</obo:BFO_0000051>
+    <obo:OBI_0001937>79</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/99ecb39b-fcae-40eb-aed7-1e0ce002d95e">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/ea4b2b02-5464-428a-8cc9-84edd771ba75"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/ea4b2b02-5464-428a-8cc9-84edd771ba75">
+    <obo:BFO_0000051>Fold</obo:BFO_0000051>
+    <obo:OBI_0001937>1.5</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/95d4a3ef-e3e4-45c1-8868-e1d57fc8de64">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/0a378297-546c-44bd-bdbd-e3e16d9d8c30"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/1b99900e-21a4-46e7-ad20-56a843f419a2">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/1fc82926-5df5-460a-a6b5-75aae4b77f64"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/00d8beaa-224b-4931-921e-805feb60a8ba">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/535f15f5-4817-41d6-9c70-9657440569b9"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/2b812085-6b11-416e-8e3f-f4c58d85f03c">
+    <obo:BFO_0000051></obo:BFO_0000051>
+    <obo:OBI_0001937>unchanged</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/f94e557d-c376-480d-86b6-ff9ec60271ca">
+    <obo:BFO_0000051>Fold</obo:BFO_0000051>
+    <obo:OBI_0001937>10.6</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/d678a987-32a6-4080-8e49-054875ae4b19">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/96689d46-c99e-401f-a4ad-266af987340c"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/1fca345e-5d82-415c-be9b-cfa892eda7bd">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <rdfs:label>Nelfinavir-simvastatin drug package cmax Increase information</rdfs:label>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/1e8ef5d2-e539-4701-a47c-a435e0cd7126"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/fe3d2da6-810c-4b88-a2d5-c54f87d1b467">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/33744c97-576d-4ffd-a639-9beab58f15aa"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/29639289-c100-4fe9-9b21-210bb27ddab0">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/3ae0c598-91bd-4d1a-b3e4-b97c89268a36"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/5d2b7e57-5525-48eb-a1be-d8b915eb9652">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/0dc7b225-cc54-4aa0-baff-9f19494f8070"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/bcacce6a-965a-4e56-be0f-e8c2762b88fe">
+    <obo:BFO_0000051>None</obo:BFO_0000051>
+    <obo:OBI_0001937>unchanged</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/3378b942-2199-46de-a241-187b4e88877e">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/d8a3538a-e44d-4e11-a4a8-e2fac0628b83"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/ba340420-6dd3-49cb-a638-96923e9bd2ab">
+    <obo:BFO_0000051>Percent</obo:BFO_0000051>
+    <obo:OBI_0001937>4.3</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://purl.obolibrary.org/obo/OBI_0000576">
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/cd6a3411-d6ea-405b-ae2d-7cfe1f2df901">
+    <obo:BFO_0000051></obo:BFO_0000051>
+    <obo:OBI_0001937>unchanged</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/0f72aa7d-2af9-41fe-910c-bf9d7d4e5e35">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/5c6ad9f7-495e-493a-aa40-453b160be12e"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/d5a07d39-6ecd-4758-8813-f73e7f7158ef">
+    <obo:BFO_0000051>Percent</obo:BFO_0000051>
+    <obo:OBI_0001937>67.6</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/fb8298be-7e5e-4dfb-8cd1-4b70ede76acc">
+    <obo:BFO_0000051>Fold</obo:BFO_0000051>
+    <obo:OBI_0001937>2.58</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/7f968839-fa31-4766-9d1a-9c78c76635db">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/2bf7cf9a-809e-47f4-9fd9-c13cb98b2808"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/1c47743e-8ae3-4be6-88c2-f1b429a04e40">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/61689d39-d887-4474-8602-6c6c6e1173e4"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/97a71bb5-6c09-44d5-be5d-6e07d759cbfe"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/9b859a78-fa16-4307-9045-fc22ae133f1d">
+    <obo:BFO_0000051>Fold</obo:BFO_0000051>
+    <obo:OBI_0001937>2.2</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/a283690c-e1df-48dc-bc28-d5882feb9fc5">
+    <obo:BFO_0000051>Percent</obo:BFO_0000051>
+    <obo:OBI_0001937>84</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
+</rdf:RDF>
