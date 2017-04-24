@@ -171,6 +171,60 @@ function initLiseners() {
         $('#commitDrug2').show();
     });
 
+    $('#edit-clUnit').click(editUnit);
+    $('#edit-vmaxUnit').click(editUnit);
+    $('#edit-inhibitionUnit').click(editUnit);
+    $('#edit-kmUnit').click(editUnit);
+    $('#edit-kiUnit').click(editUnit);
+    $('#edit-kinactUnit').click(editUnit);
+    $('#edit-ic50Unit').click(editUnit);
+
+    function editUnit() {
+        var field = currFormType + "Unit";
+        $('#' + field).hide();
+        $('#' + field + '-input').show();
+        $('#edit-' + field).hide();
+        $('#commit-' + field).show();
+    }
+
+    $('#commit-clUnit').click(checkEditedUnit);
+    $('#commit-vmaxUnit').click(checkEditedUnit);
+    $('#commit-inhibitionUnit').click(checkEditedUnit);
+    $('#commit-kmUnit').click(checkEditedUnit);
+    $('#commit-kiUnit').click(checkEditedUnit);
+    $('#commit-kinactUnit').click(checkEditedUnit);
+    $('#commit-ic50Unit').click(checkEditedUnit);
+
+    function checkEditedUnit() {
+        var field = currFormType + "Unit";
+        $('#' + field).show();
+        $('#' + field + '-input').hide();
+        $('#edit-' + field).show();
+        $('#commit-' + field).hide();
+        //add input drug1 to dropdown list
+        var input_object = $('#'+field+'-input').val();
+        if (input_object != "") { //sanity check
+            //sanity check - input duplicates
+            var tempval = input_object;
+            //add option
+            if ($('#'+field+' option[value = \"'+tempval+'\"]').length == 0) {
+                $('#'+field).append($('<option>', {
+                    value: tempval,
+                    text: tempval
+                }));
+            }
+            //select option
+            $('#'+field+' > option').each(function () {
+                console.log(this.text);
+                if (this.text === tempval) {
+                    $(this).prop('selected', true);
+                } else {
+                    $(this).prop('selected', false);
+                }
+            });
+        }
+    }
+
     $('#edit-object-metabolite').click(function() {
         $('#object-metabolite').hide();
         $('#object-metabolite-input').show();
@@ -275,6 +329,8 @@ function initLiseners() {
     unchangedCheckBoxDialog("km");
     unchangedCheckBoxDialog("ki");
     unchangedCheckBoxDialog("inhibition");
+    unchangedCheckBoxDialog("kinact");
+    unchangedCheckBoxDialog("ic50");
     
     // jquery for checking form editing status
     $(":input").change(function(){
@@ -436,8 +492,8 @@ function unchangedCheckBoxDialog(field) {
         });
     }
 
-    //experiment measurement: cl, vmax, km, ki, inhibition
-    if (field == "cl" || field == "vmax" || field == "km" || field == "ki" || field == "inhibition") {
+    //experiment measurement: cl, vmax, km, ki, inhibition, kinact, ic50
+    if (field == "cl" || field == "vmax" || field == "km" || field == "ki" || field == "inhibition" || field == "kinact" || field == "ic50") {
 
         $('#' + field + '-unchanged-checkbox').change(function() {
             

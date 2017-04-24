@@ -235,7 +235,7 @@ function addNewExperimentRow() {
             experimentRow += "<td>" + objectMetabolite + "</td>";
         }
 
-        experimentRow += "<td onclick='addDataCellByEditor(\"cl\", 0);'><td onclick='addDataCellByEditor(\"vmax\", 0);'><td onclick='addDataCellByEditor(\"km\", 0);'><td onclick='addDataCellByEditor(\"ki\", 0);'><td onclick='addDataCellByEditor(\"inhibition\", 0);'></td>";
+        experimentRow += "<td onclick='addDataCellByEditor(\"cl\", 0);'></td><td onclick='addDataCellByEditor(\"vmax\", 0);'></td><td onclick='addDataCellByEditor(\"km\", 0);'></td><td onclick='addDataCellByEditor(\"ki\", 0);'></td><td onclick='addDataCellByEditor(\"inhibition\", 0);'></td><td onclick='addDataCellByEditor(\"kinact\", 0);'></td><td onclick='addDataCellByEditor(\"ic50\", 0);'></td>";
         if (!protein.includes(enzyme) || objectDrug != 'N/A') {
             experimentRow += "<td onclick='addDataCellByEditor(\"rateWith\",\""+dataNumLast+"\", true);'></td><td onclick='addDataCellByEditor(\"rateWithout\",\""+dataNumLast+"\", true);'></td>";
         } else {
@@ -409,7 +409,7 @@ function createExperimentTable(annotation){
         experimentTable += "<td>Object Metabolite</td>";
     }
 
-    experimentTable += "<td>CL<sub>int total</sub></td><td>V<sub>max</sub></td><td>K<sub>m</sub></td><td>K<sub>i</sub></td><td>%Inhibition</td>";
+    experimentTable += "<td>CL<sub>int total</sub></td><td>V<sub>max</sub></td><td>K<sub>m</sub></td><td>K<sub>i</sub></td><td>%Inhibition</td><td>K(inact)</td><td>IC(50)</td>";
     if (relation == "inhibits") {
         if (protein.includes(enzyme)) { //protein
             if (objectDrug == 'N/A') {
@@ -463,12 +463,13 @@ function createExperimentTable(annotation){
                 row += "<td>" + objectMetabolite + "</td>";
             }
 
-            //measurement
+            // measurement
+            // dict
             if (data.measurement == null) {
                 var measurementTmp = {};
                 data.measurement = measurementTmp;
             }
-            var mTypes = ["cl", "vmax", "km", "ki", "inhibition"];
+            var mTypes = ["cl", "vmax", "km", "ki", "inhibition", "kinact", "ic50"];
             for (var i = 0; i < mTypes.length; i++) {
                 var mType = mTypes[i];
                 if (data.measurement[mType] != null && data.measurement[mType].value != null)
@@ -510,7 +511,7 @@ function createExperimentTable(annotation){
             if (objectMetabolite != "N/A") {
                 experimentTable += "<td>" + objectMetabolite + "</td>";
             }
-        experimentTable += "<td onclick='addDataCellByEditor(\"cl\", 0);'><td onclick='addDataCellByEditor(\"vmax\", 0);'><td onclick='addDataCellByEditor(\"km\", 0);'><td onclick='addDataCellByEditor(\"ki\", 0);'><td onclick='addDataCellByEditor(\"inhibition\", 0);'></td><td onclick='addDataCellByEditor(\"rateWith\", 0);'></td><td onclick='addDataCellByEditor(\"rateWithout\", 0);'></td><td onclick='addDataCellByEditor(\"studytype\",0);'></td></tr>";
+        experimentTable += "<td onclick='addDataCellByEditor(\"cl\", 0);'><td onclick='addDataCellByEditor(\"vmax\", 0);'><td onclick='addDataCellByEditor(\"km\", 0);'><td onclick='addDataCellByEditor(\"ki\", 0);'><td onclick='addDataCellByEditor(\"inhibition\", 0);'></td><td onclick='addDataCellByEditor(\"kinact\", 0);'></td><td onclick='addDataCellByEditor(\"ic50\", 0);'></td><td onclick='addDataCellByEditor(\"rateWith\", 0);'></td><td onclick='addDataCellByEditor(\"rateWithout\", 0);'></td><td onclick='addDataCellByEditor(\"studytype\",0);'></td></tr>";
     }
     experimentTable += "</table>";
     return experimentTable;

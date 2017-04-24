@@ -38,6 +38,8 @@ function claimEditorLoad() {
     $("#mp-data-form-km").hide();
     $("#mp-data-form-ki").hide();
     $("#mp-data-form-inhibition").hide();
+    $("#mp-data-form-kinact").hide();
+    $("#mp-data-form-ic50").hide();
 }
 
 function reviewerChange() {
@@ -440,7 +442,7 @@ function editDataCellByEditor(field, dataNum) {
                 material = data.supportsBy.supportsBy;
                 
                 if ((field == "participants" && material.participants.value != null) || (field == "dose1" && material.drug1Dose.value != null) || (field == "dose2" && material.drug2Dose.value != null) || ((field == "auc" || field == "cmax" || field == "clearance" || field == "halflife") && (data[field].value != null)) || 
-                    field == "rateWithout" || field == "rateWith" || field == "cellSystem" || field == "cl" || field == "vmax" || field == "km" || field == "ki" || field == "inhibition")
+                    field == "rateWithout" || field == "rateWith" || field == "cellSystem" || field == "cl" || field == "vmax" || field == "km" || field == "ki" || field == "inhibition" || field == "kinact" || field == "ic50")
                     $("#annotator-delete").show();
                 
                 // call AnnotatorJs editor for update    
