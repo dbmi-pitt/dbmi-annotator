@@ -15,6 +15,9 @@ if [[ -z $HOST || -z $PORT || -z $SNAPSHOT ]]; then
    echo "ex. bash elastic-restore.sh localhost 9200 20160822-164139"
    exit
 else
+    # register snapshot repository
+    curl -XPUT "http://$HOST:$PORT/_snapshot/dbmiannotator-elastic-snapshot" -d '{ "type": "fs", "settings": { "location": "/home/dbmiannotator-elastic-snapshot", "compress": true }}'
+
     INDEX=annotator
 
     # Close the index
