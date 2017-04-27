@@ -22,7 +22,7 @@ config.profile.userProfile = {};
 
 //article list
 //vlan
-config.article = ['dailymed','pmc','wiley','elsevier','springer','sage','taylor','wolters','future'];
+config.article = ['dailymed','pmc','wiley','elsevier','springer','sage','taylor','wolters','future', 'test-experiment'];
 //public
 //config.article = ['dailymed','pmc';
 

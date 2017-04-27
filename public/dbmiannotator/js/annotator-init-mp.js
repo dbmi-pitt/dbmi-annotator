@@ -171,6 +171,96 @@ function initLiseners() {
         $('#commitDrug2').show();
     });
 
+    $('#edit-clUnit').click(editUnit);
+    $('#edit-vmaxUnit').click(editUnit);
+    $('#edit-inhibitionUnit').click(editUnit);
+    $('#edit-kmUnit').click(editUnit);
+    $('#edit-kiUnit').click(editUnit);
+    $('#edit-kinactUnit').click(editUnit);
+    $('#edit-ic50Unit').click(editUnit);
+
+    function editUnit() {
+        var field = currFormType + "Unit";
+        $('#' + field).hide();
+        $('#' + field + '-input').show();
+        $('#edit-' + field).hide();
+        $('#commit-' + field).show();
+    }
+
+    $('#commit-clUnit').click(checkEditedUnit);
+    $('#commit-vmaxUnit').click(checkEditedUnit);
+    $('#commit-inhibitionUnit').click(checkEditedUnit);
+    $('#commit-kmUnit').click(checkEditedUnit);
+    $('#commit-kiUnit').click(checkEditedUnit);
+    $('#commit-kinactUnit').click(checkEditedUnit);
+    $('#commit-ic50Unit').click(checkEditedUnit);
+
+    function checkEditedUnit() {
+        var field = currFormType + "Unit";
+        $('#' + field).show();
+        $('#' + field + '-input').hide();
+        $('#edit-' + field).show();
+        $('#commit-' + field).hide();
+        //add input drug1 to dropdown list
+        var input_object = $('#'+field+'-input').val();
+        if (input_object != "") { //sanity check
+            //sanity check - input duplicates
+            var tempval = input_object;
+            //add option
+            if ($('#'+field+' option[value = \"'+tempval+'\"]').length == 0) {
+                $('#'+field).append($('<option>', {
+                    value: tempval,
+                    text: tempval
+                }));
+            }
+            //select option
+            $('#'+field+' > option').each(function () {
+                console.log(this.text);
+                if (this.text === tempval) {
+                    $(this).prop('selected', true);
+                } else {
+                    $(this).prop('selected', false);
+                }
+            });
+        }
+    }
+
+    $('#edit-object-metabolite').click(function() {
+        $('#object-metabolite').hide();
+        $('#object-metabolite-input').show();
+        $('#edit-object-metabolite').hide();
+        $('#commit-object-metabolite').show();
+    });
+
+    $('#commit-object-metabolite').click(function() {
+        $('#object-metabolite').show();
+        $('#object-metabolite-input').hide();
+        $('#edit-object-metabolite').show();
+        $('#commit-object-metabolite').hide();
+        //add input drug1 to dropdown list
+        var input_object = $('#object-metabolite-input').val();
+        if (input_object != "") { //sanity check
+            //sanity check - input duplicates
+            var tempval = input_object;
+            //add option
+            if ($('#object-metabolite option[value = \"'+tempval+'\"]').length == 0) {
+                $('#object-metabolite').append($('<option>', {
+                    value: tempval,
+                    text: tempval
+                }));
+            }
+            //select option
+            $('#object-metabolite > option').each(function () {
+                console.log(this.text);
+                if (this.text === tempval) {
+                    $(this).prop('selected', true);
+                } else {
+                    $(this).prop('selected', false);
+                }
+            });
+        }
+    });
+
     $('#commitDrug1').click(function() {
         $('#Drug1').show();
         $('#Drug1-input').hide();
@@ -181,7 +271,7 @@ function initLiseners() {
         if (input_drug1 != "") { //sanity check
             //sanity check - input duplicates
             var tempval = input_drug1 + "_0";
-            if ($('#Drug1 option[value = '+tempval+']').length == 0) {
+            if ($('#Drug1 option[value = \"'+tempval+'\"]').length == 0) {
                 $('#Drug1').append($('<option>', {
                     value: input_drug1 + "_0",
                     text: input_drug1
@@ -210,7 +300,7 @@ function initLiseners() {
         if (input_drug2 != "") { //sanity check - input is null
             //sanity check - input duplicates
             var tempval = input_drug2 + "_0";
-            if ($('#Drug2 option[value = '+tempval+']').length == 0) {
+            if ($('#Drug2 option[value = \"'+tempval+'\"]').length == 0) {
                 $('#Drug2').append($('<option>', {
                     value: input_drug2 + "_0",
                     text: input_drug2
@@ -234,6 +324,13 @@ function initLiseners() {
     unchangedCheckBoxDialog("cmax");
     unchangedCheckBoxDialog("clearance");
     unchangedCheckBoxDialog("halflife");
+    unchangedCheckBoxDialog("cl");
+    unchangedCheckBoxDialog("vmax");
+    unchangedCheckBoxDialog("km");
+    unchangedCheckBoxDialog("ki");
+    unchangedCheckBoxDialog("inhibition");
+    unchangedCheckBoxDialog("kinact");
+    unchangedCheckBoxDialog("ic50");
     
     // jquery for checking form editing status
     $(":input").change(function(){
@@ -345,53 +442,100 @@ function rejectEvidenceCheckBox(field) {
 // dialog for confirm truncation when user check unchanged checkbox  
 // fields allowed: auc, cmax, clearance, halflife
 function unchangedCheckBoxDialog(field) {
-    if (field !== "auc" && field!== "cmax" && field!== "clearance" && field !== "halflife") { return; }
+    //auc, cmax, clearance, halflife
+    if (field == "auc" || field == "cmax" || field == "clearance" || field == "halflife") {
 
-    $('#' + field + '-unchanged-checkbox').change(function() {
-        
-        if ($(this).is(":checked")) {            
-            if ($('#'+field).val() != null && $('#'+field).val().trim() != "") {
-                // show unchanged warn dialog
-                var unchangedDialog = document.getElementById('unchanged-warn-dialog');
-                unchangedDialog.style.display = "block";
-                // When the user clicks anywhere outside of the dialog, close it
-                window.onclick = function(event) {
-                    if (event.target == unchangedDialog) {
-                        unchangedDialog.style.display = "none";
+        $('#' + field + '-unchanged-checkbox').change(function() {
+            
+            if ($(this).is(":checked")) {            
+                if ($('#'+field).val() != null && $('#'+field).val().trim() != "") {
+                    // show unchanged warn dialog
+                    var unchangedDialog = document.getElementById('unchanged-warn-dialog');
+                    unchangedDialog.style.display = "block";
+                    // When the user clicks anywhere outside of the dialog, close it
+                    window.onclick = function(event) {
+                        if (event.target == unchangedDialog) {
+                            unchangedDialog.style.display = "none";
+                        }
                     }
-                }
-                
-                var okBtn = document.getElementById("unchanged-dialog-ok-btn");
-                var cancelBtn = document.getElementById("unchanged-dialog-cancel-btn");
-                okBtn.onclick = function() {
-                    unchangedDialog.style.display = "none";
-                    $('#'+field).val('');
+                    
+                    var okBtn = document.getElementById("unchanged-dialog-ok-btn");
+                    var cancelBtn = document.getElementById("unchanged-dialog-cancel-btn");
+                    okBtn.onclick = function() {
+                        unchangedDialog.style.display = "none";
+                        $('#'+field).val('');
+                        $('#'+field+'Type')[0].selectedIndex = -1;
+                        $('#'+field+'Direction')[0].selectedIndex = -1;
+                        
+                        $('#'+field).attr('disabled', true);
+                        $('#'+field+'Type').attr('disabled', true);
+                        $('#'+field+'Direction').attr('disabled', true);   
+                    }
+                    cancelBtn.onclick = function() {
+                        unchangedDialog.style.display = "none"; 
+                        $('#'+field+'-unchanged-checkbox').attr('checked',false);
+                    }
+                } else {                
                     $('#'+field+'Type')[0].selectedIndex = -1;
                     $('#'+field+'Direction')[0].selectedIndex = -1;
                     
                     $('#'+field).attr('disabled', true);
                     $('#'+field+'Type').attr('disabled', true);
-                    $('#'+field+'Direction').attr('disabled', true);   
-                }
-                cancelBtn.onclick = function() {
-                    unchangedDialog.style.display = "none"; 
-                    $('#'+field+'-unchanged-checkbox').attr('checked',false);
-                }
-            } else {                
-                $('#'+field+'Type')[0].selectedIndex = -1;
-                $('#'+field+'Direction')[0].selectedIndex = -1;
-                
-                $('#'+field).attr('disabled', true);
-                $('#'+field+'Type').attr('disabled', true);
-                $('#'+field+'Direction').attr('disabled', true);                   
-            }            
-        } else {
-            // TODO: grey out fields
-            $('#'+field).attr('disabled', false);
-            $('#'+field+'Type').attr('disabled', false);
-            $('#'+field+'Direction').attr('disabled', false);   
-        }
-    });
+                    $('#'+field+'Direction').attr('disabled', true);                   
+                }            
+            } else {
+                // TODO: grey out fields
+                $('#'+field).attr('disabled', false);
+                $('#'+field+'Type').attr('disabled', false);
+                $('#'+field+'Direction').attr('disabled', false);   
+            }
+        });
+    }
+
+    //experiment measurement: cl, vmax, km, ki, inhibition, kinact, ic50
+    if (field == "cl" || field == "vmax" || field == "km" || field == "ki" || field == "inhibition" || field == "kinact" || field == "ic50") {
+
+        $('#' + field + '-unchanged-checkbox').change(function() {
+            
+            if ($(this).is(":checked")) {
+                if ($('#'+field+'Value').val() != null && $('#'+field+'Value').val().trim() != "") {
+                    // show unchanged warn dialog
+                    var unchangedDialog = document.getElementById('unchanged-warn-dialog');
+                    unchangedDialog.style.display = "block";
+                    // When the user clicks anywhere outside of the dialog, close it
+                    window.onclick = function(event) {
+                        if (event.target == unchangedDialog) {
+                            unchangedDialog.style.display = "none";
+                        }
+                    }
+                    
+                    var okBtn = document.getElementById("unchanged-dialog-ok-btn");
+                    var cancelBtn = document.getElementById("unchanged-dialog-cancel-btn");
+                    okBtn.onclick = function() {
+                        unchangedDialog.style.display = "none";
+                        $('#'+field+'Value').val('');
+                        $('#'+field+'Unit')[0].selectedIndex = -1;
+                        
+                        $('#' + field + 'Unit').attr('disabled', true);
+                        $('#' + field + 'Value').attr('disabled', true);  
+                    }
+                    cancelBtn.onclick = function() {
+                        unchangedDialog.style.display = "none"; 
+                        $('#'+field+'-unchanged-checkbox').attr('checked',false);
+                    }
+                } else {                
+                    $('#'+field+'Unit')[0].selectedIndex = -1;
+                    
+                    $('#' + field + 'Unit').attr('disabled', true);
+                    $('#' + field + 'Value').attr('disabled', true);                 
+                }            
+            } else {
+                // TODO: grey out fields
+                $('#' + field + 'Unit').attr('disabled', false);
+                $('#' + field +'Value').attr('disabled', false);
+            }
+        });
+    }
 }
 
 // pop up dialog for importable existing annotation sets  

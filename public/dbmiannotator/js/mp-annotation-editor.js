@@ -8,6 +8,7 @@ function claimEditorLoad() {
     $(".annotator-save").hide();
     $("#mp-data-nav").hide();
     $("#mp-dips-nav").hide();
+    $("#mp-experiment-nav").hide();
     $("#mp-data-form-evRelationship").hide();
     $("#mp-data-form-participants").hide();
     $("#mp-data-form-dose1").hide();
@@ -29,6 +30,16 @@ function claimEditorLoad() {
     $("#mp-data-form-q8").hide();
     $("#mp-data-form-q9").hide();
     $("#mp-data-form-q10").hide();
+    $("#mp-data-form-cellSystem").hide();
+    $("#mp-data-form-rateWith").hide();
+    $("#mp-data-form-rateWithout").hide();
+    $("#mp-data-form-cl").hide();
+    $("#mp-data-form-vmax").hide();
+    $("#mp-data-form-km").hide();
+    $("#mp-data-form-ki").hide();
+    $("#mp-data-form-inhibition").hide();
+    $("#mp-data-form-kinact").hide();
+    $("#mp-data-form-ic50").hide();
 }
 
 function reviewerChange() {
@@ -64,14 +75,23 @@ function editClaim() {
 
 // when method is phenotype and relationship is inhibits or substrate of
 function changeCausedbyMethod() {
+    $("#relationship option[value = 'interact with']").removeAttr('disabled');
+    $("#relationship option[value = 'interact with']").show();
+    $("#relationship option[value = 'inhibits']").removeAttr('disabled');
+    $("#relationship option[value = 'inhibits']").show();
+    $("#relationship option[value = 'substrate of']").removeAttr('disabled');
+    $("#relationship option[value = 'substrate of']").show();
+    $('#object-metabolite').parent().hide();
+    $('#object-metabolite-label').parent().hide();
+
     var methodValue = $("#method option:selected").text();
     //statement
     if (methodValue == "Statement") {
-        $('#negationdiv').show();
-        $('#negation-label').show();
+        $('#negationdiv').parent().show();
+        $('#negation-label').parent().show();
     } else {
-        $('#negationdiv').hide();
-        $('#negation-label').hide();
+        $('#negationdiv').parent().hide();
+        $('#negation-label').parent().hide();
     }
     //phenotype - no interact with
     if (methodValue == "Phenotype clinical study") {
@@ -81,9 +101,6 @@ function changeCausedbyMethod() {
             $("#relationship option:selected").prop("selected", false);
             $("#relationship option[value='inhibits']").prop("selected", true);
         }
-    } else {
-        $("#relationship option[value = 'interact with']").removeAttr('disabled');
-        $("#relationship option[value = 'interact with']").show();
     }
     //case report - no substrate of or inhibits
     if (methodValue == "Case Report") {
@@ -95,12 +112,19 @@ function changeCausedbyMethod() {
             $("#relationship option:selected").prop("selected", false);
             $("#relationship option[value='interact with']").prop("selected", true);
         }
-    } else {
-        $("#relationship option[value = 'inhibits']").removeAttr('disabled');
-        $("#relationship option[value = 'inhibits']").show();
-        $("#relationship option[value = 'substrate of']").removeAttr('disabled');
-        $("#relationship option[value = 'substrate of']").show();
     }
+    //experiment - no interact with
+    if (methodValue == "Experiment") {
+        $("#relationship option[value = 'interact with']").attr('disabled', 'disabled');
+        $("#relationship option[value = 'interact with']").hide();
+        if ($("#relationship option:selected").text() == "interact with") {
+            $("#relationship option:selected").prop("selected", false);
+            $("#relationship option[value='inhibits']").prop("selected", true);
+        }
+        $('#object-metabolite').parent().show();
+        $('#object-metabolite-label').parent().show();
+    }
+
     //phenotype & statement
     if ((methodValue == "Phenotype clinical study" || methodValue == "Statement") && ($("#relationship option:selected").text() == "inhibits"||$("#relationship option:selected").text()=="substrate of")) {
         $("#Drug1-label").html("Drug: ");
@@ -264,6 +288,9 @@ function addDataCellByEditor(field, dataNum, isNewData) {
     if (!isTextSelected && !selectedTextNotNeed.includes(field)) {
         warnSelectTextSpan(field);
     } else {
+        $("#mp-data-nav").hide();
+        $("#mp-dips-nav").hide();
+        $("#mp-experiment-nav").hide();
         // hide data fields navigation if editing evidence relationship 
         if (field == "evRelationship" || field =="studytype") {
             $("#mp-data-nav").hide();
@@ -282,6 +309,9 @@ function addDataCellByEditor(field, dataNum, isNewData) {
             } else {
                 $('.dipsQuestion').prop('disabled', false);
             }
+        } else if (currAnnotation.argues.method == "Experiment"){
+            $("#mp-experiment-nav").show();
+            //$("#annotator-save").show();
         } else {
             $("#mp-data-nav").show();
             $("#mp-dips-nav").hide();
@@ -290,7 +320,7 @@ function addDataCellByEditor(field, dataNum, isNewData) {
         if (currAnnotation.argues.method == "Phenotype clinical study") {
             $('#nav-dose2-btn').hide();
             $('#nav-phenotype-btn').show();
-        } else {
+        } else if (currAnnotation.argues.method != "Experiment"){
             $('#nav-dose2-btn').show();
             $('#nav-phenotype-btn').hide();
         }
@@ -321,7 +351,7 @@ function addDataCellByEditor(field, dataNum, isNewData) {
                     // add data if not avaliable  
                     if (annotation.argues.supportsBy.length == 0 || isNewData){ 
 
-                        var data = {type : "mp:data", evRelationship: "", auc : {}, cmax : {}, clearance : {}, halflife : {}, reviewer: {}, dips: {}, supportsBy : {type : "mp:method", supportsBy : {type : "mp:material", participants : {}, drug1Dose : {}, drug2Dose : {}, phenotype: {}}}, grouprandom: "", parallelgroup: ""};
+                        var data = {type : "mp:data", evRelationship: "", auc : {}, cmax : {}, clearance : {}, halflife : {}, reviewer: {}, dips: {}, cellSystem: {}, metaboliteRateWith: {}, metaboliteRateWithout: {}, measurement: {}, supportsBy : {type : "mp:method", supportsBy : {type : "mp:material", participants : {}, drug1Dose : {}, drug2Dose : {}, phenotype: {}}}, grouprandom: "", parallelgroup: ""};
                         annotation.argues.supportsBy.push(data); 
                     } 
                     
@@ -342,7 +372,9 @@ function editDataCellByEditor(field, dataNum) {
     showEditor();
     $("#claim-label-data-editor").show();
     $('#quote').hide();
-    
+    $("#mp-data-nav").hide();
+    $("#mp-dips-nav").hide();
+    $("#mp-experiment-nav").hide();
     // hide data fields navigation if editing evidence relationship 
     if (field == "evRelationship" || field =="studytype") {
         $("#mp-data-nav").hide();
@@ -361,6 +393,9 @@ function editDataCellByEditor(field, dataNum) {
         } else {
             $('.dipsQuestion').prop('disabled', false);
         }
+    } else if (currAnnotation.argues.method == "Experiment"){
+        $("#mp-experiment-nav").show();
+        //$("#annotator-save").show();
     } else {
         $("#mp-data-nav").show();
         $("#mp-dips-nav").hide();
@@ -405,7 +440,9 @@ function editDataCellByEditor(field, dataNum) {
                 // show delete button
                 data = annotation.argues.supportsBy[dataNum];
                 material = data.supportsBy.supportsBy;
-                if ((field == "participants" && material.participants.value != null) || (field == "dose1" && material.drug1Dose.value != null) || (field == "dose2" && material.drug2Dose.value != null) || ((field == "auc" || field == "cmax" || field == "clearance" || field == "halflife") && (data[field].value != null)))
+                
+                if ((field == "participants" && material.participants.value != null) || (field == "dose1" && material.drug1Dose.value != null) || (field == "dose2" && material.drug2Dose.value != null) || ((field == "auc" || field == "cmax" || field == "clearance" || field == "halflife") && (data[field].value != null)) || 
+                    field == "rateWithout" || field == "rateWith" || field == "cellSystem" || field == "cl" || field == "vmax" || field == "km" || field == "ki" || field == "inhibition" || field == "kinact" || field == "ic50")
                     $("#annotator-delete").show();
                 
                 // call AnnotatorJs editor for update    
