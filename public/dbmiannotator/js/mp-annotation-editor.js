@@ -83,6 +83,11 @@ function changeCausedbyMethod() {
     $("#relationship option[value = 'substrate of']").show();
     $('#object-metabolite').parent().hide();
     $('#object-metabolite-label').parent().hide();
+    var selectR = $("#relationship option:selected").text();
+    if (selectR == "has metabolite" || selectR == "controls formation of" || selectR == "inhibition constant") {
+        $("#relationship option:selected").prop("selected", false);
+        $("#relationship option[value='interact with']").prop("selected", true);
+    }
 
     var methodValue = $("#method option:selected").text();
     //statement
@@ -113,16 +118,26 @@ function changeCausedbyMethod() {
             $("#relationship option[value='interact with']").prop("selected", true);
         }
     }
-    //experiment - no interact with
+    //experiment - no interact with, add "has metabolite", "controls formation of", "inhibition constant"
     if (methodValue == "Experiment") {
+        $("#relationship option").removeAttr('disabled');
+        $("#relationship option").show();
         $("#relationship option[value = 'interact with']").attr('disabled', 'disabled');
         $("#relationship option[value = 'interact with']").hide();
-        if ($("#relationship option:selected").text() == "interact with") {
+        var selectedR = $("#relationship option:selected").text();
+        if (selectedR == "interact with") {
             $("#relationship option:selected").prop("selected", false);
             $("#relationship option[value='inhibits']").prop("selected", true);
         }
         $('#object-metabolite').parent().show();
         $('#object-metabolite-label').parent().show();
+    } else {
+        $("#relationship option[value = 'has metabolite']").attr('disabled', 'disabled');
+        $("#relationship option[value = 'has metabolite']").hide();
+        $("#relationship option[value = 'controls formation of']").attr('disabled', 'disabled');
+        $("#relationship option[value = 'controls formation of']").hide();
+        $("#relationship option[value = 'inhibition constant']").attr('disabled', 'disabled');
+        $("#relationship option[value = 'inhibition constant']").hide();
     }
 
     //phenotype & statement
