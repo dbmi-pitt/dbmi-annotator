@@ -114,15 +114,21 @@ if method is "Experiments"
     if predicate is "inhibits"
 
         required: drug1, precipitant, enzyme
+	optional: drug2, object metabolite
 
         if drug1 is "precipitant"
-            mpsubject: drug1, mpobject: enzyme, precipitant: drug1, ddiobject: drug2
+            mpsubject: drug1, mpobject: enzyme, precipitant: drug1, ddiobject: None
+	    if drug2
+	       drug2: essay (extra qualifier)
         else
-            mpsubject: drug2, mpobject: enzyme, precipitant: drug2, ddiobject: drug1
+            mpsubject: drug2, mpobject: enzyme, precipitant: drug2, ddiobject: None
+	    if drug1
+	       drug1: essay (extra qualifier)
 
     if predicate is "substrate of"
 
-        required: drug1, precipitant, enzyme
+        required: drug1, enzyme
+	optional: drug2, object metabolite
 
         if drug1 is "precipitant"
             mpsubject: drug2, mpobject: enzyme, precipitant: drug1, ddiobject: drug2
@@ -132,23 +138,29 @@ if method is "Experiments"
     if predicate is "has metabolite"
 
         required: drug1, precipitant, object metabolite
+	optional: drug2
 
         if drug1 is precipitant
-            mpsubject: drug1, mpobject: object metabolite, precipitant: drug1, ddiobject: object metabolite
+            mpsubject: drug1, mpobject: object metabolite, precipitant: drug1, ddiobject: None
+	    if drug2
+	       drug2: essay (extra qualifier)
         else
-        mpsubject: drug2, mpobject: object metabolite, precipitant: drug2, ddiobject: object metabolite
+	    mpsubject: drug2, mpobject: object metabolite, precipitant: drug2, ddiobject: None
+	    if drug1
+	       drug1: essay (extra qualifier)
 
     if predicate is "controls formation of"
 
-    required: drug1, precipitant, enzyme, object metabolite
+        required: drug1, precipitant, enzyme, object metabolite
 
-        mpsubject: enzyme, mpobject: object metabolite, precipitant: drug1, ddiobject: object metabolite
+        mpsubject: enzyme, mpobject: object metabolite, precipitant: drug1, ddiobject: None
 
     if predicate is "inhibition constant"
 
         required: drug1, enzyme, precipitant
+	optional: drug2, object metabolite
 
-    if drug 1 is precipitant
-        mpsubject: drug1, mpobject: enzyme, precipitant: drug1, ddiobject: enzyme
-    else
-        mpsubject: drug2, mpobject: enzyme, precipitant: drug2, ddiobject: enzyme
+    	if drug 1 is precipitant
+            mpsubject: drug1, mpobject: enzyme, precipitant: drug1, ddiobject: drug2 if available
+    	else
+	    mpsubject: drug2, mpobject: enzyme, precipitant: drug2, ddiobject: drug1 if available
