@@ -21,7 +21,8 @@
          'enzyme':'',
          'drug1PC':'enantiomer|metabolite',
          'drug2PC':'enantiomer|metabolite',
-         'precipitant': 'drug1 or drug2'
+         'precipitant': 'drug1 or drug2',
+	 'objectMetabolite': ''
      },
      'hasTarget' : {
          'id': 'uuid'
