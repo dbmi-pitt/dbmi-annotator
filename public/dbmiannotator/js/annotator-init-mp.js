@@ -364,8 +364,15 @@ function selectDrug() {
     var drug1 = $('#Drug1 option:selected').text();
     var drug2 = $('#Drug2 option:selected').text();
     //console.log("select new drug:" + drug1 + "," + drug2);
-    var drug1ID = $('#Drug1 option:selected').val();
-    var drug1Index = parseInt(drug1ID.split("_")[1]);
+    var drug1ID;
+    var drug1Index;
+    if ($("#Drug1")[0].selectedIndex != -1) {
+        drug1ID = $('#Drug1 option:selected').val();
+        drug1Index = drug1ID == undefined ? 0 : parseInt(drug1ID.split("_")[1]);
+    } else {
+        drug1 = "";
+    }
+
     var drug2ID;
     var drug2Index;
     
@@ -386,7 +393,7 @@ function selectDrug() {
     quotecontent = "<p>" + element.html() + "</p>";//get back new string
 
     //select drug
-    drug1Index = findIndex(quotecontent, drug1, drug1Index);
+    drug1Index = drug1 == "" ? -1 : findIndex(quotecontent, drug1, drug1Index);
     drug2Index = drug2 == "" ? drug1Index : findIndex(quotecontent, drug2, drug2Index);
     var drug1End = drug1Index + drug1.length;
     var drug2End = drug2Index + drug2.length;

@@ -109,7 +109,7 @@
                  'direction' : 'unk, increase, decrease',
                  'hasTarget' : '',
                  'ranges' : ''
-             }
+             },
              'dips': { // for case report
                  'q1':'',
                  'q2':'',
@@ -121,12 +121,71 @@
                  'q8':'',
                  'q9':'',
                  'q10':''
-             }
+             },
              'reviewer': { // for case report
                  'date': 'MM/YYYY, DD/MM/YYYY',
                  'reviewer': 'option: Author, External',
                  'total': '',
                  'lackInfo': 'true or false'
+             },
+             'cellsystem': { // for experiment
+                 'value': '',
+                 'hasTarget' : '',
+                 'ranges' : ''
+             },
+             'metaboliteRateWith': { // for experiment
+                 'value': '',
+                 'hasTarget' : '',
+                 'ranges' : ''
+             },
+             'metaboliteRateWithout': { // for experiment
+                 'value': '',
+                 'hasTarget' : '',
+                 'ranges' : ''
+             },
+             'measurement': { // for experiment
+                 'cl': {
+                     'value': '',
+                     'unit': '',
+                     'hasTarget' : '',
+                     'ranges' : ''
+                 },
+                 'vmax': {
+                     'value': '',
+                     'unit': '',
+                     'hasTarget' : '',
+                     'ranges' : ''
+                 },
+                 'inhibition': {
+                     'value': '',
+                     'unit': '',
+                     'hasTarget' : '',
+                     'ranges' : ''
+                 },
+                 'km': {
+                     'value': '',
+                     'unit': '',
+                     'hasTarget' : '',
+                     'ranges' : ''
+                 },
+                 'ki': {
+                     'value': '',
+                     'unit': '',
+                     'hasTarget' : '',
+                     'ranges' : ''
+                 },
+                 'kinact': {
+                     'value': '',
+                     'unit': '',
+                     'hasTarget' : '',
+                     'ranges' : ''
+                 },
+                 'ic50': {
+                     'value': '',
+                     'unit': '',
+                     'hasTarget' : '',
+                     'ranges' : ''
+                 }
              }
          }
      ]    
