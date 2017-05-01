@@ -8,11 +8,19 @@ if (typeof annotator === 'undefined') {
 
     // var annType = $('#mp-annotation-tb').attr('name');
     var annType = "MP";
-    var sourceURL = getURLParameter("sourceURL").trim();
+
+    var sourceURL = getURLParameter("sourceURL");
+    if (sourceURL != null)
+        sourceURL = sourceURL.trim();
+    else 
+        sourceURL = getURLParameter("file");
+    
     var currEmail = getURLParameter("email");
     
     // global variables for keeping status of text selection
     var isTextSelected = false;
+    var multiSelected = false;
+    var redrawDrug = false;
     var cachedOATarget = "";
     var cachedOARanges = "";
 
@@ -82,7 +90,7 @@ function initSplitter() {
 
     $('#splitter').jqxSplitter({ showSplitBar: false, width: $(window).width(), height: $(window).height(), orientation: 'horizontal', panels: [{ size: '100%',min: 200 }, { size: '0%', min: 0}] });
 
-    var resizeTimer;           
+    var resizeTimer;
     $(window).resize(function() {
         clearTimeout(resizeTimer);
         resizeTimer = setTimeout(resetSplitter, 300);
@@ -342,6 +350,7 @@ function initLiseners() {
     $("#Drug1").change(function (){selectDrug();});
     $("#Drug2").change(function (){selectDrug();});
 }
+
     //helper function
     function findIndex(string, old, no) {
         var i = 0;
@@ -357,7 +366,6 @@ function initLiseners() {
                 return match;
         });
     }
-
 
 function selectDrug() {
 
@@ -630,6 +638,20 @@ function importAnnotationActions(userEmails, allMPAnnsD, uri, email) {
             userEmails.add(email); // add user emails to set as global variable     
         });
         
+        //PDF
+        unsaved = false;
+/* PDF VERSION
+        unsaved = false;
+        if (sourceURL.match(/localhost.*html/g)) {
+            userEmails.forEach(function(email) { // draw all annotaitons by email
+        		app.annotations.load({uri: uri, email: email});
+                selectedMPAnnsL = selectedMPAnnsL.concat(allMPAnnsD[email]);
+            });
+        }
+        userEmails.forEach(function(email) { 
+            selectedMPAnnsL = selectedMPAnnsL.concat(allMPAnnsD[email]);
+*/
+        
         userEmails.forEach(function(email) { // draw all annotaitons by email
 		    app.annotations.load({uri: uri, email: email});
 
@@ -637,29 +659,35 @@ function importAnnotationActions(userEmails, allMPAnnsD, uri, email) {
             // console.log(allMPAnnsD[email]);
             if (allMPAnnsD[email] != null)
                 selectedMPAnnsL = selectedMPAnnsL.concat(allMPAnnsD[email]);
-        });
 
+        });
         initAnnTable(selectedMPAnnsL); // update annotation table
         importDialog.style.display = "none"; // hide panel        
     }	
 
     cancelBtn.onclick = function() { // only load current user's annotation
         
-        selectedMPAnnsL = allMPAnnsD[currEmail];        
-        userEmails.forEach(function(email) { // draw all annotaitons by email
-		    app.annotations.load({uri: uri, email: email});
-        });
+        selectedMPAnnsL = allMPAnnsD[currEmail];
+        if (sourceURL.match(/localhost.*html/g)) {        
+            userEmails.forEach(function(email) { // draw all annotaitons by email
+    		    app.annotations.load({uri: uri, email: email});
+            });
+        }
         initAnnTable(selectedMPAnnsL); // update annotation table
         importDialog.style.display = "none"; 
+        unsaved = false;
     }
 
     closeBtn.onclick = function() {
-        selectedMPAnnsL = allMPAnnsD[currEmail];        
-        userEmails.forEach(function(email) { // draw all annotaitons by email
-		    app.annotations.load({uri: uri, email: email});
-        });
+        selectedMPAnnsL = allMPAnnsD[currEmail];
+        if (sourceURL.match(/localhost.*html/g)) {
+            userEmails.forEach(function(email) { // draw all annotaitons by email
+    		    app.annotations.load({uri: uri, email: email});
+            });
+        }
         initAnnTable(selectedMPAnnsL); // update annotation table
         importDialog.style.display = "none"; 
+        unsaved = false;
     }
 }
 

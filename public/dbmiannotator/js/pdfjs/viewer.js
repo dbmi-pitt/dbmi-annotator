@@ -4069,7 +4069,11 @@ var TextLayerBuilder = (function TextLayerBuilderClosure() {
   TextLayerBuilder.prototype = {
     _finishRendering: function TextLayerBuilder_finishRendering() {
       this.renderingDone = true;
-
+      var self = this;
+      userEmails.forEach(function(email) { // draw all annotaitons by email
+        app.annotations.load({uri: sourceURL.replace(/[\/\\\-\:\.]/g, ""), email: email}, self.pageNumber);
+        });                            
+      //todo wen test
       var event = document.createEvent('CustomEvent');
       event.initCustomEvent('textlayerrendered', true, true, {
         pageNumber: this.pageNumber
