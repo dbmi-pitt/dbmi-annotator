@@ -25,6 +25,7 @@ from validate import validateResults
 reload(sys)  
 sys.setdefaultencoding('utf8')
 
+
 #1. pip install psycopg2
 
 SPLS_CSVS = ['data/pkddi-katrina-latest-03302017.csv', 'data/pkddi-amy-latest-03302017.csv']
@@ -491,5 +492,3 @@ def main():
 
 if __name__ == '__main__':
 	main()
-
-

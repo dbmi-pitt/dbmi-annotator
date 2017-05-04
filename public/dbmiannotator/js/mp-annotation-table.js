@@ -41,6 +41,11 @@ function updateAnnTable(sourceURL){
 function initAnnTable(selectedAnnsL) {
     console.log("init ann table");
 
+    //console.log(selectedAnnsL);
+    /* PDF version
+    if (selectedAnnsL == null) return null;
+    */
+
     // ann Id for selected claim, if null, set first claim as default 
     if ((currAnnotationId == null || currAnnotationId.trim()) == "" && selectedAnnsL != null) { 
         if (selectedAnnsL.length > 0){
@@ -652,8 +657,15 @@ function changeClaimInAnnoTable() {
     }
 
     currAnnotationId = newAnnotationId;
-    sourceURL = getURLParameter("sourceURL").trim();
+
+    if (!window.location.search.substring(1).includes("file")) {
+        sourceURL = getURLParameter("sourceURL").trim();
+    } else {
+        sourceURL = getURLParameter("file").trim();
+    }
+    
     updateAnnTable(sourceURL);
+
 }
 
 
@@ -671,8 +683,11 @@ function changeClaimInDialog() {
 
     //console.log("dialog - claim changed to :" + newAnnotationId);
     currAnnotationId = newAnnotationId;
-
-    sourceURL = getURLParameter("sourceURL").trim();
+    if (!window.location.search.substring(1).includes("file")) {
+        sourceURL = getURLParameter("sourceURL").trim();
+    } else {
+        sourceURL = getURLParameter("file").trim();
+    }
     email = getURLParameter("email");
 
     $.ajax({url: config.protocal + "://" + config.apache2.host + ":" + config.apache2.port + "/annotatorstore/search",

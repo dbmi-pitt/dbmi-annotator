@@ -28,13 +28,12 @@ See https://github.com/adobe-type-tools/cmap-resources
 
 
     <link rel="stylesheet" href="css/viewer.css"/>
-
-    <!-- browserify for configs -->
-    <script type="text/javascript" src="js/app.bundle.js"></script>
+    <!-- bring pdf annotation highlights css style  -->
+    <link rel="stylesheet" href="css/dbmi.pdf.highlight.css"/>
+    <link rel="stylesheet" href="./css/dbmiannotator.css" type="text/css" />
+    
 
     <script src="js/pdfjs/compatibility.js"></script>
-
-
     <!-- This snippet is used in production (included from viewer.html) -->
     <link rel="resource" type="application/l10n" href="js/pdfjs/locale/locale.properties"/>
     <script src="js/pdfjs/l10n.js"></script>
@@ -45,10 +44,126 @@ See https://github.com/adobe-type-tools/cmap-resources
     <script src="js/pdfjs/debugger.js"></script>
     <script src="js/pdfjs/viewer.js"></script>
 
+
+    <!-- add mark.js -->
+    <script src="js/mark/mark.min.js"></script>
    
   </head>
 
-  <body onload="Init()" tabindex="1" class="loadingInProgress">
+  <body tabindex="1" class="loadingInProgress">
+    
+    
+      <!-- dialog for selecting text to begin with create claim/data -->
+      <div id="dialog-select-text-for-data" class="dialog-background" style="display: none;">
+        <div class="dialog-content">
+          <div class="modal-header">
+            <span id="select-text-dialog-close" class="close">×</span>
+            <strong>Warning</strong>
+          </div>
+          <div class="modal-body">
+            <strong>Please select text span for the data field!</strong>
+          </div>
+        </div>
+      </div>
+
+      <!-- dialog for options when creating claim -->
+      <div id="create-claim-dialog" class="dialog-background" style="display: none;">
+        <div class="dialog-content">
+          <div class="modal-header">
+            <span id="create-claim-close" class="close">×</span>
+            <strong>Select next step from options:</strong>
+          </div>
+          <div class="modal-body">
+            <p><strong>Add data from the same text span for Claim:</strong> 
+              <div id="dialog-claim-options" style="display: inline;"></div>
+              <button id="add-data-same-span-btn">OK</button>
+            </p>
+            <p><strong>Add another claim from the same text span</strong> 
+              <button id="add-claim-same-span-btn">OK</button>
+            </p>
+            <p><strong>Move to different text span (finish) </strong>
+              <button id="finish-same-span-btn">OK</button>
+            </p>
+          </div>
+        </div>
+        
+      </div>
+
+      <!-- dialog for warn that unchange checkbox will truncate form -->
+      <div id="unchanged-warn-dialog" class="dialog-background" style="display: none;">
+        <div class="dialog-content">
+          <div class="modal-header">
+            <span id="unchanged-dialog-close" class="close">×</span>
+            <strong>Check unchanged will truncate current form</strong>
+          </div>
+          <div class="modal-body">
+            <button id="unchanged-dialog-ok-btn">OK</button>&nbsp;&nbsp;
+            <button id="unchanged-dialog-cancel-btn">Cancel</button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- dialog for user to save current editing -->
+      <div id="remind-unsave-dialog" class="dialog-background" style="display: none;">
+        <div class="dialog-content">
+          <div class="modal-header">
+            <span id="unsave-dialog-close" class="close">×</span>
+            <strong>Data you just entered not saved yet!</strong>
+          </div>
+          <div class="modal-body">
+            Please click save button before exit current form<button id="remind-dialog-ok-btn">OK</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- dialog for warn that this claim will be deleted-->
+      <div id="dialog-claim-delete-confirm" class="dialog-background" style="display: none;">
+        <div class="dialog-content">
+          <div class="modal-header">
+            <span id="claim-delete-dialog-close" class="close">×</span>
+            <strong>Delete Confirmation</strong>
+          </div>
+          <div class="modal-body">
+            <p><strong> Delete claim will trancate all data & material assigned on it! </strong></p>
+            <button id="claim-delete-confirm-btn">Confirm</button>&nbsp;&nbsp;
+            <button id="claim-delete-cancel-btn">Cancel</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- dialog for warn that this data will be deleted-->
+      <div id="dialog-data-delete-confirm" class="dialog-background" style="display: none;">
+        <div class="dialog-content">
+          <div class="modal-header">
+            <span id="data-delete-dialog-close" class="close">×</span>
+            <strong>Delete Confirmation</strong>
+          </div>
+          <div class="modal-body">
+            <p><strong> Delete data & material item? </strong></p>
+            <button id="data-delete-confirm-btn">Confirm</button>&nbsp;&nbsp;
+            <button id="data-delete-cancel-btn">Cancel</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- dialog for annotations import panel-->
+      <div id="dialog-annotation-import" class="import-dialog-background" style="display: none;">
+        <div class="import-dialog-content">
+          <div class="modal-header">
+            <span id="annotation-import-dialog-close" class="close">×</span>
+            <strong>Annotation import</strong>
+          </div>
+          <div class="modal-body">
+            <p><strong> Select annotation set from other users to import </strong></p>
+            <!-- inject all public data sets from different users --> 
+            <div id="import-annotation-selection"></div>
+            <br>
+            <button id="ann-import-confirm-btn">Import</button>&nbsp;&nbsp;
+            <button id="ann-import-cancel-btn">Cancel</button>
+          </div>
+        </div>
+      </div>
+
     <div id="outerContainer">
 
       <div id="sidebarContainer">
@@ -250,30 +365,35 @@ See https://github.com/adobe-type-tools/cmap-resources
                     data-l10n-id="page_rotate_ccw"></menuitem>
         </menu>
         <!---annotator splitter-->
-<div id='splitter'>
-      <div id="content" class="firstsection" style='overflow: auto'>
+        <div id='splitter'>
+          <div id="subcontent" class="firstsection" style='overflow: auto'>
         
-        <div id="viewerContainer" tabindex="0">
-          <div id="viewer" class="pdfViewer"></div>
-        </div>
+        
 
-        <button class="btn btn-success" onclick="buttonshowright()" value="hide"><img src="img/menu.png" height="25px" width="25px"><span id="menu">&nbsp Menu</span></button>
-          <button class="btn btn-home" onclick="location.href = '/dbmiannotator/main';" value="hide"><img src="img/home.png" height="20px" width="20px"><span>&nbsp&nbsp Home</span></button>
+          <button class="btn btn-success" onclick="annotationPanelClick()" value="hide"><img src="img/menu.png" height="25px" width="28px"></button>
+          <button class="btn btn-home" onclick="backToHome();" value="hide"><img src="img/home.png" height="25px" width="38px"></button>
+
+          <div id="viewerContainer" tabindex="0">
+            <div id="viewer" class="pdfViewer"></div>
+          </div>
       </div>
-      <div id="tabs">
+
+
+<div id="tabs" style="position:fixed">
   <ul>
-    <li><a href="#tabs-1">Annotation List</a></li>
-    <li><a href="#tabs-2">Annotation Editor</a></li>
-    <li><a href="#tabs-3">Sign In</a></li>
+    <li><a href="#tabs-1">Annotation Table</a></li>
+    <li class="editorsection"><a href="#tabs-2">Annotation Editor</a></li>
+    <li style="display: none"><a href="#tabs-3">Plugin Settings</a></li>
   </ul>
   <div id="tabs-1">
-      <p>COMING SOON</p>
+      <div id="mp-annotation-tb" name="<%=config.profile.userProfile.type %>" > </div>
 
   </div>
-  <div id="tabs-2">
-    <div class="secondsection">
-      </div>
+
+  <div id="tabs-2" class="editorsection">
+      <div class="mpeditorsection"> </div>
   </div>
+
   <div id="tabs-3">
     <h2>Sign In</h2><br>
         <input type="text" style="width:150px;height:30px" id="username" size="20" placeholder="User Name" maxlength="30" />
@@ -447,26 +567,73 @@ See https://github.com/adobe-type-tools/cmap-resources
   </div>
   </div>
 
-<!-- bring pdf annotation highlights css style  -->
-<link rel="stylesheet" href="css/dbmi.pdf.highlight.css"/>
-<link rel="stylesheet" href="./css/dbmiannotator.css" type="text/css" />
-<!-- bring annotator js-->
-<script src="js/annotator.min.js"></script>
+</body>
 
-<!-- bring splitter libs -->
-<link rel="stylesheet" href="css/jqx.base.css" type="text/css" />
 
-<script type="text/javascript" src="js/jqxcore.js"></script>
-<script type="text/javascript" src="js/jqxsplitter.js"></script>
-<script type="text/javascript" src="js/demos.js"></script>
-<script type="text/javascript" src="js/dbmi.js"></script>
 <script>
     $( "#tabs" ).tabs();
 </script>
 
-<!-- bring ddi plugin js for pdf -->
-<script src="js/ddi-plugin-pdf.js"></script>
+<!-- browserify for configs -->
+<script type="text/javascript" src="js/app.bundle.js"></script>
 
-  </body>
+<!-- bring annotator js-->
+<script src="js/annotator.min.js"></script>
+
+<!-- bring splitter libs -->
+<script type="text/javascript" src="js/jqx-all.js"></script>
+<script type="text/javascript" src="js/demos.js"></script>
+
+<!-- mp anotation table, editor -->
+<script type="text/javascript" src="js/mp-annotation-table.js"></script>
+<script type="text/javascript" src="js/mp-annotation-editor.js"></script>
+        
+<!-- call annotator for mp plugin-->
+<script src="js/annotator-init-mp.js"></script>
+<script type="text/javascript" src="js/mp-menu.js"></script>
+
+<!-- bring ddi plugin js for pdf -->
+<!-- <script src="js/ddi-plugin-pdf.js"></script> -->
+
+<!-- DrugMention and MP annotation highlight color definition in PDF (it's darker than in HTML, overrides style for html) --> 
+<style>
+
+.annotator-hl {
+	/* HTML color */
+	/* background: rgba(255, 255, 10, 0.3); */
+
+	/* PDF color */
+	background: #FFFF0A; !important
+	/* -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#4DFFFF0A, endColorstr=#4DFFFF0A)";  /* 0.3 == 4D in MS filters */ */
+}
+
+
+.annotator-mp {
+
+	/* HTML color  */
+	/* background: rgba(176, 196, 222, 0.4); */
+
+	/* The heavy color for PDF */
+	background: rgba(86, 95, 115, 0.4); !important
+	/* font-size: 11px;
+	font-style: strong;
+	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#4DFFFF0A, endColorstr=#4DFFFF0A)";  /* 0.3 == 4D in MS filters */ */
+}
+
+span[name="annotator-mp"] {
+
+	/* HTML color  
+ 	background: #B0C4DE;
+	background: rgba(176, 196, 222, 0.4); */
+
+	/* PDF color  */
+	background: #969696; !important
+        background: rgba(45, 50, 64, 0.4); !important
+
+	/* -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#4DFFFF0A, endColorstr=#4DFFFF0A)";  /* 0.3 == 4D in MS filters */ */
+}
+
+</style>
+  
 </html>
 

@@ -113,23 +113,22 @@ module.exports = function(app, passport) {
     app.get('/dbmiannotator/displayWebPage', isLoggedIn, praseWebContents, function(req, res) {
 	
 	    var sourceUrl = req.query.sourceURL.trim();
+        console.log(sourceUrl);
 	    var email = req.query.email;
 	    var validUrl = require('valid-url');
 
 	    if (validUrl.isUri(sourceUrl)){
 		    
-		    // if (sourceUrl.match(/\.pdf/g)){ // local pdf resouces
-		    //     res.redirect("/dbmiannotator/viewer.html?file=" + sourceUrl+"&email=" + email); 
-		    // }
-		    
-		    if (sourceUrl.match(/localhost.*html/g)) { 		    
+		    if (sourceUrl.match(/\.pdf/g)){ // local pdf resouces
+                console.log("load pdf");
+		        res.redirect("/dbmiannotator/viewer.html?file=" + sourceUrl+"&email=" + email); 
+		    } else if (sourceUrl.match(/localhost.*html/g)) { 		    
                 res.render('displayWebPage.ejs', {
 			        htmlsource: req.htmlsource,
 			        pluginSetL: config.profile.pluginSetL,
 			        userProfile: config.profile.userProfile
                 });   
-	        }
-		    else {
+	        } else {
 		        req.flash('loadMessage', 'The url you just entered is not valid!');
 		        res.redirect('/dbmiannotator/main');
 		    }
@@ -339,7 +338,7 @@ function praseWebContents(req, res, next){
 
     console.log("[DEBUG] parseWebContents");
 
-    if(sourceUrl.match(/localhost.*html/g)){
+    if(sourceUrl.match(/localhost.*html/g) || sourceUrl.match(/\.pdf/g)){
 
         if (process.env.APACHE2_HOST != null) // use apache2 in docker network
             sourceUrl = sourceUrl.replace("localhost", process.env.APACHE2_HOST);
@@ -357,9 +356,6 @@ function praseWebContents(req, res, next){
             req.htmlsource = labelDecode;
             next();                        
         });
-
-    } else {
-        next();        
     }
 }
 
