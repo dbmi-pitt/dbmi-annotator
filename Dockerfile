@@ -1,5 +1,6 @@
 ############################ DBMI-ANNOTATOR ############################
-FROM ubuntu:14.04
+# FROM ubuntu:14.04
+FROM ubuntu:15.10
 MAINTAINER Yifan Ning "yin2@pitt.edu"
 
 # build image from nodejs server
@@ -7,7 +8,7 @@ MAINTAINER Yifan Ning "yin2@pitt.edu"
 
 RUN apt-get update
 RUN apt-get install -y nodejs npm python-pip libpq-dev python-dev emacs curl jq
-
+RUN npm install -g npm
 RUN update-alternatives --install /usr/bin/node node /usr/bin/nodejs 10
 
 # Create dbmi-annotator directory
