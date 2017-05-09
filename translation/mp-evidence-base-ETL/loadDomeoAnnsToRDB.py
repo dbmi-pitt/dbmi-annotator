@@ -375,7 +375,7 @@ def preprocess(inputs, output):
 				row['preciptFormulation'] = "Oral"
 
 			# all SPLs annotation's method is interact_with
-			row.update({'predicate': 'interact_with'})
+			row.update({'predicate': 'interact with'})
 
 			# make assertion in  subject (precipt) predicate object
 			if 'object' in row['drug1Role'] and 'precipitant' in row['drug2Role']:
