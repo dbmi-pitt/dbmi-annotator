@@ -93,7 +93,7 @@ def insert_claim_body(conn, claimlabel, exact):
 	cur = conn.cursor()
 	urn = uuid.uuid4().hex
 	
-	qry1 = "INSERT INTO oa_claim_body (urn, label, claim_text) VALUES ('%s', '%s', '%s');" % (urn, claimlabel, exact.replace("'","''"))
+	qry1 = "INSERT INTO oa_claim_body (urn, label, claim_text) VALUES ('%s', '%s', '%s');" % (urn, claimlabel.replace("'","''"), exact.replace("'","''"))
 	cur.execute(qry1)
 
 	qry2 = "SELECT * FROM oa_claim_body WHERE urn = '%s';" % (urn)
@@ -192,7 +192,7 @@ def insert_highlight_annotation(conn, has_body, has_target, creator, date_create
 def insert_oa_highlight_body(conn, drug, url):
 	urn = uuid.uuid4().hex
 	cur = conn.cursor()
-	qry1 = "INSERT INTO oa_highlight_body (urn, drugname, uri) VALUES ('%s', '%s', '%s');" % (urn, drug, url);
+	qry1 = "INSERT INTO oa_highlight_body (urn, drugname, uri) VALUES ('%s', '%s', '%s');" % (urn, drug.replace("'","''"), url);
 	cur.execute(qry1);
 	
 	qry2 = "SELECT * FROM oa_highlight_body WHERE urn = '%s';" % (urn)

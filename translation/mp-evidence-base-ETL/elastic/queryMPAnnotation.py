@@ -151,7 +151,10 @@ def createClinicalTrial(doc, doc_urn):
 	label = claim["label"]; method = doc["argues"]["method"]; date = doc["created"]
 	exact = getSelectorTxt(claim, "exact"); prefix = getSelectorTxt(claim, "prefix"); suffix = getSelectorTxt(claim, "suffix")
 	qualifier = claim["qualifiedBy"]; 
-	drugname1 = qualifier["drug1"]; drugname2 = qualifier["drug2"]; enzyme = qualifier["enzyme"]; predicate = qualifier["relationship"]; precipitant = qualifier["precipitant"]
+	drugname1 = qualifier["drug1"]; drugname2 = qualifier["drug2"]; predicate = qualifier["relationship"]; precipitant = qualifier["precipitant"]
+        enzyme = None
+        if "enzyme" in qualifier:
+                qualifier["enzyme"]
 
 	## MP Claim
 	annotation = createSubAnnotation(doc_urn, source, label, method, email, date)
@@ -164,6 +167,9 @@ def createClinicalTrial(doc, doc_urn):
 	if dataL and len(dataL) > 0:
 		for i in xrange(0, len(dataL)):
 			data = dataL[i]
+                        if not validateClinicalTrialDataMaterial(data, doc["rawurl"], doc["email"], doc["created"], claim["label"]):
+                                return None
+                                
 			dmRow = ClinicalTrialDMRow(i)
 			dmRow.ev_supports = parseEvSupports(data["evRelationship"]) 
 			addEVTypeQuestions(dmRow, data) # add evidence type question 
@@ -501,7 +507,8 @@ def createPhenotypeItem(item):
 	phItem.value = item["typeVal"]
 	if "metabolizer" in item:
 		phItem.metabolizer = item["metabolizer"]
-	phItem.population = item["population"]
+        if "population" in item:
+	        phItem.population = item["population"]
 	return phItem
 
 
@@ -573,7 +580,7 @@ def addEVTypeQuestions(dmRow, data):
 			dmRow.parallelgroup = "no"
 
 	
-## Validates ##########################################################################
+## Validate Claim ##########################################################################
 def validateStatement(precipitant, drugname1, drugname2, enzyme, predicate, source, label):
 	## data validation
 	if ((predicate == "interact with" and (not drugname1 or not drugname2 or enzyme)) or (predicate in ["inhibits", "substrate of"] and (not drugname1 or not enzyme or drugname2))): 
@@ -589,10 +596,11 @@ def validateClinicalTrial(claim, source):
 	if "precipitant" not in qualifier or qualifier["precipitant"] not in ["drug1", "drug2"]:
 		print "[ERROR] createClinicalTrial: percipitant undefined, skip source (%s), claim (%s)" % (source, label)
 		return False
-	## data validation
-	if ((predicate == "interact with" and (not qualifier["drug1"] or not qualifier["drug2"] or qualifier["enzyme"])) or (predicate in ["inhibits", "substrate of"] and (not qualifier["drug1"] or not qualifier["drug2"] or not qualifier["enzyme"]))): 
+	## claim validation
+	if ((predicate == "interact with" and (not qualifier["drug1"] or not qualifier["drug2"])) or (predicate in ["inhibits", "substrate of"] and (not qualifier["drug1"] or not qualifier["drug2"] or not qualifier["enzyme"]))): 
 		print "[WARN] DDI clinical trial: qualifier error, skip (%s) - (%s)" % (source, label)
 		return False
+        
 	return True
 
 def validatePhenotypeClinicalStudy(drugname1, enzyme, predicate, source, label):
@@ -616,6 +624,14 @@ def validateCaseReport(claim, source):
 		print "[WARN] Case Report: qualifier error, skip (%s) - (%s)" % (source, label)
 		return False
 	return True
+
+
+## Validate Data & Material #########################################################
+def validateClinicalTrialDataMaterial(data, rawurl, email, dateCreated, label):
+        if "evRelationship" not in data:
+                print "[ERROR] createClinicalTrial: evRelationship undified, skip source (%s), claim(%s), author(%s), date(%s)" % (rawurl, label, email, dateCreated)
+                return False
+        return True
 
 
 ## Utils ############################################################################
