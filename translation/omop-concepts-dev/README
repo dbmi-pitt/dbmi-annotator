@@ -1,0 +1,6 @@
+$ python generateDideoConceptsInsertSQL.py
+
+By 06/16/2017
+insert concept: 401
+insert vocabulary: 24
+insert domain: 1
