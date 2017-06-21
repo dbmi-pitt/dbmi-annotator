@@ -1,6 +1,25 @@
-$ python generateDideoConceptsInsertSQL.py
+this folder omop-concepts-dev for adding concept terms into OHDSI vocabulary 
 
+(1) query postgreSQL database mpevidence to get distinct list of qualifier names
+
+mpevidence database ER:
+https://github.com/dbmi-pitt/dbmi-annotator/blob/master/design/images/MP-evidence-ER.jpeg
+
+Run: $ python generateQualifierList.py > data/output.txt
+Output: qualifier name, source URL, text quote
+
+(2) create sql script for adding dideo terms into OHDSI vocabulary
+
+Input: data/4bb83833.csv
+Download as csv from dideo terms serach portal
+https://owl2tl.com/4bb83833
+
+Run:
+$ python generateDideoConceptsInsertSQL.py > data/dideo-concepts-insert-full.sql
+
+Results: number of terms been added to table concept, vocabulary and domain
 By 06/16/2017
 insert concept: 401
 insert vocabulary: 24
 insert domain: 1
+
