@@ -20,6 +20,9 @@ def utf_8_encoder(unicode_csv_data):
 def insert_concept_template(concept_id, concept_name, domain_id, vocabulary_id, concept_class_id, concept_code):
     return "INSERT INTO public.concept (concept_id, concept_name, domain_id, vocabulary_id, concept_class_id, standard_concept, concept_code, valid_start_date, valid_end_date, invalid_reason) VALUES (%s, '%s', '%s', '%s', '%s', '', '%s', '2000-01-01', '2099-02-22', '');" % (concept_id, concept_name.replace("'", "''"), domain_id, vocabulary_id, concept_class_id, concept_code)
 
+def insert_concept_class_template(concept_class_id, concept_class_name, concept_class_concept_id):
+    return "INSERT INTO concept_class (concept_class_id, concept_class_name, concept_class_concept_id) VALUES (%s, %s, %s);" % (concept_class_id, concept_class_name, concept_class_concept_id)
+
 
 def insert_vocabulary_template(vocabulary_id, vocabulary_name, vocabulary_reference, vocabulary_version, vocabulary_concept_id):
     return "INSERT INTO public.vocabulary (vocabulary_id, vocabulary_name, vocabulary_reference, vocabulary_version, vocabulary_concept_id) VALUES ('%s', '%s', '%s', '%s', %s);" % (vocabulary_id, vocabulary_name, vocabulary_reference, vocabulary_version, vocabulary_concept_id)
@@ -31,15 +34,15 @@ def insert_domain_template(domain_id, domain_name, domain_concept_id):
 
 # DELETE #############################################################################
 def delete_concept_by_id():
-    return "DELETE FROM public.concept WHERE concept_id BETWEEN -8000000 AND -7000000;"
+    return "DELETE FROM public.concept WHERE concept_id BETWEEN -9999999 AND -7000000;"
 
 
 def delete_vocabulary_by_concept_id():
-    return "DELETE FROM public.vocabulary WHERE vocabulary_concept_id BETWEEN -8000000 AND -7000000;"
+    return "DELETE FROM public.vocabulary WHERE vocabulary_concept_id BETWEEN -9999999 AND -7000000;"
 
 
 def delete_domain_by_concept_id():
-    return "DELETE FROM public.domain WHERE domain_concept_id BETWEEN -8000000 AND -7000000;"
+    return "DELETE FROM public.domain WHERE domain_concept_id BETWEEN -9999999 AND -7000000;"
 
 
 # PRINT SQL ##########################################################################
@@ -76,18 +79,26 @@ def print_concept_insert_sql(concept_id):
     return concept_id + 1
 
 
-# domain table insert for dideo terms
+# domain table insert
 # return: the next available concept id 
-def print_domain_template(domain_concept_id):
-    print insert_domain_template('PDDI or NPDI', 'PDDI or NPDI', domain_concept_id)
-    return domain_concept_id + 1
+def print_domain_insert_sql():
+    print insert_concept_template(-9900000, 'Potential drug interactions of natural product drug interactions', 'Metadata', 'Domain', 'Domain', 'OMOP generated')
+    print insert_domain_template('PDDI or NPDI', 'PDDI or NPDI',  -9900000)
 
+
+# concept class insert
+def print_concept_class_insert_sql():
+    print insert_concept_template(-9900000, 'PDDI or NPDI Test Class', 'Metadata', 'Concept Class', 'Concept Class', 'OMOP generated')    
+    print insert_concept_class_template('PDDI or NPDI Class', 'PDDI or NPDI Test Class', -9990000)
+    
 
 # MAIN ###############################################################################
-
 def print_insert_script():
-    concept_id = print_domain_template(-9900000)
+    # templated inserting statements
+    print_domain_insert_sql()
+    print_concept_class_insert_sql()
 
+    # dideo terms
     concept_id = -8000000
     concept_id = print_vocabulary_insert_sql(concept_id)
     concept_id = print_concept_insert_sql(concept_id)
@@ -100,8 +111,8 @@ def print_delete_script():
 
 
 def main():    
-    # print_insert_script()
-    print_delete_script()
+    print_insert_script()
+    # print_delete_script()
 
 if __name__ == '__main__':
     main()
