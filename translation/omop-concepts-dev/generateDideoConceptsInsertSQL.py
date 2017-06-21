@@ -18,7 +18,6 @@ def utf_8_encoder(unicode_csv_data):
         
 # INSERT QUERY TEMPLATES #############################################################
 def insert_concept_template(concept_id, concept_name, domain_id, vocabulary_id, concept_class_id, concept_code):
-    
     return "INSERT INTO public.concept (concept_id, concept_name, domain_id, vocabulary_id, concept_class_id, standard_concept, concept_code, valid_start_date, valid_end_date, invalid_reason) VALUES (%s, '%s', '%s', '%s', '%s', '', '%s', '2000-01-01', '2099-02-22', '');" % (concept_id, concept_name.replace("'", "''"), domain_id, vocabulary_id, concept_class_id, concept_code)
 
 
@@ -49,12 +48,12 @@ def delete_domain_by_concept_id():
 def print_vocabulary_insert_sql(concept_id):
     vocabL = ['OAE', 'NCBITaxon', 'IDO', 'ERO', 'PR', 'CHMO', 'DIDEO', 'OBI', 'GO', 'DRON', 'APOLLO_SV', 'UBERON', 'CLO', 'CL', 'GO#GO', 'OGMS', 'EFO', 'STATO', 'FMA', 'CHEBI', 'MOP', 'UO', 'INO', 'PDRO.owl#PDRO']
     
+    print insert_concept_template(-9999000, 'The Potential Drug-drug Interaction and Potential Drug-drug Interaction Evidence Ontology', 'Metadata', 'Vocabulary', 'Vocabulary', 'OMOP generated')    
     print insert_vocabulary_template('DIDEO', 'The Potential Drug-drug Interaction and Potential Drug-drug Interaction Evidence Ontology', 'https://github.com/DIDEO/DIDEO', 'release 2016-10-20', -9999000)
-    print insert_concept_template(-9999000, 'The Potential Drug-drug Interaction and Potential Drug-drug Interaction Evidence Ontology', 'Metadata', 'Vocabulary', 'Vocabulary', 'OMOP generated')
 
     for vocab in vocabL:
-        print insert_vocabulary_template(vocab, vocab, '', 'release 2016-10-20', concept_id)
         print insert_concept_template(concept_id, vocab, 'Metadata', 'Vocabulary', 'Vocabulary', 'OMOP generated')
+        print insert_vocabulary_template(vocab, vocab, '', 'release 2016-10-20', concept_id)
         concept_id += 1
     return concept_id + 1
 
@@ -87,8 +86,9 @@ def print_domain_template(domain_concept_id):
 # MAIN ###############################################################################
 
 def print_insert_script():
+    concept_id = print_domain_template(-9900000)
+
     concept_id = -8000000
-    concept_id = print_domain_template(concept_id)
     concept_id = print_vocabulary_insert_sql(concept_id)
     concept_id = print_concept_insert_sql(concept_id)
 
