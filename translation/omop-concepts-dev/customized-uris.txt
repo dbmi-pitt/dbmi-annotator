@@ -1,3 +1,7 @@
+######################################################################################
+DIDEO TERMS
+######################################################################################
+
 1. interact_with
 
 Evidence base:
@@ -92,10 +96,10 @@ Term: evidence information from genotyped pharmacokinetic trial
 Definition: An evidence information content entity that is about a clinical drug trial that focusses on pharmacokinetics and that has organisms as participants that participated in genotyping.
 Alternative Term: EV_CT_PK_Genotype
 
-7. probesubstrate
+######################################################################################
+PREDICATES
+######################################################################################
 
-
------------------------------------------------------------------------------------
 Terms in ontology:
 has specified value: http://purl.obolibrary.org/obo/OBI_0001937
 
@@ -112,3 +116,27 @@ has proper part -> has part
 http://purl.obolibrary.org/obo/BFO_0000051
 
 has member http://purl.obolibrary.org/obo/RO_0002351). The decision to use that for DIDEO was made and is valid.
+
+
+######################################################################################
+PROTEIN & GENE
+######################################################################################
+Enzyme/Protein
+update enzyme set concept_id = 4312402 where name = 'CYP1A2';
+
+update enzyme set concept_id = 4309826 where name = 'CYP2A6'; 
+
+update enzyme set concept_id = 4308333 where name = 'CYP2B6'; 
+
+update enzyme set concept_id = 4306333 where name = 'CYP2C8'; 
+
+update enzyme set concept_id = 4309227 where name = 'CYP2C9'; 
+
+update enzyme set concept_id = 4311137 where name = 'CYP2C19'; 
+
+update enzyme set concept_id = 4173631 where name = 'CYP2D6'; 
+
+update enzyme set concept_id = 4173608 where name = 'CYP2E1'; 
+
+SLCO1B1
+http://purl.obolibrary.org/obo/PR_000015223 
