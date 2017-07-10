@@ -101,7 +101,7 @@ ALTER TABLE drug_strength OWNER TO dbmiannotator;
 -- Name: concept; Type: TABLE; Schema: public; Owner: dbmiannotator; Tablespace: 
 --
 
-CREATE TABLE concept (
+CREATE TABLE negative_concept (
     concept_id integer NOT NULL,
     concept_name character varying(255) NOT NULL,
     domain_id character varying(20) NOT NULL,
@@ -109,9 +109,6 @@ CREATE TABLE concept (
     concept_class_id character varying(20) NOT NULL,
     standard_concept character varying(1),
     concept_code character varying(50) NOT NULL,
-    valid_start_date date NOT NULL,
-    valid_end_date date NOT NULL,
-    invalid_reason character varying(1)
 );
 
 

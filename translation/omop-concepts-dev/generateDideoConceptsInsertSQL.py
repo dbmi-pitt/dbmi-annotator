@@ -1,13 +1,18 @@
-import sys, csv
+import os, sys, csv
 
 reload(sys)  
 sys.setdefaultencoding('utf8')
 
 # create sql script for inserting dideo concepts
-# reserve (-9999999, -7000000) for concept names
+# reserve (-9999999, -8000000) for concept names
 
 DIDEO_CSV = 'data/4bb83833.csv'
 OUTPUT_SQL = 'data/dideo-concepts-insert.sql'
+CACHE = 'data/cache-concepts-mapping.txt'
+
+# Assumption: don't have case that two concept term having the same concept name (ex. from different vocabulary)
+cacheIdName = {} # {conceptId: conceptName}
+cacheNameId = {} # {conceptName: conceptId}
 
 # UTILS ##############################################################################
 # encode data as utf-8
@@ -16,9 +21,21 @@ def utf_8_encoder(unicode_csv_data):
 	yield line.encode('utf-8')
 
         
+# read cache concept map into global dict
+def readConceptCache(cache_path):
+    if os.path.isfile(cache_path):
+        with open(cache_path) as f:
+            lines = f.readlines()
+            for line in lines:
+                [conceptId, conceptName] = line.split(';')
+                cacheIdName[conceptId] = conceptName
+                cacheNameId[conceptName] = conceptId
+    
+        
 # INSERT QUERY TEMPLATES #############################################################
 def insert_concept_template(concept_id, concept_name, domain_id, vocabulary_id, concept_class_id, concept_code):
     return "INSERT INTO public.concept (concept_id, concept_name, domain_id, vocabulary_id, concept_class_id, standard_concept, concept_code, valid_start_date, valid_end_date, invalid_reason) VALUES (%s, '%s', '%s', '%s', '%s', '', '%s', '2000-01-01', '2099-02-22', '');" % (concept_id, concept_name.replace("'", "''"), domain_id, vocabulary_id, concept_class_id, concept_code)
+
 
 def insert_concept_class_template(concept_class_id, concept_class_name, concept_class_concept_id):
     return "INSERT INTO public.concept_class (concept_class_id, concept_class_name, concept_class_concept_id) VALUES ('%s', '%s', %s);" % (concept_class_id, concept_class_name, concept_class_concept_id)
@@ -30,23 +47,6 @@ def insert_vocabulary_template(vocabulary_id, vocabulary_name, vocabulary_refere
 
 def insert_domain_template(domain_id, domain_name, domain_concept_id):
     return "INSERT INTO public.domain (domain_id, domain_name, domain_concept_id) VALUES ('%s', '%s', %s);" % (domain_id, domain_name, domain_concept_id)
-
-
-# DELETE #############################################################################
-def delete_concept_by_id():
-    return "DELETE FROM public.concept WHERE concept_id BETWEEN -9999999 AND -7000000;"
-
-
-def delete_concept_class_by_id():
-    return "DELETE FROM public.concept_class WHERE concept_class_concept_id BETWEEN -9999999 AND -7000000;"
-
-
-def delete_vocabulary_by_concept_id():
-    return "DELETE FROM public.vocabulary WHERE vocabulary_concept_id BETWEEN -9999999 AND -7000000;"
-
-
-def delete_domain_by_concept_id():
-    return "DELETE FROM public.domain WHERE domain_concept_id BETWEEN -9999999 AND -7000000;"
 
 
 # PRINT SQL ##########################################################################
@@ -103,22 +103,14 @@ def print_insert_script():
     print_domain_insert_sql()
     print_concept_class_insert_sql()
 
-    # dideo terms
+    # new terms
     concept_id = -8000000
     concept_id = print_vocabulary_insert_sql(concept_id)
     concept_id = print_concept_insert_sql(concept_id)
 
     
-def print_delete_script():
-    print delete_concept_by_id()
-    print delete_vocabulary_by_concept_id()
-    print delete_domain_by_concept_id()
-    print delete_concept_class_by_id()
-
-    
 def main():    
     print_insert_script()
-    # print_delete_script()
 
 if __name__ == '__main__':
     main()

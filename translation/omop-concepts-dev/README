@@ -1,4 +1,4 @@
-this folder omop-concepts-dev for adding concept terms into OHDSI vocabulary 
+this folder omop-concepts-dev for adding concept terms into OHDSI vocabulary. The concept id will be negative 
 
 -----------------------------------------------------------------------------
 query postgreSQL database mpevidence to get distinct list of qualifier names
@@ -20,7 +20,16 @@ https://owl2tl.com/4bb83833
 
 Run:
 $ python generateDideoConceptsInsertSQL.py
-Output: data/dideo-concepts-insert.sql
+
+Output:
+data/dideo-concepts-insert.sql
+data/cache-concepts-mapping.sql
+
+This script:
+(1) Reads cache file 'data/cache-concepts-mapping.sql' for existing terms
+(2) When generate concept insert sql script, use same negative concept id if exists. Otherwise, make one from -8000000 and update mapping in memory
+(3) Update local cache file for all newly created terms
+(4) Output sql insert script at 'data/dideo-concepts-insert.sql'
 
 Results: number of terms been added to table concept, vocabulary and domain
 By 06/16/2017
