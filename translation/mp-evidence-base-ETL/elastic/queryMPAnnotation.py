@@ -66,7 +66,13 @@ def createStatement(doc, doc_urn):
 	claim = doc["argues"]; source = doc["rawurl"]; email = doc["email"]
 	label = claim["label"]; method = doc["argues"]["method"]; date = doc["created"]
 	exact = getSelectorTxt(claim, "exact"); prefix = getSelectorTxt(claim, "prefix"); suffix = getSelectorTxt(claim, "suffix")
-	qualifier = claim["qualifiedBy"]; negation = claim["negation"]
+	qualifier = claim["qualifiedBy"];
+
+        negation = "No"
+        if "negation" in claim:
+                negation = claim["negation"]
+        else:
+                print "[WARN] doc (%s) statement (%s), negation is undefined" % (source, label)
 	drugname1 = qualifier["drug1"]; drugname2 = qualifier["drug2"]; enzyme = qualifier["enzyme"]; predicate = qualifier["relationship"]; precipitant = qualifier["precipitant"]
 
 	if not validateStatement(precipitant, drugname1, drugname2, enzyme, predicate, source, label):
