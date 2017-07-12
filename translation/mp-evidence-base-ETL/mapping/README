@@ -1,0 +1,13 @@
+(1) QUALIFIER URI MAPPING
+
+drug-list-mapped.csv is the mapping file for qualifier identifier
+columns: qualifier name, RxNorm, DrOn, PRO (Protein Ontology), enantiomer, metabolite (MeSH), brand name, drug class, omop concept id
+
+The script tool.py parse drug-list-mapped csv and print term with URI when mappings either RxNorm or MeSH available. (Only RxNorm and MeSH currenly in OMOP vocabulary among listed sources)
+
+RUN
+$ python tool.py
+
+(2) LIST OF CONCEPTS TO APPEND:
+
+qualifier-mapping-append.txt

@@ -1,0 +1,66 @@
+ATV/RTV
+BAY 59-7939
+CMI
+CYP2D6
+CsA
+FPV/RTV
+HIV protease inhibitors
+HO-NEF
+L-amphetamine
+LPV/r
+Lopinavir/Ritonavir
+OATP1B1
+P88?
+P95?
+Phenothiazines
+RSV
+RTV/SQV
+R-warfarin
+S-warfarin 
+SSRIs
+TCA
+TPV/r
+acetylsalicylic acid
+antiarrhythmics
+antidepressants
+antipsychotics
+antiviral drugs
+atorvastatin lactone
+avasimibe
+azole antifungals
+barbiturates
+benzodiazepines
+beta blockers
+beta-blockers
+calcium channel blockers
+ciclosporin
+cyp2c19
+cyp2d6
+cyp3a4
+darunavir or ritonavir
+darunavir/ritonavir
+dextrorphan
+divalproex sodium
+erythrohydrobupropion
+ethinylestradiol
+fimasartan
+hepatic enzyme inducers
+hepatic enzyme inhibitors
+high-dose ASA
+lopinavir/ritonavir
+low-dose ASA
+mCPPC060062
+mipomersen sodium
+norfluoxetine
+norverapamil
+oral contraceptives
+paroxetine CR
+phenothiazines
+psychostimulants
+rifampicin
+risperdione
+selective serotonin reuptake inhibitors
+simvastatin acid
+sulforidazine
+tricyclic antidepressant
+tricyclic antidepressants
