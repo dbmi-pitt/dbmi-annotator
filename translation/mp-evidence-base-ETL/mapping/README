@@ -11,3 +11,9 @@ $ python tool.py
 (2) LIST OF CONCEPTS TO APPEND:
 
 qualifier-mapping-append.txt
+
+source of URI to append:
+PRO (Protein Ontology)
+CHEBI
+DrOn
+Drug class? (ex. N0000175520)
