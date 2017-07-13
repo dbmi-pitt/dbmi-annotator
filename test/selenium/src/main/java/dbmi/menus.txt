@@ -1,0 +1,72 @@
+<div class="annotator-addermp" style="top: 294px; left: 516px;">
+<button class="mp-menu-btn" type="button">Annotate</button>
+<ul class="mp-main-menu" style="display: none;">
+<li class="mp-main-menu-1" onclick="showEditor(),claimEditorLoad();">
+create a claim
+</li>
+<li class="mp-main-menu-2">
+add data for
+<ul class="mp-sub-menu-2" style="display: none;"></ul>
+</li>
+</ul>
+</div>
+
+
+
+<div class="annotator-adderhl" style="top: 294px; left: 481px;">
+  <button class="hl-adder-btn" type="button" title="Highlight">Annotate</button>
+</div>
+
+----
+
+for mp button: 
+button contains "mp-menu-btn" 
+hover
+li contains "mp-main-menu-1"
+Claim editor
+
+for drug button:
+button contains "hl-adder-btn"
+
+----
+
+<span data-markjs="false" class="annotator-hl" name="annotator-hl" id="AVys6iqgB3yl9ytfLaLi">evaluate</span>
+
+----
+
+<select id="Drug2" style="display: inline-block;"><option value="N/A">N/A</option><option value="warfarin_0">warfarin</option><option value="warfarin_0">warfarin</option><option value="warfarin_0">warfarin</option><option value="warfarin_0">warfarin</option><option value="warfarin_0">warfarin</option><option value="warfarin_0">warfarin</option><option value="warfarin_0">warfarin</option><option value="ambrisentan_0">ambrisentan</option><option value="warfarin_1">warfarin</option><option value="warfarin_1">warfarin</option><option value="warfarin_1">warfarin</option><option value="warfarin_1">warfarin</option><option value="warfarin_1">warfarin</option><option value="warfarin_1">warfarin</option><option value="warfarin_1">warfarin</option></select>
+
+----
+
+<input type="radio" name="precipitant" id="drug1precipitant" value="drug1">
+
+----
+
+<button class="annotator-save-close" id="annotator-save-close">Save and Close</button>
+
+----
+
+<button id="finish-same-span-btn">OK</button>
+
+----
+
+<button class="btn btn-success" onclick="annotationPanelClick()" value="hide" style="display: block; margin-bottom: 0px;"><img src="img/menu.png" height="25px" width="28px"></button>
+
+----
+
+<select id="relationship">
+	<option id="r0" value="interact with">interact with</option>
+	<option id="r1" value="inhibits">inhibits</option>
+	<option id="r2" value="substrate of">substrate of</option>
+	<option id="undefined" value="has metabolite" disabled="disabled" style="display: none;">has metabolite</option>
+	<option id="undefined" value="controls formation of" disabled="disabled" style="display: none;">controls formation of</option>
+	<option id="undefined" value="inhibition constant" disabled="disabled" style="display: none;">inhibition constant</option>
+</select>
+
+<select id="method"><option value="DDI clinical trial">DDI clinical trial</option><option value="Phenotype clinical study">Phenotype clinical study</option><option value="Case Report">Case Report</option><option value="Statement">Statement</option><option value="Experiment">Experiment</option></select>
+
+----
+
+<button class="annotator-delete" id="annotator-delete" style="display: inline-block;">Delete</button>
+
+<button id="claim-delete-confirm-btn">Confirm</button>
