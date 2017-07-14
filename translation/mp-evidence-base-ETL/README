@@ -17,10 +17,9 @@ pip install psycopg2
 -----------------------------------------------------------------------
 translate MP annotations from elasticsearch and load into postgres DB
 -----------------------------------------------------------------------
+execute ETL program loadAnnotatorAnnsToRDB.py
 
 $ cd mp-evidence-base-ETL
-
-execute ETL program loadAnnotatorAnnsToRDB.py 
 
 $ python loadAnnotatorAnnsToRDB.py <elastic host> <elastic port> <pg host> <pg port> <pg username> <pg password> <OPTIONS (1: clean all tables, 2 drop and recreate all tables, 0: keep existing data)>
 
@@ -30,6 +29,11 @@ ex. $ python loadAnnotatorAnnsToRDB.py localhost 9200 localhost 5432 dbmiannotat
 Docker container:
 $ python loadAnnotatorAnnsToRDB.py elasticsearch 9200 postgres 5432 dbmiannotator <password> 0
 
+Note: default database is 'ohdsi'.'mpevidence', edit main() for DB connection configuration
+Example:
+# specify DB connection in script to 'dikb'
+CREATOR = "test@gmail.com"; PG_DATABASE = 'dikb'
+	
 -----------------------------------------------------------------------
 translate Domeo SPLs annotations from csv and load into postgres DB
 -----------------------------------------------------------------------
@@ -65,10 +69,10 @@ python load-rdb-annotations.py <pg hostname> <pg username> <pg password> <es hos
 
 Development mode:
 ex. 
-$ python translateRDB2Elastic.py localhost dbmiannotator <password> localhost dbmi.etl@gmail.com
+$ python translateRDB2Elastic.py localhost dbmiannotator <password> localhost test@gmail.com
 
 Docker container:
-$ python translateRDB2Elastic.py postgres dbmiannotator <password> elasticsearch dbmi.etl@gmail.com
+$ python translateRDB2Elastic.py postgres dbmiannotator <password> elasticsearch test@gmail.com
 
 --------------------------------------------------------------------
 query and export annotations from elasticsearch to csv
