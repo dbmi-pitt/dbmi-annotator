@@ -1,67 +1,67 @@
-NAME | NOTES | URI
-ATV/RTV | abbreviation for "atazanavir/ritonavir" https://www.hiv.va.gov/provider/manual-primary-care/abbreviations.asp |
-BAY 59-7939 | | MeSH D000069552 https://www.ncbi.nlm.nih.gov/mesh/?term=bay+59+7939
-CMI | ambiguous |
-CYP2D6 | | MeSH D019389 https://www.ncbi.nlm.nih.gov/mesh/68019389
-CsA | ambiguous |
-FPV/RTV | abbreviation for "fosamprenavir/ritonavir" https://www.hiv.va.gov/provider/manual-primary-care/abbreviations.asp |
-HIV protease inhibitors | | MeSH D017320 https://www.ncbi.nlm.nih.gov/mesh/68017320
-HO-NEF | abbreviation for "hydroxynefazodone" | MeSH C092333 https://www.ncbi.nlm.nih.gov/mesh/?term=hydroxynefazodone
-L-amphetamine | | MeSH D000661 https://www.ncbi.nlm.nih.gov/mesh/?term=L-amphetamine
-LPV/r | abbreviation for "Lopinavir/Ritonavir" | MeSH C558899 https://www.ncbi.nlm.nih.gov/mesh/?term=lopinavir+ritonavir
-Lopinavir/Ritonavir | DUPLICATE | MeSH C558899 https://www.ncbi.nlm.nih.gov/mesh/?term=lopinavir+ritonavir
-OATP1B1 | | MeSH C503999 https://www.ncbi.nlm.nih.gov/mesh/?term=oatp1b1+protein%2C+human
-P88? | | Already in spreadsheet https://www.ncbi.nlm.nih.gov/mesh/?term=p88+capsid+protein%2C+hv190sv
-P95? | | Already in spreadsheet https://www.ncbi.nlm.nih.gov/mesh/?term=retinoblastoma+protein+p95
+NAME|NOTES|URI
+ATV/RTV|abbreviation for "atazanavir/ritonavir" https://www.hiv.va.gov/provider/manual-primary-care/abbreviations.asp|
+BAY 59-7939||MeSH D000069552 https://www.ncbi.nlm.nih.gov/mesh/?term=bay+59+7939
+CMI|ambiguous|
+CYP2D6||MeSH D019389 https://www.ncbi.nlm.nih.gov/mesh/68019389
+CsA|ambiguous|
+FPV/RTV|abbreviation for "fosamprenavir/ritonavir" https://www.hiv.va.gov/provider/manual-primary-care/abbreviations.asp|
+HIV protease inhibitors||MeSH D017320 https://www.ncbi.nlm.nih.gov/mesh/68017320
+HO-NEF|abbreviation for "hydroxynefazodone"|MeSH C092333 https://www.ncbi.nlm.nih.gov/mesh/?term=hydroxynefazodone
+L-amphetamine||MeSH D000661 https://www.ncbi.nlm.nih.gov/mesh/?term=L-amphetamine
+LPV/r|abbreviation for "Lopinavir/Ritonavir"|MeSH C558899 https://www.ncbi.nlm.nih.gov/mesh/?term=lopinavir+ritonavir
+Lopinavir/Ritonavir|DUPLICATE|MeSH C558899 https://www.ncbi.nlm.nih.gov/mesh/?term=lopinavir+ritonavir
+OATP1B1||MeSH C503999 https://www.ncbi.nlm.nih.gov/mesh/?term=oatp1b1+protein%2C+human
+P88?||Already in spreadsheet https://www.ncbi.nlm.nih.gov/mesh/?term=p88+capsid+protein%2C+hv190sv
+P95?||Already in spreadsheet https://www.ncbi.nlm.nih.gov/mesh/?term=retinoblastoma+protein+p95
 Phenothiazines
-RSV | | MeSH D010640 https://www.ncbi.nlm.nih.gov/mesh/?term=phenothiazines
-RTV/SQV | abbreviation for "ritonavir/saquinavir" https://www.hiv.va.gov/provider/manual-primary-care/abbreviations.asp |
-R-warfarin | | MeSH D014859 https://www.ncbi.nlm.nih.gov/mesh/68014859
-S-warfarin | | MeSH D014859 https://www.ncbi.nlm.nih.gov/mesh/68014859
-SSRIs | abbreviation for "Selective serotonin reuptake inhibitors" -- in ATLAS | non-standard concept id may be 4229949, 4159928
-TCA | abbreviation for "Tricyclic antidepressant" | MeSH D000929 https://www.ncbi.nlm.nih.gov/mesh/68000929
-TPV/r | abbreviation for "Tipranavir/Ritanovir" |
-acetylsalicylic acid | synonym for "aspirin" | Already in spreadsheet
-antiarrhythmics | | MeSH D000889 https://www.ncbi.nlm.nih.gov/mesh/68000889
-antidepressants | | MeSH D000928 https://www.ncbi.nlm.nih.gov/mesh/68000928
-antipsychotics | | MeSH D014150 https://www.ncbi.nlm.nih.gov/mesh/68014150
-antiviral drugs | | MeSH D000998 https://www.ncbi.nlm.nih.gov/mesh/68000998
-atorvastatin lactone | https://pubchem.ncbi.nlm.nih.gov/compound/6483036 |
-avasimibe | | MeSH C423185 https://www.ncbi.nlm.nih.gov/mesh/?term=avasimibe
-azole antifungals | In ATLAS | non-standard concept id may be 4160920, 4228543?
-barbiturates | | MeSH D001463 https://www.ncbi.nlm.nih.gov/mesh/?term=barbiturates
-benzodiazepines | | MeSH D001569 https://www.ncbi.nlm.nih.gov/mesh/?term=benzodiazepines
-beta blockers | | MeSH D000319 https://www.ncbi.nlm.nih.gov/mesh/68000319
-beta-blockers | DUPLICATE | MeSH D000319 https://www.ncbi.nlm.nih.gov/mesh/68000319
-calcium channel blockers | | MeSH D002121 https://www.ncbi.nlm.nih.gov/mesh/68002121
-ciclosporin | | MeSH D016572 https://www.ncbi.nlm.nih.gov/mesh/?term=ciclosporin
-cyp2c19 | | MeSH C045793 https://www.ncbi.nlm.nih.gov/mesh/?term=cyp2c19%2C+human
-cyp2d6 | DUPLICATE | MeSH D019389 https://www.ncbi.nlm.nih.gov/mesh/68019389
-cyp3a4 | | MeSH C510163 https://www.ncbi.nlm.nih.gov/mesh/?term=cyp3a4+protein%2C+human
-darunavir or ritonavir | lab measurement in ATLAS? |
-darunavir/ritonavir | DUPLICATE |
-dextrorphan | | MeSH D003917 https://www.ncbi.nlm.nih.gov/mesh/?term=dextrorphan
-divalproex sodium | | MeSH D014635 https://www.ncbi.nlm.nih.gov/mesh/?term=divalproex+sodium
-erythrohydrobupropion | | MeSH C496216 https://www.ncbi.nlm.nih.gov/mesh/?term=erythrohydrobupropion
-ethinylestradiol | | MeSH D004997 https://www.ncbi.nlm.nih.gov/mesh/?term=ethinyl+estradiol
-fimasartan | | MeSH C558933 https://www.ncbi.nlm.nih.gov/mesh/?term=fimasartan
-hepatic enzyme inducers | hepatic = liver | 
-hepatic enzyme inhibitors | hepatic = liver | 
-high-dose ASA | synonym for "high-dose aspirin" | 
-lopinavir/ritonavir | DUPLICATE | MeSH C558899 https://www.ncbi.nlm.nih.gov/mesh/?term=lopinavir+ritonavir
-low-dose ASA | synonym for "low-dose aspirin" | 
-mCPPC060062 | mCPPC? https://www.ncbi.nlm.nih.gov/mesh/?term=mcppc |
-mipomersen sodium | In ATLAS | non-standard concept code 1367838, concept id 46274505 
-norfluoxetine | | MeSH C036139 https://www.ncbi.nlm.nih.gov/mesh/?term=norfluoxetine
-norverapamil | | MeSH C016904 https://www.ncbi.nlm.nih.gov/mesh/?term=norverapamil
-oral contraceptives | | MeSH D003276 https://www.ncbi.nlm.nih.gov/mesh/68003276
-paroxetine CR | synonym for "paroxetine controlled release" or "paroxetine extended release" -- used "paroxetine" | Already in spreadsheet
-phenothiazines | | MeSH D010640 https://www.ncbi.nlm.nih.gov/mesh/?term=phenothiazines 
-psychostimulants | in ATLAS | non-standard concept id may be 4194213, 4305913
-rifampicin | | MeSH D012293 https://www.ncbi.nlm.nih.gov/mesh/68012293
-risperdione | | MeSH D018967 https://www.ncbi.nlm.nih.gov/mesh/68018967
-selective serotonin reuptake inhibitors | DUPLICATE | non-standard concept id may be 4229949, 4159928
-simvastatin acid | | MeSH C063287 https://www.ncbi.nlm.nih.gov/mesh/67063287
-sulforidazine | | MeSH C040634 https://www.ncbi.nlm.nih.gov/mesh/67040634 
-tricyclic antidepressant | DUPLICATE | MeSH D000929 https://www.ncbi.nlm.nih.gov/mesh/68000929
-tricyclic antidepressants | DUPLICATE | MeSH D000929 https://www.ncbi.nlm.nih.gov/mesh/68000929
+RSV||MeSH D010640 https://www.ncbi.nlm.nih.gov/mesh/?term=phenothiazines
+RTV/SQV|abbreviation for "ritonavir/saquinavir" https://www.hiv.va.gov/provider/manual-primary-care/abbreviations.asp|
+R-warfarin||MeSH D014859 https://www.ncbi.nlm.nih.gov/mesh/68014859
+S-warfarin||MeSH D014859 https://www.ncbi.nlm.nih.gov/mesh/68014859
+SSRIs|abbreviation for "Selective serotonin reuptake inhibitors" -- in ATLAS|non-standard concept id may be 4229949, 4159928
+TCA|abbreviation for "Tricyclic antidepressant"|MeSH D000929 https://www.ncbi.nlm.nih.gov/mesh/68000929
+TPV/r|abbreviation for "Tipranavir/Ritanovir"|
+acetylsalicylic acid|synonym for "aspirin"|Already in spreadsheet
+antiarrhythmics||MeSH D000889 https://www.ncbi.nlm.nih.gov/mesh/68000889
+antidepressants||MeSH D000928 https://www.ncbi.nlm.nih.gov/mesh/68000928
+antipsychotics||MeSH D014150 https://www.ncbi.nlm.nih.gov/mesh/68014150
+antiviral drugs||MeSH D000998 https://www.ncbi.nlm.nih.gov/mesh/68000998
+atorvastatin lactone|https://pubchem.ncbi.nlm.nih.gov/compound/6483036|
+avasimibe||MeSH C423185 https://www.ncbi.nlm.nih.gov/mesh/?term=avasimibe
+azole antifungals|In ATLAS|non-standard concept id may be 4160920, 4228543?
+barbiturates||MeSH D001463 https://www.ncbi.nlm.nih.gov/mesh/?term=barbiturates
+benzodiazepines||MeSH D001569 https://www.ncbi.nlm.nih.gov/mesh/?term=benzodiazepines
+beta blockers||MeSH D000319 https://www.ncbi.nlm.nih.gov/mesh/68000319
+beta-blockers|DUPLICATE|MeSH D000319 https://www.ncbi.nlm.nih.gov/mesh/68000319
+calcium channel blockers||MeSH D002121 https://www.ncbi.nlm.nih.gov/mesh/68002121
+ciclosporin||MeSH D016572 https://www.ncbi.nlm.nih.gov/mesh/?term=ciclosporin
+cyp2c19||MeSH C045793 https://www.ncbi.nlm.nih.gov/mesh/?term=cyp2c19%2C+human
+cyp2d6|DUPLICATE|MeSH D019389 https://www.ncbi.nlm.nih.gov/mesh/68019389
+cyp3a4||MeSH C510163 https://www.ncbi.nlm.nih.gov/mesh/?term=cyp3a4+protein%2C+human
+darunavir or ritonavir|lab measurement in ATLAS?|
+darunavir/ritonavir|DUPLICATE|
+dextrorphan||MeSH D003917 https://www.ncbi.nlm.nih.gov/mesh/?term=dextrorphan
+divalproex sodium||MeSH D014635 https://www.ncbi.nlm.nih.gov/mesh/?term=divalproex+sodium
+erythrohydrobupropion||MeSH C496216 https://www.ncbi.nlm.nih.gov/mesh/?term=erythrohydrobupropion
+ethinylestradiol||MeSH D004997 https://www.ncbi.nlm.nih.gov/mesh/?term=ethinyl+estradiol
+fimasartan||MeSH C558933 https://www.ncbi.nlm.nih.gov/mesh/?term=fimasartan
+hepatic enzyme inducers|hepatic = liver|
+hepatic enzyme inhibitors|hepatic = liver|
+high-dose ASA|synonym for "high-dose aspirin"|
+lopinavir/ritonavir|DUPLICATE|MeSH C558899 https://www.ncbi.nlm.nih.gov/mesh/?term=lopinavir+ritonavir
+low-dose ASA|synonym for "low-dose aspirin"|
+mCPPC060062|mCPPC? https://www.ncbi.nlm.nih.gov/mesh/?term=mcppc|
+mipomersen sodium|In ATLAS|non-standard concept code 1367838, concept id 46274505 
+norfluoxetine||MeSH C036139 https://www.ncbi.nlm.nih.gov/mesh/?term=norfluoxetine
+norverapamil||MeSH C016904 https://www.ncbi.nlm.nih.gov/mesh/?term=norverapamil
+oral contraceptives||MeSH D003276 https://www.ncbi.nlm.nih.gov/mesh/68003276
+paroxetine CR|synonym for "paroxetine controlled release" or "paroxetine extended release" -- used "paroxetine"|Already in spreadsheet
+phenothiazines||MeSH D010640 https://www.ncbi.nlm.nih.gov/mesh/?term=phenothiazines 
+psychostimulants|in ATLAS|non-standard concept id may be 4194213, 4305913
+rifampicin||MeSH D012293 https://www.ncbi.nlm.nih.gov/mesh/68012293
+risperdione||MeSH D018967 https://www.ncbi.nlm.nih.gov/mesh/68018967
+selective serotonin reuptake inhibitors|DUPLICATE|non-standard concept id may be 4229949, 4159928
+simvastatin acid||MeSH C063287 https://www.ncbi.nlm.nih.gov/mesh/67063287
+sulforidazine||MeSH C040634 https://www.ncbi.nlm.nih.gov/mesh/67040634 
+tricyclic antidepressant|DUPLICATE|MeSH D000929 https://www.ncbi.nlm.nih.gov/mesh/68000929
+tricyclic antidepressants|DUPLICATE|MeSH D000929 https://www.ncbi.nlm.nih.gov/mesh/68000929
