@@ -3,9 +3,12 @@
 drug-list-mapped.csv is the mapping file for qualifier identifier
 columns: qualifier name, RxNorm, DrOn, PRO (Protein Ontology), enantiomer, metabolite (MeSH), brand name, drug class, omop concept id
 
-The script tool.py parse drug-list-mapped csv and print term with URI when mappings either RxNorm or MeSH available. (Only RxNorm and MeSH currenly in OMOP vocabulary among listed sources)
+The script tool.py parse drug-list-mapped csv and return dictionary of drug URI mapping. It's called when translating annotation from elasticsearch to PostgreSQL, filling the concept code for drug terms in annotation.
 
-RUN
+function getDrugMappingDict(inputfile)
+
+Besides, run the script standalone will print term with URI when mappings either RxNorm or MeSH available. (Only RxNorm and MeSH currenly in OMOP vocabulary among listed sources)
+
 $ python tool.py
 
 (2) LIST OF CONCEPTS TO APPEND:

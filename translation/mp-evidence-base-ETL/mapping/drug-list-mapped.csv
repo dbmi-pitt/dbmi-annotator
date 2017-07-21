@@ -1,345 +1,344 @@
-name,RxNorm,DrOn,PRO,enantiomer,metabolite,brand,class,conceptId
-1-pyrimidinylpiperazine,null,null,,,C037921,,,null
-2-hydroxy desipramine,null,null,,,C028653,,,null
-4-hydroxypropranolol,null,null,,,C001422,,,null
-9-hydroxyrisperidone,null,null,,,D000068882,,,null
-ABILIFY,352393,null,,,,x,,19031636
-ATV/RTV,null,null,,,,,,null
-AUBAGIO,1310526,null,,,,x,,42898635
-Atorvastatin,83367,CHEBI_39548,,,,,,1545958
-BAY 59-7939,null,null,,,,,,null
-BRINTELLIX,1439824,null,,,,x,,44506424
-Bupropion,42347,CHEBI_3219,,,,,,750982
-CMI,null,null,,,,,,null
-CRESTOR,320864,null,,,,x,,19015844
-CYP2D6,null,null,PR:000006121,,,,,null
-Carbamazepine,2002,CHEBI_3387,,,,,,740275
-Celexa,215928,null,,,,,,19058158
-Cimetidine,2541,CHEBI_3699,,,,,,997276
-Citalopram,2556,CHEBI_3723,,,,,,797617
-Clopidogrel,32968,CHEBI_37941,,,,,,1322184
-CsA,null,null,,,,,,null
-Cyclosporine,3008,CHEBI_4031,,,,,,19010482
-Desipramine,3247,CHEBI_47781,,,,,,716968
-Diclofenac,3355,CHEBI_47381,,,,,,1124300
-Digoxin,3407,CHEBI_4551,,,,,,1326303
-Dilantin,202740,null,,,,,,19043651
-EMSAM,617716,null,,,,x,,19086595
-Edoxaban,1599538,null,,,,,,45892847
-Efavirenz,195085,DRON_00017693,,,,,,1738135
-Enoxaparin,67108,CHEBI_28304,,,,,,1301025
-Erythromycin,4053,CHEBI_48923,,,,,,1746940
-Eszopiclone,485437,DRON_00018768,,,,,,40038687
-FETZIMA,1433218,null,,,,x,,43560139
-FPV/RTV,null,null,,,,x,,null
-Fluconazole,4450,CHEBI_46081,,,,,,1754994
-Fluoxetine,4493,CHEBI_5118,,,,,,755695
-Fluvoxamine,42355,CHEBI_5138,,,,,,751412
-GILENYA,1012896,null,,,,x,,40226860
-Gemfibrozil,4719,CHEBI_5296,,,,,,1558242
-HIV protease inhibitors,null,null,,,,,N0000175520 ,null
-HO-NEF,null,null,,,,,,null
-INVEGA,686438,null,,,,x,,19005338
-Imipramine,5691,CHEBI_47499,,,,,,778268
-Ketoconazole,6135,CHEBI_48339,,,,,,985708
-L-amphetamine,null,null,,,,,,null
-LIPITOR,153165,null,,,,x,,19023381
-LPV/r,null,null,,,,,,null
-Lexapro,352741,null,,,,,,19033448
-Lithium,6448,CHEBI_30145,,,,,,19124477
-Lopinavir,195088,DRON_00016421,,,,,,1738170
-Lopinavir/Ritonavir,null,null,,,,,,null
-Lorazepam,6470,CHEBI_52993,,,,,,791967
-MEVACOR,224938,null,,,,x,,19087537
-Mirtazapine,15996,CHEBI_6950,,,,,,725131
-N-desmethylclozapine,null,null,,,C058272,,,null
-N-desmethyldiazepam,null,null,,,D003708,,,null
-N-desmethylsertraline,null,null,,,C065162,,,null
-NFV,134527,null,,,D019888,,,1715472
-Nefazodone,31565,CHEBI_7494,,,,,,714684
-Nelfinavir,134527,DRON_00013466,,,,,,1715472
-OATP1B1,null,null,x,,,,,null
-Olanzapine,61381,CHEBI_7735,,,,,,785788
-Omeprazole,7646,CHEBI_7772,,,,,,923645
-P88,null,null,C102211,,?,,,null
-P95,null,null,C062257,,?,,,null
-Phenothiazines,null,null,,,,,N0000175746,null
-Phenylpropanolamine,8175,DRON_00017685,,,,, ,1139993
-Phenytoin,8183,CHEBI_8107,,,,,,740910
-Propranolol,8787,CHEBI_8499,,,,,,1353766
-Quetiapine,51272,CHEBI_8707,,,,,,766814
-RSV,null,null,,,,,,null
-RTV/SQV,null,null,,,,,,null
-Ranitidine,9143,CHEBI_8776,,,,,,961047
-R-warfarin,null,,,87738,,,,null
-Rifampin,9384,CHEBI_28077,,,,,,1763204
-Risperidone,35636,CHEBI_8871,,,,,,735979
-Ritonavir,85762,CHEBI_45409,,,,,,1748921
-Rosuvastatin,301542,DRON_00018679,,,,,,1510813
-S-warfarin,null,null,,87737, ,,,null
-SAPHRIS,859976,null,,,,x,,40165240
-SSRIs,null,null,,,,,N0000175696 ,null
-SURMONTIL,225029,null,,,,x,,19087690
-Savella,833136,null,,,,x,,19045862
-Sertraline,36437,CHEBI_9123,,,,,,739138
-TCA,null,null,,,,,N0000175752 ,null
-TPV/r,null,null,,,,,,null
-Telaprevir,1102261,null,,,,,,40239330
-Teriflunomide,1310520,DRON_00020307,,,,,,42900584
-Ticagrelor,1116632,DRON_00020111,,,,,,40241186
-Ticlopidine,10594,CHEBI_9588,,,,,,1302398
-UNK,null,null,,,,,,null
-Warfarin,11289,CHEBI_10033,,,,,,1310149
-XARELTO,1114199,null,,,,x,,40241222
-Zaleplon,74667,CHEBI_10102,,,,,,720727
-Ziprasidone,115698,CHEBI_10119,,,,,,712615
-Zolpidem,39993,CHEBI_10125,,,,,,744740
-abiraterone,1100072,DRON_00020081,,,,,,40239056
-abiraterone acetate,null,null,,,D000069501,,,null
-acetylsalicylic acid,null,null,,,,,,null
-aliskiren,325646,DRON_00020021,,,,,,1317967
-alitretinoin,81864,DRON_00013988,,,,,,941052
-alosetron,85248,DRON_00013975,,,,,,948555
-alprazolam,596,CHEBI_2611,,,,,,781039
-ambrisentan,358274,DRON_00018947,,,,,,1337068
-amiodarone,703,CHEBI_2663,,,,,,1309944
-amitriptyline,704,CHEBI_2666,,,,,,710062
-amlodipine,17767,CHEBI_2668,,,,,,1332418
-antiarrhythmics,null,null,,,,,C01B,null
-antidepressants,null,null,,,,,N06A ,null
-antipsychotics,null,null,,,,,N05A ,null
-antiviral drugs,null,null,,,,,S01AD,null
-apixaban,1364430,DRON_00723857,,,,,,43013024
-aripiprazole,89013,CHEBI_31236,,,,,,757688
-aspirin,1191,CHEBI_15365,,,,,,1112807
-astemizole,42328,null,,,,,,1150770
-atazanavir,343047,DRON_00018681,,,,,,1727223
-atenolol,1202,CHEBI_2904,,,,,,1314002
-atomoxetine,38400,CHEBI_127342,,,,,,742185
-atorvastatin,83367,CHEBI_39548,,,,,,1545958
-atorvastatin lactone,null,null,,,,,,null
-avasimibe,null,null,,,,,,null
-azole antifungals,null,null,,,,,,null
-barbiturates,null,null,,,,,,null
-benzodiazepines,null,null,,,,,,null
-benztropine,1424,CHEBI_3048,,,,,,719174
-beta blockers,null,null,,,,,x,null
-beta-blockers,null,null,,,,,x,null
-bicalutamide,83008,CHEBI_3090,,,,,,1344381
-biperiden,1589,null,,,,,,724908
-boceprevir,1102129,DRON_00020085,,,,,,40238770
-bosentan,75207,DRON_00013739,,,,,,1321636
-bupropion,42347,CHEBI_3219,,,,,,750982
-buspirone,1827,CHEBI_3223,,,,,,733301
-caffeine,1886,CHEBI_27732,,,,,,1134439
-calcium channel blockers,null,null,,,,,C08,null
-carbamazepine,2002,CHEBI_3387,,,,,,740275
-cefaclor,2176,CHEBI_3478,,,,,,1768849
-chlorpromazine,2403,CHEBI_3647,,,,,,794852
-chlorpropamide,2404,CHEBI_3650,,,,,,1594973
-ciclosporin,null,null,,,,,,null
-cimetidine,2541,CHEBI_3699,,,,,,997276
-ciprofloxacin,2551,CHEBI_100241,,,,,,1797513
-cisapride,35255,CHEBI_3720,,,,,,932196
-citalopram,2556,CHEBI_3723,,,,,,797617
-clarithromycin,21212,CHEBI_3732,,,,,,1750500
-clomipramine,2597,CHEBI_47780,,,,,,798834
-clopidogrel,32968,CHEBI_37941,,,,,,1322184
-clozapine,2626,CHEBI_3766,,,,,,800878
-clozapine N-oxide,null,null,,,C079149,,,null
-cobicistat,1306284,DRON_00020283,,,,,,42874220
-colchicine,2683,CHEBI_23359,,,,,,1101554
-coumarin,2898,DRON_00016051,,,,,,19008106
-cyclosporine,3008,CHEBI_4031,,,,,,19010482
-cyp2c19,null,null,PR:000006118,,,,,null
-cyp2d6,null,null,PR:000006121,,,,,null
-cyp3a4,null,null,PR:000006130,,,,,null
-dabigatran,1546356,null,,,,,,45775372
-darunavir,643071,DRON_00020177,,,,,,40134447
-darunavir or ritonavir,null,null,,,,,,null
-darunavir/ritonavir,null,null,,,,,,null
-debrisoquin,3118,null,,,,,,19011951
-delavirdine,83816,DRON_00010568,,,,,,1747157
-desipramine,3247,CHEBI_47781,,,,,,716968
-desmethylsertraline,null,null,,,C065162,,,null
-desvenlafaxine,734064,DRON_00019106,,, ,,,717607
-desvenlafaxine succinate,683693,null,,,D000069468,,,19125398
-dextromethorphan,3289,CHEBI_4470,,,,,,1119510
-dextrorphan,null,null,,,,,,null
-diazepam,3322,CHEBI_49575,,,,,,723013
-diclofenac,3355,CHEBI_47381,,,,,,1124300
-digoxin,3407,CHEBI_4551,,,,,,1326303
-diltiazem,3443,CHEBI_101278,,,,,,1328165
-diphenhydramine,3498,CHEBI_4636,,,,,,1129625
-divalproex sodium,null,null,,,,,,null
-doxepin,3638,CHEBI_4710,,,,,,738156
-dronedarone,233698,DRON_00017674,,,,,,40163615
-duloxetine,72625,DRON_00016862,,,,,,715259
-efavirenz,195085,DRON_00017693,,,,,,1738135
-enoxacin,3925,null,,,,,,1743222
-enoxaparin,67108,CHEBI_28304,,,,,,1301025
-erythrohydrobupropion,null,null,,,,,,null
-erythromycin,4053,CHEBI_48923,,,,,,1746940
-escitalopram,321988,DRON_00018586,,,,,,715939
-estazolam,4077,CHEBI_4858,,,,,,748010
-eszopiclone,485437,DRON_00018768,,,,,,40038687
-ethinyl estradiol,4124,CHEBI_4903,,,,,,1549786
-ethinylestradiol,null,CHEBI_4903,,,,,,null
-ezetimibe,341248,CHEBI_49040,,,,,,1526475
-famotidine,4278,CHEBI_4975,,,,,,953076
-fenofibrate,8703,CHEBI_5001,,,,,,1551803
-fimasartan,null,null,,,,,,null
-fingolimod,1012892,DRON_00019979,,,,,,40226579
-flecainide,4441,DRON_00016203,,,,,,1354860
-fluconazole,4450,CHEBI_46081,,,,,,1754994
-fluoxetine,4493,CHEBI_5118,,,,,,755695
-fluvastatin,41127,DRON_00012123,,,,,,1549686
-fluvoxamine,42355,CHEBI_5138,,,,,,751412
-fluvoxamine maleate,203143,null,,,,,,19026599
-fosamprenavir,358262,null,,,,,,1736829
-gemfibrozil,4719,CHEBI_5296,,,,,,1558242
-glipizide,4821,DRON_00016824,,,,,,1560171
-glyburide,4815,CHEBI_5441,,,,,,1559684
-goserelin,50610,DRON_00013847,,,,,,1366310
-haloperidol,5093,CHEBI_5613,,,,,,766529
-hepatic enzyme inducers,null,null,,,,,x,null
-hepatic enzyme inhibitors,null,null,,,,,x,null
-high-dose ASA,null,null,,,,,,null
-hydrocodone,5489,CHEBI_5779,,,,,,1174888
-hydroxybupropion,null,null,,,C580748,,,null
-hydroxynefazodone,null,null,,,C092333,,,null
-ibuprofen,5640,CHEBI_5855,,,,,,1177480
-iloperidone,73178,DRON_00017638,,,,,,19017241
-imipramine,5691,CHEBI_47499,,,,,,778268
-indinavir,114289,DRON_00013621,,,,,,1711523
-isoniazid,6038,CHEBI_6030,,,,,,1782521
-itraconazole,28031,CHEBI_6076,,,,,,1703653
-ketoconazole,6135,CHEBI_48339,,,,,,985708
-ketoprofen,6142,CHEBI_6128,,,,,,1185922
-lamotrigine,28439,CHEBI_6367,,,,,,705103
-leuprolide,42375,CHEBI_6427,,,,,,1351541
-levomilnacipran,1433212,DRON_00730821,,,,,,43560354
-levonorgestrel,6373,CHEBI_6443,,,,,,1589505
-levothyroxine,10582,CHEBI_30660,,,,,,1501700
-linezolid,190376,DRON_00013028,,,,,,1736887
-lithium,6448,CHEBI_30145,,,,,,19124477
-lithium carbonate,42351,CHEBI_6504,,,,,,751246
-lopinavir,195088,DRON_00016421,,,,,,1738170
-lopinavir/ritonavir,null,null,,,,,,null
-lorazepam,6470,CHEBI_52993,,,,,,791967
-losartan,52175,CHEBI_6541,,,,,,1367500
-lovastatin,6472,CHEBI_40303,,,,,,1592085
-low-dose ASA,null,null,,,,,,null
-lurasidone,1040028,DRON_00020009,,,,,,40230761
-m-chlorophenylpiperazine,null,null,,,C015068,,,null
-mCPP,null,null,,,C060062,,,null
-maprotiline,6646,DRON_00015231,,,,,,794147
-mesoridazine,6779,null,,,,,,703083
-methadone,6813,CHEBI_6807,,,,,,1103640
-methamphetamine,6816,CHEBI_6809,,,,,,704053
-methotrexate,6851,CHEBI_44185,,,,,,1305058
-methylphenidate,6901,CHEBI_6887,,,,,,705944
-metoprolol,6918,CHEBI_6904,,,,,,1307046
-mexiletine,6926,CHEBI_6916,,,,,,1307542
-midazolam,6960,DRON_00017834,,,,,,708298
-milnacipran,588250,DRON_00019210,,,,,,19080226
-mipomersen sodium,null,null,,,,,,null
-mirtazapine,15996,CHEBI_6950,,,,,,725131
-mitoxantrone,7005,CHEBI_50729,,,,,,1309188
-naproxen,7258,CHEBI_7476,,,,,,1115008
-natalizumab,354770,DRON_00018759,,,,,,735843
-nateglinide,274332,DRON_00018346,,,,,,1502826
-nefazodone,31565,CHEBI_7494,,,,,,714684
-nelfinavir,134527,DRON_00013466,,,,,,1715472
-niacin,7393,CHEBI_15940,,,,,,1517824
-norethindrone,7514,CHEBI_7627,,,,,,1521369
-norfluoxetine,null,null,,,,,,null
-nortriptyline,7531,CHEBI_7640,,,,,,721724
-norverapamil,null,null,,,,,,null
-olanzapine,61381,CHEBI_7735,,,,,,785788
-omeprazole,7646,CHEBI_7772,,,,,,923645
-oral contraceptives,null,null,,,,,x,null
-oxazepam,7781,CHEBI_7823,,,,,,724816
-oxycodone,7804,CHEBI_7852,,,,,,1124957
-paclitaxel,56946,CHEBI_45863,,,,,,1378382
-pantoprazole,40790,CHEBI_7915,,,,,,948078
-paroxetine,32937,CHEBI_7936,,,,,,722031
-paroxetine CR,null,null,,,,,,null
-penicillin G,7980,CHEBI_18208,,,,,,1728416
-perphenazine,8076,CHEBI_8028,,,,,,733008
-phenobarbital,8134,CHEBI_8069,,,,,,734275
-phenothiazines,null,null,,,,,N0000175746,null
-phenytoin,8183,CHEBI_8107,,,,,,740910
-pimozide,8331,DRON_00011376,,,,,,745790
-pindolol,8332,CHEBI_8214,,,,,,1345858
-pioglitazone,33738,CHEBI_8228,,,,,,1525215
-pitavastatin,861634,DRON_00019455,,,,,,40165636
-posaconazole,282446,DRON_00018916,,,,,,1704139
-prasugrel,613391,DRON_00019434,,,,,,40163718
-pravastatin,42463,CHEBI_63618,,,,,,1551860
-pregabalin,483435,DRON_00017760,,,,,,40102084
-procyclidine,8718,null,,,,,,752276
-propafenone,8754,CHEBI_63619,,,,,,1353256
-propranolol,8787,CHEBI_8499,,,,,,1353766
-pseudoephedrine,8896,CHEBI_51209,,,,,,1154332
-psychostimulants,null,null,,,,,N06B,null
-quazepam,35185,DRON_00011480,,,,,,731188
-quetiapine,51272,CHEBI_8707,,,,,,766814
-quinidine,9068,CHEBI_28593,,,,,,1360421
-rabeprazole,477402,CHEBI_8768,,,,,,40077074
-ramelteon,596205,DRON_00018794,,,,,,781182
-ramipril,35296,CHEBI_8774,,,,,,1334456
-ranitidine,9143,CHEBI_8776,,,,,,961047
-repaglinide,73044,DRON_00017472,,,,,,1516766
-rifampicin,null,null,,,,,,null
-rifampin,9384,CHEBI_28077,,,,,,1763204
-risperdione,null,null,,,,,,null
-risperidone,35636,CHEBI_8871,,,,,,735979
-ritonavir,85762,CHEBI_45409,,,,,,1748921
-rivaroxaban,1114195,DRON_00020099,,,,,,40241331
-rosiglitazone,84108,CHEBI_50122,,,,,,1547504
-rosuvastatin,301542,DRON_00018679,,,,,,1510813
-salicylic acid,9525,CHEBI_16914,,,,,,964407
-saquinavir,83395,DRON_00016171,,,,,,1746244
-selective serotonin reuptake inhibitors,null,null,,,,,N0000175696 ,null
-selegiline,9639,CHEBI_50217,,,,,,766209
-sertraline,36437,CHEBI_9123,,,,,,739138
-simvastatin,36567,CHEBI_9150,,,,,,1539403
-simvastatin acid,null,null,,,,,,null
-sitagliptin,593411,CHEBI_40237,,,,,,1580747
-sulforidazine,null,null,,,,,,null
-tacrine,10318,null,,,,,,836654
-tacrolimus,42316,CHEBI_61057,,,,,,950637
-tamoxifen,10324,CHEBI_41774,,,,,,1436678
-telaprevir,1102261,null,,,,,,40239330
-telithromycin,274786,DRON_00018669,,,,,,1702911
-temazepam,10355,DRON_00013980,,,,,,836715
-terbinafine,37801,DRON_00016960,,,,,,1741309
-terfenadine,42330,null,,,,,,1150836
-teriflunomide,1310520,DRON_00020307,,,,,,42900584
-theophylline,10438,CHEBI_28177,,,,,,1237049
-thioridazine,10502,CHEBI_9566,,,,,,700299
-thiothixene,10510,DRON_00012220,,,,,,700465
-threohydrobupropion,null,null,,,C496216,,,null
-threohydrobupropion and erythrohydrobupropion,null,null,,,C496216,,,null
-ticagrelor,1116632,DRON_00020111,,,,,,40241186
-ticlopidine,10594,CHEBI_9588,,,,,,1302398
-tipranavir,190548,CHEBI_63628,,,,,,1736999
-tizanidine,57258,CHEBI_63629,,,,,,778474
-tolbutamide,10635,CHEBI_27999,,,,,,1502855
-tramadol,10689,DRON_00017838,,,,,,1103314
-triazolam,10767,CHEBI_9674,,,,,,704599
-triazole-dione,null,null,,,C406672,,,null
-tricyclic antidepressant,null,null,,,,,N0000175752 ,null
-tricyclic antidepressants,null,null,,,,,N0000175752 ,null
-valproate,40254,null,,,,,,745466
-valproic acid,11118,null,,,,,,19010963
-venlafaxine,39786,CHEBI_9943,,,,,,743670
-verapamil,11170,CHEBI_9948,,,,,,1307863
-vildagliptin,596554,null,,,,,,19122137
-voriconazole,121243,CHEBI_10023,,,,,,1714277
-warfarin,11289,CHEBI_10033,,,,,,1310149
-zaleplon,74667,CHEBI_10102,,,,,,720727
-zidovudine,11413,CHEBI_10110,,,,,,1710612
-ziprasidone,115698,CHEBI_10119,,,,,,712615
-zolpidem,39993,CHEBI_10125,,,,,,744740
+name,RxNorm,DrOn,MeSH,PRO,enantiomer,NDF-RT,conceptId,comment
+1-pyrimidinylpiperazine,,,C037921,,,,,
+2-hydroxy desipramine,,,C028653,,,,,
+4-hydroxypropranolol,,,C001422,,,,,
+9-hydroxyrisperidone,,,D000068882,,,,,
+ABILIFY,352393,,,,,,19031636,
+ATV/RTV,,,,,,,,
+AUBAGIO,1310526,,,,,,42898635,
+Atorvastatin,83367,CHEBI_39548,,,,,1545958,
+BAY 59-7939,,,D000069552 ,,,,,
+BRINTELLIX,1439824,,,,,,44506424,
+Bupropion,42347,CHEBI_3219,,,,,750982,
+CMI,,,,,,,,
+CRESTOR,320864,,,,,,19015844,
+CYP2D6,,,D019389 ,PR:000006121,,,,
+Carbamazepine,2002,CHEBI_3387,,,,,740275,
+Celexa,215928,,,,,,19058158,
+Cimetidine,2541,CHEBI_3699,,,,,997276,
+Citalopram,2556,CHEBI_3723,,,,,797617,
+Clopidogrel,32968,CHEBI_37941,,,,,1322184,
+CsA,,,,,,,,
+Cyclosporine,3008,CHEBI_4031,,,,,19010482,
+Desipramine,3247,CHEBI_47781,,,,,716968,
+Diclofenac,3355,CHEBI_47381,,,,,1124300,
+Digoxin,3407,CHEBI_4551,,,,,1326303,
+Dilantin,202740,,,,,,19043651,
+EMSAM,617716,,,,,,19086595,
+Edoxaban,1599538,,,,,,45892847,
+Efavirenz,195085,DRON_00017693,,,,,1738135,
+Enoxaparin,67108,CHEBI_28304,,,,,1301025,
+Erythromycin,4053,CHEBI_48923,,,,,1746940,
+Eszopiclone,485437,DRON_00018768,,,,,40038687,
+FETZIMA,1433218,,,,,,43560139,
+FPV/RTV,,,,,,,,
+Fluconazole,4450,CHEBI_46081,,,,,1754994,
+Fluoxetine,4493,CHEBI_5118,,,,,755695,
+Fluvoxamine,42355,CHEBI_5138,,,,,751412,
+GILENYA,1012896,,,,,,40226860,
+Gemfibrozil,4719,CHEBI_5296,,,,,1558242,
+HIV protease inhibitors,,,D017320,,,N0000175520 ,,
+HO-NEF,,,C092333,,,,,
+INVEGA,686438,,,,,,19005338,
+Imipramine,5691,CHEBI_47499,,,,,778268,
+Ketoconazole,6135,CHEBI_48339,,,,,985708,
+L-amphetamine,,,D000661,,,,,
+LIPITOR,153165,,,,,,19023381,
+LPV/r,,,C558899 ,,,,,
+Lexapro,352741,,,,,,19033448,
+Lithium,6448,CHEBI_30145,,,,,19124477,
+Lopinavir,195088,DRON_00016421,,,,,1738170,
+Lopinavir/Ritonavir,,,C558899,,,,,
+Lorazepam,6470,CHEBI_52993,,,,,791967,
+MEVACOR,224938,,,,,,19087537,
+Mirtazapine,15996,CHEBI_6950,,,,,725131,
+N-desmethylclozapine,,,C058272,,,,,
+N-desmethyldiazepam,,,D003708,,,,,
+N-desmethylsertraline,,,C065162,,,,,
+NFV,134527,,D019888,,,,1715472,
+Nefazodone,31565,CHEBI_7494,,,,,714684,
+Nelfinavir,134527,DRON_00013466,,,,,1715472,
+OATP1B1,,,C503999,,,,,
+Olanzapine,61381,CHEBI_7735,,,,,785788,
+Omeprazole,7646,CHEBI_7772,,,,,923645,
+P88,,,C102211,,,,,
+P95,,,C062257,,,,,
+Phenothiazines,,,,,,N0000175746,,
+Phenylpropanolamine,8175,DRON_00017685,,,, ,1139993,
+Phenytoin,8183,CHEBI_8107,,,,,740910,
+Propranolol,8787,CHEBI_8499,,,,,1353766,
+Quetiapine,51272,CHEBI_8707,,,,,766814,
+RSV,,,D010640,,,,,
+RTV/SQV,,,,,,,,
+Ranitidine,9143,CHEBI_8776,,,,,961047,
+R-warfarin,,,D014859,,87738,,,
+Rifampin,9384,CHEBI_28077,,,,,1763204,
+Risperidone,35636,CHEBI_8871,,,,,735979,
+Ritonavir,85762,CHEBI_45409,,,,,1748921,
+Rosuvastatin,301542,DRON_00018679,,,,,1510813,
+S-warfarin,,,D014859,,87737,,,
+SAPHRIS,859976,,,,,,40165240,
+SSRIs,,,,,,N0000175696 ,,"non-standard concept id may be 4229949, 4159928"
+SURMONTIL,225029,,,,,,19087690,
+Savella,833136,,,,,,19045862,
+Sertraline,36437,CHEBI_9123,,,,,739138,
+TCA,,,,,,N0000175752 ,,
+TPV/r,,,,,,,,
+Telaprevir,1102261,,,,,,40239330,
+Teriflunomide,1310520,DRON_00020307,,,,,42900584,
+Ticagrelor,1116632,DRON_00020111,,,,,40241186,
+Ticlopidine,10594,CHEBI_9588,,,,,1302398,
+Warfarin,11289,CHEBI_10033,,,,,1310149,
+XARELTO,1114199,,,,,,40241222,
+Zaleplon,74667,CHEBI_10102,,,,,720727,
+Ziprasidone,115698,CHEBI_10119,,,,,712615,
+Zolpidem,39993,CHEBI_10125,,,,,744740,
+abiraterone,1100072,DRON_00020081,,,,,40239056,
+abiraterone acetate,,,D000069501,,,,,
+acetylsalicylic acid,1191,CHEBI_15365,,,,,1112807,
+aliskiren,325646,DRON_00020021,,,,,1317967,
+alitretinoin,81864,DRON_00013988,,,,,941052,
+alosetron,85248,DRON_00013975,,,,,948555,
+alprazolam,596,CHEBI_2611,,,,,781039,
+ambrisentan,358274,DRON_00018947,,,,,1337068,
+amiodarone,703,CHEBI_2663,,,,,1309944,
+amitriptyline,704,CHEBI_2666,,,,,710062,
+amlodipine,17767,CHEBI_2668,,,,,1332418,
+antiarrhythmics,,,D000889,,,,,
+antidepressants,,,D000928,,,,,
+antipsychotics,,,D014150,,,,,
+antiviral drugs,,,D000998,,,,,
+apixaban,1364430,DRON_00723857,,,,,43013024,
+aripiprazole,89013,CHEBI_31236,,,,,757688,
+aspirin,1191,CHEBI_15365,,,,,1112807,
+astemizole,42328,,,,,,1150770,
+atazanavir,343047,DRON_00018681,,,,,1727223,
+atenolol,1202,CHEBI_2904,,,,,1314002,
+atomoxetine,38400,CHEBI_127342,,,,,742185,
+atorvastatin,83367,CHEBI_39548,,,,,1545958,
+atorvastatin lactone,,,,,,,,PubChem: 6483036
+avasimibe,,,C423185,,,,,
+azole antifungals,,,,,,,,"non-standard concept id may be 4160920, 4228543?"
+barbiturates,,,D001463,,,,,
+benzodiazepines,,,D001569,,,,,
+benztropine,1424,CHEBI_3048,,,,,719174,
+beta blockers,,,D000319,,,,,
+beta-blockers,,,D000319,,,,,
+bicalutamide,83008,CHEBI_3090,,,,,1344381,
+biperiden,1589,,,,,,724908,
+boceprevir,1102129,DRON_00020085,,,,,40238770,
+bosentan,75207,DRON_00013739,,,,,1321636,
+bupropion,42347,CHEBI_3219,,,,,750982,
+buspirone,1827,CHEBI_3223,,,,,733301,
+caffeine,1886,CHEBI_27732,,,,,1134439,
+calcium channel blockers,,,D002121,,,,,
+carbamazepine,2002,CHEBI_3387,,,,,740275,
+cefaclor,2176,CHEBI_3478,,,,,1768849,
+chlorpromazine,2403,CHEBI_3647,,,,,794852,
+chlorpropamide,2404,CHEBI_3650,,,,,1594973,
+ciclosporin,,,D016572,,,,,
+cimetidine,2541,CHEBI_3699,,,,,997276,
+ciprofloxacin,2551,CHEBI_100241,,,,,1797513,
+cisapride,35255,CHEBI_3720,,,,,932196,
+citalopram,2556,CHEBI_3723,,,,,797617,
+clarithromycin,21212,CHEBI_3732,,,,,1750500,
+clomipramine,2597,CHEBI_47780,,,,,798834,
+clopidogrel,32968,CHEBI_37941,,,,,1322184,
+clozapine,2626,CHEBI_3766,,,,,800878,
+clozapine N-oxide,,,C079149,,,,,
+cobicistat,1306284,DRON_00020283,,,,,42874220,
+colchicine,2683,CHEBI_23359,,,,,1101554,
+coumarin,2898,DRON_00016051,,,,,19008106,
+cyclosporine,3008,CHEBI_4031,,,,,19010482,
+cyp2c19,,,C045793,PR:000006118,,,,
+cyp2d6,,,D019389,PR:000006121,,,,
+cyp3a4,,,C510163,PR:000006130,,,,
+dabigatran,1546356,,,,,,45775372,
+darunavir,643071,DRON_00020177,,,,,40134447,
+darunavir or ritonavir,,,,,,,,
+darunavir/ritonavir,,,,,,,,
+debrisoquin,3118,,,,,,19011951,
+delavirdine,83816,DRON_00010568,,,,,1747157,
+desipramine,3247,CHEBI_47781,,,,,716968,
+desmethylsertraline,,,C065162,,,,,
+desvenlafaxine,734064,DRON_00019106, ,,,,717607,
+desvenlafaxine succinate,683693,,D000069468,,,,19125398,
+dextromethorphan,3289,CHEBI_4470,,,,,1119510,
+dextrorphan,,,D003917,,,,,
+diazepam,3322,CHEBI_49575,,,,,723013,
+diclofenac,3355,CHEBI_47381,,,,,1124300,
+digoxin,3407,CHEBI_4551,,,,,1326303,
+diltiazem,3443,CHEBI_101278,,,,,1328165,
+diphenhydramine,3498,CHEBI_4636,,,,,1129625,
+divalproex sodium,,,D014635,,,,,
+doxepin,3638,CHEBI_4710,,,,,738156,
+dronedarone,233698,DRON_00017674,,,,,40163615,
+duloxetine,72625,DRON_00016862,,,,,715259,
+efavirenz,195085,DRON_00017693,,,,,1738135,
+enoxacin,3925,,,,,,1743222,
+enoxaparin,67108,CHEBI_28304,,,,,1301025,
+erythrohydrobupropion,,,C496216,,,,,
+erythromycin,4053,CHEBI_48923,,,,,1746940,
+escitalopram,321988,DRON_00018586,,,,,715939,
+estazolam,4077,CHEBI_4858,,,,,748010,
+eszopiclone,485437,DRON_00018768,,,,,40038687,
+ethinyl estradiol,4124,CHEBI_4903,,,,,1549786,
+ethinylestradiol,,CHEBI_4903,D004997,,,,,
+ezetimibe,341248,CHEBI_49040,,,,,1526475,
+famotidine,4278,CHEBI_4975,,,,,953076,
+fenofibrate,8703,CHEBI_5001,,,,,1551803,
+fimasartan,,,C558933,,,,,
+fingolimod,1012892,DRON_00019979,,,,,40226579,
+flecainide,4441,DRON_00016203,,,,,1354860,
+fluconazole,4450,CHEBI_46081,,,,,1754994,
+fluoxetine,4493,CHEBI_5118,,,,,755695,
+fluvastatin,41127,DRON_00012123,,,,,1549686,
+fluvoxamine,42355,CHEBI_5138,,,,,751412,
+fluvoxamine maleate,203143,,,,,,19026599,
+fosamprenavir,358262,,,,,,1736829,
+gemfibrozil,4719,CHEBI_5296,,,,,1558242,
+glipizide,4821,DRON_00016824,,,,,1560171,
+glyburide,4815,CHEBI_5441,,,,,1559684,
+goserelin,50610,DRON_00013847,,,,,1366310,
+haloperidol,5093,CHEBI_5613,,,,,766529,
+hepatic enzyme inducers,,,,,,,,
+hepatic enzyme inhibitors,,,,,,,,
+high-dose ASA,1191,CHEBI_15365,,,,,1112807,"synonym for ""high-dose aspirin"""
+hydrocodone,5489,CHEBI_5779,,,,,1174888,
+hydroxybupropion,,,C580748,,,,,
+hydroxynefazodone,,,C092333,,,,,
+ibuprofen,5640,CHEBI_5855,,,,,1177480,
+iloperidone,73178,DRON_00017638,,,,,19017241,
+imipramine,5691,CHEBI_47499,,,,,778268,
+indinavir,114289,DRON_00013621,,,,,1711523,
+isoniazid,6038,CHEBI_6030,,,,,1782521,
+itraconazole,28031,CHEBI_6076,,,,,1703653,
+ketoconazole,6135,CHEBI_48339,,,,,985708,
+ketoprofen,6142,CHEBI_6128,,,,,1185922,
+lamotrigine,28439,CHEBI_6367,,,,,705103,
+leuprolide,42375,CHEBI_6427,,,,,1351541,
+levomilnacipran,1433212,DRON_00730821,,,,,43560354,
+levonorgestrel,6373,CHEBI_6443,,,,,1589505,
+levothyroxine,10582,CHEBI_30660,,,,,1501700,
+linezolid,190376,DRON_00013028,,,,,1736887,
+lithium,6448,CHEBI_30145,,,,,19124477,
+lithium carbonate,42351,CHEBI_6504,,,,,751246,
+lopinavir,195088,DRON_00016421,,,,,1738170,
+lopinavir/ritonavir,,,C558899,,,,,
+lorazepam,6470,CHEBI_52993,,,,,791967,
+losartan,52175,CHEBI_6541,,,,,1367500,
+lovastatin,6472,CHEBI_40303,,,,,1592085,
+low-dose ASA,,,,,,,,"synonym for ""low-dose aspirin"""
+lurasidone,1040028,DRON_00020009,,,,,40230761,
+m-chlorophenylpiperazine,,,C015068,,,,,
+mCPP,,,C060062,,,,,
+maprotiline,6646,DRON_00015231,,,,,794147,
+mesoridazine,6779,,,,,,703083,
+methadone,6813,CHEBI_6807,,,,,1103640,
+methamphetamine,6816,CHEBI_6809,,,,,704053,
+methotrexate,6851,CHEBI_44185,,,,,1305058,
+methylphenidate,6901,CHEBI_6887,,,,,705944,
+metoprolol,6918,CHEBI_6904,,,,,1307046,
+mexiletine,6926,CHEBI_6916,,,,,1307542,
+midazolam,6960,DRON_00017834,,,,,708298,
+milnacipran,588250,DRON_00019210,,,,,19080226,
+mipomersen sodium,,,,,,,,"non-standard concept code 1367838, concept id 46274505 "
+mirtazapine,15996,CHEBI_6950,,,,,725131,
+mitoxantrone,7005,CHEBI_50729,,,,,1309188,
+naproxen,7258,CHEBI_7476,,,,,1115008,
+natalizumab,354770,DRON_00018759,,,,,735843,
+nateglinide,274332,DRON_00018346,,,,,1502826,
+nefazodone,31565,CHEBI_7494,,,,,714684,
+nelfinavir,134527,DRON_00013466,,,,,1715472,
+niacin,7393,CHEBI_15940,,,,,1517824,
+norethindrone,7514,CHEBI_7627,,,,,1521369,
+norfluoxetine,,,C036139,,,,,
+nortriptyline,7531,CHEBI_7640,,,,,721724,
+norverapamil,,,C016904,,,,,
+olanzapine,61381,CHEBI_7735,,,,,785788,
+omeprazole,7646,CHEBI_7772,,,,,923645,
+oral contraceptives,,,D003276,,,x,,
+oxazepam,7781,CHEBI_7823,,,,,724816,
+oxycodone,7804,CHEBI_7852,,,,,1124957,
+paclitaxel,56946,CHEBI_45863,,,,,1378382,
+pantoprazole,40790,CHEBI_7915,,,,,948078,
+paroxetine,32937,CHEBI_7936,,,,,722031,
+paroxetine CR,32937,CHEBI_7936,,,,,722031,
+penicillin G,7980,CHEBI_18208,,,,,1728416,
+perphenazine,8076,CHEBI_8028,,,,,733008,
+phenobarbital,8134,CHEBI_8069,,,,,734275,
+phenothiazines,,,D010640,,,N0000175746,,
+phenytoin,8183,CHEBI_8107,,,,,740910,
+pimozide,8331,DRON_00011376,,,,,745790,
+pindolol,8332,CHEBI_8214,,,,,1345858,
+pioglitazone,33738,CHEBI_8228,,,,,1525215,
+pitavastatin,861634,DRON_00019455,,,,,40165636,
+posaconazole,282446,DRON_00018916,,,,,1704139,
+prasugrel,613391,DRON_00019434,,,,,40163718,
+pravastatin,42463,CHEBI_63618,,,,,1551860,
+pregabalin,483435,DRON_00017760,,,,,40102084,
+procyclidine,8718,,,,,,752276,
+propafenone,8754,CHEBI_63619,,,,,1353256,
+propranolol,8787,CHEBI_8499,,,,,1353766,
+pseudoephedrine,8896,CHEBI_51209,,,,,1154332,
+psychostimulants,,,,,,N06B,,"non-standard concept id may be 4194213, 4305913"
+quazepam,35185,DRON_00011480,,,,,731188,
+quetiapine,51272,CHEBI_8707,,,,,766814,
+quinidine,9068,CHEBI_28593,,,,,1360421,
+rabeprazole,477402,CHEBI_8768,,,,,40077074,
+ramelteon,596205,DRON_00018794,,,,,781182,
+ramipril,35296,CHEBI_8774,,,,,1334456,
+ranitidine,9143,CHEBI_8776,,,,,961047,
+repaglinide,73044,DRON_00017472,,,,,1516766,
+rifampicin,,,D012293,,,,,
+rifampin,9384,CHEBI_28077,,,,,1763204,
+risperdione,,,D018967,,,,,
+risperidone,35636,CHEBI_8871,,,,,735979,
+ritonavir,85762,CHEBI_45409,,,,,1748921,
+rivaroxaban,1114195,DRON_00020099,,,,,40241331,
+rosiglitazone,84108,CHEBI_50122,,,,,1547504,
+rosuvastatin,301542,DRON_00018679,,,,,1510813,
+salicylic acid,9525,CHEBI_16914,,,,,964407,
+saquinavir,83395,DRON_00016171,,,,,1746244,
+selective serotonin reuptake inhibitors,,,,,,N0000175696 ,,"non-standard concept id may be 4229949, 4159928"
+selegiline,9639,CHEBI_50217,,,,,766209,
+sertraline,36437,CHEBI_9123,,,,,739138,
+simvastatin,36567,CHEBI_9150,,,,,1539403,
+simvastatin acid,,,C063287,,,,,
+sitagliptin,593411,CHEBI_40237,,,,,1580747,
+sulforidazine,,,C040634,,,,,
+tacrine,10318,,,,,,836654,
+tacrolimus,42316,CHEBI_61057,,,,,950637,
+tamoxifen,10324,CHEBI_41774,,,,,1436678,
+telaprevir,1102261,,,,,,40239330,
+telithromycin,274786,DRON_00018669,,,,,1702911,
+temazepam,10355,DRON_00013980,,,,,836715,
+terbinafine,37801,DRON_00016960,,,,,1741309,
+terfenadine,42330,,,,,,1150836,
+teriflunomide,1310520,DRON_00020307,,,,,42900584,
+theophylline,10438,CHEBI_28177,,,,,1237049,
+thioridazine,10502,CHEBI_9566,,,,,700299,
+thiothixene,10510,DRON_00012220,,,,,700465,
+threohydrobupropion,,,C496216,,,,,
+threohydrobupropion and erythrohydrobupropion,,,C496216,,,,,
+ticagrelor,1116632,DRON_00020111,,,,,40241186,
+ticlopidine,10594,CHEBI_9588,,,,,1302398,
+tipranavir,190548,CHEBI_63628,,,,,1736999,
+tizanidine,57258,CHEBI_63629,,,,,778474,
+tolbutamide,10635,CHEBI_27999,,,,,1502855,
+tramadol,10689,DRON_00017838,,,,,1103314,
+triazolam,10767,CHEBI_9674,,,,,704599,
+triazole-dione,,,C406672,,,,,
+tricyclic antidepressant,,,D000929,,,N0000175752 ,,
+tricyclic antidepressants,,,D000929,,,N0000175752 ,,
+valproate,40254,,,,,,745466,
+valproic acid,11118,,,,,,19010963,
+venlafaxine,39786,CHEBI_9943,,,,,743670,
+verapamil,11170,CHEBI_9948,,,,,1307863,
+vildagliptin,596554,,,,,,19122137,
+voriconazole,121243,CHEBI_10023,,,,,1714277,
+warfarin,11289,CHEBI_10033,,,,,1310149,
+zaleplon,74667,CHEBI_10102,,,,,720727,
+zidovudine,11413,CHEBI_10110,,,,,1710612,
+ziprasidone,115698,CHEBI_10119,,,,,712615,
+zolpidem,39993,CHEBI_10125,,,,,744740,
