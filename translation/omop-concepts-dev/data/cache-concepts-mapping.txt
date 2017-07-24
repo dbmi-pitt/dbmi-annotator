@@ -32,16 +32,16 @@ DIDEO;object drug information;-7999661
 CHEBI;glutathione;-7999904
 ERO;RNA interference oligonucleotide;-7999961
 CHEBI;organic molecule;-7999850
-UBERON;anatomical system;-7999953
+OAE;adverse drug event;-7999800
 DIDEO;evidence information from observation-based adverse drug event report;-7999718
 DIDEO;diclofenac 4'-hydroxylation;-7999770
 DIDEO;evidence information from drug-drug interaction clinical trial;-7999721
 Vocabulary;The Potential Drug-drug Interaction and Potential Drug-drug Interaction Evidence Ontology;-9999000
 DIDEO;evidence information from OATP1B3 transport protein identification experiment using overexpressed cell lines;-7999728
 OBI;evaluant role;-7999748
-DIDEO;gastrointestinal functioning;-7999695
-DIDEO;public adverse event reporting database;-7999631
-CHEBI;racemate;-7999836
+DIDEO;precipitant drug information;-7999638
+DIDEO;efflux ratio;-7999750
+STATO;area under curve;-7999797
 CHEBI;ketoconazole;-7999884
 CHEBI;protein;-7999838
 CHEBI;organic heterotricyclic compound;-7999852
@@ -52,9 +52,9 @@ CHEBI;carbon group molecular entity;-7999942
 DIDEO;obsolete_evidence information content entity;-7999657
 FMA;Portion of body substance;-7999963
 OAE;severe adverse event;-7999827
-GO;catalytic activity;-7999938
+Vocabulary;MOP;-7999981
 DIDEO;drug-drug interaction evidence;-7999752
-CHEBI;heteroorganic entity;-7999897
+ERO;nucleic acid reagent;-7999859
 GO;transport;-7999821
 CHEBI;diazole;-7999921
 CL;cultured cell;-7999931
@@ -73,7 +73,7 @@ DIDEO;siRNA knockout Caco-2 cell;-7999624
 CHEBI;inhibitor;-7999887
 OBI;transfection;-7999616
 CHEBI;organic cyclic compound;-7999857
-DIDEO;adverse drug reaction causality evaluation protocol;-7999799
+DIDEO;clinically relevant potential drug-drug interaction;-7999778
 CHEBI;azole;-7999951
 DIDEO;HBG BC2 cell;-7999808
 OBI;device;-7999924
@@ -84,7 +84,7 @@ DIDEO;drug-drug interaction description;-7999756
 DIDEO;pharmacokinetic area under curve information;-7999650
 DIDEO;evidence information from p-glycoprotein transport protein identification experiment using Caco 2 cell lines;-7999709
 DIDEO;evidence information from observational drug-drug interaction study;-7999716
-DIDEO;pooled human intestinal microsomal fraction;-7999641
+DIDEO;evidence information from CYP450 human microsome drug metabolism inhibition experiment;-7999741
 DIDEO;metabolic potential drug-drug interaction;-7999673
 CHEBI;benzothiazepine;-7999948
 DIDEO;absorbability;-7999803
@@ -98,9 +98,9 @@ CHEBI;main group molecular entity;-7999875
 OAE;contraindication;-7999777
 CLO;cell line;-7999786
 DIDEO;primary metabolic clearance enzyme role;-7999636
-OBI;clinical study design;-7999779
+CHEBI;heme-thiolate protein;-7999901
 CHEBI;benzofurans;-7999949
-DIDEO;dextromethorphan O-demethylation;-7999771
+Vocabulary;NCBITaxon;-7999999
 DIDEO;drug first pass metabolism assay;-7999765
 Vocabulary;OBI;-7999994
 DIDEO;mechanism of interaction information;-7999674
@@ -116,7 +116,7 @@ CLO;Caco-2 cell;-7999970
 DIDEO;hepatic clearance ratio;-7999689
 CHEBI;mixture;-7999868
 OBI;protocol;-7999632
-DIDEO;evidence information from CYP450 human microsome drug metabolism inhibition experiment;-7999741
+DIDEO;pooled human intestinal microsomal fraction;-7999641
 DIDEO;area under the curve ratio;-7999796
 DIDEO;omeprazole 5-hydroxylation;-7999656
 Vocabulary;GO#GO;-7999987
@@ -132,6 +132,7 @@ DIDEO;evidence information content entity;-7999746
 Vocabulary;UO;-7999980
 Vocabulary;UBERON;-7999990
 DIDEO;pharmacokinetic parameter ratio increase;-7999645
+DIDEO;evidence information from CYP450 human microsome drug metabolism identification experiment;-7999744
 DRON;active ingredient;-7999801
 DIDEO;U.S. Food and Drug Administration drug label;-7999804
 DIDEO;human liver cytosolic fraction;-7999684
@@ -140,7 +141,7 @@ CHEBI;fluconazole;-7999908
 DIDEO;first pass metabolism measurement datum;-7999698
 DIDEO;drug-drug interaction management option;-7999751
 UO;dimensionless unit;-7999916
-DIDEO;clinically relevant potential drug-drug interaction;-7999778
+DIDEO;adverse drug reaction causality evaluation protocol;-7999799
 DIDEO;recombinant protein production host role;-7999630
 PDRO.owl#PDRO;drug product quantification specification;-7999913
 CHEBI;phenoxazine;-7999842
@@ -156,7 +157,7 @@ OBI;microtiter plate;-7999670
 OAE;adverse event;-7999798
 DIDEO;baculovirus-insect recombinant protein production host cell;-7999794
 Vocabulary;INO;-7999979
-CHEBI;biomacromolecule;-7999944
+DIDEO;coumarin 7-hydroxylation;-7999776
 DIDEO;volume of distribution ratio;-7999614
 CHEBI;main-group coordination entity;-7999874
 DIDEO;Hep G2 cell;-7999807
@@ -181,11 +182,11 @@ UBERON;digestive system;-7999919
 Vocabulary;CHEBI;-7999982
 DIDEO;evidence information from non-randomized drug-drug interaction clinical trial;-7999719
 DIDEO;evidence information from CYP450 recombinant drug metabolism inhibition experiment;-7999736
-CLO;293-derived cell;-7999813
-CHEBI;NADH;-7999965
+Vocabulary;DRON;-7999992
+CHEBI;p-block molecular entity;-7999846
 CHEBI;carboxylic acid;-7999940
 DIDEO;sandwich cultured hepatocyte population;-7999626
-CHMO;absorption of material;-7999957
+DIDEO;evidence information from CYP450 human microsome drug metabolism identification experiment using chemical inhibitors;-7999742
 CHEBI;information biomacromolecule;-7999888
 DIDEO;evidence information from CYP450 metabolic enzyme inhibition experiment;-7999740
 OAE;causal adverse drug event;-7999787
@@ -201,7 +202,7 @@ DIDEO;evidence information from OATP1B1 transport protein identification experim
 GO;establishment of localization;-7999911
 GO#GO;cellular process;-7999784
 GO;cellular metabolic process;-7999936
-CHEBI;delta-lactone;-7999926
+CHEBI;organooxygen compound;-7999848
 DIDEO;drug bioavailability assay;-7999767
 DIDEO;drug-drug interaction description from FDA label information;-7999755
 CLO;cell line cell;-7999937
@@ -210,7 +211,7 @@ CHEBI;metalloprotein;-7999869
 DIDEO;percent inhibition;-7999652
 DIDEO;pharmacokinetic interaction signal;-7999649
 DIDEO;evidence information from pharmacokinetic trial;-7999706
-OAE;adverse drug event;-7999800
+UBERON;anatomical system;-7999953
 APOLLO_SV;count;-7999775
 DIDEO;HepaRG cell;-7999805
 DIDEO;clearance measurement datum;-7999780
@@ -222,18 +223,18 @@ CHEBI;5'-hydroxyomeprazole;-7999974
 DIDEO;information about decrease of pharmacokinetic area under the curve;-7999680
 CHEBI;4'-hydroxydiclofenac;-7999975
 DIDEO;potential drug-drug interaction;-7999639
-DIDEO;evidence information from CYP450 human microsome drug metabolism identification experiment;-7999744
+UBERON;material anatomical entity;-7999872
 DIDEO;transgenic animal hepatocyte population;-7999615
 CHEBI;5-[2-(dimethylamino)ethyl]-2-(4-methoxyphenyl)-4-oxo-2,3,4,5-tetrahydro-1,5-benzothiazepin-3-yl acetate;-7999973
 OBI;ex vivo design;-7999700
 OBI;target of material addition role;-7999620
 DIDEO;pooled human liver microsomal fraction;-7999640
 CHEBI;Midazolam;-7999967
-CHEBI;p-block molecular entity;-7999846
-DIDEO;efflux ratio;-7999750
+CHEBI;NADH;-7999965
+DIDEO;public adverse event reporting database;-7999631
 OBI;processed material;-7999633
 MOP;hydroxylation;-7999894
-STATO;area under curve;-7999797
+CHEBI;racemate;-7999836
 DIDEO;evidence information from CYP450 human microsome drug metabolism identification experiment using antibody inhibitors;-7999743
 CHEBI;heteroarene;-7999899
 DIDEO;evidence information from clinical study;-7999724
@@ -248,11 +249,10 @@ DIDEO;293 transfected cell;-7999814
 GO#GO;catalytic activity;-7999788
 GO;negative regulation of biological process;-7999864
 DIDEO;evidence information from transport protein inhibition experiment;-7999702
-UBERON;material anatomical entity;-7999872
 Vocabulary;CL;-7999988
 CHEBI;omeprazole;-7999858
 INO;gene expression;-7999906
-OBI;specimen;-7999623
+CHEBI;organic heteropolycyclic compound;-7999854
 DIDEO;evidence information from drug metabolism identification experiment;-7999723
 CHEBI;molecular entity;-7999867
 UO;ratio;-7999835
@@ -278,7 +278,7 @@ DIDEO;evidence information from OATP1B1 inhibition experiment;-7999735
 GO;regulation of transport;-7999832
 DIDEO;pharmacokinetic process;-7999644
 CHEBI;lactone;-7999883
-Vocabulary;MOP;-7999981
+GO;catalytic activity;-7999938
 DIDEO;inhibitory constant;-7999678
 Vocabulary;EFO;-7999985
 DIDEO;E. coli recombinant protein production host cell;-7999810
@@ -287,7 +287,7 @@ DRON;drug product;-7999758
 DIDEO;object drug role;-7999660
 DRON;role of scattered molecular aggregate;-7999627
 GO;biological_process;-7999945
-CHEBI;heme-thiolate protein;-7999901
+OBI;clinical study design;-7999779
 OBI;centrifugation;-7999783
 OBI;parallel group design;-7999653
 DIDEO;drug co-administration;-7999766
@@ -302,10 +302,10 @@ Domain;Potential drug interactions of natural product drug interactions;-9900000
 Vocabulary;APOLLO_SV;-7999991
 DIDEO;probe subtrate role;-7999634
 OBI;half maximal inhibitory concentration (IC50);-7999902
-Vocabulary;DRON;-7999992
+CLO;293-derived cell;-7999813
 Vocabulary;PR;-7999996
 DIDEO;human intestine S9 fraction;-7999687
-CHEBI;organic heteropolycyclic compound;-7999854
+OBI;specimen;-7999623
 GO;molecular_function;-7999866
 CHEBI;itraconazole;-7999885
 CHEBI;triazole;-7999818
@@ -320,7 +320,7 @@ GO;positive regulation of biological process;-7999839
 CHEBI;polyatomic entity;-7999841
 CHEBI;iron protein;-7999886
 OGMS;pathological bodily process;-7999845
-DIDEO;evidence information from CYP450 human microsome drug metabolism identification experiment using chemical inhibitors;-7999742
+CHMO;absorption of material;-7999957
 GO;regulation of biological process;-7999834
 DIDEO;evidence information from p-glycoprotein inhibition experiment using Caco 2 cell lines;-7999712
 DIDEO;evidence information from parallel groups drug-drug interaction clinical trial';-7999707
@@ -332,10 +332,10 @@ GO;immunoglobulin complex, circulating;-7999891
 OBI;half maximal effective concentration (EC50);-7999903
 DIDEO;pharmacokinetic area under curve;-7999651
 DIDEO;information about increase of pharmacokinetic area under the curve;-7999679
-DIDEO;precipitant drug information;-7999638
+DIDEO;gastrointestinal functioning;-7999695
 UO;unit;-7999816
-DIDEO;data item from extrapolation;-7999772
-ERO;nucleic acid reagent;-7999859
+CHEBI;7-ethoxyresorufin;-7999972
+CHEBI;heteroorganic entity;-7999897
 DIDEO;drug package AUC information;-7999760
 CHEBI;metabolite;-7999870
 CHEBI;nucleic acid;-7999860
@@ -343,7 +343,7 @@ ERO;RNA oligonucleotide;-7999960
 DIDEO;pharmacokinetic parameter ratio decrease;-7999647
 CHEBI;diltiazem;-7999917
 DIDEO;7-ethoxyresorufin O-deethylation;-7999812
-Vocabulary;NCBITaxon;-7999999
+DIDEO;dextromethorphan O-demethylation;-7999771
 OBI;genetic transformation;-7999693
 DIDEO;phenacetin O-deethylation;-7999643
 GO;negative regulation of transport;-7999862
@@ -352,14 +352,14 @@ OBI;study design;-7999622
 DIDEO;evidence information from CYP450 recombinant drug metabolism identification experiment using chemical inhibitors;-7999737
 Vocabulary;OGMS;-7999986
 CHEBI;NADPH;-7999964
-DIDEO;coumarin 7-hydroxylation;-7999776
+CHEBI;biomacromolecule;-7999944
 DIDEO;evidence information from p-glycoprotein inhibition experiment using overexpressed cell lines;-7999711
 CHEBI;lovastatin;-7999881
 CHEBI;NAD;-7999966
 DIDEO;data item about biological process;-7999773
 ERO;siRNA oligonucleotide;-7999826
 CHEBI;dihydroxy monocarboxylic acid;-7999918
-CHEBI;organooxygen compound;-7999848
+CHEBI;delta-lactone;-7999926
 OBI;organism;-7999655
 OBI;centrifuge pellet role;-7999782
 DIDEO;evidence information from an observation-based case-report of a drug interaction;-7999725
@@ -376,14 +376,14 @@ CHEBI;magnesium halide;-7999876
 Vocabulary;PDRO.owl#PDRO;-7999978
 CHEBI;atorvastatin;-7999952
 DIDEO;evidence information from OATP1B3 inhibition experiment;-7999731
-CHEBI;7-ethoxyresorufin;-7999972
+DIDEO;data item from extrapolation;-7999772
 OBI;cell pellet;-7999785
 DIDEO;evidence information from OATP1B3 inhibition experiment using overexpressed cell lines;-7999730
 OBI;dose specification;-7999914
 CHEBI;ribonucleic acid;-7999829
 DIDEO;drug absorbability assay;-7999769
 NCBITaxon;Escherichia coli;-7999969
-CHEBI;triazolam;-7999819
+GO;biological regulation;-7999947
 OBI;value specification;-7999815
 DIDEO;drug-drug interaction effect;-7999753
-GO;biological regulation;-7999947
+CHEBI;triazolam;-7999819

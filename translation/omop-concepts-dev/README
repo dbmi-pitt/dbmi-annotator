@@ -31,7 +31,7 @@ data/cache-concepts-mapping.txt
 This script:
 (1) Reads cache file 'data/cache-concepts-mapping.sql' for existing terms
 
-(2) When generate concept insert sql script, use same negative concept id if exists. Otherwise, make one from -8000000 and update mapping in memory
+(2) When generate concept insert sql script, use same negative concept id if exists in mapping file. Otherwise, make one from -8000000 and update mapping in memory
 
 (3) Update local cache file for all newly created terms
 
