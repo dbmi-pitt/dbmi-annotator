@@ -4,7 +4,7 @@ from utils import fileOperation as fop
 
 reload(sys)  
 sys.setdefaultencoding('utf8')
-# reserve (-9999999, -8000000) for concept names
+# reserve (-7000000, -8000000) for concept names
 
 DRUG_CSV = 'data/drug-list-mapped.csv'
 OUTPUT_SQL = 'data/drug-concepts-insert.sql'
