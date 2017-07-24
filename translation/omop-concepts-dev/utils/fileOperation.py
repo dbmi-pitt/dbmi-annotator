@@ -27,5 +27,5 @@ def readConceptCache(cache_path):
 # input: dict {vocabId;conceptName: conceptId}
 def writeConceptCache(cache_path, cacheDict):
     with open(cache_path, 'w') as f:
-        for cpt_key, concept_id in cacheDict.iteritems():
+        for cpt_key, concept_id in sorted(cacheDict.iteritems()):
             f.write(cpt_key+';'+str(concept_id)+'\n')        
