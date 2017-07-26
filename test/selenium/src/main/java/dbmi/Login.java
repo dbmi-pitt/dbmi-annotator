@@ -39,7 +39,8 @@ public class Login extends TestBase{
         // driver.findElement(By.linkText("Logout")).click(); // logout
 
         // load test PMC article
-        driver.findElement(By.name("sourceURL")).sendKeys("http://localhost/PMC/PMC2686069.html");
+        // driver.findElement(By.name("sourceURL")).sendKeys("http://localhost/PMC/PMC2686069.html");
+        driver.findElement(By.name("sourceURL")).sendKeys(" http://localhost/PMC/PMC3922121.html");
         // driver.findElement(By.name("sourceURL")).sendKeys("http://localhost/test/test.html");
         driver.findElement(By.xpath("//button[contains(.,'load')]")).click();
         Thread.sleep(1500);
@@ -53,16 +54,17 @@ public class Login extends TestBase{
         */
 
         // WebElement firstP = driver.findElement(By.id("drug1")); // for test file
-        WebElement firstP = driver.findElement(By.id("__p14"));
-
+        // WebElement firstP = driver.findElement(By.id("__p14"));
+        WebElement firstP = driver.findElement(By.id("P16"));
         // create drug mention 1
         createDrug(firstP,0,0);
 
         //move cursor to a new word, create drug mention 2
-        createDrug(firstP,100,150);
+        createDrug(firstP,50,50);
 
         // highlight passage until beginning of following paragraph
-        WebElement next = driver.findElement(By.id("__p15"));
+        // WebElement next = driver.findElement(By.id("__p15"));
+        WebElement next = driver.findElement(By.id("P17"));
         Actions highlight = new Actions(driver);
         System.out.println(firstP + "\n" + next);
         highlight.moveToElement(firstP,0,0).click();
@@ -82,7 +84,7 @@ public class Login extends TestBase{
         WebElement d1 =  driver.findElement(By.id("Drug1"));
         Select dropdown1 = new Select(d1);
         // dropdown1.selectByVisibleText("warfarin");
-        dropdown1.selectByIndex(1);
+        dropdown1.selectByIndex(0);
         Thread.sleep(1000);
 
         WebElement d2 = driver.findElement(By.id("Drug2"));
@@ -114,6 +116,7 @@ public class Login extends TestBase{
         System.out.println(dd.size() + " methods options");
 
         // Loop to print one by one
+        // TODO: boolean tests with arrays to see if dropdown menus contain the entries they should.
         for (int i = 0; i < dd.size(); i++) {
             System.out.println("METHOD INDEX " + i + ": " + dd.get(i).getText());
             dropdownM.selectByIndex(i);
