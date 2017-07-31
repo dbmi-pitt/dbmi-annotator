@@ -10,11 +10,11 @@ DIDEO_CSV = 'data/4bb83833.csv'
 OUTPUT_SQL = 'data/dideo-concepts-insert.sql'
 
 # cache file, line: vocabId;conceptName;conceptId
-CACHE = 'data/cache-concepts-mapping.txt'
+CACHE = 'cache/cache-concepts-mapping.txt'
 
 # vocabulary table insert for dideo and term URI namespaces
 # return: the next available concept id 
-def write_vocabulary_insert_sql(concept_id, f, cacheNameIdDict):
+def write_vocabulary_insert_sql(concept_id, f, cacheNameIdDict, cacheConceptIds):
     
     cpt_sql = dop.insert_concept_template(-9999000, 'The Potential Drug-drug Interaction and Potential Drug-drug Interaction Evidence Ontology', 'Metadata', 'Vocabulary', 'Vocabulary', 'OMOP generated', cacheNameIdDict)
     vcb_sql = dop.insert_vocabulary_template('DIDEO', 'The Potential Drug-drug Interaction and Potential Drug-drug Interaction Evidence Ontology', 'https://github.com/DIDEO/DIDEO', 'release 2016-10-20', -9999000)
@@ -29,21 +29,24 @@ def write_vocabulary_insert_sql(concept_id, f, cacheNameIdDict):
         if cpt_key in cacheNameIdDict:
             concept_id = cacheNameIdDict[cpt_key]
         else:
+            while concept_id in cacheConceptIds: # skip used concept id
+                concept_id += 1
             cacheNameIdDict[cpt_key] = concept_id
+            cacheConceptIds.add(concept_id)
         
         cpt_sql1 = dop.insert_concept_template(concept_id, vocab, 'Metadata', 'Vocabulary', 'Vocabulary', 'OMOP generated', cacheNameIdDict)
         vcb_sql1 = dop.insert_vocabulary_template(vocab, vocab, '', 'release 2016-10-20', concept_id)
-        concept_id = int(concept_id) + 1
         
         f.write(cpt_sql1 + '\n')
         f.write(vcb_sql1 + '\n')
 
+    concept_id = int(concept_id) + 1
     return int(concept_id) + 1
 
 
 # concept table insert for dideo terms
 # return: the next available concept id 
-def write_concept_insert_sql(concept_id, f, cacheNameIdDict):
+def write_concept_insert_sql(concept_id, f, cacheNameIdDict, cacheConceptIds):
     reader = csv.DictReader(fop.utf_8_encoder(open(DIDEO_CSV, 'r')))
     next(reader, None) # skip the header
 
@@ -58,7 +61,10 @@ def write_concept_insert_sql(concept_id, f, cacheNameIdDict):
         if cpt_key in cacheNameIdDict:
             concept_id = cacheNameIdDict[cpt_key]
         else:
-            cacheNameIdDict[cpt_key] = concept_id
+            while concept_id in cacheConceptIds: # skip used concept id
+                concept_id += 1
+            cacheNameIdDict[cpt_key] = concept_id # add new concept to cache
+            cacheConceptIds.add(concept_id) # this concept id is taken
 
         cpt_sql = dop.insert_concept_template(concept_id, concept_name, domain_id, vocabulary_id, concept_class_id, concept_code, cacheNameIdDict)
         f.write(cpt_sql + '\n')
@@ -89,6 +95,10 @@ def write_insert_script():
 
     # dict {'vocabId;conceptName': conceptId}
     cacheNameIdDict = fop.readConceptCache(CACHE) # read cached concepts
+    cacheConceptIds = set(cacheNameIdDict.values()) # get concept ids that are taken
+
+    numBefore = len(cacheNameIdDict)
+    print "[INFO] read (%s) cached concepts from (%s)" % (numBefore, CACHE)
     
     with open(OUTPUT_SQL, 'w+') as f:
     
@@ -98,9 +108,12 @@ def write_insert_script():
 
         # add new terms
         concept_id = -8000000
-        concept_id = write_vocabulary_insert_sql(concept_id, f, cacheNameIdDict)
-        concept_id = write_concept_insert_sql(concept_id, f, cacheNameIdDict)
+        concept_id = write_vocabulary_insert_sql(concept_id, f, cacheNameIdDict, cacheConceptIds)
+        concept_id = write_concept_insert_sql(concept_id, f, cacheNameIdDict, cacheConceptIds)
 
+    numAfter = len(cacheNameIdDict)
+    print "[INFO] added (%s) new concepts, total (%s) concepts are cached" % (numAfter-numBefore, numAfter)
+        
     fop.writeConceptCache(CACHE, cacheNameIdDict) # write cached concepts
         
 def main():    
