@@ -1,14 +1,4 @@
-this folder omop-concepts-dev for adding concept terms into OHDSI vocabulary. The concept id will be negative 
-
------------------------------------------------------------------------------
-query postgreSQL database mpevidence to get distinct list of qualifier names
------------------------------------------------------------------------------
-
-mpevidence database ER:
-https://github.com/dbmi-pitt/dbmi-annotator/blob/master/design/images/MP-evidence-ER.jpeg
-
-Run: $ python generateQualifierList.py > data/output.txt
-Output: qualifier name, source URL, text quote
+This folder omop-concepts-dev for adding concept terms into OHDSI vocabulary. The concept id will be negative 
 
 -----------------------------------------------------------------------------
 create sql script for adding dideo terms into OHDSI vocabulary
@@ -21,25 +11,53 @@ https://owl2tl.com/4bb83833
 Run:
 $ python generateDideoConceptsInsertSQL.py
 
-Outputs:
+Output:
 SQL script that can be executed for adding concept to OHDSI vocabulary
 data/dideo-concepts-insert.sql
 
+Results:
+By 07/31/2017
+insert 389 new concepts
+
+-----------------------------------------------------------------------------
+create sql script for adding drug concepts into OHDSI vocabulary
+-----------------------------------------------------------------------------
+
+Input: data/drug-list-mapped.csv (from manually mapping)
+
+Run:
+$ python generateDrugConceptsInsertSQL.py
+
+Output:
+SQL script that can be executed for adding concept to OHDSI vocabulary
+data/drug-concepts-insert.sql
+
+Results:
+By 07/31/2017
+insert 46 new concepts
+
+-----------------------------------------------------------------------------
+Notes
+-----------------------------------------------------------------------------
+
+Both generateDideoConceptsInsertSQL.py and generateDrugConceptsInsertSQL.py
+
 Create/update local cached concept id mapping for ensuring the same concept always take the same unique concept id
-data/cache-concepts-mapping.txt
+cache/cache-concepts-mapping.txt
 
 This script:
-(1) Reads cache file 'data/cache-concepts-mapping.sql' for existing terms
+(1) Reads cache file 'cache/cache-concepts-mapping.txt' for existing terms
 
 (2) When generate concept insert sql script, use same negative concept id if exists in mapping file. Otherwise, make one from -8000000 and update mapping in memory
 
 (3) Update local cache file for all newly created terms
 
-(4) Output sql insert script at 'data/dideo-concepts-insert.sql'
+-----------------------------------------------------------------------------
+query postgreSQL database mpevidence to get distinct list of qualifier names
+-----------------------------------------------------------------------------
 
-Results: number of terms been added to table concept, vocabulary and domain
-By 06/16/2017
-insert concept: 401
-insert vocabulary: 24
-insert domain: 1
+mpevidence database ER:
+https://github.com/dbmi-pitt/dbmi-annotator/blob/master/design/images/MP-evidence-ER.jpeg
 
+Run: $ python generateQualifierList.py > data/output.txt
+Output: qualifier name, source URL, text quote
