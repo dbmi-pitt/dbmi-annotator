@@ -1,5 +1,7 @@
 This folder omop-concepts-dev for adding concept terms into OHDSI vocabulary. The concept id will be negative 
 
+reserve negative concept ids in range (-7000000, -8000000) for new concept terms
+
 -----------------------------------------------------------------------------
 create sql script for adding dideo terms into OHDSI vocabulary
 -----------------------------------------------------------------------------

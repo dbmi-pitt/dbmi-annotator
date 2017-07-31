@@ -51,14 +51,14 @@ def write_concept_insert_sql(temp_concept_id, f, cacheNameIdDict, cacheConceptId
                 while str(temp_concept_id) in cacheConceptIds: # skip used concept id
                     temp_concept_id += 1
 
+                cacheNameIdDict[cpt_key] = str(temp_concept_id) # add new concept to cache
+                cacheConceptIds.add(str(temp_concept_id))
+
             if not concept_id:
                 concept_id = temp_concept_id
                     
             cpt_sql = dop.insert_concept_template(concept_id, concept_name, domain_id, vocabulary_id, concept_class_id, concept_code, cacheNameIdDict)
-            f.write(cpt_sql + '\n')
-            
-            cacheNameIdDict[cpt_key] = concept_id # add new concept to cache
-            cacheConceptIds.add(str(concept_id))
+            f.write(cpt_sql + '\n')            
             uniqConcepts.add(cpt_key)
             
     return temp_concept_id + 1
@@ -88,6 +88,9 @@ def write_insert_script():
     for k, v in cacheNameIdDictAfter.iteritems():
         if not int(v) < 0:
             print "[ERROR] concept term (%s) is using positive id (%s)" % (k, v)
+
+    if len(cacheNameIdDictAfter) != len(set(cacheNameIdDictAfter.values())):
+        print "[ERROR] concept ids are not unique, number of concepts (%s) and number of concept ids (%s)" % (len(cacheNameIdDictAfter), len(set(cacheNameIdDictAfter.values())))
     
     fop.writeConceptCache(CACHE, cacheNameIdDictAfter) # write cached concepts
     print "[INFO] Validation done! insert script is available at (%s)" % OUTPUT_SQL
