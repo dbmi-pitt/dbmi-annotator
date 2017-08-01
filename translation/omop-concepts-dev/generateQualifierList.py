@@ -26,7 +26,7 @@ if __name__ == '__main__':
 	resD = run(PG_HOST, PG_USER, PG_PASSWORD, PG_DATABASE)
 	drugSortedL = sorted(resD.keys())
 	
-	print '"name","source","text","RxNorm","DrOn","PRO","enantiomer","metabolite","conceptId"'
+	print '"name","source","text","RxNorm","MESH","PRO","NDFRT","enantiomer","metabolite","conceptId"'
 	for drug in drugSortedL:
 		print '"' + drug + '","' + resD[drug]["source"]+ '","' + resD[drug]["text"] + '"' 
 

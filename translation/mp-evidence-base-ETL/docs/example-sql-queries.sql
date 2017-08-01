@@ -27,22 +27,6 @@ left join oa_selector s on t.has_selector = s.id
 where mann.mp_claim_id = '1';
 
 
--- how many claims from amy: 336
-select count(*)
-from mp_claim_annotation cann, 
-oa_target t, oa_selector s
-where cann.has_target = t.id
-and t.has_selector = s.id
-and creator = 'amy'
-
-
--- how many distinct labels that amy annotated: 34
-select count(distinct t.has_source)
-from mp_claim_annotation cann, 
-oa_target t, oa_selector s
-where cann.has_target = t.id
-and t.has_selector = s.id
-and creator = 'amy'
 
 -- query dideo concept codes
 select * from public.concept c where c.vocabulary_id = 'DIDEO' and c.domain_id = 'PDDI' and c.concept_class_id = 'DIKB'; 
@@ -98,9 +82,6 @@ AS mf(material_body_id INTEGER, duration TEXT, formulation TEXT, regimens TEXT, 
 JOIN oa_material_body mb ON mf.material_body_id = mb.id
 JOIN mp_material_annotation mm ON mb.is_oa_body_of = mm.id
 WHERE mf.value != ''
-
--- Get qualifiers that don't have concept code mapped
-SELECT * from qualifier q where q.predicate = False;
 
 
 
