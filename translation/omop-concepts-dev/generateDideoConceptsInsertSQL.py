@@ -5,8 +5,8 @@ from utils import fileOperation as fop
 reload(sys)  
 sys.setdefaultencoding('utf8')
 
-DIDEO_CSV = 'data/4bb83833.csv'
-OUTPUT_SQL = 'data/dideo-concepts-insert.sql'
+DIDEO_CSV = 'inputs/4bb83833.csv'
+OUTPUT_SQL = 'outputs/dideo-concepts-insert.sql'
 
 # cache file, line: vocabId;conceptName;conceptId
 CACHE = 'cache/cache-concepts-mapping.txt'

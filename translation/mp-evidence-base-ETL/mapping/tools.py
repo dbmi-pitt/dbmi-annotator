@@ -22,7 +22,7 @@ def getDrugMappingDict(inputfile):
 	reader = csv.DictReader(utf_8_encoder(open(inputfile, 'r')))
 	next(reader, None) # skip the header
 	for row in reader:	
-		name = row["name"]
+		name = row["name"] # this is annotated drug name (not standardized concept name)
 		if name and name not in drugMapD:
 			concept_code = None; vocab_id = None; concept_id = None
 			if row["RxNorm"] and row["RxNorm"] != "null":
@@ -33,11 +33,13 @@ def getDrugMappingDict(inputfile):
                                 concept_code = row["NDFRT"].strip()
                                 vocab_id = 44819103 # NDFRT concept id
                                 
-			elif row["metabolite"] and row["metabolite"] != "null":				
-				concept_code = row["metabolite"]
+			elif row["MESH"] and row["MESH"] != "null":	   
+				concept_code = row["MESH"].strip()
 				vocab_id = 44819136 # MeSH concept id
+                                
 			if row["conceptId"] and row["conceptId"] != "null":
-				concept_id = row["conceptId"]
+				concept_id = row["conceptId"].strip()
+                                
 			if concept_code and vocab_id and concept_id:
 				drugMapD[name] = Concept(name, concept_code, vocab_id, concept_id)
 	return drugMapD

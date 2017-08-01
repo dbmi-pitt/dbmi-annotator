@@ -5,8 +5,8 @@ from utils import fileOperation as fop
 reload(sys)  
 sys.setdefaultencoding('utf8')
 
-DRUG_CSV = 'data/drug-list-mapped.csv'
-OUTPUT_SQL = 'data/drug-concepts-insert.sql'
+DRUG_CSV = 'inputs/drug-list-mapped.csv'
+OUTPUT_SQL = 'outputs/drug-concepts-insert.sql'
 
 # cache file, line: vocabId;conceptName;conceptId
 CACHE = 'cache/cache-concepts-mapping.txt'

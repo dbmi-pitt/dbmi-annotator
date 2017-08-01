@@ -41,7 +41,6 @@ def parseToMPAnns(documents):
 
 def parseToMPAnn(document):
 
-
 	doc = document["_source"]; doc_urn = document["_id"]
 	method = doc["argues"]["method"]; annotation = None
 

@@ -6,7 +6,7 @@ reserve negative concept ids in range (-7000000, -8000000) for new concept terms
 create sql script for adding dideo terms into OHDSI vocabulary
 -----------------------------------------------------------------------------
 
-Input: data/4bb83833.csv
+Input: inputs/4bb83833.csv
 Download as csv from dideo terms serach portal
 https://owl2tl.com/4bb83833
 
@@ -15,7 +15,7 @@ $ python generateDideoConceptsInsertSQL.py
 
 Output:
 SQL script that can be executed for adding concept to OHDSI vocabulary
-data/dideo-concepts-insert.sql
+outputs/dideo-concepts-insert.sql
 
 Results:
 By 07/31/2017
@@ -25,14 +25,14 @@ insert 389 new concepts
 create sql script for adding drug concepts into OHDSI vocabulary
 -----------------------------------------------------------------------------
 
-Input: data/drug-list-mapped.csv (from manually mapping)
+Input: inputs/drug-list-mapped.csv (from manually mapping)
 
 Run:
 $ python generateDrugConceptsInsertSQL.py
 
 Output:
 SQL script that can be executed for adding concept to OHDSI vocabulary
-data/drug-concepts-insert.sql
+outputs/drug-concepts-insert.sql
 
 Results:
 By 07/31/2017
@@ -61,5 +61,5 @@ query postgreSQL database mpevidence to get distinct list of qualifier names
 mpevidence database ER:
 https://github.com/dbmi-pitt/dbmi-annotator/blob/master/design/images/MP-evidence-ER.jpeg
 
-Run: $ python generateQualifierList.py > data/output.txt
+Run: $ python generateQualifierList.py > outputs/qualifier-list.txt
 Output: qualifier name, source URL, text quote
