@@ -21,24 +21,24 @@ def write_concept_insert_sql(temp_concept_id, f, cacheNameIdDict, cacheConceptId
 
     domain_id = "Metadata"; concept_class_id = "Domain"
     for row in reader:
-        drug_name, concept_name = row["name"], row["concept name"]
+        drug_name, concept_name = row["name"].strip(), row["concept name"].strip()
         if drug_name == "" or concept_name == "":
             continue
 
         # use rxnorm if it's available, RxNorm concept id: 44819104
         if row["RxNorm"].strip() != "":
             vocabulary_id = "RxNorm"
-            concept_code = row["RxNorm"]
+            concept_code = row["RxNorm"].strip()
 
         # use ndf-rt code when don't have rxnorm, NDFRT: 44819103
         elif row["NDFRT"].strip() != "":
             vocabulary_id = "NDFRT"
-            concept_code = row["NDFRT"]
+            concept_code = row["NDFRT"].strip()
 
         # use mesh code when don't have rxnorm and ndf-rt, MESH: 44819136
         elif row["MESH"].strip() != "":
             vocabulary_id = "MESH"
-            concept_code = row["MESH"]
+            concept_code = row["MESH"].strip()
 
         cpt_key = vocabulary_id + ';' + concept_name
         

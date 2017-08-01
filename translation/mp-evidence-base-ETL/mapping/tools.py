@@ -26,11 +26,16 @@ def getDrugMappingDict(inputfile):
 		if name and name not in drugMapD:
 			concept_code = None; vocab_id = None; concept_id = None
 			if row["RxNorm"] and row["RxNorm"] != "null":
-				concept_code = row["RxNorm"]
-				vocab_id = 44819104 # RxNorm
+				concept_code = row["RxNorm"].strip()
+				vocab_id = 44819104 # RxNorm omop concept id
+                                
+                        elif row["NDFRT"].strip() != "":
+                                concept_code = row["NDFRT"].strip()
+                                vocab_id = 44819103 # NDFRT concept id
+                                
 			elif row["metabolite"] and row["metabolite"] != "null":				
 				concept_code = row["metabolite"]
-				vocab_id = 44819136 # MeSH
+				vocab_id = 44819136 # MeSH concept id
 			if row["conceptId"] and row["conceptId"] != "null":
 				concept_id = row["conceptId"]
 			if concept_code and vocab_id and concept_id:
