@@ -26,8 +26,10 @@ def getDrugMappingDict(inputfile, pgconn):
 	reader = csv.DictReader(utf_8_encoder(open(inputfile, 'r')))
 	next(reader, None) # skip the header
         
-	for row in reader:	
-		name = row["name"] # this is annotated drug name (not standardized concept name)
+	for row in reader:
+
+                # this is annotated drug name (not standardized concept name), use lower case as key in map
+		name = row["name"].lower() 
 		if name and name not in drugMapD:
 			concept_code = None; vocab_id = None; concept_id = None
 			if row["RxNorm"].strip() != "":

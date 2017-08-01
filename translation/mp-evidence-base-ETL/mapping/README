@@ -1,22 +1,58 @@
-(1) QUALIFIER URI MAPPING
+The mappings of qualifier name and OMOP concept code are used for standardize drug names in evidence base
+
+(1) Qualifier concept code mapping
 
 drug-list-mapped.csv is the mapping file for qualifier identifier
-columns: qualifier name, RxNorm, DrOn, PRO (Protein Ontology), enantiomer, metabolite (MeSH), brand name, drug class, omop concept id
+columns: name (qualifier name), concept name, RxNorm, MESH, PRO (Protein Ontology), NDFRT, conceptId (omop concept id), comment
 
-The script tool.py parse drug-list-mapped csv and return dictionary of drug URI mapping. It's called when translating annotation from elasticsearch to PostgreSQL, filling the concept code for drug terms in annotation.
+The script tool.py parse drug-list-mapped csv and return dictionary of drug URI mapping. It's called when translating annotation from elasticsearch JSON  document to PostgreSQL DB, filling the concept code for drug terms in annotation.
 
-function getDrugMappingDict(inputfile)
+function getDrugMappingDict(inputfile, PostgreSQL connection)
 
 Besides, run the script standalone will print term with URI when mappings either RxNorm or MeSH available. (Only RxNorm and MeSH currenly in OMOP vocabulary among listed sources)
 
 $ python tool.py
 
-(2) LIST OF CONCEPTS TO APPEND:
+(2) List of qualifiers that don't have concept code mapped:
+38 out of 345 unique qualifier names
 
-qualifier-mapping-append.txt
+"eltrombopag"
+"ELIQUIS"
+"2-hydroxyatorvastatin acid"
+"4-hydroxyatorvastatin acid"
+"UNK"
+"PROZAC"
+"paliperidone"
+"encainide"
+"CsA"
+"hepatic enzyme inducers"
+"mibefradil"
+"darunavir or ritonavir"
+"RTV/SQV"
+"TPV/r"
+"zopiclone"
+"rapamycin"
+"1-pyrimidinylpiperazine"
+"Darunavir/Ritonavir"
+"S-warfarin's hydroxyl"
+"CMI"
+"lopinavir and ritonavir"
+"Fosamprenavir/Ritonavir"
+"psychostimulants"
+"atorvastatin lactone"
+"valsartan"
+"LATUDA"
+"vinblastine"
+"azole antifungals"
+"hepatic enzyme inhibitors"
+"digitoxin"
+"Tipranavir/Ritonavir"
+"R- warfarin"
+"FPV/RTV"
+"Saquinavir/Ritonavir"
+"Coumadin"
+"mipomersen sodium"
+"CLOZARIL"
+"darunavir/ritonavir"
+"ATV/RTV"
 
-source of URI to append:
-PRO (Protein Ontology)
-CHEBI
-DrOn
-Drug class? (ex. N0000175520)

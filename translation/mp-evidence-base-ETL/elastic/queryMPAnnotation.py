@@ -56,6 +56,17 @@ def parseToMPAnn(document, pgconn):
 	return annotation
 
 
+# add OMOP concept code and vocabulary id to qualifier
+def addQualifierConcept(qualifier, drugMapD):
+        if not qualifier or not qualifier.qvalue or not drugMapD:
+                #print "[ERROR] queryMPAnnotation.py: concept code mapping not availiable"
+                return
+        
+	if qualifier.qvalue.lower() in drugMapD:
+		concept = drugMapD[qualifier.qvalue.lower()]
+		qualifier.setQualifierConcept(concept.concept_code, concept.vocabulary_id)
+
+
 ## STATEMENT ########################################################################
 ## initial statement annotation
 # param1: annotation in Json from elasticsearch
@@ -73,7 +84,7 @@ def createStatement(doc, doc_urn, drugMapD):
                 negation = claim["negation"]
         else:
                 print "[WARN] doc (%s) statement (%s), negation is undefined" % (source, label)
-	drugname1 = qualifier["drug1"]; drugname2 = qualifier["drug2"]; enzyme = qualifier["enzyme"]; predicate = qualifier["relationship"]; precipitant = qualifier["precipitant"]
+	drugname1 = qualifier["drug1"].replace(".",""); drugname2 = qualifier["drug2"].replace(".",""); enzyme = qualifier["enzyme"]; predicate = qualifier["relationship"]; precipitant = qualifier["precipitant"]
 
 	if not validateStatement(precipitant, drugname1, drugname2, enzyme, predicate, source, label):
 		return None
@@ -87,10 +98,6 @@ def createStatement(doc, doc_urn, drugMapD):
 
 	return annotation
 
-def addQualifierConcept(qualifier, drugMapD):
-	if qualifier and qualifier.qvalue in drugMapD:
-		concept = drugMapD[qualifier.qvalue]
-		qualifier.setQualifierConcept(concept.concept_code, concept.vocabulary_id)
 
 ## add qualifiers to Statement annotation
 # parma1: annotation obj
@@ -157,7 +164,7 @@ def createClinicalTrial(doc, doc_urn, drugMapD):
 	label = claim["label"]; method = doc["argues"]["method"]; date = doc["created"]
 	exact = getSelectorTxt(claim, "exact"); prefix = getSelectorTxt(claim, "prefix"); suffix = getSelectorTxt(claim, "suffix")
 	qualifier = claim["qualifiedBy"]; 
-	drugname1 = qualifier["drug1"]; drugname2 = qualifier["drug2"]; predicate = qualifier["relationship"]; precipitant = qualifier["precipitant"]
+	drugname1 = qualifier["drug1"].replace(".",""); drugname2 = qualifier["drug2"].replace(".",""); predicate = qualifier["relationship"]; precipitant = qualifier["precipitant"]
         enzyme = None
         if "enzyme" in qualifier:
                 qualifier["enzyme"]
@@ -315,7 +322,7 @@ def createPhenotypeClinicalStudy(doc, doc_urn, drugMapD):
 	label = claim["label"]; method = doc["argues"]["method"]; date = doc["created"]
 	exact = getSelectorTxt(claim, "exact"); prefix = getSelectorTxt(claim, "prefix"); suffix = getSelectorTxt(claim, "suffix")
 	qualifier = claim["qualifiedBy"]
-	drugname1 = qualifier["drug1"]; enzyme = qualifier["enzyme"]; predicate = qualifier["relationship"];
+	drugname1 = qualifier["drug1"].replace(".",""); enzyme = qualifier["enzyme"]; predicate = qualifier["relationship"];
 
 	if not validatePhenotypeClinicalStudy(drugname1, enzyme, predicate, source, label):
 		return None
@@ -390,7 +397,7 @@ def createCaseReport(doc, doc_urn, drugMapD):
 
 	exact = getSelectorTxt(claim, "exact"); prefix = getSelectorTxt(claim, "prefix"); suffix = getSelectorTxt(claim, "suffix")
 	qualifier = claim["qualifiedBy"]; precipitant = qualifier["precipitant"]
-	drugname1 = qualifier["drug1"]; drugname2 = qualifier["drug2"]; predicate = qualifier["relationship"];
+	drugname1 = qualifier["drug1"].replace(".",""); drugname2 = qualifier["drug2"].replace(".",""); predicate = qualifier["relationship"];
 
 	## MP Claim
 	annotation = createSubAnnotation(doc_urn, source, label, method, email, date)
