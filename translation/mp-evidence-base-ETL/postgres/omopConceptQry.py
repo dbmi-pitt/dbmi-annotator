@@ -14,6 +14,7 @@
 
 import sys, uuid, datetime
 
+# query concept id and concept code for specific vocabulary 
 def getConceptCodeByVocabId(conn, vocabId):
 	
 	cur = conn.cursor()
@@ -22,4 +23,16 @@ def getConceptCodeByVocabId(conn, vocabId):
 	""" % vocabId
 	cur.execute(qry)
 	return cur.fetchall()
-	
+
+
+# query concept id by concept code and vocabulary id
+def getConceptIdByConceptCode(conn, conceptCode, vocabId):
+        
+	cur = conn.cursor()
+	qry = """
+        select * from public.concept where concept_code = '%s' and vocabulary_id = '%s';
+	""" % (conceptCode, vocabId)
+        
+	cur.execute(qry)
+        for row in cur.fetchall():
+	        return row[0]

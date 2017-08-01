@@ -15,17 +15,22 @@
 import os.path, sys, csv
 sys.path.append(os.path.join(os.path.dirname(os.path.realpath(__file__)), os.pardir))
 from model.Concept import *
+from postgres import connection as pgconn
+from postgres import omopConceptQry as pgcp
+
+vocabIdConvertDict = {44819104 : "RxNorm", 44819103 : "NDFRT", 44819136 : "MESH"}
 
 ## return concepts in dict {"concept name": Concept}
-def getDrugMappingDict(inputfile):
+def getDrugMappingDict(inputfile, pgconn):
 	drugMapD = {}
 	reader = csv.DictReader(utf_8_encoder(open(inputfile, 'r')))
 	next(reader, None) # skip the header
+        
 	for row in reader:	
 		name = row["name"] # this is annotated drug name (not standardized concept name)
 		if name and name not in drugMapD:
 			concept_code = None; vocab_id = None; concept_id = None
-			if row["RxNorm"] and row["RxNorm"] != "null":
+			if row["RxNorm"].strip() != "":
 				concept_code = row["RxNorm"].strip()
 				vocab_id = 44819104 # RxNorm omop concept id
                                 
@@ -33,13 +38,16 @@ def getDrugMappingDict(inputfile):
                                 concept_code = row["NDFRT"].strip()
                                 vocab_id = 44819103 # NDFRT concept id
                                 
-			elif row["MESH"] and row["MESH"] != "null":	   
+			elif row["MESH"].strip() != "":	   
 				concept_code = row["MESH"].strip()
-				vocab_id = 44819136 # MeSH concept id
-                                
-			if row["conceptId"] and row["conceptId"] != "null":
-				concept_id = row["conceptId"].strip()
-                                
+				vocab_id = 44819136 # MeSH concept id                                
+
+			if row["conceptId"].strip() != "":
+				concept_id = row["conceptId"].strip()                                
+                        else:
+                                if concept_code and vocab_id:
+                                        concept_id = pgcp.getConceptIdByConceptCode(pgconn, concept_code, vocabIdConvertDict[vocab_id])
+                        # print "tools.py, code (%s), vid(%s), cid(%s)" % (concept_code, vocab_id, concept_id)
 			if concept_code and vocab_id and concept_id:
 				drugMapD[name] = Concept(name, concept_code, vocab_id, concept_id)
 	return drugMapD

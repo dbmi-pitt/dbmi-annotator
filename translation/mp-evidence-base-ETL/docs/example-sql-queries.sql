@@ -99,6 +99,10 @@ JOIN oa_material_body mb ON mf.material_body_id = mb.id
 JOIN mp_material_annotation mm ON mb.is_oa_body_of = mm.id
 WHERE mf.value != ''
 
+-- Get qualifiers that don't have concept code mapped
+SELECT * from qualifier q where q.predicate = False;
+
+
 
 -- FUNCTIONS 
 

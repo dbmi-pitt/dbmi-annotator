@@ -331,7 +331,7 @@ def load(conn, qryCondition, eshost, esport, dbschema, creator, isClean):
 		conn.commit()
 		print "[INFO] Drop and recreate all tables done!"
 
-	annotations = es.getMPAnnsByBody(eshost, esport, qryCondition)
+	annotations = es.getMPAnnsByBody(eshost, esport, qryCondition, conn)
         
 	print "[INFO] Begin translate and load mp annotations (%s)" % len(annotations)
 	load_annotations(conn, annotations, creator)
@@ -348,8 +348,8 @@ def load(conn, qryCondition, eshost, esport, dbschema, creator, isClean):
 def main():
 
 	DB_SCHEMA = "../../db-schema/mp_evidence_schema.sql"
-	CREATOR = "test@gmail.com"; PG_DATABASE = 'mpevidence'
-        #CREATOR = "test@gmail.com"; PG_DATABASE = 'dikb'
+	#CREATOR = "test@gmail.com"; PG_DATABASE = 'mpevidence'
+        CREATOR = "test@gmail.com"; PG_DATABASE = 'dikb'
 	
 	if len(sys.argv) > 7:
 		ES_HOST = str(sys.argv[1])

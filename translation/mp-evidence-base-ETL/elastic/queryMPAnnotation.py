@@ -8,50 +8,51 @@ from model.Micropublication import *
 from model.Concept import *
 from mapping import tools 
 
-drugMapD = {} # concept as {"concept name": Concept}
+# drugMapD = {} # concept as {"concept name": Concept}
 DRUG_MAPPING = "mapping/drug-list-mapped.csv"
-drugMapD = tools.getDrugMappingDict(DRUG_MAPPING)
 
 ## Query and Parse annotations in Elasticsearch #####################################
-def getMPAnnsByBody(es_host, es_port, query_condit):
+def getMPAnnsByBody(es_host, es_port, query_condit, pgconn):
 	## query condition (refers to elasticsearch REST API)
 	body = {'query': { 'term': {'annotationType': 'MP'}}}
 	if query_condit:
 		body = query_condit
 	res = esop.queryByBody(es_host, es_port, body)	
 	print "Elasticsearch get MP annotations (%s)" % res['hits']['total']
-	return parseToMPAnns(res['hits']['hits'])
+	return parseToMPAnns(res['hits']['hits'], pgconn)
 
 
-def getMPAnnById(es_host, es_port, annId):
+def getMPAnnById(es_host, es_port, annId, pgconn):
 	res = esop.queryById(es_host, es_port, annId)	
-	ann = parseToMPAnn(res)
+	ann = parseToMPAnn(res, pgconn)
 	return ann
 
 
-def parseToMPAnns(documents):
+def parseToMPAnns(documents, pgconn):
 
 	anns = []
 	for doc in documents:
-		ann = parseToMPAnn(doc)
+		ann = parseToMPAnn(doc, pgconn)
 		if ann:
 			anns.append(ann)
 	return anns
 
-
-def parseToMPAnn(document):
-
+# parse JSON document, applying omop vocabulary for standardize concepts
+# return object Annotation based on method of annotation
+def parseToMPAnn(document, pgconn):
+        drugMapD = tools.getDrugMappingDict(DRUG_MAPPING, pgconn)
+        
 	doc = document["_source"]; doc_urn = document["_id"]
 	method = doc["argues"]["method"]; annotation = None
 
 	if method == "DDI clinical trial":
-		annotation = createClinicalTrial(doc, doc_urn)
+		annotation = createClinicalTrial(doc, doc_urn, drugMapD)
 	elif method == "Statement":
-		annotation = createStatement(doc, doc_urn)
+		annotation = createStatement(doc, doc_urn, drugMapD)
 	elif method == "Phenotype clinical study":
-		annotation = createPhenotypeClinicalStudy(doc, doc_urn)
+		annotation = createPhenotypeClinicalStudy(doc, doc_urn, drugMapD)
 	elif method == "Case Report":
-		annotation = createCaseReport(doc, doc_urn)
+		annotation = createCaseReport(doc, doc_urn, drugMapD)
 	return annotation
 
 
@@ -60,7 +61,7 @@ def parseToMPAnn(document):
 # param1: annotation in Json from elasticsearch
 # param2: annotation Id
 # return: Statement annotation
-def createStatement(doc, doc_urn):
+def createStatement(doc, doc_urn, drugMapD):
 
 	claim = doc["argues"]; source = doc["rawurl"]; email = doc["email"]
 	label = claim["label"]; method = doc["argues"]["method"]; date = doc["created"]
@@ -79,14 +80,14 @@ def createStatement(doc, doc_urn):
 
 	## MP Claim
 	annotation = createSubAnnotation(doc_urn, source, label, method, email, date)
-	addQualifiersForST(annotation, drugname1, drugname2, predicate, enzyme, precipitant, parseDrugPC("drug1PC", qualifier), parseDrugPC("drug2PC", qualifier))
+	addQualifiersForST(annotation, drugname1, drugname2, predicate, enzyme, precipitant, parseDrugPC("drug1PC", qualifier), parseDrugPC("drug2PC", qualifier), drugMapD)
 	annotation.setOaSelector(prefix, exact, suffix)
 	addRejected(annotation, claim)
 	annotation.negation = negation # negate this statement
 
 	return annotation
 
-def addQualifierConcept(qualifier):
+def addQualifierConcept(qualifier, drugMapD):
 	if qualifier and qualifier.qvalue in drugMapD:
 		concept = drugMapD[qualifier.qvalue]
 		qualifier.setQualifierConcept(concept.concept_code, concept.vocabulary_id)
@@ -100,7 +101,7 @@ def addQualifierConcept(qualifier):
 # param6: precipitant in DDI
 # param7: drug1 parent compound
 # param8: drug2 parent compound
-def addQualifiersForST(annotation, drugname1, drugname2, predicate, enzyme, precipitant, drug1PC, drug2PC):
+def addQualifiersForST(annotation, drugname1, drugname2, predicate, enzyme, precipitant, drug1PC, drug2PC, drugMapD):
 	csubject = None; cobject = None
 
 	if predicate == "interact with":
@@ -135,8 +136,8 @@ def addQualifiersForST(annotation, drugname1, drugname2, predicate, enzyme, prec
 		cobject.setTypeEnzyme()
 		cobject.setRoleObject()
 
-	addQualifierConcept(csubject)
-	addQualifierConcept(cobject)
+	addQualifierConcept(csubject, drugMapD)
+	addQualifierConcept(cobject, drugMapD)
 		
 	cpredicate = Qualifier(predicate, False, True, False)
 	annotation.setQualifiers(csubject, cpredicate, cobject)
@@ -147,7 +148,7 @@ def addQualifiersForST(annotation, drugname1, drugname2, predicate, enzyme, prec
 # param1: annotation in Json from elasticsearch
 # param2: annotation Id
 # return: Clinical trial annotation
-def createClinicalTrial(doc, doc_urn):
+def createClinicalTrial(doc, doc_urn, drugMapD):
 
 	claim = doc["argues"]; source = doc["rawurl"]; email = doc["email"]
 	if not validateClinicalTrial(claim, source):
@@ -163,7 +164,7 @@ def createClinicalTrial(doc, doc_urn):
 
 	## MP Claim
 	annotation = createSubAnnotation(doc_urn, source, label, method, email, date)
-	addQualifiersForCT(annotation, drugname1, drugname2, predicate, enzyme, precipitant, parseDrugPC("drug1PC", qualifier), parseDrugPC("drug2PC", qualifier))
+	addQualifiersForCT(annotation, drugname1, drugname2, predicate, enzyme, precipitant, parseDrugPC("drug1PC", qualifier), parseDrugPC("drug2PC", qualifier), drugMapD)
 	annotation.setOaSelector(prefix, exact, suffix)
 	addRejected(annotation, claim)
 
@@ -213,7 +214,7 @@ def createClinicalTrial(doc, doc_urn):
 # param6: precipitant in DDI
 # param7: drug1 parent compound
 # param8: drug2 parent compound
-def addQualifiersForCT(annotation, drugname1, drugname2, predicate, enzyme, precipitant, drug1PC, drug2PC):
+def addQualifiersForCT(annotation, drugname1, drugname2, predicate, enzyme, precipitant, drug1PC, drug2PC, drugMapD):
 	csubject = None; cobject = None; cqualifier = None
 
 	if predicate == "interact with":
@@ -294,10 +295,10 @@ def addQualifiersForCT(annotation, drugname1, drugname2, predicate, enzyme, prec
 			cqualifier.setTypeDrugProduct()
 			addParentCompound(cqualifier, drug2PC)	
 		
-	addQualifierConcept(csubject)
-	addQualifierConcept(cobject)
+	addQualifierConcept(csubject, drugMapD)
+	addQualifierConcept(cobject, drugMapD)
 	if cqualifier:
-		addQualifierConcept(cqualifier)
+		addQualifierConcept(cqualifier, drugMapD)
 
 	cpredicate = Qualifier(predicate, False, True, False)
 	annotation.setQualifiers(csubject, cpredicate, cobject, cqualifier)
@@ -308,7 +309,7 @@ def addQualifiersForCT(annotation, drugname1, drugname2, predicate, enzyme, prec
 # param1: annotation in Json from elasticsearch
 # param2: annotation Id
 # return: Phenotype clinical study annotation
-def createPhenotypeClinicalStudy(doc, doc_urn):
+def createPhenotypeClinicalStudy(doc, doc_urn, drugMapD):
 
 	claim = doc["argues"]; source = doc["rawurl"]; email = doc["email"]
 	label = claim["label"]; method = doc["argues"]["method"]; date = doc["created"]
@@ -321,7 +322,7 @@ def createPhenotypeClinicalStudy(doc, doc_urn):
 
 	## MP Claim
 	annotation = createSubAnnotation(doc_urn, source, label, method, email, date)
-	addQualifiersForPH(annotation, drugname1, predicate, enzyme, parseDrugPC("drug1PC", qualifier))
+	addQualifiersForPH(annotation, drugname1, predicate, enzyme, parseDrugPC("drug1PC", qualifier), drugMapD)
 	annotation.setOaSelector(prefix, exact, suffix)
 	addRejected(annotation, claim)
 
@@ -357,7 +358,7 @@ def createPhenotypeClinicalStudy(doc, doc_urn):
 # param3: DDI relationship
 # param4: enzyme
 # param5: drug1 parent compound
-def addQualifiersForPH(annotation, drugname1, predicate, enzyme, drug1PC):
+def addQualifiersForPH(annotation, drugname1, predicate, enzyme, drug1PC, drugMapD):
 
 	csubject = Qualifier(drugname1, True, False, False) # drug1 as mpsubject/precipitant
 	csubject.setTypeDrugProduct()
@@ -368,8 +369,8 @@ def addQualifiersForPH(annotation, drugname1, predicate, enzyme, drug1PC):
 	cobject.setTypeEnzyme()
 	cobject.setRoleObject()
 					
-	addQualifierConcept(csubject)
-	addQualifierConcept(cobject)
+	addQualifierConcept(csubject, drugMapD)
+	addQualifierConcept(cobject, drugMapD)
 
 	cpredicate = Qualifier(predicate, False, True, False)
 	annotation.setQualifiers(csubject, cpredicate, cobject)
@@ -380,7 +381,7 @@ def addQualifiersForPH(annotation, drugname1, predicate, enzyme, drug1PC):
 # param1: annotation in Json from elasticsearch
 # param2: annotation Id
 # return: Case report annotation
-def createCaseReport(doc, doc_urn):
+def createCaseReport(doc, doc_urn, drugMapD):
 
 	claim = doc["argues"]; source = doc["rawurl"]; email = doc["email"]
 	label = claim["label"]; method = doc["argues"]["method"]; date = doc["created"]
@@ -393,7 +394,7 @@ def createCaseReport(doc, doc_urn):
 
 	## MP Claim
 	annotation = createSubAnnotation(doc_urn, source, label, method, email, date)
-	addQualifiersForCR(annotation, drugname1, predicate, drugname2, precipitant, parseDrugPC("drug1PC", qualifier), parseDrugPC("drug2PC", qualifier))
+	addQualifiersForCR(annotation, drugname1, predicate, drugname2, precipitant, parseDrugPC("drug1PC", qualifier), parseDrugPC("drug2PC", qualifier), drugMapD)
 	annotation.setOaSelector(prefix, exact, suffix)
 	addRejected(annotation, claim)
 
@@ -434,7 +435,7 @@ def createCaseReport(doc, doc_urn):
 # param5: precipitant role in DDI
 # param6: drug1 parent compound
 # param7: drug2 parent compound
-def addQualifiersForCR(annotation, drugname1, predicate, drugname2, precipitant, drug1PC, drug2PC):
+def addQualifiersForCR(annotation, drugname1, predicate, drugname2, precipitant, drug1PC, drug2PC, drugMapD):
 	if precipitant == "drug1":
 		csubject = Qualifier(drugname1, True, False, False) # drug1 as mpsubject/precipitant
 		csubject.setRolePrecipitant()
@@ -456,8 +457,8 @@ def addQualifiersForCR(annotation, drugname1, predicate, drugname2, precipitant,
 		cobject.setTypeDrugProduct()
 		addParentCompound(cobject, drug1PC)					
 
-	addQualifierConcept(csubject)
-	addQualifierConcept(cobject)
+	addQualifierConcept(csubject, drugMapD)
+	addQualifierConcept(cobject, drugMapD)
 
 	cpredicate = Qualifier(predicate, False, True, False)
 	annotation.setQualifiers(csubject, cpredicate, cobject)
