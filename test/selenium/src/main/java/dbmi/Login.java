@@ -103,6 +103,9 @@ public class Login extends TestBase{
         driver.findElement(By.id("finish-same-span-btn")).click();
         Thread.sleep(2000);
 
+        // TODO: add data and material
+        driver.findElement(By.xpath(".//input[contains(@onclick, 'addDataCellByEditor(&quot;evRelationship&quot;,0);')]")).click();
+
         // edit drug claim - check dropdown menus for "Relationships" and "Methods"
         // driver.findElement(By.className("btn btn-success")).click();
         driver.findElement(By.xpath("//button[contains(.,'Edit Claim')]")).click();
@@ -112,7 +115,7 @@ public class Login extends TestBase{
         Select dropdownM = new Select(methods);
         List<WebElement> dd = dropdownM.getOptions();
 
-        //Get length
+        // Get length
         System.out.println(dd.size() + " methods options");
 
         // Loop to print one by one
@@ -141,6 +144,11 @@ public class Login extends TestBase{
         Thread.sleep(1500);
         driver.findElement(By.id("claim-delete-confirm-btn")).click();
         Thread.sleep(5000);
+
+        // delete drug annotations
+        deleteDrug(firstP,0,0);
+
+        deleteDrug(firstP,5,50);
     }
 
     public void createDrug(WebElement element, int x, int y) throws InterruptedException
@@ -151,6 +159,18 @@ public class Login extends TestBase{
         action.moveToElement(element,x,y).doubleClick().build().perform();
         Thread.sleep(2000);
         driver.findElement(By.className("hl-adder-btn")).click();
+        Thread.sleep(1000);
+    }
+
+    public void deleteDrug(WebElement element, int x, int y) throws InterruptedException
+    {
+        Actions action = new Actions(driver);
+        // action.click();
+        Thread.sleep(2000);
+        // action.moveToElement(element,x,y).click();
+        action.moveToElement(element,x,y).doubleClick().build().perform();
+        Thread.sleep(2000);
+        // driver.findElement(By.className("annotator-delete")).click();
         Thread.sleep(1000);
     }
 }

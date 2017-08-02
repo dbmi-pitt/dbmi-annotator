@@ -70,3 +70,27 @@ button contains "hl-adder-btn"
 <button class="annotator-delete" id="annotator-delete" style="display: inline-block;">Delete</button>
 
 <button id="claim-delete-confirm-btn">Confirm</button>
+
+----
+
+<tr style="height:20px;">
+	<td onclick="addDataCellByEditor(&quot;evRelationship&quot;,0);"></td>
+	<td onclick="addDataCellByEditor(&quot;participants&quot;,0);"></td>
+	<td onclick="addDataCellByEditor(&quot;dose1&quot;,0);"> </td>
+	<td onclick="addDataCellByEditor(&quot;dose2&quot;,0);"></td>
+	<td onclick="addDataCellByEditor(&quot;auc&quot;,0);"></td>
+	<td onclick="addDataCellByEditor(&quot;cmax&quot;,0);"></td>
+	<td onclick="addDataCellByEditor(&quot;clearance&quot;,0);"></td>
+	<td onclick="addDataCellByEditor(&quot;halflife&quot;,0);"></td>
+	<td onclick="addDataCellByEditor(&quot;studytype&quot;,0);"></td>
+</tr>
+
+----
+
+<span data-markjs="false" class="annotator-hl" name="annotator-hl" id="AV2kDhWtacdHV0xa1qFV">Statistical</span>
+
+<span data-markjs="false" class="annotator-hl" name="annotator-hl" id="AV2kFiQUacdHV0xa1qFX">comparisons</span>
+
+----
+
+<button type="button" title="Delete" class="annotator-delete">Delete</button>
