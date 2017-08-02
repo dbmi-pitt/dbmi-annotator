@@ -32,7 +32,7 @@ def getConceptIdByConceptCode(conn, conceptCode, vocabId):
 	qry = """
         select * from public.concept where concept_code = '%s' and vocabulary_id = '%s';
 	""" % (conceptCode, vocabId)
-        
+
 	cur.execute(qry)
         for row in cur.fetchall():
 	        return row[0]

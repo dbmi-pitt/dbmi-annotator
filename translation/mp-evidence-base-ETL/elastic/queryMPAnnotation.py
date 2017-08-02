@@ -22,25 +22,19 @@ def getMPAnnsByBody(es_host, es_port, query_condit, pgconn):
 	return parseToMPAnns(res['hits']['hits'], pgconn)
 
 
-def getMPAnnById(es_host, es_port, annId, pgconn):
-	res = esop.queryById(es_host, es_port, annId)	
-	ann = parseToMPAnn(res, pgconn)
-	return ann
-
-
 def parseToMPAnns(documents, pgconn):
-
+        drugMapD = tools.getDrugMappingDict(DRUG_MAPPING, pgconn)        
 	anns = []
 	for doc in documents:
-		ann = parseToMPAnn(doc, pgconn)
+		ann = parseToMPAnn(doc, drugMapD)
 		if ann:
 			anns.append(ann)
 	return anns
 
+
 # parse JSON document, applying omop vocabulary for standardize concepts
 # return object Annotation based on method of annotation
-def parseToMPAnn(document, pgconn):
-        drugMapD = tools.getDrugMappingDict(DRUG_MAPPING, pgconn)
+def parseToMPAnn(document, drugMapD):
         
 	doc = document["_source"]; doc_urn = document["_id"]
 	method = doc["argues"]["method"]; annotation = None
@@ -54,6 +48,12 @@ def parseToMPAnn(document, pgconn):
 	elif method == "Case Report":
 		annotation = createCaseReport(doc, doc_urn, drugMapD)
 	return annotation
+
+
+def getMPAnnById(es_host, es_port, annId, drugMapD):
+	res = esop.queryById(es_host, es_port, annId)	
+	ann = parseToMPAnn(res, pgconn, drugMapD)
+	return ann
 
 
 # add OMOP concept code and vocabulary id to qualifier

@@ -348,8 +348,8 @@ def load(conn, qryCondition, eshost, esport, dbschema, creator, isClean):
 def main():
 
 	DB_SCHEMA = "../../db-schema/mp_evidence_schema.sql"
-	#CREATOR = "test@gmail.com"; PG_DATABASE = 'mpevidence'
-        CREATOR = "test@gmail.com"; PG_DATABASE = 'dikb'
+	CREATOR = "test@gmail.com"; PG_DATABASE = 'mpevidence'
+        #CREATOR = "test@gmail.com"; PG_DATABASE = 'dikb'
 	
 	if len(sys.argv) > 7:
 		ES_HOST = str(sys.argv[1])

@@ -25,6 +25,7 @@ def getDrugMappingDict(inputfile, pgconn):
 	drugMapD = {}
 	reader = csv.DictReader(utf_8_encoder(open(inputfile, 'r')))
 	next(reader, None) # skip the header
+        #cnt = 0
         
 	for row in reader:
 
@@ -49,7 +50,10 @@ def getDrugMappingDict(inputfile, pgconn):
                         else:
                                 if concept_code and vocab_id:
                                         concept_id = pgcp.getConceptIdByConceptCode(pgconn, concept_code, vocabIdConvertDict[vocab_id])
-                        # print "tools.py, code (%s), vid(%s), cid(%s)" % (concept_code, vocab_id, concept_id)
+
+                        #cnt += 1
+                        # print "tools.py, code (%s), vid(%s), cid(%s), %s" % (concept_code, vocab_id, concept_id, cnt)
+
 			if concept_code and vocab_id and concept_id:
 				drugMapD[name] = Concept(name, concept_code, vocab_id, concept_id)
 	return drugMapD
