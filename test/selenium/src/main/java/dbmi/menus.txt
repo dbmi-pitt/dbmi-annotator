@@ -74,16 +74,24 @@ button contains "hl-adder-btn"
 ----
 
 <tr style="height:20px;">
-	<td onclick="addDataCellByEditor(&quot;evRelationship&quot;,0);"></td>
-	<td onclick="addDataCellByEditor(&quot;participants&quot;,0);"></td>
-	<td onclick="addDataCellByEditor(&quot;dose1&quot;,0);"> </td>
-	<td onclick="addDataCellByEditor(&quot;dose2&quot;,0);"></td>
-	<td onclick="addDataCellByEditor(&quot;auc&quot;,0);"></td>
-	<td onclick="addDataCellByEditor(&quot;cmax&quot;,0);"></td>
-	<td onclick="addDataCellByEditor(&quot;clearance&quot;,0);"></td>
-	<td onclick="addDataCellByEditor(&quot;halflife&quot;,0);"></td>
-	<td onclick="addDataCellByEditor(&quot;studytype&quot;,0);"></td>
+	<td onclick="addDataCellByEditor("evRelationship",0);"></td>
+	<td onclick="addDataCellByEditor("participants",0);"></td>
+	<td onclick="addDataCellByEditor("dose1",0);"> </td>
+	<td onclick="addDataCellByEditor("dose2",0);"></td>
+	<td onclick="addDataCellByEditor("auc",0);"></td>
+	<td onclick="addDataCellByEditor("cmax",0);"></td>
+	<td onclick="addDataCellByEditor("clearance",0);"></td>
+	<td onclick="addDataCellByEditor("halflife",0);"></td>
+	<td onclick="addDataCellByEditor("studytype",0);"></td>
 </tr>
+
+<input type="radio" name="evRelationship" id="evRelationship" value="supports">
+
+<input type="radio" name="evRelationship" id="evRelationship" value="refutes">
+
+<button class="annotator-save-close" id="annotator-save-close">Save and Close</button>
+
+<span id="select-text-dialog-close" class="annotator-close">×</span>
 
 ----
 

@@ -103,8 +103,37 @@ public class Login extends TestBase{
         driver.findElement(By.id("finish-same-span-btn")).click();
         Thread.sleep(2000);
 
-        // TODO: add data and material
-        driver.findElement(By.xpath(".//input[contains(@onclick, 'addDataCellByEditor(&quot;evRelationship&quot;,0);')]")).click();
+        // add data and material
+        driver.findElement(By.xpath("//td[contains(@onclick, 'addDataCellByEditor(\"evRelationship\",0);')]")).click();
+        Thread.sleep(500);
+        driver.findElement(By.xpath("//input[contains(@value, 'refutes')]")).click();
+        Thread.sleep(500);
+        driver.findElement(By.xpath("//input[contains(@value, 'supports')]")).click();
+        Thread.sleep(500);
+        driver.findElement(By.xpath("//button[contains(.,'Save and Close')]")).click();
+        Thread.sleep(2000);
+
+        addDataWithoutText("//td[contains(@onclick, 'addDataCellByEditor(\"participants\",\"0\");')]");
+        addDataWithoutText("//td[contains(@onclick, 'addDataCellByEditor(\"dose1\",\"0\");')]");
+        addDataWithoutText("//td[contains(@onclick, 'addDataCellByEditor(\"dose2\",\"0\");')]");
+        addDataWithoutText("//td[contains(@onclick, 'addDataCellByEditor(\"auc\",\"0\");')]");
+        addDataWithoutText("//td[contains(@onclick, 'addDataCellByEditor(\"cmax\",\"0\");')]");
+        addDataWithoutText("//td[contains(@onclick, 'addDataCellByEditor(\"clearance\",\"0\");')]");
+        addDataWithoutText("//td[contains(@onclick, 'addDataCellByEditor(\"halflife\",\"0\");')]");
+
+        driver.findElement(By.xpath("//td[contains(@onclick, 'addDataCellByEditor(\"studytype\",\"0\");')]")).click();
+        Thread.sleep(500);
+        driver.findElement(By.xpath("//input[(@id='grouprandom' and @value='yes')]")).click();
+        Thread.sleep(500);
+        driver.findElement(By.xpath("//input[(@id='parallelgroup' and @value='yes')]")).click();
+        Thread.sleep(500);
+        driver.findElement(By.id("study-type-qs-clear")).click();
+        Thread.sleep(500);
+        driver.findElement(By.xpath("//input[(@id='grouprandom' and @value='no')]")).click();
+        Thread.sleep(500);
+        driver.findElement(By.xpath("//input[(@id='parallelgroup' and @value='no')]")).click();
+        driver.findElement(By.xpath("//button[contains(.,'Save and Close')]")).click();
+        Thread.sleep(2000);
 
         // edit drug claim - check dropdown menus for "Relationships" and "Methods"
         // driver.findElement(By.className("btn btn-success")).click();
@@ -172,5 +201,13 @@ public class Login extends TestBase{
         Thread.sleep(2000);
         // driver.findElement(By.className("annotator-delete")).click();
         Thread.sleep(1000);
+    }
+
+    public void addDataWithoutText(String s) throws InterruptedException
+    {   
+        driver.findElement(By.xpath(s)).click();
+        Thread.sleep(1000);
+        driver.findElement(By.id("select-text-dialog-close")).click();
+        Thread.sleep(2000);
     }
 }
