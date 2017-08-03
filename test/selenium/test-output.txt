@@ -1,0 +1,22 @@
+[[ChromeDriver: chrome on LINUX (6ff808a3cb9e4a91e71bb108c9a0ec27)] -> id: P16]
+[[ChromeDriver: chrome on LINUX (6ff808a3cb9e4a91e71bb108c9a0ec27)] -> id: P17]
+5 methods options
+METHOD INDEX 0: DDI clinical trial
+RELATIONSHIP INDEX 0: interact with
+RELATIONSHIP INDEX 1: inhibits
+RELATIONSHIP INDEX 2: substrate of
+METHOD INDEX 1: Phenotype clinical study
+RELATIONSHIP INDEX 1: inhibits
+RELATIONSHIP INDEX 2: substrate of
+METHOD INDEX 2: Case Report
+RELATIONSHIP INDEX 0: interact with
+METHOD INDEX 3: Statement
+RELATIONSHIP INDEX 0: interact with
+RELATIONSHIP INDEX 1: inhibits
+RELATIONSHIP INDEX 2: substrate of
+METHOD INDEX 4: Experiment
+RELATIONSHIP INDEX 1: inhibits
+RELATIONSHIP INDEX 2: substrate of
+RELATIONSHIP INDEX 3: has metabolite
+RELATIONSHIP INDEX 4: controls formation of
+RELATIONSHIP INDEX 5: inhibition constant
