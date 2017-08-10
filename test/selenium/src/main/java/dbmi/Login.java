@@ -16,6 +16,8 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.Keys;
 
 import java.util.List;
+import java.util.Arrays;
+import java.util.ArrayList;
 import java.io.PrintWriter;
 import java.io.IOException;
 
@@ -44,7 +46,7 @@ public class Login extends TestBase{
 
             // load test PMC article
             // driver.findElement(By.name("sourceURL")).sendKeys("http://localhost/PMC/PMC2686069.html");
-            driver.findElement(By.name("sourceURL")).sendKeys(" http://localhost/PMC/PMC3922121.html");
+            driver.findElement(By.name("sourceURL")).sendKeys("http://localhost/PMC/PMC3922121.html");
             // driver.findElement(By.name("sourceURL")).sendKeys("http://localhost/test/test.html");
             driver.findElement(By.xpath("//button[contains(.,'load')]")).click();
             Thread.sleep(1500);
@@ -70,7 +72,7 @@ public class Login extends TestBase{
             // WebElement next = driver.findElement(By.id("__p15"));
             WebElement next = driver.findElement(By.id("P17"));
             Actions highlight = new Actions(driver);
-            writer.println(firstP + "\n" + next);
+            writer.println(firstP + "\n" + next + "\n");
             highlight.moveToElement(firstP,0,0).click();
             highlight.keyDown(Keys.SHIFT);
             highlight.moveToElement(next,0,0).click();
@@ -149,12 +151,13 @@ public class Login extends TestBase{
             List<WebElement> dd = dropdownM.getOptions();
 
             // Get length
-            writer.println(dd.size() + " methods options");
+            // writer.println(dd.size() + " methods options");
 
             // Loop to print one by one
             // TODO: boolean tests with arrays to see if dropdown menus contain the entries they should.
             for (int i = 0; i < dd.size(); i++) {
-                writer.println("METHOD INDEX " + i + ": " + dd.get(i).getText());
+                writer.println("Method index " + i + ": " + dd.get(i).getText());
+                String method = dd.get(i).getText();
                 dropdownM.selectByIndex(i);
                 Thread.sleep(2000);
 
@@ -162,11 +165,62 @@ public class Login extends TestBase{
                 WebElement relationships = driver.findElement(By.id("relationship"));
                 Select dropdownR = new Select(relationships);
                 List<WebElement> de = dropdownR.getOptions();
+                List<String> relationshipList = new ArrayList<String>();
 
                 for(int j = 0; j < de.size(); j++) {
                     // writer.println(de.get(j).getAttribute("disabled"));
                     if (de.get(j).getAttribute("disabled") == null) {
-                        writer.println("RELATIONSHIP INDEX " + j + ": " + de.get(j).getText());
+                        // writer.println("RELATIONSHIP INDEX " + j + ": " + de.get(j).getText());
+                        String r = de.get(j).getText();
+                        relationshipList.add(r);
+                    }
+                }
+                writer.println("Relationships:\n" + relationshipList);
+
+                // make sure relationship lists are correct for each method
+                if (method.equals("DDI clinical trial")) {
+                    List<String> correctR = new ArrayList<>(Arrays.asList("interact with", "inhibits", "substrate of"));
+                    if (relationshipList.equals(correctR)) {
+                        writer.println("CORRECT set of relationships\n");
+                    }
+                    else {
+                        writer.println("ALERT: this set of relationships is incorrect for " + method + "\n");
+                    }
+                }
+                else if (method.equals("Phenotype clinical study")) {
+                    List<String> correctR = new ArrayList<>(Arrays.asList("inhibits", "substrate of"));
+                    if (relationshipList.equals(correctR)) {
+                        writer.println("CORRECT set of relationships\n");
+                    }
+                    else {
+                        writer.println("ALERT: this set of relationships is incorrect for " + method + "\n");
+                    }
+                }
+                else if (method.equals("Case Report")) {
+                    List<String> correctR = new ArrayList<>(Arrays.asList("interact with"));
+                    if (relationshipList.equals(correctR)) {
+                        writer.println("CORRECT set of relationships\n");
+                    }
+                    else {
+                        writer.println("ALERT: this set of relationships is incorrect for " + method + "\n");
+                    }
+                }
+                else if (method.equals("Statement")) {
+                    List<String> correctR = new ArrayList<>(Arrays.asList("interact with", "inhibits", "substrate of"));
+                    if (relationshipList.equals(correctR)) {
+                        writer.println("CORRECT set of relationships\n");
+                    }
+                    else {
+                        writer.println("ALERT: this set of relationships is incorrect for " + method + "\n");
+                    }
+                }
+                else if (method.equals("Experiment")) {
+                    List<String> correctR = new ArrayList<>(Arrays.asList("inhibits", "substrate of", "has metabolite", "controls formation of", "inhibition constant"));
+                    if (relationshipList.equals(correctR)) {
+                        writer.println("CORRECT set of relationships\n");
+                    }
+                    else {
+                        writer.println("ALERT: this set of relationships is incorrect for " + method + "\n");
                     }
                 }
             }
@@ -182,7 +236,7 @@ public class Login extends TestBase{
             deleteDrug(firstP,0,0);
 
             deleteDrug(firstP,5,50);
-            driver.sleep(4000);
+            Thread.sleep(4000);
             writer.close();
         } catch (IOException e) {
             e.printStackTrace();
