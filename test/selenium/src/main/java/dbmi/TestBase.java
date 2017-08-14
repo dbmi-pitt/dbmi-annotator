@@ -66,7 +66,7 @@ public class TestBase {
 			System.setProperty("webdriver.chrome.driver", "/home/yin2/dbmi-annotator/test/selenium/libs/chromedriver"); 
             driver = new ChromeDriver();
 		} else if (browser.equals("firefox")) {
-            System.setProperty("webdriver.gecko.driver", "/usr/bin/geckodriver");
+            System.setProperty("webdriver.gecko.driver", "/home/yin2/dbmi-annotator/test/selenium/libs/geckodriver");
 			driver = new FirefoxDriver();
 		}
 		driver.get(appUrl);

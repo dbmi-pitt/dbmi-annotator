@@ -70,3 +70,35 @@ button contains "hl-adder-btn"
 <button class="annotator-delete" id="annotator-delete" style="display: inline-block;">Delete</button>
 
 <button id="claim-delete-confirm-btn">Confirm</button>
+
+----
+
+<tr style="height:20px;">
+	<td onclick="addDataCellByEditor("evRelationship",0);"></td>
+	<td onclick="addDataCellByEditor("participants",0);"></td>
+	<td onclick="addDataCellByEditor("dose1",0);"> </td>
+	<td onclick="addDataCellByEditor("dose2",0);"></td>
+	<td onclick="addDataCellByEditor("auc",0);"></td>
+	<td onclick="addDataCellByEditor("cmax",0);"></td>
+	<td onclick="addDataCellByEditor("clearance",0);"></td>
+	<td onclick="addDataCellByEditor("halflife",0);"></td>
+	<td onclick="addDataCellByEditor("studytype",0);"></td>
+</tr>
+
+<input type="radio" name="evRelationship" id="evRelationship" value="supports">
+
+<input type="radio" name="evRelationship" id="evRelationship" value="refutes">
+
+<button class="annotator-save-close" id="annotator-save-close">Save and Close</button>
+
+<span id="select-text-dialog-close" class="annotator-close">×</span>
+
+----
+
+<span data-markjs="false" class="annotator-hl" name="annotator-hl" id="AV2kDhWtacdHV0xa1qFV">Statistical</span>
+
+<span data-markjs="false" class="annotator-hl" name="annotator-hl" id="AV2kFiQUacdHV0xa1qFX">comparisons</span>
+
+----
+
+<button type="button" title="Delete" class="annotator-delete">Delete</button>
