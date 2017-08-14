@@ -43,7 +43,7 @@ WHERE method.method = 'DDI clinical trial'
 -- MP data table: rdf_mp_data -------------------------------------------------------
 -- auc, cmax, clearance, halflife
 CREATE TABLE rdf_mp_data AS 
-(SELECT d.mp_claim_id, d.mp_data_index, d.ev_supports, d.type as datatype, df.type as dftype, df.value, df.direction, uuid_generate_v4() as data_item_urn, uuid_generate_v4() as data_type_urn
+(SELECT d.mp_claim_id, d.mp_data_index, d.ev_supports, d.type as datatype, df.type as dftype, df.value, df.direction, uuid_generate_v4() as data_item_urn, uuid_generate_v4() as data_type_urn, uuid_generate_v4() as data_ratio_type_has_part_urn 
 FROM crosstab('SELECT df.data_body_id, df.data_field_type, df.value_as_string FROM data_field df ORDER BY 1,2')
 AS df(data_body_id INTEGER, direction TEXT, type TEXT, value TEXT)
 JOIN oa_data_body db ON df.data_body_id = db.id
