@@ -37,6 +37,7 @@ from method
 JOIN p ON p.id = method.mp_claim_id
 JOIN o ON o.id = method.mp_claim_id
 WHERE method.method = 'DDI clinical trial'
+AND method.mp_claim_id = '1800' -- specify one claim for demo purpose, comment for all claims
 ) AS tb;
 
 
@@ -48,7 +49,9 @@ FROM crosstab('SELECT df.data_body_id, df.data_field_type, df.value_as_string FR
 AS df(data_body_id INTEGER, direction TEXT, type TEXT, value TEXT)
 JOIN oa_data_body db ON df.data_body_id = db.id
 JOIN mp_data_annotation d ON db.id = d.has_body
-WHERE d.type = 'auc' or d.type = 'cmax' or d.type = 'clearance' or d.type = 'halflife');
+AND d.mp_claim_id = '1800' -- specify one claim for demo purpose, comment for all claims
+WHERE d.type = 'auc' or d.type = 'cmax' or d.type = 'clearance' or d.type = 'halflife'
+);
 
 
 -- MP material table: rdf_mp_material -----------------------------------------------
@@ -67,5 +70,7 @@ WHERE material_type = 'precipitant_dose'
 OR material_type = 'object_dose')
 SELECT m_ann.mp_claim_id, m_ann.mp_data_index, m_ann.ev_supports, m_ann.material_type, m_field.drugname, m_field.value, m_field.duration, m_field.formulation, m_field.regimens
 FROM m_ann
-JOIN m_field on m_ann.has_body = m_field.body_id;
+JOIN m_field on m_ann.has_body = m_field.body_id
+AND m_ann.mp_claim_id = '1800' -- specify one claim for demo purpose, comment for all claims
+;
 
