@@ -16,8 +16,9 @@
 
 map:database a d2rq:Database;
     d2rq:jdbcDriver "org.postgresql.Driver";
-    # d2rq:jdbcDSN "jdbc:postgresql://localhost/mpevidence?autoReconnect=true&user=<username>&password=<password>";   
-	.
+    # d2rq:jdbcDSN "jdbc:postgresql://localhost/mpevidence?autoReconnect=true&user=<username>&password=<password>";
+    # d2rq:jdbcDSN "jdbc:postgresql://localhost/mpevidence?autoReconnect=true&user=&password=";   
+    .
 #####################################################################################
 # Class Assertion description 
 #####################################################################################
@@ -317,11 +318,12 @@ map:DataRatioType a d2rq:ClassMap;
     .
 
 ## rdfs_label data ratio type label
-map:method_rdfs_label a d2rq:PropertyBridge;
+map:data_ratio_type_rdfs_label a d2rq:PropertyBridge;
 	d2rq:belongsToClassMap map:DataRatioType;
 	d2rq:property rdfs:label; 
-    d2rq:pattern "@@ohdsi.rdf_mp_data.datatype@@"@en;
-
+    d2rq:pattern "@@ohdsi.rdf_mp_data.value@@ @@ohdsi.rdf_mp_data.dftype@@ "@en;
+    .
+    
 ## has part
 map:data_ratio_type_has_part a d2rq:PropertyBridge;
 	d2rq:belongsToClassMap map:DataRatioType;
