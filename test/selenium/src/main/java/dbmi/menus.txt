@@ -93,6 +93,41 @@ button contains "hl-adder-btn"
 
 <span id="select-text-dialog-close" class="annotator-close">×</span>
 
+<input type="radio" name="grouprandom" id="grouprandom" value="yes">
+
+<input type="radio" name="parallelgroup" id="parallelgroup" value="yes">
+
+<a onclick="clearStudyTypeQuestions()" id="study-type-qs-clear">Clear</a>
+
+----
+
+<li class="mp-main-menu-2">
+add data for
+<ul style="display: none;" class="mp-sub-menu-2"></ul>
+</li>
+
+<a href="#">comparisons_interact with_Statistical</a>
+
+----
+
+<input style="width:30px; height:20px;" type="text" id="participants">
+
+----
+
+<input style="width: 30px; height: 20px; background-color: rgb(249, 220, 217);" type="text" id="drug1Dose">
+
+<select id="drug1Formulation" style="background-color: rgb(249, 220, 217);"><option value="UNK">UNK</option><option value="Oral">Oral</option><option value="IV">IV</option><option value="transdermal">transdermal</option><option value="IM">IM</option></select>
+
+<input style="width: 30px; height: 20px; background-color: rgb(249, 220, 217);" type="text" id="drug1Duration">
+
+<select id="drug1Regimens" style="background-color: rgb(249, 220, 217);"><option value="UNK">UNK</option><option value="SD">SD</option><option value="QD">QD</option><option value="BID">BID</option><option value="TID">TID</option><option value="QID">QID</option><option value="Q12">Q12</option><option value="Q8">Q8</option><option value="Q6">Q6</option><option value="Daily">Daily</option></select>
+
+----
+
+<button style="display: inline-block;" class="annotator-save annotator-focus">Save</button>
+
+<button id="data-delete-confirm-btn">Confirm</button>
+
 ----
 
 <span data-markjs="false" class="annotator-hl" name="annotator-hl" id="AV2kDhWtacdHV0xa1qFV">Statistical</span>
