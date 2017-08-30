@@ -1,7 +1,6 @@
 var pg = require('pg');
 var LocalStrategy = require('passport-local').Strategy;
 //var User = require('./../models/user').User;
-var bcrypt   = require('bcrypt-nodejs');
 var uuid = require('node-uuid');
 config = require('./config.js');
 

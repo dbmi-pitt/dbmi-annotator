@@ -12,7 +12,7 @@
  See the License for the specific language governing permissions and
  limitations under the License. */
 
-var bcrypt   = require('bcrypt-nodejs');
+var bcrypt   = require('bcryptjs');
  
 module.exports = function(sequelize, Sequelize) {
     var User = sequelize.define('user', {
@@ -34,7 +34,7 @@ module.exports = function(sequelize, Sequelize) {
 			    		 return bcrypt.compareSync(password1, password2);
 				     },
 				     generateHash: function(password){
-			    		 return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
+			    		 return bcrypt.hashSync(password, bcrypt.genSaltSync(8));
 				     }
 				 }
 				}			     
