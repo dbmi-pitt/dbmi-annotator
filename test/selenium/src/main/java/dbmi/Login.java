@@ -138,34 +138,34 @@ public class Login extends TestBase{
             Thread.sleep(2000);
 
             // TODO highlight some other passage (P17?) and use this to add data and material
-            WebElement e2 = driver.findElement(By.id("P18"));
-            highlightText(next, e2);
+            // WebElement e2 = driver.findElement(By.id("P18"));
+            // highlightText(next, e2);
 
-            // add data and material
-            addDataMaterialByText();
+            // // add data and material
+            // addDataMaterialByText();
 
-            // go through data and material that require text. Delete and re-highlight text to re-test next data and material box.
-            addDataText("//td[contains(@onclick, 'addDataCellByEditor(\"dose1\",\"0\");')]");
-            Thread.sleep(1000);
-            // TODO go up more parents until found
-            WebElement topElement = driver.findElement(By.id("tabs-1"));
-            WebElement parentElement = topElement.findElement(By.id("mp-data-form-dose1"));
-            writer.println("PARENT ELEMENT" + parentElement);
-            parentElement.findElement(By.xpath("//input[(@id='drug1Dose')]")).sendKeys("10");
-            Thread.sleep(1000);
-            save();
-            Thread.sleep(500);
-            Select formulation = new Select(parentElement.findElement(By.id("drug1Formulation")));
-            // dropdown2.selectByVisibleText("ambrisentan");
-            formulation.selectByIndex(1);
-            Thread.sleep(500);
-            parentElement.findElement(By.xpath("//input[(@id='drug1Duration')]")).sendKeys("20");
-            Thread.sleep(500);
-            Select regimen = new Select(parentElement.findElement(By.id("drug1Regimens")));
-            // dropdown2.selectByVisibleText("ambrisentan");
-            regimen.selectByIndex(1);
-            Thread.sleep(500);
-            delete();
+            // // go through data and material that require text. Delete and re-highlight text to re-test next data and material box.
+            // addDataText("//td[contains(@onclick, 'addDataCellByEditor(\"dose1\",\"0\");')]");
+            // Thread.sleep(1000);
+            // // TODO go up more parents until found
+            // WebElement topElement = driver.findElement(By.id("tabs-1"));
+            // WebElement parentElement = topElement.findElement(By.id("mp-data-form-dose1"));
+            // writer.println("PARENT ELEMENT" + parentElement);
+            // parentElement.findElement(By.xpath("//input[(@id='drug1Dose')]")).sendKeys("10");
+            // Thread.sleep(1000);
+            // save();
+            // Thread.sleep(500);
+            // Select formulation = new Select(parentElement.findElement(By.id("drug1Formulation")));
+            // // dropdown2.selectByVisibleText("ambrisentan");
+            // formulation.selectByIndex(1);
+            // Thread.sleep(500);
+            // parentElement.findElement(By.xpath("//input[(@id='drug1Duration')]")).sendKeys("20");
+            // Thread.sleep(500);
+            // Select regimen = new Select(parentElement.findElement(By.id("drug1Regimens")));
+            // // dropdown2.selectByVisibleText("ambrisentan");
+            // regimen.selectByIndex(1);
+            // Thread.sleep(500);
+            // delete();
 
             // edit drug claim - check dropdown menus for "Relationships" and "Methods"
             // driver.findElement(By.className("btn btn-success")).click();
