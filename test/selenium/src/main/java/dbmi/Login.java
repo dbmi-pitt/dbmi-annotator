@@ -115,13 +115,14 @@ public class Login extends TestBase{
             driver.findElement(By.xpath("//button[contains(.,'Save and Close')]")).click();
             Thread.sleep(2000);
 
-            addDataText("//td[contains(@onclick, 'addDataCellByEditor(\"participants\",\"0\");')]");
-            addDataText("//td[contains(@onclick, 'addDataCellByEditor(\"dose1\",\"0\");')]");
-            addDataText("//td[contains(@onclick, 'addDataCellByEditor(\"dose2\",\"0\");')]");
-            addDataText("//td[contains(@onclick, 'addDataCellByEditor(\"auc\",\"0\");')]");
-            addDataText("//td[contains(@onclick, 'addDataCellByEditor(\"cmax\",\"0\");')]");
-            addDataText("//td[contains(@onclick, 'addDataCellByEditor(\"clearance\",\"0\");')]");
-            addDataText("//td[contains(@onclick, 'addDataCellByEditor(\"halflife\",\"0\");')]");
+            // Select data cells that require highlighted text to make sure they aren't able to be entered. 
+            // addDataText("//td[contains(@onclick, 'addDataCellByEditor(\"participants\",\"0\");')]");
+            // addDataText("//td[contains(@onclick, 'addDataCellByEditor(\"dose1\",\"0\");')]");
+            // addDataText("//td[contains(@onclick, 'addDataCellByEditor(\"dose2\",\"0\");')]");
+            // addDataText("//td[contains(@onclick, 'addDataCellByEditor(\"auc\",\"0\");')]");
+            // addDataText("//td[contains(@onclick, 'addDataCellByEditor(\"cmax\",\"0\");')]");
+            // addDataText("//td[contains(@onclick, 'addDataCellByEditor(\"clearance\",\"0\");')]");
+            // addDataText("//td[contains(@onclick, 'addDataCellByEditor(\"halflife\",\"0\");')]");
 
             driver.findElement(By.xpath("//td[contains(@onclick, 'addDataCellByEditor(\"studytype\",\"0\");')]")).click();
             Thread.sleep(500);
