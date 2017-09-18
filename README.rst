@@ -5,11 +5,11 @@ AnnotationPress
 --------
 Overview 
 --------
-AnnotationPress is designed to provide a user friendly tool that helps scientists annotate scientific claims, data, and evidence in HTML and PDF documents. The current version is configured to annotated drug-drug interactions in both full text journal articles and structured product labeling. This is a particularly challenging domain that required the development of several annotation workflows which we think will be useful for for other scientific domains. A key aspect of AnnotationPress is its use of annotation plug-ins which make the tool is easily adaptable to other annotation use cases. Another distinctive feature is that AnnotationPress implements the [Micropublication](https://jbiomedsem.biomedcentral.com/articles/10.1186/2041-1480-5-28) and [Open Annotation data](http://www.openannotation.org/spec/core/) standards. These standards specify how to relate annotations in target documents about data, methods, and materials to scientific claims.
+AnnotationPress is designed to provide a user friendly tool that helps scientists annotate scientific claims, data, and evidence in HTML and PDF documents. The current version is configured to annotated drug-drug interactions in both full text journal articles and structured product labeling. This is a particularly challenging domain that required the development of several annotation workflows which we think will be useful for for other scientific domains. A key aspect of AnnotationPress is its use of annotation plug-ins which make the tool is easily adaptable to other annotation use cases. Another distinctive feature is that AnnotationPress implements the `Micropublication <https://jbiomedsem.biomedcentral.com/articles/10.1186/2041-1480-5-28>`_ and `Open Annotation data <http://www.openannotation.org/spec/core/>`_ standards. These standards specify how to relate annotations in target documents about data, methods, and materials to scientific claims.
 
-If you are new to AnnotationPress, please watch our [video](https://www.youtube.com/) that show two annotation plugins in action.
+If you are new to AnnotationPress, please watch our `video <https://goo.gl/kF1aaM>`_ that show two annotation plugins in action.
 
-AnnotationPress is an Apache licensed open source project available on [github](https://github.com/dbmi-pitt/dbmi-annotator). Please contact us if you are interested in contributing to its development, if you would like to request new features, or have any other questions.
+AnnotationPress is an Apache licensed open source project available on `github <https://github.com/dbmi-pitt/dbmi-annotator>`_. Please contact us if you are interested in contributing to its development, if you would like to request new features, or have any other questions.
 
 ---------
 Licensing
