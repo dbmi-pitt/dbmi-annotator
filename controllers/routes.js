@@ -202,9 +202,11 @@ module.exports = function(app, passport) {
 
     // EXPORT TO CSV ==============================
     app.get('/dbmiannotator/exportcsv', isLoggedIn, function(req, res){
-	
-	    var url = config.protocal + "://" + config.apache2.host + ":" + config.apache2.port + "/annotatorstore/search?email=" + req.query.email + "&annotationType=" + config.profile.def;
-        //var url = config.protocal + "://" + config.apache2.host + ":" + config.apache2.port + "/annotatorstore/search?annotationType=" + config.profile.def;
+	// export current user's annotation
+	//var url = config.protocal + "://" + config.apache2.host + ":" + config.apache2.port + "/annotatorstore/search?email=" + req.query.email + "&annotationType=" + config.profile.def;
+
+	// export all annotations (inclusing other users)
+        var url = config.protocal + "://" + config.apache2.host + ":" + config.apache2.port + "/annotatorstore/search?annotationType=" + config.profile.def;
 	    
 	    request({url: url, json: true, followAllRedirects: true, "rejectUnauthorized": false}, function(error,response,body){            
 	        if (!error && (response.statusCode === 200 || response.statusCode ===302)) {
@@ -217,11 +219,20 @@ module.exports = function(app, passport) {
                 for (var i = 0; i < jsonObjs.length; i++) {
                     jsonObj = jsonObjs[i];
                     claim = jsonObj.argues;
-                    dataL = claim.supportsBy;            
+                    dataL = claim.supportsBy;
+		    mpmethod = claim.method;
 
                     // initiate dict for one row in csv with claim information
-                    var rowDict={"document":jsonObj.rawurl, "useremail":jsonObj.email, "claimlabel":claim.label, "claimtext":claim.hasTarget.hasSelector.exact, "method":claim.method, "relationship":claim.qualifiedBy.relationship, "drug1":claim.qualifiedBy.drug1, "drug2":claim.qualifiedBy.drug2, "precipitant":(claim.qualifiedBy.precipitant||''), "enzyme":(claim.qualifiedBy.enzyme||''), "rejected": "", "evRelationship":"", "participants":"", "participantstext":"", "drug1dose":"", "drug1formulation":"", "drug1duration":"", "drug1regimens":"", "drug1dosetext":"", "drug2dose":"", "phenotypetype": "", "phenotypevalue": "", "phenotypemetabolizer": "", "phenotypepopulation": "", "drug2formulation":"", "drug2duration":"", "drug2regimens":"", "drug2dosetext":"", "aucvalue":"", "auctype":"", "aucdirection":"", "auctext":"", "cmaxvalue":"", "cmaxtype":"", "cmaxdirection":"", "cmaxtext":"", "clearancevalue":"", "clearancetype":"", "clearancedirection":"", "clearancetext":"", "halflifevalue":"", "halflifetype":"", "halflifedirection":"", "halflifetext":"", "dipsquestion":"", "reviewer":"", "reviewerdate":"", "reviewertotal":"", "reviewerlackinfo":"", "grouprandomization":"", "parallelgroupdesign":"", "id": jsonObj.id};
-
+                    var rowDict={"document":jsonObj.rawurl, "useremail":jsonObj.email, "claimlabel":claim.label, "claimtext":claim.hasTarget.hasSelector.exact, "method": mpmethod, "relationship":claim.qualifiedBy.relationship, "drug1":claim.qualifiedBy.drug1, "drug2":claim.qualifiedBy.drug2, "precipitant":(claim.qualifiedBy.precipitant||''), "enzyme":(claim.qualifiedBy.enzyme||''), "rejected": "", "evRelationship":"",
+				 "participants":"", "participantstext":"", "drug1dose":"", "drug1formulation":"", "drug1duration":"", "drug1regimens":"", "drug1dosetext":"", "drug2dose":"",
+				 "phenotypetype": "", "phenotypevalue": "", "phenotypemetabolizer": "", "phenotypepopulation": "",
+				 "drug2formulation":"", "drug2duration":"", "drug2regimens":"", "drug2dosetext":"",
+				 "aucvalue":"", "auctype":"", "aucdirection":"", "auctext":"", "cmaxvalue":"", "cmaxtype":"", "cmaxdirection":"", "cmaxtext":"", "clearancevalue":"", "clearancetype":"", "clearancedirection":"", "clearancetext":"", "halflifevalue":"", "halflifetype":"", "halflifedirection":"", "halflifetext":"",
+				 "dipsquestion":"", "reviewer":"", "reviewerdate":"", "reviewertotal":"", "reviewerlackinfo":"",
+				 "cellSystem": "", "cellSystemtext": "", "metaboliteRateWith": "", "metaboliteRateWithtext": "", "metaboliteRateWithout": "", "metaboliteRateWithouttext": "",
+				 "measurementcl": "", "measurementclunit": "", "measurementcltext": "", "measurementvmax": "", "measurementvmaxunit": "", "measurementvmaxtext": "", "measurementinhibition": "", "measurementinhibitionunit": "", "measurementinhibitiontext": "", "measurementkm": "", "measurementkmunit": "", "measurementkmtext": "", "measurementki": "", "measurementkiunit": "", "measurementkitext": "", "measurementkinact": "", "measurementkinactunit": "", "measurementkinacttext": "", "measurementic50": "", "measurementic50unit": "", "measurementic50text": "",
+				 "grouprandomization":"", "parallelgroupdesign":"", "id": jsonObj.id};
+		    
                     if (claim.rejected != null)
                         rowDict["rejected"] = (claim.rejected || "");
 
@@ -234,49 +245,85 @@ module.exports = function(app, passport) {
                             var method = data.supportsBy;
                             var material = method.supportsBy;
 
+			    // evidence relationship
                             copyDict["evRelationship"] = (data.evRelationship || "");
 
+			    // participants
                             if (material.participants != null) {
                                 copyDict["participants"] = (material.participants.value || "")
                                 copyDict["participantstext"] = (getSpanFromField(material.participants) || "")
                             }
 
+			    // data ratio 
                             dataFieldsL = ["auc","cmax","clearance","halflife"];
                             for (p = 0; p < dataFieldsL.length; p++) {
                                 field = dataFieldsL[p];
                                 if (data[field] != null) {
-                                    copyDict[field + 'value'] = (data[field].value || "")
-                                    copyDict[field + 'type'] = (data[field].type || "")
-                                    copyDict[field + 'direction'] = (data[field].direction || "")
-                                    copyDict[field + 'text'] = (getSpanFromField(data[field]) || "")
+                                    copyDict[field + 'value'] = (data[field].value || "");
+                                    copyDict[field + 'type'] = (data[field].type || "");
+                                    copyDict[field + 'direction'] = (data[field].direction || "");
+                                    copyDict[field + 'text'] = (getSpanFromField(data[field]) || "");
                                 }
                             }
 
-                            if (data.dips != null) {
-                                dipsQsStr = "";
-                                qsL=["q1","q2","q3","q4","q5","q6","q7","q8","q9","q10"];
-                                for (q = 0; q < qsL.length; q++) {
-                                    if (q == qsL.length - 1)
-                                        dipsQsStr += data.dips[qsL[q]];
-                                    else
-                                        dipsQsStr += data.dips[qsL[q]] + "|";
-                                }
-                                copyDict["dipsquestion"] = dipsQsStr;
-                            }
-
-                            if (data.reviewer != null) {
-                                copyDict["reviewer"] = data.reviewer.reviewer || "";
-                                copyDict["reviewerdate"] = data.reviewer.date || "";
-                                copyDict["reviewertotal"] = data.reviewer.total || "";
-                                copyDict["reviewerlackinfo"] = data.reviewer.lackinfo || "";
-                            }
-
+			    // evidence type questions
                             if (data.grouprandom != null)
                                 copyDict["grouprandomization"] = (data.grouprandom || "");                            
                             
                             if (data.parallelgroup != null)
                                 copyDict["parallelgroupdesign"] = (data.parallelgroup || "");
 
+			    // Case Report fields
+			    if (mpmethod == "Case Report") {
+				// dips score questions (Case Report only)
+				if (data.dips != null) {
+                                    dipsQsStr = "";
+                                    qsL=["q1","q2","q3","q4","q5","q6","q7","q8","q9","q10"];
+                                    for (q = 0; q < qsL.length; q++) {
+					if (q == qsL.length - 1)
+                                            dipsQsStr += data.dips[qsL[q]];
+					else
+                                            dipsQsStr += data.dips[qsL[q]] + "|";
+                                    }
+                                    copyDict["dipsquestion"] = dipsQsStr;
+				}
+
+				// reviewer (Case Report only)
+				if (data.reviewer != null) {
+                                    copyDict["reviewer"] = data.reviewer.reviewer || "";
+                                    copyDict["reviewerdate"] = data.reviewer.date || "";
+                                    copyDict["reviewertotal"] = data.reviewer.total || "";
+                                    copyDict["reviewerlackinfo"] = data.reviewer.lackinfo || "";
+				}
+			    }
+
+			    // Experiment fields only
+			    if (mpmethod == "Experiment") {
+
+				experimentL = ["cellSystem", "metaboliteRateWith", "metaboliteRateWithout"]
+				for (i = 0; i < experimentL.length; i++) {
+				    field = experimentL[i];
+				    
+				    if (data[field] != null) {
+					copyDict[field] = (data[field].value || "");
+					copyDict[field + 'text'] = (getSpanFromField(data[field]) || "");
+				    }				    
+				}
+				if (data.measurement != null) {
+				    measurementL = ["cl", "vmax", "inhibition", "km", "ki", "kinact", "ic50"];
+				    for (j = 0; j < measurementL.length; j++) {				    
+					field = measurementL[j];
+					
+					if (data.measurement[field] != null) {
+					    copyDict['measurement' + field] = (data.measurement[field].value || "");
+					    copyDict['measurement' + field + 'unit'] = (data.measurement[field].unit || "");
+					    copyDict['measurement' + field + 'text'] = (getSpanFromField(data.measurement[field]) || "");
+					}
+				    }
+				}
+			    }
+
+			    // dose information
                             if (material.drug1Dose != null) {
                                 copyDict["drug1dose"] = (material.drug1Dose.value || "")
                                 copyDict["drug1formulation"] = (material.drug1Dose.formulation || "")
@@ -290,13 +337,18 @@ module.exports = function(app, passport) {
                                 copyDict["drug2duration"] = (material.drug2Dose.duration || "")
                                 copyDict["drug2regimens"] = (material.drug2Dose.regimens || "")
                                 copyDict["drug2dosetext"] = (getSpanFromField(material.drug2Dose) || "")
-                            }                                 
-                            if (material.phenotype != null) {
-                                copyDict["phenotypetype"] = material.phenotype.type || "";
-                                copyDict["phenotypevalue"] = material.phenotype.typeVal || "";
-                                copyDict["phenotypemetabolizer"] = material.phenotype.metabolizer || "";
-                                copyDict["phenotypepopulation"] = material.phenotype.population || "";
-                            }                      
+                            }
+
+			    // Phenotype clinical study only fields
+			    if (mpmethod == "Phenotype clinical study") {
+				if (material.phenotype != null) {
+                                    copyDict["phenotypetype"] = material.phenotype.type || "";
+                                    copyDict["phenotypevalue"] = material.phenotype.typeVal || "";
+                                    copyDict["phenotypemetabolizer"] = material.phenotype.metabolizer || "";
+                                    copyDict["phenotypepopulation"] = material.phenotype.population || "";
+				}
+			    }
+
                             resultsL.push(copyDict);
                         }
                     } else {
@@ -304,7 +356,6 @@ module.exports = function(app, passport) {
                     }
                 }
 
-                console.log(resultsL.length);
                 csvTxt = utilcsv.toCsv(resultsL, '"', '\t');
 
 		        res.attachment('annotations-'+req.query.email+'.csv');
