@@ -206,13 +206,15 @@ module.exports = function(app, passport) {
 	// var url_all = config.protocal + "://" + config.store.host + ":" + config.store.port + "/search?email=" + req.query.email + "&annotationType=" + config.profile.def;
 
 	// export all annotations (inclusing other users)
-        var url_all = config.protocal + "://" + config.store.host + ":" + config.store.port + "/search?annotationType=" + config.profile.def;
+        // var url_all = config.protocal + "://" + config.store.host + ":" + config.store.port + "/search?annotationType=" + config.profile.def;
+	var url_all = "http://" + config.store.host + ":" + config.store.port + "/search?annotationType=" + config.profile.def;
 	
 	// var url = "http://apache2/PMC/PMC1459289.html"; // works
 	// var url = "http://annotator-store:5000/search?annotationType=" + config.profile.def; // works
 	// var url = "http://apache2/annotatorstore"; // not works
 
 	request({url: url_all, json: true, followAllRedirects: true, "rejectUnauthorized": false}, function(error,response,body){
+	    console.log(url_all);
 	    
 	    if (!error && (response.statusCode === 200 || response.statusCode ===302)) {
 		console.log(url_all);
