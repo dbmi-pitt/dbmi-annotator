@@ -61,44 +61,44 @@ module.exports = function(app, passport) {
             annotationType = config.profile.userProfile.type;
         } else {
             annotationType = config.profile.def;
-        }
-        
-	    // fetch all DDI annotations for current user
-	    var url = config.protocal + "://" + config.apache2.host +":" + config.apache2.port + "/annotatorstore/search?email=" + req.user.email + "&annotationType=" + annotationType;
-
+        }        
+	
         //loading csv file
         var content = loadArticleList();
-
-		res.render('main.ejs', {
-		    user : req.user,
-		    annotations : [],
+	
+	res.render('main.ejs', {
+	    user : req.user,
+	    annotations : [],
             article: content,
-		    exportMessage : req.flash('exportMessage'),
-		    loadMessage : req.flash('loadMessage'),
-		    host : config.annotator.host
-		});
-
-	    // request({url: url, json: true}, function(error,response,body){
-	    //     if (!error && response.statusCode === 200) {
-		        
-		//         res.render('main.ejs', {
-		//             user : req.user,
-		//             annotations : body,
-		//             exportMessage : req.flash('exportMessage'),
-		//             loadMessage : req.flash('loadMessage'),
-		//             host : config.annotator.host,
-		//         });
-		        
-	    //     } else {
-		//         res.render('main.ejs', {
-		//             user : req.user,
-		//             annotations : {'total':0},
-		//             exportMessage: req.flash('exportMessage'),
-		//             loadMessage: req.flash('loadMessage'),
-		//             host: config.annotator.host,
-		//         });
-	    //     }
-	    // });
+	    exportMessage : req.flash('exportMessage'),
+	    loadMessage : req.flash('loadMessage'),
+	    host : config.annotator.host
+	});
+	
+	// fetch all DDI annotations for current user
+	// var user_url = config.protocal + "://" + config.apache2.host +":" + config.apache2.port + "/annotatorstore/search?email=" + req.user.email + "&annotationType=" + annotationType;
+	
+	// request({url: user_url, json: true}, function(error,response,body){
+	//     if (!error && response.statusCode === 200) {
+	
+	//         res.render('main.ejs', {
+	//             user : req.user,
+	//             annotations : body,
+	//             exportMessage : req.flash('exportMessage'),
+	//             loadMessage : req.flash('loadMessage'),
+	//             host : config.annotator.host,
+	//         });
+	
+	//     } else {
+	//         res.render('main.ejs', {
+	//             user : req.user,
+	//             annotations : {'total':0},
+	//             exportMessage: req.flash('exportMessage'),
+	//             loadMessage: req.flash('loadMessage'),
+	//             host: config.annotator.host,
+	//         });
+	//     }
+	// });
     });
     
     // LOGOUT ==============================
@@ -110,30 +110,29 @@ module.exports = function(app, passport) {
     });
 
     // DISPLAY ==============================
-    app.get('/dbmiannotator/displayWebPage', isLoggedIn, praseWebContents, function(req, res) {
+    app.get('/dbmiannotator/displayWebPage', isLoggedIn, parseWebContents, function(req, res) {
 	
-	    var sourceUrl = req.query.sourceURL.trim();
+	var sourceUrl = req.query.sourceURL.trim();
         console.log(sourceUrl);
-	    var email = req.query.email;
-	    var validUrl = require('valid-url');
-
-	    if (validUrl.isUri(sourceUrl)){
-		    
-		    if (sourceUrl.match(/\.pdf/g)){ // local pdf resouces
+	var email = req.query.email;
+	var validUrl = require('valid-url');
+	
+	if (validUrl.isUri(sourceUrl)){
+	    
+	    if (sourceUrl.match(/\.pdf/g)){ // local pdf resouces
                 console.log("load pdf");
-		        res.redirect("/dbmiannotator/viewer.html?file=" + sourceUrl+"&email=" + email); 
-		    } else if (sourceUrl.match(/localhost.*html/g)) { 		    
+		res.redirect("/dbmiannotator/viewer.html?file=" + sourceUrl+"&email=" + email); 
+	    } else if (sourceUrl.match(/localhost.*html/g)) { 		    
                 res.render('displayWebPage.ejs', {
-			        htmlsource: req.htmlsource,
-			        pluginSetL: config.profile.pluginSetL,
-			        userProfile: config.profile.userProfile
+		    htmlsource: req.htmlsource,
+		    pluginSetL: config.profile.pluginSetL,
+		    userProfile: config.profile.userProfile
                 });   
-	        } else {
-		        req.flash('loadMessage', 'The url you just entered is not valid!');
-		        res.redirect('/dbmiannotator/main');
-		    }
-		    
-	    }
+	    } else {
+		req.flash('loadMessage', 'The url you just entered is not valid!');
+		res.redirect('/dbmiannotator/main');
+	    }	    
+	}
     });
     
     
@@ -197,23 +196,31 @@ module.exports = function(app, passport) {
 	        } else {
 		        res.redirect('/dbmiannotator/main');		        
 	        }	
-	    });	    	    
+	    });
+	
     });        
 
     // EXPORT TO CSV ==============================
     app.get('/dbmiannotator/exportcsv', isLoggedIn, function(req, res){
 	// export current user's annotation
-	//var url = config.protocal + "://" + config.apache2.host + ":" + config.apache2.port + "/annotatorstore/search?email=" + req.query.email + "&annotationType=" + config.profile.def;
+	// var url_all = config.protocal + "://" + config.store.host + ":" + config.store.port + "/search?email=" + req.query.email + "&annotationType=" + config.profile.def;
 
 	// export all annotations (inclusing other users)
-        var url = config.protocal + "://" + config.apache2.host + ":" + config.apache2.port + "/annotatorstore/search?annotationType=" + config.profile.def;
-	    
-	    request({url: url, json: true, followAllRedirects: true, "rejectUnauthorized": false}, function(error,response,body){            
-	        if (!error && (response.statusCode === 200 || response.statusCode ===302)) {
-                var jsonObjs = body.rows;
+        var url_all = config.protocal + "://" + config.store.host + ":" + config.store.port + "/search?annotationType=" + config.profile.def;
+	
+	// var url = "http://apache2/PMC/PMC1459289.html"; // works
+	// var url = "http://annotator-store:5000/search?annotationType=" + config.profile.def; // works
+	// var url = "http://apache2/annotatorstore"; // not works
 
+	request({url: url_all, json: true, followAllRedirects: true, "rejectUnauthorized": false}, function(error,response,body){
+	    
+	    if (!error && (response.statusCode === 200 || response.statusCode ===302)) {
+		console.log(url_all);
+		
+                var jsonObjs = body.rows;
+		
                 res.attachment('annotations-'+req.query.email+'.csv');
-		        res.setHeader('Content-Type', 'text/csv');
+		res.setHeader('Content-Type', 'text/csv');
                 resultsL = [];
 
                 for (var i = 0; i < jsonObjs.length; i++) {
@@ -358,16 +365,17 @@ module.exports = function(app, passport) {
 
                 csvTxt = utilcsv.toCsv(resultsL, '"', '\t');
 
-		        res.attachment('annotations-'+req.query.email+'.csv');
-		        res.setHeader('Content-Type', 'text/csv');
-		        res.end(csvTxt);                                              
+		res.attachment('annotations-'+req.query.email+'.csv');
+		res.setHeader('Content-Type', 'text/csv');
+		res.end(csvTxt);          
+                
 		        
-	        } else {
-		        //req.flash('exportMessage', 'exported failed, annotation fetch exception, please see logs or contact Yifan at yin2@pitt.edu!');
-                console.log(error);
-		        res.redirect('/dbmiannotator/main');		        
-	        }	
-	    });	    	    
+	    } else {
+	    	//req.flash('exportMessage', 'exported failed, annotation fetch exception, please see logs or contact Yifan at yin2@pitt.edu!');
+	    	console.log("export csv - error:");
+                console.log(error);	        
+	    }	
+	});
     });        
 };
 
@@ -384,7 +392,7 @@ function getSpanFromField(field) {
 // MIDDLE WARE FUNCTIONS ==============================
 
 // parse web contents from url
-function praseWebContents(req, res, next){
+function parseWebContents(req, res, next){
     var sourceUrl = req.query.sourceURL.trim();
 
     console.log("[DEBUG] parseWebContents");
@@ -395,13 +403,15 @@ function praseWebContents(req, res, next){
             sourceUrl = sourceUrl.replace("localhost", process.env.APACHE2_HOST);
 
         request(sourceUrl, function(err, res, body){
+	    console.log(sourceUrl);
 
             if (err){
                 console.log(err);
                 console.log(res);
                 return;
             }             
-
+	    console.log("status code:" + res.statusCode);
+	    
             // skip tidy beacuse changing of char encoding
             labelDecode = body.replace(/&amp;/g,'&').replace(/&nbsp;/g,' ');   
             req.htmlsource = labelDecode;
