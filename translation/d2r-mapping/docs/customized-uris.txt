@@ -1,0 +1,142 @@
+######################################################################################
+DIDEO TERMS
+######################################################################################
+
+1. interact_with
+
+Evidence base:
+used for the predicate in any scientific claim that relates one drug to another using "interacts with"
+
+DIDEO:
+URI: http://purl.obolibrary.org/obo/DIDEO_00000015
+Term: metabolic potential drug-drug interaction
+Definition: A potential drug drug interaction that is about a drug metabolism.
+
+2. drug product and active ingredient
+
+Evidence base:
+used for any drug product that is used in scientific claims that
+relate a drug to another drug or enzyme. We tend to think of these as
+"active ingredients" but in DIDEO, "active ingredient" is a role not a
+material entity.
+
+DIDEO:
+URI: http://purl.obolibrary.org/obo/DRON_00000005
+Term: drug product
+Definition: a material entity (1) containing at least one scattered molecular aggregate as part (the active ingredient) and (2) that is the bearer of a clinical drug role
+
+3. enzyme:
+
+Evidence base:
+This would used to specify a specific enzyme when annotating evidence
+for or against various claims where an enzyme is a part of the claim.
+
+DIDEO:
+URI: http://purl.obolibrary.org/obo/OBI_0000427
+Term: enzyme
+Definition: (protein or rna) or has_part (protein or rna) and has_function some GO:0003824 (catalytic activity)
+
+4. precipitant and object 
+
+Evidence base:
+drug role as precipitant or object that involved in a potential drug drug interaction. 
+The role precipitant and object is exclusive relation.
+
+precipitant
+URI: http://purl.obolibrary.org/obo/DIDEO_00000013
+Term: precipitant drug role
+Definition: The role that inheres in a drug product or drug ingredient that is realized by affecting another drug pharmacokinetically or pharmacodynamically in a drug drug interaction.
+
+object
+URI: http://purl.obolibrary.org/obo/DIDEO_00000012
+Term: object drug role
+Definition: The role that inheres in a drug product or drug ingredient and that is realized by being affected by another drug pharmacokinetically or pharmacodynamically in a drug drug interaction.
+
+5. auc, cmax, clearance, halflife ratio
+
+Evidence base: auc, cmax, clearance, halflife ratio data captured in article
+
+auc: 
+URI: http://purl.obolibrary.org/obo/DIDEO_00000093 
+Term: area under the curve ratio
+Definition: 
+Alternative Term: AUC ratio
+
+cmax: 
+URI: http://purl.obolibrary.org/obo/DIDEO_00000099
+Term: drug maximum concentration ratio
+Definition: A pharmacokinetic parameter ratio that describes the relation between the drug maximum concentration measurements for a given active ingredient or metabolite in an organism with and without the inhibiting drug present in the organism.
+Alternative Term: Cmax ratio
+
+clearance
+URI: http://purl.obolibrary.org/obo/DIDEO_00000101
+Term: hepatic clearance ratio
+Definition: A pharmacokinetic parameter ratio that describes the relation between the measurement of the volume of blood, serum, or plasma from which an active ingredient or a metabolite is completely removed by the liver in a given amount of time in an organism with and without the inhibiting drug present in the organism.
+Alternative Term: CL_H ratio
+
+halflife
+URI: http://purl.obolibrary.org/obo/DIDEO_00000100 
+Term: half-life ratio
+Definition: A pharmacokinetic parameter ratio that describes the relation between the time it takes for half of a given active ingredient or metabolite to be removed from the system of an organism with and without the inhibiting drug present in the organism.
+Alternative Term: t1/2 ratio
+
+6. phenotype and genotype
+
+Evidence base: For scientific claim with evidence type as phenotype clinical trial, the
+
+phenotype
+URI: http://purl.obolibrary.org/obo/DIDEO_00000103
+Term: evidence information from phenotyped pharmacokinetic trial
+Definition: An evidence information content entity that is about a clinical drug trial that focusses on pharmacokinetics and that has organisms as participants that participated in phenotyping.
+Alternative Term: EV_CT_PK_Phenotype
+
+genotype
+URI: http://purl.obolibrary.org/obo/DIDEO_00000076
+Term: evidence information from genotyped pharmacokinetic trial
+Definition: An evidence information content entity that is about a clinical drug trial that focusses on pharmacokinetics and that has organisms as participants that participated in genotyping.
+Alternative Term: EV_CT_PK_Genotype
+
+######################################################################################
+PREDICATES
+######################################################################################
+
+Terms in ontology:
+has specified value: http://purl.obolibrary.org/obo/OBI_0001937
+
+has part: http://purl.obolibrary.org/obo/BFO_0000051
+
+is about: http://purl.obolibrary.org/obo/IAO_0000136
+
+bearer of: http://purl.obolibrary.org/obo/RO_0000053​
+
+has measurement unit label: http://purl.obolibrary.org/obo/IAO_0000039
+the label should be 'has measurement unit label'
+
+has proper part -> has part
+http://purl.obolibrary.org/obo/BFO_0000051
+
+has member http://purl.obolibrary.org/obo/RO_0002351). The decision to use that for DIDEO was made and is valid.
+
+
+######################################################################################
+PROTEIN & GENE
+######################################################################################
+Enzyme/Protein
+update enzyme set concept_id = 4312402 where name = 'CYP1A2';
+
+update enzyme set concept_id = 4309826 where name = 'CYP2A6'; 
+
+update enzyme set concept_id = 4308333 where name = 'CYP2B6'; 
+
+update enzyme set concept_id = 4306333 where name = 'CYP2C8'; 
+
+update enzyme set concept_id = 4309227 where name = 'CYP2C9'; 
+
+update enzyme set concept_id = 4311137 where name = 'CYP2C19'; 
+
+update enzyme set concept_id = 4173631 where name = 'CYP2D6'; 
+
+update enzyme set concept_id = 4173608 where name = 'CYP2E1'; 
+
+SLCO1B1
+http://purl.obolibrary.org/obo/PR_000015223 

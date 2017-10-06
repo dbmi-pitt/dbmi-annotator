@@ -12,8 +12,8 @@ CREATE TABLE rdf_mp_claim_qualifier AS
 SELECT 
 mp_claim_id, mp_data_index, method, precipitant, p_concept_code, p_role_concept_code, object, o_concept_code, o_role_concept_code, uuid_generate_v4() as asrt_description_urn, 
 uuid_generate_v4() as p_bearer_role_urn, uuid_generate_v4() as o_bearer_role_urn, uuid_generate_v4() as p_drug_role_urn, uuid_generate_v4() as o_drug_role_urn, uuid_generate_v4() as method_urn, 
-uuid_generate_v4() as p_scattered_molecular_aggregate_urn, uuid_generate_v4() as p_active_ingredient_urn, uuid_generate_v4() as p_drug_urn, uuid_generate_v4() as p_mass_urn, uuid_generate_v4() as p_milligram_urn, 
-uuid_generate_v4() as o_scattered_molecular_aggregate_urn, uuid_generate_v4() as o_active_ingredient_urn, uuid_generate_v4() as o_drug_urn, uuid_generate_v4() as o_mass_urn, uuid_generate_v4() as o_milligram_urn
+uuid_generate_v4() as p_scattered_molecular_aggregate_urn, uuid_generate_v4() as p_active_ingredient_urn, uuid_generate_v4() as p_drug_urn, uuid_generate_v4() as p_value_measurement_urn, uuid_generate_v4() as p_value_specification_urn, uuid_generate_v4() as p_mass_urn, uuid_generate_v4() as p_milligram_urn, 
+uuid_generate_v4() as o_scattered_molecular_aggregate_urn, uuid_generate_v4() as o_active_ingredient_urn, uuid_generate_v4() as o_drug_urn, uuid_generate_v4() as o_value_measurement_urn, uuid_generate_v4() as o_value_specification_urn, uuid_generate_v4() as o_mass_urn, uuid_generate_v4() as o_milligram_urn
 FROM (
 WITH method AS (
 SELECT mp_claim_id, mp_data_index, m.entered_value as method from method m),
@@ -74,3 +74,13 @@ JOIN m_field on m_ann.has_body = m_field.body_id
 AND m_ann.mp_claim_id = '1800' -- specify one claim for demo purpose, comment for all claims
 ;
 
+-- Truncate tables ----------------------------------------------------------------
+TRUNCATE TABLE ohdsi.rdf_mp_claim_qualifier;
+TRUNCATE TABLE ohdsi.rdf_mp_data;
+TRUNCATE TABLE ohdsi.rdf_mp_material;
+
+
+-- Drop tables ----------------------------------------------------------------
+DROP TABLE ohdsi.rdf_mp_claim_qualifier;
+DROP TABLE ohdsi.rdf_mp_data;
+DROP TABLE ohdsi.rdf_mp_material;
