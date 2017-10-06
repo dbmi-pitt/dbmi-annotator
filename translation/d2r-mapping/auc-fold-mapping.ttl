@@ -103,18 +103,18 @@ map:precipitant_scattered_has_member a d2rq:PropertyBridge;
     d2rq:uriSqlExpression "CONCAT('http://dikb.org/precipitant-drug/', ohdsi.rdf_mp_claim_qualifier.p_drug_urn)"; 
     .
 
-## bearer_of: PrecipitantActiveIngredient
+## is bearer_of: PrecipitantActiveIngredient
 map:precipitant_scattered_bearer_of_active_ingredient a d2rq:PropertyBridge;
     d2rq:belongsToClassMap map:PrecipitantScatteredMolecularAggregate;
     d2rq:property obo:RO_0000053; 
     d2rq:uriSqlExpression "CONCAT('http://dikb.org/precipitant-active-ingredient/', ohdsi.rdf_mp_claim_qualifier.p_active_ingredient_urn)"; 
     .
 
-## bearer of: precipitant mass
-map:precipitant_scattered_beaer_of a d2rq:PropertyBridge;
+## is bearer of: ValueMeasurement
+map:precipitant_scattered_beaer_of_value_measurement a d2rq:PropertyBridge;
     d2rq:belongsToClassMap map:PrecipitantScatteredMolecularAggregate;
     d2rq:property obo:RO_0000053; 
-    d2rq:uriSqlExpression "CONCAT('http://dikb.org/precipitant-mass/', ohdsi.rdf_mp_claim_qualifier.p_mass_urn)"; 
+    d2rq:uriSqlExpression "CONCAT('http://dikb.org/precipitant-value-measurement-datum/', ohdsi.rdf_mp_claim_qualifier.p_value_measurement_urn)"; 
     .
 
 ## Class Precipitant ################################################################
@@ -136,7 +136,51 @@ map:PrecipitantActiveIngredient a d2rq:ClassMap;
     d2rq:class obo:DRON_00000028; ## active ingredient 
     d2rq:dataStorage map:database;
     .
-    
+
+## Class Precipitant ValueMeasurement ###############################################
+map:PrecipitantValueMeasurement a d2rq:ClassMap;
+    d2rq:uriPattern "http://dikb.org/precipitant-value-measurement-datum/@@ohdsi.rdf_mp_claim_qualifier.p_value_measurement_urn@@";
+    d2rq:class obo:IAO_0000109; ## value measurement datum 
+    d2rq:dataStorage map:database;
+    .
+
+## is quality measurement of: Mass
+map:precipitant_value_measurement_is_quality_measurement_of a d2rq:PropertyBridge;
+    d2rq:belongsToClassMap map:PrecipitantValueMeasurement;
+    d2rq:property obo:TEMP_IS_QUALITY_MEASUREMENT_OF; ## is quality measurement of
+    d2rq:uriSqlExpression "CONCAT('http://dikb.org/precipitant-mass/', ohdsi.rdf_mp_claim_qualifier.p_mass_urn)"; 
+    .
+
+## has value specification: ValueSpecification
+map:precipitant_value_measurement_has_value_specification a d2rq:PropertyBridge;
+    d2rq:belongsToClassMap map:PrecipitantValueMeasurement;
+    d2rq:property obo:OBI_0001937; ## has value specification 
+    d2rq:uriSqlExpression "CONCAT('http://dikb.org/precipitant-value-specification/', ohdsi.rdf_mp_claim_qualifier.p_value_specification_urn)"; 
+    .
+
+## Class Precipitant ValueSpecification ############################################
+map:PrecipitantValueSpecification a d2rq:ClassMap;
+    d2rq:uriPattern "http://dikb.org/precipitant-value-specification/@@ohdsi.rdf_mp_claim_qualifier.p_value_specification_urn@@";
+    d2rq:class obo:OBI_0001933; 
+    d2rq:dataStorage map:database;
+    .
+
+## has measurement unit label: Milligram
+map:precipitant_value_specification_has_measurement_unit_label a d2rq:PropertyBridge;
+    d2rq:belongsToClassMap map:PrecipitantValueSpecification;
+    d2rq:property obo:IAO_0000039; ## has measurement unit label 
+    d2rq:uriSqlExpression "CONCAT('http://dikb.org/precipitant-milligram/', ohdsi.rdf_mp_claim_qualifier.p_milligram_urn)"; 
+    .
+
+## has specified value
+map:precipitant_value_specification_has_specified_value a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:PrecipitantValueSpecification;
+	d2rq:property obo:OBI_0001937; 
+    	d2rq:column "ohdsi.rdf_mp_material.value";
+    	d2rq:join "ohdsi.rdf_mp_claim_qualifier.mp_claim_id <= ohdsi.rdf_mp_material.mp_claim_id";
+    	d2rq:join "ohdsi.rdf_mp_claim_qualifier.mp_data_index <= ohdsi.rdf_mp_material.mp_data_index";
+    	d2rq:condition "ohdsi.rdf_mp_material.material_type = 'precipitant_dose'";
+    .	
 
 ## Class Precipitant Mass ###########################################################
 map:PrecipitantMass a d2rq:ClassMap;
@@ -145,29 +189,13 @@ map:PrecipitantMass a d2rq:ClassMap;
     d2rq:dataStorage map:database;
     .
 
-## Precipitant Mass has_specified_value
-map:precipitant_mass_has_specified_value a d2rq:PropertyBridge;
-    d2rq:belongsToClassMap map:PrecipitantMass;
-    d2rq:property obo:OBI_0001937; 
-    d2rq:column "ohdsi.rdf_mp_material.value";
-    d2rq:join "ohdsi.rdf_mp_claim_qualifier.mp_claim_id <= ohdsi.rdf_mp_material.mp_claim_id";
-    d2rq:join "ohdsi.rdf_mp_claim_qualifier.mp_data_index <= ohdsi.rdf_mp_material.mp_data_index";
-    d2rq:condition  "ohdsi.rdf_mp_material.material_type = 'precipitant_dose'";
-    .
-
-## Precipitant Mass has_measurement_unit
-map:precipiant_mass_has_measurement_unit a d2rq:PropertyBridge;
-	d2rq:belongsToClassMap map:PrecipitantMass;
-	d2rq:property obo:IAO_0000039; # has_measurement_unit
-    d2rq:uriSqlExpression "CONCAT('http://dikb.org/precipitant-milligram/', ohdsi.rdf_mp_claim_qualifier.p_milligram_urn)"; 
-    .
-
-## Class Precipitant Milligram
+## Class Precipitant Milligram ######################################################
 map:PrecipitantMilligram a d2rq:ClassMap;
     d2rq:uriPattern "http://dikb.org/precipitant-milligram/@@ohdsi.rdf_mp_claim_qualifier.p_milligram_urn@@";
     d2rq:class obo:UO_0000022; ## mass 
     d2rq:dataStorage map:database;
     .
+    
 #####################################################################################
 # Class Bearer of object drug role 
 #####################################################################################
@@ -184,21 +212,22 @@ map:object_bearer_role_of a d2rq:PropertyBridge;
     d2rq:uriSqlExpression "CONCAT('http://dikb.org/object-drug-role/', ohdsi.rdf_mp_claim_qualifier.o_drug_role_urn)"; 
     .
 
-## has_part object scattered molecular aggregate
+## has_part scattered molecular aggregate
 map:object_bearer_of a d2rq:PropertyBridge;
 	d2rq:belongsToClassMap map:BearerObjectRole;
 	d2rq:property obo:BFO_0000051; 
     d2rq:uriSqlExpression "CONCAT('http://dikb.org/o-scattered-molecular-aggregate/', ohdsi.rdf_mp_claim_qualifier.o_scattered_molecular_aggregate_urn)"; 
     .
 
-## Class Object drug role ###########################################################
+## Class Object drug role ######################################################
 map:ObjectRole a d2rq:ClassMap;
     d2rq:uriPattern "http://dikb.org/object-drug-role/@@ohdsi.rdf_mp_claim_qualifier.o_drug_role_urn@@";
-    d2rq:class obo:DIDEO_00000012; ## object role
+    d2rq:class obo:DIDEO_00000013; ## object role
+    #d2rq:classDefinitionLabel "object drug role"@en;
     d2rq:dataStorage map:database;
     .
 
-## Class Object scattered molecular aggregate #######################################
+## Class Object scattered molecular aggregate ##################################
 map:ObjectScatteredMolecularAggregate a d2rq:ClassMap;
     d2rq:uriPattern "http://dikb.org/o-scattered-molecular-aggregate/@@ohdsi.rdf_mp_claim_qualifier.o_scattered_molecular_aggregate_urn@@";
     d2rq:class obo:OBI_0000576; ## scattered molecular aggregate 
@@ -212,21 +241,21 @@ map:object_scattered_has_member a d2rq:PropertyBridge;
     d2rq:uriSqlExpression "CONCAT('http://dikb.org/object-drug/', ohdsi.rdf_mp_claim_qualifier.o_drug_urn)"; 
     .
 
-## bearer_of: ObjectActiveIngredient
+## is bearer_of: ObjectActiveIngredient
 map:object_scattered_bearer_of_active_ingredient a d2rq:PropertyBridge;
-	d2rq:belongsToClassMap map:ObjectScatteredMolecularAggregate;
-	d2rq:property obo:RO_0000053; 
+    d2rq:belongsToClassMap map:ObjectScatteredMolecularAggregate;
+    d2rq:property obo:RO_0000053; 
     d2rq:uriSqlExpression "CONCAT('http://dikb.org/object-active-ingredient/', ohdsi.rdf_mp_claim_qualifier.o_active_ingredient_urn)"; 
     .
 
-## bearer of: object mass
-map:object_scattered_beaer_of_mass a d2rq:PropertyBridge;
-	d2rq:belongsToClassMap map:ObjectScatteredMolecularAggregate;
-	d2rq:property obo:RO_0000053; 
-    d2rq:uriSqlExpression "CONCAT('http://dikb.org/object-mass/', ohdsi.rdf_mp_claim_qualifier.o_mass_urn)"; 
+## is bearer of: ValueMeasurement
+map:object_scattered_beaer_of_value_measurement a d2rq:PropertyBridge;
+    d2rq:belongsToClassMap map:ObjectScatteredMolecularAggregate;
+    d2rq:property obo:RO_0000053; 
+    d2rq:uriSqlExpression "CONCAT('http://dikb.org/object-value-measurement-datum/', ohdsi.rdf_mp_claim_qualifier.o_value_measurement_urn)"; 
     .
 
-## Class Object drug ################################################################
+## Class Object ################################################################
 map:ObjectItem a d2rq:ClassMap;
     d2rq:uriPattern "http://dikb.org/object-drug/@@ohdsi.rdf_mp_claim_qualifier.o_drug_urn@@";
     d2rq:dataStorage map:database;
@@ -239,43 +268,72 @@ map:object_item_rdf_type a d2rq:PropertyBridge;
     d2rq:uriSqlExpression "CONCAT('http://purl.bioontology.org/ontology/RXNORM/', ohdsi.rdf_mp_claim_qualifier.o_concept_code)"; 
     .
 
-## Class Object Active Ingredient ###################################################
+## Class Object Active Ingredient ##############################################
 map:ObjectActiveIngredient a d2rq:ClassMap;
     d2rq:uriPattern "http://dikb.org/object-active-ingredient/@@ohdsi.rdf_mp_claim_qualifier.o_active_ingredient_urn@@";
     d2rq:class obo:DRON_00000028; ## active ingredient 
     d2rq:dataStorage map:database;
     .
-    
-## Class Object Mass ################################################################
+
+## Class Object ValueMeasurement ###############################################
+map:ObjectValueMeasurement a d2rq:ClassMap;
+    d2rq:uriPattern "http://dikb.org/object-value-measurement-datum/@@ohdsi.rdf_mp_claim_qualifier.o_value_measurement_urn@@";
+    d2rq:class obo:IAO_0000109; ## value measurement datum 
+    d2rq:dataStorage map:database;
+    .
+
+## is quality measurement of: Mass
+map:object_value_measurement_is_quality_measurement_of a d2rq:PropertyBridge;
+    d2rq:belongsToClassMap map:ObjectValueMeasurement;
+    d2rq:property obo:TEMP_IS_QUALITY_MEASUREMENT_OF; ## is quality measurement of
+    d2rq:uriSqlExpression "CONCAT('http://dikb.org/object-mass/', ohdsi.rdf_mp_claim_qualifier.o_mass_urn)"; 
+    .
+
+## has value specification: ValueSpecification
+map:object_value_measurement_has_value_specification a d2rq:PropertyBridge;
+    d2rq:belongsToClassMap map:ObjectValueMeasurement;
+    d2rq:property obo:OBI_0001937; ## has value specification 
+    d2rq:uriSqlExpression "CONCAT('http://dikb.org/object-value-specification/', ohdsi.rdf_mp_claim_qualifier.o_value_specification_urn)"; 
+    .
+
+## Class Object ValueSpecification ############################################
+map:ObjectValueSpecification a d2rq:ClassMap;
+    d2rq:uriPattern "http://dikb.org/object-value-specification/@@ohdsi.rdf_mp_claim_qualifier.o_value_specification_urn@@";
+    d2rq:class obo:OBI_0001933; 
+    d2rq:dataStorage map:database;
+    .
+
+## has measurement unit label: Milligram
+map:object_value_specification_has_measurement_unit_label a d2rq:PropertyBridge;
+    d2rq:belongsToClassMap map:ObjectValueSpecification;
+    d2rq:property obo:IAO_0000039; ## has measurement unit label 
+    d2rq:uriSqlExpression "CONCAT('http://dikb.org/object-milligram/', ohdsi.rdf_mp_claim_qualifier.o_milligram_urn)"; 
+    .
+
+## has specified value
+map:object_value_specification_has_specified_value a d2rq:PropertyBridge;
+	d2rq:belongsToClassMap map:ObjectValueSpecification;
+	d2rq:property obo:OBI_0001937; 
+    	d2rq:column "ohdsi.rdf_mp_material.value";
+    	d2rq:join "ohdsi.rdf_mp_claim_qualifier.mp_claim_id <= ohdsi.rdf_mp_material.mp_claim_id";
+    	d2rq:join "ohdsi.rdf_mp_claim_qualifier.mp_data_index <= ohdsi.rdf_mp_material.mp_data_index";
+    	d2rq:condition "ohdsi.rdf_mp_material.material_type = 'object_dose'";
+    .	
+
+## Class Object Mass ###########################################################
 map:ObjectMass a d2rq:ClassMap;
     d2rq:uriPattern "http://dikb.org/object-mass/@@ohdsi.rdf_mp_claim_qualifier.o_mass_urn@@";
     d2rq:class obo:PATO_0000125; ## mass 
     d2rq:dataStorage map:database;
     .
 
-## has_specified_value
-map:object_has_specified_value a d2rq:PropertyBridge;
-    d2rq:belongsToClassMap map:ObjectMass;
-    d2rq:property obo:OBI_0001937; 
-    d2rq:column "ohdsi.rdf_mp_material.value";
-    d2rq:join "ohdsi.rdf_mp_claim_qualifier.mp_claim_id <= ohdsi.rdf_mp_material.mp_claim_id";
-    d2rq:join "ohdsi.rdf_mp_claim_qualifier.mp_data_index <= ohdsi.rdf_mp_material.mp_data_index";
-    d2rq:condition "ohdsi.rdf_mp_material.material_type = 'object_dose'";
-    .
-
-## has_measurement_unit Object Milligram
-map:object_mass_has_measurement_unit a d2rq:PropertyBridge;
-	d2rq:belongsToClassMap map:ObjectMass;
-	d2rq:property obo:IAO_0000039; # has_measurement_unit
-    d2rq:uriSqlExpression "CONCAT('http://dikb.org/object-milligram/', ohdsi.rdf_mp_claim_qualifier.o_mass_urn)"; 
-    .
-
-## Class Object Milligram ###########################################################
+## Class Object Milligram ######################################################
 map:ObjectMilligram a d2rq:ClassMap;
     d2rq:uriPattern "http://dikb.org/object-milligram/@@ohdsi.rdf_mp_claim_qualifier.o_milligram_urn@@";
     d2rq:class obo:UO_0000022; ## mass 
     d2rq:dataStorage map:database;
     .
+
 
 #####################################################################################
 # Class Data Ratio Item

@@ -31,7 +31,7 @@ Reference: http://d2rq.org/dump-rdf
 ./dump-rdf -f RDF/XML -o mpevidence.rdf --verbose <path to translation/d2r-mapping/auc-fold-mapping.ttl>
 
 Count instances of claim in RDF graph for validation
-grep -r "rdf:Description rdf:about=\"http://dikb.org/mpevidence/mp_claim_annotation" mpevidence.rdf 
+grep -r "assertion" mpevidence.rdf 
 
 -----------------------------------------------------------------------
 OWL merging
