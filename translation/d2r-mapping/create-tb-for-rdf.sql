@@ -11,9 +11,9 @@ CREATE EXTENSION tablefunc;
 CREATE TABLE rdf_mp_claim_qualifier AS 
 SELECT 
 mp_claim_id, mp_data_index, method, precipitant, p_concept_code, p_role_concept_code, object, o_concept_code, o_role_concept_code, uuid_generate_v4() as asrt_description_urn, 
-uuid_generate_v4() as p_bearer_role_urn, uuid_generate_v4() as o_bearer_role_urn, uuid_generate_v4() as p_drug_role_urn, uuid_generate_v4() as o_drug_role_urn, uuid_generate_v4() as method_urn, 
-uuid_generate_v4() as p_scattered_molecular_aggregate_urn, uuid_generate_v4() as p_active_ingredient_urn, uuid_generate_v4() as p_drug_urn, uuid_generate_v4() as p_value_measurement_urn, uuid_generate_v4() as p_value_specification_urn, uuid_generate_v4() as p_mass_urn, uuid_generate_v4() as p_milligram_urn, 
-uuid_generate_v4() as o_scattered_molecular_aggregate_urn, uuid_generate_v4() as o_active_ingredient_urn, uuid_generate_v4() as o_drug_urn, uuid_generate_v4() as o_value_measurement_urn, uuid_generate_v4() as o_value_specification_urn, uuid_generate_v4() as o_mass_urn, uuid_generate_v4() as o_milligram_urn
+uuid_generate_v4() as method_urn, 
+uuid_generate_v4() as p_bearer_role_urn, uuid_generate_v4() as p_drug_role_urn, uuid_generate_v4() as p_scattered_molecular_aggregate_urn, uuid_generate_v4() as p_active_ingredient_urn, uuid_generate_v4() as p_drug_urn, uuid_generate_v4() as p_value_measurement_urn, uuid_generate_v4() as p_value_specification_urn, uuid_generate_v4() as p_mass_urn, uuid_generate_v4() as p_milligram_urn, 
+uuid_generate_v4() as o_bearer_role_urn, uuid_generate_v4() as o_drug_role_urn, uuid_generate_v4() as o_scattered_molecular_aggregate_urn, uuid_generate_v4() as o_active_ingredient_urn, uuid_generate_v4() as o_drug_urn, uuid_generate_v4() as o_value_measurement_urn, uuid_generate_v4() as o_value_specification_urn, uuid_generate_v4() as o_mass_urn, uuid_generate_v4() as o_milligram_urn
 FROM (
 WITH method AS (
 SELECT mp_claim_id, mp_data_index, m.entered_value as method from method m),
@@ -37,7 +37,7 @@ from method
 JOIN p ON p.id = method.mp_claim_id
 JOIN o ON o.id = method.mp_claim_id
 WHERE method.method = 'DDI clinical trial'
-AND method.mp_claim_id = '1800' -- specify one claim for demo purpose, comment for all claims
+AND method.mp_claim_id = '53' -- specify one claim for demo purpose, comment for all claims
 ) AS tb;
 
 
@@ -49,7 +49,7 @@ FROM crosstab('SELECT df.data_body_id, df.data_field_type, df.value_as_string FR
 AS df(data_body_id INTEGER, direction TEXT, type TEXT, value TEXT)
 JOIN oa_data_body db ON df.data_body_id = db.id
 JOIN mp_data_annotation d ON db.id = d.has_body
-AND d.mp_claim_id = '1800' -- specify one claim for demo purpose, comment for all claims
+AND d.mp_claim_id = '53' -- specify one claim for demo purpose, comment for all claims
 WHERE d.type = 'auc' or d.type = 'cmax' or d.type = 'clearance' or d.type = 'halflife'
 );
 
@@ -71,7 +71,7 @@ OR material_type = 'object_dose')
 SELECT m_ann.mp_claim_id, m_ann.mp_data_index, m_ann.ev_supports, m_ann.material_type, m_field.drugname, m_field.value, m_field.duration, m_field.formulation, m_field.regimens
 FROM m_ann
 JOIN m_field on m_ann.has_body = m_field.body_id
-AND m_ann.mp_claim_id = '1800' -- specify one claim for demo purpose, comment for all claims
+AND m_ann.mp_claim_id = '53' -- specify one claim for demo purpose, comment for all claims
 ;
 
 -- Truncate tables ----------------------------------------------------------------
@@ -83,4 +83,4 @@ TRUNCATE TABLE ohdsi.rdf_mp_material;
 -- Drop tables ----------------------------------------------------------------
 DROP TABLE ohdsi.rdf_mp_claim_qualifier;
 DROP TABLE ohdsi.rdf_mp_data;
-DROP TABLE ohdsi.rdf_mp_material;
+DROP TABLE ohdsi.rdf_mp_material; 

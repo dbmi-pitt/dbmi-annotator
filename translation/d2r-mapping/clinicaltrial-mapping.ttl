@@ -17,8 +17,9 @@
 map:database a d2rq:Database;
     d2rq:jdbcDriver "org.postgresql.Driver";
     # d2rq:jdbcDSN "jdbc:postgresql://localhost/mpevidence?autoReconnect=true&user=<username>&password=<password>";
-    # d2rq:jdbcDSN "jdbc:postgresql://localhost/mpevidence?autoReconnect=true&user=&password=";   
+    d2rq:jdbcDSN "jdbc:postgresql://localhost/mpevidence?autoReconnect=true&user=dbmiannotator&password=dbmi2016";   
     .
+    
 #####################################################################################
 # Class Assertion description 
 #####################################################################################
@@ -147,7 +148,7 @@ map:PrecipitantValueMeasurement a d2rq:ClassMap;
 ## is quality measurement of: Mass
 map:precipitant_value_measurement_is_quality_measurement_of a d2rq:PropertyBridge;
     d2rq:belongsToClassMap map:PrecipitantValueMeasurement;
-    d2rq:property obo:TEMP_IS_QUALITY_MEASUREMENT_OF; ## is quality measurement of
+    d2rq:property obo:IAO_0000221; ## is quality measurement of
     d2rq:uriSqlExpression "CONCAT('http://dikb.org/precipitant-mass/', ohdsi.rdf_mp_claim_qualifier.p_mass_urn)"; 
     .
 
@@ -285,7 +286,7 @@ map:ObjectValueMeasurement a d2rq:ClassMap;
 ## is quality measurement of: Mass
 map:object_value_measurement_is_quality_measurement_of a d2rq:PropertyBridge;
     d2rq:belongsToClassMap map:ObjectValueMeasurement;
-    d2rq:property obo:TEMP_IS_QUALITY_MEASUREMENT_OF; ## is quality measurement of
+    d2rq:property obo:IAO_0000221; ## is quality measurement of
     d2rq:uriSqlExpression "CONCAT('http://dikb.org/object-mass/', ohdsi.rdf_mp_claim_qualifier.o_mass_urn)"; 
     .
 
@@ -350,9 +351,11 @@ map:DataRatio a d2rq:ClassMap;
 map:data_ratio_label a d2rq:PropertyBridge;
 	d2rq:belongsToClassMap map:DataRatio;
 	d2rq:property rdfs:label;
-    d2rq:join "ohdsi.rdf_mp_claim_qualifier.mp_claim_id <= ohdsi.rdf_mp_data.mp_claim_id";
-    d2rq:join "ohdsi.rdf_mp_claim_qualifier.mp_data_index <= ohdsi.rdf_mp_data.mp_data_index";
-    d2rq:pattern "@@ohdsi.rdf_mp_claim_qualifier.precipitant@@-@@ohdsi.rdf_mp_claim_qualifier.object@@ drug package @@ohdsi.rdf_mp_data.datatype@@ @@ohdsi.rdf_mp_data.direction@@ information"@en;
+   	d2rq:join "ohdsi.rdf_mp_claim_qualifier.mp_claim_id <= ohdsi.rdf_mp_data.mp_claim_id";
+        d2rq:join "ohdsi.rdf_mp_claim_qualifier.mp_claim_id => ohdsi.rdf_mp_data.mp_claim_id";
+    	d2rq:join "ohdsi.rdf_mp_claim_qualifier.mp_data_index <= ohdsi.rdf_mp_data.mp_data_index";
+        d2rq:join "ohdsi.rdf_mp_claim_qualifier.mp_data_index => ohdsi.rdf_mp_data.mp_data_index";
+    	d2rq:pattern "@@ohdsi.rdf_mp_claim_qualifier.precipitant@@-@@ohdsi.rdf_mp_claim_qualifier.object@@ drug package @@ohdsi.rdf_mp_data.datatype@@ @@ohdsi.rdf_mp_data.direction@@ information"@en;
     .
 
 ## is_specified_output_of Method
@@ -406,7 +409,7 @@ map:DataRatioTypeHasPart a d2rq:ClassMap;
 ## Class Method #####################################################################
 map:Method a d2rq:ClassMap;
     d2rq:uriPattern "http://dikb.org/method/@@ohdsi.rdf_mp_claim_qualifier.method_urn@@";
-    d2rq:class obo:TEMP_METHOD_CODE; ## temp code
+    d2rq:class obo:DIDEO_00000124; ## clinical trial
     d2rq:dataStorage map:database;
     .
 

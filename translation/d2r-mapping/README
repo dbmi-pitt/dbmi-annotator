@@ -1,11 +1,7 @@
 -----------------------------------------------------------------------
 Description
 -----------------------------------------------------------------------
-D2r server maps data in PostgreSQL to RDF via ttl mapping configuration (not available for now!)
-
-Micropublication evidence with dideo ontology sample (Nelfinavir interact with simvastatin): 
-
-http://dbmi-icode-01.dbmi.pitt.edu/describe/?url=http://dikb.org/assertion/fc673662-ca40-4d86-a881-c752ccf3bc33
+D2r server maps data in PostgreSQL to RDF via ttl mapping configuration. DIDEO ontology (https://github.com/DIDEO/DIDEO) is applied
 
 -----------------------------------------------------------------------
 D2R server mapping
