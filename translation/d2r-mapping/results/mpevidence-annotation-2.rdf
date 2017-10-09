@@ -26,7 +26,6 @@
   </rdf:Description>
   <rdf:Description rdf:about="http://dikb.org/data-ratio/8644a3a9-8124-4255-89a3-535580de7366">
     <obo:OBI_0000312 rdf:resource="http://dikb.org/method/f707038f-a71f-4130-9ac9-542dee6264d7"/>
-    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/e934f7f0-d967-4381-b88e-5cfd5545c5dc"/>
     <rdfs:label>nefazodone-digoxin drug package cmax Increase information</rdfs:label>
     <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/1ccb155e-a910-44d7-b35e-ab70e8a478df"/>
     <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
@@ -46,7 +45,6 @@
     <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://dikb.org/data-ratio/67973709-109b-4c13-a41e-2b2d17111100">
-    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/f707038f-a71f-4130-9ac9-542dee6264d7"/>
     <obo:OBI_0000312 rdf:resource="http://dikb.org/method/e934f7f0-d967-4381-b88e-5cfd5545c5dc"/>
     <rdfs:label>divalproex sodium-INVEGA drug package cmax Increase information</rdfs:label>
     <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/5b7b635b-0899-45c6-8f6c-4f4e7307a915"/>
@@ -100,7 +98,6 @@
   </rdf:Description>
   <rdf:Description rdf:about="http://dikb.org/data-ratio/0bd05683-fd00-43ca-8238-5d77af592186">
     <obo:OBI_0000312 rdf:resource="http://dikb.org/method/f707038f-a71f-4130-9ac9-542dee6264d7"/>
-    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/e934f7f0-d967-4381-b88e-5cfd5545c5dc"/>
     <rdfs:label>nefazodone-digoxin drug package auc Increase information</rdfs:label>
     <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/8f219532-5405-403f-b45f-1f6ae53570cc"/>
     <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
@@ -139,7 +136,6 @@
     <rdf:type rdf:resource="http://purl.obolibrary.org/obo/UO_0000022"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://dikb.org/data-ratio/4a32b684-482b-409b-9aa0-ce4bd3fe13c4">
-    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/f707038f-a71f-4130-9ac9-542dee6264d7"/>
     <obo:OBI_0000312 rdf:resource="http://dikb.org/method/e934f7f0-d967-4381-b88e-5cfd5545c5dc"/>
     <rdfs:label>divalproex sodium-INVEGA drug package auc Increase information</rdfs:label>
     <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/382cfac4-2c30-4da1-86a9-38cade235025"/>
