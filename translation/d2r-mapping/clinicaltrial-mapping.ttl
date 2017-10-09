@@ -17,7 +17,7 @@
 map:database a d2rq:Database;
     d2rq:jdbcDriver "org.postgresql.Driver";
     # d2rq:jdbcDSN "jdbc:postgresql://localhost/mpevidence?autoReconnect=true&user=<username>&password=<password>";
-    d2rq:jdbcDSN "jdbc:postgresql://localhost/mpevidence?autoReconnect=true&user=dbmiannotator&password=dbmi2016";   
+    # d2rq:jdbcDSN "jdbc:postgresql://localhost/mpevidence?autoReconnect=true&user=dbmiannotator&password=";   
     .
     
 #####################################################################################
@@ -361,8 +361,12 @@ map:data_ratio_label a d2rq:PropertyBridge;
 ## is_specified_output_of Method
 map:data_ratio_is_specified_output_of_method a d2rq:PropertyBridge;
 	d2rq:belongsToClassMap map:DataRatio;
-	d2rq:property obo:OBI_0000312; 
-    d2rq:uriSqlExpression "CONCAT('http://dikb.org/method/', ohdsi.rdf_mp_claim_qualifier.method_urn)"; 
+	d2rq:property obo:OBI_0000312;
+   	d2rq:join "ohdsi.rdf_mp_claim_qualifier.mp_claim_id <= ohdsi.rdf_mp_data.mp_claim_id";
+        d2rq:join "ohdsi.rdf_mp_claim_qualifier.mp_claim_id => ohdsi.rdf_mp_data.mp_claim_id";
+    	d2rq:join "ohdsi.rdf_mp_claim_qualifier.mp_data_index <= ohdsi.rdf_mp_data.mp_data_index";
+        d2rq:join "ohdsi.rdf_mp_claim_qualifier.mp_data_index => ohdsi.rdf_mp_data.mp_data_index";	
+    	d2rq:uriSqlExpression "CONCAT('http://dikb.org/method/', ohdsi.rdf_mp_claim_qualifier.method_urn)"; 
     .
 
 map:data_ratio_has_specified_value a d2rq:PropertyBridge;
