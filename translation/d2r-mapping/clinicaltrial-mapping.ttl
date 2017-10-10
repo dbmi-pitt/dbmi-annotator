@@ -17,7 +17,7 @@
 map:database a d2rq:Database;
     d2rq:jdbcDriver "org.postgresql.Driver";
     # d2rq:jdbcDSN "jdbc:postgresql://localhost/mpevidence?autoReconnect=true&user=<username>&password=<password>";
-    # d2rq:jdbcDSN "jdbc:postgresql://localhost/mpevidence?autoReconnect=true&user=dbmiannotator&password=";   
+    d2rq:jdbcDSN "jdbc:postgresql://localhost/mpevidence?autoReconnect=true&user=dbmiannotator&password=";
     .
     
 #####################################################################################
@@ -124,11 +124,10 @@ map:PrecipitantItem a d2rq:ClassMap;
     d2rq:dataStorage map:database;
     .
 
-## precipitant URI
 map:precipitant_item_rdf_type a d2rq:PropertyBridge;
-	d2rq:belongsToClassMap map:PrecipitantItem;
-	d2rq:property rdf:type;
-    d2rq:uriSqlExpression "CONCAT('http://purl.bioontology.org/ontology/RXNORM/', ohdsi.rdf_mp_claim_qualifier.p_concept_code)"; 
+    d2rq:belongsToClassMap map:PrecipitantItem;
+    d2rq:property rdf:type;
+    d2rq:uriPattern "obo:@@ohdsi.rdf_mp_claim_qualifier.p_vocabulary_id@@_@@ohdsi.rdf_mp_claim_qualifier.p_concept_code@@";
     .
 
 ## Class Precipitant Active Ingredient ##############################################
@@ -264,9 +263,9 @@ map:ObjectItem a d2rq:ClassMap;
 
 ## object URI
 map:object_item_rdf_type a d2rq:PropertyBridge;
-	d2rq:belongsToClassMap map:ObjectItem;
-	d2rq:property rdf:type;
-    d2rq:uriSqlExpression "CONCAT('http://purl.bioontology.org/ontology/RXNORM/', ohdsi.rdf_mp_claim_qualifier.o_concept_code)"; 
+    d2rq:belongsToClassMap map:ObjectItem;
+    d2rq:property rdf:type;
+    d2rq:uriPattern "obo:@@ohdsi.rdf_mp_claim_qualifier.o_vocabulary_id@@_@@ohdsi.rdf_mp_claim_qualifier.o_concept_code@@";
     .
 
 ## Class Object Active Ingredient ##############################################

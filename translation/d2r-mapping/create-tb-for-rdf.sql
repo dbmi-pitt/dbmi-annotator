@@ -18,17 +18,19 @@ FROM (
 WITH method AS (
 SELECT mp_claim_id, mp_data_index, m.entered_value as method from method m),
 p AS (
-SELECT ca.id, q.qvalue, q.concept_code, q.vocabulary_id, q.qualifier_role_concept_code, cb.label
+SELECT ca.id, q.qvalue, q.concept_code, vc.vocabulary_id, q.qualifier_role_concept_code, cb.label
 FROM mp_claim_annotation ca 
 JOIN oa_claim_body cb on cb.is_oa_body_of = ca.id
 JOIN qualifier q on q.claim_body_id = cb.id
+JOIN public.vocabulary vc on q.vocabulary_id = vc.vocabulary_concept_id 
 WHERE q.subject = True
 AND cb.label LIKE '%interact%with%'),
 o AS (
-SELECT ca.id, q.qvalue, q.concept_code, q.vocabulary_id, q.qualifier_role_concept_code, cb.label
+SELECT ca.id, q.qvalue, q.concept_code, vc.vocabulary_id, q.qualifier_role_concept_code, cb.label
 FROM mp_claim_annotation ca 
 JOIN oa_claim_body cb on cb.is_oa_body_of = ca.id
 JOIN qualifier q on q.claim_body_id = cb.id
+JOIN public.vocabulary vc on q.vocabulary_id = vc.vocabulary_concept_id 
 WHERE q.object = True
 AND cb.label LIKE '%interact%with%')
 SELECT method.mp_claim_id, method.mp_data_index, method.method, p.qvalue as precipitant, p.vocabulary_id as p_vocabulary_id, p.concept_code as p_concept_code, p.qualifier_role_concept_code as p_role_concept_code,
@@ -84,3 +86,5 @@ TRUNCATE TABLE ohdsi.rdf_mp_material;
 DROP TABLE ohdsi.rdf_mp_claim_qualifier;
 DROP TABLE ohdsi.rdf_mp_data;
 DROP TABLE ohdsi.rdf_mp_material; 
+
+
