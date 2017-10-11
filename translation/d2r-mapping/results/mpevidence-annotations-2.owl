@@ -17799,449 +17799,453 @@ A cultured cell population maintained in vitro: &quot;Rat cortical neurons from 
     
 
 
-    <!-- http://dikb.org/assertion/d5884b02-48b2-48de-9288-5de77a77d2b1 -->
+    <!-- http://dikb.org/assertion/b3a5509f-e6eb-477e-914c-f7a5a5fd7d59 -->
 
-    <NamedIndividual rdf:about="http://dikb.org/assertion/d5884b02-48b2-48de-9288-5de77a77d2b1">
+    <NamedIndividual rdf:about="http://dikb.org/assertion/b3a5509f-e6eb-477e-914c-f7a5a5fd7d59">
         <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000001"/>
-        <obo:BFO_0000051 rdf:resource="http://dikb.org/data-ratio/d623b3f0-32ff-4091-9621-74f0a22e9990"/>
-        <obo:BFO_0000051 rdf:resource="http://dikb.org/data-ratio/5c996a80-e2fb-4aa2-b6a1-22cc9c265559"/>
-        <obo:IAO_0000136 rdf:resource="http://dikb.org/bearer-object/c4637584-36d5-4812-bc6a-2977d6f23966"/>
-        <obo:IAO_0000136 rdf:resource="http://dikb.org/bearer-precipitant/698e916c-4755-4a4d-a08b-a753368a25e1"/>
+        <obo:BFO_0000051 rdf:resource="http://dikb.org/data-ratio/82c59a84-b93c-4e85-866e-0785e827baa7"/>
+        <obo:BFO_0000051 rdf:resource="http://dikb.org/data-ratio/959cb61b-74f6-4e53-a4e2-00b3ccba061a"/>
+        <obo:IAO_0000136 rdf:resource="http://dikb.org/bearer-object/212ac19a-d895-4c6d-9219-004184024d4c"/>
+        <obo:IAO_0000136 rdf:resource="http://dikb.org/bearer-precipitant/3001eecf-c065-4e59-ab90-03437a4e438c"/>
         <rdfs:label>divalproex sodium-INVEGA interaction description</rdfs:label>
     </NamedIndividual>
     
 
 
-    <!-- http://dikb.org/assertion/fe49ee63-2bc3-4459-9177-8010a71ae019 -->
+    <!-- http://dikb.org/assertion/ee1a519b-46c2-4c50-8dbe-5955b5091532 -->
 
-    <NamedIndividual rdf:about="http://dikb.org/assertion/fe49ee63-2bc3-4459-9177-8010a71ae019">
+    <NamedIndividual rdf:about="http://dikb.org/assertion/ee1a519b-46c2-4c50-8dbe-5955b5091532">
         <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000001"/>
-        <obo:BFO_0000051 rdf:resource="http://dikb.org/data-ratio/7a10e091-b0b4-4ba0-984c-d8b3d008dc45"/>
-        <obo:BFO_0000051 rdf:resource="http://dikb.org/data-ratio/70a1c37f-f09f-498a-bad0-d8934d9c79bf"/>
-        <obo:IAO_0000136 rdf:resource="http://dikb.org/bearer-object/876167ba-abfb-4a95-a5f6-4a487b573433"/>
-        <obo:IAO_0000136 rdf:resource="http://dikb.org/bearer-precipitant/4a9715be-e71f-49f6-b6e2-ba7109ca7bb4"/>
+        <obo:BFO_0000051 rdf:resource="http://dikb.org/data-ratio/b0f9680f-b09c-42dd-980a-4f66fbf35429"/>
+        <obo:BFO_0000051 rdf:resource="http://dikb.org/data-ratio/574bf84f-53e2-403e-ae0d-3776caa25acc"/>
+        <obo:IAO_0000136 rdf:resource="http://dikb.org/bearer-object/3e529544-1d53-482a-b9da-f3f4d0edb6d0"/>
+        <obo:IAO_0000136 rdf:resource="http://dikb.org/bearer-precipitant/9a6ed19d-2dad-4f25-a032-10620bb682d6"/>
         <rdfs:label>nefazodone-digoxin interaction description</rdfs:label>
     </NamedIndividual>
     
 
 
-    <!-- http://dikb.org/data-ratio-type-has-part/a38ba9ca-d92d-4881-940f-9e979813cbea -->
+    <!-- http://dikb.org/data-ratio-type-has-part/ed10e1c5-7c9c-49b5-b727-f13f334f47b3 -->
 
-    <NamedIndividual rdf:about="http://dikb.org/data-ratio-type-has-part/a38ba9ca-d92d-4881-940f-9e979813cbea">
+    <NamedIndividual rdf:about="http://dikb.org/data-ratio-type-has-part/ed10e1c5-7c9c-49b5-b727-f13f334f47b3">
         <rdf:type rdf:resource="http://purl.obolibrary.org/obo/UO_0000187"/>
     </NamedIndividual>
     
 
 
-    <!-- http://dikb.org/data-ratio-type-has-part/ecbd7362-ff18-46d0-ac3c-a1ed10d40c2d -->
+    <!-- http://dikb.org/data-ratio-type-has-part/5caf0caf-5e1d-47ba-9c15-6f24c6f642c8 -->
 
-    <NamedIndividual rdf:about="http://dikb.org/data-ratio-type-has-part/ecbd7362-ff18-46d0-ac3c-a1ed10d40c2d">
+    <NamedIndividual rdf:about="http://dikb.org/data-ratio-type-has-part/5caf0caf-5e1d-47ba-9c15-6f24c6f642c8">
         <rdf:type rdf:resource="http://purl.obolibrary.org/obo/UO_0000187"/>
     </NamedIndividual>
     
 
 
-    <!-- http://dikb.org/data-ratio-type-has-part/32adbe1c-91cf-4457-aa55-895672bbca25 -->
+    <!-- http://dikb.org/data-ratio-type-has-part/53cf3760-3f0a-45b4-9097-e86388eddf9d -->
 
-    <NamedIndividual rdf:about="http://dikb.org/data-ratio-type-has-part/32adbe1c-91cf-4457-aa55-895672bbca25">
+    <NamedIndividual rdf:about="http://dikb.org/data-ratio-type-has-part/53cf3760-3f0a-45b4-9097-e86388eddf9d">
         <rdf:type rdf:resource="http://purl.obolibrary.org/obo/UO_0000187"/>
     </NamedIndividual>
     
 
 
-    <!-- http://dikb.org/data-ratio-type-has-part/51296759-828e-4f93-a9c6-0aacff9b2530 -->
+    <!-- http://dikb.org/data-ratio-type-has-part/8a18ddbf-8a7b-4aa1-834b-8e4f07add297 -->
 
-    <NamedIndividual rdf:about="http://dikb.org/data-ratio-type-has-part/51296759-828e-4f93-a9c6-0aacff9b2530">
+    <NamedIndividual rdf:about="http://dikb.org/data-ratio-type-has-part/8a18ddbf-8a7b-4aa1-834b-8e4f07add297">
         <rdf:type rdf:resource="http://purl.obolibrary.org/obo/UO_0000187"/>
     </NamedIndividual>
     
 
 
-    <!-- http://dikb.org/data-ratio-type/d26301d0-14ba-4ce8-9321-f109a9f32970 -->
+    <!-- http://dikb.org/data-ratio-type/3275118b-fb34-44a0-8e39-4f584cb4b5ea -->
 
-    <NamedIndividual rdf:about="http://dikb.org/data-ratio-type/d26301d0-14ba-4ce8-9321-f109a9f32970">
+    <NamedIndividual rdf:about="http://dikb.org/data-ratio-type/3275118b-fb34-44a0-8e39-4f584cb4b5ea">
         <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
-        <obo:OBI_0000051 rdf:resource="http://dikb.org/data-ratio-type-has-part/a38ba9ca-d92d-4881-940f-9e979813cbea"/>
-        <obo:OBI_0001937>50</obo:OBI_0001937>
-        <rdfs:label>50 Percent </rdfs:label>
-    </NamedIndividual>
-    
-
-
-    <!-- http://dikb.org/data-ratio-type/f3c325be-d13f-4933-becd-7e7f65a63698 -->
-
-    <NamedIndividual rdf:about="http://dikb.org/data-ratio-type/f3c325be-d13f-4933-becd-7e7f65a63698">
-        <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
-        <obo:OBI_0000051 rdf:resource="http://dikb.org/data-ratio-type-has-part/51296759-828e-4f93-a9c6-0aacff9b2530"/>
-        <obo:OBI_0001937>29</obo:OBI_0001937>
-        <rdfs:label>29 Percent </rdfs:label>
-    </NamedIndividual>
-    
-
-
-    <!-- http://dikb.org/data-ratio-type/fc1572d1-1f81-433a-9e2f-9256608dd279 -->
-
-    <NamedIndividual rdf:about="http://dikb.org/data-ratio-type/fc1572d1-1f81-433a-9e2f-9256608dd279">
-        <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
-        <obo:OBI_0000051 rdf:resource="http://dikb.org/data-ratio-type-has-part/32adbe1c-91cf-4457-aa55-895672bbca25"/>
+        <obo:OBI_0000051 rdf:resource="http://dikb.org/data-ratio-type-has-part/5caf0caf-5e1d-47ba-9c15-6f24c6f642c8"/>
         <obo:OBI_0001937>15</obo:OBI_0001937>
         <rdfs:label>15 Percent </rdfs:label>
     </NamedIndividual>
     
 
 
-    <!-- http://dikb.org/data-ratio-type/3591beac-135e-4453-ba73-f745a9388d0c -->
+    <!-- http://dikb.org/data-ratio-type/54518117-7137-445e-af1a-374688750721 -->
 
-    <NamedIndividual rdf:about="http://dikb.org/data-ratio-type/3591beac-135e-4453-ba73-f745a9388d0c">
+    <NamedIndividual rdf:about="http://dikb.org/data-ratio-type/54518117-7137-445e-af1a-374688750721">
         <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
-        <obo:OBI_0000051 rdf:resource="http://dikb.org/data-ratio-type-has-part/ecbd7362-ff18-46d0-ac3c-a1ed10d40c2d"/>
+        <obo:OBI_0000051 rdf:resource="http://dikb.org/data-ratio-type-has-part/ed10e1c5-7c9c-49b5-b727-f13f334f47b3"/>
         <obo:OBI_0001937>50</obo:OBI_0001937>
         <rdfs:label>50 Percent </rdfs:label>
     </NamedIndividual>
     
 
 
-    <!-- http://dikb.org/data-ratio/d623b3f0-32ff-4091-9621-74f0a22e9990 -->
+    <!-- http://dikb.org/data-ratio-type/6281350e-d055-431d-9dd2-9a49be4b4dce -->
 
-    <NamedIndividual rdf:about="http://dikb.org/data-ratio/d623b3f0-32ff-4091-9621-74f0a22e9990">
-        <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
-        <obo:OBI_0000312 rdf:resource="http://dikb.org/method/999a7d05-deb7-480c-8935-265315282188"/>
-        <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/3591beac-135e-4453-ba73-f745a9388d0c"/>
-        <rdfs:label>divalproex sodium-INVEGA drug package auc Increase information</rdfs:label>
+    <NamedIndividual rdf:about="http://dikb.org/data-ratio-type/6281350e-d055-431d-9dd2-9a49be4b4dce">
+        <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+        <obo:OBI_0000051 rdf:resource="http://dikb.org/data-ratio-type-has-part/53cf3760-3f0a-45b4-9097-e86388eddf9d"/>
+        <obo:OBI_0001937>29</obo:OBI_0001937>
+        <rdfs:label>29 Percent </rdfs:label>
     </NamedIndividual>
     
 
 
-    <!-- http://dikb.org/data-ratio/5c996a80-e2fb-4aa2-b6a1-22cc9c265559 -->
+    <!-- http://dikb.org/data-ratio-type/835ffb02-ff80-42b0-b358-a21b0058af71 -->
 
-    <NamedIndividual rdf:about="http://dikb.org/data-ratio/5c996a80-e2fb-4aa2-b6a1-22cc9c265559">
-        <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
-        <obo:OBI_0000312 rdf:resource="http://dikb.org/method/999a7d05-deb7-480c-8935-265315282188"/>
-        <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/d26301d0-14ba-4ce8-9321-f109a9f32970"/>
-        <rdfs:label>divalproex sodium-INVEGA drug package cmax Increase information</rdfs:label>
+    <NamedIndividual rdf:about="http://dikb.org/data-ratio-type/835ffb02-ff80-42b0-b358-a21b0058af71">
+        <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+        <obo:OBI_0000051 rdf:resource="http://dikb.org/data-ratio-type-has-part/8a18ddbf-8a7b-4aa1-834b-8e4f07add297"/>
+        <obo:OBI_0001937>50</obo:OBI_0001937>
+        <rdfs:label>50 Percent </rdfs:label>
     </NamedIndividual>
     
 
 
-    <!-- http://dikb.org/data-ratio/7a10e091-b0b4-4ba0-984c-d8b3d008dc45 -->
+    <!-- http://dikb.org/data-ratio/b0f9680f-b09c-42dd-980a-4f66fbf35429 -->
 
-    <NamedIndividual rdf:about="http://dikb.org/data-ratio/7a10e091-b0b4-4ba0-984c-d8b3d008dc45">
+    <NamedIndividual rdf:about="http://dikb.org/data-ratio/b0f9680f-b09c-42dd-980a-4f66fbf35429">
         <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
-        <obo:OBI_0000312 rdf:resource="http://dikb.org/method/8001a4b8-a2bf-4586-a0a6-885eff89ea12"/>
-        <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/f3c325be-d13f-4933-becd-7e7f65a63698"/>
-        <rdfs:label>nefazodone-digoxin drug package cmax Increase information</rdfs:label>
-    </NamedIndividual>
-    
-
-
-    <!-- http://dikb.org/data-ratio/70a1c37f-f09f-498a-bad0-d8934d9c79bf -->
-
-    <NamedIndividual rdf:about="http://dikb.org/data-ratio/70a1c37f-f09f-498a-bad0-d8934d9c79bf">
-        <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
-        <obo:OBI_0000312 rdf:resource="http://dikb.org/method/8001a4b8-a2bf-4586-a0a6-885eff89ea12"/>
-        <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/fc1572d1-1f81-433a-9e2f-9256608dd279"/>
+        <obo:OBI_0000312 rdf:resource="http://dikb.org/method/fffd8ecb-3541-4caf-a908-1496e7f63ee6"/>
+        <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/3275118b-fb34-44a0-8e39-4f584cb4b5ea"/>
         <rdfs:label>nefazodone-digoxin drug package auc Increase information</rdfs:label>
     </NamedIndividual>
     
 
 
-    <!-- http://dikb.org/method/8001a4b8-a2bf-4586-a0a6-885eff89ea12 -->
+    <!-- http://dikb.org/data-ratio/574bf84f-53e2-403e-ae0d-3776caa25acc -->
 
-    <NamedIndividual rdf:about="http://dikb.org/method/8001a4b8-a2bf-4586-a0a6-885eff89ea12">
+    <NamedIndividual rdf:about="http://dikb.org/data-ratio/574bf84f-53e2-403e-ae0d-3776caa25acc">
+        <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+        <obo:OBI_0000312 rdf:resource="http://dikb.org/method/fffd8ecb-3541-4caf-a908-1496e7f63ee6"/>
+        <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/6281350e-d055-431d-9dd2-9a49be4b4dce"/>
+        <rdfs:label>nefazodone-digoxin drug package cmax Increase information</rdfs:label>
+    </NamedIndividual>
+    
+
+
+    <!-- http://dikb.org/data-ratio/82c59a84-b93c-4e85-866e-0785e827baa7 -->
+
+    <NamedIndividual rdf:about="http://dikb.org/data-ratio/82c59a84-b93c-4e85-866e-0785e827baa7">
+        <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+        <obo:OBI_0000312 rdf:resource="http://dikb.org/method/8581039c-8447-464f-a3cf-d78a091df622"/>
+        <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/835ffb02-ff80-42b0-b358-a21b0058af71"/>
+        <rdfs:label>divalproex sodium-INVEGA drug package auc Increase information</rdfs:label>
+    </NamedIndividual>
+    
+
+
+    <!-- http://dikb.org/data-ratio/959cb61b-74f6-4e53-a4e2-00b3ccba061a -->
+
+    <NamedIndividual rdf:about="http://dikb.org/data-ratio/959cb61b-74f6-4e53-a4e2-00b3ccba061a">
+        <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+        <obo:OBI_0000312 rdf:resource="http://dikb.org/method/8581039c-8447-464f-a3cf-d78a091df622"/>
+        <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/54518117-7137-445e-af1a-374688750721"/>
+        <rdfs:label>divalproex sodium-INVEGA drug package cmax Increase information</rdfs:label>
+    </NamedIndividual>
+    
+
+
+    <!-- http://dikb.org/method/fffd8ecb-3541-4caf-a908-1496e7f63ee6 -->
+
+    <NamedIndividual rdf:about="http://dikb.org/method/fffd8ecb-3541-4caf-a908-1496e7f63ee6">
         <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000124"/>
         <rdfs:label>nefazodone-digoxin DDI clinical trial</rdfs:label>
     </NamedIndividual>
     
 
 
-    <!-- http://dikb.org/method/999a7d05-deb7-480c-8935-265315282188 -->
+    <!-- http://dikb.org/method/8581039c-8447-464f-a3cf-d78a091df622 -->
 
-    <NamedIndividual rdf:about="http://dikb.org/method/999a7d05-deb7-480c-8935-265315282188">
+    <NamedIndividual rdf:about="http://dikb.org/method/8581039c-8447-464f-a3cf-d78a091df622">
         <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000124"/>
         <rdfs:label>divalproex sodium-INVEGA DDI clinical trial</rdfs:label>
     </NamedIndividual>
     
 
 
-    <!-- http://dikb.org/o-scattered-molecular-aggregate/4d429d20-be93-4fe1-a1f9-c0277b608db1 -->
+    <!-- http://dikb.org/o-scattered-molecular-aggregate/bb9944b7-794b-4011-ae25-b5f5f1f44604 -->
 
-    <NamedIndividual rdf:about="http://dikb.org/o-scattered-molecular-aggregate/4d429d20-be93-4fe1-a1f9-c0277b608db1">
+    <NamedIndividual rdf:about="http://dikb.org/o-scattered-molecular-aggregate/bb9944b7-794b-4011-ae25-b5f5f1f44604">
         <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0000576"/>
-        <obo:RO_0000053 rdf:resource="http://dikb.org/object-active-ingredient/2156ec05-1fb6-44ac-9bdf-9f6ada3fce0e"/>
-        <obo:RO_0000053 rdf:resource="http://dikb.org/object-value-measurement-datum/e7a19131-becb-416e-bd93-08e0a175692c"/>
-        <obo:RO_0002351 rdf:resource="http://dikb.org/object-drug/6e74686c-bfc7-464e-ae07-d068a739fc46"/>
+        <obo:RO_0000053 rdf:resource="http://dikb.org/object-active-ingredient/b3aafeca-7844-46e5-966a-caa264f34014"/>
+        <obo:RO_0000053 rdf:resource="http://dikb.org/object-value-measurement-datum/1b9338a3-7ca6-4fb4-954e-027db605d2df"/>
+        <obo:RO_0002351 rdf:resource="http://dikb.org/object-drug/81567612-65f5-4117-9f69-cea8d180d314"/>
     </NamedIndividual>
     
 
 
-    <!-- http://dikb.org/o-scattered-molecular-aggregate/5ede027b-cdc3-45cd-a6f5-da6eb11e021c -->
+    <!-- http://dikb.org/o-scattered-molecular-aggregate/e070aff0-ca97-468f-86b1-05d01071449f -->
 
-    <NamedIndividual rdf:about="http://dikb.org/o-scattered-molecular-aggregate/5ede027b-cdc3-45cd-a6f5-da6eb11e021c">
+    <NamedIndividual rdf:about="http://dikb.org/o-scattered-molecular-aggregate/e070aff0-ca97-468f-86b1-05d01071449f">
         <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0000576"/>
-        <obo:RO_0000053 rdf:resource="http://dikb.org/object-active-ingredient/4c3c4772-9a84-4a65-aeca-7c089d401fa4"/>
-        <obo:RO_0000053 rdf:resource="http://dikb.org/object-value-measurement-datum/6e299f72-b98b-4b52-8a94-eed59191f0be"/>
-        <obo:RO_0002351 rdf:resource="http://dikb.org/object-drug/0811409f-a236-4ea9-83d4-22dbc5773cce"/>
+        <obo:RO_0000053 rdf:resource="http://dikb.org/object-active-ingredient/d75bb8b8-25e8-4534-a1f3-8cffa3460ad2"/>
+        <obo:RO_0000053 rdf:resource="http://dikb.org/object-value-measurement-datum/b8b8a181-db46-432a-adea-ff071a3dbcd1"/>
+        <obo:RO_0002351 rdf:resource="http://dikb.org/object-drug/55888d8a-af45-48aa-b574-f679f2318427"/>
     </NamedIndividual>
     
 
 
-    <!-- http://dikb.org/object-active-ingredient/2156ec05-1fb6-44ac-9bdf-9f6ada3fce0e -->
+    <!-- http://dikb.org/object-active-ingredient/b3aafeca-7844-46e5-966a-caa264f34014 -->
 
-    <NamedIndividual rdf:about="http://dikb.org/object-active-ingredient/2156ec05-1fb6-44ac-9bdf-9f6ada3fce0e">
+    <NamedIndividual rdf:about="http://dikb.org/object-active-ingredient/b3aafeca-7844-46e5-966a-caa264f34014">
         <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DRON_00000028"/>
     </NamedIndividual>
     
 
 
-    <!-- http://dikb.org/object-active-ingredient/4c3c4772-9a84-4a65-aeca-7c089d401fa4 -->
+    <!-- http://dikb.org/object-active-ingredient/d75bb8b8-25e8-4534-a1f3-8cffa3460ad2 -->
 
-    <NamedIndividual rdf:about="http://dikb.org/object-active-ingredient/4c3c4772-9a84-4a65-aeca-7c089d401fa4">
+    <NamedIndividual rdf:about="http://dikb.org/object-active-ingredient/d75bb8b8-25e8-4534-a1f3-8cffa3460ad2">
         <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DRON_00000028"/>
     </NamedIndividual>
     
 
 
-    <!-- http://dikb.org/object-drug-role/e4a020f8-6edc-439e-9773-7af8a69dada1 -->
+    <!-- http://dikb.org/object-drug-role/ca6fdb71-ec63-410f-ac0a-406709bcb125 -->
 
-    <NamedIndividual rdf:about="http://dikb.org/object-drug-role/e4a020f8-6edc-439e-9773-7af8a69dada1">
+    <NamedIndividual rdf:about="http://dikb.org/object-drug-role/ca6fdb71-ec63-410f-ac0a-406709bcb125">
         <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000013"/>
     </NamedIndividual>
     
 
 
-    <!-- http://dikb.org/object-drug-role/20bb65b1-1ed2-494d-bda7-fd24a4941a15 -->
+    <!-- http://dikb.org/object-drug-role/7f423442-ef47-4be9-a1d7-1872545afa3f -->
 
-    <NamedIndividual rdf:about="http://dikb.org/object-drug-role/20bb65b1-1ed2-494d-bda7-fd24a4941a15">
+    <NamedIndividual rdf:about="http://dikb.org/object-drug-role/7f423442-ef47-4be9-a1d7-1872545afa3f">
         <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000013"/>
     </NamedIndividual>
     
 
 
-    <!-- http://dikb.org/object-drug/0811409f-a236-4ea9-83d4-22dbc5773cce -->
+    <!-- http://dikb.org/object-drug/55888d8a-af45-48aa-b574-f679f2318427 -->
 
-    <NamedIndividual rdf:about="http://dikb.org/object-drug/0811409f-a236-4ea9-83d4-22dbc5773cce">
+    <NamedIndividual rdf:about="http://dikb.org/object-drug/55888d8a-af45-48aa-b574-f679f2318427">
         <rdf:type rdf:resource="obo:RxNorm_3407"/>
+        <rdfs:label>digoxin</rdfs:label>
     </NamedIndividual>
     
 
 
-    <!-- http://dikb.org/object-drug/6e74686c-bfc7-464e-ae07-d068a739fc46 -->
+    <!-- http://dikb.org/object-drug/81567612-65f5-4117-9f69-cea8d180d314 -->
 
-    <NamedIndividual rdf:about="http://dikb.org/object-drug/6e74686c-bfc7-464e-ae07-d068a739fc46">
+    <NamedIndividual rdf:about="http://dikb.org/object-drug/81567612-65f5-4117-9f69-cea8d180d314">
         <rdf:type rdf:resource="obo:RxNorm_686438"/>
+        <rdfs:label>INVEGA</rdfs:label>
     </NamedIndividual>
     
 
 
-    <!-- http://dikb.org/object-mass/01ed047a-5912-403c-8f95-5487ea3bddd7 -->
+    <!-- http://dikb.org/object-mass/aa1cd42c-b063-4c11-8270-33d6452b5312 -->
 
-    <NamedIndividual rdf:about="http://dikb.org/object-mass/01ed047a-5912-403c-8f95-5487ea3bddd7">
+    <NamedIndividual rdf:about="http://dikb.org/object-mass/aa1cd42c-b063-4c11-8270-33d6452b5312">
         <rdf:type rdf:resource="http://purl.obolibrary.org/obo/PATO_0000125"/>
     </NamedIndividual>
     
 
 
-    <!-- http://dikb.org/object-mass/72d2630c-1c06-4ce6-a241-e43d58463a6e -->
+    <!-- http://dikb.org/object-mass/91e39034-b50b-4284-94d3-c2da81e8b312 -->
 
-    <NamedIndividual rdf:about="http://dikb.org/object-mass/72d2630c-1c06-4ce6-a241-e43d58463a6e">
+    <NamedIndividual rdf:about="http://dikb.org/object-mass/91e39034-b50b-4284-94d3-c2da81e8b312">
         <rdf:type rdf:resource="http://purl.obolibrary.org/obo/PATO_0000125"/>
     </NamedIndividual>
     
 
 
-    <!-- http://dikb.org/object-milligram/e2105ee8-c829-4310-9fde-52db6f2387ac -->
+    <!-- http://dikb.org/object-milligram/e7284abb-b1ad-4946-be38-aede651b4447 -->
 
-    <NamedIndividual rdf:about="http://dikb.org/object-milligram/e2105ee8-c829-4310-9fde-52db6f2387ac">
+    <NamedIndividual rdf:about="http://dikb.org/object-milligram/e7284abb-b1ad-4946-be38-aede651b4447">
         <rdf:type rdf:resource="http://purl.obolibrary.org/obo/UO_0000022"/>
     </NamedIndividual>
     
 
 
-    <!-- http://dikb.org/object-milligram/1a0cae88-998e-490c-b50f-59c754eb941f -->
+    <!-- http://dikb.org/object-milligram/2983d993-2335-4b34-8bdf-330af88ec141 -->
 
-    <NamedIndividual rdf:about="http://dikb.org/object-milligram/1a0cae88-998e-490c-b50f-59c754eb941f">
+    <NamedIndividual rdf:about="http://dikb.org/object-milligram/2983d993-2335-4b34-8bdf-330af88ec141">
         <rdf:type rdf:resource="http://purl.obolibrary.org/obo/UO_0000022"/>
     </NamedIndividual>
     
 
 
-    <!-- http://dikb.org/object-value-measurement-datum/e7a19131-becb-416e-bd93-08e0a175692c -->
+    <!-- http://dikb.org/object-value-measurement-datum/b8b8a181-db46-432a-adea-ff071a3dbcd1 -->
 
-    <NamedIndividual rdf:about="http://dikb.org/object-value-measurement-datum/e7a19131-becb-416e-bd93-08e0a175692c">
+    <NamedIndividual rdf:about="http://dikb.org/object-value-measurement-datum/b8b8a181-db46-432a-adea-ff071a3dbcd1">
         <rdf:type rdf:resource="http://purl.obolibrary.org/obo/IAO_0000109"/>
-        <obo:IAO_0000221 rdf:resource="http://dikb.org/object-mass/01ed047a-5912-403c-8f95-5487ea3bddd7"/>
-        <obo:OBI_0001937 rdf:resource="http://dikb.org/object-value-specification/a8f237ed-dda0-4356-a74c-bd04d84ae32b"/>
+        <obo:IAO_0000221 rdf:resource="http://dikb.org/object-mass/91e39034-b50b-4284-94d3-c2da81e8b312"/>
+        <obo:OBI_0001937 rdf:resource="http://dikb.org/object-value-specification/0b17c4ec-0e33-470c-892e-9ea4265a414a"/>
     </NamedIndividual>
     
 
 
-    <!-- http://dikb.org/object-value-measurement-datum/6e299f72-b98b-4b52-8a94-eed59191f0be -->
+    <!-- http://dikb.org/object-value-measurement-datum/1b9338a3-7ca6-4fb4-954e-027db605d2df -->
 
-    <NamedIndividual rdf:about="http://dikb.org/object-value-measurement-datum/6e299f72-b98b-4b52-8a94-eed59191f0be">
+    <NamedIndividual rdf:about="http://dikb.org/object-value-measurement-datum/1b9338a3-7ca6-4fb4-954e-027db605d2df">
         <rdf:type rdf:resource="http://purl.obolibrary.org/obo/IAO_0000109"/>
-        <obo:IAO_0000221 rdf:resource="http://dikb.org/object-mass/72d2630c-1c06-4ce6-a241-e43d58463a6e"/>
-        <obo:OBI_0001937 rdf:resource="http://dikb.org/object-value-specification/57d7841c-5a21-47b1-8c45-866a07ba809f"/>
+        <obo:IAO_0000221 rdf:resource="http://dikb.org/object-mass/aa1cd42c-b063-4c11-8270-33d6452b5312"/>
+        <obo:OBI_0001937 rdf:resource="http://dikb.org/object-value-specification/726bb020-6721-4cb7-bde5-7b787e87543f"/>
     </NamedIndividual>
     
 
 
-    <!-- http://dikb.org/object-value-specification/a8f237ed-dda0-4356-a74c-bd04d84ae32b -->
+    <!-- http://dikb.org/object-value-specification/0b17c4ec-0e33-470c-892e-9ea4265a414a -->
 
-    <NamedIndividual rdf:about="http://dikb.org/object-value-specification/a8f237ed-dda0-4356-a74c-bd04d84ae32b">
+    <NamedIndividual rdf:about="http://dikb.org/object-value-specification/0b17c4ec-0e33-470c-892e-9ea4265a414a">
         <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
-        <obo:IAO_0000039 rdf:resource="http://dikb.org/object-milligram/e2105ee8-c829-4310-9fde-52db6f2387ac"/>
-        <obo:OBI_0001937>12</obo:OBI_0001937>
-    </NamedIndividual>
-    
-
-
-    <!-- http://dikb.org/object-value-specification/57d7841c-5a21-47b1-8c45-866a07ba809f -->
-
-    <NamedIndividual rdf:about="http://dikb.org/object-value-specification/57d7841c-5a21-47b1-8c45-866a07ba809f">
-        <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
-        <obo:IAO_0000039 rdf:resource="http://dikb.org/object-milligram/1a0cae88-998e-490c-b50f-59c754eb941f"/>
+        <obo:IAO_0000039 rdf:resource="http://dikb.org/object-milligram/e7284abb-b1ad-4946-be38-aede651b4447"/>
         <obo:OBI_0001937>.2</obo:OBI_0001937>
     </NamedIndividual>
     
 
 
-    <!-- http://dikb.org/p-scattered-molecular-aggregate/abae99ab-abd3-4e98-94ce-13c2e98d528f -->
+    <!-- http://dikb.org/object-value-specification/726bb020-6721-4cb7-bde5-7b787e87543f -->
 
-    <NamedIndividual rdf:about="http://dikb.org/p-scattered-molecular-aggregate/abae99ab-abd3-4e98-94ce-13c2e98d528f">
-        <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0000576"/>
-        <obo:RO_0000053 rdf:resource="http://dikb.org/precipitant-active-ingredient/ddabfb74-b457-4c04-b8ea-a0b6f61c030c"/>
-        <obo:RO_0000053 rdf:resource="http://dikb.org/precipitant-value-measurement-datum/25d7a0aa-9f5e-4c57-b878-c333d6b319e0"/>
-        <obo:RO_0002351 rdf:resource="http://dikb.org/precipitant-drug/3649309e-7422-4991-bd8e-c65e8a51a44b"/>
-    </NamedIndividual>
-    
-
-
-    <!-- http://dikb.org/p-scattered-molecular-aggregate/989f30d1-dd2f-4837-bd46-f4fb430545d4 -->
-
-    <NamedIndividual rdf:about="http://dikb.org/p-scattered-molecular-aggregate/989f30d1-dd2f-4837-bd46-f4fb430545d4">
-        <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0000576"/>
-        <obo:RO_0000053 rdf:resource="http://dikb.org/precipitant-active-ingredient/b4c3830d-76f2-49cf-9c5c-94110da4432e"/>
-        <obo:RO_0000053 rdf:resource="http://dikb.org/precipitant-value-measurement-datum/25aec3b5-50d7-4aee-8cc3-946543bb79a0"/>
-        <obo:RO_0002351 rdf:resource="http://dikb.org/precipitant-drug/60952425-0d9b-4e0b-bfb4-b0b7f342666b"/>
-    </NamedIndividual>
-    
-
-
-    <!-- http://dikb.org/precipitant-active-ingredient/b4c3830d-76f2-49cf-9c5c-94110da4432e -->
-
-    <NamedIndividual rdf:about="http://dikb.org/precipitant-active-ingredient/b4c3830d-76f2-49cf-9c5c-94110da4432e">
-        <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DRON_00000028"/>
-    </NamedIndividual>
-    
-
-
-    <!-- http://dikb.org/precipitant-active-ingredient/ddabfb74-b457-4c04-b8ea-a0b6f61c030c -->
-
-    <NamedIndividual rdf:about="http://dikb.org/precipitant-active-ingredient/ddabfb74-b457-4c04-b8ea-a0b6f61c030c">
-        <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DRON_00000028"/>
-    </NamedIndividual>
-    
-
-
-    <!-- http://dikb.org/precipitant-drug-role/2eb00f1a-acbe-4379-a2c3-f589c16059de -->
-
-    <NamedIndividual rdf:about="http://dikb.org/precipitant-drug-role/2eb00f1a-acbe-4379-a2c3-f589c16059de">
-        <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000013"/>
-    </NamedIndividual>
-    
-
-
-    <!-- http://dikb.org/precipitant-drug-role/5dd2dced-99f8-47c8-9062-046ac4bcc24c -->
-
-    <NamedIndividual rdf:about="http://dikb.org/precipitant-drug-role/5dd2dced-99f8-47c8-9062-046ac4bcc24c">
-        <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000013"/>
-    </NamedIndividual>
-    
-
-
-    <!-- http://dikb.org/precipitant-drug/3649309e-7422-4991-bd8e-c65e8a51a44b -->
-
-    <NamedIndividual rdf:about="http://dikb.org/precipitant-drug/3649309e-7422-4991-bd8e-c65e8a51a44b">
-        <rdf:type rdf:resource="obo:RxNorm_31565"/>
-    </NamedIndividual>
-    
-
-
-    <!-- http://dikb.org/precipitant-drug/60952425-0d9b-4e0b-bfb4-b0b7f342666b -->
-
-    <NamedIndividual rdf:about="http://dikb.org/precipitant-drug/60952425-0d9b-4e0b-bfb4-b0b7f342666b">
-        <rdf:type rdf:resource="obo:MeSH_D014635"/>
-    </NamedIndividual>
-    
-
-
-    <!-- http://dikb.org/precipitant-mass/141978d2-0226-4e4a-b002-ffdf25ee9521 -->
-
-    <NamedIndividual rdf:about="http://dikb.org/precipitant-mass/141978d2-0226-4e4a-b002-ffdf25ee9521">
-        <rdf:type rdf:resource="http://purl.obolibrary.org/obo/PATO_0000125"/>
-    </NamedIndividual>
-    
-
-
-    <!-- http://dikb.org/precipitant-mass/234c4770-2d9c-4092-9d14-4210dda9bd48 -->
-
-    <NamedIndividual rdf:about="http://dikb.org/precipitant-mass/234c4770-2d9c-4092-9d14-4210dda9bd48">
-        <rdf:type rdf:resource="http://purl.obolibrary.org/obo/PATO_0000125"/>
-    </NamedIndividual>
-    
-
-
-    <!-- http://dikb.org/precipitant-milligram/3de9e5e2-59c8-41fd-a2ac-e33b3eef2df9 -->
-
-    <NamedIndividual rdf:about="http://dikb.org/precipitant-milligram/3de9e5e2-59c8-41fd-a2ac-e33b3eef2df9">
-        <rdf:type rdf:resource="http://purl.obolibrary.org/obo/UO_0000022"/>
-    </NamedIndividual>
-    
-
-
-    <!-- http://dikb.org/precipitant-milligram/957cc4b4-84df-4698-884d-ea23c808fe36 -->
-
-    <NamedIndividual rdf:about="http://dikb.org/precipitant-milligram/957cc4b4-84df-4698-884d-ea23c808fe36">
-        <rdf:type rdf:resource="http://purl.obolibrary.org/obo/UO_0000022"/>
-    </NamedIndividual>
-    
-
-
-    <!-- http://dikb.org/precipitant-value-measurement-datum/25aec3b5-50d7-4aee-8cc3-946543bb79a0 -->
-
-    <NamedIndividual rdf:about="http://dikb.org/precipitant-value-measurement-datum/25aec3b5-50d7-4aee-8cc3-946543bb79a0">
-        <rdf:type rdf:resource="http://purl.obolibrary.org/obo/IAO_0000109"/>
-        <obo:IAO_0000221 rdf:resource="http://dikb.org/precipitant-mass/234c4770-2d9c-4092-9d14-4210dda9bd48"/>
-        <obo:OBI_0001937 rdf:resource="http://dikb.org/precipitant-value-specification/450406de-5c43-48c7-bee9-a1a1bc54e75c"/>
-    </NamedIndividual>
-    
-
-
-    <!-- http://dikb.org/precipitant-value-measurement-datum/25d7a0aa-9f5e-4c57-b878-c333d6b319e0 -->
-
-    <NamedIndividual rdf:about="http://dikb.org/precipitant-value-measurement-datum/25d7a0aa-9f5e-4c57-b878-c333d6b319e0">
-        <rdf:type rdf:resource="http://purl.obolibrary.org/obo/IAO_0000109"/>
-        <obo:IAO_0000221 rdf:resource="http://dikb.org/precipitant-mass/141978d2-0226-4e4a-b002-ffdf25ee9521"/>
-        <obo:OBI_0001937 rdf:resource="http://dikb.org/precipitant-value-specification/aa224600-6edd-42c8-9ba3-b14e5ed1b0a2"/>
-    </NamedIndividual>
-    
-
-
-    <!-- http://dikb.org/precipitant-value-specification/aa224600-6edd-42c8-9ba3-b14e5ed1b0a2 -->
-
-    <NamedIndividual rdf:about="http://dikb.org/precipitant-value-specification/aa224600-6edd-42c8-9ba3-b14e5ed1b0a2">
+    <NamedIndividual rdf:about="http://dikb.org/object-value-specification/726bb020-6721-4cb7-bde5-7b787e87543f">
         <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
-        <obo:IAO_0000039 rdf:resource="http://dikb.org/precipitant-milligram/957cc4b4-84df-4698-884d-ea23c808fe36"/>
+        <obo:IAO_0000039 rdf:resource="http://dikb.org/object-milligram/2983d993-2335-4b34-8bdf-330af88ec141"/>
+        <obo:OBI_0001937>12</obo:OBI_0001937>
+    </NamedIndividual>
+    
+
+
+    <!-- http://dikb.org/p-scattered-molecular-aggregate/e4bde22a-8586-403a-bd9f-beec1327a101 -->
+
+    <NamedIndividual rdf:about="http://dikb.org/p-scattered-molecular-aggregate/e4bde22a-8586-403a-bd9f-beec1327a101">
+        <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0000576"/>
+        <obo:RO_0000053 rdf:resource="http://dikb.org/precipitant-active-ingredient/30424846-6045-4e48-aae6-4bd8dfaf78ce"/>
+        <obo:RO_0000053 rdf:resource="http://dikb.org/precipitant-value-measurement-datum/3fa89768-6b7c-4e1b-9ef2-f555271f6cc2"/>
+        <obo:RO_0002351 rdf:resource="http://dikb.org/precipitant-drug/c003cd94-1c9c-46e2-bcdb-9332842c2f9b"/>
+    </NamedIndividual>
+    
+
+
+    <!-- http://dikb.org/p-scattered-molecular-aggregate/70757561-a374-4eb9-9cb0-051fd5e627dd -->
+
+    <NamedIndividual rdf:about="http://dikb.org/p-scattered-molecular-aggregate/70757561-a374-4eb9-9cb0-051fd5e627dd">
+        <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0000576"/>
+        <obo:RO_0000053 rdf:resource="http://dikb.org/precipitant-active-ingredient/17c46710-e53c-4058-aa1d-7810b2442351"/>
+        <obo:RO_0000053 rdf:resource="http://dikb.org/precipitant-value-measurement-datum/db62eea3-6725-45ae-b3ea-f3d8ede9760f"/>
+        <obo:RO_0002351 rdf:resource="http://dikb.org/precipitant-drug/bd13b90c-d25b-4516-8c8a-521df5e08b52"/>
+    </NamedIndividual>
+    
+
+
+    <!-- http://dikb.org/precipitant-active-ingredient/17c46710-e53c-4058-aa1d-7810b2442351 -->
+
+    <NamedIndividual rdf:about="http://dikb.org/precipitant-active-ingredient/17c46710-e53c-4058-aa1d-7810b2442351">
+        <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DRON_00000028"/>
+    </NamedIndividual>
+    
+
+
+    <!-- http://dikb.org/precipitant-active-ingredient/30424846-6045-4e48-aae6-4bd8dfaf78ce -->
+
+    <NamedIndividual rdf:about="http://dikb.org/precipitant-active-ingredient/30424846-6045-4e48-aae6-4bd8dfaf78ce">
+        <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DRON_00000028"/>
+    </NamedIndividual>
+    
+
+
+    <!-- http://dikb.org/precipitant-drug-role/aa7c58f5-9a86-43f4-9d3b-34a940457b7e -->
+
+    <NamedIndividual rdf:about="http://dikb.org/precipitant-drug-role/aa7c58f5-9a86-43f4-9d3b-34a940457b7e">
+        <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000013"/>
+    </NamedIndividual>
+    
+
+
+    <!-- http://dikb.org/precipitant-drug-role/09cb66a2-76fd-44dc-b757-49743f378121 -->
+
+    <NamedIndividual rdf:about="http://dikb.org/precipitant-drug-role/09cb66a2-76fd-44dc-b757-49743f378121">
+        <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000013"/>
+    </NamedIndividual>
+    
+
+
+    <!-- http://dikb.org/precipitant-drug/bd13b90c-d25b-4516-8c8a-521df5e08b52 -->
+
+    <NamedIndividual rdf:about="http://dikb.org/precipitant-drug/bd13b90c-d25b-4516-8c8a-521df5e08b52">
+        <rdf:type rdf:resource="obo:RxNorm_31565"/>
+        <rdfs:label>nefazodone</rdfs:label>
+    </NamedIndividual>
+    
+
+
+    <!-- http://dikb.org/precipitant-drug/c003cd94-1c9c-46e2-bcdb-9332842c2f9b -->
+
+    <NamedIndividual rdf:about="http://dikb.org/precipitant-drug/c003cd94-1c9c-46e2-bcdb-9332842c2f9b">
+        <rdf:type rdf:resource="obo:MeSH_D014635"/>
+        <rdfs:label>divalproex sodium</rdfs:label>
+    </NamedIndividual>
+    
+
+
+    <!-- http://dikb.org/precipitant-mass/e5b7fba5-db4e-4b97-abff-53d4c078b02b -->
+
+    <NamedIndividual rdf:about="http://dikb.org/precipitant-mass/e5b7fba5-db4e-4b97-abff-53d4c078b02b">
+        <rdf:type rdf:resource="http://purl.obolibrary.org/obo/PATO_0000125"/>
+    </NamedIndividual>
+    
+
+
+    <!-- http://dikb.org/precipitant-mass/622eeb38-d5dc-4eba-9fa0-2f11f959e28f -->
+
+    <NamedIndividual rdf:about="http://dikb.org/precipitant-mass/622eeb38-d5dc-4eba-9fa0-2f11f959e28f">
+        <rdf:type rdf:resource="http://purl.obolibrary.org/obo/PATO_0000125"/>
+    </NamedIndividual>
+    
+
+
+    <!-- http://dikb.org/precipitant-milligram/c5e14cee-e60b-4e0f-903e-f9247a77d7be -->
+
+    <NamedIndividual rdf:about="http://dikb.org/precipitant-milligram/c5e14cee-e60b-4e0f-903e-f9247a77d7be">
+        <rdf:type rdf:resource="http://purl.obolibrary.org/obo/UO_0000022"/>
+    </NamedIndividual>
+    
+
+
+    <!-- http://dikb.org/precipitant-milligram/8d6ca658-608e-4baf-8bff-219e4b2ea729 -->
+
+    <NamedIndividual rdf:about="http://dikb.org/precipitant-milligram/8d6ca658-608e-4baf-8bff-219e4b2ea729">
+        <rdf:type rdf:resource="http://purl.obolibrary.org/obo/UO_0000022"/>
+    </NamedIndividual>
+    
+
+
+    <!-- http://dikb.org/precipitant-value-measurement-datum/db62eea3-6725-45ae-b3ea-f3d8ede9760f -->
+
+    <NamedIndividual rdf:about="http://dikb.org/precipitant-value-measurement-datum/db62eea3-6725-45ae-b3ea-f3d8ede9760f">
+        <rdf:type rdf:resource="http://purl.obolibrary.org/obo/IAO_0000109"/>
+        <obo:IAO_0000221 rdf:resource="http://dikb.org/precipitant-mass/e5b7fba5-db4e-4b97-abff-53d4c078b02b"/>
+        <obo:OBI_0001937 rdf:resource="http://dikb.org/precipitant-value-specification/a116271a-a01a-4b60-8df8-7e8a72d3c8c1"/>
+    </NamedIndividual>
+    
+
+
+    <!-- http://dikb.org/precipitant-value-measurement-datum/3fa89768-6b7c-4e1b-9ef2-f555271f6cc2 -->
+
+    <NamedIndividual rdf:about="http://dikb.org/precipitant-value-measurement-datum/3fa89768-6b7c-4e1b-9ef2-f555271f6cc2">
+        <rdf:type rdf:resource="http://purl.obolibrary.org/obo/IAO_0000109"/>
+        <obo:IAO_0000221 rdf:resource="http://dikb.org/precipitant-mass/622eeb38-d5dc-4eba-9fa0-2f11f959e28f"/>
+        <obo:OBI_0001937 rdf:resource="http://dikb.org/precipitant-value-specification/1244642e-8693-4102-926b-076c67f4994e"/>
+    </NamedIndividual>
+    
+
+
+    <!-- http://dikb.org/precipitant-value-specification/a116271a-a01a-4b60-8df8-7e8a72d3c8c1 -->
+
+    <NamedIndividual rdf:about="http://dikb.org/precipitant-value-specification/a116271a-a01a-4b60-8df8-7e8a72d3c8c1">
+        <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+        <obo:IAO_0000039 rdf:resource="http://dikb.org/precipitant-milligram/c5e14cee-e60b-4e0f-903e-f9247a77d7be"/>
         <obo:OBI_0001937>200</obo:OBI_0001937>
     </NamedIndividual>
     
 
 
-    <!-- http://dikb.org/precipitant-value-specification/450406de-5c43-48c7-bee9-a1a1bc54e75c -->
+    <!-- http://dikb.org/precipitant-value-specification/1244642e-8693-4102-926b-076c67f4994e -->
 
-    <NamedIndividual rdf:about="http://dikb.org/precipitant-value-specification/450406de-5c43-48c7-bee9-a1a1bc54e75c">
+    <NamedIndividual rdf:about="http://dikb.org/precipitant-value-specification/1244642e-8693-4102-926b-076c67f4994e">
         <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
-        <obo:IAO_0000039 rdf:resource="http://dikb.org/precipitant-milligram/3de9e5e2-59c8-41fd-a2ac-e33b3eef2df9"/>
+        <obo:IAO_0000039 rdf:resource="http://dikb.org/precipitant-milligram/8d6ca658-608e-4baf-8bff-219e4b2ea729"/>
         <obo:OBI_0001937>1000</obo:OBI_0001937>
     </NamedIndividual>
     
@@ -18556,21 +18560,21 @@ binary, and takes no temporal argument.
     ///////////////////////////////////////////////////////////////////////////////////////
      -->
 
-    <rdf:Description rdf:about="http://dikb.org/bearer-object/c4637584-36d5-4812-bc6a-2977d6f23966">
-        <obo:BFO_0000051 rdf:resource="http://dikb.org/o-scattered-molecular-aggregate/4d429d20-be93-4fe1-a1f9-c0277b608db1"/>
-        <obo:RO_0000053 rdf:resource="http://dikb.org/object-drug-role/e4a020f8-6edc-439e-9773-7af8a69dada1"/>
+    <rdf:Description rdf:about="http://dikb.org/bearer-object/212ac19a-d895-4c6d-9219-004184024d4c">
+        <obo:BFO_0000051 rdf:resource="http://dikb.org/o-scattered-molecular-aggregate/bb9944b7-794b-4011-ae25-b5f5f1f44604"/>
+        <obo:RO_0000053 rdf:resource="http://dikb.org/object-drug-role/ca6fdb71-ec63-410f-ac0a-406709bcb125"/>
     </rdf:Description>
-    <rdf:Description rdf:about="http://dikb.org/bearer-object/876167ba-abfb-4a95-a5f6-4a487b573433">
-        <obo:RO_0000053 rdf:resource="http://dikb.org/object-drug-role/20bb65b1-1ed2-494d-bda7-fd24a4941a15"/>
-        <obo:BFO_0000051 rdf:resource="http://dikb.org/o-scattered-molecular-aggregate/5ede027b-cdc3-45cd-a6f5-da6eb11e021c"/>
+    <rdf:Description rdf:about="http://dikb.org/bearer-object/3e529544-1d53-482a-b9da-f3f4d0edb6d0">
+        <obo:BFO_0000051 rdf:resource="http://dikb.org/o-scattered-molecular-aggregate/e070aff0-ca97-468f-86b1-05d01071449f"/>
+        <obo:RO_0000053 rdf:resource="http://dikb.org/object-drug-role/7f423442-ef47-4be9-a1d7-1872545afa3f"/>
     </rdf:Description>
-    <rdf:Description rdf:about="http://dikb.org/bearer-precipitant/4a9715be-e71f-49f6-b6e2-ba7109ca7bb4">
-        <obo:RO_0000053 rdf:resource="http://dikb.org/precipitant-drug-role/5dd2dced-99f8-47c8-9062-046ac4bcc24c"/>
-        <obo:BFO_0000051 rdf:resource="http://dikb.org/p-scattered-molecular-aggregate/abae99ab-abd3-4e98-94ce-13c2e98d528f"/>
+    <rdf:Description rdf:about="http://dikb.org/bearer-precipitant/3001eecf-c065-4e59-ab90-03437a4e438c">
+        <obo:BFO_0000051 rdf:resource="http://dikb.org/p-scattered-molecular-aggregate/e4bde22a-8586-403a-bd9f-beec1327a101"/>
+        <obo:RO_0000053 rdf:resource="http://dikb.org/precipitant-drug-role/aa7c58f5-9a86-43f4-9d3b-34a940457b7e"/>
     </rdf:Description>
-    <rdf:Description rdf:about="http://dikb.org/bearer-precipitant/698e916c-4755-4a4d-a08b-a753368a25e1">
-        <obo:BFO_0000051 rdf:resource="http://dikb.org/p-scattered-molecular-aggregate/989f30d1-dd2f-4837-bd46-f4fb430545d4"/>
-        <obo:RO_0000053 rdf:resource="http://dikb.org/precipitant-drug-role/2eb00f1a-acbe-4379-a2c3-f589c16059de"/>
+    <rdf:Description rdf:about="http://dikb.org/bearer-precipitant/9a6ed19d-2dad-4f25-a032-10620bb682d6">
+        <obo:RO_0000053 rdf:resource="http://dikb.org/precipitant-drug-role/09cb66a2-76fd-44dc-b757-49743f378121"/>
+        <obo:BFO_0000051 rdf:resource="http://dikb.org/p-scattered-molecular-aggregate/70757561-a374-4eb9-9cb0-051fd5e627dd"/>
     </rdf:Description>
     <rdf:Description rdf:about="http://example.com/bfo-spec-label">
         <obo:IAO_0000119>Person:Alan Ruttenberg</obo:IAO_0000119>
@@ -18581,14 +18585,14 @@ binary, and takes no temporal argument.
         <obo:IAO_0000111 xml:lang="en">has part</obo:IAO_0000111>
         <obo:RO_0001900 rdf:resource="http://purl.obolibrary.org/obo/RO_0001901"/>
         <obo:IAO_0000116 xml:lang="en">Occurrents are not subject to change and so parthood between occurrents holds for all the times that the part exists. Many continuants are subject to change, so parthood between continuants will only hold at certain times, but this is difficult to specify in OWL. See https://code.google.com/p/obo-relations/wiki/ROAndTime</obo:IAO_0000116>
-        <obo:IAO_0000115 xml:lang="en">a core relation that holds between a whole and its part</obo:IAO_0000115>
         <obo:IAO_0000412 rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.obolibrary.org/obo/obi.owl</obo:IAO_0000412>
+        <obo:IAO_0000115 xml:lang="en">a core relation that holds between a whole and its part</obo:IAO_0000115>
         <rdfs:label xml:lang="en">has part</rdfs:label>
         <obo:IAO_0000116 xml:lang="en">Everything has itself as a part. Any part of any part of a thing is itself part of that thing. Two distinct things cannot have each other as a part.</obo:IAO_0000116>
-        <obo:IAO_0000112 xml:lang="en">my stomach has part my stomach cavity (continuant parthood, material entity has part immaterial entity)</obo:IAO_0000112>
         <obo:IAO_0000116 xml:lang="en">Parthood requires the part and the whole to have compatible classes: only an occurrent have an occurrent as part; only a process can have a process as part; only a continuant can have a continuant as part; only an independent continuant can have an independent continuant as part; only a specifically dependent continuant can have a specifically dependent continuant as part; only a generically dependent continuant can have a generically dependent continuant as part. (This list is not exhaustive.)
 
 A continuant cannot have an occurrent as part: use &apos;participates in&apos;. An occurrent cannot have a continuant as part: use &apos;has participant&apos;. An immaterial entity cannot have a material entity as part: use &apos;location of&apos;. An independent continuant cannot have a specifically dependent continuant as part: use &apos;bearer of&apos;. A specifically dependent continuant cannot have an independent continuant as part: use &apos;inheres in&apos;.</obo:IAO_0000116>
+        <obo:IAO_0000112 xml:lang="en">my stomach has part my stomach cavity (continuant parthood, material entity has part immaterial entity)</obo:IAO_0000112>
         <obo:IAO_0000112 xml:lang="en">this year has part this day (occurrent parthood)</obo:IAO_0000112>
     </rdf:Description>
     <rdf:Description rdf:about="http://purl.obolibrary.org/obo/BFO_0000134">
@@ -18689,21 +18693,21 @@ Werner suggests a solution based on &quot;Magnitudes&quot; a proposal for which 
         <obo:IAO_0000114 rdf:resource="http://purl.obolibrary.org/obo/IAO_0000120"/>
         <obo:IAO_0000111 xml:lang="en">group randomization</obo:IAO_0000111>
         <obo:IAO_0000117 rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Philippe Rocca-Serra</obo:IAO_0000117>
-        <obo:IAO_0000119 rdf:datatype="http://www.w3.org/2001/XMLSchema#string">adapted from wikipedia [http://en.wikipedia.org/wiki/Randomization]</obo:IAO_0000119>
         <rdfs:label xml:lang="en">group randomization</rdfs:label>
+        <obo:IAO_0000119 rdf:datatype="http://www.w3.org/2001/XMLSchema#string">adapted from wikipedia [http://en.wikipedia.org/wiki/Randomization]</obo:IAO_0000119>
         <obo:IAO_0000412 rdf:datatype="http://www.w3.org/2001/XMLSchema#string">http://purl.obolibrary.org/obo/obi.owl</obo:IAO_0000412>
         <obo:IAO_0000112 xml:lang="en">PMID: 18349405. Randomization reveals unexpected acute leukemias in Southwest Oncology Group prostate cancer trial. J Clin Oncol. 2008 Mar 20;26(9):1532-6.</obo:IAO_0000112>
         <obo:IAO_0000115 xml:lang="en">A group assignment which relies on chance to assign materials to a group of materials in order to avoid bias in experimental set up.</obo:IAO_0000115>
     </rdf:Description>
     <rdf:Description rdf:about="http://purl.obolibrary.org/obo/RO_0000053">
-        <obo:IAO_0000118 xml:lang="en">is bearer of</obo:IAO_0000118>
         <rdfs:label xml:lang="en">bearer of</rdfs:label>
-        <obo:IAO_0000111 xml:lang="en">bearer of</obo:IAO_0000111>
+        <obo:IAO_0000118 xml:lang="en">is bearer of</obo:IAO_0000118>
         <obo:IAO_0000115 xml:lang="en">a relation between an independent continuant (the bearer) and a specifically dependent continuant (the dependent), in which the dependent specifically depends on the bearer for its existence</obo:IAO_0000115>
+        <obo:IAO_0000111 xml:lang="en">bearer of</obo:IAO_0000111>
         <obo:IAO_0000112 xml:lang="en">this vase is bearer of this fragility</obo:IAO_0000112>
         <obo:IAO_0000118 xml:lang="en">bearer_of</obo:IAO_0000118>
-        <obo:RO_0001900 rdf:resource="http://purl.obolibrary.org/obo/RO_0001901"/>
         <obo:IAO_0000112 xml:lang="en">this apple is bearer of this red color</obo:IAO_0000112>
+        <obo:RO_0001900 rdf:resource="http://purl.obolibrary.org/obo/RO_0001901"/>
         <obo:IAO_0000116 xml:lang="en">A bearer can have many dependents, and its dependents can exist for different periods of time, but none of its dependents can exist when the bearer does not exist.</obo:IAO_0000116>
     </rdf:Description>
     <rdf:Description rdf:about="http://purl.obolibrary.org/obo/RO_0002351">
