@@ -17,7 +17,7 @@
 map:database a d2rq:Database;
     d2rq:jdbcDriver "org.postgresql.Driver";
     # d2rq:jdbcDSN "jdbc:postgresql://localhost/mpevidence?autoReconnect=true&user=<username>&password=<password>";
-    d2rq:jdbcDSN "jdbc:postgresql://localhost/mpevidence?autoReconnect=true&user=dbmiannotator&password=";
+    # d2rq:jdbcDSN "jdbc:postgresql://localhost/mpevidence?autoReconnect=true&user=dbmiannotator&password=";
     .
     
 #####################################################################################
