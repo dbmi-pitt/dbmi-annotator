@@ -12,62 +12,42 @@
     xmlns:meta="http://www4.wiwiss.fu-berlin.de/bizer/d2r-server/metadata#"
     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
   xml:base="file:///home/yin2/Downloads/d2rq-0.8.1/mpevidence.rdf#" > 
+  <rdf:Description rdf:about="http://dikb.org/precipitant-mass/622eeb38-d5dc-4eba-9fa0-2f11f959e28f">
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/PATO_0000125"/>
+  </rdf:Description>
   <rdf:Description rdf:about="http://purl.obolibrary.org/obo/IAO_0000109">
     <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://dikb.org/bearer-precipitant/4a9715be-e71f-49f6-b6e2-ba7109ca7bb4">
-    <obo:BFO_0000051 rdf:resource="http://dikb.org/p-scattered-molecular-aggregate/abae99ab-abd3-4e98-94ce-13c2e98d528f"/>
-    <obo:RO_0000053 rdf:resource="http://dikb.org/precipitant-drug-role/5dd2dced-99f8-47c8-9062-046ac4bcc24c"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://purl.obolibrary.org/obo/BFO_0000051">
     <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://dikb.org/data-ratio-type-has-part/32adbe1c-91cf-4457-aa55-895672bbca25">
-    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/UO_0000187"/>
+  <rdf:Description rdf:about="http://dikb.org/object-value-specification/726bb020-6721-4cb7-bde5-7b787e87543f">
+    <obo:OBI_0001937>12</obo:OBI_0001937>
+    <obo:IAO_0000039 rdf:resource="http://dikb.org/object-milligram/2983d993-2335-4b34-8bdf-330af88ec141"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://dikb.org/data-ratio-type-has-part/a38ba9ca-d92d-4881-940f-9e979813cbea">
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type-has-part/ed10e1c5-7c9c-49b5-b727-f13f334f47b3">
     <rdf:type rdf:resource="http://purl.obolibrary.org/obo/UO_0000187"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://purl.obolibrary.org/obo/RO_0002351">
     <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://dikb.org/method/8001a4b8-a2bf-4586-a0a6-885eff89ea12">
-    <rdfs:label>nefazodone-digoxin DDI clinical trial</rdfs:label>
-    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000124"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://dikb.org/data-ratio/5c996a80-e2fb-4aa2-b6a1-22cc9c265559">
-    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/999a7d05-deb7-480c-8935-265315282188"/>
-    <rdfs:label>divalproex sodium-INVEGA drug package cmax Increase information</rdfs:label>
-    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/d26301d0-14ba-4ce8-9321-f109a9f32970"/>
-    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  <rdf:Description rdf:about="http://dikb.org/precipitant-active-ingredient/17c46710-e53c-4058-aa1d-7810b2442351">
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DRON_00000028"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://purl.obolibrary.org/obo/DIDEO_00000124">
     <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://dikb.org/object-active-ingredient/2156ec05-1fb6-44ac-9bdf-9f6ada3fce0e">
-    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DRON_00000028"/>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/b0f9680f-b09c-42dd-980a-4f66fbf35429">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/fffd8ecb-3541-4caf-a908-1496e7f63ee6"/>
+    <rdfs:label>nefazodone-digoxin drug package auc Increase information</rdfs:label>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/3275118b-fb34-44a0-8e39-4f584cb4b5ea"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://dikb.org/object-milligram/1a0cae88-998e-490c-b50f-59c754eb941f">
-    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/UO_0000022"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://dikb.org/assertion/fe49ee63-2bc3-4459-9177-8010a71ae019">
-    <obo:BFO_0000051 rdf:resource="http://dikb.org/data-ratio/70a1c37f-f09f-498a-bad0-d8934d9c79bf"/>
-    <obo:BFO_0000051 rdf:resource="http://dikb.org/data-ratio/7a10e091-b0b4-4ba0-984c-d8b3d008dc45"/>
-    <obo:IAO_0000136 rdf:resource="http://dikb.org/bearer-object/876167ba-abfb-4a95-a5f6-4a487b573433"/>
-    <obo:IAO_0000136 rdf:resource="http://dikb.org/bearer-precipitant/4a9715be-e71f-49f6-b6e2-ba7109ca7bb4"/>
-    <rdfs:label>nefazodone-digoxin interaction description</rdfs:label>
-    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000001"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://dikb.org/object-active-ingredient/4c3c4772-9a84-4a65-aeca-7c089d401fa4">
-    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DRON_00000028"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://dikb.org/object-value-specification/57d7841c-5a21-47b1-8c45-866a07ba809f">
-    <obo:OBI_0001937>.2</obo:OBI_0001937>
-    <obo:IAO_0000039 rdf:resource="http://dikb.org/object-milligram/1a0cae88-998e-490c-b50f-59c754eb941f"/>
-    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://dikb.org/object-mass/72d2630c-1c06-4ce6-a241-e43d58463a6e">
-    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/PATO_0000125"/>
+  <rdf:Description rdf:about="http://dikb.org/precipitant-value-measurement-datum/3fa89768-6b7c-4e1b-9ef2-f555271f6cc2">
+    <obo:IAO_0000221 rdf:resource="http://dikb.org/precipitant-mass/622eeb38-d5dc-4eba-9fa0-2f11f959e28f"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/precipitant-value-specification/1244642e-8693-4102-926b-076c67f4994e"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/IAO_0000109"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://purl.obolibrary.org/obo/UO_0000022">
     <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
@@ -75,11 +55,11 @@
   <rdf:Description rdf:about="http://purl.obolibrary.org/obo/UO_0000187">
     <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://dikb.org/precipitant-milligram/3de9e5e2-59c8-41fd-a2ac-e33b3eef2df9">
-    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/UO_0000022"/>
-  </rdf:Description>
   <rdf:Description rdf:about="http://purl.obolibrary.org/obo/IAO_0000221">
     <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/object-drug-role/ca6fdb71-ec63-410f-ac0a-406709bcb125">
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000013"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://purl.obolibrary.org/obo/IAO_0000136">
     <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
@@ -87,28 +67,29 @@
   <rdf:Description rdf:about="http://purl.obolibrary.org/obo/IAO_0000039">
     <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://dikb.org/data-ratio/70a1c37f-f09f-498a-bad0-d8934d9c79bf">
-    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/8001a4b8-a2bf-4586-a0a6-885eff89ea12"/>
-    <rdfs:label>nefazodone-digoxin drug package auc Increase information</rdfs:label>
-    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/fc1572d1-1f81-433a-9e2f-9256608dd279"/>
-    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type-has-part/53cf3760-3f0a-45b4-9097-e86388eddf9d">
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/UO_0000187"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/f3c325be-d13f-4933-becd-7e7f65a63698">
-    <obo:OBI_0000051 rdf:resource="http://dikb.org/data-ratio-type-has-part/51296759-828e-4f93-a9c6-0aacff9b2530"/>
-    <rdfs:label>29 Percent </rdfs:label>
-    <obo:OBI_0001937>29</obo:OBI_0001937>
+  <rdf:Description rdf:about="http://dikb.org/o-scattered-molecular-aggregate/bb9944b7-794b-4011-ae25-b5f5f1f44604">
+    <obo:RO_0002351 rdf:resource="http://dikb.org/object-drug/81567612-65f5-4117-9f69-cea8d180d314"/>
+    <obo:RO_0000053 rdf:resource="http://dikb.org/object-active-ingredient/b3aafeca-7844-46e5-966a-caa264f34014"/>
+    <obo:RO_0000053 rdf:resource="http://dikb.org/object-value-measurement-datum/1b9338a3-7ca6-4fb4-954e-027db605d2df"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0000576"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/precipitant-value-specification/1244642e-8693-4102-926b-076c67f4994e">
+    <obo:OBI_0001937>1000</obo:OBI_0001937>
+    <obo:IAO_0000039 rdf:resource="http://dikb.org/precipitant-milligram/8d6ca658-608e-4baf-8bff-219e4b2ea729"/>
     <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">
     <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://dikb.org/assertion/d5884b02-48b2-48de-9288-5de77a77d2b1">
-    <obo:BFO_0000051 rdf:resource="http://dikb.org/data-ratio/d623b3f0-32ff-4091-9621-74f0a22e9990"/>
-    <obo:BFO_0000051 rdf:resource="http://dikb.org/data-ratio/5c996a80-e2fb-4aa2-b6a1-22cc9c265559"/>
-    <obo:IAO_0000136 rdf:resource="http://dikb.org/bearer-object/c4637584-36d5-4812-bc6a-2977d6f23966"/>
-    <obo:IAO_0000136 rdf:resource="http://dikb.org/bearer-precipitant/698e916c-4755-4a4d-a08b-a753368a25e1"/>
-    <rdfs:label>divalproex sodium-INVEGA interaction description</rdfs:label>
-    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000001"/>
+  <rdf:Description rdf:about="http://dikb.org/object-drug-role/7f423442-ef47-4be9-a1d7-1872545afa3f">
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000013"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/precipitant-drug/c003cd94-1c9c-46e2-bcdb-9332842c2f9b">
+    <rdf:type rdf:resource="obo:MeSH_D014635"/>
+    <rdfs:label>divalproex sodium</rdfs:label>
   </rdf:Description>
   <rdf:Description rdf:about="http://purl.obolibrary.org/obo/DIDEO_00000050">
     <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
@@ -116,44 +97,67 @@
   <rdf:Description rdf:about="http://purl.obolibrary.org/obo/OBI_0001933">
     <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://dikb.org/object-drug/6e74686c-bfc7-464e-ae07-d068a739fc46">
-    <rdf:type rdf:resource="obo:RxNorm_686438"/>
+  <rdf:Description rdf:about="http://dikb.org/precipitant-drug/bd13b90c-d25b-4516-8c8a-521df5e08b52">
+    <rdf:type rdf:resource="obo:RxNorm_31565"/>
+    <rdfs:label>nefazodone</rdfs:label>
   </rdf:Description>
-  <rdf:Description rdf:about="http://dikb.org/precipitant-drug-role/2eb00f1a-acbe-4379-a2c3-f589c16059de">
-    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000013"/>
+  <rdf:Description rdf:about="http://dikb.org/precipitant-value-measurement-datum/db62eea3-6725-45ae-b3ea-f3d8ede9760f">
+    <obo:IAO_0000221 rdf:resource="http://dikb.org/precipitant-mass/e5b7fba5-db4e-4b97-abff-53d4c078b02b"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/precipitant-value-specification/a116271a-a01a-4b60-8df8-7e8a72d3c8c1"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/IAO_0000109"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/assertion/b3a5509f-e6eb-477e-914c-f7a5a5fd7d59">
+    <obo:BFO_0000051 rdf:resource="http://dikb.org/data-ratio/82c59a84-b93c-4e85-866e-0785e827baa7"/>
+    <obo:BFO_0000051 rdf:resource="http://dikb.org/data-ratio/959cb61b-74f6-4e53-a4e2-00b3ccba061a"/>
+    <obo:IAO_0000136 rdf:resource="http://dikb.org/bearer-object/212ac19a-d895-4c6d-9219-004184024d4c"/>
+    <obo:IAO_0000136 rdf:resource="http://dikb.org/bearer-precipitant/3001eecf-c065-4e59-ab90-03437a4e438c"/>
+    <rdfs:label>divalproex sodium-INVEGA interaction description</rdfs:label>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000001"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://purl.obolibrary.org/obo/PATO_0000125">
     <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
   </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/object-mass/aa1cd42c-b063-4c11-8270-33d6452b5312">
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/PATO_0000125"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/object-mass/91e39034-b50b-4284-94d3-c2da81e8b312">
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/PATO_0000125"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/precipitant-value-specification/a116271a-a01a-4b60-8df8-7e8a72d3c8c1">
+    <obo:OBI_0001937>200</obo:OBI_0001937>
+    <obo:IAO_0000039 rdf:resource="http://dikb.org/precipitant-milligram/c5e14cee-e60b-4e0f-903e-f9247a77d7be"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  </rdf:Description>
   <rdf:Description rdf:about="http://purl.obolibrary.org/obo/OBI_0000312">
     <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://dikb.org/bearer-object/876167ba-abfb-4a95-a5f6-4a487b573433">
-    <obo:BFO_0000051 rdf:resource="http://dikb.org/o-scattered-molecular-aggregate/5ede027b-cdc3-45cd-a6f5-da6eb11e021c"/>
-    <obo:RO_0000053 rdf:resource="http://dikb.org/object-drug-role/20bb65b1-1ed2-494d-bda7-fd24a4941a15"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://dikb.org/p-scattered-molecular-aggregate/abae99ab-abd3-4e98-94ce-13c2e98d528f">
-    <obo:RO_0000053 rdf:resource="http://dikb.org/precipitant-value-measurement-datum/25d7a0aa-9f5e-4c57-b878-c333d6b319e0"/>
-    <obo:RO_0000053 rdf:resource="http://dikb.org/precipitant-active-ingredient/ddabfb74-b457-4c04-b8ea-a0b6f61c030c"/>
-    <obo:RO_0002351 rdf:resource="http://dikb.org/precipitant-drug/3649309e-7422-4991-bd8e-c65e8a51a44b"/>
+  <rdf:Description rdf:about="http://dikb.org/p-scattered-molecular-aggregate/70757561-a374-4eb9-9cb0-051fd5e627dd">
+    <obo:RO_0000053 rdf:resource="http://dikb.org/precipitant-value-measurement-datum/db62eea3-6725-45ae-b3ea-f3d8ede9760f"/>
+    <obo:RO_0000053 rdf:resource="http://dikb.org/precipitant-active-ingredient/17c46710-e53c-4058-aa1d-7810b2442351"/>
+    <obo:RO_0002351 rdf:resource="http://dikb.org/precipitant-drug/bd13b90c-d25b-4516-8c8a-521df5e08b52"/>
     <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0000576"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://dikb.org/object-value-specification/a8f237ed-dda0-4356-a74c-bd04d84ae32b">
-    <obo:OBI_0001937>12</obo:OBI_0001937>
-    <obo:IAO_0000039 rdf:resource="http://dikb.org/object-milligram/e2105ee8-c829-4310-9fde-52db6f2387ac"/>
-    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  <rdf:Description rdf:about="http://dikb.org/o-scattered-molecular-aggregate/e070aff0-ca97-468f-86b1-05d01071449f">
+    <obo:RO_0002351 rdf:resource="http://dikb.org/object-drug/55888d8a-af45-48aa-b574-f679f2318427"/>
+    <obo:RO_0000053 rdf:resource="http://dikb.org/object-active-ingredient/d75bb8b8-25e8-4534-a1f3-8cffa3460ad2"/>
+    <obo:RO_0000053 rdf:resource="http://dikb.org/object-value-measurement-datum/b8b8a181-db46-432a-adea-ff071a3dbcd1"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0000576"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://dikb.org/precipitant-drug/3649309e-7422-4991-bd8e-c65e8a51a44b">
-    <rdf:type rdf:resource="obo:RxNorm_31565"/>
+  <rdf:Description rdf:about="http://dikb.org/precipitant-drug-role/aa7c58f5-9a86-43f4-9d3b-34a940457b7e">
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000013"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://www.w3.org/2000/01/rdf-schema#label">
     <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://dikb.org/data-ratio-type-has-part/51296759-828e-4f93-a9c6-0aacff9b2530">
-    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/UO_0000187"/>
+  <rdf:Description rdf:about="http://dikb.org/bearer-precipitant/3001eecf-c065-4e59-ab90-03437a4e438c">
+    <obo:BFO_0000051 rdf:resource="http://dikb.org/p-scattered-molecular-aggregate/e4bde22a-8586-403a-bd9f-beec1327a101"/>
+    <obo:RO_0000053 rdf:resource="http://dikb.org/precipitant-drug-role/aa7c58f5-9a86-43f4-9d3b-34a940457b7e"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://dikb.org/object-drug-role/20bb65b1-1ed2-494d-bda7-fd24a4941a15">
-    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000013"/>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/574bf84f-53e2-403e-ae0d-3776caa25acc">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/fffd8ecb-3541-4caf-a908-1496e7f63ee6"/>
+    <rdfs:label>nefazodone-digoxin drug package cmax Increase information</rdfs:label>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/6281350e-d055-431d-9dd2-9a49be4b4dce"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://purl.obolibrary.org/obo/DIDEO_00000013">
     <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
@@ -164,142 +168,142 @@
   <rdf:Description rdf:about="http://purl.obolibrary.org/obo/DIDEO_00000001">
     <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://dikb.org/precipitant-value-specification/aa224600-6edd-42c8-9ba3-b14e5ed1b0a2">
-    <obo:OBI_0001937>200</obo:OBI_0001937>
-    <obo:IAO_0000039 rdf:resource="http://dikb.org/precipitant-milligram/957cc4b4-84df-4698-884d-ea23c808fe36"/>
+  <rdf:Description rdf:about="http://dikb.org/object-value-measurement-datum/1b9338a3-7ca6-4fb4-954e-027db605d2df">
+    <obo:IAO_0000221 rdf:resource="http://dikb.org/object-mass/aa1cd42c-b063-4c11-8270-33d6452b5312"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/object-value-specification/726bb020-6721-4cb7-bde5-7b787e87543f"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/IAO_0000109"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type-has-part/8a18ddbf-8a7b-4aa1-834b-8e4f07add297">
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/UO_0000187"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/object-value-specification/0b17c4ec-0e33-470c-892e-9ea4265a414a">
+    <obo:OBI_0001937>.2</obo:OBI_0001937>
+    <obo:IAO_0000039 rdf:resource="http://dikb.org/object-milligram/e7284abb-b1ad-4946-be38-aede651b4447"/>
     <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://dikb.org/method/999a7d05-deb7-480c-8935-265315282188">
-    <rdfs:label>divalproex sodium-INVEGA DDI clinical trial</rdfs:label>
-    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000124"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://dikb.org/bearer-object/c4637584-36d5-4812-bc6a-2977d6f23966">
-    <obo:BFO_0000051 rdf:resource="http://dikb.org/o-scattered-molecular-aggregate/4d429d20-be93-4fe1-a1f9-c0277b608db1"/>
-    <obo:RO_0000053 rdf:resource="http://dikb.org/object-drug-role/e4a020f8-6edc-439e-9773-7af8a69dada1"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://dikb.org/object-milligram/e2105ee8-c829-4310-9fde-52db6f2387ac">
+  <rdf:Description rdf:about="http://dikb.org/object-milligram/e7284abb-b1ad-4946-be38-aede651b4447">
     <rdf:type rdf:resource="http://purl.obolibrary.org/obo/UO_0000022"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://dikb.org/precipitant-active-ingredient/ddabfb74-b457-4c04-b8ea-a0b6f61c030c">
+  <rdf:Description rdf:about="http://dikb.org/object-active-ingredient/b3aafeca-7844-46e5-966a-caa264f34014">
     <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DRON_00000028"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://dikb.org/bearer-precipitant/698e916c-4755-4a4d-a08b-a753368a25e1">
-    <obo:BFO_0000051 rdf:resource="http://dikb.org/p-scattered-molecular-aggregate/989f30d1-dd2f-4837-bd46-f4fb430545d4"/>
-    <obo:RO_0000053 rdf:resource="http://dikb.org/precipitant-drug-role/2eb00f1a-acbe-4379-a2c3-f589c16059de"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://dikb.org/object-mass/01ed047a-5912-403c-8f95-5487ea3bddd7">
-    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/PATO_0000125"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://dikb.org/o-scattered-molecular-aggregate/4d429d20-be93-4fe1-a1f9-c0277b608db1">
-    <obo:RO_0002351 rdf:resource="http://dikb.org/object-drug/6e74686c-bfc7-464e-ae07-d068a739fc46"/>
-    <obo:RO_0000053 rdf:resource="http://dikb.org/object-active-ingredient/2156ec05-1fb6-44ac-9bdf-9f6ada3fce0e"/>
-    <obo:RO_0000053 rdf:resource="http://dikb.org/object-value-measurement-datum/e7a19131-becb-416e-bd93-08e0a175692c"/>
-    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0000576"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://dikb.org/precipitant-active-ingredient/b4c3830d-76f2-49cf-9c5c-94110da4432e">
-    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DRON_00000028"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://dikb.org/precipitant-milligram/957cc4b4-84df-4698-884d-ea23c808fe36">
+  <rdf:Description rdf:about="http://dikb.org/object-milligram/2983d993-2335-4b34-8bdf-330af88ec141">
     <rdf:type rdf:resource="http://purl.obolibrary.org/obo/UO_0000022"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/fc1572d1-1f81-433a-9e2f-9256608dd279">
-    <obo:OBI_0000051 rdf:resource="http://dikb.org/data-ratio-type-has-part/32adbe1c-91cf-4457-aa55-895672bbca25"/>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/3275118b-fb34-44a0-8e39-4f584cb4b5ea">
+    <obo:OBI_0000051 rdf:resource="http://dikb.org/data-ratio-type-has-part/5caf0caf-5e1d-47ba-9c15-6f24c6f642c8"/>
     <rdfs:label>15 Percent </rdfs:label>
     <obo:OBI_0001937>15</obo:OBI_0001937>
     <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://dikb.org/data-ratio/d623b3f0-32ff-4091-9621-74f0a22e9990">
-    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/999a7d05-deb7-480c-8935-265315282188"/>
-    <rdfs:label>divalproex sodium-INVEGA drug package auc Increase information</rdfs:label>
-    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/3591beac-135e-4453-ba73-f745a9388d0c"/>
-    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type-has-part/5caf0caf-5e1d-47ba-9c15-6f24c6f642c8">
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/UO_0000187"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://dikb.org/o-scattered-molecular-aggregate/5ede027b-cdc3-45cd-a6f5-da6eb11e021c">
-    <obo:RO_0002351 rdf:resource="http://dikb.org/object-drug/0811409f-a236-4ea9-83d4-22dbc5773cce"/>
-    <obo:RO_0000053 rdf:resource="http://dikb.org/object-active-ingredient/4c3c4772-9a84-4a65-aeca-7c089d401fa4"/>
-    <obo:RO_0000053 rdf:resource="http://dikb.org/object-value-measurement-datum/6e299f72-b98b-4b52-8a94-eed59191f0be"/>
+  <rdf:Description rdf:about="http://dikb.org/precipitant-milligram/c5e14cee-e60b-4e0f-903e-f9247a77d7be">
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/UO_0000022"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/bearer-object/3e529544-1d53-482a-b9da-f3f4d0edb6d0">
+    <obo:BFO_0000051 rdf:resource="http://dikb.org/o-scattered-molecular-aggregate/e070aff0-ca97-468f-86b1-05d01071449f"/>
+    <obo:RO_0000053 rdf:resource="http://dikb.org/object-drug-role/7f423442-ef47-4be9-a1d7-1872545afa3f"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/method/8581039c-8447-464f-a3cf-d78a091df622">
+    <rdfs:label>divalproex sodium-INVEGA DDI clinical trial</rdfs:label>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000124"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/object-drug/55888d8a-af45-48aa-b574-f679f2318427">
+    <rdf:type rdf:resource="obo:RxNorm_3407"/>
+    <rdfs:label>digoxin</rdfs:label>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/p-scattered-molecular-aggregate/e4bde22a-8586-403a-bd9f-beec1327a101">
+    <obo:RO_0000053 rdf:resource="http://dikb.org/precipitant-value-measurement-datum/3fa89768-6b7c-4e1b-9ef2-f555271f6cc2"/>
+    <obo:RO_0000053 rdf:resource="http://dikb.org/precipitant-active-ingredient/30424846-6045-4e48-aae6-4bd8dfaf78ce"/>
+    <obo:RO_0002351 rdf:resource="http://dikb.org/precipitant-drug/c003cd94-1c9c-46e2-bcdb-9332842c2f9b"/>
     <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0000576"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://dikb.org/precipitant-mass/234c4770-2d9c-4092-9d14-4210dda9bd48">
-    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/PATO_0000125"/>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/835ffb02-ff80-42b0-b358-a21b0058af71">
+    <obo:OBI_0000051 rdf:resource="http://dikb.org/data-ratio-type-has-part/8a18ddbf-8a7b-4aa1-834b-8e4f07add297"/>
+    <rdfs:label>50 Percent </rdfs:label>
+    <obo:OBI_0001937>50</obo:OBI_0001937>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://dikb.org/data-ratio/7a10e091-b0b4-4ba0-984c-d8b3d008dc45">
-    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/8001a4b8-a2bf-4586-a0a6-885eff89ea12"/>
-    <rdfs:label>nefazodone-digoxin drug package cmax Increase information</rdfs:label>
-    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/f3c325be-d13f-4933-becd-7e7f65a63698"/>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/959cb61b-74f6-4e53-a4e2-00b3ccba061a">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/8581039c-8447-464f-a3cf-d78a091df622"/>
+    <rdfs:label>divalproex sodium-INVEGA drug package cmax Increase information</rdfs:label>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/54518117-7137-445e-af1a-374688750721"/>
     <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://purl.obolibrary.org/obo/OBI_0001937">
     <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/3591beac-135e-4453-ba73-f745a9388d0c">
-    <obo:OBI_0000051 rdf:resource="http://dikb.org/data-ratio-type-has-part/ecbd7362-ff18-46d0-ac3c-a1ed10d40c2d"/>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio/82c59a84-b93c-4e85-866e-0785e827baa7">
+    <obo:OBI_0000312 rdf:resource="http://dikb.org/method/8581039c-8447-464f-a3cf-d78a091df622"/>
+    <rdfs:label>divalproex sodium-INVEGA drug package auc Increase information</rdfs:label>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/835ffb02-ff80-42b0-b358-a21b0058af71"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000050"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/precipitant-mass/e5b7fba5-db4e-4b97-abff-53d4c078b02b">
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/PATO_0000125"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/precipitant-active-ingredient/30424846-6045-4e48-aae6-4bd8dfaf78ce">
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DRON_00000028"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/bearer-precipitant/9a6ed19d-2dad-4f25-a032-10620bb682d6">
+    <obo:BFO_0000051 rdf:resource="http://dikb.org/p-scattered-molecular-aggregate/70757561-a374-4eb9-9cb0-051fd5e627dd"/>
+    <obo:RO_0000053 rdf:resource="http://dikb.org/precipitant-drug-role/09cb66a2-76fd-44dc-b757-49743f378121"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/precipitant-drug-role/09cb66a2-76fd-44dc-b757-49743f378121">
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000013"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/bearer-object/212ac19a-d895-4c6d-9219-004184024d4c">
+    <obo:BFO_0000051 rdf:resource="http://dikb.org/o-scattered-molecular-aggregate/bb9944b7-794b-4011-ae25-b5f5f1f44604"/>
+    <obo:RO_0000053 rdf:resource="http://dikb.org/object-drug-role/ca6fdb71-ec63-410f-ac0a-406709bcb125"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/54518117-7137-445e-af1a-374688750721">
+    <obo:OBI_0000051 rdf:resource="http://dikb.org/data-ratio-type-has-part/ed10e1c5-7c9c-49b5-b727-f13f334f47b3"/>
     <rdfs:label>50 Percent </rdfs:label>
     <obo:OBI_0001937>50</obo:OBI_0001937>
     <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://dikb.org/precipitant-value-measurement-datum/25aec3b5-50d7-4aee-8cc3-946543bb79a0">
-    <obo:IAO_0000221 rdf:resource="http://dikb.org/precipitant-mass/234c4770-2d9c-4092-9d14-4210dda9bd48"/>
-    <obo:OBI_0001937 rdf:resource="http://dikb.org/precipitant-value-specification/450406de-5c43-48c7-bee9-a1a1bc54e75c"/>
-    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/IAO_0000109"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://dikb.org/data-ratio-type-has-part/ecbd7362-ff18-46d0-ac3c-a1ed10d40c2d">
-    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/UO_0000187"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://dikb.org/precipitant-drug-role/5dd2dced-99f8-47c8-9062-046ac4bcc24c">
-    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000013"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://dikb.org/p-scattered-molecular-aggregate/989f30d1-dd2f-4837-bd46-f4fb430545d4">
-    <obo:RO_0000053 rdf:resource="http://dikb.org/precipitant-value-measurement-datum/25aec3b5-50d7-4aee-8cc3-946543bb79a0"/>
-    <obo:RO_0000053 rdf:resource="http://dikb.org/precipitant-active-ingredient/b4c3830d-76f2-49cf-9c5c-94110da4432e"/>
-    <obo:RO_0002351 rdf:resource="http://dikb.org/precipitant-drug/60952425-0d9b-4e0b-bfb4-b0b7f342666b"/>
-    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0000576"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://purl.obolibrary.org/obo/DRON_00000028">
     <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://dikb.org/object-drug/0811409f-a236-4ea9-83d4-22dbc5773cce">
-    <rdf:type rdf:resource="obo:RxNorm_3407"/>
+  <rdf:Description rdf:about="http://dikb.org/method/fffd8ecb-3541-4caf-a908-1496e7f63ee6">
+    <rdfs:label>nefazodone-digoxin DDI clinical trial</rdfs:label>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000124"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/d26301d0-14ba-4ce8-9321-f109a9f32970">
-    <obo:OBI_0000051 rdf:resource="http://dikb.org/data-ratio-type-has-part/a38ba9ca-d92d-4881-940f-9e979813cbea"/>
-    <rdfs:label>50 Percent </rdfs:label>
-    <obo:OBI_0001937>50</obo:OBI_0001937>
-    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+  <rdf:Description rdf:about="http://dikb.org/object-value-measurement-datum/b8b8a181-db46-432a-adea-ff071a3dbcd1">
+    <obo:IAO_0000221 rdf:resource="http://dikb.org/object-mass/91e39034-b50b-4284-94d3-c2da81e8b312"/>
+    <obo:OBI_0001937 rdf:resource="http://dikb.org/object-value-specification/0b17c4ec-0e33-470c-892e-9ea4265a414a"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/IAO_0000109"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://dikb.org/precipitant-mass/141978d2-0226-4e4a-b002-ffdf25ee9521">
-    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/PATO_0000125"/>
+  <rdf:Description rdf:about="http://dikb.org/object-active-ingredient/d75bb8b8-25e8-4534-a1f3-8cffa3460ad2">
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DRON_00000028"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://dikb.org/precipitant-milligram/8d6ca658-608e-4baf-8bff-219e4b2ea729">
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/UO_0000022"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://purl.obolibrary.org/obo/OBI_0000576">
     <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://dikb.org/precipitant-value-measurement-datum/25d7a0aa-9f5e-4c57-b878-c333d6b319e0">
-    <obo:IAO_0000221 rdf:resource="http://dikb.org/precipitant-mass/141978d2-0226-4e4a-b002-ffdf25ee9521"/>
-    <obo:OBI_0001937 rdf:resource="http://dikb.org/precipitant-value-specification/aa224600-6edd-42c8-9ba3-b14e5ed1b0a2"/>
-    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/IAO_0000109"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://dikb.org/object-value-measurement-datum/e7a19131-becb-416e-bd93-08e0a175692c">
-    <obo:IAO_0000221 rdf:resource="http://dikb.org/object-mass/01ed047a-5912-403c-8f95-5487ea3bddd7"/>
-    <obo:OBI_0001937 rdf:resource="http://dikb.org/object-value-specification/a8f237ed-dda0-4356-a74c-bd04d84ae32b"/>
-    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/IAO_0000109"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://dikb.org/precipitant-value-specification/450406de-5c43-48c7-bee9-a1a1bc54e75c">
-    <obo:OBI_0001937>1000</obo:OBI_0001937>
-    <obo:IAO_0000039 rdf:resource="http://dikb.org/precipitant-milligram/3de9e5e2-59c8-41fd-a2ac-e33b3eef2df9"/>
+  <rdf:Description rdf:about="http://dikb.org/data-ratio-type/6281350e-d055-431d-9dd2-9a49be4b4dce">
+    <obo:OBI_0000051 rdf:resource="http://dikb.org/data-ratio-type-has-part/53cf3760-3f0a-45b4-9097-e86388eddf9d"/>
+    <rdfs:label>29 Percent </rdfs:label>
+    <obo:OBI_0001937>29</obo:OBI_0001937>
     <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://dikb.org/object-drug-role/e4a020f8-6edc-439e-9773-7af8a69dada1">
-    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000013"/>
+  <rdf:Description rdf:about="http://dikb.org/object-drug/81567612-65f5-4117-9f69-cea8d180d314">
+    <rdf:type rdf:resource="obo:RxNorm_686438"/>
+    <rdfs:label>INVEGA</rdfs:label>
   </rdf:Description>
   <rdf:Description rdf:about="http://purl.obolibrary.org/obo/OBI_0000051">
     <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://dikb.org/precipitant-drug/60952425-0d9b-4e0b-bfb4-b0b7f342666b">
-    <rdf:type rdf:resource="obo:MeSH_D014635"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://dikb.org/object-value-measurement-datum/6e299f72-b98b-4b52-8a94-eed59191f0be">
-    <obo:IAO_0000221 rdf:resource="http://dikb.org/object-mass/72d2630c-1c06-4ce6-a241-e43d58463a6e"/>
-    <obo:OBI_0001937 rdf:resource="http://dikb.org/object-value-specification/57d7841c-5a21-47b1-8c45-866a07ba809f"/>
-    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/IAO_0000109"/>
+  <rdf:Description rdf:about="http://dikb.org/assertion/ee1a519b-46c2-4c50-8dbe-5955b5091532">
+    <obo:BFO_0000051 rdf:resource="http://dikb.org/data-ratio/b0f9680f-b09c-42dd-980a-4f66fbf35429"/>
+    <obo:BFO_0000051 rdf:resource="http://dikb.org/data-ratio/574bf84f-53e2-403e-ae0d-3776caa25acc"/>
+    <obo:IAO_0000136 rdf:resource="http://dikb.org/bearer-object/3e529544-1d53-482a-b9da-f3f4d0edb6d0"/>
+    <obo:IAO_0000136 rdf:resource="http://dikb.org/bearer-precipitant/9a6ed19d-2dad-4f25-a032-10620bb682d6"/>
+    <rdfs:label>nefazodone-digoxin interaction description</rdfs:label>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000001"/>
   </rdf:Description>
 </rdf:RDF>

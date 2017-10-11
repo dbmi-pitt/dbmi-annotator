@@ -70,8 +70,8 @@ map:BearerPrecipitantRole a d2rq:ClassMap;
 
 ## bearer of: precipitant drug role 
 map:precipitant_bearer_role_of a d2rq:PropertyBridge;
-	d2rq:belongsToClassMap map:BearerPrecipitantRole;
-	d2rq:property obo:RO_0000053; 
+    d2rq:belongsToClassMap map:BearerPrecipitantRole;
+    d2rq:property obo:RO_0000053; 
     d2rq:uriSqlExpression "CONCAT('http://dikb.org/precipitant-drug-role/', ohdsi.rdf_mp_claim_qualifier.p_drug_role_urn)"; 
     .
 
@@ -97,14 +97,14 @@ map:PrecipitantScatteredMolecularAggregate a d2rq:ClassMap;
     d2rq:dataStorage map:database;
     .
 
-## has_member: precipitant drug
+## has member: precipitant drug
 map:precipitant_scattered_has_member a d2rq:PropertyBridge;
-	d2rq:belongsToClassMap map:PrecipitantScatteredMolecularAggregate;
-	d2rq:property obo:RO_0002351; 
+    d2rq:belongsToClassMap map:PrecipitantScatteredMolecularAggregate;
+    d2rq:property obo:RO_0002351; 
     d2rq:uriSqlExpression "CONCAT('http://dikb.org/precipitant-drug/', ohdsi.rdf_mp_claim_qualifier.p_drug_urn)"; 
     .
 
-## is bearer_of: PrecipitantActiveIngredient
+## is bearer of: PrecipitantActiveIngredient
 map:precipitant_scattered_bearer_of_active_ingredient a d2rq:PropertyBridge;
     d2rq:belongsToClassMap map:PrecipitantScatteredMolecularAggregate;
     d2rq:property obo:RO_0000053; 
@@ -128,6 +128,12 @@ map:precipitant_item_rdf_type a d2rq:PropertyBridge;
     d2rq:belongsToClassMap map:PrecipitantItem;
     d2rq:property rdf:type;
     d2rq:uriPattern "obo:@@ohdsi.rdf_mp_claim_qualifier.p_vocabulary_id@@_@@ohdsi.rdf_mp_claim_qualifier.p_concept_code@@";
+    .
+
+map:precipitant_item_label a d2rq:PropertyBridge;
+    d2rq:belongsToClassMap map:PrecipitantItem;
+    d2rq:property rdfs:label;
+    d2rq:column "ohdsi.rdf_mp_claim_qualifier.precipitant";
     .
 
 ## Class Precipitant Active Ingredient ##############################################
@@ -234,14 +240,14 @@ map:ObjectScatteredMolecularAggregate a d2rq:ClassMap;
     d2rq:dataStorage map:database;
     .
 
-## has_member: object drug
+## has member: object drug
 map:object_scattered_has_member a d2rq:PropertyBridge;
 	d2rq:belongsToClassMap map:ObjectScatteredMolecularAggregate;
 	d2rq:property obo:RO_0002351; 
     d2rq:uriSqlExpression "CONCAT('http://dikb.org/object-drug/', ohdsi.rdf_mp_claim_qualifier.o_drug_urn)"; 
     .
 
-## is bearer_of: ObjectActiveIngredient
+## is bearer of: ObjectActiveIngredient
 map:object_scattered_bearer_of_active_ingredient a d2rq:PropertyBridge;
     d2rq:belongsToClassMap map:ObjectScatteredMolecularAggregate;
     d2rq:property obo:RO_0000053; 
@@ -266,6 +272,13 @@ map:object_item_rdf_type a d2rq:PropertyBridge;
     d2rq:belongsToClassMap map:ObjectItem;
     d2rq:property rdf:type;
     d2rq:uriPattern "obo:@@ohdsi.rdf_mp_claim_qualifier.o_vocabulary_id@@_@@ohdsi.rdf_mp_claim_qualifier.o_concept_code@@";
+    .
+
+# object drug label
+map:object_item_label a d2rq:PropertyBridge;
+    d2rq:belongsToClassMap map:ObjectItem;
+    d2rq:property rdfs:label;
+    d2rq:column "ohdsi.rdf_mp_claim_qualifier.object";
     .
 
 ## Class Object Active Ingredient ##############################################
