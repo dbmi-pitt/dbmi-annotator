@@ -9,7 +9,7 @@ join oa_selector s on t.has_selector = s.id;
 
 
 -- Get Mp data by claim id
-select dann.type, df.data_field_type, df.value_as_string, df.value_as_number, s.exact, s.prefix, s.suffix, dann.mp_data_index, dann.ev_supports, dann.rejected, dann.rejected_reason, dann.rejected_comment
+select dann.type, df.data_field_type, df.value_as_string, df.value_as_number, s.exact, s.prefix, s.suffix, dann.mp_data_index, dann.ev_supports
 from mp_data_annotation dann 
 join oa_data_body dbody on dann.has_body = dbody.id 
 join data_field df on df.data_body_id = dbody.id 
