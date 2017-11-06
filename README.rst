@@ -132,8 +132,7 @@ Configuration:
 
     #proxy for local annotator store on port 5000
     ProxyPass /annotatorstore http://localhost:5000/
-    RewriteRule /annotatorstore(.*) http://localhost:5000$1 [P]
-
+    RewriteRule /annotatorstore(.*) http://localhost:5000$1 [P]  
 
 Run server:
 ^^^^^^^^^^
@@ -143,7 +142,25 @@ Run server:
     $ nodemon server.js (run '$ npm install -g nodemon', if command is not available)
     $ service apache2 start
 
-access AnnotationPress through ``'http://localhost/dbmiannotator'``
+    access AnnotationPress through ``'http://localhost/dbmiannotator'``
+
+4.Add documents to annotate
+
+    Add document to apache2 home directory
+    $ cp /path/to/html /var/www/html/PMC/
+
+    Resigter new document in article-list
+    pmc-list.csv for PMC article
+    ex. new entry for article Aberg_2009 
+    Aberg_2006_16514303 	http://localhost/PMC/PMC1459289.html
+    
+    Access the article by copy and paste the link to input box on main page
+    http://localhost/PMC/PMC4536363.html 
+
+    Tips: save HTML article
+    Example PMC article with id 4536363: 
+    <1> save PMC article with pmcid 4536363 as PMC4536363
+    <2> copy the html resources to apache home dir in docker container apache2
 
 -----------
 Directories
