@@ -144,7 +144,9 @@ Run server:
 
     access AnnotationPress through ``'http://localhost/dbmiannotator'``
 
-4.Add documents to annotate
+    
+Add documents to annotate:
+^^^^^^^^^^
 
     Add document to apache2 home directory
     $ cp /path/to/html /var/www/html/PMC/
@@ -157,7 +159,7 @@ Run server:
     Access the article by copy and paste the link to input box on main page
     http://localhost/PMC/PMC4536363.html 
 
-    Tips: save HTML article
+    Note: save HTML article to local
     Example PMC article with id 4536363: 
     <1> save PMC article with pmcid 4536363 as PMC4536363
     <2> copy the html resources to apache home dir in docker container apache2
