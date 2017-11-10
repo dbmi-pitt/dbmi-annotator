@@ -13,10 +13,8 @@
     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
   xml:base="file:///home/yin2/Downloads/d2rq-0.8.1/mpevidence.rdf#" > 
   <rdf:Description rdf:about="http://dikb.org/data-ratio-type/3ba41382-b985-40ea-a885-859e72187f3c">
-    <obo:OBI_0000051 rdf:resource="http://dikb.org/data-ratio-type-has-part/a0a14e6a-2070-4ebe-ad26-26c4ae1f7ae8"/>
-    <rdfs:label>50 Percent </rdfs:label>
     <obo:OBI_0001937>50</obo:OBI_0001937>
-    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000127"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://purl.obolibrary.org/obo/IAO_0000109">
     <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
@@ -76,9 +74,6 @@
   <rdf:Description rdf:about="http://purl.obolibrary.org/obo/CHEBI_59999">
     <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://purl.obolibrary.org/obo/UO_0000187">
-    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
-  </rdf:Description>
   <rdf:Description rdf:about="http://purl.obolibrary.org/obo/IAO_0000003">
     <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
   </rdf:Description>
@@ -89,10 +84,8 @@
     <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://dikb.org/data-ratio-type/8280bf00-379f-4ea0-ac56-e8403f3e9eb9">
-    <obo:OBI_0000051 rdf:resource="http://dikb.org/data-ratio-type-has-part/93073bf9-2221-4d19-acc1-6902b57cbcc9"/>
-    <rdfs:label>50 Percent </rdfs:label>
     <obo:OBI_0001937>50</obo:OBI_0001937>
-    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000127"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://dikb.org/bearer-object/0de1cf0a-6864-48f9-89d6-88b20ad080e9">
     <obo:BFO_0000051 rdf:resource="http://dikb.org/o-scattered-molecular-aggregate/fe841db3-1888-483b-b890-5ec48a48a2a4"/>
@@ -130,6 +123,9 @@
   <rdf:Description rdf:about="http://dikb.org/object-chemical-substance/5ee660e2-34a3-478b-a310-9bff1ac360c4">
     <obo:RO_0002353 rdf:resource="http://dikb.org/object-metabolism/e63e7ddd-3107-4324-a73e-36346b6ee5f4"/>
     <rdf:type rdf:resource="http://purl.obolibrary.org/obo/CHEBI_59999"/>
+  </rdf:Description>
+  <rdf:Description rdf:about="http://purl.obolibrary.org/obo/DIDEO_00000127">
+    <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://purl.obolibrary.org/obo/PATO_0000125">
     <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
@@ -171,7 +167,7 @@
   <rdf:Description rdf:about="http://dikb.org/data-ratio/84f26145-cf39-4fd6-9d00-f7a0f5064f28">
     <obo:OBI_0000312 rdf:resource="http://dikb.org/method/322ec1eb-b9f3-4204-b2b3-204a661257e9"/>
     <rdfs:label>nefazodone-digoxin drug package auc Increase information</rdfs:label>
-    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/1fed5ed8-72b7-4d35-bc71-22b9d1a4c289"/>
+    <obo:OBI_0001938 rdf:resource="http://dikb.org/data-ratio-type/1fed5ed8-72b7-4d35-bc71-22b9d1a4c289"/>
     <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000046"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://dikb.org/object-active-ingredient/93907f3e-d9f0-4014-bb61-6adfa6a401a9">
@@ -192,17 +188,15 @@
   <rdf:Description rdf:about="http://dikb.org/data-ratio/71946e97-152e-45ca-88fd-296b64545c13">
     <obo:OBI_0000312 rdf:resource="http://dikb.org/method/ad3ad3ca-c2f7-4b77-8c21-7720d5dfbffb"/>
     <rdfs:label>divalproex sodium-INVEGA drug package cmax Increase information</rdfs:label>
-    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/8280bf00-379f-4ea0-ac56-e8403f3e9eb9"/>
+    <obo:OBI_0001938 rdf:resource="http://dikb.org/data-ratio-type/8280bf00-379f-4ea0-ac56-e8403f3e9eb9"/>
     <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000038"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://purl.obolibrary.org/obo/DIDEO_00000001">
     <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://dikb.org/data-ratio-type/cb840b93-7fa2-410c-9278-21d5ac83c64d">
-    <obo:OBI_0000051 rdf:resource="http://dikb.org/data-ratio-type-has-part/f6a1e491-5e0d-4611-9586-f7c2f9f19df2"/>
-    <rdfs:label>29 Percent </rdfs:label>
     <obo:OBI_0001937>29</obo:OBI_0001937>
-    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000127"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://purl.obolibrary.org/obo/RO_0002353">
     <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
@@ -214,9 +208,6 @@
     <obo:IAO_0000136 rdf:resource="http://dikb.org/bearer-precipitant/9b0e1eb0-803c-4c5c-a597-d842f916476a"/>
     <rdfs:label>divalproex sodium-INVEGA interaction description</rdfs:label>
     <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000001"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://dikb.org/data-ratio-type-has-part/93073bf9-2221-4d19-acc1-6902b57cbcc9">
-    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/UO_0000187"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://dikb.org/object-metabolism/b123c329-636b-4134-8029-4481bde699df">
     <rdf:type rdf:resource="http://purl.obolibrary.org/obo/GO_000B152"/>
@@ -255,9 +246,6 @@
   <rdf:Description rdf:about="http://dikb.org/precipitant-measurement-unit-label/4dbbe60d-6c01-413b-8936-0ff66c0f2152">
     <rdf:type rdf:resource="http://purl.obolibrary.org/obo/IAO_0000003"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://dikb.org/data-ratio-type-has-part/39aedc9d-facf-489e-9031-8474fc4202b7">
-    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/UO_0000187"/>
-  </rdf:Description>
   <rdf:Description rdf:about="http://purl.obolibrary.org/obo/GO_000B152">
     <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
   </rdf:Description>
@@ -281,9 +269,6 @@
   <rdf:Description rdf:about="http://dikb.org/object-mass/fe293fec-1e80-479c-976c-64c29203c47b">
     <rdf:type rdf:resource="http://purl.obolibrary.org/obo/IAO_0000109"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://dikb.org/data-ratio-type-has-part/f6a1e491-5e0d-4611-9586-f7c2f9f19df2">
-    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/UO_0000187"/>
-  </rdf:Description>
   <rdf:Description rdf:about="http://dikb.org/object-chemical-substance/1afe1aa8-a7b8-4381-89b6-1116292a02ca">
     <obo:RO_0002353 rdf:resource="http://dikb.org/object-metabolism/b123c329-636b-4134-8029-4481bde699df"/>
     <rdf:type rdf:resource="http://purl.obolibrary.org/obo/CHEBI_59999"/>
@@ -301,11 +286,8 @@
   <rdf:Description rdf:about="http://dikb.org/data-ratio/d828ac42-2724-4c79-a6e4-7e1b7e767e2e">
     <obo:OBI_0000312 rdf:resource="http://dikb.org/method/322ec1eb-b9f3-4204-b2b3-204a661257e9"/>
     <rdfs:label>nefazodone-digoxin drug package cmax Increase information</rdfs:label>
-    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/cb840b93-7fa2-410c-9278-21d5ac83c64d"/>
+    <obo:OBI_0001938 rdf:resource="http://dikb.org/data-ratio-type/cb840b93-7fa2-410c-9278-21d5ac83c64d"/>
     <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000038"/>
-  </rdf:Description>
-  <rdf:Description rdf:about="http://dikb.org/data-ratio-type-has-part/a0a14e6a-2070-4ebe-ad26-26c4ae1f7ae8">
-    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/UO_0000187"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://dikb.org/bearer-precipitant/9c6b6dd7-cdb7-4978-a636-c93e3f93e1a9">
     <obo:BFO_0000051 rdf:resource="http://dikb.org/p-scattered-molecular-aggregate/e3ccdeac-daf8-49e1-b076-420490555c58"/>
@@ -323,9 +305,6 @@
   <rdf:Description rdf:about="http://dikb.org/precipitant-drug-role/7d3d4a99-63cc-4d3a-a6e8-f8fde1f733e2">
     <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000013"/>
   </rdf:Description>
-  <rdf:Description rdf:about="http://purl.obolibrary.org/obo/OBI_0000051">
-    <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
-  </rdf:Description>
   <rdf:Description rdf:about="http://dikb.org/object-measurement-unit-label/eea60bb4-d006-4ecb-8be2-cf2213959755">
     <rdf:type rdf:resource="http://purl.obolibrary.org/obo/IAO_0000003"/>
   </rdf:Description>
@@ -335,14 +314,12 @@
   <rdf:Description rdf:about="http://dikb.org/data-ratio/96a6242b-14fb-4c4e-8844-0db3c78beb5c">
     <obo:OBI_0000312 rdf:resource="http://dikb.org/method/ad3ad3ca-c2f7-4b77-8c21-7720d5dfbffb"/>
     <rdfs:label>divalproex sodium-INVEGA drug package auc Increase information</rdfs:label>
-    <obo:OBI_0001937 rdf:resource="http://dikb.org/data-ratio-type/3ba41382-b985-40ea-a885-859e72187f3c"/>
+    <obo:OBI_0001938 rdf:resource="http://dikb.org/data-ratio-type/3ba41382-b985-40ea-a885-859e72187f3c"/>
     <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000046"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://dikb.org/data-ratio-type/1fed5ed8-72b7-4d35-bc71-22b9d1a4c289">
-    <obo:OBI_0000051 rdf:resource="http://dikb.org/data-ratio-type-has-part/39aedc9d-facf-489e-9031-8474fc4202b7"/>
-    <rdfs:label>15 Percent </rdfs:label>
     <obo:OBI_0001937>15</obo:OBI_0001937>
-    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/OBI_0001933"/>
+    <rdf:type rdf:resource="http://purl.obolibrary.org/obo/DIDEO_00000127"/>
   </rdf:Description>
   <rdf:Description rdf:about="http://dikb.org/object-metabolite/0093f44a-f71d-4c65-9598-7da27557ea4b">
     <obo:RO_0000052 rdf:resource="http://dikb.org/object-chemical-substance/5ee660e2-34a3-478b-a310-9bff1ac360c4"/>
