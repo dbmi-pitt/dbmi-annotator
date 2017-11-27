@@ -104,10 +104,10 @@ map:PrecipitantScatteredMolecularAggregate a d2rq:ClassMap;
     d2rq:dataStorage map:database;
     .
 
-## has member: precipitant drug
-map:precipitant_scattered_has_member a d2rq:PropertyBridge;
+## has part: precipitant drug
+map:precipitant_scattered_has_part a d2rq:PropertyBridge;
     d2rq:belongsToClassMap map:PrecipitantScatteredMolecularAggregate;
-    d2rq:property obo:RO_0002351; 
+    d2rq:property obo:BFO_0000051; 
     d2rq:uriSqlExpression "CONCAT('http://dikb.org/precipitant-drug/', ohdsi.rdf_mp_claim_qualifier.p_drug_urn)"; 
     .
 
@@ -248,7 +248,7 @@ map:ObjectScatteredMolecularAggregate a d2rq:ClassMap;
     .
 
 ## has part: object drug
-map:object_scattered_has_member a d2rq:PropertyBridge;
+map:object_scattered_has_part a d2rq:PropertyBridge;
     d2rq:belongsToClassMap map:ObjectScatteredMolecularAggregate;
     d2rq:property obo:BFO_0000051; 
     d2rq:uriSqlExpression "CONCAT('http://dikb.org/object-drug/', ohdsi.rdf_mp_claim_qualifier.o_drug_urn)"; 
