@@ -60,7 +60,7 @@ order by qsc, qpv, qoc
 -- subject and object concepts removed : count = 561.
 -- NOTE: Enhancement - The vocabulary IDs that we are using in the qualifier tables should be the string IDs used by concept records, not the vocabulary concept_ids.
 --                     Changing this in the tables will simplify the query below.       
-select qsc_c.concept_name, qsc_c.vocabulary_id, qpv, qoc_c.concept_name, qoc_c.vocabulary_id, count(claimid) 
+select qsc_c.concept_name, qsc_c.concept_id, qsc_c.vocabulary_id, qpv, qoc_c.concept_name, qoc_c.concept_id, qoc_c.vocabulary_id, count(claimid) 
 from (
 select qsubj.claim_body_id claimid, 
        qsubj.qvalue qsv, 
@@ -84,8 +84,8 @@ where qsubj.subject = True
      inner join public.vocabulary qovv on qoc_c.vocabulary_id = qovv.vocabulary_id
   where qsvid = qsvv.vocabulary_concept_id
     and qovid = qovv.vocabulary_concept_id
-group by qsc_c.concept_name, qsc_c.vocabulary_id, qpv, qoc_c.concept_name, qoc_c.vocabulary_id 
-order by qsc_c.concept_name, qsc_c.vocabulary_id, qpv, qoc_c.concept_name, qoc_c.vocabulary_id
+group by qsc_c.concept_name, qsc_c.concept_id, qsc_c.vocabulary_id, qpv, qoc_c.concept_name, qoc_c.concept_id, qoc_c.vocabulary_id
+order by qsc_c.concept_name, qsc_c.concept_id, qsc_c.vocabulary_id, qpv, qoc_c.concept_name, qoc_c.concept_id, qoc_c.vocabulary_id
 ;
 
 -- (12/10/17) further refining counts so that rejected claims are removed and its clear what is a negated claim
@@ -157,11 +157,32 @@ where negation = False
   and qobj.concept_code is not null
 ;
 
+--------------------------------------------------------------------
+-- Create a new table to hold the individual qualified claims. This will be used in the D2R mapper to 
+-- create a single MP and MP:Claim for each record using the MP:Argues predicate. Then, each statement will be related to 
+-- the relevant MP:Claim using MP:Supports and MP:Challenges as is appropriate
+DROP TABLE IF EXISTS ohdsi.mp_micropublication;
+CREATE TABLE ohdsi.mp_micropublication(
+ id SERIAL PRIMARY KEY,
+ subj_concept_name varchar(255),
+ subj_concept_id integer, 
+ subj_vocabulary_id varchar(255), 
+ predicate text,
+ obj_concept_name varchar(255),
+ obj_concept_id integer, 
+ obj_vocabulary_id varchar(255),
+ attribution_as_author varchar(255),
+ attribution_as_editor varchar(255),
+ attribution_as_publisher varchar(255),
+ attribution_as_curator varchar(255)
+);
 
-
---------------
-select qsc_c.concept_name, qpv, qoc_c.concept_name, count(claimid) 
-from (
+INSERT INTO ohdsi.mp_micropublication 
+   (subj_concept_name, subj_concept_id, subj_vocabulary_id, predicate, obj_concept_name, obj_concept_id, obj_vocabulary_id,
+   attribution_as_author, attribution_as_editor, attribution_as_publisher, attribution_as_curator)
+SELECT qsc_c.concept_name, qsc_c.concept_id, qsc_c.vocabulary_id, qpv, qoc_c.concept_name, qoc_c.concept_id, qoc_c.vocabulary_id,
+      'https://orcid.org/0000-0002-2993-2085', 'https://orcid.org/0000-0002-2993-2085','https://orcid.org/0000-0002-2993-2085','https://orcid.org/0000-0002-2993-2085' 
+FROM (
 select qsubj.claim_body_id claimid, 
        qsubj.qvalue qsv, 
        qpred.qvalue qpv, 
@@ -173,19 +194,17 @@ select qsubj.claim_body_id claimid,
 from 
 ohdsi.qualifier qsubj inner join ohdsi.qualifier qpred on qsubj.claim_body_id = qpred.claim_body_id
     inner join ohdsi.qualifier qobj on qsubj.claim_body_id = qobj.claim_body_id
-    inner join ohdsi.claim_body cb on cb.id = qsubj.claim_body_id
-    inner join ohdsi.mp_claim_annotation on cb.is_oa_body_of = ohdsi.mp_claim_annotation.id
 where qsubj.subject = True 
   and qpred.predicate = True
   and qobj.object = True
   and qsubj.concept_code is not null
   and qobj.concept_code is not null
-) t1 inner join public.concept qsc_c on qsc = qsc_c.concept_code -- and qsvid = qsc_c.vocabulary_id
-     inner join public.concept qoc_c on qoc = qoc_c.concept_code -- and qovid = qoc_c.vocabulary_id
-group by qsc_c.concept_name, qpv, qoc_c.concept_name
-order by qsc_c.concept_name, qpv, qoc_c.concept_name
+) t1 inner join public.concept qsc_c on qsc = qsc_c.concept_code
+     inner join public.vocabulary qsvv on qsc_c.vocabulary_id = qsvv.vocabulary_id
+     inner join public.concept qoc_c on qoc = qoc_c.concept_code
+     inner join public.vocabulary qovv on qoc_c.vocabulary_id = qovv.vocabulary_id
+  where qsvid = qsvv.vocabulary_concept_id
+    and qovid = qovv.vocabulary_concept_id
+group by qsc_c.concept_name, qsc_c.concept_id, qsc_c.vocabulary_id, qpv, qoc_c.concept_name, qoc_c.concept_id, qoc_c.vocabulary_id
+order by qsc_c.concept_name, qsc_c.concept_id, qsc_c.vocabulary_id, qpv, qoc_c.concept_name, qoc_c.concept_id, qoc_c.vocabulary_id
 ;
-
-select distinct vocabulary_id from public.concept;
-
-select * from concept where concept_id = 44819136
