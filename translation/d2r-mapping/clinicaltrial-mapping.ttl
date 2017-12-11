@@ -9,6 +9,7 @@
 @prefix d2r: <http://sites.wiwiss.fu-berlin.de/suhl/bizer/d2r-server/config.rdf#> .
 @prefix meta: <http://www4.wiwiss.fu-berlin.de/bizer/d2r-server/metadata#> .
 @prefix obo: <http://purl.obolibrary.org/obo/> .
+@prefix mp: <http://purl.org/mp/> .
 
 <> a d2r:Server;
       rdfs:label "D2R Server for Micropublication evidence";
@@ -24,9 +25,139 @@ map:dataTypeTransition a d2rq:TranslationTable;
 map:database a d2rq:Database;
     d2rq:jdbcDriver "org.postgresql.Driver";
     # d2rq:jdbcDSN "jdbc:postgresql://localhost/mpevidence?autoReconnect=true&user=<username>&password=<password>";
-    d2rq:jdbcDSN "jdbc:postgresql://localhost/mpevidence?autoReconnect=true&user=dbmiannotator&password=";
+    d2rq:jdbcDSN "jdbc:postgresql://localhost/mpevidence?autoReconnect=true&user=dbmiannotator&password=dbmi2016";
     .
+
+#####################################################################################
+# Micropublications description 
+#####################################################################################
+map:Micropublication a d2rq:ClassMap;
+    d2rq:uriPattern "http://dikb.org/micropublication/@@ohdsi.mp_micropublication.id@@";
+    d2rq:class mp:Micropublication;
+    d2rq:dataStorage map:database;
+    .
+
+## How to specify that the values of the attribution properties are mp:Attribution? This does not work.      
+# map:Attribution a d2rq:ClassMap;
+#     d2rq:class mp:Attribution;
+#     d2rq:dataStorage map:database;
+#     d2rq:uriPattern "@@ohdsi.mp_micropublication.attribution_as_curator@@";
+#     .
+
+map:mp_attribution_as_curator a d2rq:PropertyBridge;
+    d2rq:belongsToClassMap map:Micropublication;
+    d2rq:property mp:attributionAsCurator;
+    d2rq:uriColumn "ohdsi.mp_micropublication.attribution_as_curator";
+    .
+
+map:mp_attribution_as_publisher a d2rq:PropertyBridge;
+    d2rq:belongsToClassMap map:Micropublication;
+    d2rq:property mp:attributionAsPublisher;
+    d2rq:uriColumn "ohdsi.mp_micropublication.attribution_as_publisher";
+    .
+
+map:mp_attribution_as_editor a d2rq:PropertyBridge;
+    d2rq:belongsToClassMap map:Micropublication;
+    d2rq:property mp:attributionAsEditor;
+    d2rq:uriColumn "ohdsi.mp_micropublication.attribution_as_editor";
+    .
+
+map:mp_attribution_as_author a d2rq:PropertyBridge;
+    d2rq:belongsToClassMap map:Micropublication;
+    d2rq:property mp:attributionAsAuthor;
+    d2rq:uriColumn "ohdsi.mp_micropublication.attribution_as_author";
+    #d2rq:additionalPropertyDefinitionProperty map:AttributionType;
+   .
+
+## How to specify that the values of the attribution properties are mp:Attribution? This does not work.     
+#map:AttributionType a d2rq:AdditionalProperty;
+#    d2rq:propertyName rdf:type;
+#    d2rq:propertyValue mp:Attribution;
+#    .
+
+
+map:mp_argues a d2rq:PropertyBridge;
+    d2rq:belongsToClassMap map:Micropublication;
+    d2rq:property mp:argues;
+    d2rq:uriPattern "http://dikb.org/claim/@@ohdsi.mp_micropublication.id@@";
+    .
+   
+
+#####################################################################################
+# Class Claim (NOTE: one to one with Micropublication)
+#####################################################################################
+map:MP_Claim a d2rq:ClassMap;
+    d2rq:uriPattern "http://dikb.org/claim/@@ohdsi.mp_micropublication.id@@";
+    d2rq:class mp:Claim;
+    d2rq:condition "ohdsi.mp_micropublication.id is not null";
+    d2rq:dataStorage map:database;
+    .
+
+map:claim_label a d2rq:PropertyBridge;
+    d2rq:belongsToClassMap map:MP_Claim;
+    d2rq:property rdfs:label;
+    d2rq:column "ohdsi.mp_micropublication.claim_label";
+    .
+
+
+#####################################################################################
+# Class (Claim) SemanticQualifier (NOTE: from the mp_micropublication table)
+#####################################################################################
+map:MP_SemanticQualifier a d2rq:ClassMap;
+    d2rq:uriPattern "http://dikb.org/vocabulary/@@ohdsi.claim_semantic_qualifiers.concept_code|urlify@@";
+    d2rq:class mp:SemanticQualifier;
+    d2rq:dataStorage map:database;
+    .
+
+map:semantic_qualifier a d2rq:PropertyBridge;
+    d2rq:belongsToClassMap map:MP_SemanticQualifier;
+    d2rq:property mp:qualifies;
+    d2rq:uriPattern "http://dikb.org/claim/@@ohdsi.claim_semantic_qualifiers.qualifies|urlencode@@";
+    .
+
+# map:semantic_qualifier_label a d2rq:PropertyBridge;
+#     d2rq:belongsToClassMap map:MP_SemanticQualifierSubject;
+#     d2rq:property rdfs:label;
+#     d2rq:uriSqlExpression
+#     d2rq:column "ohdsi.mp_micropublication.subj_concept_name";
+#     .
+
+# map:MP_SemanticQualifierObject a d2rq:ClassMap;
+#     d2rq:uriPattern "http://dikb.org/vocabulary/@@ohdsi.mp_micropublication.obj_concept_code@@";
+#     d2rq:class mp:SemanticQualifier;
+#     d2rq:dataStorage map:database;
+#     .
     
+# map:object_semantic_qualifier a d2rq:PropertyBridge;
+#     d2rq:belongsToClassMap map:MP_SemanticQualifierSubject;
+#     d2rq:property mp:qualifies;
+#     d2rq:uriPattern "http://dikb.org/claim/@@ohdsi.mp_micropublication.id@@";
+#     .
+
+# map:object_semantic_qualifier_label a d2rq:PropertyBridge;
+#     d2rq:belongsToClassMap map:MP_SemanticQualifierSubject;
+#     d2rq:property rdfs:label;
+#     d2rq:column "ohdsi.mp_micropublication.obj_concept_name";
+#     .
+
+# map:MP_SemanticQualifierPredicate a d2rq:ClassMap;
+#     d2rq:uriPattern "http://dikb.org/vocabulary/@@ohdsi.mp_micropublication.predicate@@";
+#     d2rq:class mp:SemanticQualifier;
+#     d2rq:dataStorage map:database;
+#     .
+    
+# map:predicate_semantic_qualifier a d2rq:PropertyBridge;
+#     d2rq:belongsToClassMap map:MP_SemanticQualifierSubject;
+#     d2rq:property mp:qualifies;
+#     d2rq:uriPattern "http://dikb.org/claim/@@ohdsi.mp_micropublication.id@@";
+#     .
+
+# map:predicate_semantic_qualifier_label a d2rq:PropertyBridge;
+#     d2rq:belongsToClassMap map:MP_SemanticQualifierSubject;
+#     d2rq:property rdfs:label;
+#     d2rq:column "ohdsi.mp_micropublication.predicate";
+#     .
+
 #####################################################################################
 # Class Assertion description 
 #####################################################################################
