@@ -10,6 +10,7 @@
 @prefix meta: <http://www4.wiwiss.fu-berlin.de/bizer/d2r-server/metadata#> .
 @prefix obo: <http://purl.obolibrary.org/obo/> .
 @prefix mp: <http://purl.org/mp/> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
 
 <> a d2r:Server;
       rdfs:label "D2R Server for Micropublication evidence";
@@ -115,48 +116,17 @@ map:semantic_qualifier a d2rq:PropertyBridge;
     d2rq:uriPattern "http://dikb.org/claim/@@ohdsi.claim_semantic_qualifiers.qualifies|urlencode@@";
     .
 
-# map:semantic_qualifier_label a d2rq:PropertyBridge;
-#     d2rq:belongsToClassMap map:MP_SemanticQualifierSubject;
-#     d2rq:property rdfs:label;
-#     d2rq:uriSqlExpression
-#     d2rq:column "ohdsi.mp_micropublication.subj_concept_name";
-#     .
+map:semantic_qualifier_label a d2rq:PropertyBridge;
+    d2rq:belongsToClassMap map:MP_SemanticQualifier;
+    d2rq:property rdfs:label;
+    d2rq:column "ohdsi.claim_semantic_qualifiers.concept_name";
+    .
 
-# map:MP_SemanticQualifierObject a d2rq:ClassMap;
-#     d2rq:uriPattern "http://dikb.org/vocabulary/@@ohdsi.mp_micropublication.obj_concept_code@@";
-#     d2rq:class mp:SemanticQualifier;
-#     d2rq:dataStorage map:database;
-#     .
-    
-# map:object_semantic_qualifier a d2rq:PropertyBridge;
-#     d2rq:belongsToClassMap map:MP_SemanticQualifierSubject;
-#     d2rq:property mp:qualifies;
-#     d2rq:uriPattern "http://dikb.org/claim/@@ohdsi.mp_micropublication.id@@";
-#     .
-
-# map:object_semantic_qualifier_label a d2rq:PropertyBridge;
-#     d2rq:belongsToClassMap map:MP_SemanticQualifierSubject;
-#     d2rq:property rdfs:label;
-#     d2rq:column "ohdsi.mp_micropublication.obj_concept_name";
-#     .
-
-# map:MP_SemanticQualifierPredicate a d2rq:ClassMap;
-#     d2rq:uriPattern "http://dikb.org/vocabulary/@@ohdsi.mp_micropublication.predicate@@";
-#     d2rq:class mp:SemanticQualifier;
-#     d2rq:dataStorage map:database;
-#     .
-    
-# map:predicate_semantic_qualifier a d2rq:PropertyBridge;
-#     d2rq:belongsToClassMap map:MP_SemanticQualifierSubject;
-#     d2rq:property mp:qualifies;
-#     d2rq:uriPattern "http://dikb.org/claim/@@ohdsi.mp_micropublication.id@@";
-#     .
-
-# map:predicate_semantic_qualifier_label a d2rq:PropertyBridge;
-#     d2rq:belongsToClassMap map:MP_SemanticQualifierSubject;
-#     d2rq:property rdfs:label;
-#     d2rq:column "ohdsi.mp_micropublication.predicate";
-#     .
+map:semantic_qualifier_vocab a d2rq:PropertyBridge;
+    d2rq:belongsToClassMap map:MP_SemanticQualifier;
+    d2rq:property dc:description;
+    d2rq:column "ohdsi.claim_semantic_qualifiers.vocabulary_id";
+    .
 
 #####################################################################################
 # Class Assertion description 
