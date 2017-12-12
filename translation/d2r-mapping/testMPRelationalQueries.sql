@@ -254,10 +254,28 @@ select qualifies from ohdsi.claim_semantic_qualifiers;
 -------------
 
 -- Set up a table that will help create the MP:Statement resources that support/challenge claims
-SELECT oas.exact,
-       cb.id, cb.urn, cb.label, 
-       mp.*, 
-       ca.*      
+DROP TABLE IF EXISTS ohdsi.claim_statement_join;
+CREATE TABLE ohdsi.claim_statement_join
+(
+ id SERIAL PRIMARY KEY,
+ claim_statement text,
+ claim_body_id integer,
+ claim_body_urn text,
+ claim_body_label text,
+ mp_annotation_id integer,
+ mp_annotation_claim_label varchar(500),
+ claim_annotation_id integer, 
+ claim_annotation_negation boolean,
+ claim_annotation_rejected boolean 
+  );
+
+INSERT INTO ohdsi.claim_statement_join (claim_statement, claim_body_id, claim_body_urn, claim_body_label, 
+                                        mp_annotation_id, mp_annotation_claim_label, 
+                                        claim_annotation_id, claim_annotation_negation, claim_annotation_rejected) 
+SELECT oas.exact claim_statement,
+       cb.id claim_body_id, cb.urn claim_body_urn, cb.label claim_body_label, 
+       mp.id mp_id, mp.claim_label mp_claim_label,  
+       ca.id claim_annotation_id, ca.negation claim_annotation_negation, ca.rejected_statement claim_annotation_rejected  
 FROM 
 ohdsi.oa_claim_body cb inner join ohdsi.qualifier qsubj on cb.id = qsubj.claim_body_id
  inner join ohdsi.qualifier qpred on qsubj.claim_body_id = qpred.claim_body_id
@@ -270,3 +288,43 @@ ohdsi.oa_claim_body cb inner join ohdsi.qualifier qsubj on cb.id = qsubj.claim_b
  inner join ohdsi.oa_selector oas on oat.has_selector = oas.id
 ;
 
+
+
+
+SELECT oas.exact claim_statement,
+       cb.id claim_body_id, cb.urn claim_body_urn, cb.label claim_body_label, 
+       mp.id mp_id, mp.claim_label mp_claim_label,  
+       ca.id claim_annotation_id      
+FROM 
+ohdsi.oa_claim_body cb inner join ohdsi.qualifier qsubj on cb.id = qsubj.claim_body_id
+ inner join ohdsi.qualifier qpred on qsubj.claim_body_id = qpred.claim_body_id
+ inner join ohdsi.qualifier qobj on qsubj.claim_body_id = qobj.claim_body_id
+ inner join ohdsi.mp_micropublication mp on mp.subj_concept_code = qsubj.concept_code 
+    and mp.obj_concept_code = qobj.concept_code 
+    and mp.predicate = qpred.qvalue
+ inner join ohdsi.mp_claim_annotation ca on cb.id = ca.has_body
+ inner join ohdsi.oa_target oat on ca.has_target = oat.id
+ inner join ohdsi.oa_selector oas on oat.has_selector = oas.id
+ where 
+   -- mp.claim_label like '%352393%'
+   cb.id = 721
+ ORDER BY claim_body_id;
+
+select * from ohdsi.mp_claim_annotation ca inner join ohdsi.claim_statement_join csj on ca.id = csj.claim_body_id where ca.negation = False and csj.claim_body_id = 721;
+
+
+SELECT ("ohdsi"."claim_statement_join"."claim_body_urn" = '23f9083ad4804538b26fd814caebda37' AND ("ohdsi"."mp_claim_annotation"."negation" = False)) AS expr4201ac1d,
+       ("ohdsi"."claim_statement_join"."claim_body_urn" = '23f9083ad4804538b26fd814caebda37' AND ("ohdsi"."mp_claim_annotation"."negation" = True)) AS exprf627010a, 
+       "ohdsi"."claim_statement_join"."mp_annotation_id" FROM "ohdsi"."mp_claim_annotation", "ohdsi"."claim_statement_join" 
+       WHERE ("ohdsi"."claim_statement_join"."claim_body_id" = "ohdsi"."mp_claim_annotation"."has_body" 
+         AND (("ohdsi"."claim_statement_join"."claim_body_urn" = '23f9083ad4804538b26fd814caebda37' 
+         AND "ohdsi"."claim_statement_join"."claim_body_urn" IS NOT NULL 
+         AND "ohdsi"."claim_statement_join"."mp_annotation_id" IS NOT NULL 
+         AND ("ohdsi"."mp_claim_annotation"."negation" = False)) 
+         OR 
+         ("ohdsi"."claim_statement_join"."claim_body_urn" = '23f9083ad4804538b26fd814caebda37' 
+         AND "ohdsi"."claim_statement_join"."claim_body_urn" IS NOT NULL 
+         AND "ohdsi"."claim_statement_join"."mp_annotation_id" IS NOT NULL 
+         AND ("ohdsi"."mp_claim_annotation"."negation" = True))));
+
+SELECT "ohdsi"."claim_statement_join"."claim_statement" FROM "ohdsi"."claim_statement_join" WHERE ("ohdsi"."claim_statement_join"."claim_body_urn" = '23f9083ad4804538b26fd814caebda37' AND ("ohdsi"."claim_statement_join"."claim_body_urn" IS NOT NULL OR ("ohdsi"."claim_statement_join"."claim_body_urn" IS NOT NULL AND "ohdsi"."claim_statement_join"."claim_statement" IS NOT NULL)));SELECT "ohdsi"."claim_statement_join"."claim_statement" FROM "ohdsi"."claim_statement_join" WHERE ("ohdsi"."claim_statement_join"."claim_body_urn" = '23f9083ad4804538b26fd814caebda37' AND ("ohdsi"."claim_statement_join"."claim_body_urn" IS NOT NULL OR ("ohdsi"."claim_statement_join"."claim_body_urn" IS NOT NULL AND "ohdsi"."claim_statement_join"."claim_statement" IS NOT NULL)))

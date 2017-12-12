@@ -129,6 +129,56 @@ map:semantic_qualifier_vocab a d2rq:PropertyBridge;
     .
 
 #####################################################################################
+# Class (Claim) Statement (NOTE: from the claim_statement_join table)
+#####################################################################################
+map:MP_Statement a d2rq:ClassMap;
+    d2rq:class mp:Sentence;
+    d2rq:dataStorage map:database;
+    d2rq:uriPattern "http://dikb.org/statement/@@ohdsi.claim_statement_join.claim_body_urn@@";
+    .
+
+map:mp_statement_value a d2rq:PropertyBridge;
+    d2rq:belongsToClassMap map:MP_Statement;
+    d2rq:property mp:value;
+    d2rq:datatype xsd:string;
+    d2rq:column "ohdsi.claim_statement_join.claim_statement";
+    .
+
+map:mp_statement_challenges a d2rq:PropertyBridge;
+    d2rq:belongsToClassMap map:MP_Statement;
+    d2rq:refersToClassMap map:MP_Claim;
+    d2rq:property mp:challenges;
+    d2rq:join "ohdsi.claim_statement_join.mp_annotation_id => ohdsi.mp_micropublication.id";
+    d2rq:condition "ohdsi.claim_statement_join.claim_annotation_negation";
+    .
+
+map:mp_statement_supports a d2rq:PropertyBridge;
+    d2rq:belongsToClassMap map:MP_Statement;
+    d2rq:refersToClassMap map:MP_Claim;
+    d2rq:property mp:supports;
+    d2rq:join "ohdsi.claim_statement_join.mp_annotation_id => ohdsi.mp_micropublication.id";
+    d2rq:condition "not ohdsi.claim_statement_join.claim_annotation_negation";
+    .
+
+# map:mp_statement_challenges a d2rq:PropertyBridge;
+#     d2rq:belongsToClassMap map:MP_Statement;
+#     d2rq:refersToClassMap map:MP_Claim;
+#     d2rq:property mp:challenges;
+#     d2rq:join "ohdsi.mp_claim_annotation.has_body => ohdsi.claim_statement_join.claim_body_id";
+#     d2rq:join "ohdsi.claim_statement_join.mp_annotation_id => ohdsi.mp_micropublication.id";
+#     d2rq:condition "ohdsi.mp_claim_annotation.negation = True";
+#     .
+
+# map:mp_statement_supports a d2rq:PropertyBridge;
+#     d2rq:belongsToClassMap map:MP_Statement;
+#     d2rq:refersToClassMap map:MP_Claim;
+#     d2rq:property mp:supports;
+#     d2rq:join "ohdsi.mp_claim_annotation.has_body => ohdsi.claim_statement_join.claim_body_id";
+#     d2rq:join "ohdsi.claim_statement_join.mp_annotation_id => ohdsi.mp_micropublication.id";
+#     d2rq:condition "ohdsi.mp_claim_annotation.negation = False";
+#     .
+
+#####################################################################################
 # Class Assertion description 
 #####################################################################################
 map:Assertion a d2rq:ClassMap;
