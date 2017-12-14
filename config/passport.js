@@ -30,10 +30,11 @@ module.exports = function(passport, User) {
     passport.use('local-signup', new LocalStrategy({
         usernameField : 'email',
         passwordField : 'password',
+        profileSetField: 'profile',
         passReqToCallback : true // allows us to pass back the entire request to the callback
-    },
-    function(req, email, password, done) {
+    }, function(req, email, password, done) {
 	console.log("in passport validation");
+        console.log(req.body.profile);
         // User.findOne wont fire unless data is sent back
         process.nextTick(function() {
 	    if (!req.repassword)

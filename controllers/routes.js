@@ -42,18 +42,22 @@ module.exports = function(app, passport) {
     }));    
 
     // SIGNUP ==============================
-    app.get('/dbmiannotator/register', function(req, res) {
-        res.render('register.ejs', { message: req.flash('signupMessage') });
-        // disable register for public release
-        // res.render('index.ejs', { message: req.flash('signupMessage') });
+    app.get('/dbmiannotator/register', getProfileSetOptions, function(req, res) {
+        //console.log(config.profile.pluginSetL);
+        
+        res.render('register.ejs', {
+            profiles: config.profile.pluginSetL,
+            message: req.flash('signupMessage')                    
+        });            
+        
     });
+    
 
     app.post('/dbmiannotator/register', isRegisterFormValid, passport.authenticate('local-signup', {
 	successRedirect : '/dbmiannotator/main', 
 	failureRedirect : '/dbmiannotator/register', 
 	failureFlash : true
-    })
-	    );
+    }));
     
     // MAIN ==============================
     app.get('/dbmiannotator/main', isLoggedIn, initPluginProfile, function(req, res) {
@@ -466,6 +470,40 @@ function initPluginProfile(req, res, next){
         });
 
 
+    });
+}
+
+
+// get plugin set options
+function getProfileSetOptions(req, res, next){
+
+    console.log("routes.js - getProfileSetOptions");
+    // get list of profile sets  
+    pg.connect(config.postgres, function(err, client, done) {
+        
+        if(err) {
+            done();
+            console.log(err);
+            return res.status(500).json({ success: false, data: err});
+        }
+        
+        resultsL = []
+        var queryProfiles = client.query('SELECT ps.id, ps.type FROM "plugin_set" ps where ps.status = $1', [true]);
+        
+        queryProfiles.on('row', function(row) {
+            resultsL.push(row);
+        });
+
+        queryProfiles.on('end', function() { 
+            if (resultsL.length > 0){
+                config.profile.pluginSetL = [];
+                for (var i = 0; i < resultsL.length; i++) {
+                    config.profile.pluginSetL.push(resultsL[i]);
+                }
+            }
+            next();
+            client.end();
+        });        
     });
 }
 

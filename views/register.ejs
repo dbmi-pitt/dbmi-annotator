@@ -64,6 +64,16 @@
             <label>Repeat password &nbsp;(Minimum 6 characters required)</label>
             <input type="password" class="form-control" name="repassword">
         </div>
+
+        <div class="form-group">
+        <label>Plugin profile: </label>
+        
+        <% for (var i=0; i < profiles.length; i++) { %>
+           <label> <%=profiles[i].type %> </label>
+           <input type="radio" id="<%=profiles[i].id %>" name="profile" value="<%=profiles[i].id %> "> &nbsp;
+        <% } %>
+        </div>
+           
 	
         <button type="submit" class="btn btn-warning btn-lg">Register</button>
     </form>
