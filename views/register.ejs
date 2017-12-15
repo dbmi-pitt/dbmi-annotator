@@ -68,9 +68,9 @@
         <div class="form-group">
         <label>Plugin profile: </label>
         
-        <% for (var i=0; i < profiles.length; i++) { %>
-           <label> <%=profiles[i].type %> </label>
-           <input type="radio" id="<%=profiles[i].id %>" name="profile" value="<%=profiles[i].id %> "> &nbsp;
+        <% for (var i=0; i < profileSetOptions.length; i++) { %>
+           <label> <%=profileSetOptions[i].type %> </label>
+           <input type="radio" id="<%=profileSetOptions[i].id %>" name="profile" value="<%=profileSetOptions[i].id %> "> &nbsp;
         <% } %>
         </div>
            

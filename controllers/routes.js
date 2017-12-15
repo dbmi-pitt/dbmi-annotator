@@ -43,15 +43,13 @@ module.exports = function(app, passport) {
 
     // SIGNUP ==============================
     app.get('/dbmiannotator/register', getProfileSetOptions, function(req, res) {
-        //console.log(config.profile.pluginSetL);
         
         res.render('register.ejs', {
-            profiles: config.profile.pluginSetL,
+            profileSetOptions: config.profile.pluginSetL,
             message: req.flash('signupMessage')                    
         });            
         
     });
-    
 
     app.post('/dbmiannotator/register', isRegisterFormValid, passport.authenticate('local-signup', {
 	successRedirect : '/dbmiannotator/main', 
@@ -61,11 +59,14 @@ module.exports = function(app, passport) {
     
     // MAIN ==============================
     app.get('/dbmiannotator/main', isLoggedIn, initPluginProfile, function(req, res) {
+        console.log("[INFO] routes.js - get /main");
+        console.log(config.profile.userProfile.type);
+        
         if (config.profile.userProfile != null) {
             annotationType = config.profile.userProfile.type;
         } else {
             annotationType = config.profile.def;
-        }        
+        }
 	
         //loading csv file
         var content = loadArticleList();
@@ -115,9 +116,10 @@ module.exports = function(app, passport) {
 
     // DISPLAY ==============================
     app.get('/dbmiannotator/displayWebPage', isLoggedIn, parseWebContents, function(req, res) {
+        console.log("[INFO] route.js - displayWebPage");
+        console.log(config.profile.userProfile);
 	
 	var sourceUrl = req.query.sourceURL.trim();
-        console.log(sourceUrl);
 	var email = req.query.email;
 	var validUrl = require('valid-url');
 	
@@ -155,7 +157,7 @@ module.exports = function(app, passport) {
 
             if (config.profile.userProfile == null){  // no user profile, then insert
                 console.log("[ERROR] user profile not avaliable!");
-	            res.redirect('/dbmiannotator/main');
+	        res.redirect('/dbmiannotator/main');
 
             } else {   // get user profile
                 resultsL = []
@@ -426,14 +428,13 @@ function parseWebContents(req, res, next){
     }
 }
 
-// get plugin profile
+// get user's plugin profile information when login
 function initPluginProfile(req, res, next){
 
-    console.log("routes.js - initPluginProfile");
+    console.log("[INFO] routes.js - initPluginProfile");
 
     var pluginSetL = [];
     var userProfileL = [];
-
     var data = {text: req.body.text, complete: false};
     
     pg.connect(config.postgres, function(err, client, done) {
@@ -443,6 +444,7 @@ function initPluginProfile(req, res, next){
             console.log(err);
             return res.status(500).json({ success: false, data: err});
         }
+        
         // get all available plugin sets 
         var queryPlugins = client.query("SELECT ps.id, ps.name, ps.type, ps.description FROM plugin_set ps WHERE ps.status = True ORDER BY ps.id ASC;");
 
@@ -453,6 +455,7 @@ function initPluginProfile(req, res, next){
         queryPlugins.on('end', function() {
             config.profile.pluginSetL = pluginSetL;
         });
+        
         // get plugin set from user setting
         var queryUserProfile = client.query('SELECT u.uid, up.set_id, ps.name, ps.type FROM "user" u, "user_profile" up, "plugin_set" ps where u.uid = up.uid and up.set_id = ps.id and u.email = $1 and up.status = True', [req.user.email]);
 
@@ -462,8 +465,6 @@ function initPluginProfile(req, res, next){
         queryUserProfile.on('end', function() { 
             if (userProfileL.length > 0){
                 config.profile.userProfile = userProfileL[0];
-                console.log("init pluginProfile - get user profile");
-                console.log(config.profile.userProfile)
             }
             next();
             client.end();
@@ -476,8 +477,7 @@ function initPluginProfile(req, res, next){
 
 // get plugin set options
 function getProfileSetOptions(req, res, next){
-
-    console.log("routes.js - getProfileSetOptions");
+    
     // get list of profile sets  
     pg.connect(config.postgres, function(err, client, done) {
         

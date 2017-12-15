@@ -5,9 +5,9 @@ if (typeof annotator === 'undefined') {
 } else {
     // DBMIAnnotator with highlight and DDI plugin
     var app = new annotator.App();
+    var annotationType = $("#annotationtype-div").text();    
 
-    // var annType = $('#mp-annotation-tb').attr('name');
-    var annType = "MP";
+    console.log("[INFO] init annotator.js - plugin: " + annotationType);
 
     var sourceURL = getURLParameter("sourceURL");
     if (sourceURL != null)
@@ -37,9 +37,9 @@ if (typeof annotator === 'undefined') {
     // users annotation been imported
     var userEmails = new Set();
 
-    if (annType == "DDI")
-        app.include(annotator.ui.dbmimain);            
-    else if (annType == "MP")
+    if (annotationType == "DDI")
+        app.include(annotator.ui.dbmimain, {element: subcontent, email: currEmail, source: sourceURL});            
+    else if (annotationType == "MP")
         app.include(annotator.ui.mpmain, {element: subcontent, email: currEmail, source: sourceURL});
     else 
         alert("[ERROR] plugin settings wrong, neither DDI nor MP plugin!");
@@ -232,7 +232,7 @@ function initLiseners() {
             });
         }
     }
-
+    
     $('#edit-object-metabolite').click(function() {
         $('#object-metabolite').hide();
         $('#object-metabolite-input').show();
@@ -560,6 +560,8 @@ function importAnnotationDialog(sourceURL, email) {
     var emailS = new Set();
     var allMPAnnsD = {}; // dict for all MP annotations {email: annotations}
     var allDrugAnnsD = {}; // dict for all drug mention annotation {email: annotations}
+    var allDDIAnnsD = {}; // dict for all DDI mention annotation {email: annotations}
+    
     var urlReq = config.protocal + "://" + config.apache2.host + ":" + config.apache2.port + "/annotatorstore/search";
 
     console.log(urlReq);

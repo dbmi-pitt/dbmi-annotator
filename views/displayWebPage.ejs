@@ -24,7 +24,9 @@
   <link rel="stylesheet" href="css/jquery-ui.css" />
   <link rel="stylesheet" href="./css/dbmiannotator.css" type="text/css" />
 
-  <body>    
+  <body>
+    <!-- get server side userProfile var at runtime via EJS -->
+    <div id="annotationtype-div" style="display: none;"><%=userProfile.type %></div>
 
     <style>
     input[type="radio"] { -webkit-appearance: radio; }
@@ -233,7 +235,7 @@ span[name="annotator-mp"] {
 
             <form action="/dbmiannotator/savePluginProfile" method="post">
               <table>
-                <%
+                <%                   
                     if (userProfile == null){
                         selection = config.profile.def;
                     } else {

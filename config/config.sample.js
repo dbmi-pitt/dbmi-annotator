@@ -23,7 +23,7 @@ config.store.port = '5000';
 // user default profile
 config.profile.def = 'MP';
 config.profile.pluginSetL = [];
-config.profile.userProfile = {};
+config.profile.userProfile = {}; // format {'id': integer, 'type': String}
 
 //article list
 //vlan
