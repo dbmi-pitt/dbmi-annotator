@@ -56,17 +56,15 @@ if (typeof annotator === 'undefined') {
     // load annotation after page contents loaded
     app.start().then(
         function () {
-            console.log(config);
+	    app.ident.identity = currEmail;
+	    $(".btn-success").css("display","block");            
 
-			app.ident.identity = currEmail;
-			$(".btn-success").css("display","block");            
-            
-            initMpAdder(); // initiate mp adder
+            if (annotationType == "MP" || annotationType == "DDI") {
+                initMpAdder(); // initiate mp adder
+            }
             
             initLiseners(); // initiate listeners on data unchange button, claim relationship change, etc
-            
-            initSplitter(); // initiate screen splitter
-            
+            initSplitter(); // initiate screen splitter            
             importAnnotationDialog(sourceURL, currEmail); // annotation import dialog    
         });
     $body = $("body");
@@ -592,7 +590,12 @@ function importAnnotationDialog(sourceURL, email) {
                             allDrugAnnsD[email] = [ann];
                         else 
                             allDrugAnnsD[email].push(ann);                   
-                    }                    
+                    } else if (ann.annotationType == "DDI") {
+                        if (allDDIAnnsD[email] == null) 
+                            allDDIAnnsD[email] = [ann];
+                        else 
+                            allDDIAnnsD[email].push(ann);                   
+                    }                   
                 }
                 //console.log(allMPAnnsD);
                 //console.log(allDrugAnnsD);
@@ -602,7 +605,9 @@ function importAnnotationDialog(sourceURL, email) {
                     if (allMPAnnsD[email] != null)
                         numsOfAnns += allMPAnnsD[email].length;
                     if (allDrugAnnsD[email] != null)
-                        numsOfAnns += allDrugAnnsD[email].length;    
+                        numsOfAnns += allDrugAnnsD[email].length;
+                    if (allDDIAnnsD[email] != null)
+                        numsOfAnns += allDDIAnnsD[email].length;
 
                     htmlCnt += "<b>"+email+": </b>" + numsOfAnns;
 
@@ -618,7 +623,11 @@ function importAnnotationDialog(sourceURL, email) {
            });
 
     userEmails.add(currEmail); // add current user as default
-    importAnnotationActions(userEmails, allMPAnnsD, uri, email) // import, cancel, close buttons
+
+    if (annotationType == "DDI")
+        importAnnotationActions(userEmails, allDDIAnnsD, uri, email) // import, cancel, close buttons
+    else if (annotationType == "MP")
+        importAnnotationActions(userEmails, allMPAnnsD, uri, email) // import, cancel, close buttons
 }
 
 // add actions for button in import panel

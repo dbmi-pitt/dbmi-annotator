@@ -4,11 +4,11 @@
 
 function updateAnnTable(sourceURL){
     console.log("update annotation table");
-    //console.log(userEmails);
+    console.log("annotationType: " + annotationType);
     // request all mp annotaitons for current document and user
 
     $.ajax({url: config.protocal + "://" + config.apache2.host + ":" + config.apache2.port + "/annotatorstore/search",
-            data: {annotationType: "MP", 
+            data: {annotationType: annotationType, 
                    uri: sourceURL.replace(/[\/\\\-\:\.]/g, "")},
             method: 'GET',
             error : function(jqXHR, exception){
