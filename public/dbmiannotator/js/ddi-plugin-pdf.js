@@ -6,7 +6,8 @@ if (typeof annotator === 'undefined') {
     
     // DBMIAnnotator with highlight and DDI plugin
     var app = new annotator.App();
-    var annType = "MP";
+    var annotationType = $("#annotationtype-div").text();
+
     var sourceURL = getURLParameter("file").trim();
     var email = getURLParameter("email");
 
@@ -27,9 +28,9 @@ if (typeof annotator === 'undefined') {
     // track the form editing status from user
     var unsaved = false;
 
-    if (annType == "DDI")
-        app.include(annotator.ui.dbmimain);            
-    else if (annType == "MP")
+    if (annotationType == "DDI")
+        app.include(annotator.ui.ddimain);            
+    else if (annotationType == "MP")
         app.include(annotator.ui.mpmain, {element: '', email: email, source: sourceURL});
     else 
         alert("[ERROR] plugin settings wrong, neither DDI nor MP plugin!");

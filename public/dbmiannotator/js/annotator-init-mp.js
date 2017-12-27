@@ -38,7 +38,7 @@ if (typeof annotator === 'undefined') {
     var userEmails = new Set();
 
     if (annotationType == "DDI")
-        app.include(annotator.ui.dbmimain, {element: subcontent, email: currEmail, source: sourceURL});            
+        app.include(annotator.ui.ddimain, {element: subcontent, email: currEmail, source: sourceURL});            
     else if (annotationType == "MP")
         app.include(annotator.ui.mpmain, {element: subcontent, email: currEmail, source: sourceURL});
     else 
