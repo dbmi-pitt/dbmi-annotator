@@ -42,7 +42,7 @@ module.exports = function(app, passport) {
     }));    
 
     // SIGNUP ==============================
-    app.get('/dbmiannotator/register', getProfileSetOptions, function(req, res) {
+    app.get('/dbmiannotator/register', getProfileSetOptions, function(req, res) {        
         
         res.render('register.ejs', {
             profileSetOptions: config.profile.pluginSetL,
