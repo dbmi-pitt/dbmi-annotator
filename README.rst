@@ -147,22 +147,41 @@ Run server:
     
 Add documents to annotate:
 ^^^^^^^^^^
+1) Download the HTML using your browser to some place e.g., /path/
 
-    Add document to apache2 home directory
-    $ cp /path/to/html /var/www/html/PMC/
+2) If needed, rename the file to a more appropriate name. E.g., for PMC articles, it is good to concatenate 'PMC' with the article's PMC identifier. For example, for PMC 1459289 you would:
 
-    Resigter new document in article-list
-    pmc-list.csv for PMC article
-    ex. new entry for article Aberg_2009 
-    Aberg_2006_16514303 	http://localhost/PMC/PMC1459289.html
-    
-    Access the article by copy and paste the link to input box on main page
-    http://localhost/PMC/PMC4536363.html 
+$ mv  /path/file.html   /path/PMC1459289.html
 
-    Note: save HTML article to local
-    Example PMC article with id 4536363: 
-    <1> save PMC article with pmcid 4536363 as PMC4536363
-    <2> copy the html resources to apache home dir in docker container apache2
+$ mv  /path/file_files  /path/PMC1459289_files
+
+
+3) Add html document and related files to apache2 home directory that is relevant for the papers publisher. E.g., for PMC:
+
+$ cp  -r /path/PMC1459289*   /var/www/html/PMC/
+
+
+4) Register new document by opening up in a text editor the relevant file in the folder dbmi-annotator/article-list/ . For example, for PMC:
+
+$ sublime article-list pmc-list.csv
+
+<you local article identifier> http://localhost/PMC/PMC1459289.html
+
+5) Confirm that you can access the article in your browser using  the link e.g., http://localhost/PMC/PMC4536363.html
+
+6) Now,  refresh the AnnotatorPress in your browser and you should see the new article under the relevant publisher. Click to open.
+
+This should work for all of the publishers we have ensured compatibility between HTML versions of their papers (with their associated files) and our style sheets:
+
+Dailymed
+PMC
+Wiley
+Elsevier
+Springer
+Sage
+Taylor & Francis
+Wolters Kluwer
+
 
 -----------
 Directories
