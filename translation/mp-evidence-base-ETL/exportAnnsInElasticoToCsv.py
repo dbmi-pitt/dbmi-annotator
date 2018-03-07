@@ -18,6 +18,8 @@ import datetime
 from sets import Set
 import sys  
 import validate as test
+import codecs
+
 from elastic import queryDictAnnotation as es
 
 reload(sys)  
@@ -26,6 +28,21 @@ sys.setdefaultencoding('utf8')
 
 ES_HOST = "localhost"
 ES_PORT = "9200"
+
+
+def unicode_csv_reader(unicode_csv_data, dialect=csv.excel, **kwargs):
+        # csv.py doesn't do Unicode; encode temporarily as UTF-8:
+        csv_reader = csv.reader(utf_8_encoder(unicode_csv_data),
+                                dialect=dialect, **kwargs)
+        for row in csv_reader:
+                # decode UTF-8 back to Unicode, cell by cell:
+                yield [unicode(cell, 'utf-8') for cell in row]
+                
+def utf_8_encoder(unicode_csv_data):
+        for line in unicode_csv_data:
+                yield line.encode('utf-8')
+
+
 
 def run():
 
@@ -44,9 +61,9 @@ def run():
 	print "[INFO] exported %s annotations from elasticsearch" % (len(results))	
 		
 	## write to csv
-	csv_columns = ["document", "useremail", "claimlabel", "claimtext", "method", "relationship", "drug1", "drug2", "drug1PC", "drug2PC", "precipitant", "enzyme", "rejected", "evRelationship", "participants", "participantstext", "drug1dose", "drug1formulation", "drug1duration", "drug1regimens", "drug1dosetext", "drug2dose", "phenotypetype", "phenotypevalue", "phenotypemetabolizer", "phenotypepopulation", "drug2formulation", "drug2duration", "drug2regimens", "drug2dosetext", "aucvalue", "auctype", "aucdirection", "auctext", "cmaxvalue", "cmaxtype", "cmaxdirection", "cmaxtext", "clearancevalue", "clearancetype", "clearancedirection", "clearancetext", "halflifevalue", "halflifetype", "halflifedirection", "halflifetext", "dipsquestion", "reviewer", "reviewerdate", "reviewertotal", "reviewerlackinfo", "grouprandom", "parallelgroup", "id"]
+	csv_columns = [unicode(x, 'utf-8') for x in ["document", "useremail", "claimlabel", "claimtext", "negation", "method", "relationship", "drug1", "drug2", "drug1PC", "drug2PC", "precipitant", "enzyme", "rejected", "evRelationship", "participants", "participantstext", "drug1dose", "drug1formulation", "drug1duration", "drug1regimens", "drug1dosetext", "drug2dose", "phenotypetype", "phenotypevalue", "phenotypemetabolizer", "phenotypepopulation", "drug2formulation", "drug2duration", "drug2regimens", "drug2dosetext", "aucvalue", "auctype", "aucdirection", "auctext", "cmaxvalue", "cmaxtype", "cmaxdirection", "cmaxtext", "clearancevalue", "clearancetype", "clearancedirection", "clearancetext", "halflifevalue", "halflifetype", "halflifedirection", "halflifetext", "dipsquestion", "reviewer", "reviewerdate", "reviewertotal", "reviewerlackinfo", "grouprandom", "parallelgroup", "id"]]
 
-	with open('data/exported-mp-annotations.csv', 'wb') as f: 
+	with codecs.open('data/exported-mp-annotations.csv', 'wb', 'utf8') as f: 
 		w = csv.DictWriter(f, csv_columns)
 		w.writeheader()
 		w.writerows(results)

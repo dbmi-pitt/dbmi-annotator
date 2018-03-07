@@ -42,6 +42,12 @@ def parseAnnotation(annotation):
 	claim = ann["argues"]
 	initDict["claimlabel"] = claim["label"]
 	initDict["claimtext"] = claim["hasTarget"]["hasSelector"]["exact"]
+
+        if claim.get("negation"):
+                initDict["negation"] = claim["negation"]
+        else:
+                initDict["negation"] = "n/a"
+                
 	initDict["method"] = claim["method"]	
 	
 	initDict["relationship"] = claim["qualifiedBy"]["relationship"]
@@ -147,7 +153,7 @@ def addDataMaterialToAnnDict(data, material, annDict):
 	return annDict
 
 def getAnnDict():
-	return {"document": None, "useremail": None, "claimlabel": None, "claimtext": None, "method": None, "relationship": None, "drug1": None, "drug2": None, "drug1PC": None, "drug2PC": None, "precipitant": None, "enzyme": None, "rejected": None, "evRelationship":None, "participants":None, "participantstext":None, "drug1dose":None, "drug1formulation":None, "drug1duration":None, "drug1regimens":None, "drug1dosetext":None, "drug2dose":None, "phenotypetype": None, "phenotypevalue": None, "phenotypemetabolizer": None, "phenotypepopulation": None, "drug2formulation":None, "drug2duration":None, "drug2regimens":None, "drug2dosetext":None, "aucvalue":None, "auctype":None, "aucdirection":None, "auctext":None, "cmaxvalue":None, "cmaxtype":None, "cmaxdirection":None, "cmaxtext":None, "clearancevalue":None, "clearancetype":None, "clearancedirection":None, "clearancetext":None, "halflifevalue":None, "halflifetype":None, "halflifedirection":None, "halflifetext":None, "dipsquestion":None, "reviewer":None, "reviewerdate":None, "reviewertotal":None, "reviewerlackinfo":None, "grouprandom":None, "parallelgroup":None, "id": None}
+	return {"document": None, "useremail": None, "claimlabel": None, "claimtext": None, "negation": None, "method": None, "relationship": None, "drug1": None, "drug2": None, "drug1PC": None, "drug2PC": None, "precipitant": None, "enzyme": None, "rejected": None, "evRelationship":None, "participants":None, "participantstext":None, "drug1dose":None, "drug1formulation":None, "drug1duration":None, "drug1regimens":None, "drug1dosetext":None, "drug2dose":None, "phenotypetype": None, "phenotypevalue": None, "phenotypemetabolizer": None, "phenotypepopulation": None, "drug2formulation":None, "drug2duration":None, "drug2regimens":None, "drug2dosetext":None, "aucvalue":None, "auctype":None, "aucdirection":None, "auctext":None, "cmaxvalue":None, "cmaxtype":None, "cmaxdirection":None, "cmaxtext":None, "clearancevalue":None, "clearancetype":None, "clearancedirection":None, "clearancetext":None, "halflifevalue":None, "halflifetype":None, "halflifedirection":None, "halflifetext":None, "dipsquestion":None, "reviewer":None, "reviewerdate":None, "reviewertotal":None, "reviewerlackinfo":None, "grouprandom":None, "parallelgroup":None, "id": None}
 
 
 def getTextSpan(field):
