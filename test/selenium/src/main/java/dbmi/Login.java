@@ -5,6 +5,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.annotations.*;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -22,7 +24,7 @@ import java.io.PrintWriter;
 import java.io.IOException;
 
 /**
- *@author: Yifan Ning
+ *@author: Yifan Ning, Eric Chou
  *@date: Dec 13, 2016 5:01:32 PM
  *
  */
@@ -53,12 +55,13 @@ public class Login extends TestBase{
 
             // import existing annotations
             driver.findElement(By.xpath("//button[contains(.,'Import')]")).click(); // import
-            Thread.sleep(1500);
+            Thread.sleep(3000);
 
             /*
             ANNOTATE ARTICLE
             */
-
+            WebDriverWait wait = new WebDriverWait(driver, 4000);
+            wait.until(ExpectedConditions.visibilityOfElementLocated((By.id("P16"))));
             // WebElement firstP = driver.findElement(By.id("drug1")); // for test file
             // WebElement firstP = driver.findElement(By.id("__p14"));
             WebElement firstP = driver.findElement(By.id("P16"));
@@ -71,14 +74,7 @@ public class Login extends TestBase{
             // highlight passage until beginning of following paragraph
             // WebElement next = driver.findElement(By.id("__p15"));
             WebElement next = driver.findElement(By.id("P17"));
-            Actions highlight = new Actions(driver);
-            writer.println(firstP + "\n" + next + "\n");
-            highlight.moveToElement(firstP,0,0).click();
-            highlight.keyDown(Keys.SHIFT);
-            highlight.moveToElement(next,0,0).click();
-            highlight.keyUp(Keys.SHIFT);
-            highlight.build().perform();
-            Thread.sleep(2000);
+            highlightText(firstP, next);
 
             // create claim with the highlighted passage
             WebElement mp = driver.findElement(By.className("mp-menu-btn"));
@@ -119,13 +115,14 @@ public class Login extends TestBase{
             driver.findElement(By.xpath("//button[contains(.,'Save and Close')]")).click();
             Thread.sleep(2000);
 
-            addDataWithoutText("//td[contains(@onclick, 'addDataCellByEditor(\"participants\",\"0\");')]");
-            addDataWithoutText("//td[contains(@onclick, 'addDataCellByEditor(\"dose1\",\"0\");')]");
-            addDataWithoutText("//td[contains(@onclick, 'addDataCellByEditor(\"dose2\",\"0\");')]");
-            addDataWithoutText("//td[contains(@onclick, 'addDataCellByEditor(\"auc\",\"0\");')]");
-            addDataWithoutText("//td[contains(@onclick, 'addDataCellByEditor(\"cmax\",\"0\");')]");
-            addDataWithoutText("//td[contains(@onclick, 'addDataCellByEditor(\"clearance\",\"0\");')]");
-            addDataWithoutText("//td[contains(@onclick, 'addDataCellByEditor(\"halflife\",\"0\");')]");
+            // Select data cells that require highlighted text to make sure they aren't able to be entered. 
+            // addDataText("//td[contains(@onclick, 'addDataCellByEditor(\"participants\",\"0\");')]");
+            // addDataText("//td[contains(@onclick, 'addDataCellByEditor(\"dose1\",\"0\");')]");
+            // addDataText("//td[contains(@onclick, 'addDataCellByEditor(\"dose2\",\"0\");')]");
+            // addDataText("//td[contains(@onclick, 'addDataCellByEditor(\"auc\",\"0\");')]");
+            // addDataText("//td[contains(@onclick, 'addDataCellByEditor(\"cmax\",\"0\");')]");
+            // addDataText("//td[contains(@onclick, 'addDataCellByEditor(\"clearance\",\"0\");')]");
+            // addDataText("//td[contains(@onclick, 'addDataCellByEditor(\"halflife\",\"0\");')]");
 
             driver.findElement(By.xpath("//td[contains(@onclick, 'addDataCellByEditor(\"studytype\",\"0\");')]")).click();
             Thread.sleep(500);
@@ -141,6 +138,36 @@ public class Login extends TestBase{
             driver.findElement(By.xpath("//button[contains(.,'Save and Close')]")).click();
             Thread.sleep(2000);
 
+            // TODO highlight some other passage (P17?) and use this to add data and material
+            // WebElement e2 = driver.findElement(By.id("P18"));
+            // highlightText(next, e2);
+
+            // // add data and material
+            // addDataMaterialByText();
+
+            // // go through data and material that require text. Delete and re-highlight text to re-test next data and material box.
+            // addDataText("//td[contains(@onclick, 'addDataCellByEditor(\"dose1\",\"0\");')]");
+            // Thread.sleep(1000);
+            // // TODO go up more parents until found
+            // WebElement topElement = driver.findElement(By.id("tabs-1"));
+            // WebElement parentElement = topElement.findElement(By.id("mp-data-form-dose1"));
+            // writer.println("PARENT ELEMENT" + parentElement);
+            // parentElement.findElement(By.xpath("//input[(@id='drug1Dose')]")).sendKeys("10");
+            // Thread.sleep(1000);
+            // save();
+            // Thread.sleep(500);
+            // Select formulation = new Select(parentElement.findElement(By.id("drug1Formulation")));
+            // // dropdown2.selectByVisibleText("ambrisentan");
+            // formulation.selectByIndex(1);
+            // Thread.sleep(500);
+            // parentElement.findElement(By.xpath("//input[(@id='drug1Duration')]")).sendKeys("20");
+            // Thread.sleep(500);
+            // Select regimen = new Select(parentElement.findElement(By.id("drug1Regimens")));
+            // // dropdown2.selectByVisibleText("ambrisentan");
+            // regimen.selectByIndex(1);
+            // Thread.sleep(500);
+            // delete();
+
             // edit drug claim - check dropdown menus for "Relationships" and "Methods"
             // driver.findElement(By.className("btn btn-success")).click();
             driver.findElement(By.xpath("//button[contains(.,'Edit Claim')]")).click();
@@ -154,7 +181,6 @@ public class Login extends TestBase{
             // writer.println(dd.size() + " methods options");
 
             // Loop to print one by one
-            // TODO: boolean tests with arrays to see if dropdown menus contain the entries they should.
             for (int i = 0; i < dd.size(); i++) {
                 writer.println("Method index " + i + ": " + dd.get(i).getText());
                 String method = dd.get(i).getText();
@@ -266,11 +292,43 @@ public class Login extends TestBase{
         Thread.sleep(1000);
     }
 
-    public void addDataWithoutText(String s) throws InterruptedException
+    public void highlightText(WebElement e1, WebElement e2) throws InterruptedException
+    {
+        Actions highlight = new Actions(driver);
+        highlight.moveToElement(e1,0,0).click();
+        highlight.keyDown(Keys.SHIFT);
+        highlight.moveToElement(e2,0,0).click();
+        highlight.keyUp(Keys.SHIFT);
+        highlight.build().perform();
+        Thread.sleep(2000);
+    }
+
+    public void addDataText(String s) throws InterruptedException
     {   
         driver.findElement(By.xpath(s)).click();
         Thread.sleep(1000);
         driver.findElement(By.id("select-text-dialog-close")).click();
         Thread.sleep(2000);
+    }
+
+    public void addDataMaterialByText() throws InterruptedException
+    {
+        Actions add = new Actions(driver);
+        add.moveToElement(driver.findElement(By.className("mp-menu-btn"))).build().perform();
+        add.moveToElement(driver.findElement(By.className("mp-main-menu-2"))).build().perform();
+        Thread.sleep(2000);
+        driver.findElement(By.xpath("//a[contains(.,'interact with')]")).click();
+        Thread.sleep(2000);
+    }
+
+    public void save() throws InterruptedException
+    {
+        driver.findElement(By.xpath("//button[contains(.,'Save')]")).click();
+    }
+
+    public void delete() throws InterruptedException
+    {
+        driver.findElement(By.className("annotator-delete")).click();
+        driver.findElement(By.id("data-delete-confirm-btn")).click();
     }
 }

@@ -93,6 +93,43 @@ button contains "hl-adder-btn"
 
 <span id="select-text-dialog-close" class="annotator-close">×</span>
 
+<input type="radio" name="grouprandom" id="grouprandom" value="yes">
+
+<input type="radio" name="parallelgroup" id="parallelgroup" value="yes">
+
+<a onclick="clearStudyTypeQuestions()" id="study-type-qs-clear">Clear</a>
+
+----
+
+<li class="mp-main-menu-2">
+add data for
+<ul style="display: none;" class="mp-sub-menu-2"></ul>
+</li>
+
+<a href="#">comparisons_interact with_Statistical</a>
+
+----
+
+<input style="width:30px; height:20px;" type="text" id="participants">
+
+----
+
+<div id="mp-data-form-dose1" style="margin-top: 7px; margin-left: 25px;">
+	<div id="dose1quote" class="dataquoteborder">For log-transformed rosuvastatin concentration, the effect sizes detectable with a power of 0.80 or higher are 0.141, 0.145 and 0.187 for SLCO1B1 c.521T&gt;C, SLCO1B1 c.388A&gt;G, and ABCG2 c.421C&gt;A, respectively. For log-transformed atorvastatin concentration, the effect sizes detectable with a power of 0.80 or higher are 0.274, 0.223 and 0.324 for SLCO1B1 c.521T&gt;C, SLCO1B1 c.388A&gt;G, and ABCG2 c.421C&gt;A, respectively.Multiple linear regression analysis</div>&nbsp;&nbsp;
+	<strong id="drug1Dose-label">Statistical Dose in MG:  (precipitant)</strong>
+	<input style="width:30px; height:20px;" type="text" id="drug1Dose">&nbsp;&nbsp;
+	<strong id="drug1Formulation-label">Formulation: </strong>
+	<select id="drug1Formulation"><option value="UNK">UNK</option><option value="Oral">Oral</option><option value="IV">IV</option><option value="transdermal">transdermal</option><option value="IM">IM</option></select>&nbsp;&nbsp;
+	<strong id="drug1Duration-label">Duration in days: </strong><input style="width:30px; height:20px;" type="text" id="drug1Duration">&nbsp;&nbsp;<strong id="drug1Regimens-label">Regimens: </strong>
+	<select id="drug1Regimens"><option value="UNK">UNK</option><option value="SD">SD</option><option value="QD">QD</option><option value="BID">BID</option><option value="TID">TID</option><option value="QID">QID</option><option value="Q12">Q12</option><option value="Q8">Q8</option><option value="Q6">Q6</option><option value="Daily">Daily</option></select>
+</div>
+
+----
+
+<button style="display: inline-block;" class="annotator-save annotator-focus">Save</button>
+
+<button id="data-delete-confirm-btn">Confirm</button>
+
 ----
 
 <span data-markjs="false" class="annotator-hl" name="annotator-hl" id="AV2kDhWtacdHV0xa1qFV">Statistical</span>

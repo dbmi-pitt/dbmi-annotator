@@ -61,44 +61,44 @@ module.exports = function(app, passport) {
             annotationType = config.profile.userProfile.type;
         } else {
             annotationType = config.profile.def;
-        }
-        
-	    // fetch all DDI annotations for current user
-	    var url = config.protocal + "://" + config.apache2.host +":" + config.apache2.port + "/annotatorstore/search?email=" + req.user.email + "&annotationType=" + annotationType;
-
+        }        
+	
         //loading csv file
         var content = loadArticleList();
-
-		res.render('main.ejs', {
-		    user : req.user,
-		    annotations : [],
+	
+	res.render('main.ejs', {
+	    user : req.user,
+	    annotations : [],
             article: content,
-		    exportMessage : req.flash('exportMessage'),
-		    loadMessage : req.flash('loadMessage'),
-		    host : config.annotator.host
-		});
-
-	    // request({url: url, json: true}, function(error,response,body){
-	    //     if (!error && response.statusCode === 200) {
-		        
-		//         res.render('main.ejs', {
-		//             user : req.user,
-		//             annotations : body,
-		//             exportMessage : req.flash('exportMessage'),
-		//             loadMessage : req.flash('loadMessage'),
-		//             host : config.annotator.host,
-		//         });
-		        
-	    //     } else {
-		//         res.render('main.ejs', {
-		//             user : req.user,
-		//             annotations : {'total':0},
-		//             exportMessage: req.flash('exportMessage'),
-		//             loadMessage: req.flash('loadMessage'),
-		//             host: config.annotator.host,
-		//         });
-	    //     }
-	    // });
+	    exportMessage : req.flash('exportMessage'),
+	    loadMessage : req.flash('loadMessage'),
+	    host : config.annotator.host
+	});
+	
+	// fetch all DDI annotations for current user
+	// var user_url = config.protocal + "://" + config.apache2.host +":" + config.apache2.port + "/annotatorstore/search?email=" + req.user.email + "&annotationType=" + annotationType;
+	
+	// request({url: user_url, json: true}, function(error,response,body){
+	//     if (!error && response.statusCode === 200) {
+	
+	//         res.render('main.ejs', {
+	//             user : req.user,
+	//             annotations : body,
+	//             exportMessage : req.flash('exportMessage'),
+	//             loadMessage : req.flash('loadMessage'),
+	//             host : config.annotator.host,
+	//         });
+	
+	//     } else {
+	//         res.render('main.ejs', {
+	//             user : req.user,
+	//             annotations : {'total':0},
+	//             exportMessage: req.flash('exportMessage'),
+	//             loadMessage: req.flash('loadMessage'),
+	//             host: config.annotator.host,
+	//         });
+	//     }
+	// });
     });
     
     // LOGOUT ==============================
@@ -110,30 +110,29 @@ module.exports = function(app, passport) {
     });
 
     // DISPLAY ==============================
-    app.get('/dbmiannotator/displayWebPage', isLoggedIn, praseWebContents, function(req, res) {
+    app.get('/dbmiannotator/displayWebPage', isLoggedIn, parseWebContents, function(req, res) {
 	
-	    var sourceUrl = req.query.sourceURL.trim();
+	var sourceUrl = req.query.sourceURL.trim();
         console.log(sourceUrl);
-	    var email = req.query.email;
-	    var validUrl = require('valid-url');
-
-	    if (validUrl.isUri(sourceUrl)){
-		    
-		    if (sourceUrl.match(/\.pdf/g)){ // local pdf resouces
+	var email = req.query.email;
+	var validUrl = require('valid-url');
+	
+	if (validUrl.isUri(sourceUrl)){
+	    
+	    if (sourceUrl.match(/\.pdf/g)){ // local pdf resouces
                 console.log("load pdf");
-		        res.redirect("/dbmiannotator/viewer.html?file=" + sourceUrl+"&email=" + email); 
-		    } else if (sourceUrl.match(/localhost.*html/g)) { 		    
+		res.redirect("/dbmiannotator/viewer.html?file=" + sourceUrl+"&email=" + email); 
+	    } else if (sourceUrl.match(/localhost.*html/g)) { 		    
                 res.render('displayWebPage.ejs', {
-			        htmlsource: req.htmlsource,
-			        pluginSetL: config.profile.pluginSetL,
-			        userProfile: config.profile.userProfile
+		    htmlsource: req.htmlsource,
+		    pluginSetL: config.profile.pluginSetL,
+		    userProfile: config.profile.userProfile
                 });   
-	        } else {
-		        req.flash('loadMessage', 'The url you just entered is not valid!');
-		        res.redirect('/dbmiannotator/main');
-		    }
-		    
-	    }
+	    } else {
+		req.flash('loadMessage', 'The url you just entered is not valid!');
+		res.redirect('/dbmiannotator/main');
+	    }	    
+	}
     });
     
     
@@ -197,31 +196,52 @@ module.exports = function(app, passport) {
 	        } else {
 		        res.redirect('/dbmiannotator/main');		        
 	        }	
-	    });	    	    
+	    });
+	
     });        
 
     // EXPORT TO CSV ==============================
     app.get('/dbmiannotator/exportcsv', isLoggedIn, function(req, res){
-	
-	    var url = config.protocal + "://" + config.apache2.host + ":" + config.apache2.port + "/annotatorstore/search?email=" + req.query.email + "&annotationType=" + config.profile.def;
-        //var url = config.protocal + "://" + config.apache2.host + ":" + config.apache2.port + "/annotatorstore/search?annotationType=" + config.profile.def;
-	    
-	    request({url: url, json: true, followAllRedirects: true, "rejectUnauthorized": false}, function(error,response,body){            
-	        if (!error && (response.statusCode === 200 || response.statusCode ===302)) {
-                var jsonObjs = body.rows;
+	// export current user's annotation
+	// var url_all = config.protocal + "://" + config.store.host + ":" + config.store.port + "/search?email=" + req.query.email + "&annotationType=" + config.profile.def;
 
+	// export all annotations (inclusing other users)
+        // var url_all = config.protocal + "://" + config.store.host + ":" + config.store.port + "/search?annotationType=" + config.profile.def;
+	var url_all = "http://" + config.store.host + ":" + config.store.port + "/search?annotationType=" + config.profile.def;
+	
+	// var url = "http://apache2/PMC/PMC1459289.html"; // works
+	// var url = "http://annotator-store:5000/search?annotationType=" + config.profile.def; // works
+	// var url = "http://apache2/annotatorstore"; // not works
+
+	request({url: url_all, json: true, followAllRedirects: true, "rejectUnauthorized": false}, function(error,response,body){
+	    console.log(url_all);
+	    
+	    if (!error && (response.statusCode === 200 || response.statusCode ===302)) {
+		console.log(url_all);
+		
+                var jsonObjs = body.rows;
+		
                 res.attachment('annotations-'+req.query.email+'.csv');
-		        res.setHeader('Content-Type', 'text/csv');
+		res.setHeader('Content-Type', 'text/csv');
                 resultsL = [];
 
                 for (var i = 0; i < jsonObjs.length; i++) {
                     jsonObj = jsonObjs[i];
                     claim = jsonObj.argues;
-                    dataL = claim.supportsBy;            
+                    dataL = claim.supportsBy;
+		    mpmethod = claim.method;
 
                     // initiate dict for one row in csv with claim information
-                    var rowDict={"document":jsonObj.rawurl, "useremail":jsonObj.email, "claimlabel":claim.label, "claimtext":claim.hasTarget.hasSelector.exact, "method":claim.method, "relationship":claim.qualifiedBy.relationship, "drug1":claim.qualifiedBy.drug1, "drug2":claim.qualifiedBy.drug2, "precipitant":(claim.qualifiedBy.precipitant||''), "enzyme":(claim.qualifiedBy.enzyme||''), "rejected": "", "evRelationship":"", "participants":"", "participantstext":"", "drug1dose":"", "drug1formulation":"", "drug1duration":"", "drug1regimens":"", "drug1dosetext":"", "drug2dose":"", "phenotypetype": "", "phenotypevalue": "", "phenotypemetabolizer": "", "phenotypepopulation": "", "drug2formulation":"", "drug2duration":"", "drug2regimens":"", "drug2dosetext":"", "aucvalue":"", "auctype":"", "aucdirection":"", "auctext":"", "cmaxvalue":"", "cmaxtype":"", "cmaxdirection":"", "cmaxtext":"", "clearancevalue":"", "clearancetype":"", "clearancedirection":"", "clearancetext":"", "halflifevalue":"", "halflifetype":"", "halflifedirection":"", "halflifetext":"", "dipsquestion":"", "reviewer":"", "reviewerdate":"", "reviewertotal":"", "reviewerlackinfo":"", "grouprandomization":"", "parallelgroupdesign":"", "id": jsonObj.id};
-
+                    var rowDict={"document":jsonObj.rawurl, "useremail":jsonObj.email, "claimlabel":claim.label, "claimtext":claim.hasTarget.hasSelector.exact, "method": mpmethod, "relationship":claim.qualifiedBy.relationship, "drug1":claim.qualifiedBy.drug1, "drug2":claim.qualifiedBy.drug2, "precipitant":(claim.qualifiedBy.precipitant||''), "enzyme":(claim.qualifiedBy.enzyme||''), "rejected": "", "evRelationship":"",
+				 "participants":"", "participantstext":"", "drug1dose":"", "drug1formulation":"", "drug1duration":"", "drug1regimens":"", "drug1dosetext":"", "drug2dose":"",
+				 "phenotypetype": "", "phenotypevalue": "", "phenotypemetabolizer": "", "phenotypepopulation": "",
+				 "drug2formulation":"", "drug2duration":"", "drug2regimens":"", "drug2dosetext":"",
+				 "aucvalue":"", "auctype":"", "aucdirection":"", "auctext":"", "cmaxvalue":"", "cmaxtype":"", "cmaxdirection":"", "cmaxtext":"", "clearancevalue":"", "clearancetype":"", "clearancedirection":"", "clearancetext":"", "halflifevalue":"", "halflifetype":"", "halflifedirection":"", "halflifetext":"",
+				 "dipsquestion":"", "reviewer":"", "reviewerdate":"", "reviewertotal":"", "reviewerlackinfo":"",
+				 "cellSystem": "", "cellSystemtext": "", "metaboliteRateWith": "", "metaboliteRateWithtext": "", "metaboliteRateWithout": "", "metaboliteRateWithouttext": "",
+				 "measurementcl": "", "measurementclunit": "", "measurementcltext": "", "measurementvmax": "", "measurementvmaxunit": "", "measurementvmaxtext": "", "measurementinhibition": "", "measurementinhibitionunit": "", "measurementinhibitiontext": "", "measurementkm": "", "measurementkmunit": "", "measurementkmtext": "", "measurementki": "", "measurementkiunit": "", "measurementkitext": "", "measurementkinact": "", "measurementkinactunit": "", "measurementkinacttext": "", "measurementic50": "", "measurementic50unit": "", "measurementic50text": "",
+				 "grouprandomization":"", "parallelgroupdesign":"", "id": jsonObj.id};
+		    
                     if (claim.rejected != null)
                         rowDict["rejected"] = (claim.rejected || "");
 
@@ -234,49 +254,85 @@ module.exports = function(app, passport) {
                             var method = data.supportsBy;
                             var material = method.supportsBy;
 
+			    // evidence relationship
                             copyDict["evRelationship"] = (data.evRelationship || "");
 
+			    // participants
                             if (material.participants != null) {
                                 copyDict["participants"] = (material.participants.value || "")
                                 copyDict["participantstext"] = (getSpanFromField(material.participants) || "")
                             }
 
+			    // data ratio 
                             dataFieldsL = ["auc","cmax","clearance","halflife"];
                             for (p = 0; p < dataFieldsL.length; p++) {
                                 field = dataFieldsL[p];
                                 if (data[field] != null) {
-                                    copyDict[field + 'value'] = (data[field].value || "")
-                                    copyDict[field + 'type'] = (data[field].type || "")
-                                    copyDict[field + 'direction'] = (data[field].direction || "")
-                                    copyDict[field + 'text'] = (getSpanFromField(data[field]) || "")
+                                    copyDict[field + 'value'] = (data[field].value || "");
+                                    copyDict[field + 'type'] = (data[field].type || "");
+                                    copyDict[field + 'direction'] = (data[field].direction || "");
+                                    copyDict[field + 'text'] = (getSpanFromField(data[field]) || "");
                                 }
                             }
 
-                            if (data.dips != null) {
-                                dipsQsStr = "";
-                                qsL=["q1","q2","q3","q4","q5","q6","q7","q8","q9","q10"];
-                                for (q = 0; q < qsL.length; q++) {
-                                    if (q == qsL.length - 1)
-                                        dipsQsStr += data.dips[qsL[q]];
-                                    else
-                                        dipsQsStr += data.dips[qsL[q]] + "|";
-                                }
-                                copyDict["dipsquestion"] = dipsQsStr;
-                            }
-
-                            if (data.reviewer != null) {
-                                copyDict["reviewer"] = data.reviewer.reviewer || "";
-                                copyDict["reviewerdate"] = data.reviewer.date || "";
-                                copyDict["reviewertotal"] = data.reviewer.total || "";
-                                copyDict["reviewerlackinfo"] = data.reviewer.lackinfo || "";
-                            }
-
+			    // evidence type questions
                             if (data.grouprandom != null)
                                 copyDict["grouprandomization"] = (data.grouprandom || "");                            
                             
                             if (data.parallelgroup != null)
                                 copyDict["parallelgroupdesign"] = (data.parallelgroup || "");
 
+			    // Case Report fields
+			    if (mpmethod == "Case Report") {
+				// dips score questions (Case Report only)
+				if (data.dips != null) {
+                                    dipsQsStr = "";
+                                    qsL=["q1","q2","q3","q4","q5","q6","q7","q8","q9","q10"];
+                                    for (q = 0; q < qsL.length; q++) {
+					if (q == qsL.length - 1)
+                                            dipsQsStr += data.dips[qsL[q]];
+					else
+                                            dipsQsStr += data.dips[qsL[q]] + "|";
+                                    }
+                                    copyDict["dipsquestion"] = dipsQsStr;
+				}
+
+				// reviewer (Case Report only)
+				if (data.reviewer != null) {
+                                    copyDict["reviewer"] = data.reviewer.reviewer || "";
+                                    copyDict["reviewerdate"] = data.reviewer.date || "";
+                                    copyDict["reviewertotal"] = data.reviewer.total || "";
+                                    copyDict["reviewerlackinfo"] = data.reviewer.lackinfo || "";
+				}
+			    }
+
+			    // Experiment fields only
+			    if (mpmethod == "Experiment") {
+
+				experimentL = ["cellSystem", "metaboliteRateWith", "metaboliteRateWithout"]
+				for (i = 0; i < experimentL.length; i++) {
+				    field = experimentL[i];
+				    
+				    if (data[field] != null) {
+					copyDict[field] = (data[field].value || "");
+					copyDict[field + 'text'] = (getSpanFromField(data[field]) || "");
+				    }				    
+				}
+				if (data.measurement != null) {
+				    measurementL = ["cl", "vmax", "inhibition", "km", "ki", "kinact", "ic50"];
+				    for (j = 0; j < measurementL.length; j++) {				    
+					field = measurementL[j];
+					
+					if (data.measurement[field] != null) {
+					    copyDict['measurement' + field] = (data.measurement[field].value || "");
+					    copyDict['measurement' + field + 'unit'] = (data.measurement[field].unit || "");
+					    copyDict['measurement' + field + 'text'] = (getSpanFromField(data.measurement[field]) || "");
+					}
+				    }
+				}
+			    }
+
+			    // dose information
                             if (material.drug1Dose != null) {
                                 copyDict["drug1dose"] = (material.drug1Dose.value || "")
                                 copyDict["drug1formulation"] = (material.drug1Dose.formulation || "")
@@ -290,13 +346,18 @@ module.exports = function(app, passport) {
                                 copyDict["drug2duration"] = (material.drug2Dose.duration || "")
                                 copyDict["drug2regimens"] = (material.drug2Dose.regimens || "")
                                 copyDict["drug2dosetext"] = (getSpanFromField(material.drug2Dose) || "")
-                            }                                 
-                            if (material.phenotype != null) {
-                                copyDict["phenotypetype"] = material.phenotype.type || "";
-                                copyDict["phenotypevalue"] = material.phenotype.typeVal || "";
-                                copyDict["phenotypemetabolizer"] = material.phenotype.metabolizer || "";
-                                copyDict["phenotypepopulation"] = material.phenotype.population || "";
-                            }                      
+                            }
+
+			    // Phenotype clinical study only fields
+			    if (mpmethod == "Phenotype clinical study") {
+				if (material.phenotype != null) {
+                                    copyDict["phenotypetype"] = material.phenotype.type || "";
+                                    copyDict["phenotypevalue"] = material.phenotype.typeVal || "";
+                                    copyDict["phenotypemetabolizer"] = material.phenotype.metabolizer || "";
+                                    copyDict["phenotypepopulation"] = material.phenotype.population || "";
+				}
+			    }
+
                             resultsL.push(copyDict);
                         }
                     } else {
@@ -304,19 +365,19 @@ module.exports = function(app, passport) {
                     }
                 }
 
-                console.log(resultsL.length);
                 csvTxt = utilcsv.toCsv(resultsL, '"', '\t');
 
-		        res.attachment('annotations-'+req.query.email+'.csv');
-		        res.setHeader('Content-Type', 'text/csv');
-		        res.end(csvTxt);                                              
+		res.attachment('annotations-'+req.query.email+'.csv');
+		res.setHeader('Content-Type', 'text/csv');
+		res.end(csvTxt);          
+                
 		        
-	        } else {
-		        //req.flash('exportMessage', 'exported failed, annotation fetch exception, please see logs or contact Yifan at yin2@pitt.edu!');
-                console.log(error);
-		        res.redirect('/dbmiannotator/main');		        
-	        }	
-	    });	    	    
+	    } else {
+	    	//req.flash('exportMessage', 'exported failed, annotation fetch exception, please see logs or contact Yifan at yin2@pitt.edu!');
+	    	console.log("export csv - error:");
+                console.log(error);	        
+	    }	
+	});
     });        
 };
 
@@ -333,7 +394,7 @@ function getSpanFromField(field) {
 // MIDDLE WARE FUNCTIONS ==============================
 
 // parse web contents from url
-function praseWebContents(req, res, next){
+function parseWebContents(req, res, next){
     var sourceUrl = req.query.sourceURL.trim();
 
     console.log("[DEBUG] parseWebContents");
@@ -344,13 +405,15 @@ function praseWebContents(req, res, next){
             sourceUrl = sourceUrl.replace("localhost", process.env.APACHE2_HOST);
 
         request(sourceUrl, function(err, res, body){
+	    console.log(sourceUrl);
 
             if (err){
                 console.log(err);
                 console.log(res);
                 return;
             }             
-
+	    console.log("status code:" + res.statusCode);
+	    
             // skip tidy beacuse changing of char encoding
             labelDecode = body.replace(/&amp;/g,'&').replace(/&nbsp;/g,' ');   
             req.htmlsource = labelDecode;

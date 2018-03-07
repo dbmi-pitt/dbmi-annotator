@@ -5,11 +5,11 @@ AnnotationPress
 --------
 Overview 
 --------
-AnnotationPress is designed to provide a user friendly tool that helps scientists annotate scientific claims, data, and evidence in HTML and PDF documents. The current version is configured to annotated drug-drug interactions in both full text journal articles and structured product labeling. This is a particularly challenging domain that required the development of several annotation workflows which we think will be useful for for other scientific domains. A key aspect of AnnotationPress is its use of annotation plug-ins which make the tool is easily adaptable to other annotation use cases. Another distinctive feature is that AnnotationPress implements the [Micropublication](https://jbiomedsem.biomedcentral.com/articles/10.1186/2041-1480-5-28) and [Open Annotation data](http://www.openannotation.org/spec/core/) standards. These standards specify how to relate annotations in target documents about data, methods, and materials to scientific claims.
+AnnotationPress is designed to provide a user friendly tool that helps scientists annotate scientific claims, data, and evidence in HTML and PDF documents. The current version is configured to annotated drug-drug interactions in both full text journal articles and structured product labeling. This is a particularly challenging domain that required the development of several annotation workflows which we think will be useful for for other scientific domains. A key aspect of AnnotationPress is its use of annotation plug-ins which make the tool is easily adaptable to other annotation use cases. Another distinctive feature is that AnnotationPress implements the `Micropublication <https://jbiomedsem.biomedcentral.com/articles/10.1186/2041-1480-5-28>`_ and `Open Annotation data <http://www.openannotation.org/spec/core/>`_ standards. These standards specify how to relate annotations in target documents about data, methods, and materials to scientific claims.
 
-If you are new to AnnotationPress, please watch our [video](https://www.youtube.com/) that show two annotation plugins in action.
+If you are new to AnnotationPress, please watch our `video <https://goo.gl/kF1aaM>`_ that show two annotation plugins in action.
 
-AnnotationPress is an Apache licensed open source project available on [github](https://github.com/dbmi-pitt/dbmi-annotator). Please contact us if you are interested in contributing to its development, if you would like to request new features, or have any other questions.
+AnnotationPress is an Apache licensed open source project available on `github <https://github.com/dbmi-pitt/dbmi-annotator>`_. Please contact us if you are interested in contributing to its development, if you would like to request new features, or have any other questions.
 
 ---------
 Licensing
@@ -132,8 +132,7 @@ Configuration:
 
     #proxy for local annotator store on port 5000
     ProxyPass /annotatorstore http://localhost:5000/
-    RewriteRule /annotatorstore(.*) http://localhost:5000$1 [P]
-
+    RewriteRule /annotatorstore(.*) http://localhost:5000$1 [P]  
 
 Run server:
 ^^^^^^^^^^
@@ -143,7 +142,46 @@ Run server:
     $ nodemon server.js (run '$ npm install -g nodemon', if command is not available)
     $ service apache2 start
 
-access AnnotationPress through ``'http://localhost/dbmiannotator'``
+    access AnnotationPress through ``'http://localhost/dbmiannotator'``
+
+    
+Add documents to annotate:
+^^^^^^^^^^
+1) Download the HTML using your browser to some place e.g., /path/
+
+2) If needed, rename the file to a more appropriate name. E.g., for PMC articles, it is good to concatenate 'PMC' with the article's PMC identifier. For example, for PMC 1459289 you would:
+
+$ mv  /path/file.html   /path/PMC1459289.html
+
+$ mv  /path/file_files  /path/PMC1459289_files
+
+
+3) Add html document and related files to apache2 home directory that is relevant for the papers publisher. E.g., for PMC:
+
+$ cp  -r /path/PMC1459289*   /var/www/html/PMC/
+
+
+4) Register new document by opening up in a text editor the relevant file in the folder dbmi-annotator/article-list/ . For example, for PMC:
+
+$ sublime article-list pmc-list.csv
+
+<you local article identifier> http://localhost/PMC/PMC1459289.html
+
+5) Confirm that you can access the article in your browser using  the link e.g., http://localhost/PMC/PMC4536363.html
+
+6) Now,  refresh the AnnotatorPress in your browser and you should see the new article under the relevant publisher. Click to open.
+
+This should work for all of the publishers we have ensured compatibility between HTML versions of their papers (with their associated files) and our style sheets:
+
+Dailymed
+PMC
+Wiley
+Elsevier
+Springer
+Sage
+Taylor & Francis
+Wolters Kluwer
+
 
 -----------
 Directories
