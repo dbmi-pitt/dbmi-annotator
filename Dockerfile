@@ -1,6 +1,6 @@
 ############################ DBMI-ANNOTATOR ############################
 # FROM ubuntu:14.04
-FROM ubuntu:15.10
+FROM ubuntu:18.04
 MAINTAINER Yifan Ning "yin2@pitt.edu"
 
 # build image from nodejs server
@@ -26,6 +26,7 @@ COPY . /home/dbmi-annotator
 COPY config/production.conf /home/dbmi-annotator/config/config.js
 
 # Configure client side requests
+
 RUN ./node_modules/.bin/browserify app.js -o ./public/dbmiannotator/js/app.bundle.js
 
 # Install dependencies for annotation pre-load program
