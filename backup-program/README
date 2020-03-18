@@ -1,5 +1,7 @@
 Elasticsearch 1.7.1 backup program 
 
+The elastic-snapshot script must be run prior to restoring any snapshot. 
+
 (1) snapshot script
 
 $ bash elastic-snapshot.sh <host> <port>
